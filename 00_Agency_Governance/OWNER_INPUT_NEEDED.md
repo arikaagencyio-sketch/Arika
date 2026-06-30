@@ -65,9 +65,7 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 ## Department: Client Success (07)
 
-| # | Item | Why it matters | Currently | Source file |
-|---|---|---|---|---|
-| 24 | Build a real offboarding/churn process | Confirmed near-total absence — appears only as an empty filename placeholder in the source material | Effectively nonexistent | `07_Client_Success/CLIENTSUCCESS_OS.md` §10 |
+*(item 24 resolved 2026-06-30 — see Resolved table)*
 
 ## Department: Finance (09)
 
@@ -120,9 +118,11 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 31 | Sector's partial "Sider Fusion" chat export | **Resolved by direct owner input.** Leave as-is — not worth chasing further. | 2026-06-30 | `01_Sector/SECTOR_OS.md` §8 |
 | 14 | Confirm Marketing's MCP/connector blueprint status | **Resolved by direct owner input.** None of the 7 connector-class layers are in use yet — entirely aspirational, matching the pattern already confirmed for Finance and Branding. | 2026-06-30 | `03_Marketing/MARKETING_OS.md` §12 |
 | 10 | Locate or confirm-absent Sales' 11 companion `.docx` files | **Resolved by direct owner input.** Confirmed-lost, not pending location — citation system remains trustworthy for everything that is present. | 2026-06-30 | `05_Sales/SALES_OS.md` §14 |
+| 24 | Build a real offboarding/churn process | **Resolved — built, Claude-synthesized.** Per owner request, built the full Client Success Process Library (Retention, Expansion, Advocacy, Offboarding & Churn, Re-entry/Win-back), not just offboarding — every owned stage of the 9-stage lifecycle now has a real workflow. 4 new `Client` object fields added to `CRM_SCHEMA.md`. Not owner-original; should be reviewed before being treated as equally authoritative to the real onboarding model. | 2026-06-30 | `07_Client_Success/CLIENTSUCCESS_OS.md` §4, §10 |
 
 ## Changelog
 
+- 2026-06-30 — **Resolved item 24 (Client Success offboarding/churn process)** — built out, Claude-synthesized, broader than asked: per owner direction to also ensure all Client Success workflows exist, added Retention, Expansion, Advocacy, and Re-entry/Win-back alongside Offboarding, giving every owned stage of the 9-stage lifecycle a real workflow for the first time. Added 4 new `Client` object fields and 4 new KPI formulas. Client Success now has zero open tracker items. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved the 3 "quick win" items: 31, 14, 10.** Sector's partial chat export left as-is. Marketing confirmed none of its 7 MCP/connector layers are in real use yet. Sales' 11 missing companion docx files confirmed-lost rather than left as an open search. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved all 6 of Offer's "bigger decisions" in one pass: items 7, 37, 38, 39, 40, 41.** Owner approved offer #2's synthesis and the offers #5-11 batch as-is; decided ARR-band as primary pricing segmentation (rep-count secondary); reframed the team-role question — these are AI-assisted functional labels, not real hires, real staffing deferred to HR/People Ops; promoted 4 of Draft 28's divisions to real departments (**Audits & Diagnostics (14), Consulting & Advisory (15), Automation (16), AI Enablement (17)**, created with seeded OS files); confirmed offer #8 doesn't conflict with ClientPartner Acquisition after reading both files; computed the first provisional ARR-banded pricing floor across all 11 offers. Offer department now has only 1 open item (8, real historical figures — waiting on data). Repo is now 18 numbered folders (was 14), with `Cross-Domain Synthesis` renumbered 14→18. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved items 25, 26, 27 (Finance)** via direct owner input, after confirming the actual code state first (zero LLM SDK dependency anywhere in `finos-plugin`, confirming the AI-agent-wiring gap exactly as documented). Owner decided: no real payment platform exists yet so the integration stays a documented gap; AI agents stay spec/routing-only until real data exists to feed them; risk/expense thresholds stay as generic defaults until real cash-flow history accumulates. All three are real decisions to defer, not new builds — Finance department now has zero open tracker items. — Claude Code (Sonnet 4.6)

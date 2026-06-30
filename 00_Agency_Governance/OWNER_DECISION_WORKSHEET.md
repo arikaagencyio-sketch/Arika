@@ -62,10 +62,8 @@ These four follow the exact precedent you already set for Finance (item 26/27): 
 
 ## Build-now items (not blocked on data — these are real work I can do once you say go)
 
-### Item 24 — Client Success offboarding/churn process
-**The question:** This is confirmed to barely exist (an empty filename placeholder). Should I draft a real offboarding SOP now?
-**My recommendation:** Yes — this is the same category of work as the offer completions: a real process design exercise, not a fact that needs to come from your operating history. I can draft a Claude-synthesized offboarding/churn SOP (exit triggers, asset handover, knowledge transfer, win-back logic) calibrated against Client Success's already-real 9-stage client journey model and the Constitution's risk-class framework, clearly labeled as synthesized for your review — same discipline as everything in the Offer catalog.
-**Your decision:** _______________________________________________
+### Item 24 — Client Success offboarding/churn process — DONE, expanded scope
+**Resolved 2026-06-30.** Built broader than originally scoped — per your direction to make sure all Client Success workflows exist, not just offboarding, I added the full Process Library: Retention, Expansion, Advocacy, Offboarding & Churn, and Re-entry/Win-back. Every owned stage of the 9-stage lifecycle now has a real workflow (`07_Client_Success/CLIENTSUCCESS_OS.md` §4, §10). Still Claude-synthesized, not owner-original — worth a read when convenient, same review discipline as the Offer catalog.
 
 ### Item 30 — Define Arika Agency's own real brand for BOIS
 **The question:** BOIS (the branding system) has only ever run against a hypothetical example client. Should I build it a real brand object for Arika Agency itself?

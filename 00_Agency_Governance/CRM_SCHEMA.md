@@ -44,6 +44,10 @@ Marketing/Content, Sales, Client Success, and Finance all touch the same underly
 | health_score | number | Client Success (07) | Composite of engagement, NPS, delivery satisfaction — see `AGENCY_KPI_DICTIONARY.md` |
 | account_owner | string | Client Success (07) | Individual CSM, once named owners exist |
 | contract_id | string (FK) | Legal (10) | Links to the governing contract |
+| lifecycle_stage | enum | Client Success (07) | onboarding → delivery → retention → expansion → advocacy → offboarding → re-entry-loop — maps to the 9-stage model, `07_Client_Success/CLIENTSUCCESS_OS.md` §4 |
+| relationship_status | enum | Client Success (07) | active → at-risk → offboarding → churned-alumni → churned-do-not-recontact → win-back-candidate — added 2026-06-30 with the offboarding/retention workflow build-out |
+| churn_reason | enum (nullable) | Client Success (07) | price, results-not-realized, fit-mismatch, internal-change-at-client, competitor, budget-cut, scope-creep-friction, non-payment, no-reason-given — set only at offboarding, see `CLIENTSUCCESS_OS.md` §10 |
+| offboarding_type | enum (nullable) | Client Success (07) | planned (contract end), unplanned (churn/dissatisfaction), involuntary (non-payment/breach) — set only at offboarding |
 
 ### Engagement / Project
 | Field | Type | Set by | Notes |
@@ -117,3 +121,4 @@ This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` 
 - 2026-06-30 — Initial CRM schema created as part of governance-closure pass: core objects (Lead, Opportunity, Client, Engagement/Project, Invoice), relationships, and handoff points defined.
 - 2026-06-30 — Added Partner object and the Partner→sourced-Opportunity handoff, following a gap found during ClientPartner Acquisition (06) content migration: that department's source material (`CRM System Architure. raft 13.md`) defines an 11-stage Partner pipeline that had no home in the original client-only schema.
 - 2026-06-30 — Owner confirmed CRM platform: HubSpot (tracker item 5, resolved). — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Added `lifecycle_stage`, `relationship_status`, `churn_reason`, and `offboarding_type` fields to the Client object, supporting Client Success's new Retention/Expansion/Advocacy/Offboarding/Re-entry workflow build-out (`07_Client_Success/CLIENTSUCCESS_OS.md` §4, §10). Resolves tracker item 24. — Claude Code (Sonnet 4.6)
