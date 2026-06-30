@@ -1,7 +1,7 @@
 # Finance — Department OS
 
-**Department:** Finance (08)
-**Position in flow:** Receives billable events/delivery output from Operations (07); reports roll up to Agency Governance (00).
+**Department:** Finance (09)
+**Position in flow:** Receives billable events/delivery output from Operations (08); reports roll up to Agency Governance (00).
 **Mandate:** Own accounting, cash flow, treasury, forecasting, and financial compliance for the agency.
 **Owner:** *(unassigned — placeholder)*
 
@@ -67,11 +67,13 @@ Has an independently-built **code scaffold** (`finos-plugin/`, TypeScript), stru
 
 ## 13. Existing OS Sub-Layer
 
-**Yes — but code-based, not markdown.** `08_Finance/finos-plugin/` is a TypeScript application scaffold: `src/` with 19 sub-engine folders (ai-agents, cashflow-engine, compliance-engine, core-ledger, forecasting-engine, risk-engine, treasury-system, etc., mostly one stub `.ts` file each), `docs/` (11 markdown design docs), `database/` (1 SQL file), `tests/` (1 file), and a `.codex-plugin/` config. Its own documentation states it was "derived from the Word drafts in the parent workspace." **Open question (not resolved in this pass, tracked in `GLOBAL_OS.md` §11):** whether this stays a code-backed exception to the markdown-first standard, or gets reduced to a markdown spec with a thin code wrapper.
+**Yes — but code-based, not markdown.** `09_Finance/finos-plugin/` is a TypeScript application scaffold: `src/` with 19 sub-engine folders (ai-agents, cashflow-engine, compliance-engine, core-ledger, forecasting-engine, risk-engine, treasury-system, etc., mostly one stub `.ts` file each), `docs/` (11 markdown design docs), `database/` (1 SQL file), `tests/` (1 file), and a `.codex-plugin/` config. Its own documentation states it was "derived from the Word drafts in the parent workspace."
+
+**Decision (2026-06-30):** `finos-plugin/` is **retained as a grandfathered code-backed exception**, not converted or deleted. Rationale: it represents real prior implementation effort and the markdown-first standard governs how *new* department capability gets specified, not a mandate to retroactively gut working code. Going forward: `finos-plugin/docs/` remains the canonical description of what the code does (code is the implementation, docs are the spec — not the reverse); this department's KPI Dictionary, Capability Registry, and Standards sections (above) should be populated from `finos-plugin/docs/` during the future content-migration pass rather than re-derived from the raw "Draft N.md" files where they overlap. If `finos-plugin` development stalls for an extended period, downgrade it to a markdown-only spec library (preserving the docs, archiving the unfinished code) rather than carrying an unmaintained half-built app indefinitely — that decision is deferred until there's signal either way.
 
 ## 14. Raw Archive Pointer
 
-~16 root-level "Draft N.md" files. Existing gap backlog: `08_Finance/00_Workspace_Intelligence_Inventory/`. Migration into the registries above, and reconciliation with `finos-plugin/docs/`, is deferred to a future session.
+~16 root-level "Draft N.md" files. Existing gap backlog: `09_Finance/00_Workspace_Intelligence_Inventory/`. Migration into the registries above, and reconciliation with `finos-plugin/docs/`, is deferred to a future session.
 
 ## 15. Changelog
 

@@ -1,6 +1,6 @@
 # Registry Taxonomy Reference (Full 41-Registry Ontology)
 
-**Status: Reference only — not the active operating structure.** This document preserves the complete enterprise registry ontology developed during this repo's architectural planning (two brainstorming sessions, summarized in `13_Cross_Domain_Synthesis/`). It is the *future-state* map of everything a fully mature AI-native agency operating system could track.
+**Status: Reference only — not the active operating structure.** This document preserves the complete enterprise registry ontology developed during this repo's architectural planning (two brainstorming sessions, summarized in `14_Cross_Domain_Synthesis/`). It is the *future-state* map of everything a fully mature AI-native agency operating system could track.
 
 For v0.1, only a curated subset (~12) of these registries is active, embedded as standard sections inside each department's `{DEPT}_OS.md` — see `GLOBAL_OS.md` §6 for the active pattern. This file exists so the full ambition isn't lost, and so future expansion has a ready-made target instead of being reinvented from scratch.
 

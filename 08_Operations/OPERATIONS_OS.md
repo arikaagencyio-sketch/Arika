@@ -1,7 +1,7 @@
 # Operations — Department OS
 
-**Department:** Operations (07)
-**Position in flow:** Receives scoped engagements from Client Success (06); executes delivery; hands off billable events to Finance (08).
+**Department:** Operations (08)
+**Position in flow:** Receives scoped engagements from Client Success (07); executes delivery; hands off billable events to Finance (09).
 **Mandate:** Own delivery execution, SOPs, capacity planning, and quality control across all client and internal work.
 **Owner:** *(unassigned — placeholder)*
 

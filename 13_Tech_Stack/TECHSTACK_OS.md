@@ -1,6 +1,6 @@
 # Tech Stack — Department OS
 
-**Department:** Tech Stack (12)
+**Department:** Tech Stack (13)
 **Position in flow:** Horizontal support layer — provides tooling/infrastructure to all other departments; reports into Agency Governance (00).
 **Mandate:** Own the canonical inventory of tools/software the agency actually uses (CRM, project management, hosting, email, AI platforms, APIs), plus integration and access records for them.
 **Owner:** *(unassigned — placeholder)*
@@ -15,7 +15,7 @@ Tech Stack is a **newly created department** — confirmed as a real gap during 
 
 ## 2. Status
 
-**Empty skeleton.** No raw draft archive exists for this department specifically. Note: the two code scaffolds (`08_Finance/finos-plugin/`, `11_Branding/bois/`) are aspirational software the agency is building, not a record of tools it currently uses — do not conflate the two when this department's content gets built out.
+**Empty skeleton.** No raw draft archive exists for this department specifically. Note: the two code scaffolds (`09_Finance/finos-plugin/`, `12_Branding/bois/`) are aspirational software the agency is building, not a record of tools it currently uses — do not conflate the two when this department's content gets built out.
 
 ## 3. Capability Registry
 
@@ -67,7 +67,7 @@ Tech Stack is a **newly created department** — confirmed as a real gap during 
 
 ## 13. Existing OS Sub-Layer
 
-None yet. (Note: `08_Finance/finos-plugin/` and `11_Branding/bois/` are department-specific aspirational software builds, not Tech Stack inventory — see those departments' own §13 sections.)
+None yet. (Note: `09_Finance/finos-plugin/` and `12_Branding/bois/` are department-specific aspirational software builds, not Tech Stack inventory — see those departments' own §13 sections.)
 
 ## 14. Raw Archive Pointer
 

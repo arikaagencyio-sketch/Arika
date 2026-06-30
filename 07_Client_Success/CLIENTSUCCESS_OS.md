@@ -1,7 +1,7 @@
 # Client Success — Department OS
 
-**Department:** Client Success (06)
-**Position in flow:** Receives closed deals from Sales (04); owns the client relationship; hands off scoped delivery to Operations (07).
+**Department:** Client Success (07)
+**Position in flow:** Receives closed deals from Sales (05); owns the client relationship; hands off scoped delivery to Operations (08).
 **Mandate:** Own the post-sale client lifecycle — onboarding, journey, segmentation, fit/qualification, retention, health, and offboarding.
 **Owner:** *(unassigned — placeholder)*
 
@@ -71,7 +71,7 @@ None yet.
 
 ## 14. Raw Archive Pointer
 
-~22 root-level "Draft N.md" files covering client definition, segmentation, journey design, onboarding, fit/qualification, "Client OS," generic legal-entity-type explainers (not the agency's own legal infrastructure — see `09_Legal/`), flywheel, and system failures/gaps. Existing gap backlog: `06_Client_Success/00_Workspace_Intelligence_Inventory/`. Migration into the registries above is deferred to a future session.
+~22 root-level "Draft N.md" files covering client definition, segmentation, journey design, onboarding, fit/qualification, "Client OS," generic legal-entity-type explainers (not the agency's own legal infrastructure — see `10_Legal/`), flywheel, and system failures/gaps. Existing gap backlog: `07_Client_Success/00_Workspace_Intelligence_Inventory/`. Migration into the registries above is deferred to a future session.
 
 ## 15. Changelog
 

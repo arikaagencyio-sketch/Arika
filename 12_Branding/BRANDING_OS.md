@@ -1,6 +1,6 @@
 # Branding — Department OS
 
-**Department:** Branding (11)
+**Department:** Branding (12)
 **Position in flow:** Horizontal support layer — feeds Marketing, Sales, Client Success, and Agency Governance with brand architecture, narrative, and identity systems.
 **Mandate:** Own brand definition, positioning, narrative engineering, and visual/identity systems for the agency and (as a service) for clients.
 **Owner:** *(unassigned — placeholder)*
@@ -67,11 +67,13 @@ Has a **partially-real code build** (`bois/`, Python — see §13). A sibling de
 
 ## 13. Existing OS Sub-Layer
 
-**Partially — code-based, not markdown.** `11_Branding/bois/` ("Brand Operating Intelligence System") is a Python application: 44 subfolders total, most empty scaffolds, but `core/` contains genuinely working code (21 `.py` files covering governance, grading, ingestion, knowledge, memory, orchestration, presentation, retrieval). `__pycache__/` directories under it were removed during cleanup. Its sibling `branding-os/` (a same-concept scaffold in a different naming/language convention) was confirmed dead — only a README, 18 fully empty subfolders — and was **deleted** during this restructuring. **Open question (not resolved in this pass, tracked in `GLOBAL_OS.md` §11):** whether `bois/` stays a code-backed exception to the markdown-first standard, or gets reduced to a markdown spec with a thin code wrapper, matching the same open question for Finance's `finos-plugin`.
+**Partially — code-based, not markdown.** `11_Branding/bois/` ("Brand Operating Intelligence System") is a Python application: 44 subfolders total, most empty scaffolds, but `core/` contains genuinely working code (21 `.py` files covering governance, grading, ingestion, knowledge, memory, orchestration, presentation, retrieval). `__pycache__/` directories under it were removed during cleanup. Its sibling `branding-os/` (a same-concept scaffold in a different naming/language convention) was confirmed dead — only a README, 18 fully empty subfolders — and was **deleted** during this restructuring.
+
+**Decision (2026-06-30):** same resolution as Finance's `finos-plugin` (see `09_Finance/FINANCE_OS.md` §13) — `bois/` is **retained as a grandfathered code-backed exception**, not converted or deleted. `bois/documentation/COGNITIVE_INFRASTRUCTURE_ARCHITECTURE.md` remains the canonical spec for what the working `core/` code does; this department's registry sections above should be populated from that document during the future content-migration pass where it overlaps with raw drafts. If `bois/` development stalls for an extended period, downgrade it to a markdown-only spec library rather than carrying unmaintained code indefinitely — deferred until there's signal either way.
 
 ## 14. Raw Archive Pointer
 
-~40 root-level "Draft N.md" files. Existing gap backlog: `11_Branding/00_Workspace_Intelligence_Inventory/`. Migration into the registries above, and reconciliation with `bois/documentation/`, is deferred to a future session.
+~40 root-level "Draft N.md" files. Existing gap backlog: `12_Branding/00_Workspace_Intelligence_Inventory/`. Migration into the registries above, and reconciliation with `bois/documentation/`, is deferred to a future session.
 
 ## 15. Changelog
 

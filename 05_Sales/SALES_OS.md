@@ -1,7 +1,7 @@
 # Sales — Department OS
 
-**Department:** Sales (04)
-**Position in flow:** Receives qualified demand from Marketing (03) and ClientPartner Acquisition (05); converts to closed deals; hands off to Client Success (06).
+**Department:** Sales (05)
+**Position in flow:** Receives qualified demand from Marketing (03)/Content (04) and ClientPartner Acquisition (06); converts to closed deals; hands off to Client Success (07).
 **Mandate:** Own pipeline, conversion, deal execution, and the agency's sales-side AI operations.
 **Owner:** *(unassigned — placeholder)*
 
@@ -67,7 +67,7 @@ Live decision log already exists: `06_AI_OPERATIONS/06_AI_Memory_Logs/Decision_L
 
 ## 13. Existing OS Sub-Layer
 
-**Yes — most mature in the repo.** `04_Sales/06_AI_OPERATIONS/` contains:
+**Yes — most mature in the repo.** `05_Sales/06_AI_OPERATIONS/` contains:
 - `00_Index/` — AI Operations Index, Source Agent Mention Registry, Build Summary, Human Operator Guide
 - `01_System_Prompts/` — Master AI Operating Constitution, Agent Runtime Template, Multi-Agent Handoff Template
 - `02_Agent_Roles/Agent_Registry.md`
@@ -81,7 +81,7 @@ This sub-layer also has its own source-citation lineage (`Master_Source_Registry
 
 ## 14. Raw Archive Pointer
 
-~68 root-level "Draft N.md" files plus 2 CSVs and a `.ps1` script live loose at `04_Sales/`. Existing gap backlog: `04_Sales/00_Workspace_Intelligence_Inventory/`. Migration into the registries above is deferred to a future session.
+~68 root-level "Draft N.md" files plus 2 CSVs and a `.ps1` script live loose at `05_Sales/`. Existing gap backlog: `05_Sales/00_Workspace_Intelligence_Inventory/`. Migration into the registries above is deferred to a future session.
 
 ## 15. Changelog
 

@@ -1,6 +1,6 @@
 # Legal — Department OS
 
-**Department:** Legal (09)
+**Department:** Legal (10)
 **Position in flow:** Horizontal support layer — governs contracts, compliance, and risk across all other departments, reporting into Agency Governance (00).
 **Mandate:** Own contracts (MSAs, SOWs), compliance, IP/copyright protection, and legal risk management for the agency and its client engagements.
 **Owner:** *(unassigned — placeholder)*

@@ -1,7 +1,7 @@
 # ClientPartner Acquisition — Department OS
 
-**Department:** ClientPartner Acquisition (05)
-**Position in flow:** Parallel acquisition channel alongside Marketing (03); feeds qualified opportunities into Sales (04), same as Marketing does.
+**Department:** ClientPartner Acquisition (06)
+**Position in flow:** Parallel acquisition channel alongside Marketing (03)/Content (04); feeds qualified opportunities into Sales (05), same as Marketing does.
 **Mandate:** Own referral/partner-channel client acquisition — distinct from direct Marketing-driven demand generation — including its own CRM architecture and partner psychographics.
 **Owner:** *(unassigned — placeholder)*
 
@@ -71,16 +71,15 @@ None yet.
 
 ## 14. Raw Archive Pointer
 
-~13 root-level "Draft N.md" files. Existing gap backlog: `05_ClientPartner_Acquisition/00_Workspace_Intelligence_Inventory/`.
+~12 root-level "Draft N.md" files. Existing gap backlog: `06_ClientPartner_Acquisition/00_Workspace_Intelligence_Inventory/`.
 
-**Open TODO — not resolved in this pass:** five similarly-titled files about partner/client acquisition systems were flagged during exploration as a likely near-duplicate cluster, but could not be definitively resolved without a full content diff:
-- `Client Partner Acquisition System. Draft 10.md`
-- `Client Partner Acquisition. Draft 11.md`
-- `ClientPartner Acquisition System. Draft 2.md`
-- `ClientPartner Acquisition. Draft 3.md`
-- `ClientPartner Aquisition. Draft 1.md` *(note: typo "Aquisition" in this filename)*
+**Resolved (2026-06-30):** the 5-file near-duplicate cluster flagged during exploration was content-diffed:
+- `Client Partner Acquisition System. Draft 10.md` was a byte-exact duplicate of `ClientPartner Acquisition System. Draft 2.md` (same system prompt, same CPAROS revenue-architecture output) — **deleted**, `Draft 2.md` retained as canonical.
+- `Client Partner Acquisition. Draft 11.md` is genuinely distinct — a different framework (CP-AOS: a dual-agent Codex/Claude Code acquisition orchestration system), not a duplicate.
+- `ClientPartner Acquisition. Draft 3.md` is genuinely distinct — a Q&A-style breakdown of client-vs-partner acquisition scope.
+- `ClientPartner Aquisition. Draft 1.md` is genuinely distinct — a Q&A-style definitional/architecture walkthrough plus a partner-deal-vs-client-offer design framework.
 
-Run a byte/content diff across these five before or during the future content-migration pass to determine which (if any) are true duplicates versus genuinely distinct drafts in a continuous brainstorm thread.
+No further dedup action needed on this cluster.
 
 ## 15. Changelog
 
