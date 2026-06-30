@@ -9,7 +9,7 @@
 
 ## How to read this
 
-This dictionary defines **standard industry-framework metrics** relevant to an agency operating this flow (Sector → Offer → Marketing/Content → Sales → Client Success → Operations → Finance). The formulas are real and field-tested. **Owner is now confirmed (Mary Thuo, sole owner, 2026-06-30) for every metric.** Cadence was already populated with reasonable defaults at draft time. **Threshold remains the one genuine placeholder** — populating it with real cut-lines requires actual measured agency data and is explicitly not invented here, per the constitution's no-silent-invention rule (`AGENCY_OPERATING_CONSTITUTION.md` §3).
+This dictionary defines **standard industry-framework metrics** relevant to an agency operating this flow (Sector → Offer → Marketing/Content → Sales → Client Success → Operations → Finance). The formulas are real and field-tested. **Owner is now confirmed (Mary Thuo, sole owner, 2026-06-30) for every metric.** Cadence was already populated with reasonable defaults at draft time. **Threshold remains the one genuine placeholder** — populating it with real cut-lines requires actual measured agency data and is explicitly not invented here, per the constitution's no-silent-invention rule (`AGENCY_OPERATING_CONSTITUTION.md` §3). **Owner-confirmed (2026-06-30, tracker item 4): this is a deliberate decision to wait, not an oversight** — same "keep defaults/unset until real data exists" pattern already applied to Finance's risk thresholds and Branding's scoring thresholds. Revisit after the first full real operating month.
 
 ## Acquisition Metrics
 
@@ -51,3 +51,4 @@ When a department's content-migration pass surfaces a real, recurring metric not
 
 - 2026-06-30 — Initial agency-wide KPI dictionary structure created as part of governance-closure pass: standard formulas defined across acquisition, revenue/financial, and delivery/retention categories; owners/cadence/thresholds left unset pending real agency data.
 - 2026-06-30 — Owner confirmed for every metric: Mary Thuo. Thresholds remain genuinely unset, pending real measured data. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Owner confirmed leaving thresholds unset is a deliberate decision, not an oversight — resolves tracker item 4. Revisit after the first full real operating month. — Claude Code (Sonnet 4.6)

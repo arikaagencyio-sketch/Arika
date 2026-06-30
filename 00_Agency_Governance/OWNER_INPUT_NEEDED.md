@@ -27,9 +27,7 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 ## Agency-Wide (00_Agency_Governance)
 
-| # | Item | Why it matters | Currently | Source file |
-|---|---|---|---|---|
-| 4 | KPI thresholds for every metric in the dictionary | Owner and cadence are now set for every metric; only real threshold cut-lines (e.g. "alert if CAC > $X") remain genuinely unset — needs actual measured agency data, can't be invented | All `(unset)` | `AGENCY_KPI_DICTIONARY.md` |
+*(item 4 resolved 2026-06-30 — see Resolved table)*
 
 ## Department: Sector (01)
 
@@ -75,8 +73,6 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
-| 28 | Decide whether to wire the 20 documented brand agents to an actual LLM, or keep them as structured prompts/routing metadata only | Same open question as Finance's 7 agents (#27) — `agent_prompt()` generates a prompt string per agent but nothing in the codebase calls an LLM to execute them | Spec + routing exists, not executable | `12_Branding/BRANDING_OS.md` §5 |
-| 29 | Confirm or set real `BrandScoringEngine` dimension thresholds (currently generic 70-78 defaults) | These are implemented in working code and will actually gate/flag deliverables once real data flows through — but the cut-lines are designed defaults, not calibrated against real outcomes | Doctrine defaults, unconfirmed by owner | `12_Branding/BRANDING_OS.md` §7 |
 | 30 | Define the agency's own real brand (positioning, voice, identity) so BOIS has a non-hypothetical client to run against | Every BOIS run to date (including the one confirmed smoke test) has used a hypothetical example client ("Sample Nairobi Laundry") — the system has never been pointed at the agency's own brand, which is the most immediate real use case available | No real brand object exists yet, even for the agency itself | `12_Branding/BRANDING_OS.md` §2, §4 |
 
 ---
@@ -119,9 +115,13 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 14 | Confirm Marketing's MCP/connector blueprint status | **Resolved by direct owner input.** None of the 7 connector-class layers are in use yet — entirely aspirational, matching the pattern already confirmed for Finance and Branding. | 2026-06-30 | `03_Marketing/MARKETING_OS.md` §12 |
 | 10 | Locate or confirm-absent Sales' 11 companion `.docx` files | **Resolved by direct owner input.** Confirmed-lost, not pending location — citation system remains trustworthy for everything that is present. | 2026-06-30 | `05_Sales/SALES_OS.md` §14 |
 | 24 | Build a real offboarding/churn process | **Resolved — built, Claude-synthesized.** Per owner request, built the full Client Success Process Library (Retention, Expansion, Advocacy, Offboarding & Churn, Re-entry/Win-back), not just offboarding — every owned stage of the 9-stage lifecycle now has a real workflow. 4 new `Client` object fields added to `CRM_SCHEMA.md`. Not owner-original; should be reviewed before being treated as equally authoritative to the real onboarding model. | 2026-06-30 | `07_Client_Success/CLIENTSUCCESS_OS.md` §4, §10 |
+| 4 | Agency-wide KPI thresholds | **Resolved by direct owner input.** Confirmed leaving thresholds unset is deliberate, not an oversight — same pattern as Finance/Branding. Revisit after the first full real operating month. | 2026-06-30 | `AGENCY_KPI_DICTIONARY.md` |
+| 28 | Wire Branding's 20 AI agents to a real LLM? | **Resolved by direct owner input**, after confirming via code inspection that zero LLM SDK dependency exists anywhere in `bois/`. Stays spec/routing-only until the agency's own real brand exists (item 30) to give them something real to reason over. | 2026-06-30 | `12_Branding/BRANDING_OS.md` §5 |
+| 29 | Confirm or set real `BrandScoringEngine` thresholds | **Resolved by direct owner input.** Keep the generic 70-78 defaults as-is — no real BOIS run against a real client exists yet to calibrate against. | 2026-06-30 | `12_Branding/BRANDING_OS.md` §7 |
 
 ## Changelog
 
+- 2026-06-30 — **Resolved the 3 threshold/defaults items: 4, 28, 29** — same "keep defaults until real data" pattern already approved for Finance. Verified Branding's `bois/` codebase directly first (zero LLM SDK dependency, confirming item 28's premise exactly) before asking. Agency-wide KPI thresholds, Branding's AI-agent wiring, and `BrandScoringEngine`'s thresholds all confirmed to stay as-is for now. Tracker down to 5 open items: 1 build-now (30, Branding's real brand for BOIS), 4 waiting-on-data (8, 9, 13, 20). — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved item 24 (Client Success offboarding/churn process)** — built out, Claude-synthesized, broader than asked: per owner direction to also ensure all Client Success workflows exist, added Retention, Expansion, Advocacy, and Re-entry/Win-back alongside Offboarding, giving every owned stage of the 9-stage lifecycle a real workflow for the first time. Added 4 new `Client` object fields and 4 new KPI formulas. Client Success now has zero open tracker items. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved the 3 "quick win" items: 31, 14, 10.** Sector's partial chat export left as-is. Marketing confirmed none of its 7 MCP/connector layers are in real use yet. Sales' 11 missing companion docx files confirmed-lost rather than left as an open search. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved all 6 of Offer's "bigger decisions" in one pass: items 7, 37, 38, 39, 40, 41.** Owner approved offer #2's synthesis and the offers #5-11 batch as-is; decided ARR-band as primary pricing segmentation (rep-count secondary); reframed the team-role question — these are AI-assisted functional labels, not real hires, real staffing deferred to HR/People Ops; promoted 4 of Draft 28's divisions to real departments (**Audits & Diagnostics (14), Consulting & Advisory (15), Automation (16), AI Enablement (17)**, created with seeded OS files); confirmed offer #8 doesn't conflict with ClientPartner Acquisition after reading both files; computed the first provisional ARR-banded pricing floor across all 11 offers. Offer department now has only 1 open item (8, real historical figures — waiting on data). Repo is now 18 numbered folders (was 14), with `Cross-Domain Synthesis` renumbered 14→18. — Claude Code (Sonnet 4.6)

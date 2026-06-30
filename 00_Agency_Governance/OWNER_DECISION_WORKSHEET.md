@@ -20,24 +20,13 @@
 
 ---
 
-## Threshold/defaults decisions (pattern already set by Finance)
+## Threshold/defaults decisions (pattern already set by Finance) — ALL 3 RESOLVED 2026-06-30
 
-These four follow the exact precedent you already set for Finance (item 26/27): generic doctrine defaults stay in place until real operating data exists to calibrate against, rather than guessing real numbers prematurely. Flagging them so you can either rubber-stamp the same logic or override it department-by-department.
+Verified Branding's `bois/` codebase directly (zero LLM SDK dependency, same check as Finance) before asking — confirmed the premise of item 28 exactly. All 3 matched the recommendation:
 
-### Item 4 — Agency-wide KPI thresholds
-**The question:** Every metric in `AGENCY_KPI_DICTIONARY.md` has an owner and cadence now, but no threshold (e.g., "alert if CAC > $X"). Set real thresholds now, or wait?
-**My recommendation:** Same logic as Finance — keep `(unset)` for now. Setting real alert thresholds before the agency has run a single real month against the $1M target would be guessing, and a wrong threshold (false alarms or missed real problems) is worse than an honest "not yet measured." Revisit after the first full operating month.
-**Your decision:** _______________________________________________
-
-### Item 28 — Branding's 20 AI agents: wire to a real LLM?
-**The question:** Same question as Finance's 7 agents, but for Branding's 20-agent roster — keep as structured prompts/routing metadata, or wire to a live LLM now?
-**My recommendation:** Keep spec-only, matching the Finance decision exactly — and for the same reason: BOIS has never run against the agency's own real brand (see item 30 below), so there's no real data yet for live agents to reason over. Resolve item 30 first; revisit this once there's something real to point the agents at.
-**Your decision:** _______________________________________________
-
-### Item 29 — Branding's `BrandScoringEngine` thresholds
-**The question:** Generic 70-78 default scoring thresholds — keep or calibrate?
-**My recommendation:** Keep, same logic as item 4/26. No real BOIS run against a real client (including the agency itself) has happened yet — nothing to calibrate against.
-**Your decision:** _______________________________________________
+- **Item 4** (agency-wide KPI thresholds): stay unset, revisit after the first full real operating month.
+- **Item 28** (Branding's 20 AI agents): stay spec/routing-only until item 30 (the agency's own real brand) gives them something real to reason over.
+- **Item 29** (`BrandScoringEngine` thresholds): keep the generic 70-78 defaults until a real BOIS run exists to calibrate against.
 
 ### Item 8 / Item 13 — Offer's and Marketing's historical conversion/margin/LTV/CAC figures
 **The question:** Both KPI tables only have industry-benchmark template numbers, no agency actuals.
