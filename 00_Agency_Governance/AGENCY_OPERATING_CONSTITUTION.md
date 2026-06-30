@@ -14,9 +14,19 @@ This constitution governs how the agency operates as a system — who decides wh
 
 ## 2. Mission & Objectives
 
-*(Placeholder — pending owner input.)* A real mission statement, annual objectives, and quarterly goals belong here once defined by the agency owner. Until then, the only binding mission-level statement is the working description already used in `GLOBAL_OS.md` §1: operate as an AI-native agency that runs its own departments and client engagements through documented, repeatable, auditable systems rather than ad hoc effort.
+**Confirmed real, 2026-06-30.** Full vision: `00_Agency_Governance/AGENCY_VISION.md`. One-sentence form: *"Arika Agency is a 360° Cognitive Revenue Operating System that transforms businesses into self-orchestrating revenue engines by integrating sales, marketing, branding, acquisition, automation, operations, and financial intelligence into a unified system that manages revenue probability under time, capital, and opportunity constraints to produce predictable, scalable, and compounding growth."*
 
-**Do not backfill this section with invented numbers, targets, or dates.** Leave it placeholder until real objectives are supplied.
+**Real objectives (confirmed, 2026-06-30):** full detail in `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md`.
+
+| Period | Target |
+|---|---|
+| Monthly | $1,000,000 |
+| Daily | $35,000 |
+| Quarterly | $3,000,000 (derived) |
+| Half-year | $6,000,000 (derived) |
+| Yearly | $12,000,000 (derived) |
+
+Monthly/daily figures are owner-confirmed directly; quarterly/half-year/yearly are arithmetic derivations, not separately confirmed — see `AGENCY_REVENUE_TARGETS.md`'s Open Items.
 
 **Contact (confirmed 2026-06-30):** domain `arikaagency.com` (website not yet live). Business addresses: `support@arikaagency.com`, `growth@arikaagency.com`, and an owner address given as `mary.thuo@arikaagencycom` — **likely missing a "." before "com"** (would read `mary.thuo@arikaagency.com` to match the pattern of the other two addresses); flagged here rather than silently corrected, confirm the exact address when convenient.
 
@@ -78,4 +88,5 @@ No department, agent, or automation may bypass this process to self-amend the co
 ## 8. Changelog
 
 - **2026-06-30 — v0.1-draft adopted** — Initial constitution written as part of the governance-closure pass: non-negotiables, decision rights framework, 5-tier risk classification, and amendment process established. Mission/objectives left as placeholder pending agency owner input.
-- **2026-06-30** — Owner confirmed: Mary Thuo, sole owner across all departments. Applied throughout §4's Decision Rights table and the document header. Added confirmed contact info (§2). Mission/objectives (§2) remain placeholder — still pending. — Claude Code (Sonnet 4.6)
+- **2026-06-30** — Owner confirmed: Mary Thuo, sole owner across all departments. Applied throughout §4's Decision Rights table and the document header. Added confirmed contact info (§2). Mission/objectives (§2) remain placeholder — still pending.
+- **2026-06-30** — §2 Mission & Objectives resolved: real vision and real revenue targets confirmed by owner, full detail moved to `AGENCY_VISION.md` and `AGENCY_REVENUE_TARGETS.md`. — Claude Code (Sonnet 4.6)

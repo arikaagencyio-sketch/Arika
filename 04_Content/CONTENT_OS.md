@@ -35,10 +35,10 @@ Content owns what gets said and how it's produced and distributed — content st
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Content Execution Operating System | New content cycle | 10 layers: Priority Matrix → Backlog → Publishing Sequence → Research Dependencies → Asset Production → Approval → Calendar Logic → Distribution Sequencing → Repurposing → Authority-Building Roadmap | Published, sequenced content | *(unassigned)* | `Content Planning Execution.md` |
-| Asset Production Workflow | New asset needed | Research → Insight Extraction → Outline → Draft → Strategic Review → Brand Review → Final Approval → Distribution Prep → Publishing → Performance Tracking | Approved, published asset | *(unassigned)* | same |
-| Content Priority Scoring | New content idea | Score 5 dimensions (Revenue/Authority/Demand/Sales/Differentiation Impact) out of 50; Tier 1 ≥40 "Mission Critical", Tier 2 30-39, Tier 3 20-29 | Prioritized backlog | *(unassigned)* | same |
-| LinkedIn 90-day launch | New channel activation | Phase 1 Identity → Phase 2 Value → Phase 3 Depth → Phase 4 Community | Established LinkedIn presence | *(unassigned)* | `Linkedin Stratergy.md` |
+| Content Execution Operating System | New content cycle | 10 layers: Priority Matrix → Backlog → Publishing Sequence → Research Dependencies → Asset Production → Approval → Calendar Logic → Distribution Sequencing → Repurposing → Authority-Building Roadmap | Published, sequenced content | Mary Thuo | `Content Planning Execution.md` |
+| Asset Production Workflow | New asset needed | Research → Insight Extraction → Outline → Draft → Strategic Review → Brand Review → Final Approval → Distribution Prep → Publishing → Performance Tracking | Approved, published asset | Mary Thuo | same |
+| Content Priority Scoring | New content idea | Score 5 dimensions (Revenue/Authority/Demand/Sales/Differentiation Impact) out of 50; Tier 1 ≥40 "Mission Critical", Tier 2 30-39, Tier 3 20-29 | Prioritized backlog | Mary Thuo | same |
+| LinkedIn 90-day launch | New channel activation | Phase 1 Identity → Phase 2 Value → Phase 3 Depth → Phase 4 Community | Established LinkedIn presence | Mary Thuo | `Linkedin Stratergy.md` |
 
 ## 5. Agent Roster
 

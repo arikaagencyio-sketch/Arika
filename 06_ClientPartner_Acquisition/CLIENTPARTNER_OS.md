@@ -40,12 +40,12 @@ ClientPartner Acquisition's **resolved mandate (reconciliation pass, 2026-06-30)
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Partner sourcing | New partner category targeted | Classify into 6 partner categories (Distribution/Capability/Credibility/Strategic/Capital/Ecosystem), score against 7 fit criteria | Prioritized partner target list | *(unassigned)* | Draft 6 |
-| Partner attraction & qualification | Sourced partner identified | Build proof/authority assets first ("high-value partners are not acquired through begging") → score on Audience Fit/Revenue Potential/Operational Fit/Brand Alignment/Ecosystem Value (/10 each) | Qualified partner | *(unassigned)* | Drafts 6, 9 |
-| Partner onboarding/enablement | Partner qualified | Partner Toolkit (messaging, offers, case studies, scripts) + Partner Portal/CRM + training/reviews/support | Active, enabled partner | *(unassigned)* | Draft 6 |
-| Partner management/expansion | Active partnership | Co-branded campaigns, shared audiences, ecosystem integration; 4-tier partner ecosystem (Strategic core → Active distribution → Referral → Experimental) | Expanded partner network | *(unassigned)* | Draft 6 |
-| Client acquisition pipeline | New demand cycle | Demand Generation → Demand Capture → Qualification → Conversion → Feedback/Optimization | Converted client | *(unassigned)* | Draft 5 |
-| CP-AOS state machine | Any acquisition task | 12-state client lifecycle and 11-state partner lifecycle, run as separate runtimes that "MUST NEVER" be confused | Correctly-routed acquisition action | *(unassigned)* | Drafts 8, 11 |
+| Partner sourcing | New partner category targeted | Classify into 6 partner categories (Distribution/Capability/Credibility/Strategic/Capital/Ecosystem), score against 7 fit criteria | Prioritized partner target list | Mary Thuo | Draft 6 |
+| Partner attraction & qualification | Sourced partner identified | Build proof/authority assets first ("high-value partners are not acquired through begging") → score on Audience Fit/Revenue Potential/Operational Fit/Brand Alignment/Ecosystem Value (/10 each) | Qualified partner | Mary Thuo | Drafts 6, 9 |
+| Partner onboarding/enablement | Partner qualified | Partner Toolkit (messaging, offers, case studies, scripts) + Partner Portal/CRM + training/reviews/support | Active, enabled partner | Mary Thuo | Draft 6 |
+| Partner management/expansion | Active partnership | Co-branded campaigns, shared audiences, ecosystem integration; 4-tier partner ecosystem (Strategic core → Active distribution → Referral → Experimental) | Expanded partner network | Mary Thuo | Draft 6 |
+| Client acquisition pipeline | New demand cycle | Demand Generation → Demand Capture → Qualification → Conversion → Feedback/Optimization | Converted client | Mary Thuo | Draft 5 |
+| CP-AOS state machine | Any acquisition task | 12-state client lifecycle and 11-state partner lifecycle, run as separate runtimes that "MUST NEVER" be confused | Correctly-routed acquisition action | Mary Thuo | Drafts 8, 11 |
 
 ## 5. Agent Roster
 
@@ -61,11 +61,11 @@ ClientPartner Acquisition's **resolved mandate (reconciliation pass, 2026-06-30)
 
 | Metric | Formula | Draft value(s) found | Source | Owner | Cadence | Threshold |
 |---|---|---|---|---|---|---|
-| Client/Partner scoring threshold | Sum of /10 factors | 45+ priority, 30-44 nurture, <30 reject | Draft 6 | *(unassigned)* | *(unset)* | *(unset)* |
-| Partner revenue split (example) | % of deal value by partner role | Distribution Partner 20-40%, Fulfillment Operator 40-70%, Strategic Connector 10-20% | Draft 6, explicitly labeled "Example Split" | *(unassigned)* | *(unset)* | *(unset)* |
-| Trust degradation escalation | Probability threshold | Escalate if >40% | Draft 8 | *(unassigned)* | *(unset)* | *(unset)* |
-| Acquisition confidence escalation | Confidence threshold | Escalate if <85% | Draft 8 | *(unassigned)* | *(unset)* | *(unset)* |
-| Funnel/conversion metric categories | CPA, CPL, conversion rate, close rate, CAC, LTV:CAC | Named only, no benchmark values | Draft 5 | *(unassigned)* | *(unset)* | *(unset)* |
+| Client/Partner scoring threshold | Sum of /10 factors | 45+ priority, 30-44 nurture, <30 reject | Draft 6 | Mary Thuo | *(unset)* | *(unset)* |
+| Partner revenue split (example) | % of deal value by partner role | Distribution Partner 20-40%, Fulfillment Operator 40-70%, Strategic Connector 10-20% | Draft 6, explicitly labeled "Example Split" | Mary Thuo | *(unset)* | *(unset)* |
+| Trust degradation escalation | Probability threshold | Escalate if >40% | Draft 8 | Mary Thuo | *(unset)* | *(unset)* |
+| Acquisition confidence escalation | Confidence threshold | Escalate if <85% | Draft 8 | Mary Thuo | *(unset)* | *(unset)* |
+| Funnel/conversion metric categories | CPA, CPL, conversion rate, close rate, CAC, LTV:CAC | Named only, no benchmark values | Draft 5 | Mary Thuo | *(unset)* | *(unset)* |
 
 ## 8. Decision Log
 

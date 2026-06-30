@@ -73,12 +73,12 @@ Three productized offers proposed but unconfirmed: "Sector Intelligence Audit," 
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Sector Layer Blueprint Stack | New sector being evaluated | Reality → Dynamics → Advantage → Execution → Feedback (loops back to Reality) | Full sector model | *(unassigned)* | Draft 5 |
-| Sector Launch Mechanism | Entering a target sector | 7 phases: Grounding → Intelligence → Signal Generation → Positioning Lock → Trust Compression → Conversion → Expansion | Sector entry executed | *(unassigned)* | Draft 12 |
-| Weekly sector operating cadence | Time-based | Intelligence Update → Opportunity Review → Offer Refinement → Pipeline Push → Execution Audit | Maintained sector intelligence | *(unassigned)* | Draft 7 |
-| Sector Cognition Runtime | Any sector-related task | 14-step loop: identify sector → read constitution → map linguistics/infrastructure → analyze calendars/journeys → identify governance → model runtime → identify dependencies → detect opportunities/risks → update memory → generate intelligence → report | Sector intelligence output | *(unassigned)* | Draft 13 |
-| Prospect signal scoring | New prospect identified | Score 0-15 per signal category (Internal/Market/Behavioral/Stated/Competitive/Predictive) → sum to /90 → band into Low(0-22)/Medium(23-45)/High(46-67)/Critical(68-90) → match offer to highest-scoring category | Prioritized, offer-matched prospect | *(unassigned)* | `Draft 15` (chat source) |
-| Tier 1 7-stage engagement | Client signs on (Tier 1 ICP) | Pain Discovery → Revenue Audit → Quick Win (30 days, 5 meetings booked) → System Install (full dashboard) → Handoff+Training → Optimization Loop (3x+ pipeline coverage) → Ongoing Partnership (2+ referrals/12mo) | Client moved from vendor to "trusted revenue partner" relationship | *(unassigned)* | xlsx Sheet 01 |
+| Sector Layer Blueprint Stack | New sector being evaluated | Reality → Dynamics → Advantage → Execution → Feedback (loops back to Reality) | Full sector model | Mary Thuo | Draft 5 |
+| Sector Launch Mechanism | Entering a target sector | 7 phases: Grounding → Intelligence → Signal Generation → Positioning Lock → Trust Compression → Conversion → Expansion | Sector entry executed | Mary Thuo | Draft 12 |
+| Weekly sector operating cadence | Time-based | Intelligence Update → Opportunity Review → Offer Refinement → Pipeline Push → Execution Audit | Maintained sector intelligence | Mary Thuo | Draft 7 |
+| Sector Cognition Runtime | Any sector-related task | 14-step loop: identify sector → read constitution → map linguistics/infrastructure → analyze calendars/journeys → identify governance → model runtime → identify dependencies → detect opportunities/risks → update memory → generate intelligence → report | Sector intelligence output | Mary Thuo | Draft 13 |
+| Prospect signal scoring | New prospect identified | Score 0-15 per signal category (Internal/Market/Behavioral/Stated/Competitive/Predictive) → sum to /90 → band into Low(0-22)/Medium(23-45)/High(46-67)/Critical(68-90) → match offer to highest-scoring category | Prioritized, offer-matched prospect | Mary Thuo | `Draft 15` (chat source) |
+| Tier 1 7-stage engagement | Client signs on (Tier 1 ICP) | Pain Discovery → Revenue Audit → Quick Win (30 days, 5 meetings booked) → System Install (full dashboard) → Handoff+Training → Optimization Loop (3x+ pipeline coverage) → Ongoing Partnership (2+ referrals/12mo) | Client moved from vendor to "trusted revenue partner" relationship | Mary Thuo | xlsx Sheet 01 |
 
 ## 5. Agent Roster
 
@@ -96,8 +96,8 @@ Three productized offers proposed but unconfirmed: "Sector Intelligence Audit," 
 
 | Metric | Formula | Threshold | Source | Owner | Cadence |
 |---|---|---|---|---|---|
-| Prospect Signal Score | Sum of 6 categories × 0-15 each (Internal+Market+Behavioral+Stated+Competitive+Predictive) | 0-22 Low · 23-45 Medium · 46-67 High · 68-90 Critical | `Draft 15` | *(unassigned)* | Re-score Medium-tier prospects every 30 days — "signals decay" |
-| Sector readiness tier | 🟢 Ready Now / 🟡 In Progress / 🔴 Asleep, qualitative per-sector classification | N/A — qualitative gate for go-to-market sequencing | xlsx Sheet 11 | *(unassigned)* | Reassess as market conditions shift |
+| Prospect Signal Score | Sum of 6 categories × 0-15 each (Internal+Market+Behavioral+Stated+Competitive+Predictive) | 0-22 Low · 23-45 Medium · 46-67 High · 68-90 Critical | `Draft 15` | Mary Thuo | Re-score Medium-tier prospects every 30 days — "signals decay" |
+| Sector readiness tier | 🟢 Ready Now / 🟡 In Progress / 🔴 Asleep, qualitative per-sector classification | N/A — qualitative gate for go-to-market sequencing | xlsx Sheet 11 | Mary Thuo | Reassess as market conditions shift |
 
 This is a real scoring mechanism the agency designed for itself, not a fabricated figure — but it has never been run against a real prospect yet, so treat it as "ready to use," not "validated by use."
 

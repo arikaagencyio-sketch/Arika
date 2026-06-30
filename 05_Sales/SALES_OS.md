@@ -39,10 +39,10 @@ Sales is responsible for converting qualified opportunities (from Marketing and 
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Daily Sales Command Run | "Move revenue today" | 7-agent sequence: Executive Intelligence → RevOps → Demand Gen → Lead Qualification → Sales Execution → Follow-Up → Reflection | Top 5 revenue actions, deal risks, follow-ups due, new pipeline actions, approvals needed, memory updates | *(unassigned)* | `06_AI_OPERATIONS/07_Runtime_Examples/Daily_Sales_Command_Run.md` |
-| Client Sales System Build Run | "Build/reconstruct a client sales OS" | 10-agent sequence: Planning → Market Intelligence → Customer Psychology → Offer Architecture → RevOps → Enablement → AI Orchestration → Risk/Governance → Multi-Agent Orchestration → Reflection | Sales OS blueprint, agent map, SOP backlog, CRM/KPI structure, governance rules, implementation sequence | *(unassigned)* | `06_AI_OPERATIONS/07_Runtime_Examples/Client_Sales_System_Build_Run.md` |
-| Pipeline Build Runbook | New pipeline needed | 9-step agent route + daily pipeline action loop (10 steps) + 7-touch follow-up cadence (Day 0/2/5/9/14/21/30, each with purpose and message type) | 12-item output contract; the most execution-ready workflow in this folder | *(unassigned)* | `06_AI_OPERATIONS/07_Runtime_Examples/Pipeline_Build_Runbook.md` |
-| Intent → agent routing | Any incoming task | 18-row intent→agent lookup table; routing rule: smallest capable agent first, multi-agent only when >3 agents needed or cross-domain, reflection before trusting high-impact output, governance check before external/irreversible action | Correct agent assignment | *(unassigned)* | `06_AI_OPERATIONS/04_Routing/Task_Routing_Matrix.md` |
+| Daily Sales Command Run | "Move revenue today" | 7-agent sequence: Executive Intelligence → RevOps → Demand Gen → Lead Qualification → Sales Execution → Follow-Up → Reflection | Top 5 revenue actions, deal risks, follow-ups due, new pipeline actions, approvals needed, memory updates | Mary Thuo | `06_AI_OPERATIONS/07_Runtime_Examples/Daily_Sales_Command_Run.md` |
+| Client Sales System Build Run | "Build/reconstruct a client sales OS" | 10-agent sequence: Planning → Market Intelligence → Customer Psychology → Offer Architecture → RevOps → Enablement → AI Orchestration → Risk/Governance → Multi-Agent Orchestration → Reflection | Sales OS blueprint, agent map, SOP backlog, CRM/KPI structure, governance rules, implementation sequence | Mary Thuo | `06_AI_OPERATIONS/07_Runtime_Examples/Client_Sales_System_Build_Run.md` |
+| Pipeline Build Runbook | New pipeline needed | 9-step agent route + daily pipeline action loop (10 steps) + 7-touch follow-up cadence (Day 0/2/5/9/14/21/30, each with purpose and message type) | 12-item output contract; the most execution-ready workflow in this folder | Mary Thuo | `06_AI_OPERATIONS/07_Runtime_Examples/Pipeline_Build_Runbook.md` |
+| Intent → agent routing | Any incoming task | 18-row intent→agent lookup table; routing rule: smallest capable agent first, multi-agent only when >3 agents needed or cross-domain, reflection before trusting high-impact output, governance check before external/irreversible action | Correct agent assignment | Mary Thuo | `06_AI_OPERATIONS/04_Routing/Task_Routing_Matrix.md` |
 
 ## 5. Agent Roster
 
@@ -56,17 +56,27 @@ Executive Intelligence · Revenue Strategy · Market Intelligence · Customer Ps
 
 ## 7. KPI Dictionary (department-local)
 
-| Metric | Formula | Source | Owner | Cadence | Threshold |
-|---|---|---|---|---|---|
-| *(placeholder — RevOps Agent's mandate covers CRM/KPI/forecasting/dashboards, but no concrete formulas, real figures, or thresholds were found anywhere in this department's source material)* | | | | | |
+**Updated 2026-06-30 — real daily targets now exist** (owner-confirmed, not historical actuals — see `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` for full derivation and the deal-count logic behind these numbers):
 
-This is a genuine gap, not just unmigrated content — the department's own gap backlog (`00_Workspace_Intelligence_Inventory/WORKSPACE_GAP_RESOLUTION_BACKLOG.csv`) confirms no formal KPI dictionary exists as a standalone artifact. Cross-reference `00_Agency_Governance/AGENCY_KPI_DICTIONARY.md` for the agency-wide acquisition/revenue formulas (CAC, conversion rate, sales cycle length, pipeline velocity) that this department should own real values for once data exists.
+| Metric | Daily Target | Owner | Source |
+|---|---|---|---|
+| Revenue Closed | $35,000 | Mary Thuo | `AGENCY_REVENUE_TARGETS.md` |
+| Quotations Sent | $150,000 | Mary Thuo | same |
+| Discovery Calls | 12 | Mary Thuo | same |
+| Qualified Prospects | 25 | Mary Thuo | same |
+| Outbound Contacts | 300 | Mary Thuo | same |
+| Follow-Ups | 50 | Mary Thuo | same |
+| Proposals | 7 | Mary Thuo | same |
+| Closed Deals | 5 (each ≥$7,000) OR 7 closed offers/quotations (each ≥$5,000) | Mary Thuo | same |
+
+**This does not fully close the original gap** — these are real *targets*, not measured historical results (no actual close rate, CAC, sales cycle length, or pipeline velocity has been recorded against them yet, since the agency hasn't operated against these targets long enough to have real history). Cross-reference `00_Agency_Governance/AGENCY_KPI_DICTIONARY.md` for the agency-wide formulas (CAC, conversion rate, sales cycle length, pipeline velocity) this department should populate with real historical values once measured.
 
 ## 8. Decision Log
 
 Live decision log already exists: `06_AI_OPERATIONS/06_AI_Memory_Logs/Decision_Log.md` — use that file going forward rather than duplicating entries here. **Confirmed empty** (one-line template only) — same for `Learning_Loop_Log.md` and `Prompt_Evolution_Log.md`. This is a designed-but-unused capability: the format exists (`AI_Memory_Log_Template.md`), real entries do not yet.
 
 - **2026-06-30 — Reconciled this department's 4-tier risk model with the agency-wide 5-class system** (tracker item 11, resolved). See §10 for the mapping table.
+- **2026-06-30 — Added real daily revenue/activity targets** from `AGENCY_REVENUE_TARGETS.md` (tracker item 9, partially resolved — targets now real, historical actuals still pending). See §7.
 
 **Decision (2026-06-30):** added the reconciliation mapping above between this department's 4-tier risk model and the agency-wide 5-class system — see this department's §8 Decision Log entry.
 

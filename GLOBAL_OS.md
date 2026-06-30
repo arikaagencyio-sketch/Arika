@@ -10,7 +10,13 @@
 
 This repository is **Arika Agency's** own command center — the operating system the agency runs itself on, and the pattern it can extend to run client businesses. It is not a deliverable; it is the agency's internal nervous system: strategy, governance, knowledge, and (progressively) the agents/workflows that execute daily operations.
 
-**Mission (placeholder — confirm with owner):** Operate as an AI-native agency that runs its own departments and client engagements through documented, repeatable, auditable systems rather than ad hoc effort. Real sector confirmed 2026-06-30 (B2B SaaS, see `01_Sector/SECTOR_OS.md` §1) — full mission/objectives statement still pending (`00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 1).
+**Vision (confirmed real, 2026-06-30):** *"Arika Agency is a 360° Cognitive Revenue Operating System that transforms businesses into self-orchestrating revenue engines by integrating sales, marketing, branding, acquisition, automation, operations, and financial intelligence into a unified system that manages revenue probability under time, capital, and opportunity constraints to produce predictable, scalable, and compounding growth."*
+
+More plainly: the agency exists to become a fully integrated Revenue Intelligence and Execution System that designs, builds, and operates the entire growth infrastructure of B2B and complex B2C companies — where revenue is engineered through systems, not generated through services. Businesses don't "hire the agency"; they plug into a revenue operating system that behaves like an extension of their own business brain. **Full 10-layer architecture (Strategic, Revenue, Acquisition, Sales, Marketing, Branding, Operations, Automation, Intelligence, Financial Orchestration), the closed-loop system logic, and the 5 foundational realities of business/project management: `00_Agency_Governance/AGENCY_VISION.md`.**
+
+**Real operating target (confirmed, 2026-06-30):** $1,000,000/month, $35,000/day — non-negotiable. Full deal-count logic and the 7-calendar cognitive operating system: `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md`.
+
+Real sector confirmed 2026-06-30 (B2B SaaS, see `01_Sector/SECTOR_OS.md` §1).
 
 **What this repo is NOT:** a client deliverable, a finished strategy document, or a fully built automation platform. As of v0.1 it is the *structure* the agency's real source-of-truth content gets poured into — deliberately built before that content, per the agency's own stated principle of "preparing the room before adding the source of truth."
 

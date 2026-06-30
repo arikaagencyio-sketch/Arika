@@ -45,12 +45,12 @@ Branding defines and governs how the agency (and client brands it manages) prese
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Knowledge bootstrap | Manual run | `bootstrap_bois.py`: scan raw drafts → checksum/ID → parse paragraphs → tag → build knowledge graph → write indexes | Populated `bois/knowledge/_indexes/` (documents.json, paragraphs.jsonl, knowledge_graph.json) | *(unassigned)* | `core/executions/bootstrap_bois.py` — **confirmed run**, 40 docs / 14,109 paragraphs / 0 errors |
-| Brand context assembly & agent routing | New client/brief | Assemble `DynamicBrandContext` → match sector/deliverable/geography/audience against `TRIGGER_RULES` → select agents from `BASE_AGENT_SEQUENCE` (7-agent base chain) + triggered specialists → build per-agent tasks | Routed agent task set | *(unassigned)* | `core/orchestration/engine.py` |
-| Gated retrieval | Agent task needs evidence | Query 6 required sources via hybrid (TF-IDF + tag + reinforcement) scoring → assemble bundle → **hard-fail (`RuntimeError`) if incomplete** rather than proceed with partial evidence | Retrieval bundle or explicit failure state | *(unassigned)* | `core/retrieval/gated_retriever.py` |
-| Brand scoring / audit | Deliverable or evidence set ready | Score across 15 weighted dimensions (manual `.score()` or evidence-based `.audit_from_evidence()` keyword-hit heuristic) → flag dimensions below threshold (70-78) → attach recommendations | Scored brand audit | *(unassigned)* | `core/grading/engine.py` |
-| Governance validation | Agent output produced | Check retrieval completeness, agent activation, 8 mandatory reasoning fields, 5 continuity-keyword checks | Pass/fail governance finding | *(unassigned)* | `core/governance/policy.py` |
-| Smoke test | Validation run | End-to-end run of bootstrap + orchestration + scoring against a hypothetical client | Confirmed working pipeline | *(unassigned)* | `core/executions/smoke_test.py` — **confirmed run** against "Sample Nairobi Laundry" (explicitly labeled sample data) |
+| Knowledge bootstrap | Manual run | `bootstrap_bois.py`: scan raw drafts → checksum/ID → parse paragraphs → tag → build knowledge graph → write indexes | Populated `bois/knowledge/_indexes/` (documents.json, paragraphs.jsonl, knowledge_graph.json) | Mary Thuo | `core/executions/bootstrap_bois.py` — **confirmed run**, 40 docs / 14,109 paragraphs / 0 errors |
+| Brand context assembly & agent routing | New client/brief | Assemble `DynamicBrandContext` → match sector/deliverable/geography/audience against `TRIGGER_RULES` → select agents from `BASE_AGENT_SEQUENCE` (7-agent base chain) + triggered specialists → build per-agent tasks | Routed agent task set | Mary Thuo | `core/orchestration/engine.py` |
+| Gated retrieval | Agent task needs evidence | Query 6 required sources via hybrid (TF-IDF + tag + reinforcement) scoring → assemble bundle → **hard-fail (`RuntimeError`) if incomplete** rather than proceed with partial evidence | Retrieval bundle or explicit failure state | Mary Thuo | `core/retrieval/gated_retriever.py` |
+| Brand scoring / audit | Deliverable or evidence set ready | Score across 15 weighted dimensions (manual `.score()` or evidence-based `.audit_from_evidence()` keyword-hit heuristic) → flag dimensions below threshold (70-78) → attach recommendations | Scored brand audit | Mary Thuo | `core/grading/engine.py` |
+| Governance validation | Agent output produced | Check retrieval completeness, agent activation, 8 mandatory reasoning fields, 5 continuity-keyword checks | Pass/fail governance finding | Mary Thuo | `core/governance/policy.py` |
+| Smoke test | Validation run | End-to-end run of bootstrap + orchestration + scoring against a hypothetical client | Confirmed working pipeline | Mary Thuo | `core/executions/smoke_test.py` — **confirmed run** against "Sample Nairobi Laundry" (explicitly labeled sample data) |
 
 ## 5. Agent Roster
 
@@ -66,12 +66,12 @@ Branding defines and governs how the agency (and client brands it manages) prese
 
 | Metric | Formula | Threshold found | Source | Owner | Cadence |
 |---|---|---|---|---|---|
-| Brand Score (composite) | Weighted sum across 15 scoring dimensions | Per-dimension thresholds 70-78; weights sum to ~1.0 | `core/grading/engine.py` (`BrandScoringEngine`) | *(unassigned)* | Per-deliverable/audit |
-| Cultural Alignment Score | 5 sub-metrics: Resonance Rate, Emotional Sentiment Score, "Seen" Index, Promise-to-Behavior Consistency, Core Identity Stability, Adaptation Speed | Named formula, no real values | Draft 24 — conceptual ancestor of the code's scoring engine | *(unassigned)* | *(unset)* |
-| Brand Diagnostic Score | 0-5 per layer × 8 layers, total /40, bands "Fragmented" → "Category Dominant" | Named, illustrative | Draft 3 | *(unassigned)* | *(unset)* |
-| Sector Brand Intelligence Index | 7 dimensions, 1-10 scoring | Named, illustrative | Draft 19 | *(unassigned)* | *(unset)* |
-| Governance KPIs | Brand Trust Score, Infringement Incidents, Enforcement Response Time | Named only, no values | Draft 29 | *(unassigned)* | *(unset)* |
-| Retrieval completeness | Bundle assembled across 6 required sources | Hard gate — incomplete retrieval raises a runtime error rather than degrading silently | `core/retrieval/gated_retriever.py` (`RetrievalGate`) | *(unassigned)* | Per-query |
+| Brand Score (composite) | Weighted sum across 15 scoring dimensions | Per-dimension thresholds 70-78; weights sum to ~1.0 | `core/grading/engine.py` (`BrandScoringEngine`) | Mary Thuo | Per-deliverable/audit |
+| Cultural Alignment Score | 5 sub-metrics: Resonance Rate, Emotional Sentiment Score, "Seen" Index, Promise-to-Behavior Consistency, Core Identity Stability, Adaptation Speed | Named formula, no real values | Draft 24 — conceptual ancestor of the code's scoring engine | Mary Thuo | *(unset)* |
+| Brand Diagnostic Score | 0-5 per layer × 8 layers, total /40, bands "Fragmented" → "Category Dominant" | Named, illustrative | Draft 3 | Mary Thuo | *(unset)* |
+| Sector Brand Intelligence Index | 7 dimensions, 1-10 scoring | Named, illustrative | Draft 19 | Mary Thuo | *(unset)* |
+| Governance KPIs | Brand Trust Score, Infringement Incidents, Enforcement Response Time | Named only, no values | Draft 29 | Mary Thuo | *(unset)* |
+| Retrieval completeness | Bundle assembled across 6 required sources | Hard gate — incomplete retrieval raises a runtime error rather than degrading silently | `core/retrieval/gated_retriever.py` (`RetrievalGate`) | Mary Thuo | Per-query |
 
 Cross-reference `00_Agency_Governance/AGENCY_KPI_DICTIONARY.md` for the agency-wide dictionary; none of these brand-scoring metrics currently have an agency-wide analog.
 

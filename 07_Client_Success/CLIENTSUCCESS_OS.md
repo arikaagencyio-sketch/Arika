@@ -32,8 +32,8 @@ Client Success owns everything that happens to a client *after* the sale: onboar
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Client onboarding sequence | Deal closed | Welcome/confirmation → onboarding form → internal review → kickoff call → define success metrics → start execution | Activated client | *(unassigned)* | Draft 16 |
-| Outward-facing client diagnostic | Sales call / early engagement | 5-10 min scan to find a client's business bottleneck | Diagnostic output (sellable/usable on calls) | *(unassigned)* | Drafts 2, 15 |
+| Client onboarding sequence | Deal closed | Welcome/confirmation → onboarding form → internal review → kickoff call → define success metrics → start execution | Activated client | Mary Thuo | Draft 16 |
+| Outward-facing client diagnostic | Sales call / early engagement | 5-10 min scan to find a client's business bottleneck | Diagnostic output (sellable/usable on calls) | Mary Thuo | Drafts 2, 15 |
 
 **Lifecycle model — resolved (reconciliation pass, 2026-06-30).** 3 unreconciled models were found; the 9-stage Draft 2 version is now canonical, because it's the only one that maps cleanly onto this repo's own department flow (Sector→Offer→Marketing→Sales→Client→Operations→Finance) with no stage left ownerless:
 
@@ -57,9 +57,9 @@ Build any future onboarding/retention workflows against the 9-stage model.
 
 | Metric | Formula | Draft value(s) found | Source | Owner | Cadence | Threshold |
 |---|---|---|---|---|---|---|
-| Pre-sale qualification score | Sum of 5 filters /5 each = /25 | 20-25 ideal, 15-19 conditional, <15 reject (Draft 1); 20-25/15-19/10-14/<10 (Draft 15, different cut lines for the same scale) | Drafts 1, 15 | *(unassigned)* | *(unset)* | *(unset)* |
-| Onboarding diagnostic score | 6 pass/fail checks | 5-6 / 3-4 / 0-2 | Draft 16 | *(unassigned)* | *(unset)* | *(unset)* |
-| Generic metric names invoked, no values given | CAC, LTV, NPS, activation rate, engagement rate, progress rate, success rate, time-to-value | Named only | Drafts 7, 17 | *(unassigned)* | *(unset)* | *(unset)* |
+| Pre-sale qualification score | Sum of 5 filters /5 each = /25 | 20-25 ideal, 15-19 conditional, <15 reject (Draft 1); 20-25/15-19/10-14/<10 (Draft 15, different cut lines for the same scale) | Drafts 1, 15 | Mary Thuo | *(unset)* | *(unset)* |
+| Onboarding diagnostic score | 6 pass/fail checks | 5-6 / 3-4 / 0-2 | Draft 16 | Mary Thuo | *(unset)* | *(unset)* |
+| Generic metric names invoked, no values given | CAC, LTV, NPS, activation rate, engagement rate, progress rate, success rate, time-to-value | Named only | Drafts 7, 17 | Mary Thuo | *(unset)* | *(unset)* |
 
 **Note:** the two qualification-scoring drafts (1 and 15) use the same /25 scale but disagree on cut-line thresholds — flag rather than silently pick one if this gets operationalized.
 

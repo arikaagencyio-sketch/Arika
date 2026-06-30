@@ -46,10 +46,10 @@ All 17 modules below have real, non-trivial design content in `finos-plugin/docs
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Revenue Received | Payment event | Payment → Event Bus → Ledger → Allocation → Treasury → Compliance → Risk → Report | Posted, allocated revenue | *(unassigned)* | `finos-plugin/docs/workflows.md` |
-| Expense Approval | New expense | Tiered approval: ≤$500 auto/dept owner, $500-5K manager, $5K-25K CFO, >$25K executive/board | Approved/rejected expense | *(unassigned)* | same |
-| Liquidity Alert | Trigger condition met | Fires on: runway <60 days, negative net liquidity, negative 13-week forecast, reserve breach | Escalation to Treasury/CFO Agent | *(unassigned)* | same |
-| Operating rhythm | Time-based | Daily/Weekly/Monthly/Quarterly/Half-Yearly/Yearly reviews, each with specific documented content | Maintained financial oversight | *(unassigned)* | same |
+| Revenue Received | Payment event | Payment → Event Bus → Ledger → Allocation → Treasury → Compliance → Risk → Report | Posted, allocated revenue | Mary Thuo | `finos-plugin/docs/workflows.md` |
+| Expense Approval | New expense | Tiered approval: ≤$500 auto/dept owner, $500-5K manager, $5K-25K CFO, >$25K executive/board | Approved/rejected expense | Mary Thuo | same |
+| Liquidity Alert | Trigger condition met | Fires on: runway <60 days, negative net liquidity, negative 13-week forecast, reserve breach | Escalation to Treasury/CFO Agent | Mary Thuo | same |
+| Operating rhythm | Time-based | Daily/Weekly/Monthly/Quarterly/Half-Yearly/Yearly reviews, each with specific documented content | Maintained financial oversight | Mary Thuo | same |
 
 ## 5. Agent Roster
 
@@ -65,15 +65,16 @@ All 17 modules below have real, non-trivial design content in `finos-plugin/docs
 
 | Metric | Formula | Threshold found | Source | Owner | Cadence |
 |---|---|---|---|---|---|
-| Runway | Cash ÷ average daily burn | Alert if <60 days | `workflows.md`; implemented in `cashflow-engine` | *(unassigned)* | Continuous |
-| DSCR (Debt Service Coverage Ratio) | Operating income ÷ debt service | Alert if <1.25x | `risk-engine/index.ts` | *(unassigned)* | Continuous |
-| Client concentration | Largest client revenue ÷ total revenue | Alert >20%, critical >35% | same; matches `concentration_limit_pct` default in `database/schema.sql` | *(unassigned)* | Continuous |
-| LTV:CAC ratio | See `AGENCY_KPI_DICTIONARY.md` | Doctrine target 3:1 (i.e. 1:3 CAC:LTV) | Draft 5 ("Elite Unit Economics") | *(unassigned)* | *(unset)* |
-| Reserve tiers | Months of operating cost held | Operating 3-6mo, Emergency 6-12mo, plus Expansion/Acquisition reserves | `cashflow-engine`, `workflows.md` | *(unassigned)* | *(unset)* |
-| Forecast horizon | Rolling forward-looking window | 13-week / 91-day | `cashflow-engine` | *(unassigned)* | Weekly |
-| Expense approval tiers | Dollar thresholds | ≤$500 auto, $500-5K manager, $5K-25K CFO, >$25K executive/board | `workflows.md` | *(unassigned)* | Per-transaction |
+| Runway | Cash ÷ average daily burn | Alert if <60 days | `workflows.md`; implemented in `cashflow-engine` | Mary Thuo | Continuous |
+| DSCR (Debt Service Coverage Ratio) | Operating income ÷ debt service | Alert if <1.25x | `risk-engine/index.ts` | Mary Thuo | Continuous |
+| Client concentration | Largest client revenue ÷ total revenue | Alert >20%, critical >35% | same; matches `concentration_limit_pct` default in `database/schema.sql` | Mary Thuo | Continuous |
+| LTV:CAC ratio | See `AGENCY_KPI_DICTIONARY.md` | Doctrine target 3:1 (i.e. 1:3 CAC:LTV) | Draft 5 ("Elite Unit Economics") | Mary Thuo | *(unset)* |
+| Reserve tiers | Months of operating cost held | Operating 3-6mo, Emergency 6-12mo, plus Expansion/Acquisition reserves | `cashflow-engine`, `workflows.md` | Mary Thuo | *(unset)* |
+| Forecast horizon | Rolling forward-looking window | 13-week / 91-day | `cashflow-engine` | Mary Thuo | Weekly |
+| Expense approval tiers | Dollar thresholds | ≤$500 auto, $500-5K manager, $5K-25K CFO, >$25K executive/board | `workflows.md` | Mary Thuo | Per-transaction |
+| Revenue target (monthly) | Real, owner-confirmed | $1,000,000/month, $35,000/day, non-negotiable | `AGENCY_REVENUE_TARGETS.md` | Mary Thuo | Daily/Monthly |
 
-These are real, implemented thresholds in working code — closer to "configured business rules awaiting real values" than pure narrative aspiration. Cross-reference `00_Agency_Governance/AGENCY_KPI_DICTIONARY.md` for the agency-wide version of LTV:CAC.
+These are real, implemented thresholds in working code — closer to "configured business rules awaiting real values" than pure narrative aspiration. Cross-reference `00_Agency_Governance/AGENCY_KPI_DICTIONARY.md` for the agency-wide version of LTV:CAC, and `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` for the full revenue-target derivation, the 7-calendar cognitive operating system, and cash-flow discipline principle (revenue closed ≠ cash collected) that directly extends this department's own Cashflow Engine/forecasting mandate (§3, §13).
 
 ## 8. Decision Log
 
@@ -123,4 +124,5 @@ These are real, implemented thresholds in working code — closer to "configured
 ## 15. Changelog
 
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring.
-- 2026-06-30 — Content migration: `finos-plugin/docs/` (all 11 files) and a sample of code/raw drafts read. **Corrected** the original "19 engines, mostly stub" characterization — confirmed 17 engines, several with real working logic (core-ledger, cashflow-engine, risk-engine, compliance-engine), and a real source-citation system in `source-intelligence.md` comparable to Sales's. Populated Capability Registry, Workflow Index, Agent Roster, KPI Dictionary, Standards & SOPs Index, and Triggers/Automation Hooks. All financial thresholds confirmed generic doctrine, not real agency figures. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Content migration: `finos-plugin/docs/` (all 11 files) and a sample of code/raw drafts read. **Corrected** the original "19 engines, mostly stub" characterization — confirmed 17 engines, several with real working logic (core-ledger, cashflow-engine, risk-engine, compliance-engine), and a real source-citation system in `source-intelligence.md` comparable to Sales's. Populated Capability Registry, Workflow Index, Agent Roster, KPI Dictionary, Standards & SOPs Index, and Triggers/Automation Hooks. All financial thresholds confirmed generic doctrine, not real agency figures.
+- 2026-06-30 — Added the real, owner-confirmed monthly/daily revenue target to §7, cross-referencing the new `AGENCY_REVENUE_TARGETS.md`. — Claude Code (Sonnet 4.6)

@@ -38,11 +38,11 @@ All "grounded" = traceable to this department's own raw drafts per the spot-chec
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Workflow A — Strategy to Market Launch | New campaign/offer needs launching | 7 steps (strategy → production → distribution) | Live campaign | *(unassigned)* | `Elite_Marketing_Agentic_OS/03_Skill_Workflow_Rulebook.md` |
-| Workflow B — Storyboard to Image Generation Pipeline | Creative asset needed | 10 steps (storyboard → script → prompt package → generation → QA) | Approved creative asset | *(unassigned)* | same |
-| Workflow C — Weekly Optimization Cycle | Time-based (weekly) | 5 steps (review → diagnose → hypothesize → test → encode) | Updated campaign performance | *(unassigned)* | same |
-| 30/60/90 Activation Rollout | New department/system activation | Phase 1 (Day 1-30, Foundation & Control) → Phase 2 (Day 31-60, Execution & Learning Velocity) → Phase 3 (Day 61-90, Scale, Reliability, Compounding), each with named owner-agent and gate KPIs (e.g. "≥90% event integrity," "≥95% automation uptime") | Department fully activated | *(unassigned)* | `Elite_Marketing_Agentic_OS/07_30_60_90_Activation_Rollout_Plan.md` |
-| Execution cadence (daily/weekly/monthly/quarterly/annual) | Time-based | Full operating rhythm with named owner-agent per tier | Ongoing department operations | *(unassigned)* | `Elite_Marketing_Agentic_OS/05_Execution_Cadence_Playbooks.md` |
+| Workflow A — Strategy to Market Launch | New campaign/offer needs launching | 7 steps (strategy → production → distribution) | Live campaign | Mary Thuo | `Elite_Marketing_Agentic_OS/03_Skill_Workflow_Rulebook.md` |
+| Workflow B — Storyboard to Image Generation Pipeline | Creative asset needed | 10 steps (storyboard → script → prompt package → generation → QA) | Approved creative asset | Mary Thuo | same |
+| Workflow C — Weekly Optimization Cycle | Time-based (weekly) | 5 steps (review → diagnose → hypothesize → test → encode) | Updated campaign performance | Mary Thuo | same |
+| 30/60/90 Activation Rollout | New department/system activation | Phase 1 (Day 1-30, Foundation & Control) → Phase 2 (Day 31-60, Execution & Learning Velocity) → Phase 3 (Day 61-90, Scale, Reliability, Compounding), each with named owner-agent and gate KPIs (e.g. "≥90% event integrity," "≥95% automation uptime") | Department fully activated | Mary Thuo | `Elite_Marketing_Agentic_OS/07_30_60_90_Activation_Rollout_Plan.md` |
+| Execution cadence (daily/weekly/monthly/quarterly/annual) | Time-based | Full operating rhythm with named owner-agent per tier | Ongoing department operations | Mary Thuo | `Elite_Marketing_Agentic_OS/05_Execution_Cadence_Playbooks.md` |
 
 ## 5. Agent Roster
 
@@ -62,12 +62,12 @@ Plus **~45 named sub-agents** in the YAML catalog without individual cards (e.g.
 
 | Metric | Formula | Draft value(s) found | Source | Owner | Cadence | Threshold |
 |---|---|---|---|---|---|---|
-| LTV:CAC ratio | See `AGENCY_KPI_DICTIONARY.md` | 3:1 healthy, 4-5:1 strong, <3:1 inefficient | Elite_Marketing_Agentic_OS rollout plan | *(unassigned)* | *(unset)* | *(unset)* |
-| CAC payback period | Months to recover CAC | <6mo aggressive-viable, 6-12mo stable, >12mo risk | same | *(unassigned)* | *(unset)* | *(unset)* |
-| Event tracking integrity (rollout gate) | % of expected events correctly tracked | ≥90% | `07_30_60_90_Activation_Rollout_Plan.md` | *(unassigned)* | *(unset)* | *(unset)* |
-| Automation uptime (rollout gate) | % uptime of marketing automations | ≥95% | same | *(unassigned)* | *(unset)* | *(unset)* |
-| Funnel stage improvement (rollout gate) | % improvement in a core funnel stage | ≥15% | same | *(unassigned)* | *(unset)* | *(unset)* |
-| Named-but-undefined agent KPIs | Portfolio ROMI, Signal Confidence Score, Message-Market Fit, Creative Resonance Score | No formulas or baselines given anywhere | Agent Cards | *(unassigned)* | *(unset)* | *(unset)* |
+| LTV:CAC ratio | See `AGENCY_KPI_DICTIONARY.md` | 3:1 healthy, 4-5:1 strong, <3:1 inefficient | Elite_Marketing_Agentic_OS rollout plan | Mary Thuo | *(unset)* | *(unset)* |
+| CAC payback period | Months to recover CAC | <6mo aggressive-viable, 6-12mo stable, >12mo risk | same | Mary Thuo | *(unset)* | *(unset)* |
+| Event tracking integrity (rollout gate) | % of expected events correctly tracked | ≥90% | `07_30_60_90_Activation_Rollout_Plan.md` | Mary Thuo | *(unset)* | *(unset)* |
+| Automation uptime (rollout gate) | % uptime of marketing automations | ≥95% | same | Mary Thuo | *(unset)* | *(unset)* |
+| Funnel stage improvement (rollout gate) | % improvement in a core funnel stage | ≥15% | same | Mary Thuo | *(unset)* | *(unset)* |
+| Named-but-undefined agent KPIs | Portfolio ROMI, Signal Confidence Score, Message-Market Fit, Creative Resonance Score | No formulas or baselines given anywhere | Agent Cards | Mary Thuo | *(unset)* | *(unset)* |
 
 Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale/Enterprise $10M+) — template tiers, not verified real client data; cross-reference `00_Agency_Governance/CRM_SCHEMA.md` if a real segmentation model gets adopted.
 
