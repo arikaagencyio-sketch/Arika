@@ -7,7 +7,7 @@
 
 **How to use this:** for each [DECISION] item, write your call in the **Your decision** line — either agree with my recommendation, modify it, or override it entirely. You can write directly in this file, or just tell me in conversation and I'll fill it in. Once you've gone through it, tell me which ones to action and I'll update the real source files and close out `OWNER_INPUT_NEEDED.md` to match.
 
-**Tally:** 18 open tracker items. 13 are [DECISION] (you can close these today). 5 are [WAITING ON DATA] (genuinely nothing to do yet, will resolve once the agency has real operating history).
+**Tally (updated 2026-06-30):** Started at 18 open items. The Offer department's 6 bigger decisions (items 7, 37, 38, 39, 40, 41) are now resolved — see the Offer section below for what was decided. Remaining: 7 [DECISION] items, 5 [WAITING ON DATA] items.
 
 ---
 
@@ -58,39 +58,15 @@ These four follow the exact precedent you already set for Finance (item 26/27): 
 
 ## Offer department — the bigger decisions
 
-### Item 39 — Standardize the internal team-role roster?
-**The question:** All 4 real offers (and the 7 synthesized ones, deliberately kept consistent with each other) use different team-role names. Pick one canonical roster, per-division rosters, or leave it per-offer?
-**My recommendation:** **One canonical core roster, with division-specific specialist titles layered on top** — not full per-division or per-offer rosters. Concretely: every offer needs a Client Partner (relationship), Strategy Lead (audit/strategy), Implementation Lead (delivery coordination), QA Specialist, and Account Manager (retainer phase) — these 5 roles repeat in some form across every offer captured so far, real or synthesized. What varies legitimately is the *specialist* role doing the actual deliverable work (e.g. Automation Engineer for offer #6, Copywriter for offer #5, Partnership Manager for offer #8) — that's real variation, not inconsistency, and shouldn't be forced into one name. This is also the structure I already used by default across offers #5-11 (`OFFER_OS.md` §3), so adopting it formally doesn't require new work, just a decision to retrofit offers #1-4's rosters to match the same core-5 pattern when convenient.
-**Your decision:** _______________________________________________
+**All 6 resolved 2026-06-30 — see `OWNER_INPUT_NEEDED.md` Resolved table for the canonical record. Summary of what was decided:**
 
-### Item 38 — Pricing segmentation variable: rep-count vs. ARR-band?
-**The question:** Offer #1 segments pricing by rep count; offer #3 by ARR band. Which should the pricing-floor methodology standardize on?
-**My recommendation:** **ARR-band as the primary, universal segmentation variable, with rep-count as a secondary modifier only for sales-team-delivery offers** (offers #1, #2, and similar). Reasoning: ARR-band applies cleanly to *every* offer in the catalog — Brand Positioning, AI Transformation, and Revenue Growth Advisory have no "rep count" to speak of, but every client has a revenue size. Rep-count is a real, useful secondary signal specifically where the offer's value scales with the client's sales-team size (offers #1/#2), but it can't be the agency-wide standard since 9 of 11 offers in the catalog have no natural rep-count axis at all. This also matches Sector's own real ICP, which is already ARR-banded (Tier 1/2/3).
-**Your decision:** _______________________________________________
-
-### Item 7 — Compute the first pricing-floor mean
-**The question:** The segmented pricing-floor methodology is adopted but said to be "blocked on more real OEOS offers." With all 11 offers now captured (4 real, 7 synthesized), is it time to compute a first-draft floor, or keep waiting for purely real data?
-**My recommendation:** **Compute a first-draft floor now, explicitly labeled as a mix of real and synthesized inputs**, rather than waiting indefinitely for more real offers that may not arrive soon. A clearly-flagged provisional floor (e.g., "Tier 1 SaaS, $1-10M ARR: floor ≈ $X, computed from N real + M synthesized data points") is more useful than no floor at all, as long as it's never mistaken for a fully-real number. Refine it each time a new real offer arrives. This only works if you're comfortable with that explicit real/synthesized blending — if not, it should stay genuinely blocked.
-**Your decision:** _______________________________________________
-
-### Item 37 — Approve the offer #2 synthesized completion (Phases 6-12)?
-**The question:** Does the Claude-synthesized completion of Sales Enablement Systems hold up, or does it need revision?
-**My recommendation:** Approve as-is, with one specific thing worth your eyes: the synthesized **Client Constraint System** (Phase 9 — the Ghost/Unrealistic/Micromanager/Doubter/Know-It-All/Quitter/Result Ghoster archetypes) was the first time any offer actually fulfilled that part of the OEOS prompt, real or synthesized — worth a read since it may be worth retrofitting into offers #1 and #3 too, which skipped it entirely in their real chat output.
-**Your decision:** _______________________________________________
-
-### Item 40 — Approve the offers #5-11 synthesized batch + the division-mapping question
-**The question A:** Does the 7-offer synthesized batch (Brand Positioning through AI Transformation Systems) hold up?
-**My recommendation A:** Approve as-is, but specifically sanity-check offer #5 (Brand Positioning Systems) — it's the only offer with no retainer in the source material at all, which I flagged rather than inventing one; worth confirming that's actually intentional and not a gap in the original master pricing document.
-
-**The question B:** Draft 28's 7 "Divisions" (Sales, Marketing, Automation, Partner & Client Acquisition, Consulting & Advisory, Audits & Diagnostics, AI Enablement) don't map onto this repo's 13 real departments — should any of these become real departments?
-**My recommendation B:** No — keep them as Offer-internal categories, not real departments, until team size actually requires a dedicated owner for any of them. Right now you're the sole owner across everything; a new department only earns its existence once there's a real reason to delegate ownership of that specific function. Automation, Consulting/Advisory, Audits/Diagnostics, and AI Enablement are coherent *offer groupings* today, not yet coherent *operating units*.
-**Your decision (A):** _______________________________________________
-**Your decision (B):** _______________________________________________
-
-### Item 41 — Reconcile offer #8 (Strategic Partnership Infrastructure) against the ClientPartner Acquisition department
-**The question:** Offer #8 and the ClientPartner Acquisition (06) department both cover partner/referral systems — do they conflict, and if so, who owns what?
-**My recommendation:** Same split pattern already used elsewhere in this repo (Offer defines the *priced, packaged offering* sold to clients who want a partnership program built for them; ClientPartner Acquisition owns the agency's *own* partner pipeline for acquiring clients through referral). These are two different audiences for similar mechanics — offer #8 is something Arika Agency sells; ClientPartner Acquisition is how Arika Agency itself grows. Worth a direct skim of both files to confirm they don't actually contradict each other on the mechanics (e.g. commission ranges), but I don't expect a real conflict, just two legitimately separate uses of similar systems.
-**Your decision:** _______________________________________________
+- **Item 39 (team-role roster):** Reframed, not standardized as asked — these are AI-assisted functional labels, not real headcount, since you solo-orchestrate with AI. Real hiring deferred to `11_HR_People_Ops/HR_OS.md`.
+- **Item 38 (segmentation variable):** ARR-band primary, rep-count secondary (sales-team offers only). Your call, matched the recommendation.
+- **Item 7 (pricing floor):** Computed a first provisional floor, ARR-banded, explicitly flagged part-real/part-synthesized — see `02_Offer/OFFER_OS.md` §10.
+- **Item 37 (offer #2 synthesis):** Approved as-is.
+- **Item 40A (offers #5-11 batch):** Approved as-is.
+- **Item 40B (division mapping):** You went further than my recommendation — promoted Automation, Consulting & Advisory, Audits & Diagnostics, and AI Enablement to real departments (14-17), rather than keeping them as offer-internal categories. New `{DEPT}_OS.md` files created for each, seeded from their founding offer drafts.
+- **Item 41 (offer #8 vs. ClientPartner Acquisition):** Confirmed no conflict after reading both files directly — different audiences, same mechanics.
 
 ---
 

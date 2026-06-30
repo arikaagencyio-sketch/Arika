@@ -23,6 +23,8 @@ HR / People Ops is a **newly created department** — confirmed as a real gap du
 |---|---|---|
 | *(placeholder)* | | |
 
+**Cross-reference (2026-06-30):** every Offer Engineering Registry offer (`02_Offer/OFFER_OS.md` §3) and its delivery department (Audits & Diagnostics 14, Consulting & Advisory 15, Automation 16, AI Enablement 17, plus Sales 05/Marketing 03/ClientPartner Acquisition 06) uses functional team-role labels (e.g. Strategy Lead, Implementation Lead, QA Specialist) to describe AI-assisted execution functions the owner currently performs solo — explicitly **not** real hires. When real staffing becomes relevant, those role labels are the natural starting point for role scorecards here, rather than starting from nothing.
+
 ## 4. Workflow Index
 
 | Workflow | Trigger | Steps | Output | Owner |
@@ -76,3 +78,4 @@ None. This is a genuinely new department with no inherited backlog.
 ## 15. Changelog
 
 - 2026-06-30 — Department created as part of v0.1 skeleton restructuring, addressing a confirmed gap. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Added a cross-reference to the Offer department's functional team-role labels (resolves Offer's tracker item 39) — explicitly not real hires yet, but a usable starting point once the agency needs to staff beyond solo+AI operation. — Claude Code (Sonnet 4.6)

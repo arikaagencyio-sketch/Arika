@@ -18,6 +18,10 @@ All "Responsible/Accountable" cells below are department names, not individuals,
 | Function | Responsible | Accountable | Consulted | Informed |
 |---|---|---|---|---|
 | New offer launch (Sector → Offer → Marketing/Content) | Offer (02) | Offer (02) | Sector (01), Marketing (03), Content (04) | Sales (05), Finance (09) |
+| Audit/diagnostic delivery (Gateway Offer) | Audits & Diagnostics (14) | Audits & Diagnostics (14) | Offer (02) | Sales (05), Sector (01) |
+| Advisory delivery (Embedded-Partnership stage) | Consulting & Advisory (15) | Consulting & Advisory (15) | Offer (02) | All departments |
+| AI workflow / process automation delivery | Automation (16) | Automation (16) | Offer (02), AI Enablement (17) | Operations (08) |
+| AI transformation roadmap & governance | AI Enablement (17) | AI Enablement (17) | Offer (02), Legal (10) | Automation (16), Operations (08) |
 | Demand generation campaign | Marketing (03) | Marketing (03) | Branding (12), Offer (02), Content (04) | Sales (05) |
 | Content creation & narrative/messaging execution | Content (04) | Content (04) | Marketing (03), Branding (12) | Sales (05) |
 | Partner/referral channel acquisition | ClientPartner Acquisition (06) | ClientPartner Acquisition (06) | Sales (05), Legal (10) | Marketing (03) |
@@ -42,3 +46,4 @@ All "Responsible/Accountable" cells below are department names, not individuals,
 
 - 2026-06-30 — Initial cross-department RACI structure created as part of governance-closure pass.
 - 2026-06-30 — Owner confirmed: Mary Thuo, sole owner across all departments. "Agency owner" cells resolved to her name; added a note clarifying every department-name cell currently resolves to her in practice. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Added 4 cross-department function rows for the new departments (Audits & Diagnostics 14, Consulting & Advisory 15, Automation 16, AI Enablement 17), created when the owner promoted 4 of the Offer catalog's divisions to real departments. — Claude Code (Sonnet 4.6)
