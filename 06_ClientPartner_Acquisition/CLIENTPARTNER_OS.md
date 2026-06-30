@@ -3,7 +3,7 @@
 **Department:** ClientPartner Acquisition (06)
 **Position in flow:** Parallel acquisition channel alongside Marketing (03)/Content (04); feeds qualified opportunities into Sales (05), same as Marketing does.
 **Mandate:** Own referral/partner-channel client acquisition — distinct from direct Marketing-driven demand generation — including its own CRM architecture and partner psychographics.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

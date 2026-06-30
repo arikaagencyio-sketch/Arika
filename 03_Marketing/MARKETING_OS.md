@@ -3,7 +3,7 @@
 **Department:** Marketing (03)
 **Position in flow:** Receives packaged offers from Offer (02); generates demand (in close partnership with Content, 04); hands off qualified opportunities to Sales (05).
 **Mandate:** Own positioning, campaign strategy, channel strategy, and demand generation. Content creation/production and narrative architecture are owned by the sibling Content department (04) — see that department's OS file.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

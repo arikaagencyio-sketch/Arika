@@ -3,7 +3,7 @@
 **Department:** Sector (01)
 **Position in flow:** Upstream-most layer — determines the market/industry "truth" that Offer (02) packages and the rest of the agency sells.
 **Mandate:** Own sector/industry/vertical intelligence — what's true about a given market, audience-within-sector frameworks, sector-specific journey mapping and language.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

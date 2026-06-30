@@ -3,7 +3,7 @@
 **Department:** Tech Stack (13)
 **Position in flow:** Horizontal support layer — provides tooling/infrastructure to all other departments; reports into Agency Governance (00).
 **Mandate:** Own the canonical inventory of tools/software the agency actually uses (CRM, project management, hosting, email, AI platforms, APIs), plus integration and access records for them.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

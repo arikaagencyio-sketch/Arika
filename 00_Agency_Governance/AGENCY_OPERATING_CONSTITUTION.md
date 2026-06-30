@@ -1,7 +1,7 @@
 # Agency Operating Constitution
 
 **Status:** v0.1-draft — process/structure sections are load-bearing now; mission/objective content is placeholder pending owner input.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo (Arika Agency)
 **Last updated:** 2026-06-30
 
 > Referenced from [`GLOBAL_OS.md`](../GLOBAL_OS.md) §3. This is the full version; that file carries only a compressed summary.
@@ -18,6 +18,8 @@ This constitution governs how the agency operates as a system — who decides wh
 
 **Do not backfill this section with invented numbers, targets, or dates.** Leave it placeholder until real objectives are supplied.
 
+**Contact (confirmed 2026-06-30):** domain `arikaagency.com` (website not yet live). Business addresses: `support@arikaagency.com`, `growth@arikaagency.com`, and an owner address given as `mary.thuo@arikaagencycom` — **likely missing a "." before "com"** (would read `mary.thuo@arikaagency.com` to match the pattern of the other two addresses); flagged here rather than silently corrected, confirm the exact address when convenient.
+
 ## 3. Non-Negotiables
 
 These apply across every department, regardless of what any department-local Standards & SOPs document says:
@@ -32,13 +34,13 @@ These apply across every department, regardless of what any department-local Sta
 
 | Decision type | Who decides | Escalation path |
 |---|---|---|
-| Department-local operational decisions (workflow tweaks, content drafts, internal tooling choices within an approved budget/tool list) | Department owner *(once assigned)* | None required — log in department Decision Log |
-| Cross-department workflow changes (anything touching the handoff points in `GLOBAL_OS.md` §5) | Department owners of both sides, jointly | Agency owner if they disagree |
-| New department creation, department merge/split, or structural changes to this repo's top-level layout | Agency owner | — |
-| Anything in Risk Class 3+ (§5) | Agency owner (human) | — |
-| Amendments to this constitution | Agency owner | — |
+| Department-local operational decisions (workflow tweaks, content drafts, internal tooling choices within an approved budget/tool list) | Mary Thuo (department owner — solo across all departments, confirmed 2026-06-30) | None required — log in department Decision Log |
+| Cross-department workflow changes (anything touching the handoff points in `GLOBAL_OS.md` §5) | Mary Thuo | N/A — single owner, no joint-disagreement scenario today |
+| New department creation, department merge/split, or structural changes to this repo's top-level layout | Mary Thuo | — |
+| Anything in Risk Class 3+ (§5) | Mary Thuo | — |
+| Amendments to this constitution | Mary Thuo | — |
 
-This table is intentionally light on named individuals because none are assigned yet (see `GLOBAL_OS.md` §4, Department Index — all owners are placeholders). Update the "Who decides" column with real names as soon as ownership is assigned; until then, default every decision above "department-local operational" to the agency owner.
+**Confirmed 2026-06-30:** Mary Thuo is the sole agency owner, accountable for every department (see `GLOBAL_OS.md` §4, Department Index). Once Arika Agency grows beyond solo ownership, split the "Who decides" column back out per department and restore the escalation-to-agency-owner pattern for cross-department disagreements.
 
 ## 5. Risk Classes
 
@@ -75,4 +77,5 @@ No department, agent, or automation may bypass this process to self-amend the co
 
 ## 8. Changelog
 
-- **2026-06-30 — v0.1-draft adopted** — Initial constitution written as part of the governance-closure pass: non-negotiables, decision rights framework, 5-tier risk classification, and amendment process established. Mission/objectives left as placeholder pending agency owner input. — Claude Code (Sonnet 4.6)
+- **2026-06-30 — v0.1-draft adopted** — Initial constitution written as part of the governance-closure pass: non-negotiables, decision rights framework, 5-tier risk classification, and amendment process established. Mission/objectives left as placeholder pending agency owner input.
+- **2026-06-30** — Owner confirmed: Mary Thuo, sole owner across all departments. Applied throughout §4's Decision Rights table and the document header. Added confirmed contact info (§2). Mission/objectives (§2) remain placeholder — still pending. — Claude Code (Sonnet 4.6)

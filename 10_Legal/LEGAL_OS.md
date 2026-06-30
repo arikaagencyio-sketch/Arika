@@ -3,7 +3,7 @@
 **Department:** Legal (10)
 **Position in flow:** Horizontal support layer — governs contracts, compliance, and risk across all other departments, reporting into Agency Governance (00).
 **Mandate:** Own contracts (MSAs, SOWs), compliance, IP/copyright protection, and legal risk management for the agency and its client engagements.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

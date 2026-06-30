@@ -3,7 +3,7 @@
 **Department:** Content (04)
 **Position in flow:** Sits adjacent to Marketing (03), feeding content assets and narrative/messaging architecture into Marketing's demand-generation work; both then feed Sales (05).
 **Mandate:** Own content strategy, creation, channel distribution, and narrative/messaging architecture — distinct from Marketing's positioning/campaign/channel-strategy mandate, though tightly coupled to it.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

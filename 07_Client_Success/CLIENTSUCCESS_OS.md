@@ -3,7 +3,7 @@
 **Department:** Client Success (07)
 **Position in flow:** Receives closed deals from Sales (05); owns the client relationship; hands off scoped delivery to Operations (08).
 **Mandate:** Own the post-sale client lifecycle — onboarding, journey, segmentation, fit/qualification, retention, health, and offboarding.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

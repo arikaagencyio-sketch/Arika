@@ -3,7 +3,7 @@
 **Department:** Offer (02)
 **Position in flow:** Receives sector truth from Sector (01); packages it into sellable offers; hands off to Marketing (03) for demand generation.
 **Mandate:** Own offer design, packaging, pricing architecture, and the offer flywheel.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

@@ -3,7 +3,7 @@
 **Department:** HR / People Ops (11)
 **Position in flow:** Horizontal support layer — feeds capacity/staffing into Operations (08) and reports into Agency Governance (00).
 **Mandate:** Own hiring, internal onboarding/training, role definitions, compensation, and capacity/utilization planning for the agency's people (distinct from client onboarding, which is owned by Client Success).
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

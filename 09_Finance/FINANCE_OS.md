@@ -3,7 +3,7 @@
 **Department:** Finance (09)
 **Position in flow:** Receives billable events/delivery output from Operations (08); reports roll up to Agency Governance (00).
 **Mandate:** Own accounting, cash flow, treasury, forecasting, and financial compliance for the agency.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

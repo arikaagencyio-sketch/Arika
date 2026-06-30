@@ -48,20 +48,20 @@ The load-bearing rules, compressed from the full constitution:
 
 | # | Department | Path | Mandate | Owner | OS File |
 |---|---|---|---|---|---|
-| 00 | Agency Governance | `00_Agency_Governance/` | Cross-cutting governance, prior gap-analysis archive | *(unassigned)* | — *(governance layer, no department OS file; see §11)* |
-| 01 | Sector | `01_Sector/` | Upstream market/industry intelligence — determines "truth" the rest of the agency packages and sells | *(unassigned)* | [`01_Sector/SECTOR_OS.md`](01_Sector/SECTOR_OS.md) |
-| 02 | Offer | `02_Offer/` | Offer design, packaging, pricing architecture | *(unassigned)* | [`02_Offer/OFFER_OS.md`](02_Offer/OFFER_OS.md) |
-| 03 | Marketing | `03_Marketing/` | Positioning, campaign strategy, channel strategy, demand generation | *(unassigned)* | [`03_Marketing/MARKETING_OS.md`](03_Marketing/MARKETING_OS.md) |
-| 04 | Content | `04_Content/` | Content strategy, creation, narrative/messaging architecture, channel-specific execution | *(unassigned)* | [`04_Content/CONTENT_OS.md`](04_Content/CONTENT_OS.md) |
-| 05 | Sales | `05_Sales/` | Pipeline, conversion, deal execution | *(unassigned)* | [`05_Sales/SALES_OS.md`](05_Sales/SALES_OS.md) |
-| 06 | ClientPartner Acquisition | `06_ClientPartner_Acquisition/` | Referral/partner-channel client acquisition (distinct from direct Sales) | *(unassigned)* | [`06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md`](06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md) |
-| 07 | Client Success | `07_Client_Success/` | Post-sale client lifecycle: onboarding, journey, retention, health | *(unassigned)* | [`07_Client_Success/CLIENTSUCCESS_OS.md`](07_Client_Success/CLIENTSUCCESS_OS.md) |
-| 08 | Operations | `08_Operations/` | Delivery execution, SOPs, capacity, quality control *(new department — confirmed gap)* | *(unassigned)* | [`08_Operations/OPERATIONS_OS.md`](08_Operations/OPERATIONS_OS.md) |
-| 09 | Finance | `09_Finance/` | Accounting, cash flow, treasury, forecasting | *(unassigned)* | [`09_Finance/FINANCE_OS.md`](09_Finance/FINANCE_OS.md) |
-| 10 | Legal | `10_Legal/` | Contracts, compliance, IP, risk *(new department — confirmed gap, was a phantom workspace in the old completion engine)* | *(unassigned)* | [`10_Legal/LEGAL_OS.md`](10_Legal/LEGAL_OS.md) |
-| 11 | HR / People Ops | `11_HR_People_Ops/` | Hiring, onboarding (internal), capacity/utilization *(new department — confirmed gap)* | *(unassigned)* | [`11_HR_People_Ops/HR_OS.md`](11_HR_People_Ops/HR_OS.md) |
-| 12 | Branding | `12_Branding/` | Brand architecture, narrative, identity systems | *(unassigned)* | [`12_Branding/BRANDING_OS.md`](12_Branding/BRANDING_OS.md) |
-| 13 | Tech Stack | `13_Tech_Stack/` | Tooling/software inventory used across the agency *(new department — confirmed gap)* | *(unassigned)* | [`13_Tech_Stack/TECHSTACK_OS.md`](13_Tech_Stack/TECHSTACK_OS.md) |
+| 00 | Agency Governance | `00_Agency_Governance/` | Cross-cutting governance, prior gap-analysis archive | Mary Thuo | — *(governance layer, no department OS file; see §11)* |
+| 01 | Sector | `01_Sector/` | Upstream market/industry intelligence — determines "truth" the rest of the agency packages and sells | Mary Thuo | [`01_Sector/SECTOR_OS.md`](01_Sector/SECTOR_OS.md) |
+| 02 | Offer | `02_Offer/` | Offer design, packaging, pricing architecture | Mary Thuo | [`02_Offer/OFFER_OS.md`](02_Offer/OFFER_OS.md) |
+| 03 | Marketing | `03_Marketing/` | Positioning, campaign strategy, channel strategy, demand generation | Mary Thuo | [`03_Marketing/MARKETING_OS.md`](03_Marketing/MARKETING_OS.md) |
+| 04 | Content | `04_Content/` | Content strategy, creation, narrative/messaging architecture, channel-specific execution | Mary Thuo | [`04_Content/CONTENT_OS.md`](04_Content/CONTENT_OS.md) |
+| 05 | Sales | `05_Sales/` | Pipeline, conversion, deal execution | Mary Thuo | [`05_Sales/SALES_OS.md`](05_Sales/SALES_OS.md) |
+| 06 | ClientPartner Acquisition | `06_ClientPartner_Acquisition/` | Referral/partner-channel client acquisition (distinct from direct Sales) | Mary Thuo | [`06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md`](06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md) |
+| 07 | Client Success | `07_Client_Success/` | Post-sale client lifecycle: onboarding, journey, retention, health | Mary Thuo | [`07_Client_Success/CLIENTSUCCESS_OS.md`](07_Client_Success/CLIENTSUCCESS_OS.md) |
+| 08 | Operations | `08_Operations/` | Delivery execution, SOPs, capacity, quality control *(new department — confirmed gap)* | Mary Thuo | [`08_Operations/OPERATIONS_OS.md`](08_Operations/OPERATIONS_OS.md) |
+| 09 | Finance | `09_Finance/` | Accounting, cash flow, treasury, forecasting | Mary Thuo | [`09_Finance/FINANCE_OS.md`](09_Finance/FINANCE_OS.md) |
+| 10 | Legal | `10_Legal/` | Contracts, compliance, IP, risk *(new department — confirmed gap, was a phantom workspace in the old completion engine)* | Mary Thuo | [`10_Legal/LEGAL_OS.md`](10_Legal/LEGAL_OS.md) |
+| 11 | HR / People Ops | `11_HR_People_Ops/` | Hiring, onboarding (internal), capacity/utilization *(new department — confirmed gap)* | Mary Thuo | [`11_HR_People_Ops/HR_OS.md`](11_HR_People_Ops/HR_OS.md) |
+| 12 | Branding | `12_Branding/` | Brand architecture, narrative, identity systems | Mary Thuo | [`12_Branding/BRANDING_OS.md`](12_Branding/BRANDING_OS.md) |
+| 13 | Tech Stack | `13_Tech_Stack/` | Tooling/software inventory used across the agency *(new department — confirmed gap)* | Mary Thuo | [`13_Tech_Stack/TECHSTACK_OS.md`](13_Tech_Stack/TECHSTACK_OS.md) |
 | 14 | Cross-Domain Synthesis | `14_Cross_Domain_Synthesis/` | NOT an active department — early whole-agency synthesis draft, kept as historical/reference material (likely origin document for this restructuring; see `AgencyOs Cognitive Framework. Draft 1.md`) | — | — *(reference archive, no OS file)* |
 
 Numbering encodes the agency's own previously-documented operating flow (see §5) directly into the filesystem.

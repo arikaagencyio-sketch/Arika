@@ -3,7 +3,7 @@
 **Department:** Branding (12)
 **Position in flow:** Horizontal support layer — feeds Marketing, Sales, Client Success, and Agency Governance with brand architecture, narrative, and identity systems.
 **Mandate:** Own brand definition, positioning, narrative engineering, and visual/identity systems for the agency and (as a service) for clients.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 

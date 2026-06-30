@@ -3,7 +3,7 @@
 **Department:** Sales (05)
 **Position in flow:** Receives qualified demand from Marketing (03)/Content (04) and ClientPartner Acquisition (06); converts to closed deals; hands off to Client Success (07).
 **Mandate:** Own pipeline, conversion, deal execution, and the agency's sales-side AI operations.
-**Owner:** *(unassigned — placeholder)*
+**Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.
 
