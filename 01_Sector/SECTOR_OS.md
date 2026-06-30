@@ -103,7 +103,8 @@ This is a real scoring mechanism the agency designed for itself, not a fabricate
 
 ## 8. Decision Log
 
-*(placeholder — empty. The most consequential decision this department needs — which sector(s) to actually target — has never been made; see §1.)*
+- **2026-06-30 — Real sector confirmed: B2B SaaS, 3-tier ICP.** See §1.
+- **2026-06-30 — Adopted the xlsx's 4-layer (Data/Process/Human/AI) intelligence model as the agency's canonical operating framework**, superseding (but not discarding) two alternate framings found in chat-sourced material. See §10.
 
 ## 9. Risk / Incident Log
 
@@ -123,12 +124,12 @@ Principles stated repeatedly across the corpus (treat as working draft doctrine)
 
 Note: Draft 13 also proposes a generic AI-agent-prompting standard (MUST/MUST NOT/REQUIRED/ESCALATE/VALIDATE language) — this is general Claude-system-prompt design advice retrofitted into the Sector folder, not sector-market doctrine specifically; don't treat it as this department's own standard.
 
-**Open item — 3 unreconciled "intelligence layer" models (flagged 2026-06-30, not resolved):** the real sector material now contains three different framings of the agency's core capability stack, produced at different points in the same chat session, none identical:
+**Intelligence-layer model — resolved (2026-06-30), same class of call as Client Success (07)'s lifecycle-model reconciliation.** Three framings existed:
 - **4-layer (Data/Process/Human/AI)** — xlsx Sheet 12, the most structured/finalized version, with a per-sector breakdown and a 3-phase rollout plan (Months 1-6 / 6-18 / 18+).
-- **7-layer (Data/Process/AI/Human/Growth/Strategic/Ecosystem)** — Tier 2 chat material (`Draft 16`), framed as "most agencies operate at Layers 1-2 only; you compete by operating at Layers 3-7."
-- **4-layer, different 4 (Data/Diagnostic/Operational/Strategic)** — Tier 3 chat material (`Draft 17`), applied specifically to the Healthcare deep-dive.
+- **7-layer (Data/Process/AI/Human/Growth/Strategic/Ecosystem)** — Tier 2 chat material (`Draft 16`).
+- **4-layer, different 4 (Data/Diagnostic/Operational/Strategic)** — Tier 3 chat material (`Draft 17`), applied to the Healthcare deep-dive.
 
-This is the same class of issue already resolved for Client Success (07)'s 3 lifecycle models (see that department's §4) — but unlike that case, this one is **not** resolved here, because the xlsx version is clearly the most finished/structured of the three and is the natural default, but the owner should confirm rather than have it picked silently, since this framework is meant to describe the agency's own operating capability, not just a client-facing diagnostic.
+**Resolution: the xlsx's 4-layer model (Data/Process/Human/AI) is canonical.** It's the only one of the three built as a finished, structured artifact (per-sector breakdown + phased rollout plan) rather than free-form chat reasoning, and it's the version Tier 1 — the agency's primary ICP focus — was built around. The other two are kept as **elaborations layered on top, not competing frameworks**: the 7-layer model (`Draft 16`) splits "Process" into Process+Growth+Strategic+Ecosystem and adds an explicit maturity claim ("most agencies operate at Layers 1-2 only; compete by operating at 3-7") — read this as a deeper articulation of what "Process" and "AI" mean at full maturity, not a 4th-vs-7th layer conflict. The Tier 3 model (`Draft 17`, Data/Diagnostic/Operational/Strategic) renames rather than restructures — its "Diagnostic" ≈ the xlsx's "Process" entry point, its "Operational" ≈ "Process" execution, its "Strategic" is shared vocabulary with the xlsx. No content from either alternate model was discarded; both remain in `Draft 16`/`Draft 17` for reference, but `12_INTELLIGENCE_LAYERS` (xlsx Sheet 12) is the one to build against.
 
 ## 11. RACI / Ownership
 
