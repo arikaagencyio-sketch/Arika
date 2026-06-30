@@ -11,7 +11,17 @@
 
 Every row below needs a real fact from the agency owner — a name, a number, a confirmed decision — that **cannot be filled in by reading the raw drafts**, because the raw drafts don't contain it (they're brainstorm theory, not operating history) and inventing it would violate the no-silent-invention rule (`AGENCY_OPERATING_CONSTITUTION.md` §3). Distinguish this from gaps that will close on their own once the system runs (Decision Logs, Memory Logs — those need no owner action, just time and real usage).
 
-Work through this in any order. When an item is resolved, move it to "Resolved" at the bottom with the date and a pointer to where the real value now lives — don't delete the row, so there's a record of when/how it was closed.
+Work through this in any order — except item 0 below, which should come first if you only have time for one.
+
+When an item is resolved, move it to "Resolved" at the bottom with the date and a pointer to where the real value now lives — don't delete the row, so there's a record of when/how it was closed.
+
+---
+
+## 🔴 Highest priority
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 0 | **Which real sector(s)/industry vertical(s) does the agency actually target?** | Sector (01) is the upstream-most layer in the agency's own stated operating flow — its own doctrine states "if your sector layer is weak, everything downstream underperforms" (Offer, Marketing, Sales, Branding all package/distribute/sell "sector truth"). All 14 raw drafts in this department use only hypothetical example industries (fintech, SaaS, e-commerce, etc.) and repeatedly end with an unanswered invitation to supply a real sector. This is arguably the single highest-leverage open item in the whole repo — most other departments' content (Offer's pricing tiers, Marketing's client segments, etc.) would sharpen considerably once this is answered. | No real sector ever named | `01_Sector/SECTOR_OS.md` §1 |
 
 ---
 
