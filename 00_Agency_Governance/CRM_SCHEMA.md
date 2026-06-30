@@ -109,11 +109,13 @@ This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` 
 
 ## Platform selection
 
-**Confirmed by owner, 2026-06-30: HubSpot.** This is also independently consistent with Sector (01)'s real ICP data — Tier 1 B2B SaaS targets are themselves described as typically running HubSpot or Salesforce (`01_Sector/SECTOR_OS.md` §1), so the agency's own tool choice matches its target clients' tooling.
+**Confirmed by owner, 2026-06-30: Zoho CRM** (supersedes the same-day HubSpot selection below). Reason given: pairing with **Zoho Books** as Finance (09)'s accounting platform — same-vendor CRM↔Books integration lets the Opportunity-closed-won → Invoice handoff (see Handoff Points below) run on native Zoho sync rather than a third-party connector. This breaks the earlier noted alignment with Sector (01)'s observation that Tier 1 B2B SaaS targets typically run HubSpot/Salesforce (`01_Sector/SECTOR_OS.md` §1) — flagged, not silently dropped: the agency's own tooling no longer mirrors its highest-tier clients' tooling, though this has no bearing on the agency's ability to sell into or integrate with client-side HubSpot/Salesforce instances.
+
+*Original entry, superseded same day:* ~~Confirmed by owner, 2026-06-30: HubSpot. This is also independently consistent with Sector (01)'s real ICP data — Tier 1 B2B SaaS targets are themselves described as typically running HubSpot or Salesforce, so the agency's own tool choice matched its target clients' tooling.~~
 
 ## What this schema deliberately does not specify
 
-- Field-level validation rules, required vs. optional fields in practice, or UI/form design — those follow once HubSpot implementation begins (Tech Stack, 13).
+- Field-level validation rules, required vs. optional fields in practice, or UI/form design — those follow once Zoho CRM implementation begins (Tech Stack, 13; see `00_Agency_Governance/GO_LIVE_CHECKLIST.md`).
 - Historical/legacy data migration — not applicable until real client data exists to migrate.
 
 ## Changelog
@@ -121,4 +123,5 @@ This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` 
 - 2026-06-30 — Initial CRM schema created as part of governance-closure pass: core objects (Lead, Opportunity, Client, Engagement/Project, Invoice), relationships, and handoff points defined.
 - 2026-06-30 — Added Partner object and the Partner→sourced-Opportunity handoff, following a gap found during ClientPartner Acquisition (06) content migration: that department's source material (`CRM System Architure. raft 13.md`) defines an 11-stage Partner pipeline that had no home in the original client-only schema.
 - 2026-06-30 — Owner confirmed CRM platform: HubSpot (tracker item 5, resolved). — Claude Code (Sonnet 4.6)
+- 2026-06-30 — **Superseded the same day**: owner switched CRM platform from HubSpot to **Zoho CRM**, to pair with **Zoho Books** for Finance. See "Platform selection" above. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Added `lifecycle_stage`, `relationship_status`, `churn_reason`, and `offboarding_type` fields to the Client object, supporting Client Success's new Retention/Expansion/Advocacy/Offboarding/Re-entry workflow build-out (`07_Client_Success/CLIENTSUCCESS_OS.md` §4, §10). Resolves tracker item 24. — Claude Code (Sonnet 4.6)

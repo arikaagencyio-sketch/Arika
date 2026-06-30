@@ -7,7 +7,7 @@
 
 **How to use this:** for each [DECISION] item, write your call in the **Your decision** line — either agree with my recommendation, modify it, or override it entirely. You can write directly in this file, or just tell me in conversation and I'll fill it in. Once you've gone through it, tell me which ones to action and I'll update the real source files and close out `OWNER_INPUT_NEEDED.md` to match.
 
-**Tally (updated 2026-06-30):** Started at 18 open items. The Offer department's 6 bigger decisions (items 7, 37, 38, 39, 40, 41) are now resolved — see the Offer section below for what was decided. Remaining: 7 [DECISION] items, 5 [WAITING ON DATA] items.
+**Tally (updated 2026-06-30):** Started at 18 open items. The Offer department's 6 bigger decisions (items 7, 37, 38, 39, 40, 41), the 3 threshold/defaults items (4, 28, 29), the 3 quick wins (31, 14, 10), and item 30 (Branding's real brand for BOIS) are now resolved. Remaining: 5 [WAITING ON DATA] items (8, 9, 13, 20), 0 open [DECISION] items.
 
 ---
 
@@ -54,10 +54,8 @@ Verified Branding's `bois/` codebase directly (zero LLM SDK dependency, same che
 ### Item 24 — Client Success offboarding/churn process — DONE, expanded scope
 **Resolved 2026-06-30.** Built broader than originally scoped — per your direction to make sure all Client Success workflows exist, not just offboarding, I added the full Process Library: Retention, Expansion, Advocacy, Offboarding & Churn, and Re-entry/Win-back. Every owned stage of the 9-stage lifecycle now has a real workflow (`07_Client_Success/CLIENTSUCCESS_OS.md` §4, §10). Still Claude-synthesized, not owner-original — worth a read when convenient, same review discipline as the Offer catalog.
 
-### Item 30 — Define Arika Agency's own real brand for BOIS
-**The question:** BOIS (the branding system) has only ever run against a hypothetical example client. Should I build it a real brand object for Arika Agency itself?
-**My recommendation:** Yes, and unlike most remaining gaps, **this one is mostly buildable right now from facts already confirmed elsewhere in this repo** — not from scratch. We already have: the real name (Arika Agency), the confirmed positioning ("Revenue Infrastructure Partner"), the full vision/mission (`AGENCY_VISION.md`), the confirmed target client (B2B SaaS, Tier 1/2/3), and the operating philosophy (ROCBO, the "do-or-die" revenue framing). What's still missing and would need to come from you: visual identity preferences (if any exist yet) and voice/tone specifics beyond what's implicit in the existing positioning. I can assemble a first real brand object from what's confirmed and flag the visual/voice gaps explicitly, rather than waiting until every field is real before starting.
-**Your decision:** _______________________________________________
+### Item 30 — Define Arika Agency's own real brand for BOIS — DONE
+**Resolved 2026-06-30 ("act on item 30 now").** Built and ran `bois/executions/run_arika_agency_brand.py`: assembled a real `ClientObject` for Arika Agency itself from facts already confirmed elsewhere in this repo (name, "Revenue Infrastructure Partner" positioning, `AGENCY_VISION.md`, the 3-tier B2B SaaS ICP, the 11-offer services catalog, ROCBO/"do-or-die" operating philosophy, Kenya + global geography) — no invention. Ran it through the full pipeline: real client workspace created (`bois/clients/arika-agency/`), retrieval gate completed with zero missing sources, 11 of 20 agents activated for the task "define Arika Agency's own core brand identity, positioning, and voice." As anticipated, `competitors`, `visual_preferences`, `typography_preferences`, `color_preferences` had no real source anywhere in this repo — left empty and flagged rather than invented. Worth a follow-up owner pass whenever visual identity/competitive-positioning work happens for real.
 
 ---
 
@@ -78,3 +76,4 @@ These will close on their own as the agency operates. No action needed now; they
 ## Changelog
 
 - 2026-06-30 — Created at owner's request, as a working action-companion to `OWNER_INPUT_NEEDED.md`. Sorted all 18 open tracker items into [DECISION] (13 items, with reasoned recommendations) vs. [WAITING ON DATA] (5 items, no action possible). — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Owner made 2 new real decisions outside this worksheet's original 18 items, as part of go-live preparation: **Zoho CRM** (replacing the already-resolved item 5/HubSpot) paired with **Zoho Books** (closing item 25), and **Claude (Anthropic API)** as the agency-standard LLM (closing items 27 and 28). See `OWNER_INPUT_NEEDED.md`'s Changelog "Zoho/Claude entry" and the new `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 4.6)

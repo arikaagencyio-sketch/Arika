@@ -15,13 +15,15 @@ Tech Stack is a **newly created department** — confirmed as a real gap during 
 
 ## 2. Status
 
-**Empty skeleton.** No raw draft archive exists for this department specifically. Note: the two code scaffolds (`09_Finance/finos-plugin/`, `12_Branding/bois/`) are aspirational software the agency is building, not a record of tools it currently uses — do not conflate the two when this department's content gets built out.
+**Skeleton, with its first 3 real confirmed tools (2026-06-30).** No raw draft archive exists for this department specifically. Note: the two code scaffolds (`09_Finance/finos-plugin/`, `12_Branding/bois/`) are aspirational software the agency is building, not a record of tools it currently uses — do not conflate the two when this department's content gets built out. None of the 3 tools below are implemented yet — confirmed as the real platform decisions, not yet wired up. See `00_Agency_Governance/GO_LIVE_CHECKLIST.md` for the implementation sequence.
 
 ## 3. Capability Registry
 
 | Capability | Description | Status |
 |---|---|---|
-| *(placeholder)* | | |
+| Zoho CRM | CRM platform — implements the Lead/Opportunity/Client/Partner pipeline defined in `00_Agency_Governance/CRM_SCHEMA.md` | **Confirmed real (2026-06-30)**, not yet implemented |
+| Zoho Books | Accounting/invoicing platform for Finance (09); selected specifically to pair with Zoho CRM for native CRM↔Books sync | **Confirmed real (2026-06-30)**, not yet implemented — closes Finance's tracker item 25 integration gap |
+| Claude (Anthropic API) | Agency-standard LLM backing AI agent execution — confirmed for Finance (09)'s 7-agent roster and Branding (12)'s 20-agent roster; the default choice once Sales (05)/Marketing (03)'s markdown-defined agent rosters get executable runtimes | **Confirmed real (2026-06-30)**, not yet wired — `finos-plugin` and `bois` both still have zero LLM SDK dependency as of this entry |
 
 ## 4. Workflow Index
 
@@ -76,3 +78,4 @@ None. This is a genuinely new department with no inherited backlog.
 ## 15. Changelog
 
 - 2026-06-30 — Department created as part of v0.1 skeleton restructuring, addressing a confirmed gap. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — First 3 real tool decisions recorded: **Zoho CRM** (supersedes the earlier HubSpot selection, `CRM_SCHEMA.md`), **Zoho Books** (Finance's accounting platform, closes tracker item 25), and **Claude (Anthropic API)** as the agency-standard LLM for AI agent execution (Finance's 7 agents + Branding's 20 agents). All 3 are real decisions, none implemented yet — see `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 4.6)

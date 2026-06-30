@@ -1,0 +1,62 @@
+{
+  "client_id": "arika-agency",
+  "company_name": "Arika Agency",
+  "sector": "B2B Revenue Infrastructure / GTM Systems Agency",
+  "sub_sector": "Revenue Operating System Provider for B2B SaaS",
+  "geography": "Kenya-based, serving clients globally",
+  "audience": "B2B SaaS companies, 3-tier ICP: Tier 1 (Series A-C, $5M-$50M ARR, 50-500 employees, RevOps bottleneck, $15K-$50K/mo retainer budget); Tier 2 (Post-Seed-Series A, $1M-$10M ARR, founder still selling); Tier 3 (multi-location niche verticals - Healthcare, Real Estate Brokerages, Franchise Systems)",
+  "psychographics": [
+    "RevOps bottleneck frustration (Tier 1)",
+    "board-mandated efficiency pressure (Tier 1)",
+    "founder drowning in solo-sold growth (Tier 2)",
+    "distrust of fragmented vendor stacks",
+    "revenue-mathematics literacy over vanity metrics"
+  ],
+  "products": [],
+  "services": [
+    "Revenue System Architecture",
+    "Sales Enablement Systems",
+    "Outbound Sales Engine",
+    "Demand Generation Infrastructure",
+    "Brand Positioning Systems",
+    "AI Workflow Infrastructure",
+    "Business Operating Systems",
+    "Strategic Partnership Infrastructure",
+    "Revenue Growth Advisory",
+    "Revenue Infrastructure Audit",
+    "AI Transformation Systems"
+  ],
+  "pricing_model": "ARR-band segmented (4 bands), project fee + monthly retainer hybrid per offer; first provisional pricing floor computed 2026-06-30 (see 02_Offer/OFFER_OS.md §10) - part-real/part-synthesized, low-confidence at the Enterprise band",
+  "market_position": "Revenue Infrastructure Partner - explicitly NOT a marketing agency, sales agency, branding agency, automation agency, lead-generation agency, or consultant. A unified revenue operating system businesses plug into, not a vendor they hire.",
+  "competitors": [],
+  "communication_style": "Direct, revenue-mathematics-driven, anti-fluff. Every activity is filtered through: does this create revenue, how much, how fast, what probability, what operational load, what retention/upsell potential (ROCBO doctrine, AGENCY_REVENUE_TARGETS.md). Named anti-patterns: no meaningless meetings, no vanity tasks, no random content, no fake productivity, no outreach without qualification, no fulfillment without monetization logic.",
+  "emotional_positioning": "Infrastructure-grade trust and authority. \"Businesses do not hire the agency. They plug into a revenue operating system that behaves like an extension of their internal business brain\" (AGENCY_VISION.md Core Vision Statement). Operating intensity is explicitly \"do-or-die\", non-negotiable execution discipline, not aspirational branding.",
+  "visual_preferences": [],
+  "typography_preferences": [],
+  "color_preferences": [],
+  "campaign_history": [],
+  "brand_memory": {},
+  "visual_memory": {},
+  "narrative_memory": {},
+  "governance_rules": {
+    "tone": "direct, revenue-mathematics-driven, anti-fluff",
+    "operating_discipline": "ROCBO - Revenue-Oriented Cognitive Business Operations",
+    "anti_patterns": [
+      "no meaningless meetings",
+      "no vanity tasks",
+      "no random content",
+      "no fake productivity",
+      "no outreach without qualification",
+      "no fulfillment without monetization logic"
+    ]
+  },
+  "stakeholder_notes": [
+    "Mary Thuo - sole owner, solo-orchestrates sales/execution personally with AI assistance; not a generic team-of-roles structure.",
+    "Targets are treated as non-negotiable (\"do-or-die\" framing), the same way payroll/bills/KPIs would be for any operating business (AGENCY_REVENUE_TARGETS.md)."
+  ],
+  "timelines": [],
+  "deliverables": [],
+  "active_projects": [],
+  "memory_embeddings": [],
+  "retrieval_indexes": []
+}

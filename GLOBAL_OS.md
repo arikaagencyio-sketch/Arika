@@ -207,6 +207,8 @@ Inherited from the agency's own prior self-analysis (`00_Agency_Governance/_arch
 
 **Every item above that needs a real fact from the agency owner (not more reading/writing) is tracked in one place: `00_Agency_Governance/OWNER_INPUT_NEEDED.md`.** As each department's content-migration pass surfaces a new "needs real data" item, it gets added there rather than left buried in that department's own OS file — review that tracker in one sitting once migration is further along, rather than hunting through every department.
 
+**As of 2026-06-30, that tracker is at 0 open decisions** — the remaining open work is build/setup, not more deciding. That sequence (Zoho CRM/Zoho Books setup, wiring Claude into Finance's and Branding's agent rosters, first real operating cycle) is tracked in `00_Agency_Governance/GO_LIVE_CHECKLIST.md`.
+
 **Resolved during the v0.2 governance-closure pass (no longer open):**
 - Finance's `finos-plugin` (TypeScript) and Branding's `bois` (Python) — decision made and documented: both retained as grandfathered code-backed exceptions, not converted or deleted. See each department's `{DEPT}_OS.md` §13.
 - The 5-file ClientPartner Acquisition near-duplicate cluster — content-diffed; 1 confirmed exact duplicate deleted, 3 confirmed genuinely distinct. See `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §14.
