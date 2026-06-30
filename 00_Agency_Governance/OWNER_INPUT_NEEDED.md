@@ -59,6 +59,15 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 13 | Real KPI values (LTV:CAC, CAC payback, funnel conversion, etc.) — currently only industry-standard benchmark ranges, no agency actuals | KPI Dictionary structurally complete but substantively template-only | All marked template/aspirational | `03_Marketing/MARKETING_OS.md` §7 |
 | 14 | Confirm which (if any) MCP/connector blueprint items are actually configured/in use | Blueprint lists 7 connector-class layers as a wishlist — none confirmed real | All aspirational | `03_Marketing/MARKETING_OS.md` §12 |
 
+## Department: Content (04)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 15 | Confirm the Content/Marketing department boundary (Content = assets/narrative, Marketing = positioning/campaign/channel) | The raw source material never anticipates a Content/Marketing split at all — it describes one unified system and one file explicitly argues content should NOT be a marketing sub-function. The current boundary is an architectural decision made during this restructuring, not one drawn from the source. | Imposed split, unconfirmed by owner | `04_Content/CONTENT_OS.md` §1 |
+| 16 | Confirm/adopt or reject the Project Realignment's repositioning (LinkedIn-centric "Revenue Reality" → broader "Revenue Intelligence/Architecture/Engineering" with LinkedIn as one node among several) | This is the most decision-like document found in any department so far, but it's unconfirmed reasoning, not a logged decision — no date, no approver, no outcome | Unconfirmed | `04_Content/CONTENT_OS.md` §10 |
+| 17 | Resolve the 3-way content-pillar naming conflict (generic Growth/Revenue/Acquisition set vs. LinkedIn-specific "Revenue Reality" set vs. the Realignment file's 7-pillar set) | Downstream content planning can't proceed consistently with 3 unreconciled pillar sets | Documented, not resolved | `04_Content/CONTENT_OS.md` §10 |
+| 18 | Confirm real LinkedIn/Instagram launch timing, so the 90-day numeric targets (comments, DMs, profile views, newsletter subscribers, discovery calls) become a real plan instead of a draft template | These targets are unusually concrete (more so than any other department's KPIs) but have no anchor start date | Targets exist, no launch date | `04_Content/CONTENT_OS.md` §7 |
+
 ---
 
 ## Resolved
