@@ -68,6 +68,13 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 17 | Resolve the 3-way content-pillar naming conflict (generic Growth/Revenue/Acquisition set vs. LinkedIn-specific "Revenue Reality" set vs. the Realignment file's 7-pillar set) | Downstream content planning can't proceed consistently with 3 unreconciled pillar sets | Documented, not resolved | `04_Content/CONTENT_OS.md` §10 |
 | 18 | Confirm real LinkedIn/Instagram launch timing, so the 90-day numeric targets (comments, DMs, profile views, newsletter subscribers, discovery calls) become a real plan instead of a draft template | These targets are unusually concrete (more so than any other department's KPIs) but have no anchor start date | Targets exist, no launch date | `04_Content/CONTENT_OS.md` §7 |
 
+## Department: ClientPartner Acquisition (06)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 19 | Reconcile the operational boundary between ClientPartner Acquisition (06), Sales (05), and Marketing/Content (03/04) | The source material for this department sprawls into Sales territory (full "Conversion/Sales Engine" layer with close rates, CRM tools) and Marketing/Content territory (audience-building, social media) — the current narrow boundary ("feeds Sales, same as Marketing") is this restructuring's own framing, not something the source material draws itself. Best done once Sales, Marketing, and Content are all fully migrated so the comparison is apples-to-apples. | Documented, not resolved | `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §10 |
+| 20 | Confirm real partner names, deals, or revenue-share terms (currently all illustrative — e.g. "Distribution Partner 20-40%" is explicitly labeled "Example Split" in its source file) | KPI Dictionary and Partner CRM object are structurally ready but have zero real data | All draft/illustrative | `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §7 |
+
 ---
 
 ## Resolved

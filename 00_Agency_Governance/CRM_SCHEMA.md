@@ -64,15 +64,32 @@ Marketing/Content, Sales, Client Success, and Finance all touch the same underly
 | status | enum | Finance (09) | draft → sent → paid → overdue → written-off |
 | revenue_recognition_date | date | Finance (09) | |
 
+### Partner
+**Added 2026-06-30** — gap found during ClientPartner Acquisition (06) content migration: that department's source material defines a full parallel Partner pipeline with no analog in the original 5-object schema above (which only models client-side flow). A partner is fundamentally not a Lead/Opportunity/Client — it's a distribution/leverage relationship, not a revenue-extraction one (see `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §1 for the full client-vs-partner distinction this schema follows).
+
+| Field | Type | Set by | Notes |
+|---|---|---|---|
+| partner_id | string | System | |
+| partner_type | enum | ClientPartner Acquisition (06) | distribution, capability, credibility, strategic, capital, ecosystem |
+| stage | enum | ClientPartner Acquisition (06) | ecosystem-mapping → relationship-initiated → strategic-assessment → capability-validation → co-value-modeling → integration-planning → pilot-engagement → active-partnership → expansion / dormant / terminated |
+| fit_score | number | ClientPartner Acquisition (06) | Composite of audience alignment, trust level, distribution strength, incentive compatibility, operational compatibility, brand alignment, strategic value |
+| incentive_model | enum | ClientPartner Acquisition (06) | referral, affiliate, strategic-alliance, joint-venture, white-label |
+| revenue_share_terms | text | ClientPartner Acquisition (06) + Finance (09) | Not a fixed schema field — terms vary by incentive model; governed by Legal (10) once real |
+| sourced_opportunity_ids | array (FK → Opportunity) | System | Tracks which Opportunities this partner sourced, for attribution |
+| trust_score | number | ClientPartner Acquisition (06) | Distinct from Client `health_score` — partner trust is relationship-based, not delivery-satisfaction-based |
+
 ## Object Relationships
 
 ```
 Lead --(converts to)--> Opportunity --(closes won)--> Client --(scopes)--> Project --(bills)--> Invoice
-                                                          |
-                                                    (governed by)
-                                                          v
-                                                       Contract (Legal, 10)
+                            ^                            |
+                            |                       (governed by)
+                     (sources)                            v
+                            |                         Contract (Legal, 10)
+                       Partner --(parallel pipeline, see ClientPartner_OS §4)
 ```
+
+A Partner doesn't move through the Lead→Opportunity→Client chain itself — it sits alongside it and can *source* Opportunities (tracked via `sourced_opportunity_ids`), distinct from being one.
 
 ## Handoff Points (where this schema enforces accountability)
 
@@ -82,6 +99,7 @@ Lead --(converts to)--> Opportunity --(closes won)--> Client --(scopes)--> Proje
 | Opportunity → Client | Sales (05) | Client Success (07) | deal_value, scope commitments made during sale, contract_id |
 | Client → Project | Client Success (07) | Operations (08) | scope_summary, sla_target_date |
 | Project → Invoice | Operations (08) | Finance (09) | completed milestones/deliverables triggering billable events |
+| Partner → sourced Opportunity | ClientPartner Acquisition (06) | Sales (05) | partner_id attribution, incentive_model (for later revenue-share calculation) |
 
 This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` §11 (item 6) — each row above should eventually become a fuller handoff packet spec once real workflows are built per department.
 
@@ -93,4 +111,5 @@ This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` 
 
 ## Changelog
 
-- 2026-06-30 — Initial CRM schema created as part of governance-closure pass: core objects (Lead, Opportunity, Client, Engagement/Project, Invoice), relationships, and handoff points defined. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Initial CRM schema created as part of governance-closure pass: core objects (Lead, Opportunity, Client, Engagement/Project, Invoice), relationships, and handoff points defined.
+- 2026-06-30 — Added Partner object and the Partner→sourced-Opportunity handoff, following a gap found during ClientPartner Acquisition (06) content migration: that department's source material (`CRM System Architure. raft 13.md`) defines an 11-stage Partner pipeline that had no home in the original client-only schema. — Claude Code (Sonnet 4.6)
