@@ -13,20 +13,10 @@
 
 ## Quick wins (5 minutes, low-stakes)
 
-### Item 31 — Sector's partial chat export
-**The question:** Should we still try to get the full "Sider Fusion" chat export that produced the Tier 2/3 ICP material, or leave it as-is?
-**My recommendation:** Leave it. You already made this call once (2026-06-30) — proceed with what's captured. Tier 1 (your primary, most-detailed ICP) is fully real and unaffected; only the Tier 2/3 deep-dives are partial. Not worth revisiting unless the export becomes trivially available.
-**Your decision:** _______________________________________________
-
-### Item 14 — Marketing's MCP/connector blueprint
-**The question:** Is any of the 7 documented connector-class layers (the marketing automation/integration blueprint) actually wired up and in use, or is all of it still aspirational?
-**My recommendation:** Given Finance's integrations turned out to be zero real connectors and you confirmed no payment platform is in use yet, I'd bet this is the same — entirely aspirational. But this is a 10-second factual answer only you can give (yes/no, or "X of the 7").
-**Your decision:** _______________________________________________
-
-### Item 10 — Sales' missing companion `.docx` files
-**The question:** 11 files referenced in Sales' source registry (e.g. `HE SALES OS_2024.docx`) aren't anywhere in this repo. Do you have them somewhere else, or should we mark them confirmed-lost and move on?
-**My recommendation:** Mark confirmed-absent and move on. Sales' citation system is otherwise solid (verified against what *is* present); these 11 are a minor completeness gap, not a trust problem. Only worth digging up if you happen to know exactly where they are.
-**Your decision:** _______________________________________________
+**All 3 resolved 2026-06-30, all matched the recommendation:**
+- **Item 31** — Sector's partial chat export: left as-is.
+- **Item 14** — Marketing's MCP/connector blueprint: confirmed none of the 7 layers are in real use yet.
+- **Item 10** — Sales' 11 missing companion `.docx` files: confirmed-lost, not pending location.
 
 ---
 

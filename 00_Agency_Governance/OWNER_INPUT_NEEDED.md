@@ -33,9 +33,7 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 ## Department: Sector (01)
 
-| # | Item | Why it matters | Currently | Source file |
-|---|---|---|---|---|
-| 31 | If/when available: export and provide the full "Sider Fusion" chat conversation that produced the Tier 2/3 ICP material | The version captured in this repo (`01_Sector/Draft 16-17`) was pasted in chunks and hit a paste-size limit 3 times — Tier 2 and the Healthcare deep-dive are real but partial; Real Estate Brokerages and Franchise Systems (Tier 3) never received their full deep-dive. **Not blocking** — owner decided (2026-06-30) to proceed with what's captured rather than wait. | Partial — flagged explicitly in source files, not silently treated as complete | `01_Sector/Tier 2 ICP...Draft 16.md`; `01_Sector/Tier 3 ICP...Draft 17.md` |
+*(item 31 resolved 2026-06-30 — see Resolved table)*
 
 ## Department: Offer (02)
 
@@ -48,14 +46,12 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
 | 9 | Real historical KPI values (CAC, conversion rate, sales cycle length, etc.) — narrowed | Real daily *targets* now exist (item 34's resolution) — revenue/quotation/call/proposal/close targets, all owner-confirmed. What's still missing is *historical actuals* measured against those targets, which can't exist until the agency has operated against them for a real period | Targets real; historical actuals pending | `05_Sales/SALES_OS.md` §7 |
-| 10 | Locate or confirm-absent: 11 "companion" source `.docx` files referenced in `Master_Source_Registry.csv` but not present anywhere in this folder (e.g. `HE SALES OS_2024.docx`, `Sales Mechanism 102.docx`) | Citation system is otherwise verified-trustworthy; these specific citations can't currently be checked | Unlocated | `05_Sales/SALES_OS.md` §14 |
 
 ## Department: Marketing (03)
 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
 | 13 | Real KPI values (LTV:CAC, CAC payback, funnel conversion, etc.) — currently only industry-standard benchmark ranges, no agency actuals | KPI Dictionary structurally complete but substantively template-only | All marked template/aspirational | `03_Marketing/MARKETING_OS.md` §7 |
-| 14 | Confirm which (if any) MCP/connector blueprint items are actually configured/in use | Blueprint lists 7 connector-class layers as a wishlist — none confirmed real | All aspirational | `03_Marketing/MARKETING_OS.md` §12 |
 
 ## Department: Content (04)
 
@@ -121,9 +117,13 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 40 | Review/revise the offers #5-11 synthesized batch + decide on Draft 28's 7 "Divisions" | **Resolved by direct owner input.** Batch approved as-is. 4 of the 7 divisions promoted to real departments: **Audits & Diagnostics (14)**, **Consulting & Advisory (15)**, **Automation (16)**, **AI Enablement (17)** — Sales/Marketing/ClientPartner Acquisition already had homes, so weren't duplicated. New departments seeded with `{DEPT}_OS.md` files referencing their founding offer drafts. | 2026-06-30 | `GLOBAL_OS.md` §4; `14_Audits_Diagnostics/`, `15_Consulting_Advisory/`, `16_Automation/`, `17_AI_Enablement/` |
 | 41 | Reconcile offer #8 against the ClientPartner Acquisition department | **Resolved — checked both files directly, no real conflict found.** Offer #8 is something Arika Agency sells (a partnership-program offer for clients); ClientPartner Acquisition is how Arika Agency itself grows (its own inbound partner-commission pipeline). Same mechanics, different audiences. | 2026-06-30 | `02_Offer/OFFER_OS.md` §3 |
 | 7 | Real pricing — compute the segmented pricing-floor mean | **Resolved — first provisional floor computed**, per owner direction not to keep waiting for purely-real data. ARR-band segmented (4 bands), mean of tier-midpoints across all 11 offers, explicitly flagged as part-real/part-synthesized and low-confidence at the Enterprise band (only 3 of 11 offers have that tier, 2 open-ended). Refine as more real OEOS offers arrive. | 2026-06-30 | `02_Offer/OFFER_OS.md` §10 |
+| 31 | Sector's partial "Sider Fusion" chat export | **Resolved by direct owner input.** Leave as-is — not worth chasing further. | 2026-06-30 | `01_Sector/SECTOR_OS.md` §8 |
+| 14 | Confirm Marketing's MCP/connector blueprint status | **Resolved by direct owner input.** None of the 7 connector-class layers are in use yet — entirely aspirational, matching the pattern already confirmed for Finance and Branding. | 2026-06-30 | `03_Marketing/MARKETING_OS.md` §12 |
+| 10 | Locate or confirm-absent Sales' 11 companion `.docx` files | **Resolved by direct owner input.** Confirmed-lost, not pending location — citation system remains trustworthy for everything that is present. | 2026-06-30 | `05_Sales/SALES_OS.md` §14 |
 
 ## Changelog
 
+- 2026-06-30 — **Resolved the 3 "quick win" items: 31, 14, 10.** Sector's partial chat export left as-is. Marketing confirmed none of its 7 MCP/connector layers are in real use yet. Sales' 11 missing companion docx files confirmed-lost rather than left as an open search. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved all 6 of Offer's "bigger decisions" in one pass: items 7, 37, 38, 39, 40, 41.** Owner approved offer #2's synthesis and the offers #5-11 batch as-is; decided ARR-band as primary pricing segmentation (rep-count secondary); reframed the team-role question — these are AI-assisted functional labels, not real hires, real staffing deferred to HR/People Ops; promoted 4 of Draft 28's divisions to real departments (**Audits & Diagnostics (14), Consulting & Advisory (15), Automation (16), AI Enablement (17)**, created with seeded OS files); confirmed offer #8 doesn't conflict with ClientPartner Acquisition after reading both files; computed the first provisional ARR-banded pricing floor across all 11 offers. Offer department now has only 1 open item (8, real historical figures — waiting on data). Repo is now 18 numbered folders (was 14), with `Cross-Domain Synthesis` renumbered 14→18. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved items 25, 26, 27 (Finance)** via direct owner input, after confirming the actual code state first (zero LLM SDK dependency anywhere in `finos-plugin`, confirming the AI-agent-wiring gap exactly as documented). Owner decided: no real payment platform exists yet so the integration stays a documented gap; AI agents stay spec/routing-only until real data exists to feed them; risk/expense thresholds stay as generic defaults until real cash-flow history accumulates. All three are real decisions to defer, not new builds — Finance department now has zero open tracker items. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — **Resolved items 33, 35, 36** via direct owner input. Email confirmed (`mary.thuo@arikaagency.com`). Daily revenue target confirmed as a 5-day-week figure, giving a real $175,000 weekly target — this surfaced a genuine, flagged inconsistency between the daily and monthly targets (~23-24% gap), not silently resolved. Offer #1's ICP narrowed to B2B SaaS only, matching Sector's confirmed real ICP. Tracker down to genuine remaining gaps in Offer (synthesis review + 1 reconciliation), Sales, Marketing, ClientPartner Acquisition, Client Success, Finance, and Branding. — Claude Code (Sonnet 4.6)
