@@ -60,12 +60,7 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 ## Department: Content (04)
 
-| # | Item | Why it matters | Currently | Source file |
-|---|---|---|---|---|
-| 15 | Confirm the Content/Marketing department boundary (Content = assets/narrative, Marketing = positioning/campaign/channel) | The raw source material never anticipates a Content/Marketing split at all — it describes one unified system and one file explicitly argues content should NOT be a marketing sub-function. The current boundary is an architectural decision made during this restructuring, not one drawn from the source. | Imposed split, unconfirmed by owner | `04_Content/CONTENT_OS.md` §1 |
-| 16 | Confirm/adopt or reject the Project Realignment's repositioning (LinkedIn-centric "Revenue Reality" → broader "Revenue Intelligence/Architecture/Engineering" with LinkedIn as one node among several) | This is the most decision-like document found in any department so far, but it's unconfirmed reasoning, not a logged decision — no date, no approver, no outcome | Unconfirmed | `04_Content/CONTENT_OS.md` §10 |
-| 17 | Resolve the 3-way content-pillar naming conflict (generic Growth/Revenue/Acquisition set vs. LinkedIn-specific "Revenue Reality" set vs. the Realignment file's 7-pillar set) | Downstream content planning can't proceed consistently with 3 unreconciled pillar sets | Documented, not resolved | `04_Content/CONTENT_OS.md` §10 |
-| 18 | Confirm real LinkedIn/Instagram launch timing, so the 90-day numeric targets (comments, DMs, profile views, newsletter subscribers, discovery calls) become a real plan instead of a draft template | These targets are unusually concrete (more so than any other department's KPIs) but have no anchor start date | Targets exist, no launch date | `04_Content/CONTENT_OS.md` §7 |
+*(all 4 prior items resolved 2026-06-30 — see Resolved table)*
 
 ## Department: ClientPartner Acquisition (06)
 
@@ -113,9 +108,14 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 12 | Confirm or correct: does the agency actually operate in/serve Kenya? | **Resolved by direct owner input.** Confirmed real — Arika Agency operates in/serves Kenya, plus broader confirmation it serves clients globally and must comply with each jurisdiction's real laws as engagements happen. | 2026-06-30 | `03_Marketing/MARKETING_OS.md` §14 |
 | 2 | Agency owner's real name | **Resolved by direct owner input.** Mary Thuo. Applied to `AGENCY_OPERATING_CONSTITUTION.md` (header + §4 Decision Rights), `AGENCY_RACI.md`, `AGENCY_KPI_DICTIONARY.md` (every metric's Owner column), `GLOBAL_OS.md` §4, and every `{DEPT}_OS.md` header. | 2026-06-30 | `AGENCY_OPERATING_CONSTITUTION.md` §4 |
 | 3 | All 12 (now 13) department owners | **Resolved by direct owner input.** Mary Thuo, sole owner across all departments. Same propagation as item 2. | 2026-06-30 | `GLOBAL_OS.md` §4 Department Index; every `{DEPT}_OS.md` header |
+| 15 | Confirm the Content/Marketing department boundary | **Resolved by direct owner input.** Confirmed: keep the split. | 2026-06-30 | `04_Content/CONTENT_OS.md` §1 |
+| 16 | Confirm/adopt or reject the Project Realignment's repositioning | **Resolved by direct owner input.** Adopted: broader "Revenue Intelligence/Architecture/Engineering" framing, LinkedIn as one node among several. | 2026-06-30 | `04_Content/CONTENT_OS.md` §10 |
+| 17 | Resolve the 3-way content-pillar naming conflict | **Resolved by synthesis, per owner direction to map all three correctly rather than pick one.** Built a canonical 7-pillar structure (Realignment's top level) populated with the generic set's 35 sub-topics and the LinkedIn DRAGON set's fully-built post series, kept intact under its own pillar. Flagged Sector (01)'s new real signal framework as stronger fuel for the "Revenue Signals" pillar than the generic placeholder topics. | 2026-06-30 | `04_Content/CONTENT_OS.md` §10 |
+| 18 | Confirm real LinkedIn/Instagram launch timing | **Resolved by direct owner input.** Not launched yet, no date set — targets remain a ready-to-use template. | 2026-06-30 | `04_Content/CONTENT_OS.md` §7 |
 
 ## Changelog
 
+- 2026-06-30 — **Resolved items 15-18 (Content)**: department-boundary split confirmed, Project Realignment repositioning adopted, the 3-way pillar-naming conflict resolved by synthesizing all three sets into one canonical 7-pillar structure (rather than picking one), and LinkedIn/Instagram launch timing confirmed as not-yet-set. Tracker down to ~10 open items, all genuine owner-input gaps in Offer, Sales, Marketing, ClientPartner Acquisition, Client Success, Finance, and Branding. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Tracker created, seeded with items surfaced during Offer and Sales content migration plus 5 agency-wide items from the governance-closure pass.
 - 2026-06-30 — **Resolved item 0** (real sector, agency's #1 priority item) via direct owner input — see Resolved table. Added items 31-32 (Sector) for the now-partial chat-transcript source and the unreconciled intelligence-layer models. Updated item 7 (Offer pricing) to note the new 6th conflicting pricing source from Sector's real ICP database. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Added items 25-27 (Finance) and 28-30 (Branding) as those departments' content migrations completed. — Claude Code (Sonnet 4.6)
