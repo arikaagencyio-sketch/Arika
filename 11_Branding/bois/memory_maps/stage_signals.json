@@ -1,0 +1,792 @@
+{
+  "0892998a74c42faf": [
+    [
+      "0892998a74c42faf:P0018",
+      "Stage 1 — Introduction (Category Creation)"
+    ],
+    [
+      "0892998a74c42faf:P0022",
+      "Stage 2 — System Replacement"
+    ],
+    [
+      "0892998a74c42faf:P0026",
+      "Stage 3 — Authority Lock-in"
+    ],
+    [
+      "0892998a74c42faf:P0303",
+      "LAYER 1 — BRAND MEMORY SYSTEM"
+    ],
+    [
+      "0892998a74c42faf:P0308",
+      "LAYER 2 — BRAND SCHEMA ENGINE"
+    ],
+    [
+      "0892998a74c42faf:P0319",
+      "LAYER 3 — ORCHESTRATION ENGINE"
+    ],
+    [
+      "0892998a74c42faf:P0474",
+      "PHASE 1 — FOUNDATION"
+    ],
+    [
+      "0892998a74c42faf:P0480",
+      "PHASE 2 — MACHINE READABILITY"
+    ],
+    [
+      "0892998a74c42faf:P0485",
+      "PHASE 3 — EXECUTION"
+    ],
+    [
+      "0892998a74c42faf:P0490",
+      "PHASE 4 — OBSERVABILITY"
+    ],
+    [
+      "0892998a74c42faf:P0495",
+      "PHASE 5 — EVOLUTION"
+    ]
+  ],
+  "c4c15d30b3e652f9": [
+    [
+      "c4c15d30b3e652f9:P0016",
+      "Layer 1: Audience Mapping (Static Intelligence)"
+    ]
+  ],
+  "243287ce05c18bc7": [
+    [
+      "243287ce05c18bc7:P0173",
+      "LAYER 1 — MASTER BRAND (Authority Core)"
+    ],
+    [
+      "243287ce05c18bc7:P0191",
+      "LAYER 2 — OFFER ARCHITECTURE (Revenue Layer)"
+    ],
+    [
+      "243287ce05c18bc7:P0262",
+      "Stage 1 — Attraction"
+    ],
+    [
+      "243287ce05c18bc7:P0272",
+      "Stage 2 — Qualification"
+    ],
+    [
+      "243287ce05c18bc7:P0284",
+      "Stage 3 — Diagnosis"
+    ],
+    [
+      "243287ce05c18bc7:P0299",
+      "Stage 4 — Transformation"
+    ],
+    [
+      "243287ce05c18bc7:P0307",
+      "Stage 5 — Expansion"
+    ],
+    [
+      "243287ce05c18bc7:P0317",
+      "Stage 6 — Ecosystem Integration"
+    ],
+    [
+      "243287ce05c18bc7:P0371",
+      "Layer"
+    ]
+  ],
+  "dbdc32912d341a98": [
+    [
+      "dbdc32912d341a98:P0014",
+      "Layer 1 — Core Signal (Source of Truth)"
+    ],
+    [
+      "dbdc32912d341a98:P0021",
+      "Layer 2 — Translation Layer (Critical, often missing)"
+    ],
+    [
+      "dbdc32912d341a98:P0034",
+      "Layer 3 — Channel Infrastructure"
+    ],
+    [
+      "dbdc32912d341a98:P0049",
+      "Layer 4 — Cadence Engine (The Heartbeat)"
+    ]
+  ],
+  "b28e6c781c99f048": [
+    [
+      "b28e6c781c99f048:P0157",
+      "PHASE 1 — BRAND FOUNDATION ARCHITECTURE"
+    ],
+    [
+      "b28e6c781c99f048:P0173",
+      "Layer"
+    ],
+    [
+      "b28e6c781c99f048:P0202",
+      "PHASE 2 — GOVERNANCE OPERATING STRUCTURE"
+    ],
+    [
+      "b28e6c781c99f048:P0262",
+      "PHASE 3 — BUILD THE BRAND SYSTEM"
+    ],
+    [
+      "b28e6c781c99f048:P0311",
+      "PHASE 4 — DESIGN THE EXECUTION PIPELINE"
+    ],
+    [
+      "b28e6c781c99f048:P0368",
+      "PHASE 5 — BUILD THE DESIGN SYSTEM"
+    ],
+    [
+      "b28e6c781c99f048:P0404",
+      "PHASE 6 — DIGITAL ASSET MANAGEMENT (DAM)"
+    ],
+    [
+      "b28e6c781c99f048:P0427",
+      "PHASE 7 — BRAND TRAINING SYSTEM"
+    ],
+    [
+      "b28e6c781c99f048:P0451",
+      "PHASE 8 — MONITORING & COMPLIANCE"
+    ],
+    [
+      "b28e6c781c99f048:P0477",
+      "PHASE 9 — BRAND EVOLUTION SYSTEM"
+    ]
+  ],
+  "25d46109741bda86": [
+    [
+      "25d46109741bda86:P0087",
+      "LAYER 1 → Strategic FoundationLAYER 2 → Market IntelligenceLAYER 3 → Positioning SystemLAYER 4 → Audience PsychologyLAYER 5 → Messaging & NarrativeLAYER 6 → Identity & Visual TranslationLAYER 7 → Experience & Trust SystemsLAYER 8 → Distribution & Brand Growth"
+    ]
+  ],
+  "edb417c988686768": [
+    [
+      "edb417c988686768:P0081",
+      "Layer 1: Brand Core"
+    ],
+    [
+      "edb417c988686768:P0086",
+      "Layer 2: Client Mapping"
+    ],
+    [
+      "edb417c988686768:P0091",
+      "Layer 3: Translation Layer (Critical)"
+    ],
+    [
+      "edb417c988686768:P0095",
+      "Layer 4: Experience Design"
+    ],
+    [
+      "edb417c988686768:P0100",
+      "Layer 5: Feedback + Adaptation"
+    ]
+  ],
+  "ebb9bfcc06ac0c78": [
+    [
+      "ebb9bfcc06ac0c78:P0097",
+      "Layer 1: Brand Core"
+    ],
+    [
+      "ebb9bfcc06ac0c78:P0102",
+      "Layer 2: Sales Interface"
+    ],
+    [
+      "ebb9bfcc06ac0c78:P0107",
+      "Layer 3: Feedback Engine"
+    ],
+    [
+      "ebb9bfcc06ac0c78:P0111",
+      "Layer 4: Adaptation Loop"
+    ]
+  ],
+  "0434fe511e92958d": [
+    [
+      "0434fe511e92958d:P0268",
+      "Layer Affected (Core / Identity / Behavior / Evolution)"
+    ]
+  ],
+  "3d57ac8070838798": [
+    [
+      "3d57ac8070838798:P0139",
+      "PHASE 1 — BRAND DISCOVERY & INTELLIGENCE"
+    ],
+    [
+      "3d57ac8070838798:P0192",
+      "PHASE 2 — STRATEGIC BRAND FOUNDATION"
+    ],
+    [
+      "3d57ac8070838798:P0232",
+      "PHASE 3 — VERBAL IDENTITY SYSTEM"
+    ],
+    [
+      "3d57ac8070838798:P0259",
+      "PHASE 4 — VISUAL IDENTITY SYSTEM"
+    ],
+    [
+      "3d57ac8070838798:P0322",
+      "PHASE 5 — EXPERIENCE IDENTITY SYSTEM"
+    ],
+    [
+      "3d57ac8070838798:P0345",
+      "PHASE 6 — BRAND GOVERNANCE SYSTEM"
+    ],
+    [
+      "3d57ac8070838798:P0380",
+      "PHASE 7 — SCALING & EVOLUTION"
+    ]
+  ],
+  "dd964a7161a6d1d8": [
+    [
+      "dd964a7161a6d1d8:P0014",
+      "Layer 1: Pre-Launch (Silent Infrastructure Phase)"
+    ],
+    [
+      "dd964a7161a6d1d8:P0027",
+      "Layer 2: Tension Building (Anticipation Engineering)"
+    ],
+    [
+      "dd964a7161a6d1d8:P0040",
+      "Layer 3: The Launch Spike (Perception Injection)"
+    ],
+    [
+      "dd964a7161a6d1d8:P0053",
+      "Layer 4: Distribution Amplification (Reach Engineering)"
+    ],
+    [
+      "dd964a7161a6d1d8:P0066",
+      "Layer 5: Post-Launch Consolidation (Memory Locking)"
+    ]
+  ],
+  "caa5fb78518e54c5": [
+    [
+      "caa5fb78518e54c5:P0015",
+      "Layer 1: Reality Layer (Truth Engine)"
+    ],
+    [
+      "caa5fb78518e54c5:P0026",
+      "Layer 2: Meaning Layer (Strategic Interpretation)"
+    ],
+    [
+      "caa5fb78518e54c5:P0037",
+      "Layer 3: Translation Layer (Encoding System)"
+    ],
+    [
+      "caa5fb78518e54c5:P0049",
+      "Layer 4: Expression Layer (Execution System)"
+    ],
+    [
+      "caa5fb78518e54c5:P0061",
+      "Layer 5: Experience Layer (Interaction System)"
+    ],
+    [
+      "caa5fb78518e54c5:P0071",
+      "Layer 6: Perception Layer (Market Reality)"
+    ],
+    [
+      "caa5fb78518e54c5:P0081",
+      "Layer 7: Feedback Layer (Adaptation System)"
+    ]
+  ],
+  "2e84c5c92bff11d0": [
+    [
+      "2e84c5c92bff11d0:P0013",
+      "Layer 1: Truth Core (Non-Negotiable Foundation)"
+    ],
+    [
+      "2e84c5c92bff11d0:P0023",
+      "Layer 2: Narrative Framework (Your Story Logic)"
+    ],
+    [
+      "2e84c5c92bff11d0:P0033",
+      "Layer 3: Narrative Modules (Content Generators)"
+    ],
+    [
+      "2e84c5c92bff11d0:P0044",
+      "Layer 4: Translation Layer (Multi-Channel Adaptation)"
+    ],
+    [
+      "2e84c5c92bff11d0:P0059",
+      "Layer 5: Feedback + Evolution System"
+    ]
+  ],
+  "4e7cf9203e7ce67a": [
+    [
+      "4e7cf9203e7ce67a:P0419",
+      "Layer"
+    ],
+    [
+      "4e7cf9203e7ce67a:P0516",
+      "Layer"
+    ]
+  ],
+  "d5fa79ddc4dc5f84": [
+    [
+      "d5fa79ddc4dc5f84:P0040",
+      "Phase 1: Formation (clarity)"
+    ],
+    [
+      "d5fa79ddc4dc5f84:P0041",
+      "Phase 2: Expansion (visibility)"
+    ],
+    [
+      "d5fa79ddc4dc5f84:P0042",
+      "Phase 3: Dominance (authority)"
+    ],
+    [
+      "d5fa79ddc4dc5f84:P0043",
+      "Phase 4: Renewal (adaptation)"
+    ]
+  ],
+  "97158beb6d574803": [
+    [
+      "97158beb6d574803:P0017",
+      "Layer 1: Knowledge Capture (Input System)"
+    ],
+    [
+      "97158beb6d574803:P0034",
+      "Layer 2: Knowledge Structuring (Organization System)"
+    ],
+    [
+      "97158beb6d574803:P0055",
+      "Layer 3: Interpretation Engine (Thinking System)"
+    ],
+    [
+      "97158beb6d574803:P0063",
+      "Layer 4: Decision System (Action Layer)"
+    ],
+    [
+      "97158beb6d574803:P0076",
+      "Layer 5: Feedback Loop (Learning System)"
+    ]
+  ],
+  "be8d15ac3fde4e32": [
+    [
+      "be8d15ac3fde4e32:P0017",
+      "Layer 1: Audience Anchor (Entry Point)"
+    ],
+    [
+      "be8d15ac3fde4e32:P0029",
+      "Layer 2: Audience Definition (Pre-Segmentation)"
+    ],
+    [
+      "be8d15ac3fde4e32:P0033",
+      "Stage (where they are in growth)"
+    ],
+    [
+      "be8d15ac3fde4e32:P0037",
+      "Layer 3: Value Signal Engine"
+    ],
+    [
+      "be8d15ac3fde4e32:P0045",
+      "Layer 4: Distribution Spine"
+    ],
+    [
+      "be8d15ac3fde4e32:P0056",
+      "Layer 5: Feedback Intelligence Loop"
+    ],
+    [
+      "be8d15ac3fde4e32:P0282",
+      "Layer 0 — Market Reality"
+    ],
+    [
+      "be8d15ac3fde4e32:P0287",
+      "Layer 1 — Pre-Brand Intelligence"
+    ],
+    [
+      "be8d15ac3fde4e32:P0292",
+      "Layer 2 — Genome Core"
+    ],
+    [
+      "be8d15ac3fde4e32:P0298",
+      "Layer 3 — Translation Layer"
+    ],
+    [
+      "be8d15ac3fde4e32:P0305",
+      "Layer 4 — Narrative Engine"
+    ],
+    [
+      "be8d15ac3fde4e32:P0310",
+      "Layer 5 — Distribution Architecture"
+    ],
+    [
+      "be8d15ac3fde4e32:P0315",
+      "Layer 6 — Perception & Governance"
+    ],
+    [
+      "be8d15ac3fde4e32:P0320",
+      "Layer 7 — Evolution Engine"
+    ]
+  ],
+  "f57573b8d788d1e1": [
+    [
+      "f57573b8d788d1e1:P0143",
+      "Layer"
+    ],
+    [
+      "f57573b8d788d1e1:P0468",
+      "LAYER 1 — Environmental Intelligence Layer"
+    ],
+    [
+      "f57573b8d788d1e1:P0499",
+      "LAYER 2 — Cultural Alignment Engine"
+    ],
+    [
+      "f57573b8d788d1e1:P0532",
+      "LAYER 3 — Brand Identity Core"
+    ],
+    [
+      "f57573b8d788d1e1:P0552",
+      "LAYER 4 — Narrative Intelligence Engine"
+    ],
+    [
+      "f57573b8d788d1e1:P0590",
+      "LAYER 5 — Execution Synchronization Layer"
+    ],
+    [
+      "f57573b8d788d1e1:P0617",
+      "LAYER 6 — Measurement + Learning Layer"
+    ]
+  ],
+  "b7ef901873fcd151": [
+    [
+      "b7ef901873fcd151:P0016",
+      "Layer 1: Brand Core (Stable, Slow-Changing)"
+    ],
+    [
+      "b7ef901873fcd151:P0023",
+      "Layer 2: Brand Strategy Engine (Semi-Dynamic)"
+    ],
+    [
+      "b7ef901873fcd151:P0030",
+      "Layer 3: Identity System (Modular + Flexible)"
+    ],
+    [
+      "b7ef901873fcd151:P0039",
+      "Layer 4: Translation Layer (Critical but overlooked)"
+    ],
+    [
+      "b7ef901873fcd151:P0047",
+      "Layer 5: Execution Layer (High Frequency, Fast-Changing)"
+    ],
+    [
+      "b7ef901873fcd151:P0054",
+      "Layer 6: Intelligence & Feedback System (The Brain)"
+    ]
+  ],
+  "04b571dbc5bc4674": [
+    [
+      "04b571dbc5bc4674:P0071",
+      "Stage 1: Creation"
+    ],
+    [
+      "04b571dbc5bc4674:P0075",
+      "Stage 2: Registration"
+    ],
+    [
+      "04b571dbc5bc4674:P0079",
+      "Stage 3: Deployment"
+    ],
+    [
+      "04b571dbc5bc4674:P0084",
+      "Stage 4: Control"
+    ],
+    [
+      "04b571dbc5bc4674:P0088",
+      "Stage 5: Expansion"
+    ],
+    [
+      "04b571dbc5bc4674:P0092",
+      "Stage 6: Enforcement"
+    ]
+  ],
+  "e6637d3948c635ce": [
+    [
+      "e6637d3948c635ce:P0014",
+      "Layer 1: Market Context Mapping"
+    ],
+    [
+      "e6637d3948c635ce:P0022",
+      "Layer 2: Audience Reality (Psychographic Core)"
+    ],
+    [
+      "e6637d3948c635ce:P0030",
+      "Layer 3: Value Architecture"
+    ],
+    [
+      "e6637d3948c635ce:P0037",
+      "Layer 4: Differentiation Logic"
+    ],
+    [
+      "e6637d3948c635ce:P0049",
+      "Layer 5: Positioning Expression"
+    ],
+    [
+      "e6637d3948c635ce:P0125",
+      "PHASE 1 — MARKET INTELLIGENCE"
+    ],
+    [
+      "e6637d3948c635ce:P0170",
+      "PHASE 2 — AUDIENCE INTELLIGENCE"
+    ],
+    [
+      "e6637d3948c635ce:P0208",
+      "PHASE 3 — VALUE ARCHITECTURE"
+    ],
+    [
+      "e6637d3948c635ce:P0220",
+      "Layer"
+    ],
+    [
+      "e6637d3948c635ce:P0244",
+      "PHASE 4 — DIFFERENTIATION ENGINEERING"
+    ],
+    [
+      "e6637d3948c635ce:P0278",
+      "PHASE 5 — POSITIONING FORMULATION"
+    ],
+    [
+      "e6637d3948c635ce:P0306",
+      "Layer 1 — Core Positioning"
+    ],
+    [
+      "e6637d3948c635ce:P0308",
+      "Layer 2 — Value Messaging"
+    ],
+    [
+      "e6637d3948c635ce:P0310",
+      "Layer 3 — Proof Messaging"
+    ],
+    [
+      "e6637d3948c635ce:P0312",
+      "Layer 4 — Conversion Messaging"
+    ],
+    [
+      "e6637d3948c635ce:P0314",
+      "PHASE 6 — VISUAL + EXPERIENCE ALIGNMENT"
+    ],
+    [
+      "e6637d3948c635ce:P0346",
+      "PHASE 7 — DISTRIBUTION + PERCEPTION"
+    ],
+    [
+      "e6637d3948c635ce:P0387",
+      "PHASE 8 — EVOLUTION SYSTEM"
+    ]
+  ],
+  "9651eafc7627ac3d": [
+    [
+      "9651eafc7627ac3d:P0147",
+      "Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0167",
+      "Layer 1 — Identity Intelligence Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0200",
+      "Layer 2 — Emotional Intelligence Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0231",
+      "Layer 3 — Motivation Engine"
+    ],
+    [
+      "9651eafc7627ac3d:P0270",
+      "Layer 4 — Cultural Signal Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0290",
+      "Layer 5 — Behavioral Intelligence Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0302",
+      "Layer 6 — Narrative Resonance Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0323",
+      "Layer 7 — Perception Feedback Layer"
+    ],
+    [
+      "9651eafc7627ac3d:P0337",
+      "Layer 8 — Adaptive Decision Engine"
+    ]
+  ],
+  "e36e72a972a6c78e": [
+    [
+      "e36e72a972a6c78e:P0016",
+      "Layer 1: Value Logic (What matters here?)"
+    ],
+    [
+      "e36e72a972a6c78e:P0023",
+      "Layer 2: Trust Mechanics (How belief is built)"
+    ],
+    [
+      "e36e72a972a6c78e:P0033",
+      "Layer 3: Risk Profile (What the customer fears)"
+    ],
+    [
+      "e36e72a972a6c78e:P0040",
+      "Layer 4: Decision Dynamics (How people choose)"
+    ],
+    [
+      "e36e72a972a6c78e:P0049",
+      "Layer 5: Category Codes (What signals “this belongs here”)"
+    ],
+    [
+      "e36e72a972a6c78e:P0058",
+      "Layer 6: Competitive Narrative Space"
+    ],
+    [
+      "e36e72a972a6c78e:P0067",
+      "Layer 7: Regulatory & Structural Constraints"
+    ],
+    [
+      "e36e72a972a6c78e:P0324",
+      "LAYER 1 — Input Layer"
+    ],
+    [
+      "e36e72a972a6c78e:P0326",
+      "LAYER 2 — Analysis Layer"
+    ],
+    [
+      "e36e72a972a6c78e:P0332",
+      "LAYER 3 — Intelligence Layer"
+    ],
+    [
+      "e36e72a972a6c78e:P0337",
+      "LAYER 4 — Recommendation Layer"
+    ]
+  ],
+  "649578f127ca57c3": [
+    [
+      "649578f127ca57c3:P0184",
+      "Layer 1 — Visibility Layer"
+    ],
+    [
+      "649578f127ca57c3:P0193",
+      "Layer 2 — Perception Layer"
+    ],
+    [
+      "649578f127ca57c3:P0202",
+      "Layer 3 — Emotional Layer"
+    ],
+    [
+      "649578f127ca57c3:P0210",
+      "Layer 4 — Trust Layer"
+    ],
+    [
+      "649578f127ca57c3:P0220",
+      "Layer 5 — Community Layer"
+    ],
+    [
+      "649578f127ca57c3:P0229",
+      "Layer 6 — Conversion Layer"
+    ]
+  ],
+  "4fe594e6e6ebec7e": [
+    [
+      "4fe594e6e6ebec7e:P0050",
+      "MODE 1 — DISCOVERY MODE"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0068",
+      "MODE 2 — ARCHITECTURE MODE"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0084",
+      "MODE 3 — EXECUTION MODE"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0098",
+      "MODE 4 — VALIDATION MODE"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0112",
+      "MODE 5 — CONTINUOUS EVOLUTION MODE"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0280",
+      "STAGE 1 — Intelligence Reconstruction"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0284",
+      "STAGE 2 — Architecture Foundation"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0288",
+      "STAGE 3 — Operational Layer"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0292",
+      "STAGE 4 — AI Orchestration Layer"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0296",
+      "STAGE 5 — Integration Layer"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0301",
+      "STAGE 6 — Validation Layer"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0305",
+      "STAGE 7 — Deployment Layer"
+    ],
+    [
+      "4fe594e6e6ebec7e:P0327",
+      "Layer"
+    ]
+  ],
+  "465064f1f36ff790": [
+    [
+      "465064f1f36ff790:P0408",
+      "Phase 1 — Discovery"
+    ],
+    [
+      "465064f1f36ff790:P0414",
+      "Phase 2 — Translation"
+    ],
+    [
+      "465064f1f36ff790:P0416",
+      "Phase 3 — Execution Mapping"
+    ],
+    [
+      "465064f1f36ff790:P0422",
+      "Phase 4 — Governance"
+    ]
+  ],
+  "058ff52dc8b3c76e": [
+    [
+      "058ff52dc8b3c76e:P0154",
+      "LAYER 1 — BRAND IDENTITY DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0184",
+      "LAYER 2 — AUDIENCE DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0216",
+      "LAYER 3 — POSITIONING DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0244",
+      "LAYER 4 — OFFER ALIGNMENT DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0272",
+      "LAYER 5 — EXPERIENCE DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0302",
+      "LAYER 6 — AUTHORITY DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0330",
+      "LAYER 7 — OPERATIONAL BRAND DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0357",
+      "LAYER 8 — SCALE READINESS DIAGNOSTIC"
+    ],
+    [
+      "058ff52dc8b3c76e:P0385",
+      "Layer"
+    ]
+  ]
+}

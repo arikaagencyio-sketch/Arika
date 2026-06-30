@@ -1,0 +1,2 @@
+"""Retrieval-gated context assembly."""
+

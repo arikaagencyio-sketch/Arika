@@ -1,0 +1,11 @@
+﻿From Layer,To Layer,Information Exchanged,KPI Impact,Failure Impact
+Sector,Offer,"Sector intelligence defines economic arena, ICP, language, constraints, category maturity, and proof requirements.","offer-market fit, pricing confidence, conversion rate",Offer becomes generic or mispriced.
+Offer,Marketing,"Offer supplies promise, mechanism, value stack, proof, CTA, pricing frame, and risk reducers.","CAC, CVR, qualified pipeline, ROMI",Marketing creates attention that cannot convert.
+Marketing,Sales,"Marketing passes qualified demand, source context, lead score, campaign promise, and attribution data.","pipeline velocity, SQL rate, win rate",Sales loses context and wastes follow-up.
+Sales,Client,"Sales transfers promises, discovery, stakeholders, risks, success criteria, and contract context.","onboarding speed, retention, NRR","Delivery mismatch, churn, trust loss."
+Client,Operations,"Client data becomes delivery plan, SLA, capacity demand, quality feedback, and SOP updates.","SLA, time to value, margin, utilization",Operations works blind and rework increases.
+Operations,Finance,"Operations emits cost, capacity, utilization, delivery margin, vendor, payroll, and project economics.","gross margin, runway, budget variance",Finance cannot see profit quality or cash needs.
+Finance,Management,"Finance compresses liquidity, risk, profitability, allocation, forecast, and scale capacity into decisions.","runway, EBITDA, decision latency, growth capacity",Management scales into fragility.
+Automation,All Layers,"Automation reads rules, events, data contracts, prompts, and approval boundaries; writes logs, dashboards, memory, and actions.","cycle time, uptime, error rate, leverage",Speed increases chaos without governance.
+Legal,All Layers,"Legal governs claims, contracts, privacy, compliance, payment terms, IP, risk acceptance, and approval gates.","compliance incidents, approval SLA, contract risk",Revenue promises create unpriced exposure.
+Hiring,Operations,"Hiring converts capacity gaps and capability needs into roles, onboarding, training, and accountability.","utilization, SLA, throughput, quality",Delivery bottlenecks constrain revenue.

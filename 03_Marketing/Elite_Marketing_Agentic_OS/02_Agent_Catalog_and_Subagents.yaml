@@ -1,0 +1,383 @@
+﻿version: "1.0"
+generated_on: "2026-05-19"
+framework_name: "Elite Marketing Agentic OS"
+
+system_modes:
+  - strategic_cognition
+  - execution_engineering
+  - truth_and_learning
+  - governance_and_control
+
+global_policies:
+  - "No launch without validated intelligence brief"
+  - "Every output must map to a funnel stage and KPI"
+  - "All experiments must end in scale, kill, or iterate"
+  - "Escalation rules override throughput when risk is high"
+
+departments:
+  - id: command_governance
+    name: "Command and Governance"
+    chief_agent:
+      id: mos_orchestrator
+      title: "Marketing OS Orchestrator"
+      ownership:
+        - "cross-system orchestration"
+        - "resource arbitration"
+        - "priority stack governance"
+      kpis:
+        - "portfolio ROMI"
+        - "growth efficiency ratio"
+        - "execution-to-strategy alignment score"
+      sub_agents:
+        - id: governance_risk_controller
+          title: "Governance and Risk Controller"
+        - id: memory_learning_architect
+          title: "Memory and Learning Architect"
+        - id: operations_cadence_controller
+          title: "Operations Cadence Controller"
+    workflows:
+      - "daily command standup"
+      - "weekly decision council"
+      - "monthly strategic allocation"
+      - "incident command protocol"
+
+  - id: intelligence_market_dominance
+    name: "Intelligence and Market Dominance"
+    chief_agent:
+      id: market_intelligence_lead
+      title: "Market Intelligence Lead"
+      ownership:
+        - "market signal ingestion"
+        - "opportunity and threat mapping"
+      kpis:
+        - "signal confidence score"
+        - "insight-to-action velocity"
+      sub_agents:
+        - id: psychographic_strategist
+          title: "Psychographic Strategist"
+        - id: competitive_intel_strategist
+          title: "Competitive Intelligence Strategist"
+        - id: cultural_signal_analyst
+          title: "Cultural and Narrative Signal Analyst"
+        - id: voc_mining_agent
+          title: "Voice-of-Customer Mining Agent"
+        - id: market_research_architect
+          title: "Market Research Architect"
+    workflows:
+      - "icp drift detection"
+      - "competitor asymmetry scan"
+      - "demand timing windows"
+      - "market readiness scoring"
+
+  - id: strategy_positioning_offer
+    name: "Strategy Positioning and Offer Engineering"
+    chief_agent:
+      id: chief_marketing_strategist
+      title: "Chief Marketing Strategist"
+      ownership:
+        - "strategic intent architecture"
+        - "growth thesis and channel doctrine"
+      kpis:
+        - "message-market fit"
+        - "strategic win rate"
+      sub_agents:
+        - id: brand_positioning_architect
+          title: "Brand Positioning Architect"
+        - id: category_design_agent
+          title: "Category Design Agent"
+        - id: offer_architecture_engineer
+          title: "Offer Architecture Engineer"
+        - id: pricing_psychology_agent
+          title: "Pricing Psychology Agent"
+        - id: messaging_doctrine_architect
+          title: "Messaging Doctrine Architect"
+    workflows:
+      - "positioning doctrine board"
+      - "offer stack synthesis"
+      - "segment message matrix release"
+      - "channel portfolio decision"
+
+  - id: creative_production_command
+    name: "Creative Production Command"
+    chief_agent:
+      id: creative_director_agent
+      title: "Creative Director Agent"
+      ownership:
+        - "creative coherence governance"
+        - "campaign emotional architecture"
+      kpis:
+        - "creative resonance score"
+        - "attention retention by asset"
+      sub_agents:
+        - id: narrative_architecture_agent
+          title: "Narrative Architecture Agent"
+        - id: storyboard_intelligence_agent
+          title: "Storyboard Intelligence Agent"
+        - id: script_engineering_agent
+          title: "Script Engineering Agent"
+        - id: visual_language_architect
+          title: "Visual Language Architect"
+        - id: prompt_composition_engineer
+          title: "Prompt Composition Engineer"
+        - id: production_qa_agent
+          title: "Creative Continuity QA Agent"
+    workflows:
+      - "brief to storyworld decomposition"
+      - "script to frame architecture"
+      - "frame to prompt package generation"
+      - "continuity and brand doctrine QA"
+      - "asset manifest handoff"
+
+  - id: content_editorial_systems
+    name: "Content and Editorial Systems"
+    chief_agent:
+      id: content_strategy_director
+      title: "Content Strategy Director"
+      ownership:
+        - "content portfolio architecture"
+        - "narrative timing and progression"
+      kpis:
+        - "engagement depth"
+        - "content-to-pipeline contribution"
+      sub_agents:
+        - id: editorial_systems_architect
+          title: "Editorial Systems Architect"
+        - id: topic_cluster_engineer
+          title: "Topic Cluster Engineer"
+        - id: platform_adaptation_agent
+          title: "Platform Adaptation Agent"
+        - id: content_atomization_agent
+          title: "Content Atomization Agent"
+        - id: publishing_cadence_operator
+          title: "Publishing Cadence Operator"
+    workflows:
+      - "quarterly editorial arc"
+      - "weekly narrative packet"
+      - "core asset atomization"
+      - "cross-platform deployment"
+
+  - id: demand_distribution
+    name: "Demand Generation and Distribution"
+    chief_agent:
+      id: demand_generation_strategist
+      title: "Demand Generation Strategist"
+      ownership:
+        - "belief shift campaign systems"
+        - "pipeline generation orchestration"
+      kpis:
+        - "qualified pipeline value"
+        - "cost per qualified opportunity"
+      sub_agents:
+        - id: paid_media_systems_engineer
+          title: "Paid Media Systems Engineer"
+        - id: social_growth_operator
+          title: "Social Media Growth Operator"
+        - id: pr_communications_architect
+          title: "PR and Communications Architect"
+        - id: community_growth_engineer
+          title: "Community Growth Engineer"
+        - id: influence_partnership_operator
+          title: "Influence and Partnership Operator"
+    workflows:
+      - "campaign hypothesis design"
+      - "creative-angle and audience testing"
+      - "budget redistribution by evidence"
+      - "amplification loop scaling"
+
+  - id: channel_discoverability
+    name: "Channel and Discoverability Systems"
+    chief_agent:
+      id: seo_aeo_geo_architect
+      title: "SEO AEO GEO Architect"
+      ownership:
+        - "discoverability stack engineering"
+        - "retrieval-layer performance"
+      kpis:
+        - "inbound intent volume"
+        - "citation and answer inclusion rate"
+      sub_agents:
+        - id: search_intent_mining_agent
+          title: "Search Intent Mining Agent"
+        - id: semantic_structure_agent
+          title: "Semantic Structure Agent"
+        - id: answer_engine_optimization_agent
+          title: "Answer Engine Optimization Agent"
+        - id: generative_citation_agent
+          title: "Generative Citation Optimization Agent"
+        - id: dm_marketing_conversion_agent
+          title: "DM Marketing Conversion Agent"
+        - id: email_lifecycle_delivery_agent
+          title: "Email Lifecycle Delivery Agent"
+    workflows:
+      - "entity and schema planning"
+      - "intent cluster release"
+      - "channel-specific routing"
+      - "discoverability performance triage"
+
+  - id: funnel_conversion_revenue_transfer
+    name: "Funnel Conversion and Revenue Transfer"
+    chief_agent:
+      id: funnel_architect
+      title: "Funnel Architect"
+      ownership:
+        - "funnel system design"
+        - "conversion movement optimization"
+      kpis:
+        - "stage-to-stage conversion"
+        - "revenue per visitor"
+      sub_agents:
+        - id: conversion_architecture_engineer
+          title: "Conversion Architecture Engineer"
+        - id: landing_page_optimization_agent
+          title: "Landing Page Optimization Agent"
+        - id: cta_systems_agent
+          title: "CTA Systems Agent"
+        - id: lead_scoring_intelligence_lead
+          title: "Lead Scoring Intelligence Lead"
+        - id: qualification_router_agent
+          title: "Qualification Router Agent"
+        - id: sales_handoff_sla_agent
+          title: "Sales Handoff SLA Agent"
+    workflows:
+      - "funnel diagnostic"
+      - "friction log and test planning"
+      - "lead score recalibration"
+      - "handoff quality review"
+
+  - id: lifecycle_retention_expansion
+    name: "Lifecycle Retention and Expansion"
+    chief_agent:
+      id: lifecycle_marketing_architect
+      title: "Lifecycle Marketing Architect"
+      ownership:
+        - "post-conversion journey architecture"
+        - "retention and expansion loops"
+      kpis:
+        - "retention rate"
+        - "net revenue retention"
+        - "ltv growth"
+      sub_agents:
+        - id: onboarding_acceleration_agent
+          title: "Onboarding Acceleration Agent"
+        - id: retention_loyalty_engineer
+          title: "Retention and Loyalty Engineer"
+        - id: expansion_upsell_strategist
+          title: "Expansion and Upsell Strategist"
+        - id: community_narrative_operator
+          title: "Community Narrative Operator"
+        - id: churn_recovery_agent
+          title: "Churn Recovery Agent"
+    workflows:
+      - "first-value acceleration"
+      - "behavior-triggered nurture"
+      - "expansion offer sequencing"
+      - "churn signal intervention"
+
+  - id: analytics_modeling_experimentation
+    name: "Analytics Modeling and Experimentation"
+    chief_agent:
+      id: attribution_modeling_architect
+      title: "Attribution and Modeling Architect"
+      ownership:
+        - "measurement truth architecture"
+        - "budget intelligence models"
+      kpis:
+        - "attribution confidence"
+        - "decision latency"
+      sub_agents:
+        - id: tracking_systems_architect
+          title: "Tracking Systems Architect"
+        - id: marketing_data_scientist
+          title: "Marketing Data Scientist"
+        - id: incrementality_analyst
+          title: "Incrementality Analyst"
+        - id: experimentation_program_manager
+          title: "Experimentation Program Manager"
+        - id: executive_dashboard_agent
+          title: "Executive Dashboard Agent"
+    workflows:
+      - "source of truth reconciliation"
+      - "multi-touch and mmm calibration"
+      - "experiment registry governance"
+      - "weekly scale-kill-iterate decisions"
+
+  - id: marketing_ops_automation
+    name: "Marketing Operations and Automation"
+    chief_agent:
+      id: marketing_ops_governor
+      title: "Marketing Ops Governor"
+      ownership:
+        - "sop architecture and compliance"
+        - "automation reliability"
+      kpis:
+        - "workflow uptime"
+        - "automation incident rate"
+      sub_agents:
+        - id: sop_intelligence_architect
+          title: "SOP Intelligence Architect"
+        - id: workflow_automation_engineer
+          title: "Workflow Automation Engineer"
+        - id: integration_connector_engineer
+          title: "Integration and Connector Engineer"
+        - id: incident_response_recovery_agent
+          title: "Incident Response and Recovery Agent"
+        - id: manual_backup_mode_agent
+          title: "Manual Backup Mode Agent"
+    workflows:
+      - "sop version control"
+      - "automation deployment and monitoring"
+      - "integration health checks"
+      - "incident response drills"
+
+agent_contract_schema:
+  required_fields:
+    - "mandate"
+    - "inputs"
+    - "outputs"
+    - "workflow_sequence"
+    - "decision_rights"
+    - "quality_gates"
+    - "failure_modes"
+    - "escalation_triggers"
+    - "telemetry"
+    - "tooling_requirements"
+
+shared_tooling_layers:
+  data_and_intelligence:
+    - "crm_connector"
+    - "analytics_connector"
+    - "ad_platform_connectors"
+    - "social_listening_connector"
+  creative_and_production:
+    - "storyboard_repository"
+    - "asset_management_connector"
+    - "image_video_generation_api"
+  distribution_and_lifecycle:
+    - "email_platform_api"
+    - "social_publishing_api"
+    - "dm_automation_connector"
+    - "community_platform_connector"
+  measurement_and_operations:
+    - "bi_dashboard_connector"
+    - "workflow_automation_engine"
+    - "alerting_and_incident_connector"
+
+cadence_matrix:
+  daily:
+    - "performance watchtower"
+    - "campaign and funnel health checks"
+    - "lead routing integrity"
+  weekly:
+    - "experiment board"
+    - "creative and channel review"
+    - "budget adjustments"
+  monthly:
+    - "strategy and segment review"
+    - "attribution confidence review"
+    - "sop and automation audit"
+  quarterly:
+    - "offer architecture reset"
+    - "competitive strategy reset"
+  yearly:
+    - "operating model redesign"
+    - "capability maturity review"

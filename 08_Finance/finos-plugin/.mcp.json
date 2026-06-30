@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "finos": {
+      "command": "node",
+      "args": ["dist/api-layer/mcp-server.js"],
+      "env": {
+        "FINOS_DATABASE_URL": "${FINOS_DATABASE_URL}",
+        "FINOS_EVENT_STORE": "postgres"
+      }
+    }
+  }
+}

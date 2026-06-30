@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node / TypeScript
+node_modules/
+dist/
+build/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local secrets/config
+.env
+.env.local
+*.local

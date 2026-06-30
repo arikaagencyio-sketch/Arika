@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BOIS Dynamic Brand Context",
+  "type": "object",
+  "required": ["context_id", "client_id", "task", "sector", "geography", "audience", "deliverable", "activated_agents"],
+  "properties": {
+    "context_id": { "type": "string" },
+    "client_id": { "type": "string" },
+    "task": { "type": "string" },
+    "sector": { "type": "string" },
+    "geography": { "type": "string" },
+    "audience": { "type": "string" },
+    "deliverable": { "type": "string" },
+    "positioning_objective": { "type": "string" },
+    "communication_goal": { "type": "string" },
+    "campaign_objective": { "type": "string" },
+    "activated_agents": { "type": "array", "items": { "type": "string" } },
+    "retrieval_bundle": { "$ref": "retrieval_bundle.schema.json" },
+    "memory_updates": { "type": "array", "items": { "type": "object" } }
+  },
+  "additionalProperties": true
+}
+

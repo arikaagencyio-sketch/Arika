@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BOIS Retrieval Bundle",
+  "type": "object",
+  "required": ["query", "required_sources", "results_by_source", "missing_sources"],
+  "properties": {
+    "query": { "type": "string" },
+    "required_sources": { "type": "array", "items": { "type": "string" } },
+    "missing_sources": { "type": "array", "items": { "type": "string" } },
+    "results_by_source": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["paragraph_id", "document_id", "score", "retrieval_mode", "evidence"],
+          "properties": {
+            "paragraph_id": { "type": "string" },
+            "document_id": { "type": "string" },
+            "score": { "type": "number" },
+            "retrieval_mode": { "type": "string" },
+            "evidence": { "type": "object" }
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
+

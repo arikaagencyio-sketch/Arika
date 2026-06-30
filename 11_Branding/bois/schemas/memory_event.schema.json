@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BOIS Memory Event",
+  "type": "object",
+  "required": ["timestamp", "client_id", "stream", "event_type", "source", "payload"],
+  "properties": {
+    "timestamp": { "type": "string" },
+    "client_id": { "type": "string" },
+    "stream": {
+      "type": "string",
+      "enum": ["client", "campaign", "visual", "narrative", "governance", "market", "trend", "stakeholder"]
+    },
+    "event_type": { "type": "string" },
+    "source": { "type": "string" },
+    "payload": { "type": "object" }
+  },
+  "additionalProperties": true
+}
+

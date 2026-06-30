@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: finos
+      POSTGRES_PASSWORD: finos
+      POSTGRES_DB: finos
+    ports:
+      - "5432:5432"
+    volumes:
+      - finos-postgres:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+  nats:
+    image: nats:2.10-alpine
+    command: ["-js"]
+    ports:
+      - "4222:4222"
+      - "8222:8222"
+volumes:
+  finos-postgres:

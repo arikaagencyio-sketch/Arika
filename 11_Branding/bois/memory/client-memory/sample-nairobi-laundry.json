@@ -1,0 +1,40 @@
+{
+  "client_id": "sample-nairobi-laundry",
+  "company_name": "Sample Nairobi Laundry",
+  "sector": "laundry services",
+  "sub_sector": "",
+  "geography": "Nairobi",
+  "audience": "urban professionals",
+  "psychographics": [
+    "convenience",
+    "trust",
+    "time scarcity"
+  ],
+  "products": [],
+  "services": [],
+  "pricing_model": "",
+  "market_position": "premium convenience",
+  "competitors": [
+    "local laundromats",
+    "home washing",
+    "pickup laundry apps"
+  ],
+  "communication_style": "",
+  "emotional_positioning": "relief, polish, and dependable time recovery",
+  "visual_preferences": [],
+  "typography_preferences": [],
+  "color_preferences": [],
+  "campaign_history": [],
+  "brand_memory": {},
+  "visual_memory": {},
+  "narrative_memory": {},
+  "governance_rules": {
+    "tone": "clear, trustworthy, culturally aware"
+  },
+  "stakeholder_notes": [],
+  "timelines": [],
+  "deliverables": [],
+  "active_projects": [],
+  "memory_embeddings": [],
+  "retrieval_indexes": []
+}

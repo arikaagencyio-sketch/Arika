@@ -1,0 +1,27 @@
+{
+  "name": "finos-plugin",
+  "version": "0.1.0",
+  "description": "Financial Operating System plugin for liquidity-first capital orchestration, treasury control, risk detection, and CFO-grade financial intelligence.",
+  "author": {
+    "name": "Codex",
+    "email": "support@example.com",
+    "url": "https://example.com"
+  },
+  "license": "UNLICENSED",
+  "keywords": ["finance", "treasury", "cashflow", "risk", "mcp"],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "FinOS Plugin",
+    "shortDescription": "Liquidity-first financial command center.",
+    "longDescription": "Institutional-grade Financial Operating System plugin for event-driven treasury, ledger, allocation, risk, reporting, and AI-assisted financial workflows.",
+    "developerName": "Codex",
+    "category": "Productivity",
+    "capabilities": ["Interactive", "Write"],
+    "defaultPrompt": [
+      "Show the current cash position.",
+      "Forecast cashflow for 13 weeks.",
+      "Evaluate growth capacity."
+    ],
+    "brandColor": "#0F766E"
+  }
+}

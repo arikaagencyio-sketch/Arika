@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "BOIS Client Object",
+  "type": "object",
+  "required": ["client_id", "company_name"],
+  "properties": {
+    "client_id": { "type": "string" },
+    "company_name": { "type": "string" },
+    "sector": { "type": "string" },
+    "sub_sector": { "type": "string" },
+    "geography": { "type": "string" },
+    "audience": { "type": "string" },
+    "psychographics": { "type": "array", "items": { "type": "string" } },
+    "products": { "type": "array", "items": { "type": "string" } },
+    "services": { "type": "array", "items": { "type": "string" } },
+    "pricing_model": { "type": "string" },
+    "market_position": { "type": "string" },
+    "competitors": { "type": "array", "items": { "type": "string" } },
+    "communication_style": { "type": "string" },
+    "emotional_positioning": { "type": "string" },
+    "visual_preferences": { "type": "array", "items": { "type": "string" } },
+    "typography_preferences": { "type": "array", "items": { "type": "string" } },
+    "color_preferences": { "type": "array", "items": { "type": "string" } },
+    "campaign_history": { "type": "array", "items": { "type": "object" } },
+    "brand_memory": { "type": "object" },
+    "visual_memory": { "type": "object" },
+    "narrative_memory": { "type": "object" },
+    "governance_rules": { "type": "object" },
+    "stakeholder_notes": { "type": "array", "items": { "type": "string" } },
+    "timelines": { "type": "array", "items": { "type": "object" } },
+    "deliverables": { "type": "array", "items": { "type": "string" } },
+    "active_projects": { "type": "array", "items": { "type": "object" } },
+    "memory_embeddings": { "type": "array", "items": { "type": "string" } },
+    "retrieval_indexes": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
+

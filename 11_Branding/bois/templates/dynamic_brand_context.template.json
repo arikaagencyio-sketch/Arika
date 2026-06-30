@@ -1,0 +1,21 @@
+{
+  "context_id": "",
+  "client_id": "",
+  "task": "",
+  "sector": "",
+  "geography": "",
+  "audience": "",
+  "deliverable": "",
+  "positioning_objective": "",
+  "communication_goal": "",
+  "campaign_objective": "",
+  "activated_agents": [],
+  "retrieval_bundle": {
+    "query": "",
+    "required_sources": [],
+    "results_by_source": {},
+    "missing_sources": []
+  },
+  "memory_updates": []
+}
+
