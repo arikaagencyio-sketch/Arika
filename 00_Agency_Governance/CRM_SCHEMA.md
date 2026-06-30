@@ -103,13 +103,17 @@ A Partner doesn't move through the Lead→Opportunity→Client chain itself — 
 
 This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` §11 (item 6) — each row above should eventually become a fuller handoff packet spec once real workflows are built per department.
 
+## Platform selection
+
+**Confirmed by owner, 2026-06-30: HubSpot.** This is also independently consistent with Sector (01)'s real ICP data — Tier 1 B2B SaaS targets are themselves described as typically running HubSpot or Salesforce (`01_Sector/SECTOR_OS.md` §1), so the agency's own tool choice matches its target clients' tooling.
+
 ## What this schema deliberately does not specify
 
-- Which CRM platform implements it (HubSpot, Pipedrive, Salesforce, etc.) — that's a Tech Stack (13) decision.
-- Field-level validation rules, required vs. optional fields in practice, or UI/form design — those follow once a platform is chosen.
+- Field-level validation rules, required vs. optional fields in practice, or UI/form design — those follow once HubSpot implementation begins (Tech Stack, 13).
 - Historical/legacy data migration — not applicable until real client data exists to migrate.
 
 ## Changelog
 
 - 2026-06-30 — Initial CRM schema created as part of governance-closure pass: core objects (Lead, Opportunity, Client, Engagement/Project, Invoice), relationships, and handoff points defined.
-- 2026-06-30 — Added Partner object and the Partner→sourced-Opportunity handoff, following a gap found during ClientPartner Acquisition (06) content migration: that department's source material (`CRM System Architure. raft 13.md`) defines an 11-stage Partner pipeline that had no home in the original client-only schema. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Added Partner object and the Partner→sourced-Opportunity handoff, following a gap found during ClientPartner Acquisition (06) content migration: that department's source material (`CRM System Architure. raft 13.md`) defines an 11-stage Partner pipeline that had no home in the original client-only schema.
+- 2026-06-30 — Owner confirmed CRM platform: HubSpot (tracker item 5, resolved). — Claude Code (Sonnet 4.6)

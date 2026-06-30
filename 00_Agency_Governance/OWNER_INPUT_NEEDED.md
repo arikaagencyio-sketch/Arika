@@ -28,10 +28,9 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
 | 1 | Real mission statement, annual objectives, quarterly goals | Everything else (department mandates, KPI thresholds, RACI priorities) should trace back to this; the agency's name is now confirmed (Arika Agency, item 0 resolution) but mission/objectives are still a generic working description | Placeholder | `AGENCY_OPERATING_CONSTITUTION.md` §2 |
-| 2 | Agency owner's name (referenced throughout as "agency owner" for Risk Class 3+/4 sign-off) | Constitution and automation matrix both require a specific accountable human for high-risk approvals | Generic "agency owner" | `AGENCY_OPERATING_CONSTITUTION.md` §4-5 |
-| 3 | All 12 department owners | RACI, KPI dictionary, and automation matrix are all structurally complete but operationally inert until real names replace "Responsible/Accountable: Department Name" | All `(unassigned)` | `GLOBAL_OS.md` §4 Department Index; every `{DEPT}_OS.md` header |
-| 4 | KPI owner/cadence/threshold for every metric in the dictionary | Formulas are defined; without an owner and threshold, nothing actually gets tracked or acted on | All `(unassigned)` / `(unset)` | `AGENCY_KPI_DICTIONARY.md` |
-| 5 | CRM platform selection (HubSpot/Pipedrive/Salesforce/other) | `CRM_SCHEMA.md` defines the object model but deliberately doesn't pick a tool — that's a real decision, not a research task | Not decided | `CRM_SCHEMA.md` "What this schema deliberately does not specify"; relevant to Tech Stack (13) |
+| 2 | Agency owner's real name (referenced throughout as "agency owner" for Risk Class 3+/4 sign-off) | Constitution and automation matrix both require a specific accountable human for high-risk approvals | Still pending — asked, no answer yet | `AGENCY_OPERATING_CONSTITUTION.md` §4-5 |
+| 3 | All 12 department owners | **Structure confirmed (2026-06-30): solo — one owner runs every department**, same person as item 2. Once item 2's name is given, propagate it across RACI, KPI dictionary, automation matrix, `GLOBAL_OS.md` §4, and every `{DEPT}_OS.md` header in one pass. | Structure known, name pending (linked to item 2) | `GLOBAL_OS.md` §4 Department Index; every `{DEPT}_OS.md` header |
+| 4 | KPI owner/cadence/threshold for every metric in the dictionary | Formulas are defined; without an owner and threshold, nothing actually gets tracked or acted on — owner will be the same solo person per item 2/3 once named, but cadence/threshold per metric still need real input | All `(unassigned)` / `(unset)` | `AGENCY_KPI_DICTIONARY.md` |
 
 ## Department: Sector (01)
 
@@ -43,7 +42,6 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
-| 6 | Confirm or correct positioning: "Revenue Infrastructure Partner" | This phrase recurs across 6+ independently-generated drafts (strong internal signal) but was never confirmed as actually adopted/used with a real client | Leading candidate, unconfirmed | `02_Offer/OFFER_OS.md` §1 |
 | 7 | Real pricing — which (if any) of the now 6 conflicting draft pricing sources is closest to reality, or none of them | 5 source files in Offer propose 5 different number ranges for the same tier concept; Sector (01)'s new real ICP database (`01_Sector/SECTOR_OS.md` §1, §3) adds a 6th, more granular pricing hypothesis (per-subsector entry-audit + retainer ranges) — none validated against actual invoices or deals | All marked draft/unvalidated | `02_Offer/OFFER_OS.md` §7; `01_Sector/SECTOR_OS.md` §3 |
 | 8 | Real historical conversion/margin/LTV figures | KPI table currently has only template targets pulled from AI-generated pitches, no actuals | All marked draft/unvalidated | `02_Offer/OFFER_OS.md` §7 |
 
@@ -53,13 +51,11 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 |---|---|---|---|---|
 | 9 | Real KPI Dictionary values (CAC, conversion rate, sales cycle length, etc.) | RevOps Agent's mandate covers this, but no real figures exist anywhere in the raw material — confirmed genuine absence, not unmigrated content | Empty | `05_Sales/SALES_OS.md` §7 |
 | 10 | Locate or confirm-absent: 11 "companion" source `.docx` files referenced in `Master_Source_Registry.csv` but not present anywhere in this folder (e.g. `HE SALES OS_2024.docx`, `Sales Mechanism 102.docx`) | Citation system is otherwise verified-trustworthy; these specific citations can't currently be checked | Unlocated | `05_Sales/SALES_OS.md` §14 |
-| 11 | Reconcile this department's 4-tier risk classification with the agency-wide one in the Constitution | Both exist and map closely but were never formally merged into one system | Two parallel frameworks | `05_Sales/SALES_OS.md` §10; `AGENCY_OPERATING_CONSTITUTION.md` §5 |
 
 ## Department: Marketing (03)
 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
-| 12 | Confirm or correct: does the agency actually operate in/serve Kenya? | "Kenya Data Protection Act" appears alongside GDPR/CCPA in one raw draft — the only concrete jurisdictional signal found anywhere in this department, possibly real, possibly just an AI-generated example | Unconfirmed signal | `03_Marketing/MARKETING_OS.md` §14 |
 | 13 | Real KPI values (LTV:CAC, CAC payback, funnel conversion, etc.) — currently only industry-standard benchmark ranges, no agency actuals | KPI Dictionary structurally complete but substantively template-only | All marked template/aspirational | `03_Marketing/MARKETING_OS.md` §7 |
 | 14 | Confirm which (if any) MCP/connector blueprint items are actually configured/in use | Blueprint lists 7 connector-class layers as a wishlist — none confirmed real | All aspirational | `03_Marketing/MARKETING_OS.md` §12 |
 
@@ -112,10 +108,16 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 23 | Reconcile pre-sale qualification vs. post-sale segmentation | Resolved by architectural reconciliation. Qualification scoring reassigned to Sales (05) (matches its citation-backed Lead Qualification agent); Client Success's mandate confirmed as post-sale segmentation only. | 2026-06-30 | `07_Client_Success/CLIENTSUCCESS_OS.md` §3, §10; `05_Sales/SALES_OS.md` §3 |
 | 32 | Pick one of the 3 unreconciled "intelligence layer" models as the agency's actual operating framework | Resolved by architectural reconciliation, same class as item 19/21/22/23 — didn't need a real fact, just a structural call. Adopted the xlsx's 4-layer (Data/Process/Human/AI) model as canonical; the 7-layer and alternate-4-layer chat-sourced models are kept as elaborations layered on top, not competing frameworks. | 2026-06-30 | `01_Sector/SECTOR_OS.md` §8, §10 |
 | 0 | Which real sector(s)/industry vertical(s) does the agency actually target? | **Resolved by direct owner input** — the highest-priority item in this tracker. Owner provided `Other Source Reference/Arika_B2B_SaaS_Intelligence_Database.xlsx` (a 13-sheet real, curated database) plus a partial chat transcript. Real sector confirmed: B2B SaaS, 3-tier ICP (Tier 1: Series A-C $5M-$50M ARR; Tier 2: Post-Seed-Series A $1M-$10M ARR; Tier 3: multi-location niche verticals). Agency's real name also confirmed in the same exchange: **Arika Agency**. | 2026-06-30 | `01_Sector/SECTOR_OS.md` §1, §2, §3 |
+| 5 | CRM platform selection | **Resolved by direct owner input.** HubSpot confirmed. | 2026-06-30 | `CRM_SCHEMA.md` "Platform selection" |
+| 6 | Confirm or correct positioning: "Revenue Infrastructure Partner" | **Resolved by direct owner input.** Confirmed as the real, adopted positioning. | 2026-06-30 | `02_Offer/OFFER_OS.md` §1 |
+| 11 | Reconcile Sales' 4-tier risk classification with the agency-wide 5-class system | Resolved by architectural reconciliation, not owner input — didn't need a real fact, just a direct mapping (Constitution's Class 0+1 → Sales' Low; Class 2 → Medium; Class 3 → High; Class 4 → Critical). | 2026-06-30 | `05_Sales/SALES_OS.md` §8, §10 |
+| 12 | Confirm or correct: does the agency actually operate in/serve Kenya? | **Resolved by direct owner input.** Confirmed real — Arika Agency operates in/serves Kenya, plus broader confirmation it serves clients globally and must comply with each jurisdiction's real laws as engagements happen. | 2026-06-30 | `03_Marketing/MARKETING_OS.md` §14 |
 
 ## Changelog
 
 - 2026-06-30 — Tracker created, seeded with items surfaced during Offer and Sales content migration plus 5 agency-wide items from the governance-closure pass.
 - 2026-06-30 — **Resolved item 0** (real sector, agency's #1 priority item) via direct owner input — see Resolved table. Added items 31-32 (Sector) for the now-partial chat-transcript source and the unreconciled intelligence-layer models. Updated item 7 (Offer pricing) to note the new 6th conflicting pricing source from Sector's real ICP database. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Added items 25-27 (Finance) and 28-30 (Branding) as those departments' content migrations completed. — Claude Code (Sonnet 4.6)
-- 2026-06-30 — Reconciliation pass: resolved items 19, 21, 22, 23 (cross-department boundary/model decisions) by direct architectural analysis now that all relevant departments are migrated — these turned out not to be owner-input items at all (no real fact was missing, just full-repo context), so moved to Resolved rather than left for the owner. Remaining open items are genuine owner-input gaps. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Reconciliation pass: resolved items 19, 21, 22, 23 (cross-department boundary/model decisions) by direct architectural analysis now that all relevant departments are migrated — these turned out not to be owner-input items at all (no real fact was missing, just full-repo context), so moved to Resolved rather than left for the owner. Remaining open items are genuine owner-input gaps.
+- 2026-06-30 — Resolved item 32 (Sector intelligence-layer model) by architectural reconciliation; deprioritized item 31 (chat export) as not blocking per owner direction.
+- 2026-06-30 — Resolved items 5 (CRM=HubSpot), 6 (positioning confirmed), 12 (Kenya confirmed + global compliance scope) via direct owner input. Resolved item 11 (Sales risk-class mapping) by architectural reconciliation. Confirmed item 3's structure (solo ownership) — item 2's actual name still pending to fully close 2 and 3. — Claude Code (Sonnet 4.6)

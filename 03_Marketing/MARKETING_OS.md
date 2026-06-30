@@ -73,7 +73,7 @@ Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale
 
 ## 8. Decision Log
 
-*(placeholder — append-only, empty)*
+- **2026-06-30 — Confirmed Kenya as a real operating geography**, plus broader confirmation the agency serves clients globally and must comply with each jurisdiction's real advertising/copyright/data-protection laws as engagements happen. See §14.
 
 ## 9. Risk / Incident Log
 
@@ -111,7 +111,9 @@ Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale
 
 ~122 root-level "Draft N.md" files (largest single folder in the repo) — not all individually read; 9 were spot-checked for the 2026-06-30 content migration (`Agentic Marketing Orchestration Architect. Draft 111`, `Elite System Architecture. Draft 115`, `360 Marketing System Roles. Draft 39`, `CAC and ROI Analysis in Marketing. Draft 50`, `SEO AEO GEO Architecture. Draft 62`, `Marketing Operating System Architect. Draft 110`, `Marketing Legal Structures. Draft 32`, `Marketing Payment Sytem. Draft 34`, `Social Media Marketing. Draft 58`). Existing gap backlog: `03_Marketing/00_Workspace_Intelligence_Inventory/` (confirms 0 CSV registries/indexes, 0 JSON assets at baseline — consistent with the no-citation finding above). One confirmed exact-duplicate file (`CAC and ROI Analysis in arketing.md`) was already deleted during cleanup — its canonical twin `CAC and ROI Analysis in Marketing. Draft 50.md` remains.
 
-**Finding:** nearly every sampled raw draft is an AI-chat-transcript brainstorm (opens with a literal "You are an elite Marketing Operating System Architect..." prompt) — confirms the underlying source material is generic AI-generated strategy theory, not the agency's lived operating history, even though `Elite_Marketing_Agentic_OS/` is faithfully derived from it. One real-world signal: `Marketing Legal Structures. Draft 32.md` references the "Kenya Data Protection Act" alongside GDPR/CCPA — possibly indicates real agency operating geography; added to `00_Agency_Governance/OWNER_INPUT_NEEDED.md` for confirmation.
+**Finding:** nearly every sampled raw draft is an AI-chat-transcript brainstorm (opens with a literal "You are an elite Marketing Operating System Architect..." prompt) — confirms the underlying source material is generic AI-generated strategy theory, not the agency's lived operating history, even though `Elite_Marketing_Agentic_OS/` is faithfully derived from it. One real-world signal: `Marketing Legal Structures. Draft 32.md` references the "Kenya Data Protection Act" alongside GDPR/CCPA.
+
+**Confirmed by owner, 2026-06-30:** Kenya is real — Arika Agency operates in/serves Kenya. More broadly, the owner confirmed the agency operates globally and must comply with the relevant advertising, copyright, and data-protection laws of every jurisdiction it serves, not just Kenya/GDPR/CCPA. Treat compliance content in this department as needing a genuinely multi-jurisdictional posture (jurisdiction list not yet enumerated — add real countries/regions as real engagements happen, don't pre-build a speculative global list).
 
 ## 15. Changelog
 

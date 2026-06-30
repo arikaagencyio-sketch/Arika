@@ -13,7 +13,7 @@
 
 Offer packages sector-level truth into a sellable product/service structure — positioning, packaging, pricing.
 
-**Positioning (draft, recurring across 6+ independently-generated source files — see §14):** *"Revenue Infrastructure Partner"* — explicitly NOT "marketing agency," "automation agency," "lead generation agency," or "consultant." The exact wording shifts per file (variants: "Revenue Operating Infrastructure Firm," "Revenue Infrastructure Provider," "Enterprise Revenue Infrastructure Firm"), but the underlying idea — infrastructure/operating-system provider rather than service vendor — is corroborated independently across many separately-generated drafts, which is a stronger signal than any single file. **Not confirmed as adopted with a real client; treat as the leading candidate positioning, pending owner confirmation.**
+**Positioning — confirmed by owner, 2026-06-30:** *"Revenue Infrastructure Partner"* — explicitly NOT "marketing agency," "automation agency," "lead generation agency," or "consultant." The exact wording shifted across 6+ independently-generated source files (variants: "Revenue Operating Infrastructure Firm," "Revenue Infrastructure Provider," "Enterprise Revenue Infrastructure Firm"), but the underlying idea — infrastructure/operating-system provider rather than service vendor — is now the confirmed real positioning, not just a leading candidate. Use "Revenue Infrastructure Partner" as the canonical phrase going forward.
 
 ## 2. Status
 
@@ -66,7 +66,7 @@ This is a department-local table of *candidate* metrics; once real data exists, 
 
 ## 8. Decision Log
 
-*(placeholder — empty)*
+- **2026-06-30 — Confirmed "Revenue Infrastructure Partner" as the real, adopted positioning.** See §1.
 
 ## 9. Risk / Incident Log
 
@@ -113,4 +113,5 @@ None yet.
 ## 15. Changelog
 
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "Offer Drafts").
-- 2026-06-30 — Content migration first pass: all 28 raw drafts read and extracted; Capability Registry, Workflow Index, KPI Dictionary, and Standards & SOPs Index populated with draft/unvalidated content, clearly distinguished from confirmed agency fact per the no-silent-invention rule (`AGENCY_OPERATING_CONSTITUTION.md` §3). Positioning statement ("Revenue Infrastructure Partner") added to Identity as the leading candidate, pending owner confirmation. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Content migration first pass: all 28 raw drafts read and extracted; Capability Registry, Workflow Index, KPI Dictionary, and Standards & SOPs Index populated with draft/unvalidated content, clearly distinguished from confirmed agency fact per the no-silent-invention rule (`AGENCY_OPERATING_CONSTITUTION.md` §3). Positioning statement ("Revenue Infrastructure Partner") added to Identity as the leading candidate, pending owner confirmation.
+- 2026-06-30 — Owner confirmed "Revenue Infrastructure Partner" as the real positioning (tracker item 6, resolved). — Claude Code (Sonnet 4.6)

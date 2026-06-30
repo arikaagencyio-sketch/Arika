@@ -66,6 +66,10 @@ This is a genuine gap, not just unmigrated content — the department's own gap 
 
 Live decision log already exists: `06_AI_OPERATIONS/06_AI_Memory_Logs/Decision_Log.md` — use that file going forward rather than duplicating entries here. **Confirmed empty** (one-line template only) — same for `Learning_Loop_Log.md` and `Prompt_Evolution_Log.md`. This is a designed-but-unused capability: the format exists (`AI_Memory_Log_Template.md`), real entries do not yet.
 
+- **2026-06-30 — Reconciled this department's 4-tier risk model with the agency-wide 5-class system** (tracker item 11, resolved). See §10 for the mapping table.
+
+**Decision (2026-06-30):** added the reconciliation mapping above between this department's 4-tier risk model and the agency-wide 5-class system — see this department's §8 Decision Log entry.
+
 ## 9. Risk / Incident Log
 
 *(placeholder — no incidents logged yet)*. Risk classification framework already exists and is mature — see `06_AI_OPERATIONS/05_Escalations_Approvals/Escalation_Rules.md` and §10 below for the 4-tier risk model this log should use once populated.
@@ -86,7 +90,16 @@ Live decision log already exists: `06_AI_OPERATIONS/06_AI_Memory_Logs/Decision_L
 | High | **Human approval required before execution** | Pricing, negotiation, legal, external messaging, budget, data changes, strategy shifts |
 | Critical | **Human approval + audit log required** | Contracts, destructive actions, compliance, sensitive data, financial commitments, irreversible customer commitments |
 
-This maps closely onto `AGENCY_OPERATING_CONSTITUTION.md` §5's agency-wide risk classes (Low≈Class 1, Medium≈Class 2, High≈Class 3, Critical≈Class 4) — worth formally reconciling the two frameworks in a future pass rather than running them as parallel systems.
+**Reconciled with `AGENCY_OPERATING_CONSTITUTION.md` §5 (2026-06-30)** — resolved by direct mapping, not an owner-input gap (no real fact was missing, just a merge): the constitution's 5 classes collapse cleanly onto Sales' 4 because Class 0 and Class 1 both describe "no approval needed, proceed" actions that Sales' own framework doesn't distinguish:
+
+| Constitution (5-class) | Sales (4-tier) | Action |
+|---|---|---|
+| 0 — Informational + 1 — Reversible internal | Low | Proceed, report assumptions |
+| 2 — Reversible external-facing | Medium | Reflection check + state assumptions |
+| 3 — Hard to reverse / client-money-facing | High | Human approval required before execution |
+| 4 — Legal, contractual, or irreversible | Critical | Human approval (agency owner specifically) + audit log required |
+
+Going forward, use the constitution's 5-class system as the canonical agency-wide scale (it's more granular at the low-risk end, which matters as automation gets built); Sales' Low/Medium/High/Critical labels remain valid shorthand within this department's own runtime/escalation language via the mapping above — no need to rename anything in `Escalation_Rules.md`.
 
 Approval packets (for High/Critical) require: proposed action, reason, evidence, risk class, options, recommendation, downside, rollback plan. Human override wins unless it conflicts with the constitution/evidence/safety/prior approval — in that case the system must stop and ask rather than comply.
 
