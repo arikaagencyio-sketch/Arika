@@ -41,6 +41,14 @@ Work through this in any order. When an item is resolved, move it to "Resolved" 
 | 10 | Locate or confirm-absent: 11 "companion" source `.docx` files referenced in `Master_Source_Registry.csv` but not present anywhere in this folder (e.g. `HE SALES OS_2024.docx`, `Sales Mechanism 102.docx`) | Citation system is otherwise verified-trustworthy; these specific citations can't currently be checked | Unlocated | `05_Sales/SALES_OS.md` §14 |
 | 11 | Reconcile this department's 4-tier risk classification with the agency-wide one in the Constitution | Both exist and map closely but were never formally merged into one system | Two parallel frameworks | `05_Sales/SALES_OS.md` §10; `AGENCY_OPERATING_CONSTITUTION.md` §5 |
 
+## Department: Marketing (03)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 12 | Confirm or correct: does the agency actually operate in/serve Kenya? | "Kenya Data Protection Act" appears alongside GDPR/CCPA in one raw draft — the only concrete jurisdictional signal found anywhere in this department, possibly real, possibly just an AI-generated example | Unconfirmed signal | `03_Marketing/MARKETING_OS.md` §14 |
+| 13 | Real KPI values (LTV:CAC, CAC payback, funnel conversion, etc.) — currently only industry-standard benchmark ranges, no agency actuals | KPI Dictionary structurally complete but substantively template-only | All marked template/aspirational | `03_Marketing/MARKETING_OS.md` §7 |
+| 14 | Confirm which (if any) MCP/connector blueprint items are actually configured/in use | Blueprint lists 7 connector-class layers as a wishlist — none confirmed real | All aspirational | `03_Marketing/MARKETING_OS.md` §12 |
+
 ---
 
 ## Resolved
