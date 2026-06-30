@@ -184,6 +184,8 @@ Inherited from the agency's own prior self-analysis (`00_Agency_Governance/_arch
 - Dashboard spine (item 9 above) — not started.
 - Handoff packet standards (item 6 above) — only a seed exists in `CRM_SCHEMA.md`.
 
+**Every item above that needs a real fact from the agency owner (not more reading/writing) is tracked in one place: `00_Agency_Governance/OWNER_INPUT_NEEDED.md`.** As each department's content-migration pass surfaces a new "needs real data" item, it gets added there rather than left buried in that department's own OS file — review that tracker in one sitting once migration is further along, rather than hunting through every department.
+
 **Resolved during the v0.2 governance-closure pass (no longer open):**
 - Finance's `finos-plugin` (TypeScript) and Branding's `bois` (Python) — decision made and documented: both retained as grandfathered code-backed exceptions, not converted or deleted. See each department's `{DEPT}_OS.md` §13.
 - The 5-file ClientPartner Acquisition near-duplicate cluster — content-diffed; 1 confirmed exact duplicate deleted, 3 confirmed genuinely distinct. See `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §14.

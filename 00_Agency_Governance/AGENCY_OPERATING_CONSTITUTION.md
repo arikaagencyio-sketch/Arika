@@ -71,6 +71,7 @@ No department, agent, or automation may bypass this process to self-amend the co
 - Agency-wide KPI dictionary: `00_Agency_Governance/AGENCY_KPI_DICTIONARY.md`
 - CRM schema: `00_Agency_Governance/CRM_SCHEMA.md`
 - Department-local standards: each `{DEPT}_OS.md` §10
+- Consolidated list of every gap that needs a real fact from the agency owner (not more reading/writing): `00_Agency_Governance/OWNER_INPUT_NEEDED.md`
 
 ## 8. Changelog
 
