@@ -5,6 +5,8 @@
 
 > Referenced from [`GLOBAL_OS.md`](../GLOBAL_OS.md) §11. This file exists because individual departments correctly flag what's missing inside their own `{DEPT}_OS.md`, but those flags get buried across 12+ files as migration proceeds. This is the single place they roll up.
 
+> **For active review:** see [`OWNER_DECISION_WORKSHEET.md`](OWNER_DECISION_WORKSHEET.md) — every open item below, sorted into decisions you can make right now (with a reasoned recommendation each) vs. items genuinely waiting on real operating data. This file stays the technical record; that one is the action surface.
+
 ---
 
 ## How to use this
