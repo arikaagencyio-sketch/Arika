@@ -15,13 +15,13 @@
 | Period | Target | Derivation |
 |---|---|---|
 | Monthly | $1,000,000 | Owner-stated core target |
-| Daily | $35,000 | Owner-stated (not a flat $1M÷30 = $33,333 split — the owner's own $35K/day figure, which already builds in a buffer above the arithmetic minimum) |
-| Weekly | ~$245,000 | $35K × 7 (derived, not separately stated by owner) |
-| Quarterly | $3,000,000 | $1M × 3 (derived) |
-| Half-year | $6,000,000 | $1M × 6 (derived) |
-| Yearly | $12,000,000 | $1M × 12 (derived) |
+| Daily | $35,000 | Owner-stated, **5-day work week (Mon-Fri)** — confirmed 2026-06-30, not a 7-day figure |
+| Weekly | $175,000 | $35K × 5 business days (derived, owner-confirmed basis) |
+| Quarterly | $3,000,000 | $1M × 3 (derived from the monthly figure, see note below) |
+| Half-year | $6,000,000 | $1M × 6 (derived from the monthly figure) |
+| Yearly | $12,000,000 | $1M × 12 (derived from the monthly figure) |
 
-**Weekly/quarterly/half-year/yearly figures above are arithmetic derivations from the owner's stated monthly/daily numbers, not separately confirmed by the owner** — flagged per the no-silent-invention rule. They're simple multiplication, not invented figures, but worth a quick owner confirmation pass since real operating cadence (e.g. weekends, holiday slowdowns) could mean these aren't simply linear.
+**Real finding, owner-confirmed cadence (2026-06-30): the daily and monthly targets don't arithmetically reconcile under a 5-day week, and this is flagged rather than smoothed over.** A typical month has roughly 21-22 business days. At $35,000/day × ~21.7 business days, the daily target alone projects to **~$759,500-$770,000/month** — about 23-24% short of the confirmed $1,000,000 monthly target. This isn't a math error to silently fix; it means the $1M/month target requires either (a) some revenue closing outside the strict 5-day cadence (weekend/evening deals, since the owner is the orchestrator running sales personally), (b) days that exceed $35K, or (c) the $35K/day figure functioning as a floor rather than the literal average needed. **Quarterly/half-year/yearly are therefore derived from the monthly $1,000,000 figure (the more authoritative recurring target), not compounded from the daily/weekly figures**, since the latter would understate the real target. Worth a follow-up owner conversation on which of (a)/(b)/(c) reflects reality, but not blocking — the monthly/daily targets themselves are both real and confirmed, just not mutually self-consistent under a pure 5-day-multiplication model.
 
 ## The Deal-Count Logic (how $35K/day actually gets hit)
 
@@ -100,7 +100,7 @@ Named anti-patterns to actively avoid (owner's own list): no meaningless meeting
 
 ## Open Items / Dependencies
 
-- **Weekly/quarterly/half-year/yearly targets are derived, not separately owner-confirmed** — quick confirmation pass would be worth doing (see table above).
+- **Resolved 2026-06-30:** weekly target confirmed as $175,000 (5-day week basis). New open question surfaced by that confirmation: the daily ($35K × 5-day week) and monthly ($1M) targets don't arithmetically reconcile — see the note under "The Core Target" above. Worth a follow-up conversation on whether weekend/evening deals, above-floor days, or a different model closes the ~23-24% gap.
 - **This now partially unblocks `02_Offer/OFFER_OS.md` §10's pricing-floor methodology** — the segmented mean can now be checked against a real "does this offer mix actually reach $35K/day" question, though it still needs more real OEOS-engineered offers per segment before the floor itself is computable.
 - **This now partially unblocks `05_Sales/SALES_OS.md` §7's KPI Dictionary** (previously confirmed empty) — the daily target table above gives Sales real, owner-confirmed target figures for the first time, distinct from the "no real figures exist" finding from that department's original migration. Still not *historical actuals* (nothing has been measured against these yet) — they're real targets, a different but related kind of real data.
 - **Capacity Calendar vs. Operational Calendar overlap** — not fully disambiguated in the source material; revisit if it becomes operationally important to separate them.
@@ -108,3 +108,4 @@ Named anti-patterns to actively avoid (owner's own list): no meaningless meeting
 ## Changelog
 
 - 2026-06-30 — Created from the owner's real, stated revenue targets and cognitive calendar system. Resolves tracker item 34. Cross-referenced into Offer, Finance, and Sales department OS files. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Owner confirmed the daily target operates on a 5-day work week (Mon-Fri), giving a real weekly target of $175,000. This surfaced a real, unresolved inconsistency: $35K/day × a 5-day week undershoots the $1M monthly target by roughly 23-24% — flagged explicitly rather than silently reconciled. Quarterly/half-year/yearly figures now derive from the monthly target rather than the daily one. Resolves tracker item 35. — Claude Code (Sonnet 4.6)

@@ -26,9 +26,9 @@ This constitution governs how the agency operates as a system — who decides wh
 | Half-year | $6,000,000 (derived) |
 | Yearly | $12,000,000 (derived) |
 
-Monthly/daily figures are owner-confirmed directly; quarterly/half-year/yearly are arithmetic derivations, not separately confirmed — see `AGENCY_REVENUE_TARGETS.md`'s Open Items.
+Monthly/daily/weekly figures are owner-confirmed directly (weekly on a 5-day-week basis); quarterly/half-year/yearly remain arithmetic derivations from the monthly figure, not separately confirmed — see `AGENCY_REVENUE_TARGETS.md`'s Open Items, including a real, flagged inconsistency between the daily and monthly targets under the 5-day-week basis.
 
-**Contact (confirmed 2026-06-30):** domain `arikaagency.com` (website not yet live). Business addresses: `support@arikaagency.com`, `growth@arikaagency.com`, and an owner address given as `mary.thuo@arikaagencycom` — **likely missing a "." before "com"** (would read `mary.thuo@arikaagency.com` to match the pattern of the other two addresses); flagged here rather than silently corrected, confirm the exact address when convenient.
+**Contact (confirmed 2026-06-30, email corrected 2026-06-30):** domain `arikaagency.com` (website not yet live). Business addresses: `support@arikaagency.com`, `growth@arikaagency.com`, `mary.thuo@arikaagency.com` (originally given as `mary.thuo@arikaagencycom`, missing a "." before "com" — corrected after direct owner confirmation).
 
 ## 3. Non-Negotiables
 
