@@ -84,6 +84,14 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 23 | Reconcile pre-sale qualification (Sales' territory) vs. post-sale segmentation (this department's actual mandate) — same class of issue as item 19 for ClientPartner Acquisition | Source material conflates the two; affects where qualification scoring logic should actually live | Documented, not resolved | `07_Client_Success/CLIENTSUCCESS_OS.md` §14 |
 | 24 | Build a real offboarding/churn process | Confirmed near-total absence — appears only as an empty filename placeholder in the source material | Effectively nonexistent | `07_Client_Success/CLIENTSUCCESS_OS.md` §10 |
 
+## Department: Finance (09)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 25 | Connect at least one real financial integration (Stripe/QuickBooks/banking API/etc.) | `integrations/index.ts` is the one confirmed genuine stub in an otherwise more-real-than-expected codebase — no real connector exists, so none of the working risk/cashflow logic can run against actual data | Interface only, zero real connectors | `09_Finance/FINANCE_OS.md` §13 |
+| 26 | Confirm or set real thresholds for runway, DSCR, client concentration, reserve tiers, expense approval tiers | These are generic doctrine numbers currently hardcoded as if real (e.g. runway alert <60 days, concentration critical >35%, expense approval at $500/$5K/$25K) — they're implemented in working risk-engine code, so they'll actually fire once real data flows through, using assumed-not-confirmed values | Doctrine defaults, unconfirmed by owner | `09_Finance/FINANCE_OS.md` §7 |
+| 27 | Decide whether to wire the 7 documented AI agents (CFO, Cashflow, Risk, Profitability, Treasury, Compliance, Leakage Detection) to an actual LLM, or keep them as structured prompts/event-routing metadata only | Currently real spec data but no code calls an LLM to execute them | Spec exists, not executable | `09_Finance/FINANCE_OS.md` §5 |
+
 ---
 
 ## Resolved
