@@ -92,6 +92,14 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 26 | Confirm or set real thresholds for runway, DSCR, client concentration, reserve tiers, expense approval tiers | These are generic doctrine numbers currently hardcoded as if real (e.g. runway alert <60 days, concentration critical >35%, expense approval at $500/$5K/$25K) — they're implemented in working risk-engine code, so they'll actually fire once real data flows through, using assumed-not-confirmed values | Doctrine defaults, unconfirmed by owner | `09_Finance/FINANCE_OS.md` §7 |
 | 27 | Decide whether to wire the 7 documented AI agents (CFO, Cashflow, Risk, Profitability, Treasury, Compliance, Leakage Detection) to an actual LLM, or keep them as structured prompts/event-routing metadata only | Currently real spec data but no code calls an LLM to execute them | Spec exists, not executable | `09_Finance/FINANCE_OS.md` §5 |
 
+## Department: Branding (12)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 28 | Decide whether to wire the 20 documented brand agents to an actual LLM, or keep them as structured prompts/routing metadata only | Same open question as Finance's 7 agents (#27) — `agent_prompt()` generates a prompt string per agent but nothing in the codebase calls an LLM to execute them | Spec + routing exists, not executable | `12_Branding/BRANDING_OS.md` §5 |
+| 29 | Confirm or set real `BrandScoringEngine` dimension thresholds (currently generic 70-78 defaults) | These are implemented in working code and will actually gate/flag deliverables once real data flows through — but the cut-lines are designed defaults, not calibrated against real outcomes | Doctrine defaults, unconfirmed by owner | `12_Branding/BRANDING_OS.md` §7 |
+| 30 | Define the agency's own real brand (positioning, voice, identity) so BOIS has a non-hypothetical client to run against | Every BOIS run to date (including the one confirmed smoke test) has used a hypothetical example client ("Sample Nairobi Laundry") — the system has never been pointed at the agency's own brand, which is the most immediate real use case available | No real brand object exists yet, even for the agency itself | `12_Branding/BRANDING_OS.md` §2, §4 |
+
 ---
 
 ## Resolved
@@ -101,3 +109,4 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 ## Changelog
 
 - 2026-06-30 — Tracker created, seeded with items surfaced during Offer and Sales content migration plus 5 agency-wide items from the governance-closure pass. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Added items 25-27 (Finance) and 28-30 (Branding) as those departments' content migrations completed. — Claude Code (Sonnet 4.6)
