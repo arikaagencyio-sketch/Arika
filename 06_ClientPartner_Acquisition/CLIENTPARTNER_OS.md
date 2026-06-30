@@ -11,7 +11,7 @@
 
 ## 1. Identity
 
-ClientPartner Acquisition is a hybrid of client acquisition and partner/referral/distribution acquisition — confirmed during exploration to be **genuinely distinct content** from both Sales (general acquisition mechanics) and Client Success (post-sale lifecycle), despite the easily-confused naming of the original folders. The department's own core distinction, stated repeatedly across its source material: **"Client = Revenue Extraction Engine"** (you sell to them) vs. **"Partner = Distribution/Leverage Engine"** (you don't sell to them — you align incentives so they bring opportunities/access/scale). The single most-repeated principle in the corpus: *"The system MUST NEVER confuse [client vs. partner] logic."*
+ClientPartner Acquisition's **resolved mandate (reconciliation pass, 2026-06-30): the Partner pipeline only** — sourcing, qualifying, onboarding, managing, and expanding referral/distribution/affiliate partner relationships. It does not run a parallel client-acquisition or demand-generation system; that's Sales (05) and Marketing (03)/Content (04)'s mandate (see §10 for the full reconciliation). The department's own core distinction, stated repeatedly across its source material and the basis for this boundary: **"Client = Revenue Extraction Engine"** (you sell to them) vs. **"Partner = Distribution/Leverage Engine"** (you don't sell to them — you align incentives so they bring opportunities/access/scale). The single most-repeated principle in the corpus: *"The system MUST NEVER confuse [client vs. partner] logic."*
 
 ## 2. Status
 
@@ -19,15 +19,22 @@ ClientPartner Acquisition is a hybrid of client acquisition and partner/referral
 
 ## 3. Capability Registry
 
+**Primary to this department (Partner-track, no analog elsewhere):**
+
 | Capability | Description | Status |
 |---|---|---|
-| Pre-acquisition audience engineering | 3-layer Attraction → Capture/Segmentation → Warm-Up system splitting audience into Client (Demand Side) vs. Partner (Supply/Leverage Side) pathways before any pitch | Draft/aspirational (Draft 7) |
-| Client acquisition system engineering | 5-layer Demand Generation → Capture → Qualification → Conversion → Feedback machine | Draft/aspirational, overlaps heavily with Sales (05)'s own mandate (Draft 5) |
 | Partner acquisition funnel engineering | 7-stage funnel (Identification → Attraction → Qualification → Alignment → Conversion → Enablement → Expansion) — explicitly "not a normal sales funnel" | Draft/aspirational (Draft 6) |
-| Client-offer-type mapping | Maps 7 client awareness/maturity types to offer structures (diagnostic, productized, done-for-you, white-glove, etc.) | Draft/aspirational; overlaps with Offer (02) | 
 | Hybrid flywheel orchestration | 6-engine compounding system (Demand, Conversion, Delivery, Authority, Partner, Ecosystem) converting client outcomes into 5 reusable assets | Draft/aspirational (Draft 6) |
-| Social-media-as-acquisition-infrastructure | 4-layer model (Attention/Authority/Relationship/Conversion) with parallel client vs. partner content tracks on the same platforms | Draft/aspirational, overlaps with Marketing (03)/Content (04) (Draft 9) |
-| Partner CRM architecture | Multi-pipeline model (Acquisition/Partner/Delivery), 6 CRM domains, 5-dimension lead scoring | Draft/aspirational, most elaborate file in the department — see §2 (Draft 13) |
+| Partner CRM architecture | Multi-pipeline model (Acquisition/Partner/Delivery), 6 CRM domains, 5-dimension lead scoring — basis for the Partner object added to `CRM_SCHEMA.md` | Draft/aspirational, most elaborate file in the department (Draft 13) |
+| Client-vs-partner pathway segmentation | 3-layer Attraction → Capture/Segmentation → Warm-Up system splitting audience into Client (Demand Side) vs. Partner (Supply/Leverage Side) pathways before any pitch — the *partner-routing* logic specifically is this department's own | Draft/aspirational (Draft 7) |
+
+**Superseded by neighboring departments (reconciled 2026-06-30 — see §10):** the raw material also contains a full parallel client-acquisition system that duplicates other departments' actual mandates. Kept here only as a cross-reference, not an active capability of this department:
+
+| Capability | Description | Now owned by |
+|---|---|---|
+| Client acquisition system engineering | 5-layer Demand Generation → Capture → Qualification → Conversion → Feedback machine | Sales (05) — matches its citation-backed "Demand Generation," "Lead Qualification and Discovery," and "Sales Execution and Closing" agents |
+| Client-offer-type mapping | Maps 7 client awareness/maturity types to offer structures | Offer (02) |
+| Social-media-as-acquisition-infrastructure | 4-layer model (Attention/Authority/Relationship/Conversion) with parallel client-content track | Marketing (03) / Content (04) |
 
 ## 4. Workflow Index
 
@@ -62,7 +69,7 @@ ClientPartner Acquisition is a hybrid of client acquisition and partner/referral
 
 ## 8. Decision Log
 
-*(placeholder — empty)*
+- **2026-06-30 — Department mandate narrowed to Partner pipeline only.** Resolved the boundary with Sales (05) and Marketing (03)/Content (04): this department owns sourcing/qualifying/onboarding/managing partner relationships; it does not run a parallel client-acquisition system. See §1, §3, §10 for full reasoning. — Claude Code (Sonnet 4.6)
 
 ## 9. Risk / Incident Log
 
@@ -77,7 +84,9 @@ ClientPartner Acquisition is a hybrid of client acquisition and partner/referral
 - Trust Doctrine: "Trust MUST be earned before extraction... MUST NOT manipulate psychological vulnerabilities... every acquisition interaction MUST increase long-term trust position" (Draft 8).
 - Client psychology is problem-driven (pain relief, speed, certainty, ROI clarity); Partner psychology is opportunity-driven (leverage, alignment, control retention, strategic upside) — pitching one as the other is named as a stated failure mode: *"pitch partners like clients → they disengage; treat clients like partners → they don't convert"* (Draft 4).
 
-**Boundary finding — flagged, not resolved (2026-06-30):** the source material draws a strong *internal* boundary (client-track vs. partner-track within this department) but does **not** draw an operational boundary with Sales (05) or Marketing/Content (03/04). Draft 5's "Client Acquisition System" includes a full "Conversion (Sales Engine)" layer naming sales call systems, close rates, and CRM tools — territory that's conventionally Sales's. Draft 7 (audience-building) and Draft 9 (social media) substantially duplicate what would be expected in Marketing/Content. `CLIENTPARTNER_OS.md`'s framing ("feeds qualified opportunities into Sales, same as Marketing does") is this restructuring's own architectural narrowing, not something stated in the source drafts — the raw material itself sprawls into neighboring departments' territory. Worth a deliberate reconciliation pass once Sales, Marketing, and Content are all fully migrated, rather than silently picking a boundary now.
+**Boundary reconciliation — resolved (2026-06-30), now that Sales, Marketing, and Content are all fully migrated.** The source material draws a strong *internal* boundary (client-track vs. partner-track within this department) but did **not** itself draw an operational boundary with Sales (05) or Marketing/Content (03/04) — Draft 5's "Client Acquisition System" includes a full "Conversion (Sales Engine)" layer naming sales call systems, close rates, and CRM tools; Draft 7 (audience-building) and Draft 9 (social media) substantially duplicate Marketing/Content territory.
+
+**Resolution:** this department's active mandate is the **Partner pipeline only** (§1, §3). The client-acquisition-system content in Drafts 5/7/9 is read as an artifact of when this material was drafted before the repo split client-acquisition mechanics across dedicated departments (Sales for conversion, Marketing/Content for demand-gen) — not as a second, competing client-acquisition system this department should run. This is supported by Sales (05)'s own citation-backed Capability Registry, which already cross-references "Demand Generation... referral/partnership channels" to Marketing (03)/ClientPartner Acquisition (06) — i.e. Sales already expects partner-sourced opportunities to land in *its* conversion pipeline, consistent with `CRM_SCHEMA.md`'s Partner → sourced-Opportunity handoff (Partner sources the lead; Sales closes it). No content was deleted — the superseded capabilities remain visible in §3's cross-reference table for provenance.
 
 ## 11. RACI / Ownership
 
@@ -110,4 +119,5 @@ No further dedup action needed on this cluster.
 ## 15. Changelog
 
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "The ClientPartner Draft").
-- 2026-06-30 — Content migration: remaining 8 files read and synthesized. Capability Registry, Workflow Index, KPI Dictionary, Standards & SOPs Index, RACI, and Triggers/Automation Hooks populated. Found that this department's CRM thinking (a full Partner Pipeline) has no analog in `00_Agency_Governance/CRM_SCHEMA.md` — extended that file with a Partner entity/pipeline alongside this migration (see that file's own changelog). Documented, not resolved, an operational-boundary gap with Sales (05) and Marketing/Content (03/04) that the source material itself never draws. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Content migration: remaining 8 files read and synthesized. Capability Registry, Workflow Index, KPI Dictionary, Standards & SOPs Index, RACI, and Triggers/Automation Hooks populated. Found that this department's CRM thinking (a full Partner Pipeline) has no analog in `00_Agency_Governance/CRM_SCHEMA.md` — extended that file with a Partner entity/pipeline alongside this migration (see that file's own changelog). Documented, not resolved, an operational-boundary gap with Sales (05) and Marketing/Content (03/04) that the source material itself never draws.
+- 2026-06-30 — Reconciliation pass: resolved the operational boundary with Sales (05) and Marketing/Content (03/04) flagged above, now that all three departments are migrated. Mandate narrowed to Partner pipeline only; client-acquisition-system content reclassified as cross-referenced/superseded rather than active capability. See §1, §3, §8, §10. — Claude Code (Sonnet 4.6)

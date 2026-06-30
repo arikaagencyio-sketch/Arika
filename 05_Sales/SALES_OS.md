@@ -26,7 +26,7 @@ Sales is responsible for converting qualified opportunities (from Marketing and 
 | Buyer psychology & power mapping | Pain, objections, trust gaps, stakeholder power dynamics | Citation-backed (Customer Psychology Agent, Power Navigation Agent) |
 | Offer & pricing architecture | Value props, pricing logic, risk reducers | Citation-backed (Offer Architecture Agent) — cross-reference Offer (02)'s own Capability Registry |
 | Demand generation | Outbound, paid, referral/partnership channels | Citation-backed (Demand Generation Agent) — cross-reference Marketing (03) / ClientPartner Acquisition (06) |
-| Lead qualification & discovery | Fit/urgency/authority/timing assessment | Citation-backed (Lead Qualification and Discovery Agent) |
+| Lead qualification & discovery | Fit/urgency/authority/timing assessment | Citation-backed (Lead Qualification and Discovery Agent); cross-department reconciliation (2026-06-30) also reassigned a /25 pre-sale scoring model originally drafted under Client Success to this capability — see `07_Client_Success/CLIENTSUCCESS_OS.md` §10 |
 | Sales execution & closing | Conversation, objection navigation, negotiation | Citation-backed (Sales Execution and Closing Agent) |
 | Follow-up & stalled-deal recovery | Prevents revenue leakage via structured re-engagement | Citation-backed (Follow-Up and Recovery Agent) — see §4's 7-touch cadence |
 | Customer onboarding/expansion/retention | Post-close account growth | Citation-backed (Customer Success and Expansion Agent) — cross-reference Client Success (07) |
@@ -125,4 +125,5 @@ This sub-layer also has its own source-citation lineage (`Master_Source_Registry
 ## 15. Changelog
 
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring.
-- 2026-06-30 — Content migration: `06_AI_OPERATIONS/` extracted and independently quality-verified (7/7 sampled citations checked out against `Master_Source_Paragraph_Index.csv`; agent framing confirmed to originate in this department's own raw drafts). Capability Registry, Workflow Index, Agent Roster, Skill Library Index, Standards & SOPs Index, and Triggers/Automation Hooks populated. KPI Dictionary and Risk/Incident Log confirmed as genuine gaps (not just unmigrated) per the department's own existing gap backlog. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Content migration: `06_AI_OPERATIONS/` extracted and independently quality-verified (7/7 sampled citations checked out against `Master_Source_Paragraph_Index.csv`; agent framing confirmed to originate in this department's own raw drafts). Capability Registry, Workflow Index, Agent Roster, Skill Library Index, Standards & SOPs Index, and Triggers/Automation Hooks populated. KPI Dictionary and Risk/Incident Log confirmed as genuine gaps (not just unmigrated) per the department's own existing gap backlog.
+- 2026-06-30 — Cross-department reconciliation pass: noted in §3 that Client Success (07)'s pre-sale qualification scoring model was reassigned here as part of that department's boundary reconciliation. — Claude Code (Sonnet 4.6)

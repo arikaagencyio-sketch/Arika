@@ -72,16 +72,12 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
-| 19 | Reconcile the operational boundary between ClientPartner Acquisition (06), Sales (05), and Marketing/Content (03/04) | The source material for this department sprawls into Sales territory (full "Conversion/Sales Engine" layer with close rates, CRM tools) and Marketing/Content territory (audience-building, social media) — the current narrow boundary ("feeds Sales, same as Marketing") is this restructuring's own framing, not something the source material draws itself. Best done once Sales, Marketing, and Content are all fully migrated so the comparison is apples-to-apples. | Documented, not resolved | `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §10 |
 | 20 | Confirm real partner names, deals, or revenue-share terms (currently all illustrative — e.g. "Distribution Partner 20-40%" is explicitly labeled "Example Split" in its source file) | KPI Dictionary and Partner CRM object are structurally ready but have zero real data | All draft/illustrative | `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §7 |
 
 ## Department: Client Success (07)
 
 | # | Item | Why it matters | Currently | Source file |
 |---|---|---|---|---|
-| 21 | Pick a single client journey/lifecycle stage model — 3 unreconciled versions exist (7-stage, 9-stage, 7-phase) | Downstream onboarding/retention workflows can't be built consistently against 3 different stage namings for the same idea | Documented, not resolved | `07_Client_Success/CLIENTSUCCESS_OS.md` §4 |
-| 22 | Reconcile the Client-Success/Operations delivery handoff | Source material inconsistently shows Client Success owning delivery execution directly vs. handing off cleanly to Operations (08) — only one of several drafts draws a clean line | Documented, not resolved | `07_Client_Success/CLIENTSUCCESS_OS.md` §14 |
-| 23 | Reconcile pre-sale qualification (Sales' territory) vs. post-sale segmentation (this department's actual mandate) — same class of issue as item 19 for ClientPartner Acquisition | Source material conflates the two; affects where qualification scoring logic should actually live | Documented, not resolved | `07_Client_Success/CLIENTSUCCESS_OS.md` §14 |
 | 24 | Build a real offboarding/churn process | Confirmed near-total absence — appears only as an empty filename placeholder in the source material | Effectively nonexistent | `07_Client_Success/CLIENTSUCCESS_OS.md` §10 |
 
 ## Department: Finance (09)
@@ -104,9 +100,15 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 ## Resolved
 
-*(none yet)*
+| # | Item | Resolution | Date | Source file |
+|---|---|---|---|---|
+| 19 | Reconcile the operational boundary between ClientPartner Acquisition (06), Sales (05), and Marketing/Content (03/04) | Resolved by architectural reconciliation, not owner input — didn't need a real fact, just full-repo comparative analysis once all three departments were migrated. ClientPartner Acquisition's mandate narrowed to the Partner pipeline only; client-acquisition-system content reassigned to Sales/Marketing as cross-references. | 2026-06-30 | `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §1, §3, §10 |
+| 21 | Pick a single client journey/lifecycle stage model | Resolved by architectural reconciliation. Adopted the 9-stage (Draft 2) model as canonical — the only one of the 3 that maps cleanly onto this repo's own department flow with no stage left ownerless. Other 2 models kept as superseded reference, not deleted. | 2026-06-30 | `07_Client_Success/CLIENTSUCCESS_OS.md` §4 |
+| 22 | Reconcile the Client-Success/Operations delivery handoff | Resolved by architectural reconciliation. Reaffirmed the existing handoff (Client Success scopes, Operations delivers) — drafts that folded delivery into Client Success predate the Operations department concept (Operations has zero raw content anywhere in this repo). No change made. | 2026-06-30 | `07_Client_Success/CLIENTSUCCESS_OS.md` §10 |
+| 23 | Reconcile pre-sale qualification vs. post-sale segmentation | Resolved by architectural reconciliation. Qualification scoring reassigned to Sales (05) (matches its citation-backed Lead Qualification agent); Client Success's mandate confirmed as post-sale segmentation only. | 2026-06-30 | `07_Client_Success/CLIENTSUCCESS_OS.md` §3, §10; `05_Sales/SALES_OS.md` §3 |
 
 ## Changelog
 
 - 2026-06-30 — Tracker created, seeded with items surfaced during Offer and Sales content migration plus 5 agency-wide items from the governance-closure pass. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Added items 25-27 (Finance) and 28-30 (Branding) as those departments' content migrations completed. — Claude Code (Sonnet 4.6)
+- 2026-06-30 — Reconciliation pass: resolved items 19, 21, 22, 23 (cross-department boundary/model decisions) by direct architectural analysis now that all relevant departments are migrated — these turned out not to be owner-input items at all (no real fact was missing, just full-repo context), so moved to Resolved rather than left for the owner. Remaining open items are genuine owner-input gaps. — Claude Code (Sonnet 4.6)
