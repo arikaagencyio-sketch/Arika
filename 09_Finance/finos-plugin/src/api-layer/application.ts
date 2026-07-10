@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { AllocationEngine } from "../allocation-engine/index.js";
 import { AuditSystem } from "../audit-system/index.js";
 import { CashflowEngine } from "../cashflow-engine/index.js";
@@ -8,12 +9,16 @@ import { FinancialEventBus } from "../event-bus/index.js";
 import { FinancialGovernanceService } from "../financial-governance/index.js";
 import { ForecastingEngine } from "../forecasting-engine/index.js";
 import { AgentRegistry } from "../ai-agents/index.js";
+import { ClaudeAgentRuntime } from "../ai-agents/runtime.js";
+import { IntegrationRegistry } from "../integrations/index.js";
+import { ZohoBooksConnector } from "../integrations/zoho-books.js";
 import { ProfitabilityEngine } from "../profitability-engine/index.js";
 import { ReportingSystem } from "../reporting-system/index.js";
 import { RiskEngine } from "../risk-engine/index.js";
 import { money } from "../shared/money.js";
 import type { AllocationRule } from "../shared/types.js";
 import { TreasurySystem } from "../treasury-system/index.js";
+import { FinancialWorkflowOrchestrator } from "../workflows/index.js";
 
 const defaultEntityId = "agency-main";
 
@@ -52,30 +57,58 @@ export function createFinOsApplication() {
     { id: "reserve-acquisition", entityId: defaultEntityId, code: "2700", name: "Acquisition Reserve", class: "treasury_allocation", normalBalance: "credit", isControlAccount: true, isActive: true }
   ]);
 
+  const risk = new RiskEngine();
+  const governance = new FinancialGovernanceService([
+    {
+      entityId: defaultEntityId,
+      autoApproveMinor: 500_00,
+      managerApprovalMinor: 5_000_00,
+      cfoApprovalMinor: 25_000_00,
+      executiveApprovalMinor: 100_000_00
+    }
+  ]);
+  const compliance = new ComplianceEngine();
+  const allocation = new AllocationEngine(defaultAllocationRules);
+  const agents = new AgentRegistry();
+  const agentRuntime = new ClaudeAgentRuntime(process.env.ANTHROPIC_API_KEY);
+  const audit = new AuditSystem();
+
+  const zohoBooks = new ZohoBooksConnector({ entityId: defaultEntityId });
+  const integrations = new IntegrationRegistry();
+  integrations.register(zohoBooks);
+
+  const orchestrator = new FinancialWorkflowOrchestrator(
+    eventBus,
+    allocation,
+    compliance,
+    governance,
+    risk,
+    agents,
+    agentRuntime,
+    audit
+  );
+  orchestrator.register();
+
   return {
     defaultEntityId,
     eventBus,
+    orchestrator,
     ledger: new CoreLedgerService(ledgerStore),
-    allocation: new AllocationEngine(defaultAllocationRules),
+    allocation,
     treasury: new TreasurySystem(),
     cashflow: new CashflowEngine(),
     forecasting: new ForecastingEngine(),
-    risk: new RiskEngine(),
+    risk,
     profitability: new ProfitabilityEngine(),
-    governance: new FinancialGovernanceService([
-      {
-        entityId: defaultEntityId,
-        autoApproveMinor: 500_00,
-        managerApprovalMinor: 5_000_00,
-        cfoApprovalMinor: 25_000_00,
-        executiveApprovalMinor: 100_000_00
-      }
-    ]),
-    compliance: new ComplianceEngine(),
+    governance,
+    compliance,
     reporting: new ReportingSystem(),
     dashboard: new DashboardSystem(),
-    agents: new AgentRegistry(),
-    audit: new AuditSystem(),
+    agents,
+    agentRuntime,
+    audit,
+    integrations,
+    zohoBooks,
     fixtures: {
       emptyCashPosition: () => new TreasurySystem().emptyPosition(defaultEntityId),
       starterCashPosition: () =>

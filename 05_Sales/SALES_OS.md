@@ -151,3 +151,12 @@ This sub-layer also has its own source-citation lineage (`Master_Source_Registry
 - 2026-06-30 — Content migration: `06_AI_OPERATIONS/` extracted and independently quality-verified (7/7 sampled citations checked out against `Master_Source_Paragraph_Index.csv`; agent framing confirmed to originate in this department's own raw drafts). Capability Registry, Workflow Index, Agent Roster, Skill Library Index, Standards & SOPs Index, and Triggers/Automation Hooks populated. KPI Dictionary and Risk/Incident Log confirmed as genuine gaps (not just unmigrated) per the department's own existing gap backlog.
 - 2026-06-30 — Cross-department reconciliation pass: noted in §3 that Client Success (07)'s pre-sale qualification scoring model was reassigned here as part of that department's boundary reconciliation. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Owner confirmed (tracker item 10): the 11 missing companion `.docx` files are confirmed-lost, not pending location. — Claude Code (Sonnet 4.6)
+- 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence per the go-live plan in `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 5)
+
+## 16. Memory / Feedback Loop / Cadence
+
+**Memory**: `06_AI_OPERATIONS/06_AI_Memory_Logs/` — Decision_Log.md, Learning_Loop_Log.md, Prompt_Evolution_Log.md, all following the 17-field `AI_Memory_Log_Template.md` schema. Confirmed empty templates (§8, §13) — will hold real entries once Phase 2 (Claude wiring, see `GO_LIVE_CHECKLIST.md`) makes this roster executable, not just spec.
+
+**Feedback Loop**: A §7 daily-target miss (e.g. Discovery Calls <12) routes to the Follow-Up and Recovery Agent / Reflection and Quality Agent per the Task Routing Matrix (§4); the outcome (what was tried, what worked/failed) belongs in `Learning_Loop_Log.md`, and any resulting change to routing/prompts belongs in `Prompt_Evolution_Log.md` (prompt change/reason/scope/supersedes/next test). High/Critical-risk misses (§10) require human approval before the loop closes.
+
+**Cadence**: Daily Sales Command Run (§4) = Revenue Calendar + Pipeline Probability Calendar, daily. Follow-Up 7-touch cadence (Day 0/2/5/9/14/21/30) = Pipeline Probability Calendar, per-deal. No weekly/monthly review cadence defined yet for this department — gap, unlike Marketing's Weekly Optimization Cycle (`03_Marketing/MARKETING_OS.md` §16).

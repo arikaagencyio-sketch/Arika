@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Experience Spec System — Arika</title>
+<style>
+  :root {
+    /* Brand Genome — the real tokens */
+    --navy:#0E1B29; --charcoal:#1C1C1C; --cream:#F7F5F0; --gold:#D4AF37; --blush:#F3C1C6;
+
+    /* semantic — default is the brand's native (dark navy) world */
+    --bg:#0E1B29;
+    --bg-band:#0B1621;
+    --panel:#122433;
+    --panel-2:#16293b;
+    --ink:#F7F5F0;
+    --text:rgba(247,245,240,0.72);
+    --muted:rgba(247,245,240,0.50);
+    --faint:rgba(247,245,240,0.34);
+    --rule:rgba(247,245,240,0.12);
+    --rule-gold:rgba(212,175,55,0.42);
+    --accent:#D4AF37;
+    --accent-ink:#E4C25A;
+    --accent-soft:rgba(212,175,55,0.13);
+    --blush-ink:#F3C1C6;
+    --shadow:0 24px 60px -30px rgba(0,0,0,0.65);
+
+    --maxw:1120px;
+    --ease:cubic-bezier(0.22,1,0.36,1);
+    --sans:'Space Grotesk','Satoshi','Neue Montreal',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --serif:'Canela','Ogg','Editorial New',Georgia,'Times New Roman',serif;
+    --body:'Inter','Manrope',ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --mono:ui-monospace,'SF Mono','Cascadia Code',Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg:#F7F5F0; --bg-band:#EFEAE0; --panel:#FFFFFF; --panel-2:#FBF9F4;
+      --ink:#0E1B29; --text:rgba(14,27,41,0.75); --muted:rgba(14,27,41,0.56); --faint:rgba(14,27,41,0.40);
+      --rule:rgba(14,27,41,0.12); --rule-gold:rgba(160,124,26,0.5);
+      --accent:#B8912A; --accent-ink:#8C6B15; --accent-soft:rgba(184,145,42,0.12);
+      --blush-ink:#C77E88; --shadow:0 22px 50px -32px rgba(14,27,41,0.30);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#0E1B29; --bg-band:#0B1621; --panel:#122433; --panel-2:#16293b;
+    --ink:#F7F5F0; --text:rgba(247,245,240,0.72); --muted:rgba(247,245,240,0.50); --faint:rgba(247,245,240,0.34);
+    --rule:rgba(247,245,240,0.12); --rule-gold:rgba(212,175,55,0.42);
+    --accent:#D4AF37; --accent-ink:#E4C25A; --accent-soft:rgba(212,175,55,0.13);
+    --blush-ink:#F3C1C6; --shadow:0 24px 60px -30px rgba(0,0,0,0.65);
+  }
+  :root[data-theme="light"] {
+    --bg:#F7F5F0; --bg-band:#EFEAE0; --panel:#FFFFFF; --panel-2:#FBF9F4;
+    --ink:#0E1B29; --text:rgba(14,27,41,0.75); --muted:rgba(14,27,41,0.56); --faint:rgba(14,27,41,0.40);
+    --rule:rgba(14,27,41,0.12); --rule-gold:rgba(160,124,26,0.5);
+    --accent:#B8912A; --accent-ink:#8C6B15; --accent-soft:rgba(184,145,42,0.12);
+    --blush-ink:#C77E88; --shadow:0 22px 50px -32px rgba(14,27,41,0.30);
+  }
+
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body {
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:var(--body); font-size:17px; line-height:1.65;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+
+  .wrap { width:100%; max-width:var(--maxw); margin:0 auto; padding:0 clamp(20px,5vw,56px); }
+  .prose { max-width:64ch; }
+
+  h1,h2,h3 { font-family:var(--sans); color:var(--ink); text-wrap:balance; margin:0; font-weight:600; }
+  a { color:inherit; }
+  .eyebrow {
+    font-family:var(--sans); font-size:.72rem; font-weight:600; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--accent-ink); display:inline-flex; align-items:center; gap:.55rem;
+  }
+  .eyebrow::before { content:""; width:1.6rem; height:1px; background:var(--rule-gold); }
+  .serif { font-family:var(--serif); font-style:italic; font-weight:400; }
+  .gold { color:var(--accent-ink); }
+
+  /* ---- top bar ---- */
+  .topbar {
+    position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px solid var(--rule);
+  }
+  .topbar .row { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.85rem 0; }
+  .brandmark { display:flex; align-items:center; gap:.7rem; font-family:var(--sans); font-weight:600; color:var(--ink); letter-spacing:.02em; }
+  .brandmark .dot { width:.6rem; height:.6rem; background:var(--accent); border-radius:50%; box-shadow:0 0 0 4px var(--accent-soft); }
+  .brandmark small { color:var(--faint); font-weight:500; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; }
+  .palette-strip { display:flex; height:4px; }
+  .palette-strip span { flex:1; }
+  .toggle {
+    font-family:var(--sans); font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; font-weight:600;
+    color:var(--muted); background:transparent; border:1px solid var(--rule); border-radius:999px;
+    padding:.45rem .8rem; cursor:pointer; transition:color .25s var(--ease), border-color .25s var(--ease);
+  }
+  .toggle:hover { color:var(--ink); border-color:var(--rule-gold); }
+  .toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* ---- hero ---- */
+  .hero { padding:clamp(3.5rem,9vw,7rem) 0 clamp(2.5rem,6vw,4.5rem); position:relative; }
+  .hero h1 { font-size:clamp(2.7rem,7.2vw,5.6rem); line-height:.96; letter-spacing:-.02em; margin:1.4rem 0 0; }
+  .hero h1 .lead { display:block; color:var(--accent-ink); }
+  .hero .tag { margin-top:1.8rem; font-size:clamp(1.05rem,2.2vw,1.35rem); color:var(--text); max-width:40ch; line-height:1.5; }
+  .hero .selfnote {
+    margin-top:2.4rem; padding:1rem 1.2rem; border-left:2px solid var(--rule-gold); background:var(--accent-soft);
+    font-size:.92rem; color:var(--muted); max-width:56ch; border-radius:0 8px 8px 0;
+  }
+  .hero .selfnote b { color:var(--ink); font-weight:600; }
+
+  /* flow chips */
+  .flow { display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; margin-top:2.6rem; }
+  .flow .chip {
+    font-family:var(--sans); font-size:.8rem; font-weight:500; padding:.42rem .8rem; border:1px solid var(--rule);
+    border-radius:999px; color:var(--muted); white-space:nowrap;
+  }
+  .flow .chip.solid { background:var(--ink); color:var(--bg); border-color:var(--ink); font-weight:600; }
+  .flow .arw { color:var(--accent); font-size:.85rem; }
+
+  /* ---- section scaffold ---- */
+  .band { border-top:1px solid var(--rule); }
+  .band.deep { background:var(--bg-band); }
+  section.blk { padding:clamp(3rem,7vw,5.5rem) 0; }
+  .sechead { display:flex; flex-direction:column; gap:.9rem; margin-bottom:2.4rem; }
+  .sechead h2 { font-size:clamp(1.7rem,3.6vw,2.7rem); letter-spacing:-.015em; line-height:1.05; }
+  .sechead p { margin:0; color:var(--muted); max-width:60ch; }
+
+  /* ---- the one law ---- */
+  .law-hero { display:grid; grid-template-columns:auto 1fr; gap:clamp(1.2rem,4vw,3rem); align-items:start; }
+  .law-hero .mark { font-family:var(--serif); font-size:clamp(4rem,9vw,7rem); line-height:.7; color:var(--rule-gold); font-style:normal; }
+  .law-hero blockquote { margin:0; }
+  .law-hero blockquote p { font-family:var(--sans); font-weight:500; font-size:clamp(1.3rem,3vw,2.05rem); line-height:1.28; color:var(--ink); letter-spacing:-.01em; }
+  .law-hero blockquote p .serif { color:var(--accent-ink); }
+  .law-hero cite { display:block; margin-top:1.1rem; font-style:normal; color:var(--faint); font-size:.9rem; }
+
+  /* ---- data contract ---- */
+  .contract { display:grid; grid-template-columns:1fr auto 1fr; gap:clamp(1rem,3vw,2.4rem); align-items:stretch; }
+  .cbox { background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:1.5rem 1.5rem 1.6rem; box-shadow:var(--shadow); }
+  .cbox h3 { font-size:1rem; letter-spacing:.02em; margin-bottom:1rem; display:flex; align-items:center; gap:.6rem; }
+  .cbox h3 .k { font-family:var(--mono); font-size:.72rem; color:var(--accent-ink); border:1px solid var(--rule-gold); border-radius:6px; padding:.1rem .4rem; }
+  .clist { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.7rem; }
+  .clist li { display:flex; gap:.7rem; align-items:baseline; font-size:.95rem; color:var(--text); }
+  .clist li b { color:var(--ink); font-weight:600; }
+  .clist li::before { content:""; flex:none; width:.42rem; height:.42rem; margin-top:.45rem; border-radius:50%; background:var(--accent); }
+  .contract .mid { display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:1.6rem; }
+
+  /* ---- stations pipeline ---- */
+  .stations { display:flex; flex-direction:column; }
+  .station { display:grid; grid-template-columns:5.5rem 1fr; gap:clamp(1rem,3vw,2.2rem); position:relative; padding-bottom:2.2rem; }
+  .station:last-child { padding-bottom:0; }
+  .station .rail { position:relative; display:flex; flex-direction:column; align-items:center; }
+  .station .num {
+    font-family:var(--sans); font-weight:600; font-size:1.05rem; color:var(--accent-ink);
+    width:3rem; height:3rem; display:grid; place-items:center; border:1px solid var(--rule-gold);
+    border-radius:50%; background:var(--bg); position:relative; z-index:2; flex:none;
+  }
+  .station .line { position:absolute; top:1.4rem; bottom:-2.2rem; width:1px; background:linear-gradient(var(--rule-gold),var(--rule)); z-index:1; }
+  .station:last-child .line { display:none; }
+  .station .body { background:var(--panel); border:1px solid var(--rule); border-radius:14px; padding:1.4rem 1.5rem; transition:border-color .3s var(--ease), transform .3s var(--ease); }
+  .station .body:hover { border-color:var(--rule-gold); transform:translateY(-2px); }
+  .station h3 { font-size:1.22rem; letter-spacing:-.01em; }
+  .station .transform { margin:.75rem 0 1rem; font-family:var(--mono); font-size:.83rem; color:var(--muted); display:flex; flex-wrap:wrap; align-items:center; gap:.5rem; }
+  .station .transform .from { color:var(--faint); }
+  .station .transform .to { color:var(--accent-ink); }
+  .station .transform .arw { color:var(--accent); }
+  .metarow { display:flex; flex-wrap:wrap; gap:1.4rem; padding-top:1rem; border-top:1px solid var(--rule); }
+  .metarow .cell { display:flex; flex-direction:column; gap:.35rem; }
+  .metarow .lbl { font-family:var(--sans); font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
+  .agents { display:flex; flex-wrap:wrap; gap:.35rem; }
+  .agents .a { font-size:.78rem; color:var(--text); background:var(--panel-2); border:1px solid var(--rule); border-radius:999px; padding:.25rem .6rem; }
+  .skill { font-family:var(--mono); font-size:.82rem; color:var(--accent-ink); display:inline-flex; align-items:center; gap:.4rem; }
+  .skill.none { color:var(--faint); }
+  .skill::before { content:""; width:.4rem; height:.4rem; border-radius:50%; background:var(--accent); }
+  .skill.none::before { background:var(--faint); }
+
+  /* ---- generic card grids ---- */
+  .grid { display:grid; gap:1rem; }
+  .g3 { grid-template-columns:repeat(3,1fr); }
+  .g2 { grid-template-columns:repeat(2,1fr); }
+  .card { background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:1.3rem 1.4rem; display:flex; flex-direction:column; gap:.55rem; }
+  .card .idx { font-family:var(--mono); font-size:.72rem; color:var(--accent-ink); letter-spacing:.05em; }
+  .card h3 { font-size:1.05rem; letter-spacing:-.005em; }
+  .card p { margin:0; font-size:.9rem; color:var(--text); }
+  .card code { font-family:var(--mono); font-size:.82em; color:var(--accent-ink); background:var(--accent-soft); padding:.05rem .35rem; border-radius:5px; }
+
+  /* tiers */
+  .tier { border-top:3px solid var(--accent); }
+  .tier .badge { align-self:flex-start; font-family:var(--sans); font-weight:600; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--bg); background:var(--accent); border-radius:6px; padding:.2rem .5rem; }
+  .tier.t2 { border-top-color:var(--blush-ink); }
+  .tier.t2 .badge { background:var(--blush-ink); color:#3a2226; }
+  .tier.t3 { border-top-color:var(--muted); }
+  .tier.t3 .badge { background:transparent; color:var(--muted); border:1px solid var(--rule); }
+
+  /* tokens panel */
+  .tokens { display:grid; grid-template-columns:1.1fr 1fr; gap:1.4rem; }
+  .swatches { display:flex; flex-direction:column; gap:.5rem; }
+  .sw { display:flex; align-items:center; gap:.9rem; background:var(--panel); border:1px solid var(--rule); border-radius:11px; padding:.6rem .7rem; }
+  .sw .chipc { width:2.6rem; height:2.6rem; border-radius:8px; flex:none; border:1px solid rgba(255,255,255,0.12); }
+  .sw .meta { display:flex; flex-direction:column; gap:.1rem; min-width:0; }
+  .sw .meta b { font-family:var(--sans); font-size:.9rem; color:var(--ink); font-weight:600; }
+  .sw .meta span { font-family:var(--mono); font-size:.76rem; color:var(--muted); }
+  .sw .role { margin-left:auto; font-size:.72rem; color:var(--faint); text-align:right; font-family:var(--sans); letter-spacing:.04em; }
+  .typ { background:var(--panel); border:1px solid var(--rule); border-radius:11px; padding:1.2rem 1.3rem; display:flex; flex-direction:column; gap:1.1rem; }
+  .typ .row2 { display:flex; flex-direction:column; gap:.2rem; }
+  .typ .row2 .lbl { font-family:var(--sans); font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
+  .typ .disp { font-family:var(--sans); font-weight:600; font-size:1.75rem; color:var(--ink); letter-spacing:-.02em; line-height:1; }
+  .typ .hook { font-family:var(--serif); font-style:italic; font-size:1.5rem; color:var(--accent-ink); }
+  .typ .bd { font-family:var(--body); font-size:1rem; color:var(--text); }
+  .typ .mo { font-family:var(--mono); font-size:.85rem; color:var(--muted); }
+  .typ .mo b { color:var(--accent-ink); }
+
+  /* stack chips */
+  .stack { display:flex; flex-wrap:wrap; gap:.5rem; }
+  .stack .s { font-family:var(--sans); font-size:.82rem; color:var(--text); background:var(--panel); border:1px solid var(--rule); border-radius:8px; padding:.4rem .7rem; display:inline-flex; align-items:center; gap:.45rem; }
+  .stack .s b { color:var(--ink); font-weight:600; }
+  .stack .s .role { color:var(--faint); font-size:.74rem; }
+
+  /* discoverability */
+  .disco { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+  .disco .card .abbr { font-family:var(--sans); font-weight:600; font-size:1.6rem; color:var(--accent-ink); letter-spacing:.02em; }
+
+  /* audit */
+  .audit { background:var(--panel); border:1px solid var(--rule); border-radius:16px; padding:clamp(1.6rem,4vw,2.4rem); box-shadow:var(--shadow); display:grid; grid-template-columns:1fr auto; gap:2rem; align-items:center; }
+  .audit .checks { display:flex; flex-direction:column; gap:.6rem; }
+  .audit .checks li { list-style:none; display:flex; gap:.6rem; align-items:baseline; font-size:.92rem; color:var(--text); }
+  .audit .checks li::before { content:"\2713"; color:var(--accent); font-weight:700; }
+  .audit ul { margin:0; padding:0; }
+  .verdicts { display:flex; flex-direction:column; gap:.7rem; text-align:center; }
+  .verdict { font-family:var(--sans); font-weight:600; letter-spacing:.1em; text-transform:uppercase; font-size:.82rem; padding:.7rem 1.4rem; border-radius:10px; }
+  .verdict.ship { background:var(--accent); color:var(--bg); }
+  .verdict.no { background:transparent; color:var(--muted); border:1px dashed var(--rule); }
+  .verdict small { display:block; font-weight:500; letter-spacing:.02em; text-transform:none; font-size:.72rem; margin-top:.2rem; opacity:.85; }
+
+  /* deliverables / footer */
+  .deliver { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+  .fbox { background:var(--panel); border:1px solid var(--rule); border-radius:13px; padding:1.3rem 1.4rem; }
+  .fbox h3 { font-size:1rem; margin-bottom:.9rem; display:flex; align-items:center; gap:.5rem; }
+  .fbox h3 .n { font-family:var(--mono); font-size:.78rem; color:var(--accent-ink); }
+  .fbox ul { margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:.5rem; }
+  .fbox li { font-family:var(--mono); font-size:.82rem; color:var(--text); display:flex; gap:.5rem; align-items:baseline; }
+  .fbox li::before { content:""; width:.36rem; height:.36rem; margin-top:.4rem; flex:none; border-radius:1px; background:var(--accent); }
+  .fbox li .desc { font-family:var(--body); color:var(--muted); font-size:.82rem; }
+
+  .lineage { display:flex; flex-wrap:wrap; align-items:stretch; gap:.7rem; }
+  .lineage .node { flex:1 1 200px; background:var(--panel); border:1px solid var(--rule); border-radius:12px; padding:1.1rem 1.2rem; position:relative; }
+  .lineage .node.here { border-color:var(--rule-gold); background:var(--accent-soft); }
+  .lineage .node .n { font-family:var(--mono); font-size:.72rem; color:var(--accent-ink); }
+  .lineage .node h3 { font-size:1rem; margin:.35rem 0 .3rem; }
+  .lineage .node p { margin:0; font-size:.85rem; color:var(--muted); }
+  .lineage .node .badge-here { position:absolute; top:-.7rem; right:.9rem; font-family:var(--sans); font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; font-weight:600; color:var(--bg); background:var(--accent); padding:.15rem .45rem; border-radius:5px; }
+
+  footer.foot { border-top:1px solid var(--rule); padding:2.6rem 0 3.4rem; color:var(--faint); }
+  footer.foot .row { display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem; align-items:center; }
+  footer.foot .sig { font-family:var(--sans); color:var(--muted); font-size:.85rem; }
+  footer.foot .sig b { color:var(--ink); }
+  footer.foot code { font-family:var(--mono); font-size:.78rem; color:var(--accent-ink); }
+
+  /* reveal motion — ONE curve, reduced-motion safe */
+  .reveal { opacity:0; transform:translateY(20px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+  .reveal.in { opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal { opacity:1; transform:none; transition:none; } }
+
+  /* responsive */
+  @media (max-width:860px){
+    .contract { grid-template-columns:1fr; }
+    .contract .mid { transform:rotate(90deg); padding:.4rem 0; }
+    .tokens { grid-template-columns:1fr; }
+    .disco { grid-template-columns:1fr; }
+    .g3 { grid-template-columns:1fr; }
+    .g2 { grid-template-columns:1fr; }
+    .deliver { grid-template-columns:1fr; }
+    .audit { grid-template-columns:1fr; }
+  }
+  @media (max-width:520px){
+    .station { grid-template-columns:3.4rem 1fr; gap:.9rem; }
+    .station .num { width:2.6rem; height:2.6rem; font-size:.9rem; }
+    body { font-size:16px; }
+  }
+</style>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="row">
+      <div class="brandmark"><span class="dot"></span> Arika <small>Experience Engineering · 20</small></div>
+      <button class="toggle" id="themeToggle" aria-label="Switch colour theme">Theme</button>
+    </div>
+  </div>
+  <div class="palette-strip" aria-hidden="true">
+    <span style="background:#0E1B29"></span><span style="background:#1C1C1C"></span><span style="background:#F7F5F0"></span><span style="background:#D4AF37"></span><span style="background:#F3C1C6"></span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="eyebrow">The Design-the-Spec discipline</span>
+    <h1>The Experience<br>Spec System<span class="lead serif">one feeling in, one spec out.</span></h1>
+    <p class="tag">Six stations that turn a brief into a build so complete a stranger could execute it with zero questions — no build tool ever left to guess.</p>
+
+    <div class="flow" aria-label="Pipeline overview">
+      <span class="chip solid">Brief</span><span class="arw">→</span>
+      <span class="chip">Direction</span><span class="arw">→</span>
+      <span class="chip">Sitemap</span><span class="arw">→</span>
+      <span class="chip">References</span><span class="arw">→</span>
+      <span class="chip">Wireframe</span><span class="arw">→</span>
+      <span class="chip">Tokens</span><span class="arw">→</span>
+      <span class="chip">Audit</span><span class="arw">→</span>
+      <span class="chip solid">Build</span>
+    </div>
+
+    <p class="selfnote"><b>This page is built in the system it explains.</b> Deep-navy canvas, gold used only for accents, cream ink in opacity tiers as the greys, one type ratio, one motion curve, an asymmetric grid. Every law below, obeyed here.</p>
+  </div>
+</header>
+
+<!-- WHERE IT SITS -->
+<div class="band deep"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">Where it lives</span>
+    <h2>Three departments, one relay</h2>
+    <p>Despite the word "design" in its name, this system isn't Design (19) — that department makes <em>assets</em>. This one specs and builds <em>interactive websites</em>, which is Experience Engineering's mandate. It's EE's front-half.</p>
+  </div>
+  <div class="lineage">
+    <div class="node"><div class="n">12 · Branding</div><h3>Confirms identity</h3><p>The Brand Genome — palette, type, voice, logo. The constitution everything answers to.</p></div>
+    <div class="node"><div class="n">19 · Design</div><h3>Produces assets</h3><p>Images, video, motion primitives, Canva assemblies. The Creative Digital Twin.</p></div>
+    <div class="node here"><span class="badge-here">You are here</span><div class="n">20 · Experience Engineering</div><h3>Builds the experience</h3><p>Scroll-driven, motion- &amp; 3D-native websites. This Spec System is its "Design the Spec" front-half.</p></div>
+  </div>
+</div></section></div>
+
+<!-- THE ONE LAW -->
+<div class="band"><section class="blk"><div class="wrap reveal">
+  <div class="law-hero">
+    <div class="mark" aria-hidden="true">&#8220;</div>
+    <blockquote>
+      <p>Nothing moves to build until the spec is complete enough that a stranger — or an agent — could execute it with <span class="serif">zero questions.</span></p>
+      <cite>The one law. If the build would have to guess, the spec isn't finished.</cite>
+    </blockquote>
+  </div>
+</div></section></div>
+
+<!-- DATA CONTRACT -->
+<div class="band deep"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">The data contract</span>
+    <h2>Five in, five out</h2>
+    <p>The fixed socket that makes it a plugin — same input every project, same deliverable every project. If an input is missing, you go back to the brief.</p>
+  </div>
+  <div class="contract">
+    <div class="cbox">
+      <h3><span class="k">IN</span> What it needs to start</h3>
+      <ul class="clist">
+        <li><b>Purpose</b> — what the site is for, one sentence.</li>
+        <li><b>Audience</b> — for Arika, Sector's real B2B-SaaS ICP.</li>
+        <li><b>One feeling</b> — a single emotion. One, not three.</li>
+        <li><b>Must-have sections</b> — the non-negotiable content.</li>
+        <li><b>Hard constraints</b> — the Brand Genome, deadline, budget.</li>
+      </ul>
+    </div>
+    <div class="mid" aria-hidden="true">→</div>
+    <div class="cbox">
+      <h3><span class="k">OUT</span> The deliverable folder</h3>
+      <ul class="clist">
+        <li><b>Sitemap</b> — pages, sections, data per section.</li>
+        <li><b>Reference set</b> — 3–6 techniques, each tiered.</li>
+        <li><b>Wireframe</b> — a low-fi layout per page.</li>
+        <li><b>Style tokens</b> — type, colour, space, one motion curve.</li>
+        <li><b>Filled build prompt</b> — all of it, self-audited.</li>
+      </ul>
+    </div>
+  </div>
+</div></section></div>
+
+<!-- SIX STATIONS -->
+<div class="band"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">The assembly line</span>
+    <h2>Six stations, run in order</h2>
+    <p>The owner-facing view. Each station is performed by agents that already exist — so this needed no new roster. It's the operating manual for the 11-agent AI Creative Orchestra EE already built.</p>
+  </div>
+
+  <div class="stations">
+    <div class="station">
+      <div class="rail"><span class="num">01</span><span class="line" aria-hidden="true"></span></div>
+      <div class="body">
+        <h3>Creative Direction</h3>
+        <div class="transform"><span class="from">the brief</span><span class="arw">→</span><span class="to">one art-direction sentence + moodboard (≤9 images)</span></div>
+        <div class="metarow">
+          <div class="cell"><span class="lbl">Agents</span><div class="agents"><span class="a">Creative Director</span><span class="a">Brand Strategist ✓</span></div></div>
+          <div class="cell"><span class="lbl">Skill</span><span class="skill">/creative-direction</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="station">
+      <div class="rail"><span class="num">02</span><span class="line" aria-hidden="true"></span></div>
+      <div class="body">
+        <h3>Sitemap</h3>
+        <div class="transform"><span class="from">the direction</span><span class="arw">→</span><span class="to">pages, sections &amp; the data each section needs</span></div>
+        <div class="metarow">
+          <div class="cell"><span class="lbl">Agents</span><div class="agents"><span class="a">UX Strategist</span><span class="a">Narrative Architect</span></div></div>
+          <div class="cell"><span class="lbl">Skill</span><span class="skill">/sitemap-and-refs</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="station">
+      <div class="rail"><span class="num">03</span><span class="line" aria-hidden="true"></span></div>
+      <div class="body">
+        <h3>Reference Pull</h3>
+        <div class="transform"><span class="from">the sitemap</span><span class="arw">→</span><span class="to">3–6 named techniques, each tagged Tier 1/2/3</span></div>
+        <div class="metarow">
+          <div class="cell"><span class="lbl">Agents</span><div class="agents"><span class="a">Motion Director</span><span class="a">3D Director</span><span class="a">Technical Director</span></div></div>
+          <div class="cell"><span class="lbl">Skill</span><span class="skill">/sitemap-and-refs</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="station">
+      <div class="rail"><span class="num">04</span><span class="line" aria-hidden="true"></span></div>
+      <div class="body">
+        <h3>Wireframe</h3>
+        <div class="transform"><span class="from">references + sitemap</span><span class="arw">→</span><span class="to">a low-fi layout per page, techniques placed in zones</span></div>
+        <div class="metarow">
+          <div class="cell"><span class="lbl">Agents</span><div class="agents"><span class="a">UI Designer</span></div></div>
+          <div class="cell"><span class="lbl">Tool</span><span class="skill none">Whimsical / Relume / paper</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="station">
+      <div class="rail"><span class="num">05</span><span class="line" aria-hidden="true"></span></div>
+      <div class="body">
+        <h3>Style Tokens</h3>
+        <div class="transform"><span class="from">direction + wireframe</span><span class="arw">→</span><span class="to">the fixed visual language (from the Brand Genome)</span></div>
+        <div class="metarow">
+          <div class="cell"><span class="lbl">Agents</span><div class="agents"><span class="a">UI Designer</span></div></div>
+          <div class="cell"><span class="lbl">Skill</span><span class="skill">/design-tokens</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="station">
+      <div class="rail"><span class="num">06</span><span class="line" aria-hidden="true"></span></div>
+      <div class="body">
+        <h3>Spec Assembly + Audit <span class="gold serif" style="font-size:.8em">the gate</span></h3>
+        <div class="transform"><span class="from">all of the above</span><span class="arw">→</span><span class="to">one build-ready prompt, self-checked</span></div>
+        <div class="metarow">
+          <div class="cell"><span class="lbl">Agents</span><div class="agents"><span class="a">Creative Director</span><span class="a">QA &amp; Performance Reviewer</span></div></div>
+          <div class="cell"><span class="lbl">Skill</span><span class="skill">/design-audit</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section></div>
+
+<!-- SEVEN LAWS -->
+<div class="band deep"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">Non-negotiable</span>
+    <h2>The seven design laws</h2>
+    <p>Hardened from EE's Visual, Motion &amp; Interaction Language Systems into rules the audit can actually check. Every one is obeyed on this page.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card"><span class="idx">Law 01</span><h3>Asymmetric grid</h3><p>12 columns; desktop leans 7/5, never 6/6; mobile stacks to full width; full-height sections use <code>min-h-[100dvh]</code>.</p></div>
+    <div class="card"><span class="idx">Law 02</span><h3>One type ratio</h3><p>A single modular scale; every size derived from it; display headings scale fluidly with <code>clamp()</code>.</p></div>
+    <div class="card"><span class="idx">Law 03</span><h3>Restraint reads as luxury</h3><p>One canvas, ≤2 accents, opacity tiers as the grey scale. Never pure #FFF on pure #000.</p></div>
+    <div class="card"><span class="idx">Law 04</span><h3>One motion curve</h3><p>A single easing language everywhere. Arika's settles rather than bounces.</p></div>
+    <div class="card"><span class="idx">Law 05</span><h3>Respect reduced-motion</h3><p>All scroll animation gated behind <code>gsap.matchMedia()</code>. Elegant, never nauseating.</p></div>
+    <div class="card"><span class="idx">Law 06</span><h3>Real text in HTML</h3><p>Headings are real text, not baked into effects — for findability and accessibility.</p></div>
+    <div class="card"><span class="idx">Law 07</span><h3>Data-driven from day one</h3><p>Content lives in <code>content.config.ts</code>, mapped over — never hardcoded in JSX.</p></div>
+    <div class="card" style="border-style:dashed;justify-content:center"><p style="color:var(--muted)">Checked by <span class="skill" style="display:inline-flex">/design-audit</span> before any build ships.</p></div>
+  </div>
+</div></section></div>
+
+<!-- TIERS -->
+<div class="band"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">Feasibility, told honestly</span>
+    <h2>Every technique gets a tier</h2>
+    <p>Naming the tier <em>before</em> you start is what stops you chasing an effect that needs a specialist — or paying for one you didn't need.</p>
+  </div>
+  <div class="grid g3">
+    <div class="card tier"><span class="badge">Tier 1</span><h3>The build writes it directly</h3><p>~80% of the premium feel. Lenis smooth scroll, SplitText reveals, pin-and-scrub, horizontal galleries, video-mask expansion. The Technical Director ships it.</p></div>
+    <div class="card tier t2"><span class="badge">Tier 2</span><h3>Visual 3D, no hand-code</h3><p>Real depth built in Spline and embedded — a cursor-reactive hero object, a scroll-driven camera push. Design (19) authors, Technical Director embeds.</p></div>
+    <div class="card tier t3"><span class="badge">Tier 3</span><h3>Needs a creative developer</h3><p>Bespoke shaders, navigable 3D worlds. The 3D Director flags it — then it's justified or cut. Never promised as shippable alone.</p></div>
+  </div>
+</div></section></div>
+
+<!-- TOKENS -->
+<div class="band deep"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">Station 5 output · live</span>
+    <h2>The fixed language</h2>
+    <p>For Arika these aren't free choices — they're the confirmed Brand Genome. The token <em>method</em> is reusable; the values belong to Branding (12).</p>
+  </div>
+  <div class="tokens">
+    <div class="swatches">
+      <div class="sw"><span class="chipc" style="background:#0E1B29"></span><span class="meta"><b>Deep Revenue Navy</b><span>#0E1B29</span></span><span class="role">Canvas · base</span></div>
+      <div class="sw"><span class="chipc" style="background:#1C1C1C"></span><span class="meta"><b>Operator Charcoal</b><span>#1C1C1C</span></span><span class="role">Deep bands</span></div>
+      <div class="sw"><span class="chipc" style="background:#F7F5F0"></span><span class="meta"><b>Alabaster Cream</b><span>#F7F5F0</span></span><span class="role">Ink · /72 · /50 · /34</span></div>
+      <div class="sw"><span class="chipc" style="background:#D4AF37"></span><span class="meta"><b>Champagne Gold</b><span>#D4AF37</span></span><span class="role">Accent only</span></div>
+      <div class="sw"><span class="chipc" style="background:#F3C1C6"></span><span class="meta"><b>Operator Blush</b><span>#F3C1C6</span></span><span class="role">Sparing UGC accent</span></div>
+    </div>
+    <div class="typ">
+      <div class="row2"><span class="lbl">Display / structure</span><span class="disp">Space Grotesk · Satoshi</span></div>
+      <div class="row2"><span class="lbl">Editorial hook (the double-helix)</span><span class="hook">Executive infrastructure, editorial soul</span></div>
+      <div class="row2"><span class="lbl">Body</span><span class="bd">Inter / Manrope — set near a 65-character measure.</span></div>
+      <div class="row2"><span class="lbl">One motion curve</span><span class="mo">cubic-bezier<b>(0.22, 1, 0.36, 1)</b> · settle, not bounce</span></div>
+    </div>
+  </div>
+</div></section></div>
+
+<!-- STACK -->
+<div class="band"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">The verified elite stack</span>
+    <h2>What the build actually runs on</h2>
+    <p>Line-for-line the same stack as EE's tech inventory — which is exactly why this system belongs to Experience Engineering, not Design.</p>
+  </div>
+  <div class="stack">
+    <span class="s"><b>Next.js</b> <span class="role">framework · SSR</span></span>
+    <span class="s"><b>Tailwind</b> <span class="role">token styling</span></span>
+    <span class="s"><b>GSAP + ScrollTrigger</b> <span class="role">motion engine</span></span>
+    <span class="s"><b>Lenis</b> <span class="role">smooth scroll</span></span>
+    <span class="s"><b>SplitText</b> <span class="role">headline reveals</span></span>
+    <span class="s"><b>Framer Motion</b> <span class="role">micro-interactions</span></span>
+    <span class="s"><b>Three.js / R3F / Drei</b> <span class="role">3D</span></span>
+    <span class="s"><b>Spline</b> <span class="role">Tier-2 3D bridge</span></span>
+    <span class="s"><b>Lottie</b> <span class="role">vector animation</span></span>
+    <span class="s"><b>lucide-react</b> <span class="role">icons</span></span>
+    <span class="s"><b>Vercel</b> <span class="role">deploy</span></span>
+  </div>
+</div></section></div>
+
+<!-- DISCOVERABILITY -->
+<div class="band deep"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">The fourth pillar · new</span>
+    <h2>Beautiful, but findable</h2>
+    <p>The one thing the department had no home for. Cinematic and discoverable aren't opposites — but you have to build for both deliberately.</p>
+  </div>
+  <div class="disco">
+    <div class="card"><span class="abbr">SEO</span><h3>Rank in classic results</h3><p>Fast, crawlable, server-rendered, authoritative pages. The pool the AI reads from.</p></div>
+    <div class="card"><span class="abbr">AEO</span><h3>Be the answer</h3><p>Answer the question first, then elaborate. Q&amp;A headings, real FAQs, schema markup.</p></div>
+    <div class="card"><span class="abbr">GEO</span><h3>Be cited inside AI answers</h3><p>Authority, fact-consistency across every profile, original stats. The source the model trusts.</p></div>
+  </div>
+</div></section></div>
+
+<!-- AUDIT GATE -->
+<div class="band"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">Station 6 · the mandatory gate</span>
+    <h2>Two verdicts, no third option</h2>
+  </div>
+  <div class="audit">
+    <div class="checks">
+      <ul>
+        <li>Every choice traces to the art-direction sentence &amp; the Brand Genome</li>
+        <li>Seven design laws — all pass</li>
+        <li>Discoverability checklist — SSR, semantic HTML, schema, Search Console</li>
+        <li>Creative DNA — story, purposeful motion, a clear final action</li>
+        <li>The prompt reads so a stranger could execute it with zero questions</li>
+      </ul>
+    </div>
+    <div class="verdicts">
+      <div class="verdict ship">Ship<small>All boxes tick → into the build</small></div>
+      <div class="verdict no">Do not ship<small>Fix or flag — the spec isn't done</small></div>
+    </div>
+  </div>
+</div></section></div>
+
+<!-- DELIVERABLES -->
+<div class="band deep"><section class="blk"><div class="wrap reveal">
+  <div class="sechead">
+    <span class="eyebrow">What you actually have, today</span>
+    <h2>Real files, real skills</h2>
+    <p>Aligned into the repo and homed in Experience Engineering (20). The discipline runs now — via four skills and the existing 11 agents.</p>
+  </div>
+  <div class="deliver">
+    <div class="fbox">
+      <h3><span class="n">4 skills</span> · runnable slash-commands</h3>
+      <ul>
+        <li>/creative-direction <span class="desc">— Station 1</span></li>
+        <li>/sitemap-and-refs <span class="desc">— Stations 2–3</span></li>
+        <li>/design-tokens <span class="desc">— Station 5</span></li>
+        <li>/design-audit <span class="desc">— Station 6, the gate</span></li>
+      </ul>
+    </div>
+    <div class="fbox">
+      <h3><span class="n">5 docs</span> · the spec + reference set</h3>
+      <ul>
+        <li>EXPERIENCE_SPEC_SYSTEM.md <span class="desc">— the six stations</span></li>
+        <li>build-system/elite-web-build-system.md</li>
+        <li>build-system/vision-to-build-pipeline.md</li>
+        <li>build-system/workflow-run-sheet.md</li>
+        <li>build-system/discoverability-architecture.md</li>
+      </ul>
+    </div>
+  </div>
+</div></section></div>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="row">
+      <div class="sig"><b>The whole system in one line —</b> <span class="serif gold">one feeling in, one build-ready spec out.</span></div>
+      <code>20_Experience_Engineering/EXPERIENCE_SPEC_SYSTEM.md</code>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
+    function current() {
+      var set = root.getAttribute('data-theme');
+      if (set) return set;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var next = current() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+      });
+    }
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var items = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+

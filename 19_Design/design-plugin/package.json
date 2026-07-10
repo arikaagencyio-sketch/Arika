@@ -1,0 +1,19 @@
+{
+  "name": "design-plugin",
+  "version": "0.1.0",
+  "description": "Design (19) Production Engine connectors — KIE.ai Nano Banana Pro (image) and Seedance (video).",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  }
+}

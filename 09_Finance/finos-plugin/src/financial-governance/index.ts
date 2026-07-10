@@ -36,12 +36,13 @@ export class FinancialGovernanceService {
   }
 
   enforceSeparationOfDuties(actor: { id: string; roles: string[] }, action: "approve" | "pay" | "reconcile" | "report"): void {
-    const incompatible = {
+    const incompatibleByAction: Record<typeof action, string[]> = {
       approve: ["payment_executor", "reconciler"],
       pay: ["approver", "reconciler"],
       reconcile: ["approver", "payment_executor"],
       report: []
-    }[action];
+    };
+    const incompatible = incompatibleByAction[action];
 
     if (actor.roles.some((role) => incompatible.includes(role))) {
       throw new Error(`Segregation-of-duties violation for actor ${actor.id} performing ${action}.`);

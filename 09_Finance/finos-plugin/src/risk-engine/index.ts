@@ -12,7 +12,9 @@ export class RiskEngine {
     revenueByClient?: Array<{ clientId: string; revenue: Money }>;
     debtServiceCoverageRatio?: number;
   }): FinancialRiskSignal[] {
-    const signals: FinancialRiskSignal[] = [...this.rules.evaluateCashPosition(input.position)];
+    const signals: FinancialRiskSignal[] = [
+      ...this.rules.evaluateCashPosition(input.position.entityId, input.position)
+    ];
 
     for (const client of input.clientProfitability ?? []) {
       signals.push(...this.rules.evaluateProfitability(input.position.entityId, client));

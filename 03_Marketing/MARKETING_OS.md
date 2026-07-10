@@ -74,6 +74,7 @@ Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale
 ## 8. Decision Log
 
 - **2026-06-30 — Confirmed Kenya as a real operating geography**, plus broader confirmation the agency serves clients globally and must comply with each jurisdiction's real advertising/copyright/data-protection laws as engagements happen. See §14.
+- **2026-07-04 — Social Ecosystem platform-role model added** (§10), elaborating the existing Distribution & Demand Generation capability (§3) with a real per-platform role/KPI table and repurposing flow, sourced from the owner's pasted social-ecosystem plan for the Arika website project (`20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md`). Explicitly reconciled against Content (04)'s existing pillar/house/Story Architecture structures rather than inventing a competing content taxonomy. Zero social accounts exist yet — planning-only.
 
 ## 9. Risk / Incident Log
 
@@ -89,6 +90,28 @@ Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale
 
 **Quality rubrics**: Creative QA, Funnel QA, Data QA — named but not detailed with specific pass/fail criteria in what was sampled.
 
+**Social Ecosystem — platform architecture (added 2026-07-04, alongside the Arika website project, `20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md`).** Elaborates the Distribution & Demand Generation capability (§3) with a real platform-role model, per the owner's pasted social-ecosystem plan. **Flag up front: zero social media accounts exist yet** (`00_Agency_Governance/GO_LIVE_CHECKLIST.md` item 23, still an open owner action) — everything below is planning-only until accounts are created; it does not change §12's "none of the 7 connector layers are in use yet" status.
+
+*Platform roles* (primary role + KPI per platform, not a flat channel list):
+
+| Platform | Primary role | KPI |
+|---|---|---|
+| LinkedIn | Executive authority & B2B lead generation | Qualified leads |
+| Instagram | Brand storytelling & visual education | Engagement |
+| YouTube | Long-form education & SEO | Watch time, subscribers |
+| TikTok | Discovery & reach | Views, shares |
+| X (Twitter) | Real-time insights & conversations | Impressions, discussions |
+| Facebook | Community & retargeting | Community growth |
+| Threads | Thought leadership | Engagement |
+| Pinterest | Visual discovery | Website traffic |
+| Newsletter/Substack | Owned audience | Subscribers |
+
+Every platform is a **distribution endpoint**, not a separate content strategy — content itself is owned by Content (04), tagged by pillar/house (`04_Content/CONTENT_OS.md` §10), not reinvented per-platform here.
+
+*Repurposing flow* (one flagship asset → many formats, not separate production per channel): `Research → Flagship Article → Video → Podcast → LinkedIn Article → Instagram Carousel → Reel → Short-form (TikTok/Shorts) → Newsletter → Website Resource`. This is the same "content multiplication" idea already named in Content's own Capability Registry (`04_Content/CONTENT_OS.md` §3) — this section is the distribution-side view of that same real capability, not a competing one.
+
+*Social conversion path* (every platform should support the same progression, not invent its own funnel): `Discovery → Educational content → Framework → Free resource → Email list → Assessment → Strategy session → Proposal → Client → Case study → Referral` — matches Content's existing Story Architecture sequencing (`04_Content/CONTENT_OS.md` §10) at the experience-distribution level, and feeds the same Assessments/Book-a-Strategy-Session pages in the website sitemap (`20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md` §3).
+
 ## 11. RACI / Ownership
 
 | Function | Responsible | Accountable | Consulted | Informed |
@@ -98,6 +121,8 @@ Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale
 ## 12. Triggers / Automation Hooks
 
 `04_MCP_API_Connector_Blueprint.md` defines 7 connector-class layers (Intelligence, Strategy/Knowledge, Creative Production, Distribution, Discoverability, Conversion/Lifecycle, Measurement/Ops) naming connector types per layer (e.g. paid media platform APIs, image generation API, email automation API, LLM citation observation connector) with an owner agent per layer. **Confirmed entirely aspirational** — no API keys, account IDs, or evidence of actually-configured integrations; this is a connector taxonomy/wishlist, not a working integration inventory. **Owner-confirmed (2026-06-30, tracker item 14): none of the 7 layers are actually in use yet** — same pattern as Finance's integrations (items 25-27) and Branding's agent wiring (item 28). Treat as the target shape for `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` rows once any of these are actually built, not as live automation today.
+
+**Update (2026-07-01) — the "Creative Production" and "Distribution" layers are no longer generic placeholders.** The new Design (19) department gives the Creative Production layer's "image generation API" a concrete home: Canva is confirmed connected as the Creative Assembly platform (`19_Design/DESIGN_OS.md` §3), and the AI generation/enhancement vendor chain feeding it is documented (though vendor-undecided) as Design's Production Engine. The Distribution layer's engagement/DM-automation piece is now documented as Automation (16)'s new Engagement Layer workflow (`16_Automation/AUTOMATION_OS.md` §4) — ManyChat proposed but no account exists yet. Both remain **not live** — this update only replaces vague placeholders with a real cross-reference, it does not change the "none of the 7 layers are actually in use yet" status.
 
 ## 13. Existing OS Sub-Layer
 
@@ -121,3 +146,14 @@ Client segmentation thresholds also appear (Startup <$2M, Growth $2M-$10M, Scale
 - 2026-06-30 — `360 Agency Content`, briefly merged in as a subfolder, corrected back out to its own standalone department (`04_Content/`) per owner feedback; Sales department reference updated from (04) to (05) following the resulting renumbering.
 - 2026-06-30 — Content migration: `Elite_Marketing_Agentic_OS/` extracted and spot-verified as genuinely grounded in this department's raw drafts, but confirmed to have no citation system (gap vs. Sales) and no real historical KPI data. Capability Registry, Workflow Index, Agent Roster, Skill Library Index, KPI Dictionary, Standards & SOPs Index, and Triggers/Automation Hooks populated, all marked template/aspirational where applicable. Kenya jurisdiction signal flagged for owner confirmation. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Owner confirmed (tracker item 14): none of the 7 MCP/connector-class layers in §12 are actually in use yet. — Claude Code (Sonnet 4.6)
+- 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence per the go-live plan in `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 5)
+- 2026-07-01 — Cross-linked §12's aspirational MCP connector blueprint to the new Design (19) department (Creative Production layer → Canva/Production Engine) and Automation (16)'s new Engagement Layer (Distribution layer → ManyChat/DM automation). Status unchanged — still none of the 7 layers are actually in use. — Claude Code (Sonnet 5)
+- 2026-07-04 — **Added Social Ecosystem platform-role model** (§10, §8) for the new Arika website project (`20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md`) — platform-role/KPI table, repurposing flow, and social conversion path, reconciled against Content (04)'s existing pillar/house/Story Architecture structures. Zero social accounts exist yet (`GO_LIVE_CHECKLIST.md` item 23) — flagged explicitly as planning-only. — Claude Code (Sonnet 5)
+
+## 16. Memory / Feedback Loop / Cadence
+
+**Memory**: 5-layer "Memory and Learning Flywheel" (Doctrine/Market/Experiment/Campaign/Incident, §10) with an Observe→Classify→Hypothesize→Test→Decide→Encode→Reuse cycle — a designed pattern, not yet instantiated as real files (unlike Sales' `06_AI_Memory_Logs/`, `05_Sales/SALES_OS.md` §16). Gap: recommend mirroring Sales' Decision/Learning/Prompt-Evolution log structure under a new `Elite_Marketing_Agentic_OS/06_AI_Memory_Logs/` once this roster is wired to Claude.
+
+**Feedback Loop**: Already documented and real as a workflow — Workflow C, the Weekly Optimization Cycle (§4: review→diagnose→hypothesize→test→encode), is the feedback loop that fires when a rollout-gate KPI misses (§7: event tracking integrity <90%, automation uptime <95%, funnel stage improvement <15%). Output should be encoded into the Memory Flywheel's Experiment/Campaign layers once real logs exist.
+
+**Cadence**: Full daily/weekly/monthly/quarterly/annual rhythm already exists (`05_Execution_Cadence_Playbooks.md`) — Weekly Optimization Cycle = Revenue + Opportunity Calendar, weekly; 30/60/90 Activation Rollout (§4) = Strategic Calendar, one-time-per-activation.

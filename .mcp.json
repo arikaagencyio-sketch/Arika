@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "canva": {
+      "type": "http",
+      "url": "https://mcp.canva.com/mcp"
+    },
+    "openart": {
+      "type": "http",
+      "url": "https://mcp.openart.ai/mcp"
+    },
+    "relume": {
+      "type": "http",
+      "url": "https://relume-library-mcp.relume.io/mcp"
+    }
+  }
+}

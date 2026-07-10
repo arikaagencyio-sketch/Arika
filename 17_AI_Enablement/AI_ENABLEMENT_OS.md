@@ -81,3 +81,8 @@ No department-local raw drafts. Source content lives in `02_Offer/` — see `02_
 ## 15. Changelog
 
 - 2026-06-30 — Department created, promoted from Offer (02)'s "AI Enablement" division category per owner decision. Seeded from `Draft 40` (offer #11, AI Transformation Systems), owner-approved as-is the same day. — Claude Code (Sonnet 4.6)
+- 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence (structure-only placeholder, per the go-live plan in 00_Agency_Governance/GO_LIVE_CHECKLIST.md). — Claude Code (Sonnet 5)
+
+## 16. Memory / Feedback Loop / Cadence
+
+*(placeholder — structure only, no agent roster exists yet to generate real memory/feedback entries; see §5, which describes only offer-engineering functional role labels — AI Governance Lead, Change Management Lead, Strategy Lead — for AI-assisted execution the owner currently performs solo, not a real agent roster.)* Once this department has a real or code-based agent roster (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16), this section should define: **Memory** (where Decision/Learning/Prompt-Evolution logs live), **Feedback Loop** (what happens when a §7 KPI misses threshold), and **Cadence** (which of the 7 Cognitive Calendars — `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4 — this department's workflows run against, and how often).
