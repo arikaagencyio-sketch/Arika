@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Dict, List
 
+from ..governance.policy import AGENT_OUTPUT_CONTRACT
+
 
 AGENT_REGISTRY: Dict[str, Dict[str, object]] = {
     "master_orchestrator": {
@@ -155,11 +157,20 @@ TRIGGER_RULES: Dict[str, Dict[str, List[str]]] = {
 
 
 def agent_prompt(agent_id: str) -> str:
+    """Build the system prompt for a BOIS agent.
+
+    The requested fields come from AGENT_OUTPUT_CONTRACT so this prompt can never
+    drift from what BrandGovernancePolicy actually validates.
+    """
     agent = AGENT_REGISTRY[agent_id]
+    fields = ", ".join(field.replace("_", " ") for field in AGENT_OUTPUT_CONTRACT)
     return (
         f"You are {agent_id}. Purpose: {agent['purpose']} "
         "Use retrieved evidence before producing any recommendation. "
-        "Return strategic reasoning, psychological reasoning, cultural reasoning, symbolic reasoning, "
-        "operational implications, validation risks, and memory updates."
+        "Never generate generic branding output: if the evidence does not support a claim, "
+        "say so explicitly and record it in validation_risks rather than filling the gap. "
+        "Preserve sector, cultural, and psychographic specificity. "
+        "Flag governance risk instead of smoothing over contradictions. "
+        f"Return all of the following: {fields}."
     )
 

@@ -1,6 +1,65 @@
 ---
 name: design-brand-environment-consistency-checker
 description: Use when a generated or assembled asset needs checking against the confirmed Brand Genome and the Creative Digital Twin environment doctrine before it ships. Design (19)'s own brand/environment gate — distinct from Experience Engineering (20)'s Brand Strategist, which checks a whole interactive experience, not a single Design asset.
+department: "19"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 2
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: ASSET_GENERATED
+  - type: event
+    on: BRAND_CHECK_REQUESTED
+inputs:
+  asset: { type: string, from: event.payload.asset }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
+     verdict, ai_artifact_check, brand_genome_check, environment_check, violations]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    verdict: { type: string, enum: [pass, pass_with_conditions, fail, unknown] }
+    ai_artifact_check:
+      type: object
+      additionalProperties: false
+      required: [passed, artifacts_found, inspected]
+      properties:
+        passed: { type: string, enum: [yes, no, unknown] }
+        artifacts_found: { type: array, items: { type: string } }
+        inspected: { type: boolean }
+    brand_genome_check:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [element, expected, observed, result]
+        properties:
+          element: { type: string, enum: [color, typography, imagery_doctrine, graphic_toolkit, composition] }
+          expected: { type: string }
+          observed: { type: string }
+          result: { type: string, enum: [pass, fail, not_applicable, unknown] }
+    environment_check:
+      type: object
+      additionalProperties: false
+      required: [room, consistent, note]
+      properties:
+        room:
+          type: string
+          enum: [executive_lobby, executive_briefing_room, revenue_operations_center, growth_innovation_lab, strategy_war_room, automation_command_center, none, unknown]
+        consistent: { type: string, enum: [yes, no, unknown] }
+        note: { type: string }
+    violations: { type: array, items: { type: string } }
+memory_stream: 19_Design/_memory/runtime.jsonl
+emits: [BRAND_CHECK_PASSED, BRAND_CHECK_FAILED]
+handoff_to: [design-canva-assembler, design-production-engine-coordinator]
 ---
 
 # Brand & Environment Consistency Checker — Design (19)

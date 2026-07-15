@@ -1,6 +1,42 @@
 ---
 name: design-storyboard-generator
+department: "19"
 description: Use when a content brief needs turning into a storyboard before any video-format asset gets generated. Design (19)'s own storyboard discipline — distinct from Experience Engineering (20)'s 9-field scene storyboard; this one is Design's simpler 7-field asset-level storyboard for single pieces of content, not whole interactive experiences.
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: CONTENT_BRIEF_READY
+inputs:
+  brief: { type: string, from: event.payload.summary }
+output_schema:
+  type: object
+  additionalProperties: false
+  required: [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, storyboard]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    storyboard:
+      type: object
+      additionalProperties: false
+      required: [hook, visual, camera, voice, music, duration, prompt]
+      properties:
+        hook: { type: string }
+        visual: { type: string }
+        camera: { type: string }
+        voice: { type: string }
+        music: { type: string }
+        duration: { type: string }
+        prompt: { type: string }
+memory_stream: 19_Design/_memory/runtime.jsonl
+emits: [STORYBOARD_READY]
+handoff_to: [design-asset-librarian, design-production-engine-coordinator]
 ---
 
 # Storyboard Generator — Design (19)

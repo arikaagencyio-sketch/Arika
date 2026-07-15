@@ -1,6 +1,48 @@
 ---
 name: design-asset-librarian
 description: Use when a new reusable production asset (an environment, character, prop, motion primitive, or sound) needs cataloging into Design (19)'s Asset Library, or when checking whether a needed asset already exists before generating a new one.
+department: "19"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: STORYBOARD_READY
+  - type: event
+    on: ASSET_CATALOG_REQUESTED
+inputs:
+  storyboard: { type: string, from: event.payload.summary }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
+     required_assets, reuse_verdict, library_state, catalog_entries]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    required_assets:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [asset, sub_library, exists, match]
+        properties:
+          asset: { type: string }
+          sub_library: { type: string, enum: [environment, character, prop, motion, sound] }
+          exists: { type: boolean }
+          match: { type: string }
+    reuse_verdict: { type: string, enum: [reuse_hit, reuse_miss, partial, unknown] }
+    library_state: { type: string, enum: [populated, empty, unknown] }
+    catalog_entries: { type: array, items: { type: string } }
+memory_stream: 19_Design/_memory/runtime.jsonl
+emits: [ASSET_REUSE_HIT, ASSET_REUSE_MISS]
+handoff_to: [design-production-engine-coordinator, design-canva-assembler]
 ---
 
 # Asset Librarian — Design (19)

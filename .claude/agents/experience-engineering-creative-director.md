@@ -1,6 +1,48 @@
 ---
 name: experience-engineering-creative-director
 description: Use when a whole interactive experience (a website, presentation, product launch) needs overall creative vision set, a conflict between other Experience Engineering agents needs a final call, or the finished experience needs a creative-readiness gate before launch. Reconciles Experience Engineering (20)'s original two source-draft rosters ("Creative Director AI" and "Executive Creative Director") into this one real role — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 2
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: BUILD_SPEC_READY
+  - type: event
+    on: CREATIVE_GATE_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, gate_verdict, creative_dna_check]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    gate_verdict: { type: string, enum: [pass, pass_with_conditions, fail, unknown] }
+    creative_dna_check:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [question, answer]
+        properties:
+          question: { type: string, enum: [compelling_story, motion_has_purpose, scrolling_meaningful, accessible_and_performant, reinforces_brand, supports_business_objective, ends_with_clear_action] }
+          answer: { type: string, enum: [yes, no, unknown] }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [CREATIVE_GATE_PASSED, CREATIVE_GATE_FAILED]
+handoff_to: [experience-engineering-qa-performance-reviewer]
 ---
 
 # Creative Director — Experience Engineering (20)

@@ -1,6 +1,50 @@
 ---
 name: experience-engineering-copywriter
 description: Use when a scene needs its on-screen text, headline, CTA, or narration written or critiqued. Writes scene/interface copy for one interactive experience — not full email/social campaigns (Content 04's job) and not brand positioning/voice (Branding 12's job). "Copywriter AI" from Experience Engineering (20)'s source roster (Draft A only — no Draft B equivalent) — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: UI_SPEC_READY
+  - type: event
+    on: SCENE_COPY_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, scene_copy, voice_source]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    scene_copy:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [scene, headline, body, cta]
+        properties:
+          scene: { type: string }
+          headline: { type: string }
+          body: { type: string }
+          cta: { type: string }
+    voice_source: { type: string }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [SCENE_COPY_READY]
+handoff_to: [experience-engineering-technical-director, experience-engineering-creative-director]
 ---
 
 # Copywriter — Experience Engineering (20)

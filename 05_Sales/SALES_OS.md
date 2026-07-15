@@ -46,9 +46,36 @@ Sales is responsible for converting qualified opportunities (from Marketing and 
 
 ## 5. Agent Roster
 
-**20 canonical agents** (each with 4 named subagents = 80 total), fully cited against source paragraphs in `Master_Source_Paragraph_Index.csv`. Full detail (inputs/outputs, human boundary, escalation triggers, subagents) lives in `06_AI_OPERATIONS/02_Agent_Roles/Agent_Registry.md` — this is a summary index only, not a duplicate:
+**20 canonical agents** (each with 4 named subagents = 80 total), fully cited against source paragraphs in `Master_Source_Paragraph_Index.csv`. Full detail (inputs/outputs, human boundary, escalation triggers, subagents) lives in `06_AI_OPERATIONS/02_Agent_Roles/Agent_Registry.md`. This section is the summary index **+ runtime migration status**.
 
-Executive Intelligence · Revenue Strategy · Market Intelligence · Customer Psychology · Offer Architecture · Demand Generation · Audience and Community · Lead Qualification and Discovery · Sales Execution and Closing · Follow-Up and Recovery · Customer Success and Expansion · Revenue Operations and Performance · Power Navigation and Partnership · Risk Trust and Governance · Enablement and Playbooks · AI Orchestration · Planning · Tool-Use · Reflection and Quality · Multi-Agent Orchestration.
+**Runtime status (2026-07-14).** The registry was generated 2026-05-12 — *before* the department expansion (Offer/Marketing/ClientPartner/Client Success became their own departments) and *before* the Arika Runtime existed. So it was **triaged, not migrated wholesale**: 10 genuinely Sales-core agents are now live; 6 belong to other departments; 4 are provided by the runtime itself.
+
+**🟢 Live in the Arika Runtime — 10 Sales-core agents** (`.claude/agents/sales-*.md`, run via `arika run <name>`, advisory-first, memory → `06_AI_OPERATIONS/06_AI_Memory_Logs/runtime.jsonl`):
+
+| Registry # | Agent | Runtime spec | Class |
+|---|---|---|---|
+| 1 | Executive Intelligence | `sales-executive-intelligence` | 1 |
+| 2 | Revenue Strategy | `sales-revenue-strategy` | 2 |
+| 4 | Customer Psychology | `sales-customer-psychology` | 1 |
+| 8 | Lead Qualification & Discovery | `sales-lead-qualification` | 1 |
+| 9 | Sales Execution & Closing | `sales-execution-closing` | 2 |
+| 10 | Follow-Up & Recovery | `sales-follow-up-recovery` | 2 |
+| 12 | Revenue Operations & Performance | `sales-revenue-operations` | 1 |
+| 14 | Risk / Trust / Governance | `sales-risk-trust-governance` | 2 |
+| 15 | Enablement & Playbooks | `sales-enablement-playbooks` | 1 |
+| 19 | Reflection & Quality | `sales-reflection-quality` | 1 |
+
+**Deal-spine event chain:** `LEAD_CREATED` → qualification → `LEAD_QUALIFIED` → execution-closing → `DEAL_CLOSED_WON/LOST` → follow-up-recovery + enablement (win/loss learning). RevOps + Executive Intelligence run on schedule; Risk/Trust/Governance gates claims against the Constitution's Class 0–4; Reflection/Quality is the QA gate. (Agent-to-agent auto-dispatch of `emits` lands in a later runtime pass; each stage is runnable now via manual or a published event.)
+
+**🟠 Held for their real departments — 6 cross-department agents** (mandate belongs elsewhere; rich registry cards + citations preserved for that department's revival, not duplicated here):
+- #3 Market Intelligence → Sector (01) / Marketing (03)
+- #5 Offer Architecture → **already built in Offer (02)** (`offer-*` agents)
+- #6 Demand Generation → Marketing (03)
+- #7 Audience & Community → Marketing (03) / Content (04) / Branding (12)
+- #11 Customer Success & Expansion → Client Success (07)
+- #13 Power Navigation & Partnership → ClientPartner Acquisition (06)
+
+**⚙️ Fulfilled by the runtime, not re-created — 4 infra/meta agents.** #16 AI Orchestration, #18 Tool-Use, #20 Multi-Agent Orchestration, and #17 Planning describe exactly what `arika-runtime/` provides natively (executor + governance + memory; the tool/MCP layer; the event bus + handoff/emits). Their intent is met by the runtime substrate, so they are not authored as separate department agents.
 
 ## 6. Skill Library Index
 
@@ -151,6 +178,7 @@ This sub-layer also has its own source-citation lineage (`Master_Source_Registry
 - 2026-06-30 — Content migration: `06_AI_OPERATIONS/` extracted and independently quality-verified (7/7 sampled citations checked out against `Master_Source_Paragraph_Index.csv`; agent framing confirmed to originate in this department's own raw drafts). Capability Registry, Workflow Index, Agent Roster, Skill Library Index, Standards & SOPs Index, and Triggers/Automation Hooks populated. KPI Dictionary and Risk/Incident Log confirmed as genuine gaps (not just unmigrated) per the department's own existing gap backlog.
 - 2026-06-30 — Cross-department reconciliation pass: noted in §3 that Client Success (07)'s pre-sale qualification scoring model was reassigned here as part of that department's boundary reconciliation. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Owner confirmed (tracker item 10): the 11 missing companion `.docx` files are confirmed-lost, not pending location. — Claude Code (Sonnet 4.6)
+- 2026-07-14 — **Sales got a live execution layer — 10 of 20 registry agents wired into the Arika Runtime.** The 2026-05-12 registry was triaged (not migrated wholesale) because it predates both the department expansion and the runtime: authored the **10 genuinely Sales-core agents** as advisory-first `.claude/agents/sales-*.md` specs, each grounded in its Agent_Registry card + `SD-` citations (Executive Intelligence, Revenue Strategy, Customer Psychology, Lead Qualification ✅, Execution & Closing, Follow-Up & Recovery, Revenue Operations, Risk/Trust/Governance, Enablement & Playbooks, Reflection & Quality). Wired the deal-spine event chain (`LEAD_QUALIFIED` → closing → `DEAL_CLOSED_*` → follow-up + enablement). **Held 6 cross-department agents** (#3, #5, #6, #7, #11, #13) for their real departments rather than duplicating — notably #5 Offer Architecture, already built as Offer (02)'s `offer-*` agents. **Skipped 4 infra/meta agents** (#16 AI Orchestration, #18 Tool-Use, #20 Multi-Agent Orchestration, #17 Planning) because `arika-runtime/` provides that layer natively. §5 Agent Roster updated with the full migration-status map. Advisory-only — nothing closes, quotes, or sends without human sign-off; Class-2 agents (Revenue Strategy, Execution, Follow-Up, Risk/Trust) flag client-facing/pricing actions for review. Agents register + schema-validate in `arika list`; live model calls pending `ANTHROPIC_API_KEY`. — Claude Code (Opus 4.8)
 - 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence per the go-live plan in `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 5)
 
 ## 16. Memory / Feedback Loop / Cadence

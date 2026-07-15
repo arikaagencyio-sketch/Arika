@@ -1,6 +1,50 @@
 ---
 name: experience-engineering-3d-director
 description: Use when a scene needs its camera shot chosen (type, movement, angle), a 3D/spatial composition checked, or camera continuity verified across a sequence. Reconciles "3D Director AI" (Draft A) and "3D Artist" (Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: EXPERIENCE_STORYBOARD_READY
+  - type: event
+    on: CAMERA_SPEC_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, camera_moves, scene_composition, continuity_check]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    camera_moves:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [scene, move, rationale]
+        properties:
+          scene: { type: string }
+          move: { type: string, enum: [zoom, orbit, track, pan, tilt, reveal, focus, follow, transition, fly_through] }
+          rationale: { type: string }
+    scene_composition: { type: string }
+    continuity_check: { type: string, enum: [consistent, drift_detected, unknown] }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [CAMERA_SPEC_READY]
+handoff_to: [experience-engineering-technical-director, experience-engineering-qa-performance-reviewer]
 ---
 
 # 3D Director — Experience Engineering (20)

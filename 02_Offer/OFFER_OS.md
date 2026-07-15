@@ -41,6 +41,12 @@ Offer packages sector-level truth into a sellable product/service structure — 
 | 10 | Revenue Infrastructure Audit | Audits & Diagnostics | Phase 1 + Phase 2 positioning real (the agency's own named Gateway Offer, confirmed in 3 places within Draft 28 itself); Phases 3-10/12 **Claude-synthesized** | $2,500-$5,000 (Lite) | $5,000-$10,000 | $10,000-$15,000 | $15,000-$30,000 | None (one-time only) | `Draft 39` |
 | 11 | AI Transformation Systems | AI Enablement | Phase 1 + Phase 2 positioning real; Phases 3-12 **Claude-synthesized**; real path to Draft 28's named $500K-$5M "Whale Client" tier | $20,000-$50,000/$7.5K-$15K mo | $55,000-$120,000/$16K-$28K mo | $125,000-$250,000/$29K-$50K mo | $250,000+/$50K+mo | (4-tier, see Tier columns) | `Draft 40` |
 
+| 12 | **CPAROS — Acquisition System Ladder** (AFS → AGE → ADN) | ClientPartner Acquisition | **Structure registered 2026-07-15; NOT OEOS-engineered — a named ladder, not a 12-phase offer. Pricing NOT adopted.** Surfaced by 06's mandate correction (`CLIENTPARTNER_OS.md` §8). Segments: Emerging / Scaling / Enterprise | *AFS* — Acquisition Foundation System: lead + authority setup, basic funnel, CRM setup | *AGE* — Acquisition Growth Engine: multi-channel + partner layer, conversion engine, automated pipeline | *ADN* — Acquisition Dominance Network: ecosystem control, strategic partner network, AI forecasting | — | — | `06_ClientPartner_Acquisition/ClientPartner Acquisition System. Draft 2.md` |
+
+**⚠️ Offer #12 (CPAROS) — pricing deliberately omitted from the tier columns above.** `Draft 2` does state figures — AFS $2K–$10K setup / $1K–$5K mo; AGE $10K–$50K / $5K–$25K + performance bonus; ADN $50K–$250K+ / $25K–$100K+ + 2–10% rev share — plus outcome projections (+100–2000% pipeline, 10–80% CAC reduction, 1.5–15x revenue). **These are Claude-generated draft output, never validated against a real engagement, and are NOT agency pricing** (owner-confirmed 2026-07-15, §8). They are recorded here in prose *as provenance only* so they are never mistaken for the registry's real, owner-sourced tier figures. **Never quote them.** Any real quote runs through `offer-pricing-floor-analyst`.
+
+**⚠️ Two competing ClientPartner Acquisition ladders now sit in this registry — offers #8 and #12 need reconciliation.** Offer #8 (*Strategic Partnership Infrastructure*, $8K–$50K setup, Phases 3–12 Claude-synthesized) already carried the note *"needs reconciliation against the organizational ClientPartner Acquisition (06) department"* — **that reconciliation is now actionable and still open.** With 06's dual scope confirmed (`CLIENTPARTNER_CONSTITUTION.md` §2), the likely shape is that **#8 is the partner-ecosystem offer and #12 is the full acquisition-system offer** (client engine + partner engine + CRM), making #8 a component of #12 rather than a rival — but **neither is OEOS-engineered and this has not been decided.** Owner decision; do not quote either until it is.
+
 **All 11 offers named in `Agency Pricing Architure. Draft 28.md` (the master pricing-architecture document) are now captured, and the full batch (offers #2, #5-11) is owner-approved as-is (2026-06-30).** Offers #1-4 are real/owner-sourced (partial in places); offers #5-11 were Claude-synthesized per explicit owner direction, using Draft 28's own real Phase 1 seed data for each offer plus its agency-wide Phase 2-6 tables wherever they map onto a specific offer (offers #1, #8, #9, #10, #11 reuse real Draft 28 positioning/pricing fragments directly; offers #5, #6, #7 are more fully synthesized). Resolves tracker items 37 and 40A.
 
 **Department expansion (2026-06-30):** the Division column above now corresponds to real departments, not just offer-internal categories — the owner reviewed the full catalog and promoted 4 of Draft 28's 7 divisions to standalone departments: **Automation (16)**, **Consulting & Advisory (15)**, **Audits & Diagnostics (14)**, **AI Enablement (17)** (`GLOBAL_OS.md` §4). Sales, Marketing, and ClientPartner Acquisition already had departmental homes, so weren't duplicated. This registry remains the index of record for every offer's pricing/engineering detail regardless of which department now owns delivery — resolves tracker item 40B.
@@ -98,7 +104,17 @@ All workflows above are templates extracted from AI-generated brainstorm content
 
 ## 5. Agent Roster
 
-*(placeholder — none yet)*
+**Live in the Arika Runtime as of 2026-07-14** (`.claude/agents/offer-*.md`, run via `arika run <name>`). Advisory-first (Constitution §5 Class 1): they produce recommendations + memory logs (`02_Offer/_memory/runtime.jsonl`); a human approves before any offer is quoted, sold, or published.
+
+| Agent | Role | Grounded in | Triggers |
+|---|---|---|---|
+| `offer-orchestrator` | Governs intake — deconstructs an offer's strategic/commercial/execution intent, surfaces misaligned assumptions, routes to the specialists, recommends a registry action | Draft 24 (Offer Orchestration Architect) + §10 standards | manual, event `OFFER_BRIEF_RECEIVED` |
+| `offer-oeos-engineer` | Runs a Phase-1 seed brief through the full 12-phase OEOS to produce an engineered offer (positioning → backbone → journey → deliverables → QA → monetization → scalability) | Draft 29 (real OEOS methodology) + §3 | manual, event `OFFER_BRIEF_RECEIVED` |
+| `offer-pricing-floor-analyst` | Applies the segmented ARR-band pricing floor (the internal "do not quote below" line) to the engineered tiers | §10 (pricing-floor method + first provisional floor) | manual, event `OFFER_ENGINEERED`, `QUOTE_PROPOSED` |
+
+**Intended workflow chain:** `OFFER_BRIEF_RECEIVED` → orchestrator (intent + routing) + oeos-engineer (12-phase build) → `OFFER_ENGINEERED` → pricing-floor-analyst (floor check) → `OFFER_PRICED` → human review. Agents fire from external/published events they listen to; agent-to-agent handoff (re-publishing an agent's `emits`) is declared in each spec and lands in a later runtime pass — until then, run each stage manually or publish the event.
+
+The subagent/skill layer beneath these 3 top-level agents remains to be built as real runs accumulate.
 
 ## 6. Skill Library Index
 
@@ -124,6 +140,7 @@ This is a department-local table of *candidate* metrics; once real data exists, 
 - **2026-07-04 — Confirmed "360° Growth Revenue Framework" as the real, adopted name for Arika's methodology**, closing the open flag raised in `20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md` §8. See §1.
 - **2026-06-30 — Adopted the Offer Engineering Operating System (OEOS) as the real, live offer-engineering methodology**, superseding the generic 6-step offer-build workflow as this department's primary process. See §3.
 - **2026-06-30 — Adopted a segmented-mean pricing-floor methodology**: compute a real per-(offer × sector-tier × company-size) mean from real OEOS-engineered offers as an internal "do not discount below" line, distinct from quoted price. Not yet computable — needs more OEOS offers and real agency revenue targets first. See §10.
+- **2026-07-15 — Registered the CPAROS acquisition offer ladder (structure only); rejected its pricing.** ClientPartner Acquisition (06)'s mandate correction (`06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` §8) surfaced a **productized 3-tier service line** in its `Draft 2` that had been written off in 2026-06-30's narrowing: **AFS → AGE → ADN**, segmented by client maturity. The **ladder structure is real and adopted** — it is a genuine ascension path and matches this department's own offer-ascension model (§10) and OEOS's monetization phase. Its **numbers are not adopted**: the tier pricing ($2K–$250K+ setup, $1K–$100K+ retainer, 2–10% rev share) and outcome projections (+100–2000% pipeline, 10–80% CAC reduction, 1.5–15x revenue) are **Claude-generated draft output, never validated against a real engagement** — same status as the directional ARR bands in §10 and `Draft 6`'s explicitly labelled "Example Split." Owner-confirmed among 3 options. **Any real quote must run through `offer-pricing-floor-analyst`; the CPAROS numbers must never be quoted.** These tiers are also not yet OEOS-engineered — they are a named ladder, not 12-phase offers. See §3.
 
 ## 9. Risk / Incident Log
 
@@ -184,11 +201,20 @@ Note: "sell outcomes not activities" and "an offer is a transformation system" b
 
 ## 12. Triggers / Automation Hooks
 
-*(placeholder — structure only)*
+**Live (Arika Runtime, 2026-07-14).** The three §5 agents declare these triggers:
+
+| Trigger | Type | Fires |
+|---|---|---|
+| `OFFER_BRIEF_RECEIVED` | event | `offer-orchestrator`, `offer-oeos-engineer` |
+| `OFFER_ENGINEERED` | event | `offer-pricing-floor-analyst` |
+| `QUOTE_PROPOSED` | event | `offer-pricing-floor-analyst` |
+| manual | CLI | any of the three (`arika run offer-…`) |
+
+Emitted events (for downstream chaining): `OFFER_ENGINEERED` (oeos-engineer), `OFFER_PRICED` (pricing-floor-analyst). **No scheduled/cron trigger** — offer engineering is on-demand, not time-based. Any automation that would *act* on a recommendation (quote a price, publish an offer externally) is Class 3+ and needs a row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` + human sign-off before going live.
 
 ## 13. Existing OS Sub-Layer
 
-None yet.
+Offer's execution layer lives as three runtime agent specs (`.claude/agents/offer-*.md`), run by the unified **Arika Runtime** (`arika-runtime/`). There is no department-local plugin/code (unlike Finance's `finos-plugin` or Branding's `bois`) — the agents are `execution: prompt`, driven directly by the runtime executor. See §5.
 
 ## 14. Raw Archive Pointer
 
@@ -212,6 +238,7 @@ None yet.
 
 ## 15. Changelog
 
+- 2026-07-15 — **Registered offer #12, the CPAROS acquisition ladder (AFS/AGE/ADN) — structure only, pricing rejected** (§3, §8). Surfaced by ClientPartner Acquisition (06)'s mandate correction, which found a productized 3-tier service line in its `Draft 2` that the 2026-06-30 narrowing had written off as a Marketing duplicate. The ladder is real; its numbers ($2K–$250K+ setup, 2–10% rev share) and outcome projections are Claude-generated and **not adopted** — recorded as provenance only, never quotable. Owner-confirmed among 3 options. **Flagged a real open conflict:** offers #8 (Strategic Partnership Infrastructure) and #12 are two competing ClientPartner Acquisition ladders — #8's own long-standing "needs reconciliation against the organizational 06 department" note is now actionable and remains open. Neither is OEOS-engineered. — Claude Code (Opus 4.8)
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "Offer Drafts").
 - 2026-06-30 — Content migration first pass: all 28 raw drafts read and extracted; Capability Registry, Workflow Index, KPI Dictionary, and Standards & SOPs Index populated with draft/unvalidated content, clearly distinguished from confirmed agency fact per the no-silent-invention rule (`AGENCY_OPERATING_CONSTITUTION.md` §3). Positioning statement ("Revenue Infrastructure Partner") added to Identity as the leading candidate, pending owner confirmation.
 - 2026-06-30 — Owner confirmed "Revenue Infrastructure Partner" as the real positioning (tracker item 6, resolved).
@@ -224,7 +251,10 @@ None yet.
 - 2026-06-30 — Captured offer #3 (Outbound Sales Engine, real, substantially complete through Phase 7 — see `Draft 31`): real 4-tier ARR-segmented pricing, a 32-step internal execution sequence, RACI matrix, SLA framework, and a 10-item risk register. Completed offer #2's missing Phases 6-12 via Claude synthesis (explicitly **not** owner-original — see `Draft 32` and the registry note in §3), since the owner didn't have that part of the original chat. Synthesis fulfilled the OEOS prompt's "Client Constraint System" (named client-archetype risks: Ghost/Unrealistic/Micromanager/Doubter/Know-It-All/Quitter/Result Ghoster) for the first time — none of the 3 real offers had produced it. Flagged 2 unresolved cross-offer findings: pricing-segmentation variable differs by offer (rep-count vs. ARR-band), and "Phase N" labels don't map consistently across separate chat sessions. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Owner reviewed and resolved 6 open Offer decisions in one pass: (1) approved offer #2's synthesized completion and the offers #5-11 synthesized batch as-is (tracker items 37, 40A); (2) decided ARR-band is the primary agency-wide pricing-segmentation variable, rep-count a secondary modifier for sales-team offers only (item 38); (3) reframed the team-role-roster question — these are AI-assisted functional labels, not real headcount, since the owner solo-orchestrates with AI; no standardization needed, real hiring deferred to `11_HR_People_Ops/HR_OS.md` (item 39); (4) decided 4 of Draft 28's divisions (Audits & Diagnostics, Consulting & Advisory, Automation, AI Enablement) should become real departments (14-17) — created with seeded OS files (item 40B); (5) confirmed offer #8 doesn't conflict with the ClientPartner Acquisition department after reading both files directly — different audiences, same mechanics (item 41); (6) computed the first provisional pricing floor (ARR-band segmented, mean of tier-midpoints across all 11 offers, explicitly flagged as part-real/part-synthesized and low-confidence at the Enterprise band) (item 7). — Claude Code (Sonnet 4.6)
 - 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence (structure-only placeholder, per the go-live plan in 00_Agency_Governance/GO_LIVE_CHECKLIST.md). — Claude Code (Sonnet 5)
+- 2026-07-14 — **Offer got a live execution layer.** Authored 3 advisory-first agents into the Arika Runtime (`.claude/agents/offer-{orchestrator,oeos-engineer,pricing-floor-analyst}.md`), each grounded in real department content: the orchestrator on Draft 24's three-layer intent model, the OEOS engineer on Draft 29's real 12-phase methodology, the pricing-floor analyst on §10's segmented ARR-band floor. Moves Offer from a content-rich shell (§5/§12/§16 were empty placeholders) to a department with a runnable agent layer. Populated §5 Agent Roster, §12 Triggers, §13 Existing OS Sub-Layer, and this §16. Advisory-only (Class 1) — nothing quotes or sells without human sign-off. Agents register and schema-validate in `arika list`/`arika run`; live model calls pending `ANTHROPIC_API_KEY`. — Claude Code (Opus 4.8)
 
 ## 16. Memory / Feedback Loop / Cadence
 
-*(placeholder — structure only, no agent roster exists yet to generate real memory/feedback entries; see §5, which reads "placeholder — none yet.")* Once this department has a real or code-based agent roster (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16), this section should define: **Memory** (where Decision/Learning/Prompt-Evolution logs live), **Feedback Loop** (what happens when a §7 KPI misses threshold), and **Cadence** (which of the 7 Cognitive Calendars — `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4 — this department's workflows run against, and how often).
+**Memory:** the three §5 agents write append-only JSONL to `02_Offer/_memory/runtime.jsonl` (the runtime's bois-compatible memory envelope) on every run. Decision / Learning / Prompt-Evolution rollups (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16) can be distilled from that stream once real runs accumulate.
+**Feedback Loop:** when a §7 KPI misses threshold (e.g. audit→project conversion below target, or a pricing-floor override recurring on the same offer), route the miss back into the seed brief / OEOS phase that produced it and log the change. Formal recovery-agent wiring is pending, same as other departments.
+**Cadence:** offer engineering is **on-demand** (event `OFFER_BRIEF_RECEIVED`), not calendar-driven — it runs when a new offer is seeded, not against one of the 7 Cognitive Calendars (`00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4). The one exception is the pricing-floor recompute: refresh it whenever a new real OEOS offer arrives (§10).

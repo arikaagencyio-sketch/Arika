@@ -55,7 +55,23 @@ Client Success owns everything that happens to a client *after* the sale: onboar
 
 ## 5. Agent Roster
 
-*(placeholder — none yet)*
+**Live in the Arika Runtime as of 2026-07-14** — 6 advisory-first agents (`.claude/agents/client-success-*.md`, memory → `07_Client_Success/_memory/runtime.jsonl`), one per owned function of the 9-stage lifecycle (§4). No cross-department agents to hold — every function here is Client-Success-owned; the overlaps are handoffs. Sales' held #11 "Customer Success and Expansion" mandate is realized by the health-retention + expansion agents below.
+
+| Agent | Owns (lifecycle stage / process) | Class | Grounded in |
+|---|---|---|---|
+| `client-success-onboarding` | Onboarding — 5-layer model + diagnostics | 2 | Draft 16 (real) |
+| `client-success-segmentation` | Post-sale segmentation (5 types) | 1 | Draft 3 (real) |
+| `client-success-health-retention` | Retention cadence + health scoring | 2 | §4/§10 (synthesized) |
+| `client-success-expansion` | Expansion — ascension fit → Sales | 1 | §4 (synthesized) |
+| `client-success-advocacy` | Advocacy — testimonials/referrals | 2 | §4 (synthesized) |
+| `client-success-offboarding` | Offboarding & churn (10-step) + win-back | **3** | §10 (synthesized) |
+
+**`client-success-offboarding` is Class 3 (`requires_human_approval: true`)** — closing a client is hard to reverse; involuntary exits (non-payment/breach) route through Finance (09) and Legal (10) and escalate to the owner per the Constitution §5.
+
+**Event chain (wired into the live runtime):**
+`DEAL_CLOSED_WON` (Sales) → `client-success-onboarding` → `CLIENT_ONBOARDED` → `client-success-segmentation`. `client-success-health-retention` (monthly / on `HEALTH_SCORE_DROPPED`) → `CLIENT_HEALTHY` → expansion (→ Sales) + advocacy (→ Marketing), **or** `RETENTION_RISK_FLAGGED` → offboarding (→ Finance). Delivery hands off to Operations (08) via `SCOPE_DEFINED` (Operations not yet built — forward reference).
+
+The subagent/skill layer beneath these 6 remains to be built as real runs accumulate.
 
 ## 6. Skill Library Index
 
@@ -140,11 +156,23 @@ Client Success owns everything that happens to a client *after* the sale: onboar
 
 ## 12. Triggers / Automation Hooks
 
-*(placeholder — structure only; no automation concepts found beyond generic AI-agent-design boilerplate in Drafts 21-22, which is not client-management-specific — see §14)*
+**Live (Arika Runtime, 2026-07-14).** The §5 agents declare these triggers:
+
+| Trigger | Type | Fires |
+|---|---|---|
+| `DEAL_CLOSED_WON` (from Sales 05) | event | `client-success-onboarding` |
+| `CLIENT_ONBOARDED` | event | `client-success-segmentation` |
+| `HEALTH_SCORE_DROPPED` | event | `client-success-health-retention` |
+| `CLIENT_HEALTHY` | event | `client-success-expansion`, `client-success-advocacy` |
+| `RETENTION_RISK_FLAGGED` / `CONTRACT_ENDING` | event | `client-success-offboarding` |
+| monthly cadence (`0 8 1 * *`) | schedule | `client-success-health-retention` |
+| manual | CLI | any of the six |
+
+Emitted downstream: `SCOPE_DEFINED` (→ Operations 08), `EXPANSION_IDENTIFIED` (→ Sales 05), `ADVOCACY_CAPTURED` (→ Marketing 03), `CLIENT_OFFBOARDED` / `CHURN_LOGGED` (→ Finance 09). Any automation that would *act* (send a client email, revoke access, issue a final invoice) is Class 2–3 and needs a row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` + human sign-off — enforced hardest on `client-success-offboarding` (Class 3).
 
 ## 13. Existing OS Sub-Layer
 
-None yet.
+Client Success's execution layer lives as six runtime agent specs (`.claude/agents/client-success-*.md`), run by the unified **Arika Runtime** (`arika-runtime/`). No department-local plugin/code — the agents are `execution: prompt`. See §5.
 
 ## 14. Raw Archive Pointer
 
@@ -165,7 +193,10 @@ None yet.
 - 2026-06-30 — Reconciliation pass: resolved both scope-blur issues above (now that Sales and Operations are both confirmed/migrated) and picked the 9-stage lifecycle model as canonical. See §3, §4, §8, §10. — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Built the full Client Success Process Library (Retention, Expansion, Advocacy, Offboarding & Churn, Re-entry/Win-back) per explicit owner request — Claude-synthesized, clearly labeled, calibrated against the real onboarding model and the self-critique gap checklists (Drafts 8, 17). Populated §3, §4, §7 (4 new KPI formulas), §9, §10, §11 (RACI). Cross-referenced new `Client` object fields into `CRM_SCHEMA.md`. Resolves tracker item 24. — Claude Code (Sonnet 4.6)
 - 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence (structure-only placeholder, per the go-live plan in 00_Agency_Governance/GO_LIVE_CHECKLIST.md). — Claude Code (Sonnet 5)
+- 2026-07-14 — **Client Success got a live execution layer — 6 agents wired into the Arika Runtime**, one per owned function of the 9-stage lifecycle: `client-success-{onboarding, segmentation, health-retention, expansion, advocacy, offboarding}`, advisory-first, grounded in the department's real content (onboarding + segmentation) and its labeled Claude-synthesized Process Library (retention/expansion/advocacy/offboarding, §10). No cross-department agents to hold — the overlaps are handoffs, and Sales' held #11 "Customer Success" mandate is realized here. **Wired the post-sale loop:** Sales' `DEAL_CLOSED_WON` now triggers `client-success-onboarding` (alongside `marketing-lifecycle`); health-retention routes healthy clients to expansion (→ Sales) + advocacy (→ Marketing), and at-risk clients to offboarding (→ Finance). `client-success-offboarding` is **Class 3 (`requires_human_approval: true`)** — closing a client is hard to reverse and involuntary exits escalate to Finance/Legal/owner per the Constitution. Populated §5 Agent Roster, §12 Triggers, §13, §16. Advisory-only; live model calls pending `ANTHROPIC_API_KEY`. 36 agents now register in `arika list`; `npm test` 8/8. — Claude Code (Opus 4.8)
 
 ## 16. Memory / Feedback Loop / Cadence
 
-*(placeholder — structure only, no agent roster exists yet to generate real memory/feedback entries; see §5, which reads "placeholder — none yet.")* Once this department has a real or code-based agent roster (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16), this section should define: **Memory** (where Decision/Learning/Prompt-Evolution logs live), **Feedback Loop** (what happens when a §7 KPI misses threshold), and **Cadence** (which of the 7 Cognitive Calendars — `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4 — this department's workflows run against, and how often).
+**Memory:** the six §5 agents append JSONL to `07_Client_Success/_memory/runtime.jsonl` (the runtime's bois-compatible envelope) on every run. Decision/Learning/Prompt-Evolution rollups (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16) can be distilled from that stream as real client runs accumulate — this is where real onboarding/retention/churn history will finally exist rather than being confirmed-absent.
+**Feedback Loop:** when a §7 KPI misses threshold — churn rate rising, retention rate falling, an `at_risk`/`critical` `health_score` — `client-success-health-retention` flags it (`RETENTION_RISK_FLAGGED`) and, if the save fails, routes to `client-success-offboarding`; the `churn_reason` captured there feeds Offer (02) and Sales (05) as signal (e.g. "results-not-realized" clustering on one offer type). Directly addresses Draft 8/17's "no feedback loop" gap.
+**Cadence:** mostly **event-driven** (a closed deal, a health-score drop, a contract ending), with one **scheduled** rhythm — `client-success-health-retention`'s monthly review (`0 8 1 * *`) = the Revenue/Retention calendar, plus the quarterly strategic review tied to renewal timelines.

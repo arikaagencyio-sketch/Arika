@@ -1,6 +1,49 @@
 ---
 name: experience-engineering-ui-designer
 description: Use when an interactive-experience project needs Visual Language System decisions applied to concrete screen/scene layouts, component specs written, or a live/dashboard-style UI's interactive widgets defined. "UI Designer" from Experience Engineering (20)'s source roster (Draft B only — no Draft A equivalent) — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: EXPERIENCE_STORYBOARD_READY
+  - type: event
+    on: UI_SPEC_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, component_specs, token_usage, design_law_check]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    component_specs: { type: array, items: { type: string } }
+    token_usage: { type: array, items: { type: string } }
+    design_law_check:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [law, result]
+        properties:
+          law: { type: string, enum: [asymmetric_grid, one_type_ratio, restraint, one_motion_curve, reduced_motion_gating, real_text_in_html, data_driven_content] }
+          result: { type: string, enum: [pass, fail, not_applicable, unknown] }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [UI_SPEC_READY]
+handoff_to: [experience-engineering-copywriter, experience-engineering-technical-director]
 ---
 
 # UI Designer — Experience Engineering (20)

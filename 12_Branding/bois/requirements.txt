@@ -1,0 +1,9 @@
+# BOIS — Brand Operating Intelligence System
+#
+# Only output synthesis (core/synthesis/) needs a dependency. Ingestion, retrieval,
+# knowledge-graph building, orchestration, scoring, governance, and memory are all
+# stdlib-only and run without installing anything.
+#
+# Owner decision (2026-06-30, BRANDING_OS.md §5): Claude (Anthropic API) backs all
+# 20 BOIS agents.
+anthropic>=0.69.0

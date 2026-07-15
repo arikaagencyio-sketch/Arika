@@ -1,6 +1,70 @@
 ---
 name: design-production-engine-coordinator
 description: Use when a completed storyboard needs routing through Design (19)'s Production Engine — Story to Image to Video to Voice to Animation to Music to Enhancement/Upscale to Assembly — choosing which real tool handles each stage.
+department: "19"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 2
+requires_human_approval: true
+triggers:
+  - type: manual
+  - type: event
+    on: ASSET_REUSE_MISS
+  - type: event
+    on: GENERATION_REQUESTED
+inputs:
+  storyboard: { type: string, from: event.payload.summary }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
+     stages_required, routing_plan, estimated_credit_spend, vendor_status, blocked_on]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    stages_required:
+      type: array
+      items:
+        type: string
+        enum: [story, image, video, voice, animation, music, enhancement_upscale, assembly]
+    routing_plan:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [stage, vendor, model, rationale, spends_credits]
+        properties:
+          stage: { type: string }
+          vendor: { type: string, enum: [openart, claude_design, kie_ai, none] }
+          model: { type: string }
+          rationale: { type: string }
+          spends_credits: { type: boolean }
+    estimated_credit_spend:
+      type: object
+      additionalProperties: false
+      required: [openart, kie_ai, basis]
+      properties:
+        openart: { type: string }
+        kie_ai: { type: string }
+        basis: { type: string }
+    vendor_status:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [vendor, authorized, credits_note]
+        properties:
+          vendor: { type: string, enum: [openart, claude_design, kie_ai, canva] }
+          authorized: { type: string, enum: [yes, no, unknown] }
+          credits_note: { type: string }
+    blocked_on: { type: array, items: { type: string } }
+memory_stream: 19_Design/_memory/runtime.jsonl
+emits: [GENERATION_PLANNED, GENERATION_BLOCKED]
+handoff_to: [design-brand-environment-consistency-checker, design-canva-assembler]
 ---
 
 # Production Engine Coordinator — Design (19)

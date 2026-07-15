@@ -1,6 +1,54 @@
 ---
 name: experience-engineering-storyboard-artist
 description: Use when a scene from the Narrative Architect's scene map needs converting into a real, generation-ready storyboard entry before any asset generation or development starts. Reconciles "Storyboard AI" (Draft A only — no Draft B equivalent) from Experience Engineering (20)'s source roster — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: UX_PATTERNS_SET
+  - type: event
+    on: STORYBOARD_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, storyboard]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    storyboard:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [scene, camera, lighting, object, text, narration, motion, interaction, goal]
+        properties:
+          scene: { type: string }
+          camera: { type: string }
+          lighting: { type: string }
+          object: { type: string }
+          text: { type: string }
+          narration: { type: string }
+          motion: { type: string }
+          interaction: { type: string }
+          goal: { type: string }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [EXPERIENCE_STORYBOARD_READY]
+handoff_to: [experience-engineering-ui-designer, experience-engineering-motion-director, experience-engineering-3d-director]
 ---
 
 # Storyboard Artist — Experience Engineering (20)

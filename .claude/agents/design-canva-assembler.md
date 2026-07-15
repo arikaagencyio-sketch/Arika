@@ -1,6 +1,52 @@
 ---
 name: design-canva-assembler
 description: Use when polished, enhanced assets are ready to be assembled into a finished Canva deliverable, following Design (19)'s real, campaign-first folder structure.
+department: "19"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 2
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: BRAND_CHECK_PASSED
+  - type: event
+    on: ASSET_REUSE_HIT
+inputs:
+  asset: { type: string, from: event.payload.asset }
+  campaign: { type: string, from: event.payload.campaign }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
+     campaign, target_folder, deliverable_type, brand_check_confirmed, new_structure_created, flags]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    campaign: { type: string }
+    target_folder:
+      type: object
+      additionalProperties: false
+      required: [top_level, campaign_subfolder, rationale]
+      properties:
+        top_level:
+          type: string
+          enum: [brand_system, campaigns, templates, reusable_assets, motion_assets, podcast_assets, events, presentations]
+        campaign_subfolder:
+          type: string
+          enum: [storyboards, generated_assets, video, carousel, presentation, thumbnail, ads, final, none]
+        rationale: { type: string }
+    deliverable_type: { type: string }
+    brand_check_confirmed: { type: string, enum: [passed, not_run, failed, unknown] }
+    new_structure_created: { type: boolean }
+    flags: { type: array, items: { type: string } }
+memory_stream: 19_Design/_memory/runtime.jsonl
+emits: [DELIVERABLE_ASSEMBLED, CANVA_STRUCTURE_FLAG]
+handoff_to: [marketing-demand-generation, content-multiplication-engine]
 ---
 
 # Canva Assembler — Design (19)

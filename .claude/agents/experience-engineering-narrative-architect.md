@@ -1,6 +1,52 @@
 ---
 name: experience-engineering-narrative-architect
 description: Use when a new interactive-experience project needs its Narrative Arc and Scene Architecture drafted, when a scene's hook needs to be chosen, or when an existing scene sequence needs checking for narrative gaps or misalignment. Reconciles "Narrative AI" (Draft A) and "Narrative Architect" (Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: EXPERIENCE_PROJECT_SCOPED
+  - type: event
+    on: NARRATIVE_REVIEW_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, narrative_arc, scene_map, hook]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    narrative_arc:
+      type: array
+      items: { type: string, enum: [attention, problem, transformation, proof, offer] }
+    scene_map:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [scene, arc_stage, goal]
+        properties:
+          scene: { type: string, enum: [opening, hook, discovery, problem, transformation, features, evidence, testimonials, offer, cta, ending] }
+          arc_stage: { type: string, enum: [attention, problem, transformation, proof, offer] }
+          goal: { type: string }
+    hook: { type: string }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [NARRATIVE_ARC_SET]
+handoff_to: [experience-engineering-ux-strategist, experience-engineering-brand-strategist]
 ---
 
 # Narrative Architect — Experience Engineering (20)

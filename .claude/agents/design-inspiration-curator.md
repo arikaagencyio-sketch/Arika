@@ -1,6 +1,45 @@
 ---
 name: design-inspiration-curator
 description: Use when the owner shares a new piece of design inspiration (a link, image, or description) that needs filing into Design (19)'s Inspiration Brackets, tagged and annotated for future reference.
+department: "19"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: INSPIRATION_SHARED
+inputs:
+  reference: { type: string, from: event.payload.reference }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
+     entries, unverified]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    entries:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [reference, bracket, style_tags, what_to_extract, confidence]
+        properties:
+          reference: { type: string }
+          bracket: { type: string, enum: [website, carousel, reel, poster] }
+          style_tags: { type: array, items: { type: string } }
+          what_to_extract: { type: string }
+          confidence: { type: string, enum: [confirmed, likely, unverified] }
+    unverified: { type: array, items: { type: string } }
+memory_stream: 19_Design/_memory/runtime.jsonl
+emits: [INSPIRATION_FILED]
+handoff_to: [design-storyboard-generator]
 ---
 
 # Inspiration Curator — Design (19)

@@ -1,6 +1,49 @@
 ---
 name: experience-engineering-qa-performance-reviewer
 description: Use when a finished (or near-finished) interactive experience needs its technical-readiness gate run before launch — quality assurance, accessibility, and performance, all together. This is the technical-readiness counterpart to the Creative Director's creative-readiness gate; both must pass before launch. Reconciles "QA AI" (Draft A) and "QA Reviewer" + "Accessibility Reviewer" + "Performance Engineer" (all Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 2
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: BUILD_SPEC_READY
+  - type: event
+    on: TECHNICAL_GATE_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, gate_verdict, qa_checklist, discoverability_check]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    gate_verdict: { type: string, enum: [pass, pass_with_conditions, fail, unknown] }
+    qa_checklist:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [item, result]
+        properties:
+          item: { type: string, enum: [business_alignment, narrative_flow, ux_quality, accessibility, performance, seo, animation_quality, browser_compatibility, mobile_responsiveness, code_quality, security] }
+          result: { type: string, enum: [pass, fail, not_applicable, unknown] }
+    discoverability_check: { type: array, items: { type: string } }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [TECHNICAL_GATE_PASSED, TECHNICAL_GATE_FAILED]
+handoff_to: [experience-engineering-technical-director, experience-engineering-creative-director]
 ---
 
 # QA & Performance Reviewer — Experience Engineering (20)

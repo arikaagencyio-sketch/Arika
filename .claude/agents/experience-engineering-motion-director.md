@@ -1,6 +1,42 @@
 ---
 name: experience-engineering-motion-director
 description: Use when a scene needs its motion primitives and easing chosen, when scene-to-scene transitions need to blend smoothly, or when a motion choice needs checking against performance budgets. Reconciles "Motion Director AI" (Draft A) and "Motion Director" (Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: EXPERIENCE_STORYBOARD_READY
+  - type: event
+    on: MOTION_SPEC_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, motion_dialect, primitives, reduced_motion_plan, performance_note]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    motion_dialect: { type: string, enum: [premium, playful, minimal, luxury, tech, industrial, organic] }
+    primitives: { type: array, items: { type: string } }
+    reduced_motion_plan: { type: string }
+    performance_note: { type: string }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [MOTION_SPEC_READY]
+handoff_to: [experience-engineering-technical-director, experience-engineering-qa-performance-reviewer]
 ---
 
 # Motion Director — Experience Engineering (20)

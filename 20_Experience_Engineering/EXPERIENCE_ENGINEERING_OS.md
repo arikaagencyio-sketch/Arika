@@ -19,13 +19,12 @@ Experience Engineering is the agency's interactive/experiential production disci
 
 **Dual mandate**, same pattern as Design (19) and Automation (16): internal flagship builds first (Arika's own website/presentations, once scoped — §4), a future sellable "Experience Intelligence System" offer for other businesses later (cross-ref Offer, 02 — not built here, same "pattern noted, not built" treatment Automation gives its own internal-automation angle). The source illustrates this with industry examples (real estate, hospital, manufacturing, university delivery-output lists) — captured in `EXPERIENCE_ENGINEERING_VISION.md` §4 as illustrative only, not real Arika engagements.
 
-**Cross-department narrative-layer note (4-way distinction).** Four different "narrative arc" concepts now exist across this repo and are not duplicates or a conflict:
+**Cross-department narrative-layer note (3-way distinction — was 4-way until 2026-07-15).** Three different "narrative" concepts exist across this repo and are not duplicates or a conflict — they operate at different altitudes:
 1. Content (04)'s Story Architecture (`04_Content/CONTENT_OS.md` §10): `Problem → Insight → Demonstration → Framework → Proof → Action` — the **content-sequencing layer** (how one piece of content is paced).
 2. Branding (12)'s Narrative Engineering stack (`12_Branding/BRANDING_OS.md` §3): Truth Core → Narrative Framework → Narrative Modules → Translation Layer → Feedback/Evolution — the **brand-identity layer** (why the brand exists).
-3. This department's **Narrative Arc Draft A** (§3 below): `Attention → Problem → Transformation → Proof → Offer` — a 5-stage experience-level arc.
-4. This department's **Narrative Arc Draft B** (§3 below): `Attention → Curiosity → Education → Trust → Proof → Transformation → Offer → Action → Retention` — a 9-stage experience-level arc.
+3. This department's **Narrative Arc** (§3): **`Attention → Problem → Transformation → Proof → Offer`** — the **experience-orchestration layer**, sitting *above* Content's Story Architecture: one multi-scene interactive experience may itself contain many Story-Architecture-sequenced content pieces.
 
-Drafts 3 and 4 are both candidate versions of *this* department's own Narrative Engine capability, sourced from two different points in the same pasted conversation — genuinely non-identical, not merged, both preserved (full text in `EXPERIENCE_ENGINEERING_VISION.md` §2/§3). Conceptually, 1-2 sit at the content-piece and brand-identity levels; 3-4 sit at the experience-orchestration level above Content's Story Architecture — a single multi-scene interactive experience may itself contain many Story-Architecture-sequenced content pieces. See `04_Content/CONTENT_OS.md` §10 and `12_Branding/BRANDING_OS.md` §3 for their own copies of this note.
+**Items 3 and 4 were previously two unreconciled candidate arcs** (a 5-stage and a 9-stage version, from two points in the same pasted source conversation). **Reconciled 2026-07-15** into the single canonical arc above — settled by this department's own Scene Architecture, which independently corroborates that ordering. Full reasoning, the absorption map for the 9-stage version's extra beats, and why Retention was routed out to Client Success (07)/`marketing-lifecycle` (03): §3's Narrative Engine reconciliation note. Both original drafts remain preserved verbatim in `EXPERIENCE_ENGINEERING_VISION.md` §2/§3 — nothing was deleted, only subordinated. See `04_Content/CONTENT_OS.md` §10 and `12_Branding/BRANDING_OS.md` §3 for their own copies of this note.
 
 ## 2. Status
 
@@ -50,8 +49,29 @@ Grouped rather than a flat list, since the source names ~25 distinct systems/sub
 
 | Capability | Description | Status |
 |---|---|---|
-| Narrative Engine | Two non-identical candidate arcs from the source, both preserved (see 4-way reconciliation note, §1): **Draft A** `Attention → Problem → Transformation → Proof → Offer` (5 stages); **Draft B** `Attention → Curiosity → Education → Trust → Proof → Transformation → Offer → Action → Retention` (9 stages) | Proposed — likely the same underlying concept named twice across the source's own two drafting passes; presented as-given, not merged |
-| Scene Architecture | `Opening → Hook → Discovery → Problem → Transformation → Features → Evidence → Testimonials → Offer → CTA → Ending` — "think like Pixar, not pages: scenes" | Proposed |
+| Narrative Engine | **✅ RECONCILED 2026-07-15 — one canonical arc.** **`Attention → Problem → Transformation → Proof → Offer`** (5 stages, formerly "Draft A"). Draft B's 9 stages are absorbed, not discarded — see the reconciliation note below | **Canonical** — owner-confirmed among 4 options; the department's last unreconciled source conflict, now closed |
+| Scene Architecture | `Opening → Hook → Discovery → Problem → Transformation → Features → Evidence → Testimonials → Offer → CTA → Ending` — "think like Pixar, not pages: scenes" | **Canonical scene-level expansion of the arc above** — and the evidence that settled the reconciliation |
+
+**🔴→✅ Narrative Arc reconciliation (2026-07-15) — the department's last open source conflict, closed.** Two non-identical arcs had stood since founding, both preserved, neither canonical — while this department's *other* two source conflicts (the Creative Pipeline's 2 drafts, the AI Orchestra's 2 rosters) were both reconciled on 2026-07-04 by owner direction. This one was left because the drafts don't merely differ in granularity — **they disagree on order**:
+
+| | Draft A (5) | Draft B (9) |
+|---|---|---|
+| | Attention → Problem → **Transformation → Proof** → Offer | Attention → Curiosity → Education → Trust → **Proof → Transformation** → Offer → Action → Retention |
+
+A places Transformation **before** Proof; B places Proof **before** Transformation. A union cannot dodge that — an arc has one order.
+
+**What settled it: this department's own Scene Architecture** (row above), a third sequence never previously compared against either draft. It independently runs `… Problem → **Transformation** → Features → **Evidence** → Testimonials → Offer → CTA …` — **Transformation before Evidence**, corroborating **Draft A's ordering** from inside the department's own material rather than from an outside preference.
+
+**Canonical arc: `Attention → Problem → Transformation → Proof → Offer`.** Draft B's extra beats are **absorbed, not dropped** — each already had a home:
+
+| Draft B beat | Absorbed into | Why |
+|---|---|---|
+| Curiosity, Education | Scene Architecture's **Discovery** | Same function at scene granularity |
+| Trust | Scene Architecture's **Evidence / Testimonials** | Trust is what proof produces, not a separate beat |
+| Action | Scene Architecture's **CTA** | Same beat, different name |
+| **Retention** | **Routed out** — Client Success (07) + `marketing-lifecycle` (03) | **Not an experience beat.** A website visit doesn't retain; a relationship does. Retention already has two real owners; importing it here would have duplicated their mandates — the same scope-collision this department caught twice on 2026-07-04 (Brand Strategist vs Branding 12; Copywriter vs Offer 02) |
+
+The 4-way cross-department narrative note (§1) still holds — this reconciliation collapses items 3 and 4 into one, making it a **3-way** distinction: Content (04)'s content-sequencing layer, Branding (12)'s brand-identity layer, and this department's single experience-orchestration arc. Mirrored in `04_Content/CONTENT_OS.md` §10 and `12_Branding/BRANDING_OS.md` §3.
 
 ### Language Systems
 
@@ -125,6 +145,32 @@ The 11 roles: Creative Director, Narrative Architect, UX Strategist, Storyboard 
 
 This is the first department in this repo to have a real, invokable agent roster from day one, rather than a markdown-only proposed roster maturing later.
 
+**✅ ALL 11 ON THE RUNTIME 2026-07-15 — and with them, the last legacy specs in the repo are gone.** Until now all 11 were quarantined: real, reconciled, invokable by hand, but carrying only `name` + `description`, so `arika-runtime` couldn't see them. **All 11 now have triggers, output schemas, risk classes, and event wiring; bodies untouched** — the reconciliation work of 2026-07-04 was already right, only frontmatter was missing. `arika list` → **80 agents**, **0 legacy specs remaining** (the migration's own regression test now asserts zero, having previously asserted "at least one legacy spec is skipped").
+
+**The shared output schema is this department's own Communication Protocol, not an invention.** Every agent returns `vision` → `rationale` → `technical_notes` → `risks_contradictions` → `handoffs` (the Output Structure + return contract in [`AI_CREATIVE_ORCHESTRA.md`](AI_CREATIVE_ORCHESTRA.md)), plus the runtime's base advisory envelope and role-specific fields.
+
+| Agent | Class | Triggers on | Emits |
+|---|---|---|---|
+| `narrative-architect` | 1 | `EXPERIENCE_PROJECT_SCOPED` | `NARRATIVE_ARC_SET` |
+| `ux-strategist` | 1 | `NARRATIVE_ARC_SET` | `UX_PATTERNS_SET` |
+| `brand-strategist` | 1 | `NARRATIVE_ARC_SET` | `EXPERIENCE_BRAND_CHECKED` |
+| `storyboard-artist` | 1 | `UX_PATTERNS_SET` | `EXPERIENCE_STORYBOARD_READY` |
+| `ui-designer` | 1 | `EXPERIENCE_STORYBOARD_READY` | `UI_SPEC_READY` |
+| `motion-director` | 1 | `EXPERIENCE_STORYBOARD_READY` | `MOTION_SPEC_READY` |
+| `3d-director` | 1 | `EXPERIENCE_STORYBOARD_READY` | `CAMERA_SPEC_READY` |
+| `copywriter` | 1 | `UI_SPEC_READY` | `SCENE_COPY_READY` |
+| `technical-director` | **2** | `SCENE_COPY_READY` | `BUILD_SPEC_READY` |
+| `creative-director` | **2** | `BUILD_SPEC_READY` | `CREATIVE_GATE_PASSED` / `FAILED` |
+| `qa-performance-reviewer` | **2** | `BUILD_SPEC_READY` | `TECHNICAL_GATE_PASSED` / `FAILED` |
+
+**Risk classes:** the nine specification roles are **Class 1** — they produce specs and reasoning, touch nothing. The three that gate or build are **Class 2**: the Technical Director's output drives a real, **production-deployed** codebase (`arika-website`, live on Vercel), and the two launch gates decide what ships to the public.
+
+**Schemas encode the department's own hard rules, so they can't be skipped:**
+- The Narrative Architect's `narrative_arc` is an enum of exactly the **five canonical stages** (§3) — it cannot emit a different arc.
+- The Storyboard Artist's `storyboard` requires all **9 fields** (Scene/Camera/Lighting/Object/Text/Narration/Motion/Interaction/Goal) — the repo-wide "8-field" mislabeling caught on 2026-07-04 can't recur.
+- The UI Designer's `design_law_check` enumerates all **seven design laws** (§10).
+- The Creative Director's `creative_dna_check` enumerates all **7 Creative DNA questions**; the QA Reviewer's `qa_checklist` enumerates all **11 QA Framework items** (§3). Both gates must answer every one.
+
 ## 6. Skill Library Index
 
 **Updated 2026-07-09 — four skills are now real, not proposed.** The Experience Spec System's stations are backed by four real Claude Code skills under `.claude/skills/` — the department's first real skill layer of any kind:
@@ -148,6 +194,9 @@ Proposed initial catalog (still "Proposed, not built"): Scene Sequencing, Scroll
 
 ## 8. Decision Log
 
+- **2026-07-15 — 🔴→✅ NARRATIVE ARC RECONCILED — this department's last open source conflict is closed.** Owner-confirmed among 4 options. Two non-identical arcs had stood since founding while the department's *other* two source conflicts (2 Creative Pipeline drafts, 2 AI roster drafts) were both reconciled on 2026-07-04. This one survived because the drafts **disagree on order**, not just granularity: Draft A places Transformation *before* Proof, Draft B places Proof *before* Transformation — a union can't dodge that, an arc has one order. **Settled by evidence from inside the department**: its own **Scene Architecture** (never previously compared against either draft) independently runs `Problem → Transformation → Features → Evidence → Testimonials`, corroborating Draft A's ordering. **Canonical: `Attention → Problem → Transformation → Proof → Offer`.** Draft B's beats absorbed, not dropped (Curiosity/Education → Discovery; Trust → Evidence/Testimonials; Action → CTA), and **Retention routed out** to Client Success (07) + `marketing-lifecycle` (03) — a website visit doesn't retain, a relationship does, and importing it would have duplicated two live mandates (the same scope-collision discipline this department applied on 2026-07-04). Both original drafts remain verbatim in `EXPERIENCE_ENGINEERING_VISION.md`. The cross-department narrative note drops from **4-way to 3-way** (§1), mirrored in `04_Content/CONTENT_OS.md` §10 and `12_Branding/BRANDING_OS.md` §3. The canonical arc is now **enum-enforced** in `experience-engineering-narrative-architect`'s schema — it cannot emit a different one. — Claude Code (Opus 4.8)
+- **2026-07-15 — All 11 agents joined the runtime; the repo's legacy migration is complete.** The 11 specs gained frontmatter — triggers, schemas, risk classes, event wiring — **bodies untouched**; the 2026-07-04 reconciliation was already right, only frontmatter was missing. **These were the last 11 legacy specs in the repo**: `arika list` → **80 agents, 0 skipped**. The runtime's own regression test was updated from "at least one legacy spec is skipped" to "**zero legacy specs remain**" — the migration completing broke the test that measured it being incomplete. Schemas were derived from this department's **own Communication Protocol** (`AI_CREATIVE_ORCHESTRA.md`: Vision → Rationale → Technical Notes → Next Steps, plus risks/handoffs), not invented, and they hard-encode the department's rules: the 5 canonical arc stages, the 9-field storyboard, the 7 design laws, the 7 Creative DNA questions, the 11 QA items. 9 specification roles are **Class 1**; the Technical Director and both launch gates are **Class 2** (the build is production-deployed; the gates decide what reaches the public). — Claude Code (Opus 4.8)
+- **2026-07-15 — 🔴 Runtime gap found and flagged, not worked around: `arika-runtime` has no join/barrier.** This department's pipeline is genuinely parallel (UI+Motion+3D concurrently; Creative + QA gates "both required"), but an EventEmitter bus can fan out and never join. Four emits therefore have no agent listener — `EXPERIENCE_BRAND_CHECKED`, `MOTION_SPEC_READY`, `CAMERA_SPEC_READY` (parallel siblings; subscribing the downstream role to each would fire it 2–3×, so they're wired as context) and `CREATIVE_GATE_PASSED`/`TECHNICAL_GATE_PASSED` (the "both required" join is performed by a human, who then launches). **Documented in §12 as known parallel/human joins rather than silently fake-wired**, so `operations-state-monitor` (08) doesn't read them as broken links. A real fix is a `waits_for: [A, B]` trigger type in the runtime — same class of gap as auto-dispatch being declared but unimplemented. — Claude Code (Opus 4.8)
 - 2026-07-03 — Department created, numbered 20, named "Experience Engineering" — direct owner decision among 4 named alternatives (Interactive Experience Lab, Digital Storytelling Lab, Creative Technology Division, Experience Engineering). Positioned downstream of Design (19).
 - 2026-07-03 — Seed content sourced from an owner-relayed external AI chat session, flagged per the sourcing-honesty convention (same treatment as Branding's Brand Genome) — full text preserved in `EXPERIENCE_ENGINEERING_VISION.md`, distilled/grouped version in this file's §3.
 - 2026-07-03 — The 16-system architecture and Experience Pattern Library captured as proposed/architecture-only. The source's own internal inconsistencies — Pass 1's 9-item outline not matching its own 9 elaborated headers; Pass 1 vs. Pass 2 naming the same likely-concept twice (Story System/Narrative Engine, Motion System/Motion Language System, AI Department/AI Creative Orchestra); two non-identical Creative Pipeline drafts; two non-identical AI-role rosters; two non-identical narrative-arc drafts — are all presented as-given throughout this file and its sibling files, not silently reconciled into a single synthetic version.
@@ -191,10 +240,43 @@ Proposed initial catalog (still "Proposed, not built"): Scene Sequencing, Scroll
 
 ## 12. Triggers / Automation Hooks
 
-**Agent-to-agent handoffs are now real** (all 11 agents exist and are individually invokable), but nothing here is *automated*. Two different things, not to be conflated:
+**✅ UPDATED 2026-07-15 — the handoffs are real *events* now, not just cross-references.** The claim that stood here ("nothing here is *automated*") is no longer true: all 11 agents run on `arika-runtime`'s event bus (§5).
 
-- **Real, invokable today**: the full role-level handoff sequence in §4 (Narrative Architect → UX Strategist/Brand Strategist → Storyboard Artist → UI Designer/Motion Director/3D Director → Copywriter → Technical Director → Creative Director/QA & Performance Reviewer) — each is a real cross-reference between real subagent files, callable in sequence via the Agent tool.
-- **Still a placeholder, but now specifiable in principle**: Design (19)'s Creative Production Pipeline reaching "Assemble (Canva)" for an experience-scale project automatically *triggering* this department's Narrative Architect. Tracker item 51 is now resolved — the Arika website (`ARIKA_WEBSITE_PROJECT.md`) is the first real "experience-scale" project — so a real trigger condition could now be defined (e.g. a Design content brief tagged for the website's Campaign Architecture unit, `04_Content/CONTENT_OS.md` §10). Not yet built: no automation platform wiring exists for this handoff, same gap Design's own equivalent automation had before it went live. Building it is real follow-up work, not blocked on a missing decision anymore.
+```
+EXPERIENCE_PROJECT_SCOPED
+        ▼
+  narrative-architect ── NARRATIVE_ARC_SET ──┬─→ ux-strategist ── UX_PATTERNS_SET ─┐
+                                             └─→ brand-strategist ─(context)─┐     │
+                                                                             ▼     ▼
+                                                                     storyboard-artist
+                                                                             │ EXPERIENCE_STORYBOARD_READY
+                                              ┌──────────────┬───────────────┤
+                                              ▼              ▼               ▼
+                                        ui-designer   motion-director   3d-director
+                                              │         (context)        (context)
+                                    UI_SPEC_READY
+                                              ▼
+                                         copywriter ── SCENE_COPY_READY ─→ technical-director
+                                                                                  │ BUILD_SPEC_READY
+                                                              ┌───────────────────┴──────────────────┐
+                                                              ▼                                      ▼
+                                                     creative-director                  qa-performance-reviewer
+                                                   CREATIVE_GATE_PASSED                TECHNICAL_GATE_PASSED
+                                                              ╚═══════ ⟨ HUMAN: both required ⟩ ═══════╝
+                                                                            Launch
+```
+
+**🔴 Real runtime gap found while wiring: `arika-runtime` has no join/barrier primitive.** This department's pipeline is genuinely **parallel** — §4 runs "UI Designer + Motion Director + 3D Director… in parallel" and requires "Creative Director + QA & Performance Reviewer… **both required**" before launch. An `EventEmitter` bus can **fan out but never join**: there is no way to say *"run X only once A and B have both finished."*
+
+Consequently four emits have **no agent listener**, and wiring them naively would be worse than leaving them:
+- **`EXPERIENCE_BRAND_CHECKED`, `MOTION_SPEC_READY`, `CAMERA_SPEC_READY`** — these are **parallel siblings feeding one downstream agent**. Subscribing the Storyboard Artist to both `UX_PATTERNS_SET` *and* `EXPERIENCE_BRAND_CHECKED` would fire it **twice**; subscribing the Technical Director to all three spec events would fire it **three times**. They are wired as **context the downstream role reads**, not as triggers — which is what §4's parallel notation actually means.
+- **`CREATIVE_GATE_PASSED`, `TECHNICAL_GATE_PASSED`** — **both must pass, then a human launches.** The "both required" join is performed by a person, and launching a public site is a human act regardless (same shape as Design (19)'s `DELIVERABLE_ASSEMBLED`).
+
+**This is a runtime limitation, not an EE modelling error** — the same class of gap as agent-to-agent auto-dispatch being declared in specs but not yet implemented (`arika-runtime/DESIGN.md`). A real fix is a join/barrier trigger type (`waits_for: [A, B]`). Recorded here so `operations-state-monitor` (08) reads these four as **known parallel/human joins, not broken links.**
+
+**Still not built — the upstream trigger.** `EXPERIENCE_PROJECT_SCOPED` currently has no emitter: Design (19)'s pipeline ends at a Canva deliverable (`DELIVERABLE_ASSEMBLED`), which is asset-scale, not experience-scale. A real trigger condition is now *definable* (tracker item 51 resolved — the Arika website is the first real experience-scale project), but deciding what promotes a Design output to an experience-scale project is an open modelling question, **not** something to invent here. Until then this chain starts by hand.
+
+**No approval-matrix row needed yet:** all 11 are advisory, and the only state-changing act (launch) is human by design.
 
 ## 13. Existing OS Sub-Layer
 
@@ -208,6 +290,7 @@ No department-local `Draft N.md` corpus — genuinely new department, no inherit
 
 ## 15. Changelog
 
+- 2026-07-15 — **All 11 agents live on `arika-runtime` — the repo's legacy migration is now complete (80 agents, 0 skipped)** — and the department's **last unreconciled source conflict is closed**. Diagnosis first: the 11 agents were real, reconciled, and invokable by hand but carried only `name` + `description`, so the runtime couldn't see them; and the two Narrative Arc drafts had stood open since founding while the department's other two source conflicts were reconciled on 2026-07-04. **Cured the arc** (owner-confirmed): canonical `Attention → Problem → Transformation → Proof → Offer`, settled by the department's **own Scene Architecture** corroborating that ordering — Draft B's extra beats absorbed, Retention routed out to Client Success (07)/`marketing-lifecycle` (03) rather than duplicating two live mandates. Wired all 11 (**bodies untouched**), deriving the shared schema from the department's own Communication Protocol rather than inventing one, and hard-encoding its rules as enums (5 arc stages, 9-field storyboard, 7 design laws, 7 Creative DNA questions, 11 QA items). **Flagged a real runtime gap rather than fake-wiring around it**: `arika-runtime` has no join/barrier, so this department's genuinely parallel steps (UI+Motion+3D; both launch gates) can't be auto-joined — 4 emits are documented in §12 as known parallel/human joins. Corrected §16, stale since 2026-07-04. Updated the runtime's regression test from "≥1 legacy spec skipped" to "0 legacy specs remain". Verified: `arika list` → 80, `npm test` → 9/9. — Claude Code (Opus 4.8)
 - 2026-07-09 — **Experience Spec System aligned in** (see Decision Log). Homed the owner's "Design Department" plugin + Elite Web Build reference set here (owner-confirmed placement: Experience Engineering 20, not Design 19; scope: full wiring). New files: `EXPERIENCE_SPEC_SYSTEM.md`, four docs under `build-system/`, four skills under `.claude/skills/`. Edited §2 Status, §3 Capability Registry, §6 Skill Library Index (four skills now real), §10 Standards (seven design laws + Discoverability pillar), §13 Existing OS Sub-Layer. Companion edits: `13_Tech_Stack/TECHSTACK_OS.md` §3 (7 named-not-connected tools), `19_Design/DESIGN_OS.md` §1 (cross-ref note), `GLOBAL_OS.md` (§5 flow note + changelog + version bump), `OWNER_INPUT_NEEDED.md` + `GO_LIVE_CHECKLIST.md` (new items). Did not copy the plugin's standalone `CLAUDE.md` (would breach the one-root rule). — Claude Code (Opus 4.8)
 - 2026-07-04 — **First real project scoped and Creative Pipeline reconciled** — closes tracker items 51 and 52, the two open decisions blocking this department since founding. New file `ARIKA_WEBSITE_PROJECT.md` (Phase 1 marketing-site sitemap, Phase 2/3 roadmap flags); `EXPERIENCE_TECH_STACK.md` §3 now has one canonical 17-step Creative Pipeline instead of two unreconciled drafts. §2, §4, §12 updated to reflect both. Companion edits: `03_Marketing/MARKETING_OS.md` §10 (Social Ecosystem), `04_Content/CONTENT_OS.md` §10 (Content Operating System 10-layer model), `19_Design/DESIGN_OS.md` §10 (Example Imagery Brief). No frontend code and no image generation happened in this pass — Relume remains down and Canva/OpenArt need re-authorization. — Claude Code (Sonnet 5)
 - 2026-07-04 — **Confirmed this department's §12 trigger cannot yet be specified** (unlike Design 19's equivalent, which is now fully specified in `16_Automation/AUTOMATION_OS.md` §12) — no real project or "experience-scale" flag exists to define a trigger condition against. Revisit once tracker item 51 resolves. — Claude Code (Sonnet 5)
@@ -217,4 +300,16 @@ No department-local `Draft N.md` corpus — genuinely new department, no inherit
 
 ## 16. Memory / Feedback Loop / Cadence
 
-*(placeholder — structure only, no agent roster exists yet to generate real memory/feedback entries; see §5.)* Once this department has a real or code-based agent roster (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16), this section should define: **Memory** (where Decision/Learning/Prompt-Evolution logs live — likely the same store `PROMPTING_SYSTEM.md`'s Prompt Records live in, once that's real), **Feedback Loop** (what happens when a §7 KPI misses threshold), and **Cadence** (which of the 7 Cognitive Calendars — `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4 — this department's workflows run against, and how often).
+*(This section's old text — "no agent roster exists yet" — was stale from the day §5 was built on 2026-07-04, the same staleness Design (19) §16 carried. Corrected 2026-07-15.)*
+
+**Memory.** All 11 agents append to `20_Experience_Engineering/_memory/runtime.jsonl` in the shared bois-compatible envelope (`arika-runtime/DESIGN.md`) — the only record of what EE agents actually did, and the only evidence `operations-state-monitor` (08) can use to mark this department `live` rather than `documented`. When `PROMPTING_SYSTEM.md`'s Prompt Records become real, they should land in this same stream rather than a second store.
+
+**Feedback Loop.** §7's KPIs remain a placeholder (no build has run through this chain), but two real gates now run as code, and both are **schema-enforced rather than trusted**:
+- **The Creative DNA gate** (`experience-engineering-creative-director`) must answer all **7** creative questions — its `creative_dna_check` enum won't accept a partial answer.
+- **The technical gate** (`experience-engineering-qa-performance-reviewer`) must answer all **11** QA Framework items plus a discoverability check. Both gates are required before launch (§12), and the join between them is a **human**.
+
+The standing doctrine note in §9 — *"heavy 3D/motion experiences that sacrifice load time or accessibility for spectacle are a quality failure, not a style choice"* — is now enforceable rather than aspirational: `accessible_and_performant` is one of the Creative DNA questions, `accessibility` and `performance` are two of the 11 QA items, and `prefers-reduced-motion` gating is one of the seven design laws the UI Designer must report on.
+
+**Cadence.** Event-driven, not calendar-driven — EE produces when a project is scoped, not on a schedule. No cron. Maps loosely to the **Opportunity Calendar** (per-project) and the **Strategic Calendar** (the flagship builds that compound authority); deliberately **not** on the Revenue Calendar — an experience influences revenue, it doesn't book it.
+
+**Honest state.** This department has **shipped a real thing**: `arika-website` is live in production on Vercel (14 pages, 5 real generated images, the real logo). But it was **hand-built, not produced by this chain** — the chain as wired has **never executed a full pass**, and `EXPERIENCE_PROJECT_SCOPED` has no emitter yet (§12). Zero motion/3D tools are connected. Nothing here is evidence of a working pipeline; it is a wired one, attached to a department that happens to have already shipped by hand.

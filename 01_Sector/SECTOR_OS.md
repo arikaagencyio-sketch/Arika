@@ -82,7 +82,18 @@ Three productized offers proposed but unconfirmed: "Sector Intelligence Audit," 
 
 ## 5. Agent Roster
 
-*(placeholder — none yet)*
+**Live in the Arika Runtime as of 2026-07-14** — 4 advisory-first agents (`.claude/agents/sector-*.md`, all Constitution Class 1: internal intelligence, no client/money exposure; memory → `01_Sector/_memory/runtime.jsonl`). No cross-department agents to hold — Sector's mandate is foundational market truth, and Marketing (03)'s `marketing-market-intelligence` explicitly defers to this department for it.
+
+| Agent | Runs | Grounded in |
+|---|---|---|
+| `sector-signal-scorer` | The 90-point Prospect Signal Scorecard (6 × 0–15 → Low/Medium/High/Critical), service match, and the 30-day re-score decay rule | `Draft 15` — real, directly executable |
+| `sector-icp-fit` | Classifies a company into Tier 1 / Tier 2 / Tier 3 / Anti-ICP → pursue_now / nurture / educate_dont_sell / skip | §1 (owner-confirmed ICP) |
+| `sector-intelligence-mapper` | The 360° Sector Map (11 sections) + audience roles (Operators/Buyers/Amplifiers/Enablers) + the 5-layer linguistic model, against the real 22-sector xlsx taxonomy | Drafts 2/3/9/11 + xlsx (§13) |
+| `sector-readiness-analyst` | Readiness matrix (🟢/🟡/🔴) + agency maturity arc (Fixer → System Builder → Revenue Partner) → GTM sequencing | xlsx Sheets 01/11 |
+
+**Headwaters now wired into the flow:** `sector-icp-fit` + `sector-signal-scorer` → `sales-lead-qualification` (05), whose stated inputs include "ICP rules"; `sector-intelligence-mapper` → `marketing-market-intelligence` (03) + `offer-orchestrator` (02); `sector-readiness-analyst` → `marketing-demand-generation` (03). This makes §1's doctrine operational: *"Sector determines truth; Offer packages it; Marketing distributes it; Sales converts it."*
+
+Every agent carries this department's honesty caveats: Layer A is generic doctrine; Layer B is real owner-curated data; **pricing figures are hypotheses, not validated deals**; Tier 2/3 source content is partial/truncated; and the scorecard is *"ready to use, not validated by use."*
 
 ## 6. Skill Library Index
 
@@ -139,13 +150,24 @@ Note: Draft 13 also proposes a generic AI-agent-prompting standard (MUST/MUST NO
 
 ## 12. Triggers / Automation Hooks
 
-*(placeholder — structure only; no automation concepts found in source material beyond the generic weekly cadence in §4)*
+**Live (Arika Runtime, 2026-07-14).** The §5 agents declare these triggers:
+
+| Trigger | Type | Fires |
+|---|---|---|
+| `PROSPECT_IDENTIFIED` | event | `sector-signal-scorer`, `sector-icp-fit` |
+| weekly sector cadence (`0 8 * * 1`) | schedule | `sector-intelligence-mapper` — operationalizes §4's "living system, continuously updated" cadence |
+| monthly (`0 8 1 * *`) | schedule | `sector-signal-scorer` (Medium-band re-score — *"signals decay"*), `sector-readiness-analyst` (reassess readiness) |
+| manual | CLI | any of the four |
+
+Emitted downstream: `PROSPECT_SCORED` (→ Sales 05, Marketing 03) · `ICP_CLASSIFIED` (→ Sales 05, Marketing 03) · `SECTOR_MAPPED` (→ Marketing 03, Offer 02) · `SECTOR_READINESS_SET` (→ Marketing 03). All Class 1 (internal intelligence) — no `AUTOMATION_APPROVAL_MATRIX.md` row is required while these only recommend; one becomes necessary the moment any of them acts externally.
 
 ## 13. Existing OS Sub-Layer
 
 **Yes, as of 2026-06-30 — data-based, not code or markdown.** `Other Source Reference/Arika_B2B_SaaS_Intelligence_Database.xlsx` (and a content-identical sibling `Agency0.1_B2B_SaaS_Intelligence_Database.xlsx`) is a 13-sheet structured Excel database, ~700 rows, covering ICP definition, 22-sector taxonomy, problems/struggles/revenue-intelligence per subsector, strategic intelligence nodes, cross-sector relationship mapping, the agency opportunity map, decision-maker registry, events/communities calendar, sector readiness matrix, and a 4-layer intelligence model. It lives at the workspace root in `Other Source Reference/`, not inside `01_Sector/`, because the owner placed it there — this repo respects that placement rather than moving it, the same way Finance and Branding's grandfathered code layers stay where they were built.
 
 **Decision (2026-06-30):** unlike `finos-plugin` and `bois` (code), this is real curated *data*, not executable logic — so it isn't a "grandfathered exception to markdown-first" in the same sense; it's simply the canonical structured source for this department's real sector content, cited from here rather than duplicated into markdown. §3 above summarizes what each sheet contains; read the xlsx directly (or its CSV exports, regeneratable via `xlsx_to_csv.py`-style extraction since no `openpyxl`/`pandas` is installed in this environment) for full per-subsector detail.
+
+**Update (2026-07-14) — an execution layer now sits on top of that data.** The four §5 agents (`.claude/agents/sector-*.md`) are run by the unified **Arika Runtime** (`arika-runtime/`); they are `execution: prompt` (no department-local plugin) and treat the xlsx as their canonical source of record — cite it, don't duplicate or contradict it. So this department now has two sub-layers: the real **data** (xlsx) and the **agents** that reason over it.
 
 ## 14. Raw Archive Pointer
 
@@ -162,3 +184,14 @@ Note: Draft 13 also proposes a generic AI-agent-prompting standard (MUST/MUST NO
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "The Sector Drafts").
 - 2026-06-30 — Content migration: all 14 raw drafts read in full. Capability Registry, Workflow Index, Standards & SOPs Index populated. Confirmed no real sector has ever been chosen — flagged as the single highest-leverage open item in the repo per this department's own "weak sector layer degrades everything downstream" principle, and added to `00_Agency_Governance/OWNER_INPUT_NEEDED.md`. KPI Dictionary confirmed as genuine absence.
 - 2026-06-30 — **Resolved the #0 priority gap.** Owner provided a real sector decision (B2B SaaS, 3-tier ICP) via `Other Source Reference/Arika_B2B_SaaS_Intelligence_Database.xlsx` (13 sheets, real owner-curated data) plus a partial chat transcript (`Draft 15`-`17`). Confirmed the agency's real name: **Arika Agency**. Rewrote §1-§2 to reflect the resolved sector; added the 22-sector taxonomy, signal framework, 90-point scorecard, agency maturity arc, and 7-stage engagement model to §3-§4 and §7; added §13 pointing to the xlsx as this department's real-data sub-layer; flagged 3 unreconciled "intelligence layer" model variants (§10) and the partial/truncated state of `Draft 16`-`17` (§14) rather than silently treating either as complete. Removed item #0 from `00_Agency_Governance/OWNER_INPUT_NEEDED.md`. — Claude Code (Sonnet 4.6)
+- 2026-07-14 — **Sector got a live execution layer — 4 agents wired into the Arika Runtime**, turning the flow's headwaters from documentation into something runnable: `sector-signal-scorer` (the real, directly-executable 90-point Prospect Signal Scorecard + 30-day decay rule), `sector-icp-fit` (the owner-confirmed 3-tier B2B SaaS ICP + Anti-ICP classifier), `sector-intelligence-mapper` (360° 11-section map + audience roles + 5-layer linguistics, against the real 22-sector xlsx taxonomy), and `sector-readiness-analyst` (readiness matrix + maturity arc → GTM sequencing). All Class 1 (internal intelligence). No cross-department agents to hold — Marketing (03)'s `marketing-market-intelligence` already defers foundational market truth to this department. **Wired the headwaters into the flow:** ICP/signal output → `sales-lead-qualification` (05); sector maps → `marketing-market-intelligence` (03) + `offer-orchestrator` (02); readiness → `marketing-demand-generation` (03) — making §1's "Sector determines truth → Offer packages → Marketing distributes → Sales converts" doctrine operational rather than aspirational. Every agent carries this department's honesty caveats (Layer A generic vs Layer B real; pricing = hypothesis; Tier 2/3 partial; scorecard ready-but-unvalidated). Populated §5 Agent Roster, §12 Triggers, §13 (second sub-layer), and added §16 Memory/Feedback/Cadence (this file never had one — it had no agent roster until now). 40 agents register in `arika list`; `npm test` 8/8; live model calls pending `ANTHROPIC_API_KEY`. — Claude Code (Opus 4.8)
+
+## 16. Memory / Feedback Loop / Cadence
+
+*(Added 2026-07-14 — this file previously had no §16, since the department had no agent roster to generate memory from.)*
+
+**Memory:** the four §5 agents append JSONL to `01_Sector/_memory/runtime.jsonl` (the runtime's bois-compatible envelope) on every run. This is where the department's "living system" doctrine finally gets a real substrate — every prospect score, ICP classification, sector map, and readiness call is now logged rather than re-derived. Distil Decision/Learning rollups from that stream (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16) as real runs accumulate.
+
+**Feedback Loop:** the department's own principle is that **signals decay** — so the loop is a re-scoring discipline, not a KPI-miss alarm. Medium-band prospects are re-scored every 30 days (`sector-signal-scorer`); sector readiness is reassessed monthly (`sector-readiness-analyst`) as market conditions shift. When a scored prospect converts (or fails) downstream in Sales (05), that outcome is the real validation signal this department has never had — feed it back to calibrate the 90-point scorecard, which today is *"ready to use, not validated by use."*
+
+**Cadence:** **weekly** — `sector-intelligence-mapper` runs the §4 weekly sector operating cadence (Intelligence Update → Opportunity Review → Offer Refinement → Pipeline Push → Execution Audit). **Monthly** — signal re-scoring + readiness reassessment. **Event-driven** — `PROSPECT_IDENTIFIED` fires scoring and ICP classification on demand. Maps to the Strategic/Opportunity calendars in `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4.

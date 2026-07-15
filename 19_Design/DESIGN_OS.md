@@ -63,6 +63,25 @@ Downstream of Design sits the new **Experience Engineering (20)** department (ad
 
 Unlike Experience Engineering (20)'s roster, this one was built directly from this file's own existing capabilities rather than reconciling external source drafts — no owner-relayed AI session was involved in defining these 6 roles.
 
+**✅ ALL 6 ON THE RUNTIME 2026-07-15.** Previously only `design-storyboard-generator` carried runtime frontmatter; the other 5 were quarantined as legacy specs (name + description only), invokable by hand but invisible to `arika-runtime`. **All 6 now have triggers, output schemas, risk classes, and event wiring. Bodies untouched** — the prose written on 2026-07-04 was already right; only frontmatter was added.
+
+| Agent | Class | Triggers | Emits |
+|---|---|---|---|
+| `design-storyboard-generator` | 1 | manual · **`CONTENT_BRIEF_READY`** (04) | `STORYBOARD_READY` |
+| `design-asset-librarian` | 1 | manual · `STORYBOARD_READY` · `ASSET_CATALOG_REQUESTED` | `ASSET_REUSE_HIT`, `ASSET_REUSE_MISS` |
+| `design-production-engine-coordinator` | **2 + `requires_human_approval: true`** | manual · `ASSET_REUSE_MISS` · `GENERATION_REQUESTED` | `GENERATION_PLANNED`, `GENERATION_BLOCKED` |
+| `design-brand-environment-consistency-checker` | 2 | manual · `ASSET_GENERATED` · `BRAND_CHECK_REQUESTED` | `BRAND_CHECK_PASSED`, `BRAND_CHECK_FAILED` |
+| `design-canva-assembler` | 2 | manual · `BRAND_CHECK_PASSED` · `ASSET_REUSE_HIT` | `DELIVERABLE_ASSEMBLED`, `CANVA_STRUCTURE_FLAG` |
+| `design-inspiration-curator` | 1 | manual · `INSPIRATION_SHARED` | `INSPIRATION_FILED` |
+
+**The break that was fixed:** `design-storyboard-generator` **emitted nothing**. It could receive a Content brief and produce a storyboard, and the chain stopped dead — the other four agents had no event to hear. The only production routine in the agency could be fed and could start, but could not finish.
+
+**The reuse gate now sits before the credit spend.** `design-asset-librarian` runs on `STORYBOARD_READY` and only a `ASSET_REUSE_MISS` reaches the Production Engine. That ordering is economic, not cosmetic: a KIE.ai Nano Banana Pro image costs **18 credits** against the owner's real 80-credit balance (62 remaining), and OpenArt's Free-plan pool is **already exhausted at 0**. An `ASSET_REUSE_HIT` skips generation entirely and goes straight to the Canva Assembler — exactly the §4 workflow, now enforced by wiring rather than by memory.
+
+*Ordering note (§4 vs §12):* §4's Asset-reuse-check row reads "…if none, hands off to Storyboard Generator," implying the librarian runs **first**. §12's real automation design says the Notion trigger fires the **Storyboard Generator**. Wired per §12 (storyboard first, then the reuse gate before generation), because the storyboard is the durable artifact (§10) and the reuse question is about *generation inputs*, not about whether to storyboard. Both readings are defensible; this is the one that puts the gate where the money is. Flagged rather than silently reconciled.
+
+**`design-brand-environment-consistency-checker` can now actually consult its authority.** It checks against "Branding (12)'s confirmed Brand Genome" — and as of 2026-07-15 Branding can reason (`12_Branding/BRANDING_OS.md` §5, bois wired). Before that, this agent's stated source of truth was a department that could not answer.
+
 ## 6. Skill Library Index
 
 Unlike most other departments (where this section is an empty placeholder), Design's skill library is meant to be populated with a real, reusable **production-capability catalog** — generalized (parameterized by brand/client) rather than hardcoded to Arika, so the same catalog serves internal content production and future external client/sector design work. Full specification, including the proposed Design Language MCP/API surface (design tokens, motion curves, transition timing, UI/UX component patterns) these skills should query against, lives in the sibling spec file `19_Design/DESIGN_LANGUAGE_SYSTEM.md` — mirrors how Branding's 20-agent contracts live in `bois/agents/AGENT_SYSTEM.md`, cross-referenced from `BRANDING_OS.md` §5, rather than being duplicated inline.
@@ -77,6 +96,7 @@ Proposed initial skill catalog (documented here, not yet built): Storyboard Gene
 
 ## 8. Decision Log
 
+- **2026-07-15 — All 6 Design agents joined the runtime; the production chain is closed.** The 5 legacy specs (name + description only) gained frontmatter — triggers, output schemas, risk classes, event wiring — **bodies untouched**. **The break found:** `design-storyboard-generator` **emitted nothing**, so the only production routine in the agency could be fed a brief and produce a storyboard, then stop dead: the other 4 agents had no event to hear. `STORYBOARD_READY` closed it. **Risk classification is deliberate and follows this file's own §12 rule** (*"a human gate before any credit-spending step"*): `design-production-engine-coordinator` is **Class 2 with `requires_human_approval: true`**, so it plans the routing and the credit spend and **always stops for a human**, who runs the generation. Generation costs real money (18 KIE.ai credits/image against a real 62-credit balance; OpenArt at 0), so no agent spends it unattended. `design-canva-assembler` and the consistency checker are Class 2 (they touch the real Canva account and gate what ships); the librarian and curator are Class 1. **`GENERATION_PLANNED` and `DELIVERABLE_ASSEMBLED` intentionally have no agent listener** — their listener is a human (approve-and-generate; publish). Recorded in §12 so they read as gates, not broken links. — Claude Code (Opus 4.8)
 - 2026-07-01 — Design created as a new standalone department, numbered 19 (not 18 — `18_Cross_Domain_Synthesis` stays untouched as inactive reference archive) rather than folded into Branding (12), so brand strategy/identity (Branding) stays separate from asset production (Design). Confirmed by owner via explicit choice among 3 presented options.
 - 2026-07-01 — Canva confirmed as the department's Creative Assembly platform — already connected (MCP tools present), premium tier. The one genuinely live capability in this department's registry as of this entry.
 - 2026-07-01 — Design Language MCP/API and a real (non-placeholder) Skill Library Index confirmed as in-scope for this department, per explicit owner follow-up — not deferred to a later pass. Documented as proposed/not-built in §3, §6, and `DESIGN_LANGUAGE_SYSTEM.md`; building it is future work.
@@ -152,10 +172,45 @@ Filed under `Campaigns/` in the real Canva folder structure once generated — e
 
 ## 12. Triggers / Automation Hooks
 
-**Agent-to-agent handoffs are now real** (the agents exist and can be invoked directly), but nothing below is *automated* — there is no real trigger/automation platform wiring any of this to fire without a person or Claude Code invoking the next agent manually. Two different things, not to be conflated:
+**✅ UPDATED 2026-07-15 — the handoffs are now real *events*, not just cross-references.** The statement that stood here ("nothing below is *automated* — there is no real trigger/automation platform wiring any of this to fire without a person invoking the next agent manually") is **no longer true**. All 6 agents run on `arika-runtime`'s event bus (§5).
 
-- **Real, invokable today**: Storyboard Generator → Production Engine Coordinator → Brand & Environment Consistency Checker → Canva Assembler (§4) — each handoff is a real cross-reference between real subagent files, callable in sequence right now via the Agent tool.
-- **Still a placeholder, but now fully specified**: a Content brief reaching a real "ready for design" status in Notion automatically *triggering* the Storyboard Generator without anyone invoking it manually. This is designed in full — a durable, cron-based Anthropic cloud routine, with a human gate before any credit-spending step — as **Automation (16)'s "Creative Pipeline Automation (Design 19 trigger)"** (`16_Automation/AUTOMATION_OS.md` §3, §4, §12; real row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md`). Not yet live — blocked on 2 real prerequisites (`OWNER_INPUT_NEEDED.md` items 54-55): a Notion MCP connector for the cloud-routines system, and verification of the real Publishing Status field values.
+**The chain, end to end:**
+
+```
+content-brief-builder (04) ── CONTENT_BRIEF_READY ─→ design-storyboard-generator
+                                                              │ STORYBOARD_READY
+                                                              ▼
+                                                     design-asset-librarian
+                                                        │              │
+                                     ASSET_REUSE_MISS   │              │  ASSET_REUSE_HIT
+                                                        ▼              │   (skip generation)
+                                    design-production-engine-coordinator│
+                                                        │              │
+                                              GENERATION_PLANNED        │
+                                                        ║              │
+                                            ⟨ HUMAN GATE ⟩             │
+                                        approves + generates            │
+                                                        ║              │
+                                              ASSET_GENERATED           │
+                                                        ▼              │
+                              design-brand-environment-consistency-checker
+                                                        │              │
+                                          BRAND_CHECK_PASSED           │
+                                                        ▼              ▼
+                                                   design-canva-assembler
+                                                              │ DELIVERABLE_ASSEMBLED
+                                                        ⟨ HUMAN GATE ⟩
+                                                          publishes
+```
+
+**Two events deliberately have no agent listener. They are human gates, not broken links** — record them here so `operations-state-monitor` (08) doesn't flag them as breaks:
+
+1. **`GENERATION_PLANNED`** — the Production Engine Coordinator is **Class 2 with `requires_human_approval: true`**, so every run stops for sign-off *by construction*. It produces a routing plan and an estimated credit spend; **a human approves and runs the generation.** This implements this section's own original requirement — *"a human gate before any credit-spending step"* — as code rather than as intent. Generation costs real money: **18 KIE.ai credits per Nano Banana Pro image** against the owner's real balance (62 of 80 left), and **OpenArt's Free-plan pool is at 0**. An agent must never spend it unattended.
+2. **`DELIVERABLE_ASSEMBLED`** — publishing is a human act, consistent with Content (04)'s own publishing gate (*"a human publishes"*). Design's chain ends at a finished, filed, on-brand Canva deliverable.
+
+**Still not live — the Notion trigger.** A Content brief reaching "Ready for Design" in Notion firing the Storyboard Generator is designed in full as **Automation (16)'s "Creative Pipeline Automation (Design 19 trigger)"** (`16_Automation/AUTOMATION_OS.md` §3, §4, §12; real row in `AUTOMATION_APPROVAL_MATRIX.md`) and the cloud routine is **live and running hourly** (`trig_01WyyrXEkFZck1D49tm6BfKv`, `GO_LIVE_CHECKLIST.md` items 42–43). Its remaining gap is **supply, not wiring**: the Notion content-brief database is real, correctly built, and **empty** — see `04_Content/CONTENT_OS.md` §12. `content-brief-builder` (04) exists to fill it.
+
+**No approval-matrix row is needed yet**, because no Design agent takes an action: all 6 are advisory, and the two state-changing steps (spending credits, publishing) are human by design. Add a row when a Design agent is ever permitted to generate unattended — which, per this section, it should not be.
 
 ## 13. Existing OS Sub-Layer
 
@@ -192,8 +247,19 @@ No department-local raw drafts — this is a genuinely new department with no in
 - 2026-07-04 — **Real automation specified** for this department's §12 trigger (Notion status → Storyboard Generator) — cross-referenced from the new "Creative Pipeline Automation (Design 19 trigger)" built in `16_Automation/AUTOMATION_OS.md`. Not yet live — 2 owner-actionable prerequisites tracked as `OWNER_INPUT_NEEDED.md` items 54-55. — Claude Code (Sonnet 5)
 - 2026-07-07 — **Built `19_Design/design-plugin`, Design's first real code layer** (§13, previously "none yet"): a `KieClient` shared job-API client plus `NanoBananaProConnector` and `SeedanceConnector`, wrapping KIE.ai's `createTask`/`recordInfo` endpoints for the Nano Banana Pro image model and Seedance 1.5 Pro video model respectively. Owner supplied a real KIE.ai API key. 13 tests pass against a mocked KIE API (no real credits spent building/testing this). Registered in §3's Production Engine row and `13_Tech_Stack/TECHSTACK_OS.md` §3 as a second image/video path alongside OpenArt — not a replacement, since OpenArt still covers a much broader model catalog in one account. — Claude Code (Sonnet 5)
 - 2026-07-07 — **Example Imagery Brief (§10) fully closed** — the 2 scenes still open since 2026-07-04 (Insights hub, Solutions hero) generated via KIE.ai Nano Banana Pro (direct job-API call, not the design-plugin package invoked at runtime), both clean on the first attempt, 18 credits each. Downloaded, visually verified, and wired into `20_Experience_Engineering/arika-website` (required adding an optional `image` prop to that project's hand-built `PageHeader` component). All 5 scenes in the original brief are now real, generated, and live — see `20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md` §6, §9 for the website-side record. — Claude Code (Sonnet 5)
+- 2026-07-15 — **All 6 agents live on `arika-runtime`; the creative production chain closed end-to-end.** Diagnosis first: 5 of 6 were quarantined legacy specs (name + description only) — real, well-written, invokable by hand, invisible to the runtime. The structural finding: **`design-storyboard-generator` emitted nothing**, so the agency's only production routine could receive a Content brief and produce a storyboard and then stop — the remaining 4 agents had no event to hear. Added frontmatter to all 5 (**bodies untouched**) and `emits: [STORYBOARD_READY]` to the sixth, closing: `CONTENT_BRIEF_READY` (04) → storyboard → **reuse gate** → production plan → ⟨human⟩ → brand/AI-artifact check → Canva assembly. **Put the reuse gate before the credit spend** — `ASSET_REUSE_HIT` skips generation entirely, which matters because OpenArt is at **0 credits** and KIE.ai charges **18 credits/image** against a real 62-credit balance. Honored §12's own rule as code: the Production Engine Coordinator is Class 2 with `requires_human_approval: true` and **always stops before spending**. Flagged a real §4-vs-§12 ordering ambiguity (librarian-first vs storyboard-first) rather than silently reconciling it. Corrected §16, whose "no agent roster exists yet" text had been stale since §5 was built on 2026-07-04. `design-brand-environment-consistency-checker` can now actually consult Branding (12), which only became able to reason on 2026-07-15. Verified: `arika list` → **69 agents**, `npm test` → 9/9, every Design emit has a listener except the two intentional human gates. — Claude Code (Opus 4.8)
 - 2026-07-01 — Department created. Seeded from an owner planning session: owner-supplied moodboard direction and detailed creative-infrastructure vision (asset libraries, production engine, Canva-as-assembly, campaign-first folder structure, Creative Digital Twin environment doctrine, Design Language MCP/API + skill library). Numbered 19 (not 18, which stays the inactive Cross-Domain Synthesis archive). Populated Capability Registry, Workflow Index, Standards & SOPs Index. Canva confirmed as the one genuinely live capability. Added to `GLOBAL_OS.md` §4 Department Index and `00_Agency_Governance/OWNER_INPUT_NEEDED.md`/`GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 5)
 
 ## 16. Memory / Feedback Loop / Cadence
 
-*(placeholder — structure only, no agent roster exists yet to generate real memory/feedback entries; see §5.)* Once this department has a real or code-based agent roster (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16), this section should define: **Memory** (where Decision/Learning/Prompt-Evolution logs live), **Feedback Loop** (what happens when a §7 KPI misses threshold), and **Cadence** (which of the 7 Cognitive Calendars — `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4 — this department's workflows run against, and how often).
+*(This section's old text — "no agent roster exists yet" — was stale from the day §5 was built on 2026-07-04; corrected 2026-07-15.)*
+
+**Memory.** All 6 agents append to `19_Design/_memory/runtime.jsonl` in the shared bois-compatible envelope (`arika-runtime/DESIGN.md`). This is the only record of what Design agents actually did, and the only evidence `operations-state-monitor` (08) can use to mark Design `live` rather than `documented`.
+
+**Feedback Loop.** §7's KPIs are still a placeholder (no production volume to measure), but two real loops run today:
+- **The AI-artifact gate.** `design-brand-environment-consistency-checker` enforces §10's hard bar — *"no visible AI artifacts — human-realistic production"* — as a `fail`, not a note. This has caught a real defect once already: the garbled wall-sign text in the first Revenue Operations Center generation (§10, 2026-07-04), regenerated rather than shipped. That precedent is why the check is a gate and not a suggestion.
+- **The credit gate.** `design-production-engine-coordinator` reports `estimated_credit_spend` and `vendor_status` every run and stops for approval. With OpenArt at **0** and KIE.ai at **62 of 80**, a wasted generation is a real, unrecoverable cost — the reuse gate (`design-asset-librarian`) exists to prevent it, and `ASSET_REUSE_HIT` skips generation entirely.
+
+**Cadence.** Event-driven, not calendar-driven — Design produces when Content briefs it (`CONTENT_BRIEF_READY`) or when a human requests an asset. No cron. It maps loosely to the **Opportunity Calendar** (per-campaign) rather than a fixed rhythm, and it is deliberately **not** on the Revenue Calendar: Design produces the assets revenue depends on, but books none itself.
+
+**Honest state.** Design has produced **5 real images**, all live on the Arika website (§10) — the most real production output of any department. But that was done by direct vendor calls, not by running this chain end to end. **The chain as wired has never executed a full pass**, because its upstream (the Notion brief database) is empty. Nothing here is evidence of a working pipeline; it is a wired one.

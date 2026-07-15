@@ -5,6 +5,8 @@ from typing import Dict, Iterable, List
 from ..models import DynamicBrandContext, GovernanceFinding
 
 
+# Governance-mandatory fields. Every one of these MUST be present in agent output
+# before client delivery. This list is validated by `validate_output` below.
 MANDATORY_OUTPUT_FIELDS = [
     "strategic_reasoning",
     "emotional_reasoning",
@@ -15,6 +17,20 @@ MANDATORY_OUTPUT_FIELDS = [
     "positioning_rationale",
     "operational_implications",
 ]
+
+# Fields that are not governance-mandatory but have real downstream consumers:
+# `validation_risks` -> AgentResult.validation_notes, `memory_updates` -> JsonMemoryStore.
+SUPPLEMENTARY_OUTPUT_FIELDS = [
+    "validation_risks",
+    "memory_updates",
+]
+
+# The single canonical contract every producer must satisfy. Import this rather than
+# re-listing fields: three separate lists previously diverged (agent_prompt asked for 7,
+# build_agent_tasks expected 7, governance required 8), which meant emotional_reasoning,
+# visual_reasoning, and positioning_rationale were never requested and would have failed
+# governance on every run once synthesis was wired.
+AGENT_OUTPUT_CONTRACT = MANDATORY_OUTPUT_FIELDS + SUPPLEMENTARY_OUTPUT_FIELDS
 
 
 class BrandGovernancePolicy:

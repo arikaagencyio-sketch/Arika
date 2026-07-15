@@ -46,11 +46,33 @@ All "grounded" = traceable to this department's own raw drafts per the spot-chec
 
 ## 5. Agent Roster
 
-**11 Tier-0 "chief" agents**, each with its own Agent Card in `Elite_Marketing_Agentic_OS/Agent_Cards/` and matching the agent catalog YAML exactly: Marketing OS Orchestrator (command/governance) · Market Intelligence Lead · Chief Marketing Strategist · Creative Director Agent · Content Strategy Director · Demand Generation Strategist · SEO AEO GEO Architect · Funnel Architect · Lifecycle Marketing Architect · Attribution and Modeling Architect · Marketing Ops Governor.
+**11 Tier-0 "chief" agents** + ~55 named subagents, defined in `Elite_Marketing_Agentic_OS/` (Agent Cards + `02_Agent_Catalog_and_Subagents.yaml`). This section is the summary index **+ runtime migration status**.
 
-Plus **~45 named sub-agents** in the YAML catalog without individual cards (e.g. Psychographic Strategist, Competitive Intelligence Strategist, Pricing Psychology Agent, Search Intent Mining Agent, Lead Scoring Intelligence Lead — full list in `02_Agent_Catalog_and_Subagents.yaml`).
+**Quality note (still true):** the 11 cards are structurally identical templates (same input/output contract + runtime-prompt wrapper, mission/KPIs/workflows swapped per agent) and — unlike Sales' Agent Registry — carry **no source-paragraph citations**. Grounded in this department's own drafts, but templated, not corpus-verified. The migrated specs flag this: they instruct each agent to mark assumptions and never present a templated figure as measured.
 
-**Quality note:** all 11 Agent Cards are structurally identical templates (same input/output contract, same runtime-prompt wrapper) with only mission/KPIs/workflows swapped per agent — a templated generation pass, not individually hand-crafted. Contrast with Sales's Agent Registry, which has per-agent source-paragraph citations; this roster does not.
+**Runtime status (2026-07-14).** Triaged into the Arika Runtime — 9 Marketing-core agents wired, 2 held for their real departments.
+
+**🟢 Live in the Arika Runtime — 9 Marketing-core agents** (`.claude/agents/marketing-*.md`, advisory-first, memory → `03_Marketing/_memory/runtime.jsonl`; output = the cards' 7-part contract — situation / decision / directives / kpi_forecast / risks / escalation / memory):
+
+| Chief agent | Runtime spec | Class |
+|---|---|---|
+| Marketing OS Orchestrator | `marketing-orchestrator` | 1 |
+| Market Intelligence Lead | `marketing-market-intelligence` | 1 |
+| Chief Marketing Strategist | `marketing-chief-strategist` | 1 |
+| Demand Generation Strategist | `marketing-demand-generation` | 2 |
+| SEO / AEO / GEO Architect | `marketing-seo-aeo-geo` | 1 |
+| Funnel Architect | `marketing-funnel-architect` | 1 |
+| Lifecycle Marketing Architect | `marketing-lifecycle` | 2 |
+| Attribution & Modeling Architect | `marketing-attribution-modeling` | 1 |
+| Marketing Ops Governor | `marketing-ops-governor` | 1 |
+
+**Cross-department event chain now wired end-to-end:** `marketing-funnel-architect` emits `LEAD_CREATED` → `sales-lead-qualification` (05) already listens; `sales-execution-closing`'s `DEAL_CLOSED_WON` → `marketing-lifecycle` picks up the post-conversion journey. Marketing ↔ Sales are connected.
+
+**🟠 Held for their real departments — 2 cross-dept agents** (mandate belongs elsewhere; cards preserved, not duplicated):
+- **Creative Director Agent** → Design (19) + Experience Engineering (20) already run creative-director agents (asset production + interactive experiences); Marketing hands campaign creative to them rather than running a third.
+- **Content Strategy Director** → Content (04) is its own department.
+
+The ~55 subagents remain as reasoning lenses inside each chief's system prompt, not separate runtime agents. Boundary notes baked into the specs: Chief Strategist's offer/pricing subagents defer to Offer (02); Market Intelligence is scoped to campaign/demand intelligence (Sector 01 owns foundational sector truth); SEO/AEO/GEO coordinates with EE (20)'s web-build discoverability pillar; Lifecycle coordinates with Client Success (07) on delivery.
 
 ## 6. Skill Library Index
 
@@ -149,10 +171,11 @@ Every platform is a **distribution endpoint**, not a separate content strategy �
 - 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence per the go-live plan in `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 5)
 - 2026-07-01 — Cross-linked §12's aspirational MCP connector blueprint to the new Design (19) department (Creative Production layer → Canva/Production Engine) and Automation (16)'s new Engagement Layer (Distribution layer → ManyChat/DM automation). Status unchanged — still none of the 7 layers are actually in use. — Claude Code (Sonnet 5)
 - 2026-07-04 — **Added Social Ecosystem platform-role model** (§10, §8) for the new Arika website project (`20_Experience_Engineering/ARIKA_WEBSITE_PROJECT.md`) — platform-role/KPI table, repurposing flow, and social conversion path, reconciled against Content (04)'s existing pillar/house/Story Architecture structures. Zero social accounts exist yet (`GO_LIVE_CHECKLIST.md` item 23) — flagged explicitly as planning-only. — Claude Code (Sonnet 5)
+- 2026-07-14 — **Marketing got a live execution layer — 9 of 11 chief agents wired into the Arika Runtime.** Triaged the roster (not migrated wholesale): authored the **9 Marketing-core chiefs** as advisory-first `.claude/agents/marketing-*.md` specs, each grounded in its Agent Card + `02_Agent_Catalog_and_Subagents.yaml` (Orchestrator, Market Intelligence, Chief Strategist, Demand Generation, SEO/AEO/GEO, Funnel Architect, Lifecycle, Attribution & Modeling, Ops Governor), using the cards' 7-part output contract as the structured schema. **Wired the Marketing↔Sales chain**: `marketing-funnel-architect` emits `LEAD_CREATED` (→ `sales-lead-qualification`); `sales-execution-closing`'s `DEAL_CLOSED_WON` → `marketing-lifecycle`. **Held 2 cross-dept agents** — Creative Director (→ Design 19 / EE 20, which already run creative directors) and Content Strategy Director (→ Content 04) — rather than duplicating. The ~55 subagents stay as reasoning lenses inside each chief's prompt. Baked in boundary notes (offer/pricing → Offer 02; foundational market truth → Sector 01; web-build discoverability → EE 20; delivery → Client Success 07) and the standing honesty caveat that these specs are templated/uncited. Advisory-only; Class 2 on Demand Gen + Lifecycle (spend/client-facing). §5 Agent Roster updated with the migration-status map. 30 agents now register in `arika list`; `npm test` 8/8; live model calls pending `ANTHROPIC_API_KEY`. — Claude Code (Opus 4.8)
 
 ## 16. Memory / Feedback Loop / Cadence
 
-**Memory**: 5-layer "Memory and Learning Flywheel" (Doctrine/Market/Experiment/Campaign/Incident, §10) with an Observe→Classify→Hypothesize→Test→Decide→Encode→Reuse cycle — a designed pattern, not yet instantiated as real files (unlike Sales' `06_AI_Memory_Logs/`, `05_Sales/SALES_OS.md` §16). Gap: recommend mirroring Sales' Decision/Learning/Prompt-Evolution log structure under a new `Elite_Marketing_Agentic_OS/06_AI_Memory_Logs/` once this roster is wired to Claude.
+**Memory**: 5-layer "Memory and Learning Flywheel" (Doctrine/Market/Experiment/Campaign/Incident, §10) with an Observe→Classify→Hypothesize→Test→Decide→Encode→Reuse cycle — a designed pattern, not yet instantiated as real files (unlike Sales' `06_AI_Memory_Logs/`, `05_Sales/SALES_OS.md` §16). Gap: recommend mirroring Sales' Decision/Learning/Prompt-Evolution log structure under a new `Elite_Marketing_Agentic_OS/06_AI_Memory_Logs/` once this roster is wired to Claude. **Update 2026-07-14:** the machine-memory substrate now exists — the 9 wired chief agents append JSONL to `03_Marketing/_memory/runtime.jsonl` (the runtime's bois-compatible envelope) on every run; distill the 5-layer Flywheel rollups from that stream as real runs accumulate.
 
 **Feedback Loop**: Already documented and real as a workflow — Workflow C, the Weekly Optimization Cycle (§4: review→diagnose→hypothesize→test→encode), is the feedback loop that fires when a rollout-gate KPI misses (§7: event tracking integrity <90%, automation uptime <95%, funnel stage improvement <15%). Output should be encoded into the Memory Flywheel's Experiment/Campaign layers once real logs exist.
 

@@ -4,8 +4,9 @@ import hashlib
 from datetime import datetime
 from typing import Dict, Iterable, List
 
+from ..governance.policy import AGENT_OUTPUT_CONTRACT
 from ..memory.store import JsonMemoryStore
-from ..models import AgentTask, ClientObject, DynamicBrandContext
+from ..models import AgentResult, AgentTask, ClientObject, DynamicBrandContext
 from ..retrieval.gated_retriever import REQUIRED_RETRIEVAL_SOURCES, RetrievalGate
 from .registry import AGENT_REGISTRY, BASE_AGENT_SEQUENCE, TRIGGER_RULES
 
@@ -94,15 +95,7 @@ class BrandCognitiveOrchestrator:
                         "Flag governance risk instead of smoothing over contradictions",
                     ],
                     required_inputs=list(retrieval_sources),
-                    expected_outputs=[
-                        "strategic_reasoning",
-                        "psychological_reasoning",
-                        "symbolic_reasoning",
-                        "cultural_reasoning",
-                        "operational_implications",
-                        "validation_risks",
-                        "memory_updates",
-                    ],
+                    expected_outputs=list(AGENT_OUTPUT_CONTRACT),
                     context_filters={
                         "client_id": context.client_id,
                         "sector": context.sector,
@@ -113,6 +106,53 @@ class BrandCognitiveOrchestrator:
                 )
             )
         return tasks
+
+    def synthesize(
+        self,
+        context: DynamicBrandContext,
+        runtime: "BrandAgentRuntime | None" = None,
+    ) -> List[AgentResult]:
+        """Run the `output_synthesis` stage — the reasoning step.
+
+        This closes the gap between `agent_activation` and `governance_validation` in
+        EXECUTION_STAGES. Requires ANTHROPIC_API_KEY; every other stage does not.
+
+        Results are persisted to the `governance` memory stream so that what each agent
+        actually reasoned is durable, per the append-only memory doctrine.
+        """
+        from ..synthesis.engine import BrandAgentRuntime  # local import keeps orchestration importable without the SDK
+
+        runtime = runtime or BrandAgentRuntime()
+        tasks = self.build_agent_tasks(context)
+        results = runtime.run_all(tasks, context)
+
+        for result in results:
+            self.memory_store.append_event(
+                client_id=context.client_id,
+                stream="governance",
+                event_type="agent_output_synthesized",
+                payload={
+                    "context_id": context.context_id,
+                    "task_id": result.task_id,
+                    "agent_id": result.agent_id,
+                    "status": result.status,
+                    "confidence": result.confidence,
+                    "validation_notes": result.validation_notes,
+                },
+            )
+            # Durable brand cognition: the agent's own memory_updates go to the client stream.
+            for update in result.outputs.get("memory_updates", []) or []:
+                self.memory_store.append_event(
+                    client_id=context.client_id,
+                    stream="client",
+                    event_type="agent_memory_update",
+                    payload={"agent_id": result.agent_id, "update": str(update)},
+                )
+
+        context.memory_updates.extend(
+            {"agent_id": r.agent_id, "updates": r.outputs.get("memory_updates", [])} for r in results
+        )
+        return results
 
     def persist_context(self, context: DynamicBrandContext) -> None:
         self.memory_store.append_event(

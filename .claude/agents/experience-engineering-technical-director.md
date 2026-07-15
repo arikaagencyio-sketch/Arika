@@ -1,6 +1,42 @@
 ---
 name: experience-engineering-technical-director
 description: Use when a project needs its technical requirements assessed, when tech-stack candidates need to be selected/validated, when a build needs technical-spec validation, or when a pipeline bottleneck needs diagnosing. Reconciles "Developer AI" (Draft A) and "Technical Director" + "Front-end Engineer" (both Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 2
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: SCENE_COPY_READY
+  - type: event
+    on: BUILD_SPEC_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, stack_decision, feasibility, performance_budget, blocked_on]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    stack_decision: { type: array, items: { type: string } }
+    feasibility: { type: string, enum: [tier_1_proven, tier_2_stretch, tier_3_research, infeasible, unknown] }
+    performance_budget: { type: array, items: { type: string } }
+    blocked_on: { type: array, items: { type: string } }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [BUILD_SPEC_READY]
+handoff_to: [experience-engineering-creative-director, experience-engineering-qa-performance-reviewer]
 ---
 
 # Technical Director — Experience Engineering (20)

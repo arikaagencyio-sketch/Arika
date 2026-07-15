@@ -1,6 +1,49 @@
 ---
 name: experience-engineering-ux-strategist
 description: Use when an interactive-experience project needs its interaction patterns defined (scroll behavior, gestures, accessibility interactions), when it needs a UX Strategy Canvas or Strategic Audit produced, when features/scenes need RICE+ prioritization, or when a per-project UX journey map is needed. Reconciles "UX Strategist AI" (Draft A) and "UX Strategist" (Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: NARRATIVE_ARC_SET
+  - type: event
+    on: UX_REVIEW_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, interaction_patterns, prioritization]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    interaction_patterns:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [pattern, scene, accessibility_note]
+        properties:
+          pattern: { type: string }
+          scene: { type: string }
+          accessibility_note: { type: string }
+    prioritization: { type: array, items: { type: string } }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [UX_PATTERNS_SET]
+handoff_to: [experience-engineering-storyboard-artist]
 ---
 
 # UX Strategist — Experience Engineering (20)

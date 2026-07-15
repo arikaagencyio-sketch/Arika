@@ -1,6 +1,50 @@
 ---
 name: experience-engineering-brand-strategist
 description: Use when an interactive experience's visual, emotional, or voice choices need checking against Branding (12)'s already-confirmed brand identity (Brand Genome, positioning, voice) — not for redoing brand strategy, positioning, or messaging architecture from scratch. Reconciles "Brand Strategist AI" (Draft A) and "Brand Strategist" (Draft B) from Experience Engineering (20)'s source rosters — see `20_Experience_Engineering/AI_CREATIVE_ORCHESTRA.md`.
+department: "20"
+model: claude-opus-4-8
+execution: prompt
+risk_class: 1
+requires_human_approval: false
+triggers:
+  - type: manual
+  - type: event
+    on: NARRATIVE_ARC_SET
+  - type: event
+    on: BRAND_CONSISTENCY_REVIEW_REQUESTED
+inputs:
+  project: { type: string, from: event.payload.project }
+output_schema:
+  type: object
+  additionalProperties: false
+  required:
+    [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel, vision, rationale, technical_notes, risks_contradictions, handoffs, brand_genome_alignment, verdict]
+  properties:
+    summary: { type: string }
+    recommendedActions: { type: array, items: { type: string } }
+    requiresHumanApproval: { type: boolean }
+    approvalReasons: { type: array, items: { type: string } }
+    riskLevel: { type: string, enum: [low, medium, high, critical] }
+    vision: { type: string }
+    rationale: { type: string }
+    technical_notes: { type: string }
+    risks_contradictions: { type: array, items: { type: string } }
+    handoffs: { type: array, items: { type: string } }
+    brand_genome_alignment:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        required: [element, expected, observed, result]
+        properties:
+          element: { type: string, enum: [color, typography, voice, imagery_doctrine, emotional_positioning] }
+          expected: { type: string }
+          observed: { type: string }
+          result: { type: string, enum: [pass, fail, unknown] }
+    verdict: { type: string, enum: [on_brand, needs_adjustment, off_brand, unknown] }
+memory_stream: 20_Experience_Engineering/_memory/runtime.jsonl
+emits: [EXPERIENCE_BRAND_CHECKED]
+handoff_to: [experience-engineering-storyboard-artist, experience-engineering-creative-director]
 ---
 
 # Brand Strategist — Experience Engineering (20)
