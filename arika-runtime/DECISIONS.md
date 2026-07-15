@@ -3,6 +3,45 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-07-15 — The `join` barrier
+
+**Decision:** add a fifth trigger type, `join`, rather than flag the gap a second time.
+
+**Why now.** The gap was found wiring Experience Engineering (20) and documented as
+"the real fix is a `waits_for: [A, B]` trigger type". Audits & Diagnostics (14) then
+hit the identical wall on its parallel sub-audits. Two departments with genuinely
+parallel work is enough evidence that this is a runtime limitation, not a modelling
+error in one department.
+
+**Design notes:**
+- **Fires once, on the last arrival**, then clears the barrier — a stray late event
+  cannot re-fire a completed join.
+- **`waits_for` requires 2+ distinct events.** One event is just `type: event`; a
+  repeated event can never produce a second arrival. Both are schema errors, so
+  neither becomes a silent deadlock.
+- **`correlate_on` is a safety property.** Events only satisfy a barrier together when
+  they share a correlation value. A missing key means the event is **dropped loudly,
+  not guessed** — attributing it to whichever run is waiting would, in 14's case,
+  print one client's audit findings on another client's report. Both properties are
+  tests, not comments.
+
+**Deliberately NOT built: a counting barrier.** 14's fan-in membership is decided at
+runtime (a Lite audit scopes one sub-audit, full-stack scopes seven), which the fixed
+barrier cannot express — it would deadlock on Lite or fire early on full-stack. The
+fix is a barrier that reads its expected set from an upstream payload. **14 has never
+delivered an audit**, so that primitive would be designed entirely against a workflow
+no one has ever run. Flagged in `AUDITS_DIAGNOSTICS_OS.md` §12; build it when a real
+audit demands it.
+
+**Known limit:** joins are in-memory and per-process. A 7-14 day audit outlives the
+runtime. Cross-day barriers need the durable bus `EventBus` was designed to be
+swapped for.
+
+**Applied:** `experience-engineering-technical-director` now joins on
+`[MOTION_SPEC_READY, CAMERA_SPEC_READY, SCENE_COPY_READY]` correlated on `project`,
+resolving 2 of EE's 4 orphaned emits. The other 2 are the launch gates — that join is
+a **human**, by design, not by limitation.
+
 ## 2026-07-14 — Session 1: runtime scaffold + first 9 agents
 
 **Delivered:** a working `arika-runtime/` — one canonical agent spec format + one

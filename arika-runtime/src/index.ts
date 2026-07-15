@@ -4,6 +4,7 @@ import { loadAgents } from "./agent-registry.js";
 import { runAgent } from "./executor.js";
 import { packageRoot } from "./paths.js";
 import { eventBus } from "./triggers/event-bus.js";
+import { JoinGate } from "./triggers/join-gate.js";
 import { registerSchedules } from "./triggers/scheduler.js";
 import { startWebhookServer } from "./triggers/webhook-server.js";
 
@@ -29,6 +30,34 @@ async function main(): Promise<void> {
     }
   }
 
+  // Wire join triggers → executor. Unlike an event binding, this fires once the
+  // LAST awaited event lands, not once per arrival.
+  const joinGate = new JoinGate(eventBus);
+  let joinBindings = 0;
+  for (const spec of agents.values()) {
+    for (const t of spec.triggers) {
+      if (t.type !== "join" || !t.waits_for) continue;
+      joinBindings += 1;
+      joinGate.register({
+        name: spec.name,
+        waitsFor: t.waits_for,
+        correlateOn: t.correlate_on,
+        onComplete: async (joined) => {
+          try {
+            const result = await runAgent(spec, {
+              trigger: "join",
+              eventType: t.waits_for!.join("+"),
+              input: joined.payload,
+            });
+            console.log(`[join ${joined.key}] ${spec.name} → approval:${result.requiresHumanApproval}`);
+          } catch (err) {
+            console.error(`[join ${joined.key}] ${spec.name} failed: ${(err as Error).message}`);
+          }
+        },
+      });
+    }
+  }
+
   // Wire schedule triggers → executor.
   const jobs = registerSchedules([...agents.values()], (spec) => {
     runAgent(spec, { trigger: "schedule" }).then(
@@ -44,6 +73,7 @@ async function main(): Promise<void> {
   console.log("  Arika Runtime — online");
   console.log(`  agents:     ${agents.size} registered`);
   console.log(`  events:     ${eventBindings} event binding(s) on the in-process bus`);
+  console.log(`  joins:      ${joinBindings} barrier(s) — fire once all awaited events land (in-memory)`);
   console.log(`  scheduled:  ${jobs.length} cron trigger(s)`);
   for (const j of jobs) console.log(`               • ${j.agent}  (${j.cron})`);
   console.log(`  webhook:    POST http://localhost:${port}/webhook/:source`);

@@ -17,22 +17,71 @@
 
 **Content seeded from Offer's catalog, not yet operationally run.** Full offer engineering exists (`02_Offer/OEOS - Audits and Diagnostics Division - Revenue Infrastructure Audit (Claude-Synthesized). Draft 39.md`) — Phase 1 (offer identity) and Phase 2 (positioning) are real, owner-sourced (from Draft 28); Phases 3-12 are Claude-synthesized, owner-approved as-is 2026-06-30. No real audits have been delivered yet — this department has no operating history of its own.
 
+**Agents built 2026-07-15 (6, see §5) — the delivery chain is wired, not proven.** Every honest caveat above still holds and is now encoded in the agents themselves: no audit has ever been delivered, so there are no benchmarks, no calibrated thresholds, no house report template, and no conversion data. The chain has never run end-to-end. **`AUDIT_ENGAGEMENT_SIGNED` has no emitter** — an audit engagement is signed by a human, and nothing upstream publishes the event, so today the chain starts with a manual run.
+
+**The Gateway claim is partly unbacked.** This department is described as "the agency's Gateway," but Draft 28 names **five** Gateway offers and this department engineers **one** — see §3.
+
 ## 3. Capability Registry
 
 | Capability | Description | Status |
 |---|---|---|
-| Revenue Infrastructure Audit | Fast (7-14 days), fixed-fee, 7-sub-audit diagnostic (funnel, sales, CRM, automation, acquisition, team, offer) | Offer engineered (`Draft 39`), not yet delivered |
-| Sub-audit modularity | Each of the 7 sub-audits is itself a discrete, potentially standalone diagnostic — the most modular backbone of any offer in the catalog | Designed, not yet productized separately |
+| Revenue Infrastructure Audit | Fast (7-14 days), fixed-fee, 7-sub-audit diagnostic (funnel, sales, CRM, automation, acquisition, team, offer) | Offer engineered (`Draft 39`); chain wired 2026-07-15 (§5), **not yet delivered** |
+| Sub-audit modularity | Each of the 7 sub-audits is itself a discrete, potentially standalone diagnostic — the most modular backbone of any offer in the catalog | Productized as the **Lite tier** — see the Gateway reconciliation below |
+
+### The Gateway Offer count — reconciled 2026-07-15 (owner-decided)
+
+`Agency Pricing Architure. Draft 28.md` names **five** Gateway offers; this department engineers **one**. Resolved from source where the source allows, flagged where it doesn't:
+
+| Draft 28 Gateway offer | Stated goal | Resolution |
+|---|---|---|
+| Revenue Audit | Diagnose pain | **Offer #10, this department.** Built. |
+| Funnel Audit | Show missed revenue | **Not a separate offer — it is offer #10's Lite tier.** `Draft 39` Phase 11 defines Lite as "a single targeted sub-audit (*e.g. funnel-only*)". Source-confirmed, not asserted. Draft 28's Ideal Ascension Model calls the same thing "Funnel **Diagnostic**" — a naming inconsistency within one document, same product. |
+| AI Opportunity Assessment | Introduce transformation | **AI Enablement (17)** by division (offer #11's department). Unbuilt — 17 has an OS file and no agents. |
+| Growth Workshop | Strategic authority | **Consulting & Advisory (15)** by division (offer #9's department). Unbuilt — 15 has an OS file and no agents. |
+| Sales Call Review | Demonstrate expertise | **⚠️ Genuinely unbuilt and unassigned.** Narrower than offer #10's `sales` sub-audit — a call review is not a sales-process audit — so Lite doesn't absorb it the way it absorbs Funnel Audit. Not OEOS-engineered, no Phase 1 seed data in Draft 28 beyond the name and goal. **Owner decision: is this a real micro-offer (14 or 05), or a name Draft 28 listed without intending a product?** |
+
+**Consequence:** the "agency's Gateway" is, today, **one engineered offer of five named**, and three of the four gaps sit in departments that don't exist yet as agents (15, 17) or aren't assigned (Sales Call Review). Stage 1 of the ascension model is thinner than the pricing architecture implies.
 
 ## 4. Workflow Index
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
-| Revenue Infrastructure Audit delivery | Signed audit engagement | Data/Access Collection (Day 1-3) → Parallel Sub-Audit Analysis (Day 3-10) → Synthesis & Quantification (Day 10-12) → Report Production (Day 12-13) → Delivery & Review Call (Day 14) | Findings report + ascension-path recommendation | Mary Thuo | `Draft 39` (synthesized) |
+| Revenue Infrastructure Audit delivery | Signed audit engagement (**human — no emitter**, see §12) | Scoping → Data/Access Collection (Day 1-3) → Parallel Sub-Audit Analysis (Day 3-10) → Synthesis & Quantification (Day 10-12) → Report Production (Day 12-13) → Delivery & Review Call (Day 14) | Findings report + ascension-path recommendation | Mary Thuo | `Draft 39` (synthesized) |
 
 ## 5. Agent Roster
 
-*(placeholder — the offer-engineering file uses functional role labels — Client Partner, Strategy Lead, Audit Analysts, QA Specialist — describing AI-assisted execution functions the owner currently performs solo, not real hires. See `11_HR_People_Ops/HR_OS.md` for when real staffing becomes relevant.)*
+**6 agents, built 2026-07-15.** They map onto `Draft 39` Phase 5's real functional roles (Client Partner, Strategy Lead, Audit Analysts, QA Specialist) — AI-assisted execution functions the owner currently performs solo, **not hires**. See `11_HR_People_Ops/HR_OS.md` for when real staffing becomes relevant.
+
+| Agent | Class | Trigger → emits | Role |
+|---|---|---|---|
+| `audits-scoping` | 2 | `AUDIT_ENGAGEMENT_SIGNED` → `AUDIT_SCOPED` | Which sub-audits, which tier, fixed fee + 7-14 day commitment |
+| `audits-data-access-gate` | 1 | `AUDIT_SCOPED` → `AUDIT_DATA_READY` / `AUDIT_DATA_INCOMPLETE` | Phase 10's data-completeness gate; sets `quantification_depth` |
+| `audits-subaudit-analyst` | 1 | `AUDIT_DATA_READY` → `SUBAUDIT_COMPLETE` | Runs **one** sub-audit against the owning department's standard |
+| `audits-quantification` | 2 **+ human-gated** | `SUBAUDIT_COMPLETE` → `FINDINGS_QUANTIFIED` | The immutable quantification rule + Phase 10's second-analyst spot-check |
+| `audits-report-producer` | **3** | `FINDINGS_QUANTIFIED` → `AUDIT_REPORT_READY` | The only required deliverable + the executive-clarity gate |
+| `audits-ascension-recommender` | 2 | `AUDIT_REPORT_READY` → `ASCENSION_RECOMMENDED` / `NO_ASCENSION_PATH` | Stage 1 → Stage 2, or honestly no path |
+
+**`audits-report-producer` is Class 3** — client-facing *and* money-facing (a paid deliverable carrying financial claims), matching the precedent set by `client-success-offboarding`. Per the Constitution, human sign-off is required at Class 3+ **with no exceptions carved out by convenience or urgency** — the fixed timeline is not a reason to skip it. `audits-quantification` is Class 2 but carries `requires_human_approval: true` because `Draft 39` Phase 10 *itself* requires a second analyst to review every dollar estimate.
+
+### The audit lens vs. the standard — the department's defining rule
+
+Each of the 7 sub-audits names an area **another department already owns the standard for**. This department owns the **audit lens**; it does not own — or restate — the standard:
+
+| Sub-audit | Standard set by | Live agents there? |
+|---|---|---|
+| `funnel` | Marketing (03) | ✅ `marketing-funnel-architect` |
+| `sales` | Sales (05) | ✅ `sales-revenue-operations`, `sales-execution-closing` |
+| `crm` | ClientPartner (06) + Sales (05) | ✅ `clientpartner-crm-architect` |
+| `automation` | Automation (16) | ❌ **OS file only, no agents** |
+| `acquisition` | ClientPartner (06) | ✅ **delegated — see below** |
+| `team` | HR (11) | ❌ **OS file only, no agents** |
+| `offer` | Offer (02) | ✅ `offer-oeos-engineer`, `offer-pricing-floor-analyst` |
+
+**Note the asymmetry:** those agents *design*; they are not auditors. Only 06's is a diagnostic. So the sub-audits are not "already covered" — the owning departments hold the standard an audit judges against, and turning that into "here is what's broken in *this* client's" is 14's job.
+
+**`acquisition` is delegated, not duplicated.** `clientpartner-acquisition-diagnostic` (06) **already is** this sub-audit — it audits a client's real acquisition system with a 12-input intake, a 5-control-point friction diagnosis, and the client-vs-partner separation check. `audits-subaudit-analyst` sets `delegated_to: clientpartner-acquisition-diagnostic` and carries its output through. Two diagnostics of the same thing would drift, and the client would be shown both.
+
+**`automation` and `team` rest on thinner ground than the other five** — their departments have no agents, so there is less of a standard to judge against. The agent reports this in `out_of_lens` rather than inventing best practice. This is a real hole in the Gateway Offer, not a documentation gap.
 
 ## 6. Skill Library Index
 
@@ -66,11 +115,23 @@ Full offer-engineering detail (backbone systems, immutable components, QA gates,
 
 ## 12. Triggers / Automation Hooks
 
-*(placeholder — structure only)*
+The chain runs on `arika-runtime` (`GLOBAL_OS.md` §5). Six agents, wired manual + event.
+
+**Known gaps — flagged, not worked around:**
+
+1. **`AUDIT_ENGAGEMENT_SIGNED` has no emitter.** An engagement is signed by a human, and no agent publishes the event. The chain starts with a manual `arika run audits-scoping`. Sales (05) is the natural emitter once a closed-won audit deal can announce itself.
+
+2. **⚠️ The sub-audit fan-in is *dynamic*, and the runtime's join primitive cannot express it.** `Draft 39` Phase 5 runs the scoped sub-audits in parallel and then synthesizes — synthesis must wait for **all of them**. The runtime gained a `type: join` barrier on 2026-07-15 (`waits_for: [A, B, ...]` + `correlate_on`), which fires once every awaited event lands. But it awaits a **fixed set of distinct event types**, and this department's set is **decided at scoping**: a Lite engagement runs one sub-audit, a full-stack runs seven. A barrier hard-wired to all seven would deadlock on every Lite audit; a barrier on fewer would fire early on a full-stack one.
+
+   So `audits-quantification` is wired `type: event` on `SUBAUDIT_COMPLETE` and **fires per sub-audit, not once per audit**. A human synthesizes across them. This is honest but incomplete.
+
+   The real fix is a **counting barrier** — one that reads its expected membership from `AUDIT_SCOPED`'s `scoped_subaudits` at runtime rather than from the spec. It was **not** built, deliberately: this department has never delivered an audit, so a dynamic-fan-in primitive would be designed entirely against a workflow no one has ever run. Build it when a real audit demands it.
+
+3. **In-memory joins don't survive a restart.** Even where the fixed barrier applies, it holds state in-process. An audit spans **7-14 days**; the runtime does not. Any cross-day barrier needs the durable bus `EventBus` was designed to be swapped for.
 
 ## 13. Existing OS Sub-Layer
 
-None yet — code-based automation not built. The offer-engineering content (`Draft 39`) is the canonical design reference.
+No department-local code layer. The 6 agents (§5) run on the shared `arika-runtime`; their memory stream is `14_Audits_Diagnostics/_memory/runtime.jsonl`. The offer-engineering content (`Draft 39`) remains the canonical design reference.
 
 ## 14. Raw Archive Pointer
 
@@ -80,7 +141,15 @@ No department-local raw drafts. Source content lives in `02_Offer/` — see `02_
 
 - 2026-06-30 — Department created, promoted from Offer (02)'s "Audits & Diagnostics" division category per owner decision. Seeded from `Draft 39` (offer #10, Revenue Infrastructure Audit), owner-approved as-is the same day. — Claude Code (Sonnet 4.6)
 - 2026-07-01 — Added §16 Memory/Feedback Loop/Cadence (structure-only placeholder, per the go-live plan in 00_Agency_Governance/GO_LIVE_CHECKLIST.md). — Claude Code (Sonnet 5)
+- 2026-07-15 — **Department built: 6 agents wired onto `arika-runtime`** (§5), covering scoping → data gate → sub-audit analysis → quantification → report → ascension. `audits-report-producer` is **Class 3** (client- and money-facing paid deliverable, matching `client-success-offboarding`'s precedent); `audits-quantification` is human-gated because `Draft 39` Phase 10 itself requires a second-analyst review of every dollar estimate. — Claude Code (Opus 4.8)
+- 2026-07-15 — **Gateway Offer count reconciled** (§3, owner-decided). Draft 28 names 5 Gateway offers; this department engineers 1. **Funnel Audit resolved from source as offer #10's Lite tier** (`Draft 39` Phase 11 defines Lite as "a single targeted sub-audit (e.g. funnel-only)") — also resolving Draft 28's internal "Funnel Audit" vs. "Funnel Diagnostic" naming inconsistency. AI Opportunity Assessment → AI Enablement (17), Growth Workshop → Consulting & Advisory (15), both by division. **Sales Call Review flagged as genuinely unbuilt and unassigned — open owner decision.** — Claude Code (Opus 4.8)
+- 2026-07-15 — **Sub-audit boundary set: this department owns the audit lens, not the standard** (§5). Each of the 7 sub-audit areas is judged against the owning department's documented standard. **`acquisition` delegated to 06's existing `clientpartner-acquisition-diagnostic`** rather than duplicated — it already is that sub-audit; two diagnostics of the same thing would drift and the client would be shown both. `automation` (16) and `team` (11) flagged as resting on departments with no agents. — Claude Code (Opus 4.8)
+- 2026-07-15 — **Dynamic sub-audit fan-in flagged as unwireable** (§12). The runtime's new `join` barrier awaits a fixed set of event types; this department's set is decided at scoping (1 sub-audit on Lite, 7 on full-stack), so a fixed barrier would deadlock or fire early. Quantification fires per sub-audit and a human synthesizes. A counting barrier was deliberately **not** built — no audit has ever been delivered, so it would be designed against a workflow no one has run. — Claude Code (Opus 4.8)
 
 ## 16. Memory / Feedback Loop / Cadence
 
-*(placeholder — structure only, no agent roster exists yet to generate real memory/feedback entries; see §5, which describes only offer-engineering functional role labels — Client Partner, Strategy Lead, Audit Analysts, QA Specialist — for AI-assisted execution the owner currently performs solo, not a real agent roster.)* Once this department has a real or code-based agent roster (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16), this section should define: **Memory** (where Decision/Learning/Prompt-Evolution logs live), **Feedback Loop** (what happens when a §7 KPI misses threshold), and **Cadence** (which of the 7 Cognitive Calendars — `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4 — this department's workflows run against, and how often).
+**Memory.** All 6 agents (§5) write to `14_Audits_Diagnostics/_memory/runtime.jsonl` in the runtime's bois-compatible JSONL envelope (`{timestamp, agent, department, stream, event_type, source, payload}`) — the same format every other department's agents use. **The stream is empty**: no agent has been run against a real engagement.
+
+**Feedback Loop.** Both §7 KPIs are **unset and uncalibratable** — audit-to-implementation conversion and delivery-timeline adherence each need delivered audits to have a value at all, and none exist. Until then there is no threshold to miss and no loop to run. The first delivered audit sets the first real data point; thresholds should be derived from actual runs rather than assumed now (the same discipline applied to bois' 15 uncalibrated thresholds in `12_Branding/BRANDING_OS.md`).
+
+**Cadence.** Per-engagement, not calendared — this department's work is triggered by a signed engagement, not by a clock. It touches two of the 7 Cognitive Calendars (`00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4): the **Pipeline Calendar** (an audit is Stage 1 of the ascension model and feeds Stage 2 opportunities via `audits-ascension-recommender`) and the **Cash Flow Calendar** (fixed-fee, one-time, fast — `Draft 28` names Stage 1's revenue role as "fast cash flow, low operational load"). Neither link is live; both are structural until an audit is actually sold.

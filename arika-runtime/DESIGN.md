@@ -94,6 +94,46 @@ Every trigger assembles a `context` and calls `runAgent`:
 | schedule  | node-cron (local) / cloud routine | empty payload; agent decides scope     |
 | event     | in-process event bus              | event payload                          |
 | webhook   | Fastify `POST /webhook/:source`   | request body mapped to an event        |
+| join      | `JoinGate` barrier over the bus   | every awaited event's payload, merged  |
+
+### `join` — the barrier (added 2026-07-15)
+
+An `EventEmitter` fans out but never joins. A step that genuinely requires several
+upstream steps to **all** finish had no honest wiring: subscribing it to each
+upstream event fires it once per arrival instead of once per completion. Two
+departments hit this — Experience Engineering (20)'s parallel spec work, and
+Audits & Diagnostics (14)'s parallel sub-audits — so it got built.
+
+```yaml
+triggers:
+  - type: join
+    waits_for: [MOTION_SPEC_READY, CAMERA_SPEC_READY, SCENE_COPY_READY]
+    correlate_on: project     # dot-path into event.payload
+```
+
+Fires **once**, when the last awaited event lands. Then the barrier is cleared, so a
+stray late arrival cannot re-fire it. `waits_for` requires 2+ **distinct** events —
+one event is just `type: event`, and a repeat could never produce a second arrival,
+so both are schema errors rather than silent deadlocks.
+
+**`correlate_on` is a safety property, not a convenience.** Without it a join is
+global — only safe when one workflow instance can ever be in flight. With it, events
+only satisfy a barrier when they share a correlation value, so two audits running at
+once can't combine into one. An event whose correlation key is **missing is dropped
+loudly, never guessed**: attributing it to whichever run happens to be waiting could
+print one client's findings on another client's report.
+
+**Two real limits:**
+1. **Fixed membership.** `waits_for` is a fixed set of event types, resolved from the
+   spec at boot. A fan-in whose membership is decided at *runtime* cannot use it —
+   see `14_Audits_Diagnostics/AUDITS_DIAGNOSTICS_OS.md` §12, where the scoped
+   sub-audit set varies per engagement, so a fixed barrier would deadlock on a
+   1-sub-audit engagement or fire early on a 7-sub-audit one. A **counting barrier**
+   that reads its expected membership from an upstream payload is the fix, and is
+   deliberately unbuilt until a real workflow demands it.
+2. **In-memory, per-process.** Pending joins do not survive a restart. Fine within a
+   session; a blocker for a multi-day workflow. That needs the durable bus `EventBus`
+   was designed to be swapped for.
 
 ## 6. Memory format (bois-compatible JSONL)
 

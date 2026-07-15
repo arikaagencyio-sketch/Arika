@@ -8,6 +8,8 @@ import { requiresHumanApproval, classToLevel, levelToClass } from "../dist/gover
 import { frontmatterSchema } from "../dist/spec-schema.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
+import { EventBus } from "../dist/triggers/event-bus.js";
+import { JoinGate } from "../dist/triggers/join-gate.js";
 
 test("governance: human approval is forced at Constitution class 3+", () => {
   assert.equal(requiresHumanApproval(0), false);
@@ -104,6 +106,94 @@ test("registry: loads every agent; the legacy migration is complete", () => {
   assert.equal(skipped.length, 0, `migration complete: expected 0 legacy specs, got ${skipped.length}: ${skipped.join(", ")}`);
   assert.equal(agents.get("finance-cfo-agent").execution, "finos-plugin");
   assert.equal(agents.get("finance-treasury-agent").risk_class, 4);
+});
+
+test("schema: join trigger requires 2+ distinct events", () => {
+  const base = {
+    name: "x",
+    department: "14",
+    description: "d",
+    risk_class: 1,
+  };
+  const join = (waits_for) =>
+    frontmatterSchema.safeParse({ ...base, triggers: [{ type: "join", waits_for }] }).success;
+
+  // One event is just `type: event` — a barrier of 1 is a barrier of none.
+  assert.equal(join(["A"]), false);
+  assert.equal(join(undefined), false);
+  // A repeated event can never produce a second arrival, so it would deadlock.
+  assert.equal(join(["A", "A"]), false);
+  assert.equal(join(["A", "B"]), true);
+});
+
+test("join-gate: fires once, only after every awaited event lands", async () => {
+  const bus = new EventBus();
+  const gate = new JoinGate(bus);
+  const fired = [];
+  gate.register({
+    name: "t-join",
+    waitsFor: ["A", "B", "C"],
+    correlateOn: "engagement_id",
+    onComplete: (joined) => fired.push(joined),
+  });
+
+  await bus.publish({ type: "A", payload: { engagement_id: "e1", from_a: 1 } });
+  await bus.publish({ type: "B", payload: { engagement_id: "e1", from_b: 2 } });
+  assert.equal(fired.length, 0, "must not fire while still waiting on C");
+  assert.deepEqual(gate.pending()[0].waitingOn, ["C"]);
+
+  await bus.publish({ type: "C", payload: { engagement_id: "e1", from_c: 3 } });
+  assert.equal(fired.length, 1, "fires exactly once, on the last arrival");
+  // The synthesis step needs every sub-audit's payload, merged.
+  assert.equal(fired[0].payload.from_a, 1);
+  assert.equal(fired[0].payload.from_b, 2);
+  assert.equal(fired[0].payload.from_c, 3);
+  assert.equal(fired[0].payload.engagement_id, "e1");
+  assert.equal(gate.pending().length, 0, "a completed join is cleared");
+
+  // A stray late arrival must not re-fire a completed barrier.
+  await bus.publish({ type: "C", payload: { engagement_id: "e1", from_c: 99 } });
+  assert.equal(fired.length, 1);
+});
+
+test("join-gate: correlation keys never bleed across runs", async () => {
+  const bus = new EventBus();
+  const gate = new JoinGate(bus);
+  const fired = [];
+  gate.register({
+    name: "t-join",
+    waitsFor: ["A", "B"],
+    correlateOn: "engagement_id",
+    onComplete: (joined) => fired.push(joined),
+  });
+
+  // Two audits in flight at once. A's from client 1 + B's from client 2 is NOT
+  // a completed audit — merging them would report one client's findings on
+  // another's report.
+  await bus.publish({ type: "A", payload: { engagement_id: "e1" } });
+  await bus.publish({ type: "B", payload: { engagement_id: "e2" } });
+  assert.equal(fired.length, 0, "different engagements must not satisfy one barrier");
+
+  await bus.publish({ type: "B", payload: { engagement_id: "e1" } });
+  assert.equal(fired.length, 1);
+  assert.equal(fired[0].key, "e1");
+});
+
+test("join-gate: an uncorrelatable event is dropped, not guessed", async () => {
+  const bus = new EventBus();
+  const gate = new JoinGate(bus);
+  const fired = [];
+  gate.register({
+    name: "t-join",
+    waitsFor: ["A", "B"],
+    correlateOn: "engagement_id",
+    onComplete: (joined) => fired.push(joined),
+  });
+
+  await bus.publish({ type: "A", payload: { engagement_id: "e1" } });
+  await bus.publish({ type: "B", payload: {} }); // no key — unattributable
+  assert.equal(fired.length, 0, "must not attribute a keyless event to an in-flight run");
+  assert.deepEqual(gate.pending()[0].waitingOn, ["B"]);
 });
 
 test("memory-writer: appends a bois-compatible JSONL line", () => {

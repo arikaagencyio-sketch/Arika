@@ -8,8 +8,12 @@ risk_class: 2
 requires_human_approval: false
 triggers:
   - type: manual
-  - type: event
-    on: SCENE_COPY_READY
+  # A build spec needs the parallel spec work to ALL be in, not whichever
+  # arrived first. SCENE_COPY_READY implies UI_SPEC_READY upstream (the
+  # copywriter waits on it), so the three below are the full set.
+  - type: join
+    waits_for: [MOTION_SPEC_READY, CAMERA_SPEC_READY, SCENE_COPY_READY]
+    correlate_on: project
   - type: event
     on: BUILD_SPEC_REQUESTED
 inputs:

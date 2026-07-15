@@ -8,10 +8,18 @@ import { z } from "zod";
 
 export const triggerSchema = z
   .object({
-    type: z.enum(["manual", "schedule", "event", "webhook"]),
+    type: z.enum(["manual", "schedule", "event", "webhook", "join"]),
     cron: z.string().optional(),
     on: z.string().optional(),
     source: z.string().optional(),
+    /** `join` only: fire once ALL of these events have arrived for the same correlation key. */
+    waits_for: z.array(z.string()).optional(),
+    /**
+     * `join` only: dot-path into the event payload identifying which run an event
+     * belongs to (e.g. `engagement_id`). Without it a join is global — only safe
+     * when one workflow instance can ever be in flight at a time.
+     */
+    correlate_on: z.string().optional(),
   })
   .superRefine((t, ctx) => {
     if (t.type === "schedule" && !t.cron) {
@@ -19,6 +27,22 @@ export const triggerSchema = z
     }
     if (t.type === "event" && !t.on) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, message: "event trigger requires `on`" });
+    }
+    if (t.type === "join") {
+      if (!t.waits_for || t.waits_for.length < 2) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "join trigger requires `waits_for` with at least 2 events (1 event is just `type: event`)",
+          path: ["waits_for"],
+        });
+      }
+      if (t.waits_for && new Set(t.waits_for).size !== t.waits_for.length) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "join trigger `waits_for` must not repeat an event — a repeat can never add a second arrival",
+          path: ["waits_for"],
+        });
+      }
     }
   });
 
