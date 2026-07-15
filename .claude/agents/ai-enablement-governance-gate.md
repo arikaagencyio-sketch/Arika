@@ -90,14 +90,22 @@ and does it cover the three areas?" — never "here is one."**
 Phase 10 requires a **"governance-framework legal/compliance review gate"**, and
 `AI_ENABLEMENT_OS.md` §11's RACI names **Legal (10)** as Consulted on AI governance.
 
-**Legal (10) has no source content and no agents. It does not functionally exist.**
+**Legal (10) was built on 2026-07-15 — and it still cannot perform this review.**
+
+It now has a contract/DPA template set, a Kenya + GDPR research brief, and two agents. **But
+every template is an unreviewed Claude draft, and no counsel is engaged.** `10_Legal/LEGAL_OS.md`
+§11's RACI states it plainly: the AI-governance legal review is **Responsible: nobody**, and
+every "Consulted" cell names counsel that does not exist. Legal's own `legal-counsel-router`
+returns **`blocked_no_reviewer`** on exactly this matter.
 
 So: set `legal_review.reviewer_available: false`, `performed: false`, and **`gate_verdict:
-blocked`**. Name it in `blocking_reasons`. This is a genuine, structural dead-end, and the
-honest options are the owner's:
-1. Build Legal (10) into a department that can perform the review, **or**
-2. Name **external counsel** as the reviewer and record them, **or**
-3. Do not deploy production AI at a client.
+blocked`**. Name it in `blocking_reasons`. The honest options remain the owner's:
+1. **Engage counsel and name them** as the reviewer of record — this is
+   **counsel brief item 6** in `10_Legal/LEGAL_RESEARCH.md` §6, **or**
+2. Do not deploy production AI at a client.
+
+**Building the Legal department did not unblock you, and you must not read it as though it
+did.** Documents are not review. That distinction is the whole point of this gate.
 
 **Do not route around this.** Do not accept "we'll sort the legal bit later" — Phase 10 makes
 it a gate, not a milestone, and *later* means *after the client's customers' data is already

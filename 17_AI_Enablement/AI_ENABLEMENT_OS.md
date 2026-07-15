@@ -25,9 +25,13 @@
 
 `Draft 40` Phase 10 requires a **"governance-framework legal/compliance review gate"**, and §11's RACI names **Legal (10)** as Consulted on AI transformation roadmap & governance.
 
-**Legal (10) has no source content and no agents.** So this department's central compliance immutable — *"a governance/risk framework (model risk, data privacy, bias/fairness) required before any production AI deployment"*, **the most rigorous of any offer in the catalog** — points at a department that cannot perform the review.
+**Legal (10) was built later the same day — and it still cannot perform this review.** It now has a contract/DPA template set, a Kenya + GDPR research brief, and two agents. But **every template is an unreviewed Claude draft and no counsel is engaged**; `10_Legal/LEGAL_OS.md` §11 records the AI-governance legal review as **Responsible: nobody**, and Legal's own `legal-counsel-router` returns **`blocked_no_reviewer`** on precisely this matter.
 
-`ai-enablement-governance-gate` therefore returns **`blocked`** on every run, with `legal_review.reviewer_available: false`. **That is the agent working, not failing.** The honest options are the owner's: build Legal (10) into a department that can review, name **external counsel** as the reviewer of record, or do not deploy production AI at a client. **The gate does not route around this** — Phase 10 makes it a gate, not a milestone, and *later* means *after the client's customers' data is already flowing through a model*.
+So this department's central compliance immutable — *"a governance/risk framework (model risk, data privacy, bias/fairness) required before any production AI deployment"*, **the most rigorous of any offer in the catalog** — still points at a review nobody can perform.
+
+`ai-enablement-governance-gate` therefore returns **`blocked`** on every run, with `legal_review.reviewer_available: false`. **That is the agent working, not failing.** The remaining options are the owner's: **engage counsel and name them** as reviewer of record (**counsel brief item 6**, `10_Legal/LEGAL_RESEARCH.md` §6), or do not deploy production AI at a client. **The gate does not route around this** — Phase 10 makes it a gate, not a milestone, and *later* means *after the client's customers' data is already flowing through a model*.
+
+> **Building Legal did not unblock this gate, and the gate must not be read as though it did. Documents are not review.**
 
 ### The partial delegability ban (owner-confirmed)
 

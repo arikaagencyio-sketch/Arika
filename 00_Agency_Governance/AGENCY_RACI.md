@@ -29,7 +29,7 @@ All "Responsible/Accountable" cells below are department names, not individuals,
 | Client onboarding | Client Success (07) | Client Success (07) | Sales (05), Operations (08) | Finance (09) |
 | Delivery execution & SOP adherence | Operations (08) | Operations (08) | Client Success (07) | Finance (09) |
 | Invoicing & revenue recognition | Finance (09) | Finance (09) | Operations (08) | Agency Governance (00) |
-| Contract drafting & legal review | Legal (10) | Legal (10) | Sales (05), Client Success (07) | Agency Governance (00) |
+| Contract drafting & legal review | Legal (10) | **Mary Thuo** | **External counsel — ⚠️ NOT ENGAGED**, Sales (05), Client Success (07) | Agency Governance (00) |
 | Hiring & internal onboarding | HR/People Ops (11) | HR/People Ops (11) | Operations (08) | Agency Governance (00) |
 | Brand standards enforcement across departments | Branding (12) | Branding (12) | Marketing (03), Content (04), Sales (05) | All departments |
 | Tool/vendor selection & access management | Tech Stack (13) | Tech Stack (13) | Department requesting tool | Finance (09) (cost), Legal (10) (contract terms) |

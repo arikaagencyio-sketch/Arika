@@ -1,0 +1,212 @@
+> # 🔴 UNREVIEWED DRAFT — NOT LEGAL ADVICE
+> Written by Claude Code (Opus 4.8) on 2026-07-15. **No lawyer has seen this.**
+> **Do not sign, send, or rely on this until a Kenyan-qualified advocate has reviewed it.**
+> See [`README.md`](README.md). Remove this banner only when replaced by:
+> *Reviewed by [NAME], [FIRM], [DATE].*
+
+---
+
+# INTELLECTUAL PROPERTY, COPYRIGHT & TRADEMARK TERMS
+
+**Two audiences, one document:**
+- **§1–§5** are **contract terms** — they expand `MSA.md` Clause 5 and can be attached to an MSA
+  or SOW as an IP schedule.
+- **§6–§8** are **internal policy** — how Arika protects and uses its own marks and others'.
+
+---
+
+## 1. Definitions
+
+| Term | Meaning |
+|---|---|
+| **Background IP** | IP owned or licensed by a Party before this engagement, or developed outside it — whether or not used in the Services |
+| **Deliverables** | The specific outputs identified in a SOW as deliverable to the Client |
+| **Foreground IP** | IP created specifically for the Client under a SOW, forming part of the Deliverables |
+| **Client Materials** | Data, brand assets, content, and IP the Client provides |
+| **AI Output** | Material generated in whole or substantial part by an AI tool |
+
+## 2. 🔴 Ideas versus expression — read this before anything else
+
+**Copyright protects expression, not ideas.** A campaign *concept*, a strategic *insight*, a
+positioning *angle*, a methodology *approach* — as ideas, these are generally **not protected by
+copyright**. The specific storyboard, the written copy, the actual deck, the code: those are
+expression, and those are protected.
+
+**Consequences Arika must design around, not wish away:**
+
+1. **Pitching a concept gives it away** unless a contract says otherwise. That is what
+   [`NDA.md`](NDA.md) **Part 2 §3** exists for — and it works by **contract**, not copyright.
+2. **Arika's methods are protected mainly by confidentiality and contract**, not by copyright.
+   The 7-sub-audit structure, the OEOS 12-phase process, the agent architecture — as *methods*,
+   largely unprotectable. As *documents and code*, protected.
+3. **The strongest protection is commercial:** don't disclose the best version before there's a
+   signed SOW.
+
+> This is stated first because every other clause here is weaker than people assume, and the
+> commercial habit is what actually protects the business.
+
+## 3. Ownership
+
+3.1 **Background IP stays with its owner.** Nothing transfers by implication.
+
+3.2 **Arika Background IP includes** (non-exhaustive): the OEOS offer-engineering process;
+audit methodologies and sub-audit checklists; the agent system, prompts, schemas, and
+`arika-runtime`; brand, narrative, and messaging frameworks; templates and operating
+documentation; and anything in this repository.
+
+3.3 **Foreground IP / Deliverables.** On **payment in full** under the relevant SOW, Arika
+assigns to the Client all right, title and interest in the Deliverables, **excluding** Arika
+Background IP embedded in them.
+
+3.4 **Embedded Background IP is licensed, not assigned** — non-exclusive, perpetual, worldwide,
+non-transferable, to use **as part of the Deliverable only**, for the Client's internal business
+purposes. It does **not** permit extraction, resale, sublicensing, or use of the Background IP
+standalone.
+
+3.5 **Client Materials remain the Client's.** The Client grants Arika a licence to use them
+solely to perform the Services, and warrants it has the right to grant it — including rights in
+any third-party assets it supplies.
+
+3.6 **Moral rights.** To the extent permitted by law, `[each Party waives / Arika waives]` moral
+rights in the Deliverables. *`[COUNSEL: moral rights are not waivable in all jurisdictions; confirm
+the Kenyan position and any client-jurisdiction position.]`*
+
+3.7 **Residual knowledge.** Arika may use general skills, know-how, and experience retained in
+the unaided memory of its personnel, provided no Confidential Information is disclosed and no
+Client IP is used.
+
+## 4. 🔴 AI-generated material — the genuinely unresolved clause
+
+**Arika delivers AI-generated work.** This is not incidental: `19_Design/DESIGN_OS.md` records
+**5 real images generated and live on the Arika website**, produced via OpenArt and KIE.ai's
+Nano Banana Pro. Client deliverables will contain AI Output.
+
+4.1 **Disclosure.** Arika uses AI tools in delivery. See
+[`API_AND_AI_TOOLING_TERMS.md`](API_AND_AI_TOOLING_TERMS.md).
+
+4.2 **Assignment of AI Output.** Arika assigns to the Client, on payment in full, **whatever
+rights Arika holds** in AI Output forming part of the Deliverables.
+
+4.3 **🔴 Arika does not warrant that AI Output attracts copyright protection, or that it is
+capable of being owned at all.**
+
+> ### Why 4.3 is drafted as a disclaimer rather than a promise
+>
+> **The copyright status of AI-generated material is genuinely unsettled**, and differs by
+> jurisdiction. Several jurisdictions require **human authorship** for copyright to subsist —
+> meaning material generated by a model on a prompt may attract **no copyright at all**, and
+> therefore **cannot be assigned**, because there is nothing to assign.
+>
+> **You cannot assign what may not exist.** Clause 3.3 promises assignment of the Deliverables;
+> Clause 4.2 deliberately narrows that to *"whatever rights Arika holds"* for AI Output — which
+> may be none.
+>
+> **This is the single most under-settled point across all of these documents**, it directly
+> affects what Arika is actually selling, and it is **counsel question 5** in
+> `LEGAL_RESEARCH.md` §6 — specifically: *what is the Kenyan position on copyright in
+> AI-generated works, and what should Arika tell a client who asks "do we own this image?"*
+>
+> **Do not resolve this by drafting around it.** A client who believes they own an asset they
+> may not own is a dispute with a date on it.
+
+4.4 **Third-party rights.** Arika does not warrant AI Output is free of third-party rights.
+Generative models are trained on material Arika does not control and cannot audit. Arika applies
+human review before delivery (`19_Design/DESIGN_OS.md`'s *"no visible AI artifacts"* standard),
+**but review is not a rights clearance.**
+
+4.5 **What Arika will not do.** Arika will not knowingly generate material that imitates an
+identifiable third party's protected work, style-as-trade-dress, trademarks, or likeness. If a
+Client requests it, Arika will decline.
+
+4.6 **Client-directed AI use.** Where the Client directs use of a specific AI tool or supplies
+prompts/reference material, the Client is responsible for the rights position of what it directs.
+
+## 5. IP warranties and indemnity
+
+5.1 Arika warrants that, **to the best of its knowledge**, the Deliverables (excluding AI Output
+per §4, and excluding Client Materials) do not infringe a third party's IP.
+
+5.2 `[OPTIONAL — NEGOTIATE, DO NOT CONCEDE BY DEFAULT: Arika will indemnify the Client against
+third-party claims that a Deliverable infringes IP, capped at [MSA Clause 9.3's cap], excluding
+claims arising from AI Output, Client Materials, or Client-directed use.]`
+
+> ⚠️ **Do not give an unqualified IP indemnity.** Clients will ask. Given §4.4 — that no one can
+> audit a generative model's training data — **an unqualified indemnity on AI Output is an
+> uncapped bet on something Arika cannot inspect.** If an indemnity is commercially necessary,
+> the AI Output carve-out is the part to fight for. **Counsel + owner.**
+
+5.3 The Client warrants Client Materials do not infringe third-party rights and indemnifies
+Arika against claims that they do.
+
+## 6. Arika's own marks — internal policy
+
+6.1 **Marks in use:** `[ARIKA / Arika Agency / the logo / arikaagency.com]`.
+
+6.2 **🔴 Registration status: `[NOT REGISTERED — TO CONFIRM]`.**
+
+> **This is a real, checkable gap.** Nothing in this repo records a trademark registration
+> anywhere. `13_Tech_Stack/TECHSTACK_OS.md` §9 records that **even the domain registrar for
+> `arikaagency.com` is unconfirmed**, while live mailboxes run on it.
+>
+> **What to decide (owner + counsel):**
+> - Register in **Kenya** (KIPI) — classes `[likely 35 (advertising/business) and 42 (technology)
+>   — TO BE CONFIRMED BY COUNSEL]`
+> - Register in target-client jurisdictions (US/EU) — Arika's ICP is not Kenyan
+> - **Confirm the domain registrar and lock the domain** before it matters
+> - An unregistered mark relies on passing-off/common-law rights — **weaker, jurisdiction-
+>   dependent, and expensive to enforce**
+
+6.3 **Client use of Arika's marks** requires prior written consent, except to identify Arika as
+its service provider.
+
+6.4 **Arika's use of Client marks** requires the Client's prior written consent — see §7.
+
+## 7. Client marks, logos, and case-study rights
+
+7.1 Arika will not use a Client's name, marks, or logo publicly without **prior written
+consent**.
+
+7.2 **Consent should be captured in the SOW, not chased afterwards.** The natural place is a
+"Publicity" clause. `07_Client_Success`'s `client-success-advocacy` agent exists to capture
+testimonials and case studies — **it has no legal basis to do so unless the SOW granted one.**
+
+7.3 A Client may withdraw consent prospectively on `[30]` days' notice; Arika will remove the
+material from channels it controls but is not obliged to recall printed or third-party-hosted
+material.
+
+7.4 **Case studies containing Client Confidential Information require separate consent**, even
+where logo use is permitted — **and a metrics claim requires substantiation** under
+[`CLAIMS_SUBSTANTIATION_POLICY.md`](CLAIMS_SUBSTANTIATION_POLICY.md).
+
+## 8. Third-party IP in delivery — internal policy
+
+8.1 **Stock and licensed assets.** Arika will hold a licence covering the actual use, including
+the Client's onward use. **Licence scope must match the deliverable** — a licence covering
+"social media" does not cover paid advertising or broadcast.
+
+8.2 **Fonts** are licensed software. Desktop licences typically do **not** cover web embedding,
+app embedding, or handing the file to a client. **Check per font, per use.**
+
+8.3 **Music and sound.** `19_Design`'s Production Engine contemplates music/voice generation.
+Licence terms differ sharply between "content creator", "commercial", and "broadcast" tiers.
+
+8.4 **Client-supplied assets** are the Client's responsibility (§5.3) — **but Arika should ask
+where an asset came from before publishing it.** "The client sent it" is not a licence.
+
+8.5 **AI tool terms of service.** Each vendor's ToS governs what may be done with output —
+including commercial use, and whether output can be used to train competing models. See
+[`API_AND_AI_TOOLING_TERMS.md`](API_AND_AI_TOOLING_TERMS.md).
+
+---
+
+## Open items — for the counsel brief
+
+| # | Question | Blocks |
+|---|---|---|
+| 1 | **Copyright in AI-generated works under Kenyan law** — does it subsist? Is §4.2's assignment meaningful? | What Arika can honestly tell a client about ownership of generated assets |
+| 2 | Is §3.3's **payment-conditional assignment** enforceable, and commercially acceptable? | Every SOW |
+| 3 | Are **moral rights waivable** (§3.6) in Kenya and in client jurisdictions? | Deliverable assignment |
+| 4 | **Trademark registration** — where, which classes, when (§6.2)? | Brand protection; the domain is unconfirmed |
+| 5 | **IP indemnity** (§5.2) — is the AI Output carve-out defensible in negotiation? | Every MSA |
+
+**Recorded in [`../LEGAL_OS.md`](../LEGAL_OS.md) §3 as open exposure.**
