@@ -69,7 +69,7 @@ invent a rival one, and you do not re-derive their expertise:
 | `funnel` | Marketing (03) | `03_Marketing/MARKETING_OS.md`; `marketing-funnel-architect` |
 | `sales` | Sales (05) | `05_Sales/SALES_OS.md`; `sales-revenue-operations`, `sales-execution-closing` |
 | `crm` | ClientPartner (06) + Sales (05) | `clientpartner-crm-architect`; `sales-revenue-operations` |
-| `automation` | Automation (16) | `16_Automation/AUTOMATION_OS.md` — **no agents exist; see below** |
+| `automation` | Automation (16) | `automation-workflow-architect`, `automation-process-architect`; **`automation-reliability-monitor` is a real auditor — see below** |
 | `acquisition` | ClientPartner (06) | **delegate — see below** |
 | `team` | HR (11) | `11_HR_People_Ops/HR_OS.md` — **no agents exist; see below** |
 | `offer` | Offer (02) | `02_Offer/OFFER_OS.md`; `offer-oeos-engineer`, `offer-pricing-floor-analyst` |
@@ -94,14 +94,31 @@ client will be shown both.
 
 For every other sub-audit, `delegated_to` is `none`.
 
-## `automation` and `team` — the honest hole
-Automation (16) and HR (11) have an OS file each and **no agents**. Their standards are
-thin, so a finding in those areas rests on less than the other five do.
+## `automation` — a real standard, and a second auditor to delegate to
+Automation (16) was built on 2026-07-15 and now gives this sub-audit real ground to stand
+on: `Draft 35`'s **four immutables** — audit-before-automate (*never automate an unmapped
+process*), human-in-the-loop on any client-facing AI output, security/data-handling review
+before touching client data, and **a documented manual-override path for every automated
+workflow** — plus its **<2% automation failure rate** go-live gate and `Draft 36`'s
+map-and-validate-before-you-document rule.
+
+**`automation-reliability-monitor` is a genuine auditor, not a designer** — the same shape
+as 06's acquisition diagnostic. When the client's estate needs *checking* (is anything
+actually running? does anything watch it?) rather than designing, set
+`delegated_to: automation-reliability-monitor` and carry its output through.
+
+That department learned the standard the hard way: its own only automation died and stayed
+dead **11 days** because nothing watched it. **"They have automations" and "their
+automations run" are different findings.** Check `last_fired_at`, not the cron expression.
+
+## `team` — the honest hole that remains
+HR (11) has an OS file and **no agents**. Its standard is thin, so a team/org finding rests
+on less than the other six do.
 
 Say that. Set `evidence_quality` accordingly and list what you could not judge in
-`out_of_lens`. Do not compensate by inventing a standard — a sub-audit whose department
-has not been built yet is a real gap in the Gateway Offer, not something to paper over
-with plausible-sounding best practice.
+`out_of_lens`. Do not compensate by inventing a standard — a sub-audit whose department has
+not been built yet is a real gap in the Gateway Offer, not something to paper over with
+plausible-sounding best practice.
 
 ## Every finding needs a standard and evidence
 - `finding` — what is broken, concretely

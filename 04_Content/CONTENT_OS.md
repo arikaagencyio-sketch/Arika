@@ -294,20 +294,32 @@ BUYER_PSYCHOLOGY_MAPPED ┘                                      ▼
 weekly sweep of the five sources independent of whether any upstream event fired,
 so starvation surfaces on a cadence rather than by silence.
 
-**The live production hook:** `Publishing Status = "Ready for Design"` in the Notion
+**The production hook:** `Publishing Status = "Ready for Design"` in the Notion
 content-brief database is the real trigger value of the **Creative Pipeline cloud
-routine** (`trig_01WyyrXEkFZck1D49tm6BfKv`, hourly `7 * * * *`, enabled 2026-07-04 —
-`GO_LIVE_CHECKLIST.md` items 42–43). **This is the only Arika automation running in
+routine** (`trig_01WyyrXEkFZck1D49tm6BfKv`, hourly `7 * * * *` —
+`GO_LIVE_CHECKLIST.md` items 42–43). **This is the only Arika automation in
 production, and Content is its supply.** `content-brief-builder` recommends the
 status but never flips it — that is a human action (Class 2), because flipping it
 starts real generation against real credits.
+
+> **🔴 Corrected 2026-07-15 — this section said "enabled 2026-07-04" and that was
+> misleading for 11 days.** The routine fired **once** on 2026-07-04 and was
+> auto-disabled 3 hours later (`auto_disabled_repo_access`). It was dead until
+> 2026-07-15, when it was restored and re-verified. **Nothing was lost — the brief
+> database is empty — but had Content ever marked a brief "Ready for Design" in that
+> window, nothing would have picked it up while this file said otherwise.** Content is
+> the supply for an automation Content cannot see the health of; that is now
+> `automation-reliability-monitor` (16)'s job. Incident: `16_Automation/AUTOMATION_OS.md`
+> §9. **Last verified: 2026-07-15T09:36:46Z (forced run); the hourly cadence is not yet
+> proven post-restoration.**
 
 ## 13. Existing OS Sub-Layer
 
 No department-local code. Content runs entirely on the shared `arika-runtime`
 substrate (`arika-runtime/DESIGN.md`) plus two real external systems it does not own:
 the **Notion content-brief database** (live, 18 properties, **empty**) and the
-**Creative Pipeline cloud routine** (live, hourly). See §12.
+**Creative Pipeline cloud routine** (hourly; **dead 2026-07-04 → 2026-07-15**, restored
+and last verified 2026-07-15T09:36:46Z). See §12.
 
 ## 14. Raw Archive Pointer
 

@@ -1,7 +1,13 @@
 # Automation Approval Matrix
 
-**Status:** v0.3 — one real automation, live. All other rows below remain illustrative templates.
-**Last updated:** 2026-07-04
+**Status:** v0.4 — one real automation, **restored 2026-07-15 after an 11-day undetected outage**. All other rows below remain illustrative templates.
+**Last updated:** 2026-07-15
+
+> **🔴 This document asserted an automation was live while it was dead, for 11 days.** The row below said *"made live 2026-07-04"* — true for 3 hours and 41 minutes. See `16_Automation/AUTOMATION_OS.md` §9 for the incident.
+>
+> **Two rules added as a result:**
+> 1. **A row carries a `Last verified` date, not just an activation date.** "We turned it on" and "it is on" are different claims. Only the second one matters, and only the recent one is credible.
+> 2. **A row must answer "how will anyone know this stopped?"** The columns below require rollback and fallback before activation — both existed here and both worked. **The gap was never rollback; it was detection.** `automation-reliability-monitor` (16) is now that control.
 
 > Referenced from [`GLOBAL_OS.md`](../GLOBAL_OS.md) §11 (closes "Required Agency-Wide Closure Systems" item 7). Expands the risk-class table in `AGENCY_OPERATING_CONSTITUTION.md` §5 into a trigger-by-trigger format for actual automations once they're built.
 
@@ -19,7 +25,23 @@ When any department builds a real automation (a Triggers/Automation Hooks entry 
 |---|---|---|---|---|---|---|
 | Notion content-brief "Publishing Status" reaches the literal value **"Ready for Design"** | Cloud routine drafts a 7-field storyboard + a planning-only Production Engine recommendation, posts both as a Notion comment for owner review | 2 | Disable the routine (`RemoteTrigger` update, `enabled: false`) | Manual invocation of the same agent chain, as documented in `19_Design/DESIGN_OS.md` §4 | `16_Automation/AUTOMATION_OS.md` §8 Decision Log | **Human review required before any OpenArt/Claude Design credit-spending step** — enforced at the infrastructure level, not just by instruction: the routine's cloud session has no OpenArt/Canva MCP connector attached at all, so it is technically incapable of spending credits, not merely instructed not to. It can only draft a storyboard + tool-choice recommendation and leave it for a human to act on. |
 
-**Live as of 2026-07-04** — routine ID `trig_01WyyrXEkFZck1D49tm6BfKv`, hourly cron (`7 * * * *`), repo `https://github.com/arikaagencyio-sketch/Arika`, Notion connector attached (connector_uuid `f957ca4d-bcce-43a2-9f31-9b6954efeee1`), first scheduled run `2026-07-04T14:07:00Z`. Both prior build blockers (`OWNER_INPUT_NEEDED.md` items 54-55) resolved same day. See `16_Automation/AUTOMATION_OS.md` §12.
+**Activated 2026-07-04 · Died 2026-07-04T17:07Z · Restored 2026-07-15 · Last verified 2026-07-15T09:36:46Z (forced run).** Routine ID `trig_01WyyrXEkFZck1D49tm6BfKv`, hourly cron (`7 * * * *`), repo `https://github.com/arikaagencyio-sketch/Arika`, Notion connector attached (connector_uuid `f957ca4d-bcce-43a2-9f31-9b6954efeee1`).
+
+**Outage history (do not delete — this row's credibility depends on it):** fired once at `2026-07-04T14:07:35Z`, auto-disabled at `17:07:19Z` with `ended_reason: auto_disabled_repo_access`, and sat dead **11 days** with `next_run_at` frozen in the past while this matrix and 4 OS files asserted it was live. Restored by pushing the repo (origin was 5 days stale) and re-enabling; a forced run succeeded without re-tripping the disable. **The hourly cadence is not yet proven post-restoration** — one forced run is not a restored cron. Full incident: `16_Automation/AUTOMATION_OS.md` §9.
+
+**Detection control (added 2026-07-15):** `automation-reliability-monitor` (16) — daily, checks `enabled` / `ended_reason` / `last_fired_at` vs. cron across the estate. It did not exist during the outage, which is why the outage lasted 11 days. **Caveat:** it is itself a runtime cron trigger, so it only runs if the runtime is booted — see the standing gap below.
+
+---
+
+### 🔴 Standing gap: 21 runtime cron triggers, 1 matrix row
+
+`arika-runtime` declares **21 `schedule` triggers**. This matrix has **one** real row — the one above.
+
+**Not a live breach only because the runtime is not running.** It is a local Node process with no `ANTHROPIC_API_KEY` and no daemon; its cron triggers are **declared, not scheduled**. One `npx tsx src/index.ts` with a key turns 21 undocumented automations on at once — no rows, no rollback, no fallback, in direct violation of this document's own rule.
+
+**Rows are deliberately not written yet.** Whether this is 21 rows or one covering row (shared rollback: disable the scheduler; shared fallback: `arika run <name>` manually) is an **owner decision**, and writing 21 rows for agents that have never run once would document an intention as a fact — the exact error that made the row above unreliable.
+
+**Until then:** `automation-approval-gate` (16) returns `blocked` on any request to run the runtime as a persistent service. **Manual `arika run` is fine and needs no row** — a human invoking an advisory agent is not an automation.
 
 **Template rows below** (illustrative, not live automations — none of these have been built yet either):
 

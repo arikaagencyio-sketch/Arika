@@ -36,7 +36,7 @@
 |---|---|---|
 | Revenue Audit | Diagnose pain | **Offer #10, this department.** Built. |
 | Funnel Audit | Show missed revenue | **Not a separate offer — it is offer #10's Lite tier.** `Draft 39` Phase 11 defines Lite as "a single targeted sub-audit (*e.g. funnel-only*)". Source-confirmed, not asserted. Draft 28's Ideal Ascension Model calls the same thing "Funnel **Diagnostic**" — a naming inconsistency within one document, same product. |
-| AI Opportunity Assessment | Introduce transformation | **AI Enablement (17)** by division (offer #11's department). Unbuilt — 17 has an OS file and no agents. |
+| AI Opportunity Assessment | Introduce transformation | **⚠️ REOPENED 2026-07-15 — contested, owner decision.** Routed to **AI Enablement (17)** on 2026-07-15 by division association (offer #11's department). Auditing Automation (16) the same day surfaced **direct textual counter-evidence**: `Draft 35` Phase 12 names **"AI Opportunity Audit" as a standalone entry offer productized from offer #6 (Automation)** — *"same audit-as-entry-offer pattern as offer #10."* The evidence is genuinely split: **"AI Opportunity"** matches Draft 35 (→16); **"Assessment"** matches offer #11's *"AI Readiness Assessment System"* and the stated goal **"Introduce transformation"** is offer #11's own word (→17). Direct text beats division association, but the naming cuts both ways. **The earlier by-division call is downgraded to provisional pending your decision.** |
 | Growth Workshop | Strategic authority | **Consulting & Advisory (15)** by division (offer #9's department). Unbuilt — 15 has an OS file and no agents. |
 | Sales Call Review | Demonstrate expertise | **⚠️ Genuinely unbuilt and unassigned.** Narrower than offer #10's `sales` sub-audit — a call review is not a sales-process audit — so Lite doesn't absorb it the way it absorbs Funnel Audit. Not OEOS-engineered, no Phase 1 seed data in Draft 28 beyond the name and goal. **Owner decision: is this a real micro-offer (14 or 05), or a name Draft 28 listed without intending a product?** |
 
@@ -72,7 +72,7 @@ Each of the 7 sub-audits names an area **another department already owns the sta
 | `funnel` | Marketing (03) | ✅ `marketing-funnel-architect` |
 | `sales` | Sales (05) | ✅ `sales-revenue-operations`, `sales-execution-closing` |
 | `crm` | ClientPartner (06) + Sales (05) | ✅ `clientpartner-crm-architect` |
-| `automation` | Automation (16) | ❌ **OS file only, no agents** |
+| `automation` | Automation (16) | ✅ **as of 2026-07-15** — `automation-workflow-architect`, `automation-process-architect`, `automation-reliability-monitor` |
 | `acquisition` | ClientPartner (06) | ✅ **delegated — see below** |
 | `team` | HR (11) | ❌ **OS file only, no agents** |
 | `offer` | Offer (02) | ✅ `offer-oeos-engineer`, `offer-pricing-floor-analyst` |
@@ -81,7 +81,9 @@ Each of the 7 sub-audits names an area **another department already owns the sta
 
 **`acquisition` is delegated, not duplicated.** `clientpartner-acquisition-diagnostic` (06) **already is** this sub-audit — it audits a client's real acquisition system with a 12-input intake, a 5-control-point friction diagnosis, and the client-vs-partner separation check. `audits-subaudit-analyst` sets `delegated_to: clientpartner-acquisition-diagnostic` and carries its output through. Two diagnostics of the same thing would drift, and the client would be shown both.
 
-**`automation` and `team` rest on thinner ground than the other five** — their departments have no agents, so there is less of a standard to judge against. The agent reports this in `out_of_lens` rather than inventing best practice. This is a real hole in the Gateway Offer, not a documentation gap.
+**Updated 2026-07-15 — the `automation` hole closed the same week it was flagged.** Automation (16) was built with 4 agents, so the `automation` sub-audit now has a real standard to judge against: `Draft 35`'s four immutables (audit-before-automate, human-in-the-loop on client-facing AI output, security/data-handling review, a documented manual-override path) and its **<2% automation failure rate** go-live gate, plus `Draft 36`'s process-mapping discipline. Better still, 16's `automation-reliability-monitor` is a genuine **auditor**, not a designer — the same shape as 06's acquisition diagnostic. **`audits-subaudit-analyst` may delegate the `automation` sub-audit to it** where the client's estate needs checking rather than designing.
+
+**`team` alone now rests on thinner ground than the other six** — HR (11) has an OS file and no agents, so a team/org finding has less of a standard behind it. The analyst reports this in `out_of_lens` rather than inventing best practice. This is a real remaining hole in the Gateway Offer, not a documentation gap.
 
 ## 6. Skill Library Index
 
