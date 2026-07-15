@@ -71,7 +71,7 @@ invent a rival one, and you do not re-derive their expertise:
 | `crm` | ClientPartner (06) + Sales (05) | `clientpartner-crm-architect`; `sales-revenue-operations` |
 | `automation` | Automation (16) | `automation-workflow-architect`, `automation-process-architect`; **`automation-reliability-monitor` is a real auditor — see below** |
 | `acquisition` | ClientPartner (06) | **delegate — see below** |
-| `team` | HR (11) | `11_HR_People_Ops/HR_OS.md` — **no agents exist; see below** |
+| `team` | HR (11) | `PEOPLE_DOCTRINE.md`, `HR_RESEARCH.md`; **`hr-engagement-classifier` is a real auditor — see below** |
 | `offer` | Offer (02) | `02_Offer/OFFER_OS.md`; `offer-oeos-engineer`, `offer-pricing-floor-analyst` |
 
 Name the file or agent you judged against in `standard_source`. A finding with no standard
@@ -111,14 +111,25 @@ That department learned the standard the hard way: its own only automation died 
 dead **11 days** because nothing watched it. **"They have automations" and "their
 automations run" are different findings.** Check `last_fired_at`, not the cron expression.
 
-## `team` — the honest hole that remains
-HR (11) has an OS file and **no agents**. Its standard is thin, so a team/org finding rests
-on less than the other six do.
+## `team` — a real standard, and a third auditor to delegate to
+HR (11) was built on 2026-07-15. The `team` sub-audit now judges against real ground:
+`PEOPLE_DOCTRINE.md`'s five rules (*people are a consequence of revenue, not a route to it*;
+*automate before you hire*; *structure follows the law, not the label*), the **Control /
+Integration / Substance** classification tests, and `HR_RESEARCH.md`'s **real cost of
+employment** (~7.5% employer add-on **plus** remittance by the 9th, monthly, personally liable —
+*the real cost of a first hire is not the salary, it is the machinery*).
 
-Say that. Set `evidence_quality` accordingly and list what you could not judge in
-`out_of_lens`. Do not compensate by inventing a standard — a sub-audit whose department has
-not been built yet is a real gap in the Gateway Offer, not something to paper over with
-plausible-sounding best practice.
+**`hr-engagement-classifier` is a genuine auditor**, not a designer. When a client's engagements
+need *checking* — is this contractor actually an employee? — set
+`delegated_to: hr-engagement-classifier` and carry its output through.
+
+**Two findings that generalize to almost any client:**
+- **The Integration Test catches more people than anyone expects.** *"We use freelancers"* is not
+  a finding; *"their freelancers do work integral to the business"* is.
+- **Never treat cost as the reason for contractor status** — that gap is the motive an auditor
+  looks for.
+
+**With this, all 7 sub-audits rest on a department with real agents.** The lens is complete.
 
 ## Every finding needs a standard and evidence
 - `finding` — what is broken, concretely

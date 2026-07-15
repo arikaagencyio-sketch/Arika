@@ -48,7 +48,11 @@ system?"** The Operational Calendar exists for exactly one reason
 (`08_Operations/OPERATIONS_CONSTITUTION.md` §7), not something you may fill in:
 
 - The owner **operates solo, AI-assisted** — *"I am the orchestrator... I am the salesperson, execution person, all of that, but I have the aid of artificial intelligence."*
-- **HR (11) is deliberately empty** — there is no headcount to model.
+- **There is no headcount to model** — 1 person, solo, AI-assisted. HR (11) was built 2026-07-15
+  (`PEOPLE_DOCTRINE.md`) and **inherits this exact ban**: it does not invent hours or headcount
+  either. Its `hr-capacity-monitor` asks *"do we need another human?"* while you ask *"can we
+  deliver **this engagement**?"* — related, not the same. Hand it strain; take its hiring signal
+  as context, never as capacity.
 - **No BI/dashboard is connected** — there is no utilization telemetry.
 - Offer's team-role rosters are **AI-assisted functional labels, not real people** (`02_Offer/OFFER_OS.md` §3).
 

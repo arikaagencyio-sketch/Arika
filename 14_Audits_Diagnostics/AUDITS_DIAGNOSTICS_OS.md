@@ -74,7 +74,7 @@ Each of the 7 sub-audits names an area **another department already owns the sta
 | `crm` | ClientPartner (06) + Sales (05) | ✅ `clientpartner-crm-architect` |
 | `automation` | Automation (16) | ✅ **as of 2026-07-15** — `automation-workflow-architect`, `automation-process-architect`, `automation-reliability-monitor` |
 | `acquisition` | ClientPartner (06) | ✅ **delegated — see below** |
-| `team` | HR (11) | ❌ **OS file only, no agents** |
+| `team` | HR (11) | ✅ **as of 2026-07-15** — `PEOPLE_DOCTRINE.md`, `HR_RESEARCH.md`, + 4 agents |
 | `offer` | Offer (02) | ✅ `offer-oeos-engineer`, `offer-pricing-floor-analyst` |
 
 **Note the asymmetry:** those agents *design*; they are not auditors. Only 06's is a diagnostic. So the sub-audits are not "already covered" — the owning departments hold the standard an audit judges against, and turning that into "here is what's broken in *this* client's" is 14's job.
@@ -83,7 +83,9 @@ Each of the 7 sub-audits names an area **another department already owns the sta
 
 **Updated 2026-07-15 — the `automation` hole closed the same week it was flagged.** Automation (16) was built with 4 agents, so the `automation` sub-audit now has a real standard to judge against: `Draft 35`'s four immutables (audit-before-automate, human-in-the-loop on client-facing AI output, security/data-handling review, a documented manual-override path) and its **<2% automation failure rate** go-live gate, plus `Draft 36`'s process-mapping discipline. Better still, 16's `automation-reliability-monitor` is a genuine **auditor**, not a designer — the same shape as 06's acquisition diagnostic. **`audits-subaudit-analyst` may delegate the `automation` sub-audit to it** where the client's estate needs checking rather than designing.
 
-**`team` alone now rests on thinner ground than the other six** — HR (11) has an OS file and no agents, so a team/org finding has less of a standard behind it. The analyst reports this in `out_of_lens` rather than inventing best practice. This is a real remaining hole in the Gateway Offer, not a documentation gap.
+**Updated 2026-07-15 — the last hole closed the same week it was flagged.** HR (11) was built with a **People Doctrine**, **Kenya labour + payroll research**, and 4 agents. The `team` sub-audit now has real ground: the **Control / Integration / Substance** classification tests, the **real cost of employment** (~7.5% employer add-on plus remittance machinery), the **delegability ceiling** as a structural constraint, and the **hiring-trigger doctrine** (*people are a consequence of revenue, not a route to it*). `hr-engagement-classifier` is a genuine **auditor** of an arrangement — the same shape as 06's acquisition diagnostic and 16's reliability monitor — so **`audits-subaudit-analyst` may delegate the `team` sub-audit to it** where a client's engagements need checking rather than designing.
+
+**All 7 sub-audits now rest on a department with agents.** The Gateway Offer's lens is complete for the first time.
 
 ## 6. Skill Library Index
 

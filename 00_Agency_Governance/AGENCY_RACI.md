@@ -30,7 +30,10 @@ All "Responsible/Accountable" cells below are department names, not individuals,
 | Delivery execution & SOP adherence | Operations (08) | Operations (08) | Client Success (07) | Finance (09) |
 | Invoicing & revenue recognition | Finance (09) | Finance (09) | Operations (08) | Agency Governance (00) |
 | Contract drafting & legal review | Legal (10) | **Mary Thuo** | **External counsel — ⚠️ NOT ENGAGED**, Sales (05), Client Success (07) | Agency Governance (00) |
-| Hiring & internal onboarding | HR/People Ops (11) | HR/People Ops (11) | Operations (08) | Agency Governance (00) |
+| Hiring & internal onboarding | HR/People Ops (11) | **Mary Thuo** | Operations (08), **external counsel + accountant — ⚠️ NEITHER ENGAGED** | Agency Governance (00) |
+| Owner compensation (self-pay) — doctrine | HR/People Ops (11) | **Mary Thuo** | **Accountant — ⚠️ NOT ENGAGED** | Finance (09) |
+| Owner compensation (self-pay) — money | Finance (09) | **Mary Thuo** | HR/People Ops (11), accountant *(not engaged)* | Agency Governance (00) |
+| Engagement classification (employee vs contractor) | HR/People Ops (11) | **Mary Thuo** | **External counsel — ⚠️ NOT ENGAGED**, Legal (10) | Finance (09) |
 | Brand standards enforcement across departments | Branding (12) | Branding (12) | Marketing (03), Content (04), Sales (05) | All departments |
 | Tool/vendor selection & access management | Tech Stack (13) | Tech Stack (13) | Department requesting tool | Finance (09) (cost), Legal (10) (contract terms) |
 | Agency-wide constitution amendments | Agency Governance (00) | Mary Thuo | All department owners | All departments |
