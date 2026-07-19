@@ -67,6 +67,17 @@ The 8 rows immediately above (marked *template row*) illustrate the pattern only
 5. If Risk Class 3+, get the required human sign-off (per Constitution §5) before activation, and log the approval in the department's Decision Log.
 6. Reference this row's trigger name in the department's own `{DEPT}_OS.md` §12 entry rather than duplicating the detail there.
 
+
+## 🔴 2026-07-19 — the 28 scheduled triggers have never fired, and that changes the question
+
+Tracker item 58 recorded **28 `type: schedule` triggers against exactly one real row here**, and called it a breach of this matrix's opening rule. **Verified 2026-07-19: it is not a breach, because none of them are live.**
+
+Evidence: `arika-runtime` has **no daemon, service, container, or process-manager configuration**. The scheduler only registers crons while `npm start` is running in a foreground terminal, and nothing keeps it running. Every entry in every `runtime.jsonl` across the whole repo — **8 in total** — is a **manual** run: two `branding-brand-definition` on 2026-07-14, and six on 2026-07-19 during the API-key verification. **Zero scheduled executions have ever occurred.**
+
+**So the real risk is not the current state — it is the transition.** The 28 crons are dormant declarations, but they are *armed*: the first time anyone runs `npm start` and leaves it up, **28 automations go live simultaneously against one governance row**, with no human intervening. The rule would be breached in the instant it started mattering.
+
+**That reframes the owner decision.** The question was *"28 rows, or one covering row?"* It should be: **what must be true before the scheduler is ever started?** — because that single command, not the specs, is what puts automation into production. See `16_Automation/AUTOMATION_OS.md` for the department that learned this the hard way when its only live routine died unwatched for 11 days.
+
 ## Changelog
 
 - 2026-07-04 — **Creative Pipeline Automation went live.** Both build blockers resolved same day (Notion cloud-routines connector confirmed already attached; "Publishing Status" given a real "Ready for Design" trigger value). Real routine created via `RemoteTrigger` (`trig_01WyyrXEkFZck1D49tm6BfKv`, hourly cron `7 * * * *`, Notion connector only — deliberately no OpenArt/Canva connector attached, making the credit-spend gate infrastructural rather than instruction-only). Closes `OWNER_INPUT_NEEDED.md` items 54-55 and `GO_LIVE_CHECKLIST.md` Phase 9 items 41-43. — Claude Code (Sonnet 5)
