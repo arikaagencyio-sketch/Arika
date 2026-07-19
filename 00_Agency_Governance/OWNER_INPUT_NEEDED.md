@@ -1,7 +1,9 @@
 # Owner Input Needed — Consolidated Tracker
 
 **Status:** Living document — updated as each department's content migration surfaces new items. Review in one sitting once migration is further along, or pick off items anytime.
-**Last updated:** 2026-07-09
+**Last updated:** 2026-07-19
+
+> ⚠️ **This tracker went stale between 2026-07-09 and 2026-07-19 and was re-synced on 2026-07-19.** Six departments were built in that window (13, 14, 15, 16, 17, 10, 11) and **none of the owner actions they surfaced had rolled up here** — including the two largest open items in the agency (engage counsel, engage an accountant). Items 57–69 close that gap. **The roll-up is manual and nothing enforces it**, which is the same class of failure Automation (16) found in its own estate: a document that describes a live process, while nothing re-checks whether the process ran. Treat the drift as a known property of this file, not a one-off.
 
 > Referenced from [`GLOBAL_OS.md`](../GLOBAL_OS.md) §11. This file exists because individual departments correctly flag what's missing inside their own `{DEPT}_OS.md`, but those flags get buried across 12+ files as migration proceeds. This is the single place they roll up.
 
@@ -28,6 +30,11 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 ## Agency-Wide (00_Agency_Governance)
 
 *(item 4 resolved 2026-06-30 — see Resolved table)*
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 57 | Supply a real `ANTHROPIC_API_KEY` in `arika-runtime/.env` | **Every one of the 106 agents depends on it.** The runtime builds, registers all 106, and passes 13/13 tests without it — but the Anthropic client is lazy by design (constructs key-less, throws only on invoke), so *nothing has ever actually called a model*. The agent layer is verified as **loadable**, not as **runnable**. Owner-held secret; cannot be filled in from any file | Not set — verified absent 2026-07-19 | `arika-runtime/.env.example`; `arika-runtime/DESIGN.md` |
+| 58 | Decide how the runtime's **28 scheduled triggers** get governance rows — 28 individual rows, or one covering row for the class | The Automation Approval Matrix opens *"No automation goes live without a row in this matrix"*. It currently holds **exactly one real row** (the Creative Pipeline cloud routine) plus 8 template rows — against **28 `type: schedule` triggers** across the agent specs. Either the rule means 28 rows, or it means something narrower; **only the owner can decide which, because it is a governance-scope question, not a fact to look up.** Until then the agency is in documented breach of its own matrix | 28 triggers, 1 real row — verified 2026-07-19 | `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md`; `arika-runtime/src/triggers/scheduler.ts` |
 
 ## Department: Sector (01)
 
@@ -99,6 +106,42 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 
 *(items 54, 55 resolved 2026-07-04 — see Resolved table)*
 
+## Department: Legal (10)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 59 | **Engage external counsel** and name them as reviewer of record | **The single highest-leverage open item in the repo.** 7 contract templates exist in draft and **none has been reviewed by a lawyer**; `legal-counsel-router`'s honest default is `blocked_no_reviewer` — *the department's primary output has no recipient*. Blocks the first signed client, and blocks offer #11 entirely (highest setup ceiling in the catalog, $250,000+, and the only source-named path to the $500K–$5M tier). **An 8-item brief is already written** — this is a decision with a prepared brief attached, not a research task | Not engaged | `10_Legal/LEGAL_RESEARCH.md` §6; `10_Legal/LEGAL_OS.md` §8 |
+| 60 | Resolve `[ARIKA LEGAL ENTITY]` — the real registered entity name and structure | **Load-bearing, not cosmetic:** a sole proprietorship has no liability shield, so the MSA's liability cap is contractual only, **with personal assets behind it**. The placeholder appears in every one of the 7 templates. Entity structure and tax were **deliberately not researched** (jurisdiction-specific; desk research would be actively misleading) — this needs the accountant and counsel, not more reading | Placeholder in all 7 templates | `10_Legal/templates/README.md`; `10_Legal/LEGAL_OS.md` §8 |
+| 61 | Decide the response to the **cross-border transfer finding** — Kenya DPA s.48 | **Active now, not on first client.** Personal data leaves Kenya for US infrastructure every day through ClickUp, Zoho Books, Notion, and every prompt to Anthropic — with no documented s.48 basis. **s.48 safeguards are contractual and pre-transfer: they cannot be applied retroactively to data already moved.** Related: Arika's tool stack *is* its sub-processor list, and under GDPR Art. 28 the agency is fully liable for all of it | Undocumented | `10_Legal/LEGAL_RESEARCH.md` §5 |
+
+## Department: HR / People Ops (11)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 62 | **Engage an accountant** | The owner's own named next hire alongside counsel, and **a professional engagement rather than an employee** — no ~7.5% employer add-on, no payroll machinery, **reachable at zero revenue when an employee is not.** Needed for: the self-pay mechanism, USD→KES basis, PAYE/NSSF/SHIF/Housing remittance (by the 9th, monthly, personally liable), and the expired Zoho Books trial. **The real cost of a first hire is not the salary — it is the machinery**, which is the argument for the accountant coming first. **Brief already written** | Not engaged | `11_HR_People_Ops/HR_RESEARCH.md` §6; `11_HR_People_Ops/PEOPLE_DOCTRINE.md` §5 |
+| 63 | Confirm the **self-pay** decision: whether, when, and how much | HR owns the doctrine, **Finance owns the money** (owner-confirmed boundary). `AGENCY_REVENUE_TARGETS.md` already treats targets *"the same way payroll/bills/KPIs would be"* — **so the owner IS the payroll.** An unpaid owner hides the business's real cost of operation from itself, and **a pricing floor that assumes free founder labour is not a floor** — every margin computed to date rests on this. Needs a real number from the owner; **no band may be invented** | Doctrine written, number unset | `11_HR_People_Ops/PEOPLE_DOCTRINE.md` §4 |
+
+## Department: Tech Stack (13)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 64 | **Re-authenticate Canva, OpenArt, and Relume** connectors | Design (19)'s Production Engine and the Arika website build both depend on these. All three verified **unauthenticated 2026-07-15**. Owner-held credentials — cannot be resolved from any file. *(OpenArt is doubly unusable: no auth **and** 0 credits.)* | Unauthenticated | `13_Tech_Stack/TECHSTACK_OS.md` §3 |
+| 65 | Decide the **Zoho Books** path — the trial has expired (`is_trial_expired: true`) | The inventory row itself said *"revisit before trial expires"*; it expired first. Finance (09)'s only accounting tool. Pay, migrate, or drop — a spend decision, and one the accountant (item 62) should inform. **Account deliberately not touched** per owner direction | Trial expired | `13_Tech_Stack/TECHSTACK_OS.md` §3 |
+| 66 | Check **OpenArt Free-plan commercial-use terms** | Free-tier imagery from OpenArt is **already live on the Arika site**. If the Free plan does not grant commercial rights, that is a live exposure on public-facing material, not a future one. A licence-terms question the owner must confirm with the vendor | Unchecked | `13_Tech_Stack/TECHSTACK_OS.md` §3; `10_Legal/LEGAL_OS.md` |
+
+## Department: Consulting & Advisory (15)
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 67 | Define the **VIP consulting day** delivery process — or retire the product | **Real Draft 28 pricing ($10,000–$35,000/day) attached to work that has never been performed and has no defined shape.** Deliberately not invented 2026-07-15: synthesizing a method for a $35K/day product from an offer with **zero delivered engagements** is exactly the error this repo has repeatedly caught elsewhere. Needs the owner's real intent | Priced, no process | `15_Consulting_Advisory/CONSULTING_ADVISORY_OS.md` §3 |
+| 68 | Decide whether the **Growth Workshop** is a real product | No Phase 1 seed data at all beyond a name and *"strategic authority"* — `Draft 38` never mentions a workshop | Unbuilt, name only | `15_Consulting_Advisory/CONSULTING_ADVISORY_OS.md` §3 |
+
+## Cross-Department: contested ownership
+
+| # | Item | Why it matters | Currently | Source file |
+|---|---|---|---|---|
+| 69 | Settle **"AI Opportunity Assessment"** — Automation (16) or AI Enablement (17), or a shared front door to both | The name is split across two divisions and **neither offer is engineered for it**. `Draft 35` Phase 12's *"AI Opportunity Audit"* is the most direct text; `Draft 40` strengthens 17's claim but **says "Readiness", never "Opportunity"**. Left contested **on purpose, twice** — it was not resolved inside the department that would benefit from resolving it. A third reading stays open: a shared entry point to both #6 and #11, which depends on `Draft 40` Phase 2's own unanswered *"bundled or separate entry points"* question | Contested, owner-confirmed twice | `17_AI_Enablement/AI_ENABLEMENT_OS.md`; `16_Automation/AUTOMATION_OS.md`; `02_Offer/OFFER_OS.md` |
+
 ---
 
 ## Resolved
@@ -155,6 +198,8 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 | 29 | Confirm or set real `BrandScoringEngine` thresholds | **Resolved by direct owner input.** Keep the generic 70-78 defaults as-is — no real BOIS run against a real client exists yet to calibrate against. | 2026-06-30 | `12_Branding/BRANDING_OS.md` §7 |
 
 ## Changelog
+
+- 2026-07-19 — **Re-synced after a 10-day gap; added items 57–69 across 6 departments plus 2 agency-wide.** Six departments (13, 14, 15, 16, 17, 10, 11) were built between 2026-07-09 and 2026-07-15 and **their owner actions had never rolled up into this file** — including the agency's two largest open items, *engage counsel* (59) and *engage an accountant* (62), and the two live-now exposures: **no `ANTHROPIC_API_KEY`, so none of the 106 agents has ever actually called a model** (57), and **28 scheduled triggers against exactly 1 real approval-matrix row** (58), a documented breach of the matrix's own opening rule. Every item verified against source before being written here rather than carried over from session memory: the 28/1 counts were re-counted from `.claude/agents/*.md` and `AUTOMATION_APPROVAL_MATRIX.md`, and the missing `.env` was confirmed absent. **Added a standing staleness warning to the header** — the roll-up is manual and nothing enforces it, the same failure class Automation (16) found in its own estate. — Claude Code (Opus 4.8)
 
 - 2026-07-09 — **New item 56 added** (confirm Whimsical connection) while aligning the owner's "Design Department" plugin into Experience Engineering (20) as its **Experience Spec System** (`20_Experience_Engineering/EXPERIENCE_SPEC_SYSTEM.md`). Not a blocker — the six-station spec discipline runs without Whimsical; the item just flags a claimed-but-unverified capability. The plugin's other new tools (Formspree, analytics, headless CMS, Search Console) are adoption/build steps tracked in `GO_LIVE_CHECKLIST.md` Phase 10, not here, since they're not decisions blocked on a missing fact. Open item count for Experience Engineering: 2 (53, 56). — Claude Code (Opus 4.8)
 - 2026-07-04 — **Items 51 and 52 resolved** — the two open decisions that had blocked Experience Engineering (20) since its founding. Item 51: first real project scoped as Arika's own flagship website (Phase 1 marketing site; Client Portal/Academy deferred as roadmap; real build budget still genuinely open, not assumed). Item 52: Creative Pipeline reconciled into one canonical 17-step sequence. Open item count for Experience Engineering: 1 (53, now unblocked but still undecided). — Claude Code (Sonnet 5)
