@@ -3,6 +3,8 @@
 **Created:** 2026-07-19 · **Status:** 🔴 Pre-incorporation. **Neither entity exists yet.**
 **Counsel approached:** Sarah Ndwiga, Partner, Ndwiga Law (Westlands, Nairobi) — quoted **KES 180,000** exclusive of government charges. Engagement **not yet accepted**.
 
+**Engagement state — 2026-07-19: instructing email SENT, awaiting reply.** Sent with `00 - Instruction Brief` attached. It corrects counsel's assumption of a co-shareholder (**Mary Thuo is sole owner**); asks whether the **holdco should be incorporated first** and **which entity holds the IP**; discloses that the software is **predominantly AI-assisted and provider-agnostic**, citing **COPTA/E001/2025**, and asks what subsists before any copyright is registered; asks what falls inside the KES 180,000 versus the eight operational questions; asks for an **estimate of government charges**; and asks for a **phased instalment plan** plus confirmation of **what may lawfully be marketed before incorporation completes**. The letter of engagement was requested *reflecting that phasing*, not ahead of it.
+
 > ⚠️ **This document is desk research, not legal advice.** Fees, timelines, and procedures below are from public sources (cited at the end) and were gathered to make the conversation with counsel informed and budgetable. **Every figure must be confirmed by counsel and against the live eCitizen/BRS invoice.** Nothing here is a substitute for Sarah's advice.
 
 ---
