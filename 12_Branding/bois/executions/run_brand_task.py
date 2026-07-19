@@ -39,7 +39,7 @@ if str(WORKSPACE_ROOT) not in sys.path:
 
 from bois.core.client_workspace import slugify  # noqa: E402
 from bois.core.governance.policy import BrandGovernancePolicy  # noqa: E402
-from bois.core.grading.engine import BrandScoringEngine  # noqa: E402
+from bois.core.grading.engine import SCORE_DIMENSIONS  # noqa: E402
 from bois.core.memory.store import JsonMemoryStore  # noqa: E402
 from bois.core.models import ClientObject  # noqa: E402
 from bois.core.orchestration.engine import BrandCognitiveOrchestrator  # noqa: E402
@@ -128,8 +128,7 @@ def run(request: Dict[str, Any]) -> Dict[str, Any]:
     }
 
     if mode == "audit":
-        engine = BrandScoringEngine()
-        result["scoring_dimensions"] = [d.id for d in engine.dimensions]
+        result["scoring_dimensions"] = [d.id for d in SCORE_DIMENSIONS]
 
     if not should_synthesize:
         return _envelope(

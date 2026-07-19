@@ -34,7 +34,10 @@ from ..orchestration.registry import agent_prompt
 
 
 DEFAULT_MODEL = "claude-opus-4-8"
-DEFAULT_MAX_TOKENS = 2048
+# The contract requires 8 prose reasoning fields plus three lists in a single JSON
+# object. 2048 truncated that mid-string on every run, which surfaced as "unparseable
+# output" rather than as the length limit it actually was — see `_parse`.
+DEFAULT_MAX_TOKENS = 16000
 MAX_EVIDENCE_PER_SOURCE = 6
 
 
@@ -69,10 +72,10 @@ def _output_schema() -> Dict[str, Any]:
             }
 
     properties["confidence"] = {
+        # The 0-1 bound lives in the description, not as `minimum`/`maximum`: structured
+        # outputs reject numerical constraints, and the whole request 400s if they appear.
         "type": "number",
-        "minimum": 0,
-        "maximum": 1,
-        "description": "Confidence in this output given the evidence actually retrieved.",
+        "description": "Confidence in this output, from 0 to 1, given the evidence actually retrieved.",
     }
     properties["evidence_gaps"] = {
         "type": "array",
@@ -202,6 +205,7 @@ class BrandAgentRuntime:
             model=self.model,
             max_tokens=self.max_tokens,
             system=agent_prompt(task.agent_id),
+            output_config={"format": {"type": "json_schema", "schema": _output_schema()}},
             messages=[{"role": "user", "content": _build_user_message(task, context)}],
         )
 
@@ -237,6 +241,13 @@ class BrandAgentRuntime:
         try:
             parsed = json.loads(text)
         except json.JSONDecodeError:
+            # Truncation looks identical to malformed output here, so name it explicitly.
+            # Reporting a length limit as "unparseable" sends the reader after the wrong bug.
+            if getattr(response, "stop_reason", None) == "max_tokens":
+                raise SynthesisError(
+                    f"{task.agent_id} hit the {self.max_tokens}-token output limit, so its JSON "
+                    "was cut off mid-response. Raise max_tokens; the output itself is not malformed."
+                )
             start, end = text.find("{"), text.rfind("}")
             if start == -1 or end <= start:
                 raise SynthesisError(f"{task.agent_id} returned unparseable output: {text[:200]}")

@@ -26,7 +26,10 @@ import type { RunContext } from "../executor.js";
 
 const BOIS_ROOT = join(repoRoot, "12_Branding", "bois");
 const ENTRY_POINT = join(BOIS_ROOT, "executions", "run_brand_task.py");
-const TIMEOUT_MS = 180_000;
+// BOIS activates a dozen agents and runs them *sequentially* (`run_all` is a list
+// comprehension, not a gather), each producing a full reasoning contract. 180s only ever
+// passed while responses were being truncated at 2048 tokens; a real run needs minutes.
+const TIMEOUT_MS = 900_000;
 
 interface BoisRequest {
   mode: string;
