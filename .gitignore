@@ -17,3 +17,6 @@ desktop.ini
 .env
 .env.local
 *.local
+
+# Generated counsel package (rebuild: python 10_Legal/build_counsel_package.py + Word export)
+10_Legal/_counsel_package/
