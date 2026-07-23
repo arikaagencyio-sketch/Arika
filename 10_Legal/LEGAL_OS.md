@@ -53,6 +53,7 @@ Legal is a **newly created department** — confirmed as a real gap during works
 | `clientpartner-partner-enablement` (06) | Payouts, commissions, rev-share, agreements — **Class 3+** | [`MSA.md`](templates/MSA.md) (unreviewed); partner agreement **not drafted** |
 | `client-success-offboarding` (07) | Involuntary offboarding — non-payment/breach — **Class 3/4** | [`MSA.md`](templates/MSA.md) Clauses 4.3–4.4 (unreviewed) |
 | `sales-risk-trust-governance` (05) | Trust, compliance, ethics, legal exposure across sales | Claims policy, MSA (unreviewed) |
+| `presence-legal-liaison` (21) | Presence-asset exposure — open-source/doc **licensing**, schema/**claims accuracy**, **brand protection** (domains/handles/impersonation), **AI-content governance**, public-form **data privacy** (added 2026-07-23) | 🔴 Routed, no reviewer — Claims policy, IP/Copyright/Trademark, API & AI Tooling, DPA (all unreviewed) |
 
 **Plus `00_Agency_Governance/AGENCY_RACI.md`**, which consults Legal on contracts and compliance agency-wide.
 

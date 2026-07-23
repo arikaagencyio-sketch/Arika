@@ -17,7 +17,7 @@ Marketing/Content, Sales, Client Success, and Finance all touch the same underly
 | Field | Type | Set by | Notes |
 |---|---|---|---|
 | lead_id | string | System | Unique identifier |
-| source | enum | Marketing (03) / Content (04) / ClientPartner Acquisition (06) | inbound, outbound, referral, partner, event |
+| source | enum | Marketing (03) / Content (04) / ClientPartner Acquisition (06) / Presence (21) | inbound, outbound, referral, partner, event, inreach |
 | source_campaign | string | Marketing (03) / Content (04) | Which campaign/content piece generated this lead |
 | contact_name, contact_email, company | string | Marketing (03) / Content (04) | Raw capture data |
 | ICP_fit_score | number | Sales (05) | Qualification scoring, see Constitution §5 for any automation risk-class implications |

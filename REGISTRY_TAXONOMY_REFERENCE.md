@@ -24,6 +24,13 @@ For v0.1, only a curated subset (~12) of these registries is active, embedded as
 
 ## Future-state — not yet built
 
+> **AEIT Phase Zero update (2026-07-22):** several of these now have *blueprints* (design, not
+> implementation) under `00_Agency_Governance/enterprise_architecture/` — **Dependency** →
+> `AEIT_02`; **Semantic/Ontology** + **Relationship (entity graph)** → `AEIT_06`; **State (system
+> state machine)** → `AEIT_05`; **Protocol (dept-to-dept contracts)** → `AEIT_09`; **Intelligence /
+> Learning / Feedback** → `AEIT_07` (IntOS). They stay "future-state" until built post-activation
+> (`AEIT_10` reality gates); blueprinted ≠ active.
+
 **Foundation:** Domain, Service, Offer (note: Offer already has a dedicated department, 02), Identity, Context, Dependency, Semantic/Ontology
 
 **Entities:** Client, Project, Task, Lead, Invoice, Asset, Contract

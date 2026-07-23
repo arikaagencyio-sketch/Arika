@@ -83,7 +83,7 @@ Downstream, `content-multiplication-engine` hands `distribution_waves` to
 
 **🔴 Deliberately NOT built — 4, with reasons** (building these would rebuild the
 fragmentation this department exists to attack):
-- **Distribution / platform agent** → Marketing (03) owns it, and says so: *"Every platform is a distribution endpoint, not a separate content strategy — content itself is owned by Content (04)... not reinvented per-platform here"* (`MARKETING_OS.md` §10). Content produces the tree; Marketing works the channels.
+- **Distribution / platform agent** → Marketing (03) owns it, and says so: *"Every platform is a distribution endpoint, not a separate content strategy — content itself is owned by Content (04)... not reinvented per-platform here"* (`MARKETING_OS.md` §10). Content produces the tree; Marketing works the channels. **Update (2026-07-23):** the owner consciously overrode the repo's "no distribution/platform department" stance to create the **Presence department (21)** — but *not* by giving it distribution or production. Presence **coordinates** presence across layers and owns the previously-unowned hidden layers + Engagement (COS Layer 7); Content still produces the tree and Marketing still works the channels. The reason this bullet gave still holds — Presence is a coordinator above them, not a distributor. See `21_Presence/PRESENCE_OS.md` §1.
 - **Asset production agent** → Design (19) owns the Production Engine (storyboard → image → video → voice → animation → music → enhance → assemble). Content produces the **brief**; Design produces the **asset**. The Notion schema's `Visual Direction` + `Canva Instructions` + `Ready for Design` are that handoff, already designed.
 - **Market/sector intelligence agent** → Sector (01) owns foundational sector truth; `marketing-market-intelligence` owns campaign/demand intelligence. Content **consumes** both (sources 1 and 2 above).
 - **Performance intelligence agent** (ACCOS Stage 12 / COS Layer 10) → **deferred, not dismissed.** It is real doctrine, but it has zero possible input: nothing has been published, zero social accounts exist (`GO_LIVE_CHECKLIST.md` item 23), and no BI is connected. It would have to invent every metric it reported. `marketing-attribution-modeling` (03) already owns measurement truth. Build when there is real published content to measure. See §7's vanity-metric exclusion list, which survives as the standard.
@@ -191,12 +191,12 @@ Four different "narrative" concepts now exist across this repo and are not dupli
 | 4. Production | Turning a brief into a real asset | Asset Production Workflow (§4) |
 | 5. Asset Management | Treating content as reusable IP | The Notion content-brief schema (below) + Design (19)'s Asset Library (`19_Design/DESIGN_OS.md` §3) — not a third inventory |
 | 6. Distribution | One idea, many touchpoints | Content multiplication (§3) + Marketing's new Social Ecosystem repurposing flow (`03_Marketing/MARKETING_OS.md` §10) |
-| 7. Engagement | Conversations, not just consumption | Not yet a named capability here — genuinely new; candidate future addition to §3, not built out in this pass |
+| 7. Engagement | Conversations, not just consumption | **Now owned by Presence (21)** (`21_Presence/PRESENCE_OS.md` §3.4, `presence-engagement`) — the two-way capability was taken as its own, 2026-07-23 |
 | 8. Conversion | Every asset points to a next step | Story Architecture's `Problem → Insight → Demonstration → Framework → Proof → Action` sequencing (this section, above) |
 | 9. Analytics | Measuring business impact, not vanity metrics | §7 KPI Dictionary's explicit vanity-metric exclusion list |
 | 10. Optimization | Using performance data to improve the system | Distribution Engineering / Performance Intelligence, the last two stages of Content System Design (ACCOS) (§3) |
 
-No new registry created — this table exists so the owner's 10-layer mental model has a durable, cross-referenced home without duplicating what §3/§4/§10 already define. Layer 7 (Engagement) is the one genuinely new gap; left open rather than invented.
+No new registry created — this table exists so the owner's 10-layer mental model has a durable, cross-referenced home without duplicating what §3/§4/§10 already define. Layer 7 (Engagement) is the one genuinely new gap; left open rather than invented. **Update (2026-07-23): Layer 7 is now owned by the Presence department (21)** (`presence-engagement`), which took the two-way / community capability as its own. Content still produces content; Presence owns the conversation layer.
 
 **🔴 Two genuine conflicts surfaced by the 2026-07-14 agent build — owner decisions, not Claude's to make.**
 

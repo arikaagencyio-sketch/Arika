@@ -2,6 +2,8 @@
 
 > **Repo-alignment header (added 2026-07-09).** Homed under Experience Engineering (20). This is the **fourth pillar** — the one the department did not previously own in any codified form. It becomes a real EE Standard (`EXPERIENCE_ENGINEERING_OS.md` §10) and is enforced by the `design-audit` skill and the QA & Performance Reviewer agent. Its tooling decisions (form service, analytics, headless CMS, Search Console) cross-reference `13_Tech_Stack/TECHSTACK_OS.md` §3 and are tracked in `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. Companion files: `elite-web-build-system.md`, `vision-to-build-pipeline.md`, `workflow-run-sheet.md`.
 
+> **Presence (21) contract (added 2026-07-23).** This layer stays EE's — the **technical** discoverability of the web build (SEO/AEO/GEO execution on the site, structured-data *deployment*, performance). The **entity / knowledge-graph / schema-decision / citation / branded-search** layer *above* it is coordinated by the new Presence department (`21_Presence/PRESENCE_OS.md` §3.3): Presence decides *what entity truth to declare*, EE *deploys* it, and Marketing (03) still owns SEO/AEO/GEO *strategy*. Three owners, one engine, no overlap.
+
 *The other files make the site good; this one makes sure it can be **found**, **used**, and **connected to real data**. Beautiful + invisible + unusable still equals amateur.*
 
 *Last verified: July 2026.*
