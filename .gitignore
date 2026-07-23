@@ -18,5 +18,8 @@ desktop.ini
 .env.local
 *.local
 
+# Auto-sync audit log (see .claude/hooks/README.md)
+.claude/hooks/auto-sync.log
+
 # Generated counsel package (rebuild: python 10_Legal/build_counsel_package.py + Word export)
 10_Legal/_counsel_package/
