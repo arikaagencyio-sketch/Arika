@@ -33,6 +33,10 @@ chmod +x .git/hooks/post-commit
 Then add the Stop hook to `.claude/settings.local.json` (see that file, or the
 `hooks.Stop` block, for the exact command).
 
+## Status
+
+- Installed and verified 2026-07-23 (post-commit push + Stop-hook commit/push paths both tested).
+
 ## Notes
 
 - Auto-sync commits are labelled `chore(auto-sync): <timestamp> [N changed]` so they're
