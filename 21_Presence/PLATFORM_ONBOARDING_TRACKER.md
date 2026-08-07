@@ -68,6 +68,8 @@
 ## 5. Per-platform detail (update these as you advance)
 
 ### 1. LinkedIn — S1 (gated)
+> **Full dossier: [`LINKEDIN_PRESENCE_OS.md`](LINKEDIN_PRESENCE_OS.md)** — the consolidated LinkedIn source of truth (blocking chain, warm-up runway, connection strategy, content playbook, orchestration, open decisions). The summary below stays here for cross-platform comparison.
+
 - **Account:** personal profile created. **Company Page blocked** (needs connections + profile maturity).
 - **Warm-up (S2→S3):** complete profile (photo, headline "Founder, Arika Agency", 1 experience, About); add real connections; verify email+phone; post a couple of manual updates. ~1–2 weeks.
 - **Then:** create Page → create developer app (must attach to the Page) → products (Sign In w/ OpenID Connect + Share on LinkedIn; Advertising API for token refresh) → redirect `https://<postiz-domain>/integrations/social/linkedin` → creds into Coolify → connect.
@@ -113,4 +115,5 @@
 ---
 
 ## 8. Decision Log
+- **2026-08-07 — LinkedIn split out into its own dossier** (`LINKEDIN_PRESENCE_OS.md`) as the position-1 platform and first end-to-end engine test. This tracker keeps LinkedIn's stage row; the dossier holds the depth. Other platforms stay tracked here until they earn the same treatment. — Claude Code (Opus 5)
 - **2026-08-07 — Tracker created.** Per-platform onboarding/health tracking established, enforcing the engine's account warm-up rule; one-platform-per-session discipline adopted to avoid platform flags/suspensions (owner priority: not being flagged/suspended). Reusable as a client-onboarding SOP. — Claude Code (Opus 4.8)
