@@ -32,7 +32,7 @@ The system that turns produced content into consistent, high-volume, **doctrine-
 | **Platform set (10, launch-priority order)** | 1·LinkedIn · 2·Facebook · 3·Instagram · 4·Threads · 5·TikTok · 6·Pinterest · 7·Website (owned hub) · 8·X · 9·Newsletter · 10·YouTube. **Tumblr out of scope.** |
 | **First-test platform** | LinkedIn (position 1) — the full body runs end-to-end here before scaling. |
 | **Executor (L6)** | **Postiz, self-hosted** — posts natively to all 10 via one API; chosen over per-post platform-API builds and over paid per-channel SaaS (flat cost, uncapped volume). |
-| **Host (L0)** | **Railway** — official one-click Postiz template (app + Postgres + Redis, ~$5/mo, auto-wired), which side-steps the **Temporal** service Postiz v2.12+ requires and Render can't host managed. Render retained as candidate for the L5 orchestrator. |
+| **Host (L0)** | **Self-hosted VPS + Coolify** — a Kenyan KVM VPS (≥4GB RAM, Ubuntu, **M-Pesa-paid**) running Coolify (free self-hosted PaaS) to deploy the Postiz stack. Supersedes Railway (2026-08-07: Railway/Stripe rejected the owner's virtual card, and its free Trial OOM-killed Postiz). Render retained as candidate for the L5 orchestrator. |
 | **Gate model** | **Two gates** — a Concept Gate (pre-production) + a Pre-Publish Check (pre-queue) + an automated pre-flight at the publish moment. |
 
 All 10 platforms are already PIL-profiled. This resolves PIL's open `[OWNER: confirm the canonical in-scope set]` flag (`04_Content/PLATFORM_INTELLIGENCE_REGISTRY.md` §4).
@@ -43,7 +43,7 @@ All 10 platforms are already PIL-profiled. This resolves PIL's open `[OWNER: con
 
 | Layer | Role | Owner · tool |
 |---|---|---|
-| **L0 Foundation** | Host + token vault + the identity spine | **Railway** (Postiz stack) · Render (L5 orchestrator, later) |
+| **L0 Foundation** | Host + token vault + the identity spine | **Self-hosted VPS + Coolify** (M-Pesa-paid, Postiz stack) · Render (L5 orchestrator, later) |
 | **L1 Supply** | Assets produced in batches, ahead of demand | Design (19) · OpenArt/KIE.ai/Canva |
 | **L2 Multiply** | 1 asset → many native variants; wrapped as a packet | Content (04) · `content-multiplication-engine` |
 | **L3 Reservoir** | Buffer + queue-of-record (packet state) | Content/Presence · Notion brief DB (extended) |
@@ -112,10 +112,10 @@ off-ramps: concept_rejected · publish_rejected→rework · failed→retry→dea
 
 ## 8. Build order
 
-- **Phase 0 — Decide & connect.** ✅ platform set / executor / host decided. Remaining: deploy Postiz via Railway's one-click template, create the 10 accounts (priority order), register connectors with `verified_at`.
+- **Phase 0 — Decide & connect.** ✅ platform set / executor / host decided. Remaining: provision a Kenyan KVM VPS (≥4GB RAM, M-Pesa) + install Coolify + deploy Postiz, create the 10 accounts (priority order), register connectors with `verified_at`.
 - **Phase 1 — Reservoir.** Extend the Notion packet schema + state machine (the queue-of-record).
 - **Phase 2 — Gates.** Wire G1 + G2 as template-level checkpoints.
-- **Phase 3 — Executor.** Deploy Postiz via Railway's one-click template; connect LinkedIn first.
+- **Phase 3 — Executor.** Deploy Postiz via Coolify on the VPS; connect LinkedIn first.
 - **Phase 4 — First test (LinkedIn, end-to-end).** One real packet through all 12 stages. The "first test of the full body."
 - **Phase 5 — Orchestrator + Monitor.** Cadence engine, rate governor, retry/dead-letter, L7 monitor; write the 3 approval-matrix rows.
 - **Phase 6 — Scale.** Fill the Reservoir to min depth; turn on platforms 2–10; go live, watched.
@@ -132,6 +132,7 @@ off-ramps: concept_rejected · publish_rejected→rework · failed→retry→dea
 
 ## 10. Decision Log
 
+- **2026-08-07 — Host switched Railway → self-hosted VPS + Coolify (M-Pesa).** Railway/Stripe rejected the owner's virtual card (no PayPal/M-Pesa), and Railway's free Trial RAM cap OOM-killed Postiz (exit 137) regardless. Kenyan VPS providers accept M-Pesa; executor moves to a KVM VPS (≥4GB RAM, Ubuntu) + Coolify. **≥4GB RAM is a hard requirement** (the OOM lesson). — Claude Code (Opus 4.8)
 - **2026-08-02 — Executor host switched Render → Railway.** Postiz v2.12+ requires a Temporal service Render can't host managed; Railway's official one-click template side-steps it (pins v2.11.3, ~$5/mo, auto-wires Postgres+Redis+secrets). Render retained as candidate for the L5 orchestrator. — Claude Code (Opus 4.8)
 - **2026-08-02 — Content Distribution Engine design ratified (owner).** Confirmed the 10-platform canonical set (LinkedIn → Facebook → Instagram → Threads → TikTok → Pinterest → Website → X → Newsletter → YouTube; Tumblr dropped), **Postiz self-hosted** as executor, **Render** as host, and the **two-gate** model (Concept + Pre-Publish, +automated pre-flight). Adopted the owner's plan-first 12-stage sequence (`1→5→9→3→4→2→new→6→7→8→+11→10`) with two relabels (09→Define Success, 03→Plan the Tree) and results-capture re-added. Resolves PIL's open in-scope-set flag. Reality-gated: no accounts, no deployment yet — design of record, not a live system. — Claude Code (Opus 4.8)
 
