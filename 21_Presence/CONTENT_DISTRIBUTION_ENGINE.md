@@ -5,7 +5,7 @@
 **Owner:** Mary Thuo (Agency Governance, 00) · coordinated by Presence (21)
 **Status:** **Design ratified by owner 2026-08-02 (platform set, executor, host, gate model all decided).** Reality-gated, pre-build — zero social accounts exist, no instance deployed. This is the design the engine gets built to, not a record of a running system.
 
-> Read `GLOBAL_OS.md`, then `21_Presence/PRESENCE_OS.md` and `00_Agency_Governance/AGENCY_COMMERCIAL_DOCTRINE.md`. This spec is the executable elaboration of Presence's §4 Workflow Index. Rich visual companions (owner-facing): the **Vision Map** (https://claude.ai/code/artifact/36a207db-9453-4f63-a8d2-51614f786c52) and the **Workflow Runbook** (https://claude.ai/code/artifact/f9c4e557-7236-46eb-b5b2-473294c42757).
+> Read `GLOBAL_OS.md`, then `21_Presence/PRESENCE_OS.md` and `00_Agency_Governance/AGENCY_COMMERCIAL_DOCTRINE.md`. This spec is the executable elaboration of Presence's §4 Workflow Index. Rich visual companions (owner-facing): the **Vision Map** (https://claude.ai/code/artifact/36a207db-9453-4f63-a8d2-51614f786c52) and the **Workflow Runbook** (https://claude.ai/code/artifact/f9c4e557-7236-46eb-b5b2-473294c42757). Per-platform account onboarding & health is tracked in `21_Presence/PLATFORM_ONBOARDING_TRACKER.md`.
 
 ---
 
