@@ -112,10 +112,10 @@ off-ramps: concept_rejected · publish_rejected→rework · failed→retry→dea
 
 ## 8. Build order
 
-- **Phase 0 — Decide & connect.** ✅ platform set / executor / host decided. Remaining: provision a Kenyan KVM VPS (≥4GB RAM, M-Pesa) + install Coolify + deploy Postiz, create the 10 accounts (priority order), register connectors with `verified_at`.
+- **Phase 0 — Decide & connect.** ✅ platform set / executor / host decided; ✅ Postiz deployed & running on Hostinger KVM 2 + Coolify (2026-08-07). Remaining: create the 10 accounts and connect each. **⚠️ Account warm-up rule (learned 2026-08-07):** brand-new accounts must be humanized and aged *before* wiring API automation, or platforms flag/gate them — LinkedIn blocks Company-Page creation on a connection-less new account (and the dev app needs a Page), and Meta bans new accounts that immediately create a developer app + connect an auto-poster. Per-account sequence: **create → humanize + verify → warm up manually (1–2+ weeks) → then create the dev app + connect Postiz.** Register each connector with `verified_at`. (This is also a reusable client-onboarding SOP.)
 - **Phase 1 — Reservoir.** Extend the Notion packet schema + state machine (the queue-of-record).
 - **Phase 2 — Gates.** Wire G1 + G2 as template-level checkpoints.
-- **Phase 3 — Executor.** Deploy Postiz via Coolify on the VPS; connect LinkedIn first.
+- **Phase 3 — Executor.** ✅ Postiz deployed via Coolify. Connect platforms as their accounts mature (new-account gates hit: LinkedIn Page-creation blocked, Meta ban-risk — see Phase 0 warm-up rule). Prove the pipeline on a low-risk platform (Bluesky/Mastodon) meanwhile.
 - **Phase 4 — First test (LinkedIn, end-to-end).** One real packet through all 12 stages. The "first test of the full body."
 - **Phase 5 — Orchestrator + Monitor.** Cadence engine, rate governor, retry/dead-letter, L7 monitor; write the 3 approval-matrix rows.
 - **Phase 6 — Scale.** Fill the Reservoir to min depth; turn on platforms 2–10; go live, watched.
