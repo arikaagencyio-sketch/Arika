@@ -51,7 +51,7 @@
 | # | Platform | Stage | Flag-risk | Current note |
 |---|---|---|---|---|
 | — | **Engine / Executor (Postiz)** | ✅ **LIVE** | — | Hostinger KVM 2 + Coolify; Postiz+PG+Redis healthy. App verified; 0 channels connected. |
-| 1 | **LinkedIn** | **S1** | Medium–High | Personal profile created ("Arika"). **Company Page BLOCKED** — new account lacks the connections LinkedIn requires. Page is required before the dev app. → warm up profile + add connections. |
+| 1 | **LinkedIn** | **S1→S4 ready** | Medium | **Unblocked 2026-08-08.** An established founder profile (Mary Thuo) exists and can create the Page — the "Arika" profile is *not* the path and is a policy risk. Page → dev app → Postiz. See [`LINKEDIN_PRESENCE_OS.md`](LINKEDIN_PRESENCE_OS.md) §4. |
 | 2 | **Facebook** | **S1–S2** | **High (90-day bans)** | Personal account + **Page already exist** (pre-existing). Verify personal acct; warm up Page. |
 | 3 | **Instagram** | **S1** | **High** | Account exists, **not yet linked** — needs Professional→**Business** + link to the FB Page. |
 | 4 | **Threads** | **S0** | High | Comes via Meta; start only after IG is established. |
@@ -70,7 +70,7 @@
 ### 1. LinkedIn — S1 (gated)
 > **Full dossier: [`LINKEDIN_PRESENCE_OS.md`](LINKEDIN_PRESENCE_OS.md)** — the consolidated LinkedIn source of truth (blocking chain, warm-up runway, connection strategy, content playbook, orchestration, open decisions). The summary below stays here for cross-platform comparison.
 
-- **Account:** personal profile created. **Company Page blocked** (needs connections + profile maturity).
+- **Account (revised 2026-08-08):** the path is the **established founder profile (Mary Thuo)**, which creates and admins the Page. The company-named "Arika" personal profile is a removal risk and is recommended for retirement. **Page no longer blocked.**
 - **Warm-up (S2→S3):** complete profile (photo, headline "Founder, Arika Agency", 1 experience, About); add real connections; verify email+phone; post a couple of manual updates. ~1–2 weeks.
 - **Then:** create Page → create developer app (must attach to the Page) → products (Sign In w/ OpenID Connect + Share on LinkedIn; Advertising API for token refresh) → redirect `https://<postiz-domain>/integrations/social/linkedin` → creds into Coolify → connect.
 - **Flag notes:** new-account Page gate; known Postiz OAuth "Not enough scopes" bug.
@@ -111,6 +111,7 @@
 | 2026-08-07 | LinkedIn | → S1 | Personal profile created; Page blocked (connections) |
 | 2026-08-07 | Facebook | → S1–S2 | Personal + Page confirmed pre-existing |
 | 2026-08-07 | Instagram | → S1 | Account exists; link-to-Page pending |
+| 2026-08-08 | LinkedIn | S1 → S4-ready | Established founder profile identified as the real path; Page unblocked; "Arika" profile flagged for retirement |
 
 ---
 

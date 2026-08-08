@@ -33,18 +33,19 @@ This dossier **consolidates and reconciles**; it does not re-own capability (one
 
 | Fact | State | Source |
 |---|---|---|
-| Personal LinkedIn profile | ✅ **Created** ("Arika") | `PLATFORM_ONBOARDING_TRACKER.md` §4 |
-| Company Page | 🔴 **BLOCKED** — new account lacks the connections/profile maturity LinkedIn requires | tracker §5.1 |
-| Connections | 🔴 Effectively none — the blocking constraint | owner, this session |
+| **A** — Mary Thuo personal profile | ✅ **Exists and is mature** — real history, connections, professional credentials | owner, 2026-08-08 |
+| **B** — "Arika" personal profile | ⚠️ Created, S1, **company-named personal account = policy risk** (§4.3) | tracker §4 |
+| **C** — Company Page | 🔴 Not created — but **no longer blocked**: creatable from A (§4.7) | owner, 2026-08-08 |
+| Connections | ✅ On A, real. 🔴 On B, effectively none — which no longer matters | owner, 2026-08-08 |
 | Posts published | 🔴 **Zero** | — |
-| Developer app / API access | 🔴 Not started — **and cannot start**: LinkedIn requires the dev app to attach to a **Company Page** | tracker §5.1 |
+| Developer app / API access | 🔴 Not started — must attach to **C**, and be created by an admin of C | tracker §5.1 |
 | Postiz connection (the executor) | 🔴 Not connected — 0 channels connected on a live instance | `CONTENT_DISTRIBUTION_ENGINE.md` §2 |
 | Executor infrastructure | ✅ **LIVE** — Postiz + Postgres + Redis healthy on Hostinger KVM 2 + Coolify | tracker §4 |
 | Content strategy | ✅ Fully written, ⚠️ **not publishable as written** — see §7.7 | `Draft 13` |
 | Content brief database (Notion) | ✅ Built, **empty**; has a `LinkedIn` platform option | `CONTENT_OS.md` §10 |
 | Launch date | 🔴 Never set — open owner decision since 2026-06-30 | `GO_LIVE_CHECKLIST.md` item 14 |
 
-**The honest summary:** the infrastructure is ahead of the account, and the strategy is ahead of both. The single thing standing between here and everything else is **connections**.
+**The honest summary (revised 2026-08-08):** the infrastructure is ahead of the account and the strategy is ahead of both — but the account situation is better than it looked. A mature founder profile already exists; it just wasn't being counted as the agency's asset. The blocker was never connections, it was **which identity does the work** (§4).
 
 ---
 
@@ -67,24 +68,94 @@ This dossier **consolidates and reconciles**; it does not re-own capability (one
 
 ---
 
-## 4. The blocking chain — what is actually stuck, and why
+## 4. Identity architecture — three identities, one system
 
-This is the core of this session. The account isn't "new and slow" — it is sitting at the head of a **five-link dependency chain**, and every downstream investment in the repo is waiting on link 1:
+**Revised 2026-08-08 (owner input).** An **established personal profile exists** — Mary Thuo's own, carrying real history, connections, and professional credentials — and the Company Page can be created from it. The previous pass assumed the only available profile was the brand-new connectionless one, which made connections the gate on everything. That assumption was wrong, and most of the blocking chain dissolves.
+
+### 4.1 The three identities in play
+
+| | Identity | What it is | State |
+|---|---|---|---|
+| **A** | **Mary Thuo — personal profile** | The real founder. Established, connected, credentialed | ✅ exists, mature |
+| **B** | **"Arika" — personal profile** | A company-named *personal* account opened to represent the agency | ⚠️ exists, S1, **policy risk** |
+| **C** | **Arika Agency — Company Page** | The institutional entity | 🔴 not created |
+
+### 4.2 The structural fact that decides the arrangement
+
+**A LinkedIn Company Page never has its own login.** It is not an account — it is an object administered by personal profiles. Its creator becomes **Super Admin**, and every post, comment, and setting change is executed by a human acting through their own profile. Additional admins can be added (Super Admin · Content Admin · Curator · Analyst), but there is no credential set that *is* the Page.
+
+So "the agency should eventually have its own LinkedIn account" is not a state LinkedIn offers. The Page **is** the agency's own presence — it just runs on a person's hands, permanently. The only real question is whose.
+
+### 4.3 ⚠️ Identity B is a liability, not an asset
+
+LinkedIn's User Agreement requires a personal profile to represent a **real natural person**. Company-named personal profiles are a standing removal category — this is not an edge case, it is one of the patterns LinkedIn actively polices. Three consequences:
+
+1. **B can be restricted or removed at any time**, without warning, and with no history worth appealing for.
+2. **If B were the Super Admin of the Page, a removal orphans the Page** — the asset the entire API path depends on, stranded behind a dead profile.
+3. **There is no supported profile → Page conversion** on LinkedIn (unlike Facebook). B cannot become C. Its only outcomes are: renamed to a real person who will actually use it, or closed.
+
+B also splits the effort: every hour spent warming it is an hour not spent on A, which is already warm.
+
+### 4.4 Recommended architecture
 
 ```
-PRESENCE  →  CONNECTIONS  →  COMPANY PAGE  →  DEVELOPER APP  →  API/POSTIZ  →  ENGINE TEST
-(manual)     (validated)      (LinkedIn gate)   (needs a Page)    (needs app)    (12 stages)
-   ▲
-   └── you are here: the only unblocked link
+  A · Mary Thuo (personal)                    C · Arika Agency (Company Page)
+  ─────────────────────────                   ──────────────────────────────
+  The founder voice          ──creates──►     The institutional entity
+  Opinion · narrative                         Proof · offers · careers
+  Manual, human                               Engine-published (Postiz)
+  Super Admin ───────────────admins──────►    Developer app lives here
+  Verified @arikaagency.com ──verifies──►     "a real person operates this"
+
+  B · "Arika" (personal) ──► retire
 ```
 
-- **Presence → Connections.** Connection requests from an empty profile with no posts get ignored or marked "I don't know this person" — which is itself a restriction trigger. Presence has to exist *before* connections are asked for. This is why warm-up is strategy, not delay.
-- **Connections → Page.** LinkedIn gates Page creation on personal-profile maturity. Its stated requirements are a profile that is **7+ days old**, has a **profile photo**, has **multiple connections**, meets a minimum **profile strength**, and lists a **current position at the company**; a **company-domain email** is often required for verification. ⚠️ *Verify these against LinkedIn's live requirements at creation time — platform gates change, and this repo does not treat vendor rules as permanent.*
-- **Page → Dev app.** The LinkedIn developer app **must attach to a Company Page** — so there is no API path that routes around the Page.
-- **Dev app → Postiz.** Products needed: *Sign In with OpenID Connect* + *Share on LinkedIn* (+ *Advertising API* for token refresh); redirect `https://<postiz-domain>/integrations/social/linkedin`; creds into Coolify. ⚠️ Known Postiz OAuth *"Not enough scopes"* bug — expect friction here (tracker §5.1).
-- **Postiz → engine test.** Phase 4 of the build order: one real packet through all 12 stages.
+**A is the engine; C is the infrastructure.** That ordering is not a compromise — it is what the platform rewards and what this repo's own doctrine already says: *"founders are bought before agencies"* (`PRESENCE_OS.md` §3.2). Personal profiles substantially out-reach Company Pages organically; the Page earns its keep as the entity that holds the dev app, verification, employees, ads, and institutional proof.
 
-**The asset that unblocks link 2 fastest:** the repo already confirms a real company-domain email — `mary.thuo@arikaagency.com` (`OWNER_INPUT_NEEDED.md` item 33, resolved 2026-06-30). ⚠️ *Confirm the mailbox is actually provisioned and receiving* — a confirmed address in a doc is not a working inbox, and this is exactly the class of doc-vs-reality drift this repo has caught four times.
+**Your instinct to link the personal profile to the agency as founder is exactly right** — and LinkedIn has a purpose-built mechanism for it: **workplace verification**. Listing Arika Agency as current experience and verifying it via a company-domain email produces a verified badge on your profile stating you work there. For a 0-client agency, "a real, credentialed person demonstrably operates this" is the scarcest credibility asset available, and it is free.
+
+### 4.5 Merits & demerits — the three arrangements
+
+| Arrangement | Merits | Demerits |
+|---|---|---|
+| **A creates + admins C; B retired** ⭐ *recommended* | Page gate clears now, not in 4–7 weeks · existing connections + credentials transfer credibility instantly · highest organic reach · workplace verification available · one identity to maintain · no policy exposure | Founder's personal network now sees business content · founder must actually show up (cannot be fully delegated) · founder's opinions become agency positions (Legal Class C) · single Super Admin = single point of failure |
+| **Keep both A and B, plus C** | Preserves whatever B has accrued · nominally separates "personal" from "brand" voice | B stays a removal risk indefinitely · **doubles** warm-up, posting, and engagement load on a solo operator · the separation is illusory — C already *is* the brand voice, so B duplicates it · confuses the audience about which identity to follow |
+| **B creates + admins C; A stays separate** | Keeps founder's personal network untouched | ❌ **Do not do this.** B may not clear the Page gate at all · orphans C if B is removed · forfeits the credentials that make the agency credible · the dev app, and therefore the whole engine, would hang off the weakest identity |
+
+**On the demerits of the recommendation — they are real, and worth naming rather than waving past:**
+
+- **Entanglement.** Your personal network becomes an agency audience. If the agency is ever sold or wound down, the Page transfers; the personal audience does not. That is the actual price of founder-led, and it is normally worth paying at this stage.
+- **Delegability ceiling.** A founder-led channel cannot be handed to a hire later without losing most of its reach — this is precisely the single-point-of-failure question HR (11) owns (`hr-owner-sustainability`). Worth logging there rather than discovering it at the first hire.
+- **Claims exposure.** Anything you assert from A about the agency is an agency claim, Class C, substantiable-or-silent — the same rule as §9, not a lighter one because it's "personal."
+- **Succession.** One Super Admin is a single point of failure for the Page *and* the dev app. Add a second Super Admin the moment a second trusted person exists.
+
+### 4.6 What lives where
+
+| | **A — founder profile** | **C — Company Page** |
+|---|---|---|
+| Content | Opinion Stand, Narrative Lesson, Founder Thinking — the "building in the open" voice (§7.7) | Frameworks, Insights, Education, Proof (when it exists), offers, careers |
+| Posting | **Manual, human.** Never fully automated | **Engine-published** via Postiz once connected |
+| Engagement | All of it — comments and DMs happen here | Light; reshare and amplify |
+| Connections | The connection strategy (§6) runs here | Followers, invited from A |
+| Automation risk | High — automating a founder voice reads false *and* flags | Low — Pages are the intended automation surface |
+
+This split is not just aesthetic: it means the distribution engine drives the Page while the founder voice stays human, which satisfies the anti-flag doctrine and the authenticity requirement with the same decision.
+
+### 4.7 The revised blocking chain
+
+What remains once A is doing the work:
+
+```
+A: verify profile + list Arika Agency  →  CREATE PAGE (C)  →  warm C manually  →  dev app  →  API/Postiz  →  engine test
+   (days, not weeks)                      (days)              (1–2 weeks)         (needs C)    (needs app)   (12 stages)
+```
+
+- **Page-creation gates** (verify live at creation time — platform rules change and this repo does not treat vendor rules as permanent): profile 7+ days old · profile photo · multiple connections · minimum profile strength · **current position at Arika Agency listed** · company-domain email for verification. A plausibly clears all but the last two already; both are same-day fixes.
+- **The mailbox is now the critical path.** `mary.thuo@arikaagency.com` is confirmed in the repo (`OWNER_INPUT_NEEDED.md` item 33) — ⚠️ *confirm it is actually provisioned and receiving.* A verification email that cannot be received blocks both Page creation and workplace verification.
+- **⚠️ The Page still needs its own warm-up.** C is a brand-new asset on day one. Creating a Page and immediately attaching a developer app and an auto-poster is the classic ban pattern the tracker's rule 6 exists to prevent (*one new asset at a time*). Post to C manually for 1–2 weeks before the dev app.
+- **Page → dev app → Postiz** is unchanged: the app must attach to C and be created by an admin of C; products *Sign In with OpenID Connect* + *Share on LinkedIn* (+ *Advertising API* for token refresh); redirect `https://<postiz-domain>/integrations/social/linkedin`; creds into Coolify. ⚠️ Known Postiz OAuth *"Not enough scopes"* bug.
+
+**Net effect: the runway shortens from 4–7 weeks to roughly 2–4**, and the long pole moves from *"earn enough connections"* to *"warm the Page and survive the OAuth setup."*
 
 ---
 
@@ -92,7 +163,13 @@ PRESENCE  →  CONNECTIONS  →  COMPANY PAGE  →  DEVELOPER APP  →  API/POST
 
 Extends the tracker's stage model with LinkedIn-specific actions. **Golden rule stands: no S4/S5 until S2 and S3 genuinely clear.** Automation before warm-up is the flag.
 
+> **⚠️ Revised 2026-08-08 — this runway now applies to two assets on different clocks.**
+> **Profile A (Mary Thuo)** is already warm: it likely sits at **S3 or beyond** for account-maturity purposes, so S2 below collapses to a same-day profile-completion pass and the connection ramp becomes optional acceleration rather than a gate.
+> **Page C (Arika Agency)** is a **brand-new asset from the day it is created** and runs its own S2 → S3 → S4 cycle. The dev app hangs off C's maturity, not A's. Do not let A's maturity tempt you into wiring an auto-poster to a one-week-old Page — that is the exact "one new asset at a time" violation (tracker §3 rule 6).
+
 ### S2 — Humanize & verify *(days 1–3, unblocked, do now)*
+
+*For profile A this is a completion pass, not a build: most of it likely already exists. The two rows that matter most are the current position and the verified company email — those are the Page gates.*
 
 | Action | Why it matters |
 |---|---|
@@ -127,16 +204,16 @@ Two tracks run in parallel, and **the posting track must lead the connection tra
 
 **Exit criteria:** 2+ weeks of genuine activity, real two-way conversation in comments/DMs, and a connection count that satisfies LinkedIn's Page gate.
 
-### S4 — Company Page *(gated on S3)*
-Create the Page → complete it fully (logo, tagline, About, `arikaagency.com`, industry, specialties, location) → invite existing connections to follow → post to the Page manually for at least a week before any API work. **Class 3 sign-off:** the Page is a public-facing brand asset (`PRESENCE_OS.md` §5).
+### S4 — Company Page *(created from A)*
+Create C from profile A — **A becomes Super Admin** → complete the Page fully (logo, tagline, About, `arikaagency.com`, industry, specialties, location) → **verify your workplace** on A against the Page using the company email (this is the "a real person operates this" badge, §4.4) → invite A's existing connections to follow → **post to C manually for 1–2 weeks** before any dev-app work. Add a second Super Admin as soon as a second trusted person exists (§4.5, succession). **Class 3 sign-off:** the Page is a public-facing brand asset (`PRESENCE_OS.md` §5).
 
-### S5 — Developer app + Postiz *(gated on S4)*
+### S5 — Developer app + Postiz *(gated on C's maturity, not A's)*
 Dev app attached to the Page → products (Sign In w/ OpenID Connect, Share on LinkedIn, Advertising API for token refresh) → redirect URI → creds into Coolify → OAuth → channel added. Register in TechStack with `verified_at` (`TECHSTACK_OS.md` discipline). **Do not create the app the same day the Page is created** — one new asset at a time (tracker §3 rule 6).
 
 ### S6 — Verified live
 One real post published **through the engine** — Phase 4 of the build order, the first end-to-end test of all 12 stages. Only then does `verified_at` get set.
 
-**Realistic runway: 4–7 weeks from today to S6**, assuming S2 starts immediately. Most of it is calendar time that cannot be compressed — which is precisely why the content and connection work should run at full intensity during it.
+**Realistic runway: ~2–4 weeks from today to S6** (revised down from 4–7 on 2026-08-08 — profile A's existing maturity removes the connection-building gate). The remaining calendar time is the Page's own warm-up, which cannot be compressed — which is precisely why the content work should run at full intensity during it.
 
 ---
 
@@ -319,7 +396,10 @@ Track only what indicates commercial movement:
 | # | Decision | Why it's blocking | Recommendation |
 |---|---|---|---|
 | L1 | **Confirm the LinkedIn launch date** (open since 2026-06-30, `GO_LIVE_CHECKLIST.md` item 14) | The one decision that starts the 4–7 week runway | Start S2 immediately; S3 posting begins within 3 days |
-| L2 | **Profile identity: personal name or "Arika"?** The tracker records the profile as "Arika" | LinkedIn Pages must be created by a *person*; a company-named personal profile can be restricted, and *"founders are bought before agencies"* (`PRESENCE_OS.md` §3.2) | Personal profile = **Mary Thuo, Founder at Arika Agency**; the brand lives on the Page |
+| L2 | ~~Profile identity: personal name or "Arika"?~~ | — | ✅ **Resolved 2026-08-08 (owner).** Profile **A (Mary Thuo)** is the founder voice and creates/admins the Page; the brand lives on Page **C**. Architecture in §4 |
+| L7 | **What happens to profile B ("Arika")?** | It is a standing policy risk (§4.3) and splits a solo operator's effort; it cannot become the Page | **Retire it.** No profile→Page conversion exists — so either close it, or rename it to a real person who will genuinely use it. Do not grow it |
+| L8 | **Second Super Admin for the Page** | One Super Admin is a single point of failure for the Page *and* the dev app hanging off it | Defer until a second trusted person exists — but log it now with HR (11)'s single-point-of-failure map (`hr-owner-sustainability`) rather than discovering it at the first hire |
+| L9 | **Accept founder-led entanglement?** | Founder-led means the personal audience never transfers with the agency, and the channel can't be delegated later without losing its reach (§4.5) | Accept it at this stage — the credibility is worth more than the optionality — but decide it consciously, not by default |
 | L3 | **Voice selection** — headline + About from §7.8 | Class 3 public-facing; gates everything | Build-in-the-open; it's the only one fully substantiable today |
 | L4 | **DRAGON conflict** (unresolved since 2026-07-14, `CONTENT_OS.md` §10) — Dialogue/Relatability/Authenticity/Growth/Opinion/Niche vs. Diagnosis/Revenue-Logic/Architecture/Growth-Systems/Operational-Intelligence/Navigation | LinkedIn is where DRAGON is actually applied; the ambiguity lands here first | Keep both at different altitudes (LinkedIn DRAGON = post construction; Realignment DRAGON = operating philosophy) and **name them distinctly** — same resolution pattern as the 3-way narrative reconciliation |
 | L5 | **Is `mary.thuo@arikaagency.com` a live mailbox?** | Company-domain email is a likely Page-verification requirement | Verify before attempting Page creation |
@@ -329,6 +409,9 @@ Track only what indicates commercial movement:
 
 ## 12. Decision Log
 
+- **2026-08-08 — Identity architecture established; the blocking chain largely dissolves.** Owner disclosed an **established personal profile (Mary Thuo)** capable of creating the Company Page — the 2026-08-07 pass had assumed the connectionless "Arika" profile was the only one available, which made connections the gate on everything. Corrected architecture (§4): **A (founder) creates and admins C (Page); B ("Arika") retired.** Grounded in the structural fact that a LinkedIn Page has no login of its own and is always operated by personal profiles — so *"the agency gets its own account"* is not a state the platform offers; the Page is that presence, permanently run by a person. Runway revised **4–7 weeks → ~2–4**; the long pole moves from *earn connections* to *warm the Page + survive OAuth*. Founder-led demerits named rather than waved past: entanglement, delegability ceiling, claims exposure, single-Super-Admin succession risk. — Claude Code (Opus 5)
+- **2026-08-08 — Profile B flagged as a liability.** A company-named *personal* profile violates LinkedIn's real-natural-person requirement and is a standing removal category; had it become Super Admin, its removal would orphan the Page and the dev app with it. No profile→Page conversion path exists. Recommended retirement, logged as open decision L7. — Claude Code (Opus 5)
+- **2026-08-08 — The Page carries its own warm-up clock.** A's maturity does *not* transfer to C: a newly created Page wired straight to a developer app and auto-poster is the "one new asset at a time" violation (tracker §3 rule 6). S5 is gated on **C's** maturity, not A's. — Claude Code (Opus 5)
 - **2026-08-07 — LinkedIn dossier created; all LinkedIn material consolidated.** Everything LinkedIn across `04_Content` (Draft 13, CONTENT_OS, PIL), `03_Marketing` (§10 channel role), `01_Sector` (ICP + decision-maker registry), `13_Tech_Stack`, `00_Agency_Governance` (GO_LIVE item 14, OWNER_INPUT item 44) and `21_Presence` (PRESENCE_OS, CDE, tracker) pulled into one file. No capability re-owned — Content still owns content, Marketing distribution, Sector the ICP; this is the coordination layer Presence (21) exists to be. — Claude Code (Opus 5)
 - **2026-08-07 — 🔴 Draft 13's first-person content ruled unpublishable as written.** Its example posts and all three bios assert a founder history that did not happen (lost 40% of revenue, missed payroll/$80K, $50K on sales training, 4 years building the system, "Revenue Reality™", clients who fired us). Publishing them would breach no-silent-invention, Gate 2's substantiation rule, and "Never publish: Authority Without Evidence." **Structures kept, claims struck**; a substantiable "building in the open" voice proposed in its place (§7.7–7.8). Owner decision L3. — Claude Code (Opus 5)
 - **2026-08-07 — Connection ramp supersedes Draft 13's 30–50/week for the warm-up period.** Draft 13's figure is safe for an aged account, restriction-triggering for a 1-week-old one; the §5 ramp reaches it by ~week 3. Anti-flag doctrine wins where the two disagree. — Claude Code (Opus 5)
@@ -336,4 +419,4 @@ Track only what indicates commercial movement:
 
 ## 13. Honest state
 
-LinkedIn has published **nothing**. One personal profile exists, with no photo confirmed, no posts, effectively no connections, no Company Page, no developer app, and no channel connected to a live and healthy executor that is sitting idle waiting for it. The strategy is thorough and mostly sound — and was written for a founder who doesn't exist yet, which is the single most important thing this file corrects. What is genuinely ready: the frameworks, the pillar/house structure, an empty Notion brief database, a running Postiz instance, and a real ICP with real buyer intelligence to aim connections at. What is genuinely missing: a photo, a headline, ten posts, and a hundred connections — none of which any agent can do for the owner, and all of which unblock everything else.
+*(revised 2026-08-08)* LinkedIn has published **nothing for the agency**. What exists is a mature founder profile that has never been pointed at the agency, a company-named second profile that should not exist, no Company Page, no developer app, and no channel connected to a live and healthy executor sitting idle waiting for it. The correction this session made is that the agency was treating its strongest LinkedIn asset — a real, credentialed, connected founder — as if it were separate from the agency's presence, and warming a brand-new empty profile instead. The strategy is thorough and mostly sound — and was written for a founder who doesn't exist yet, which is the single most important thing this file corrects. What is genuinely ready: the frameworks, the pillar/house structure, an empty Notion brief database, a running Postiz instance, and a real ICP with real buyer intelligence to aim connections at. What is genuinely missing: a photo, a headline, ten posts, and a hundred connections — none of which any agent can do for the owner, and all of which unblock everything else.
