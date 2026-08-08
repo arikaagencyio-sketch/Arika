@@ -77,7 +77,7 @@ This dossier **consolidates and reconciles**; it does not re-own capability (one
 | | Identity | What it is | State |
 |---|---|---|---|
 | **A** | **Mary Thuo — personal profile** | The real founder. Established, connected, credentialed | ✅ exists, mature |
-| **B** | **"Arika" — personal profile** | A company-named *personal* account opened to represent the agency | ⚠️ exists, S1, **policy risk** |
+| **B** | **"Arika" — personal profile** | A company-named *personal* account — ✅ **confirmed by owner 2026-08-08**: opened under the agency name, not a person's name | ⚠️ exists, S1, **policy risk** |
 | **C** | **Arika Agency — Company Page** | The institutional entity | 🔴 not created |
 
 ### 4.2 The structural fact that decides the arrangement
@@ -151,7 +151,7 @@ A: verify profile + list Arika Agency  →  CREATE PAGE (C)  →  warm C manuall
 ```
 
 - **Page-creation gates** (verify live at creation time — platform rules change and this repo does not treat vendor rules as permanent): profile 7+ days old · profile photo · multiple connections · minimum profile strength · **current position at Arika Agency listed** · company-domain email for verification. A plausibly clears all but the last two already; both are same-day fixes.
-- **The mailbox is now the critical path.** `mary.thuo@arikaagency.com` is confirmed in the repo (`OWNER_INPUT_NEEDED.md` item 33) — ⚠️ *confirm it is actually provisioned and receiving.* A verification email that cannot be received blocks both Page creation and workplace verification.
+- ~~The mailbox is the critical path.~~ ✅ **Resolved 2026-08-08 (owner): all company emails are active.** `mary.thuo@arikaagency.com` receives, so Page-creation verification and workplace verification are both unblocked. **Page creation is now a same-day action.**
 - **⚠️ The Page still needs its own warm-up.** C is a brand-new asset on day one. Creating a Page and immediately attaching a developer app and an auto-poster is the classic ban pattern the tracker's rule 6 exists to prevent (*one new asset at a time*). Post to C manually for 1–2 weeks before the dev app.
 - **Page → dev app → Postiz** is unchanged: the app must attach to C and be created by an admin of C; products *Sign In with OpenID Connect* + *Share on LinkedIn* (+ *Advertising API* for token refresh); redirect `https://<postiz-domain>/integrations/social/linkedin`; creds into Coolify. ⚠️ Known Postiz OAuth *"Not enough scopes"* bug.
 
@@ -370,6 +370,7 @@ LinkedIn is the **proving ground** for the whole Content Distribution Engine. On
 - **Legal Class C:** every claim substantiable. No client results, no revenue figures, no ™, no implied track record. Route anything doubtful via `presence-legal-liaison` → Legal (10). ⚠️ Legal has **no engaged counsel** — so the safe default is to make no claim at all.
 - **Excluded metrics** (`PRESENCE_OS.md` §7, Presence Constitution §8): impressions, followers, likes, reach. Draft 13 independently reached the same conclusion — it excludes impressions and follower count in its own "what NOT to track."
 - **Anti-flag doctrine** (tracker §3): no automation before warm-up · complete and verify the profile first · genuine native content, not cross-posts · gradual ramp · one clean login location · **one new asset at a time** · respect rate limits.
+- **Agents never impersonate humans** (adopted 2026-08-08, §11.2). Agents prepare and orchestrate assets for legitimate human and company identities — they do not operate fictional employee profiles, and no LinkedIn identity may exist that does not correspond to a real person or the real company. This is both a LinkedIn User Agreement requirement and the reason profile B is being retired (§4.3).
 - **Approval-matrix row required** before any LinkedIn cron fires (Automation 16 rule) — no row, no automation.
 
 ---
@@ -391,7 +392,87 @@ Track only what indicates commercial movement:
 
 ---
 
-## 11. Open decisions — owner input required
+## 11. The agentic layer — reconciled against what already exists
+
+**Added 2026-08-08.** The owner relayed an external-AI architecture proposal for a "LinkedIn Agentic Operating System" (orchestrator + intelligence/strategy/governance agent tiers, a content registry, five permission levels, and Claude/Foxy/OpenArt/Higgsfield tool roles). It was written without sight of this repo. Reconciled below rather than adopted or discarded wholesale.
+
+### 11.1 Already built — do not rebuild
+
+| Proposal element | Already exists as | Note |
+|---|---|---|
+| "LinkedIn shouldn't live in Marketing — it belongs in Presence/Distribution architecture" | **Presence (21)**, created 2026-07-23 for exactly this reason | ✅ Independent convergence — good validation |
+| Two-layer identity: founder profile + Company Page; personal account as *administrator*, not identity | **§4** of this file, decided 2026-08-08 | ✅ Same conclusion |
+| Orchestrator → intelligence/construction/governance → production → approval → publish → performance → feedback | **Content Distribution Engine**, 8 layers (L0–L7) + 12 stages | ✅ Exists and is *more* specified — the CDE also has a rate governor, retry/dead-letter, and an idempotency spine the proposal lacks |
+| Human approval gate before publishing | **Gate 2 (Pre-Publish) + Class 3 sign-off** | ✅ Exists, and is stricter |
+| Five permission levels (intelligence → construction → approval → publishing → feedback) | **Constitution §5's 5-tier risk classification** + `AUTOMATION_APPROVAL_MATRIX.md` | ✅ Map onto these; a parallel permission scheme would fragment governance |
+| Per-post metadata registry | **Notion content-brief database** — real, built 2026-07-03, with the field names already in use | ✅ Use the real schema; the proposal's field names are a rename of it |
+| Autonomous vs. approval-required content classes | **CDE §5 template-level approval** — approve a content *type* once, only new/flagged items get fresh review | ✅ Same mechanism, already designed |
+
+### 11.2 Genuinely new — worth adopting
+
+1. **The institutional brief format.** The proposal's worked example — personal profile carries the *argument* ("most companies don't have a marketing problem, they have a revenue architecture problem"), Page carries the *institutional artifact* ("Revenue Architecture Brief #004" with framework, evidence, model, methodology, offer, CTA) — is a real addition. This file had the founder/Page *split* (§4.6) but no signature Page format. A **numbered brief series** is citable, compounds, and feeds Presence's own "research repositories → citations → authority" hidden layer (`PRESENCE_OS.md` §3.2). **Adopted** as the Page's signature format (§12).
+2. **Agents never impersonate humans.** Agents prepare and orchestrate assets for legitimate human/company identities; no AI-operated fictional employee profiles, ever. Implied by §4.3 but never stated as a rule. **Adopted** into §9 governance.
+3. **Naming which content classes could eventually publish without per-item review** (curated observations, evergreen insights, approved recurring series, data updates) vs. which never can (opinions, new positions, announcements, pricing/offers, client material, performance claims). Useful specificity for the template-level approval mechanism that already exists.
+
+### 11.3 🔴 Conflicts with decisions already made
+
+1. **Higgsfield was explicitly rejected.** `GO_LIVE_CHECKLIST.md` item 25 (2026-07-03): *"OpenArt chosen over imagine.art and Higgsfield"* — a closed vendor decision with a live, verified connection behind it. Reintroducing Higgsfield is a **supersession**, not an addition: it needs a `techstack-inventory-registrar` decision with reasoning, not a silent slot in a diagram.
+2. **Foxy is not in the inventory, and its proposed role is already filled.** No tool called Foxy appears anywhere in `TECHSTACK_OS.md`, and I can't identify which product is meant — so it cannot be assumed. More importantly, the "workflow/execution coordinator" role the proposal assigns it **is Postiz's job** (CDE layer L6), already deployed, healthy, and paid for on the Hostinger VPS. The external proposal never mentions Postiz because it didn't know it existed. Adding Foxy either duplicates Postiz or replaces it — either way it is a decision, not a diagram. ⚠️ *What is Foxy?*
+3. **"360° Growth Revenue Agency" is a third positioning string.** Confirmed in the repo: the vision is *"a 360° Cognitive Revenue Operating System"* (`AGENCY_VISION.md`) and the Offer-side positioning is *"Revenue Infrastructure Partner"* (02). A third string introduced in a side conversation should not silently become the Page's official identity — see decision L10.
+4. **"All of the above" for audience contradicts the confirmed ICP.** Sector (01) holds an owner-curated 3-tier B2B SaaS ICP *and an explicit Anti-ICP* (`SECTOR_OS.md` §1). A Page addressed to every decision-maker in every sector is addressed to no one — and it contradicts the N in DRAGON (niche-orientation) that the LinkedIn playbook is built on. **The reconciliation that saves it:** founders, CEOs, marketing, sales, ops, investors and partners are the **buying committee inside a Tier 1/Tier 2 account**, not a list of separate markets. Broad *roles*, narrow *accounts*. That is legitimate and is how the Page should read.
+5. **L0–L9 is a third content taxonomy.** This repo already resolved a 3-way pillar conflict and settled on **7 canonical pillars × 7 Content Houses**, plus a funnel-stage field. A ten-level hierarchy is a third axis over the same content. Map instead: L0–L2 → narrative/beliefs (Branding 12 + Content narrative architecture) · L3–L5 → the 7 pillars · L6–L7 → the Conversion and Proof Houses · L8 → Presence Engagement · L9 → the existing funnel-stage field. **Do not adopt as a new axis.**
+6. **⚠️ The agent layer cannot run.** All 106 agents in this repo are unrunnable — `ANTHROPIC_API_KEY` is unset (`PRESENCE_OS.md` §9). Specifying twelve new LinkedIn agents would be the fifth time this repo built structure ahead of reality. The engine's existing agents already cover the roles; wire the account first, run one real packet, *then* extend the roster against evidence.
+
+### 11.4 The honest sequencing call
+
+The proposal's architecture is broadly right and largely already yours. But the binding constraint today is not architectural — it is that **the Page does not exist and nothing has ever been published.** An 80/20 agentic production system has nothing to produce for, no performance data to feed back, and no approved template to approve against. Build the Page, publish manually, run one packet end-to-end through the existing engine, and let the agent layer be specified by what actually breaks.
+
+---
+
+## 12. Company Page — master specification
+
+**Status: ready to execute.** All company emails are active (2026-08-08), so every gate on Page creation is clear. Fields below are draft-ready where the repo confirms the fact, and flagged where it does not. **Do not improvise the flagged ones at the keyboard** — they are brand decisions.
+
+| Field | Value | State |
+|---|---|---|
+| **Page name** | `Arika Agency` | ⚠️ Should match the registered legal entity — confirm with Legal (10); the repo has no registration record |
+| **Public URL** | `linkedin.com/company/arika-agency` | Claim early; permanent |
+| **Website** | `arikaagency.com` | 🔴 **Blocked** — the site is live only on a `.vercel.app` subdomain and is uncommitted (`PRESENCE_OS.md` §3.2). The Page's primary CTA has nowhere good to point. **EE (20) dependency** |
+| **Industry** | `Business Consulting and Services` | ⚠️ Decision — fits "revenue infrastructure" better than `Marketing Services`, which reads as a channel vendor |
+| **Company size** | `1 employee` / `1–10` | Honest. Solo + AI (`HR_OS.md`) |
+| **Company type** | Privately Held | — |
+| **Founded** | — | ⚠️ Owner input; do not invent |
+| **Location** | Kenya | ⚠️ City not recorded in the repo — owner input |
+| **Tagline** (≤120 chars) | See options below | ⚠️ Class 3 brand decision |
+| **About** (≤2,000 chars) | See draft below | ⚠️ Class 3 brand decision |
+| **Specialties** (≤20) | Revenue architecture · revenue operations · marketing systems · sales systems · workflow automation · AI enablement · CRM architecture · partner ecosystems · revenue audits · business operating systems | Drawn from the confirmed offer catalogue (02) |
+| **Logo / cover** | From the Canva brand kit | Brand kit exists (`GO_LIVE_CHECKLIST.md` item 20, done) — Design (19) to produce at spec (300×300 · 1128×191) |
+| **Custom button** | `Visit website` | Gated on the website blocker above |
+
+**Tagline options:**
+- `Revenue infrastructure for B2B SaaS. Systems, not activity.`
+- `The revenue operating system most companies assume they already have.`
+- `Marketing, sales, automation and operations — engineered as one revenue system.`
+
+**About — draft (substantiable only; no clients, no team, no results):**
+
+> Most companies don't have a marketing problem, a sales problem, or an automation problem. They have a revenue architecture problem — functions that were built separately and are asked to produce a single number together.
+>
+> Arika Agency builds revenue infrastructure for B2B SaaS: the connective system across marketing, sales, automation, partnerships and operations that turns disconnected activity into a machine that can be measured, diagnosed and scaled.
+>
+> We publish what we learn building it — frameworks, diagnostics and revenue architecture briefs — because the thinking is the proof.
+>
+> Before you hire, audit. Before you buy, diagnose.
+
+⚠️ **Honesty constraints on this copy** (§9): no client counts, no results, no "trusted by", no team language, no ™. Every sentence above is substantiable today.
+
+**Signature Page format — the brief series** (adopted from §11.2): numbered institutional artifacts, e.g. *Revenue Architecture Brief #001*, each carrying framework → evidence → model → methodology → perspective → CTA. This is what the Page publishes that the founder profile cannot: durable, citable, institutional. Start at #001 and never break the numbering.
+
+**Founder ↔ Page relationship in practice:** profile A argues the position; the Page publishes the artifact; A reshares the Page's brief with a personal take. One strategic universe, two communication roles (§4.6).
+
+---
+
+## 13. Open decisions — owner input required
 
 | # | Decision | Why it's blocking | Recommendation |
 |---|---|---|---|
@@ -400,6 +481,11 @@ Track only what indicates commercial movement:
 | L7 | **What happens to profile B ("Arika")?** | It is a standing policy risk (§4.3) and splits a solo operator's effort; it cannot become the Page | **Retire it.** No profile→Page conversion exists — so either close it, or rename it to a real person who will genuinely use it. Do not grow it |
 | L8 | **Second Super Admin for the Page** | One Super Admin is a single point of failure for the Page *and* the dev app hanging off it | Defer until a second trusted person exists — but log it now with HR (11)'s single-point-of-failure map (`hr-owner-sustainability`) rather than discovering it at the first hire |
 | L9 | **Accept founder-led entanglement?** | Founder-led means the personal audience never transfers with the agency, and the channel can't be delegated later without losing its reach (§4.5) | Accept it at this stage — the credibility is worth more than the optionality — but decide it consciously, not by default |
+| L10 | **Official positioning string for the Page** — "360° Growth Revenue Agency" vs. the confirmed "360° Cognitive Revenue Operating System" (vision) vs. "Revenue Infrastructure Partner" (Offer 02) | It becomes the Page name/tagline and then propagates everywhere; three competing strings is how positioning dies | Page **name** = the legal entity (`Arika Agency`); positioning lives in the **tagline**, drawn from the confirmed pair — not a fourth string invented in a side conversation |
+| L11 | **Audience: "all of the above"?** | Contradicts Sector's owner-curated 3-tier ICP *and* its explicit Anti-ICP | Reframe as **broad roles, narrow accounts**: the whole buying committee *inside* Tier 1/Tier 2 B2B SaaS accounts (§11.3 item 4) |
+| L12 | **Higgsfield — reinstate or keep rejected?** | It was explicitly rejected in favour of OpenArt on 2026-07-03; the diagram reintroduces it | If genuinely wanted for motion, run it as a **supersession** through `techstack-inventory-registrar` with reasoning — not a silent addition |
+| L13 | **What is Foxy, and does it replace or duplicate Postiz?** | The role it's assigned is already filled by a deployed, healthy, paid executor | Identify the product first; register in TechStack; then decide replace-vs-duplicate. Default: **Postiz stays** |
+| L14 | **Website blocker** — `arikaagency.com` is subdomain-only and uncommitted | The Page's primary CTA points at it | EE (20) dependency; either ship the domain or launch the Page with a different primary button |
 | L3 | **Voice selection** — headline + About from §7.8 | Class 3 public-facing; gates everything | Build-in-the-open; it's the only one fully substantiable today |
 | L4 | **DRAGON conflict** (unresolved since 2026-07-14, `CONTENT_OS.md` §10) — Dialogue/Relatability/Authenticity/Growth/Opinion/Niche vs. Diagnosis/Revenue-Logic/Architecture/Growth-Systems/Operational-Intelligence/Navigation | LinkedIn is where DRAGON is actually applied; the ambiguity lands here first | Keep both at different altitudes (LinkedIn DRAGON = post construction; Realignment DRAGON = operating philosophy) and **name them distinctly** — same resolution pattern as the 3-way narrative reconciliation |
 | L5 | **Is `mary.thuo@arikaagency.com` a live mailbox?** | Company-domain email is a likely Page-verification requirement | Verify before attempting Page creation |
@@ -407,8 +493,11 @@ Track only what indicates commercial movement:
 
 ---
 
-## 12. Decision Log
+## 14. Decision Log
 
+- **2026-08-08 — All company emails confirmed active (owner).** Removes the last gate on Page creation and on workplace verification. **Page creation is now a same-day action**; the critical path moves to the Page's own warm-up and the OAuth setup. — Claude Code (Opus 5)
+- **2026-08-08 — External "LinkedIn Agentic OS" proposal reconciled, not adopted wholesale (§11).** Written without sight of this repo; ~7 of its elements already exist here (Presence department, the two-layer identity, the 8-layer/12-stage engine, Gate 2, the risk-tier permission model, the real Notion schema, template-level approval). Three adopted as genuinely new: the **numbered institutional brief series**, the **agents-never-impersonate-humans rule**, and the named autonomous-vs-approval content classes. Six conflicts logged as owner decisions L10–L14 plus the L0–L9 taxonomy rejection — notably **Higgsfield (explicitly rejected 2026-07-03)** and **Foxy (unidentified, and its role already filled by the deployed Postiz executor)**. Declined to specify twelve new LinkedIn agents: all 106 existing agents are unrunnable (`ANTHROPIC_API_KEY` unset), and the binding constraint is an unpublished Page, not missing architecture. — Claude Code (Opus 5)
+- **2026-08-08 — Company Page master specification written (§12), ready to execute.** Draft-ready fields where the repo confirms the fact; flagged where it does not (founded date, city, legal name, industry category). Surfaced a real blocker the proposal missed: **`arikaagency.com` is subdomain-only and uncommitted**, so the Page's primary CTA has nowhere good to point (decision L14, EE 20 dependency). — Claude Code (Opus 5)
 - **2026-08-08 — Identity architecture established; the blocking chain largely dissolves.** Owner disclosed an **established personal profile (Mary Thuo)** capable of creating the Company Page — the 2026-08-07 pass had assumed the connectionless "Arika" profile was the only one available, which made connections the gate on everything. Corrected architecture (§4): **A (founder) creates and admins C (Page); B ("Arika") retired.** Grounded in the structural fact that a LinkedIn Page has no login of its own and is always operated by personal profiles — so *"the agency gets its own account"* is not a state the platform offers; the Page is that presence, permanently run by a person. Runway revised **4–7 weeks → ~2–4**; the long pole moves from *earn connections* to *warm the Page + survive OAuth*. Founder-led demerits named rather than waved past: entanglement, delegability ceiling, claims exposure, single-Super-Admin succession risk. — Claude Code (Opus 5)
 - **2026-08-08 — Profile B flagged as a liability.** A company-named *personal* profile violates LinkedIn's real-natural-person requirement and is a standing removal category; had it become Super Admin, its removal would orphan the Page and the dev app with it. No profile→Page conversion path exists. Recommended retirement, logged as open decision L7. — Claude Code (Opus 5)
 - **2026-08-08 — The Page carries its own warm-up clock.** A's maturity does *not* transfer to C: a newly created Page wired straight to a developer app and auto-poster is the "one new asset at a time" violation (tracker §3 rule 6). S5 is gated on **C's** maturity, not A's. — Claude Code (Opus 5)
@@ -417,6 +506,6 @@ Track only what indicates commercial movement:
 - **2026-08-07 — Connection ramp supersedes Draft 13's 30–50/week for the warm-up period.** Draft 13's figure is safe for an aged account, restriction-triggering for a 1-week-old one; the §5 ramp reaches it by ~week 3. Anti-flag doctrine wins where the two disagree. — Claude Code (Opus 5)
 - **2026-08-07 — The blocking chain named** (presence → connections → Page → dev app → API → engine test). Establishes that connections are not a vanity metric but the literal gate on the agency's position-1 platform and its first full engine test. — Claude Code (Opus 5)
 
-## 13. Honest state
+## 15. Honest state
 
 *(revised 2026-08-08)* LinkedIn has published **nothing for the agency**. What exists is a mature founder profile that has never been pointed at the agency, a company-named second profile that should not exist, no Company Page, no developer app, and no channel connected to a live and healthy executor sitting idle waiting for it. The correction this session made is that the agency was treating its strongest LinkedIn asset — a real, credentialed, connected founder — as if it were separate from the agency's presence, and warming a brand-new empty profile instead. The strategy is thorough and mostly sound — and was written for a founder who doesn't exist yet, which is the single most important thing this file corrects. What is genuinely ready: the frameworks, the pillar/house structure, an empty Notion brief database, a running Postiz instance, and a real ICP with real buyer intelligence to aim connections at. What is genuinely missing: a photo, a headline, ten posts, and a hundred connections — none of which any agent can do for the owner, and all of which unblock everything else.
