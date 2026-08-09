@@ -1,9 +1,17 @@
 # Legal Entity Setup — Arika Agency (First Operating Entity)
 
-**Created:** 2026-07-19 · **Status:** 🔴 Pre-incorporation. **Neither entity exists yet.**
-**Counsel approached:** Sarah Ndwiga, Partner, Ndwiga Law (Westlands, Nairobi) — quoted **KES 180,000** exclusive of government charges. Engagement **not yet accepted**.
+**Created:** 2026-07-19 · **Last updated:** 2026-08-09 · **Status:** 🔴 Pre-incorporation. **Neither entity exists yet.**
+**Counsel engaged?** Not yet. **Sarah Ndwiga, Managing Partner, Ndwiga Law Advocates LLP** (Westlands, Nairobi; **Collins Wachira** assisting) has issued **two Letters of Engagement — v1 dated 29 July 2026 and v2 dated 6 August 2026. Neither is signed.**
 
-**Engagement state — 2026-07-19: instructing email SENT, awaiting reply.** Sent with `00 - Instruction Brief` attached. It corrects counsel's assumption of a co-shareholder (**Mary Thuo is sole owner**); asks whether the **holdco should be incorporated first** and **which entity holds the IP**; discloses that the software is **predominantly AI-assisted and provider-agnostic**, citing **COPTA/E001/2025**, and asks what subsists before any copyright is registered; asks what falls inside the KES 180,000 versus the eight operational questions; asks for an **estimate of government charges**; and asks for a **phased instalment plan** plus confirmation of **what may lawfully be marketed before incorporation completes**. The letter of engagement was requested *reflecting that phasing*, not ahead of it.
+**Engagement state — 2026-08-09: two letters received, decision pending.** Full cross-check in **[`COUNSEL_ENGAGEMENT_REVIEW.md`](COUNSEL_ENGAGEMENT_REVIEW.md)**; both letters preserved verbatim in [`_correspondence/`](_correspondence/).
+
+**The short version:** the professional fee is **KES 185,000** in both letters (v1's stated total of 180,000 is an addition error — its own line items sum to 185,000). v2 additionally quantifies government charges at **KES 74,250**, for **KES 259,250** — *not* a fee increase. **But v2 also removed five things v1 had promised:** the two-phase trade-first structure, the **holding-company clause and the commitment to advise on sequencing between the two entities**, the eight operational matters and the promised separate estimate, **pre-incorporation marketing advice**, and the **instalment schedule**. It also downgraded the copyright work from *advice on what subsists in AI-assisted work* to *advice on how to file* — and changed the registrant from **the Company** to **Mary personally** (*"in your favour"*). **v1 addresses 7 of §6's 8 questions; v2 addresses 2.** The ask is v1's scope with v2's disbursement table.
+
+🔴 **Two things are blocking and are not yet resolved by either letter:** **(1)** the holdco/IP-ownership question below (§4.1, §6 Q1) — **nothing should be filed at KIPI or KECOBO until it is closed**; and **(2)** Terms cl 4.4 excludes tax advice unless expressly agreed, and the IP-location question is substantially a tax question.
+
+✅ **Two confirmations worth recording.** v1 §2.1.6 cites **COPTA/E001/2025** by name and unprompted, stating the human-authorship point correctly — **counsel has engaged with the case substantively.** It also relies on *"the version-controlled record of direction, specification and revision that you have indicated you can produce"* — **counsel has accepted this repository's commit history as the evidentiary record**, independently confirming §4.2 below. **Keep maintaining the decision logs and changelogs.**
+
+*(Prior state, preserved: **2026-07-19 — instructing email SENT, awaiting reply.** Sent with `00 - Instruction Brief` attached. It corrected counsel's assumption of a co-shareholder (**Mary Thuo is sole owner**); asked whether the **holdco should be incorporated first** and **which entity holds the IP**; disclosed that the software is **predominantly AI-assisted and provider-agnostic**, citing **COPTA/E001/2025**, and asked what subsists before any copyright is registered; asked what falls inside the KES 180,000 versus the eight operational questions; asked for an **estimate of government charges**; and asked for a **phased instalment plan** plus confirmation of **what may lawfully be marketed before incorporation completes**. The letter of engagement was requested *reflecting that phasing*, not ahead of it. **v1 delivered nearly all of that. v2 withdrew most of it.**)*
 
 > ⚠️ **This document is desk research, not legal advice.** Fees, timelines, and procedures below are from public sources (cited at the end) and were gathered to make the conversation with counsel informed and budgetable. **Every figure must be confirmed by counsel and against the live eCitizen/BRS invoice.** Nothing here is a substitute for Sarah's advice.
 
@@ -73,6 +81,21 @@ Offers run **$7,500–$50,000 setup** with **$3,000–$25,000/month** retainers,
 
 **Rough government-charge envelope for the trade-enabling set:** incorporation + stamp duty + permit ≈ **KES 20,000–65,000**, dominated by the county permit, which varies widely.
 
+### 🔄 Reconciled against counsel's figures, 2026-08-09
+
+The 6 August letter quotes disbursements for the first time. **Where counsel and this desk research disagree, counsel is the authority and the figures below are the ones to correct** — they are logged so they get asked, not so they get believed ([`COUNSEL_ENGAGEMENT_REVIEW.md`](COUNSEL_ENGAGEMENT_REVIEW.md) §4).
+
+| Item | This research | Counsel (v2 §4.2) | Verdict |
+|---|---|---|---|
+| Incorporation registry fee | ~10,650 | **10,750** | ✅ Confirmed |
+| ODPC, both roles | 8,000 (2 × 4,000) | **8,500** | ✅ Confirmed |
+| KECOBO copyright | ~1,000 per work | **5,000**, stated as *"fixed"* | ❓ **Ask.** 5× gap |
+| KIPI trademark, one class | ~13,000 | **50,000**, headed *"Costs per class"* | ❓ **Ask.** ~3.8×, and **the number of classes is stated nowhere in either letter.** Includes an undescribed **12,450** *"registry disbursements & costs & fast tracking"* line |
+| Stamp duty on nominal capital | 1% of nominal capital | **Absent from v2's table entirely** | ❓ **Unknowable until capital is fixed** by §2.1.2 — so v2's *"all-inclusive"* figure cannot be complete |
+| **County Single Business Permit** | **5,000–50,000+/yr, required to trade** | **Not mentioned in either letter** | 🔴 **Gap.** Neither letter's Phase 1 includes it, though this research lists it as required to trade lawfully |
+
+**⚠️ Not in either letter's scope, and both are outside the KES 259,250:** the **county business permit** and the **bank account**. Phase 1 as scoped delivers incorporation + KRA PIN only. **Confirm with counsel whether the permit is genuinely required and who obtains it.**
+
 ---
 
 ## 4. 🔴 The three findings that change the sequence
@@ -85,7 +108,14 @@ Mary's intent is that **all IP sits at holding-company level**. An IP holding co
 
 **Therefore: the holding company should exist before any IP is registered, and the IP should be registered in its name from the outset.** Registering the trademark to the operating company now and moving it later converts a free decision into a taxable one.
 
-**Sarah's reply does not say which entity will hold the IP, or mention the holding company at all.** That is the single most important thing to settle before instructing.
+**🔄 Updated 2026-08-09 — still the single most important thing to settle before instructing, but the position has moved twice.** *(This paragraph previously read: "Sarah's reply does not say which entity will hold the IP, or mention the holding company at all.")*
+
+- **v1 (29 July) §1.3 addressed it properly**: the holdco, the group structure, and IP ownership/licensing between holdco and Company are expressly **outside that letter**, with a written commitment to advise on them **and on the correct sequencing of incorporation between the two entities** once Mary supplies the information — *"under a separate letter of engagement or addendum."* **The ball is therefore in Mary's court on holdco information.**
+- **v2 (6 August) deleted the clause entirely** and does not mention the holding company anywhere — while §2.1.6–2.1.7 commit to registering copyright and trademark **"in your favour"**, i.e. **to Mary personally**. That is **two** transfers away from the intended destination, not one.
+
+**The tension that survives in both letters:** each incorporates the operating Company **first**, as Phase 1 priority, while the sequencing advice is still outstanding — so the advice arrives after the decision it governs has been executed. **The resolution is not to delay incorporation** (trading readiness is the priority and incorporation is not the problem) — **it is to decouple: incorporate now, and file nothing at KIPI or KECOBO until the holdco question closes.** v1's phasing already allows exactly that, since each Phase 2 stream is invoiced *"when you instruct us to commence it."* **v2 has no phasing, so nothing holds the filings back.**
+
+**⚠️ And note Terms cl 4.4:** the firm's scope **excludes tax advice unless expressly agreed** — but the IP-location question is substantially a tax question. **It must be brought into scope in writing, or an accountant instructed alongside.**
 
 *(The ongoing withholding tax on holdco→opco licence fees is a real running cost of the structure, and should be sized with the accountant before committing to it.)*
 
@@ -140,16 +170,22 @@ Sequenced so the agency can market and trade while the slower work proceeds in p
 
 ---
 
-## 6. Open questions for counsel
+## 6. Open questions for counsel — scored against both letters (2026-08-09)
 
-1. Holdco or opco first — and **which entity registers the IP**?
-2. Sole shareholder: recommended share structure and nominal capital *(stamp duty is 1% of it)*?
-3. AI-assisted works after **COPTA/E001/2025** — what subsists, and what records evidence it?
-4. Is KECOBO copyright registration worth the fee for AI-assisted software, given it is optional and evidentiary?
-5. Estimated **government charges and disbursements** for the full scope?
-6. **Instalment plan** against a phased timeline — pre-revenue, no clients.
-7. Which of the eight operational questions (`COUNSEL_ENGAGEMENT_BRIEF.md`) are inside the KES 180,000, and what is the marginal cost of the rest?
-8. Can Arika market and present itself online during Phase 1, and what must appear on the website before the entity exists?
+| # | Question | v1 (29 Jul) | v2 (6 Aug) |
+|---|---|---|---|
+| 1 | Holdco or opco first — and **which entity registers the IP**? | ⚠️ **Deferred, with a written commitment to advise** (§1.3) | 🔴 **Clause deleted. Not mentioned at all** |
+| 2 | Sole shareholder: share structure and nominal capital *(stamp duty is 1% of it)*? | ✅ **Answered** — two classes, all held by Mary as sole shareholder, Class B reserved for future partners without later restructuring; capital to be sized *"having regard to the stamp duty"* (§2.1.1–2.1.2) | ⚠️ Structure stated, **reasoning, sole-shareholder confirmation and stamp-duty linkage all dropped** (§2.1.1–2.1.2) |
+| 3 | AI-assisted works after **COPTA/E001/2025** — what subsists, and what records evidence it? | ✅ **Answered as a named deliverable, case cited** (§2.1.6) | 🔴 **Replaced with advice on the filing process** (§2.1.5) |
+| 4 | Is KECOBO registration worth the fee, given it is optional and evidentiary? | ✅ **Asked explicitly**, and filing gated on the answer (§2.1.6–2.1.7) | 🔴 **Pre-answered by billing for an unconditional filing** (§2.1.6) |
+| 5 | Estimated **government charges and disbursements**? | ⚠️ Deferred, honestly, until capital and classes are fixed (§4.3) | ✅ **Quantified at KES 74,250 — v2's genuine improvement** (§4.2) |
+| 6 | **Instalment plan** against a phased timeline — pre-revenue, no clients | ✅ **Real schedule**: 50/50 on Phase 1; each Phase 2 stream invoiced on instruction (§5) | 🔴 **No payment terms whatsoever.** Reverts to Terms cl 8.1 / 9.2 — payments on account on demand, interim monthly bills |
+| 7 | Which of the eight operational questions are inside the fee, and the marginal cost of the rest? | ✅ **Answered** — all eight named, scoped out, separate written estimate promised (§1.4, §2.3) | 🔴 **Silent** |
+| 8 | Can Arika market itself online during Phase 1, and in what name? | ✅ **A named deliverable** (§2.1.4) | 🔴 **Service removed** |
+
+**Scoreboard: v1 addresses 7 of 8. v2 addresses 2 of 8.** Question 1 is open in both and is the one that must close before any KIPI or KECOBO filing.
+
+**The full question list to send counsel — 24 items, ordered by what they block — is in [`COUNSEL_ENGAGEMENT_REVIEW.md`](COUNSEL_ENGAGEMENT_REVIEW.md) §9**, together with the acceptance-reservation wording needed to keep clause 2.2 (*acceptance by continued communication*) from closing the negotiation early.
 
 ---
 
