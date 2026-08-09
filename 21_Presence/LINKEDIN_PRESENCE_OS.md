@@ -320,21 +320,73 @@ Publishing any of these would break three standing rules at once: the constituti
 
 **The honest voice that is actually available** — and is arguably stronger on a platform drowning in performed authority — is *building in the open*: the agency is constructing a 360° Cognitive Revenue Operating System right now, and the observations, frameworks, and hard calls coming out of that construction are real, current, and nobody else's. That is a defensible position for a founder with no client roster. Draft 13's own thesis ("stop performing business", the 15% Gap, "does this make the reader feel less alone") supports it exactly — it just supplied a borrowed biography to carry it.
 
-### 7.8 Profile copy — rebuilt on true facts
+### 7.8 Profile A — humanization pack (paste-ready)
 
-Draft 13's three bios all rest on the fabrications above and **cannot be used as written**. Options built only on confirmed repo facts (Revenue Growth Operating System positioning, Revenue Infrastructure Partner, B2B SaaS focus, the 7-decisions framework):
+Draft 13's three bios rest on fabrications and **cannot be used** (§7.7). Below is final copy built only on facts this repository confirms. **Paste it; don't compose at the keyboard.**
 
-**Headline (pick one):**
-- `Founder, Arika Agency — Revenue infrastructure for B2B SaaS. Systems, not activity.`
-- `Founder, Arika Agency — I build the revenue operating system most companies assume they already have.`
-- `Founder, Arika Agency — Before you hire, audit. Before you buy, diagnose.`
+**Headline** *(220 char limit; this is 79)*
+```
+Founder, Arika Agency | Revenue infrastructure for B2B SaaS — systems, not activity
+```
 
-**About — opening two lines (the only ones most people read):**
-- *Framework-forward:* "Most revenue problems are decision problems wearing a costume. I write about the 7 decisions that have to happen before any dollar moves."
-- *Opinion-forward:* "Most revenue advice is dangerous because it ignores context. I write about the systems underneath the number — marketing, sales, automation, partnerships as one machine, not four departments."
-- *Build-in-the-open:* "I'm building a revenue operating system — the thing agencies sell you pieces of. I write down what it actually takes, while it's happening, including the parts that don't work yet."
+**About** *(2,600 char limit)*
+```
+I build revenue infrastructure for B2B SaaS.
 
-⚠️ **Owner decision required** — voice selection is a Class 3 public-facing brand call, and must clear Branding (12). Do not ship a headline without that.
+Not campaigns. Not funnels. The connective system underneath them — the thing that
+decides whether marketing, sales, automation and operations produce one number
+together, or four reports separately.
+
+The pattern I keep finding isn't a marketing problem or a sales problem. It's a
+revenue architecture problem: functions built separately, then asked to perform as
+a system nobody actually designed.
+
+I'm building that system for my own agency first, in public — including the parts
+that don't work yet. If you want to know what a revenue operating system actually
+takes to build, the decisions it forces and the things that quietly break, that's
+what I write about here.
+
+What I work on:
+— Revenue architecture and revenue operations
+— Marketing, sales and acquisition systems
+— Workflow automation and AI enablement
+— CRM as revenue intelligence, not a filing cabinet
+— Diagnostics: what to fix before you hire, buy, or launch
+
+Before you hire, audit. Before you buy, diagnose.
+
+Focused on B2B SaaS. Based in Kenya.
+mary.thuo@arikaagency.com
+```
+
+⚠️ **Two lines to check before pasting:** *"I build revenue infrastructure for B2B SaaS"* states what the business does, not a results claim — that's the line to keep honest. And there is deliberately **no** "trusted by", no client count, no metrics (§9).
+
+**Experience entry** — the Page-creation gate depends on this:
+
+| Field | Value |
+|---|---|
+| Title | `Founder` |
+| Company | `Arika Agency` — free text is fine before the Page exists; once created, LinkedIn associates it and pulls the logo |
+| Employment type | Self-employed |
+| Location | Kenya |
+| Start date | ⚠️ Owner input — do not invent |
+| Current role | ✅ **Must be ticked** — this is the gate |
+
+**Rest of the humanization checklist (S2):**
+
+| Item | Value / spec |
+|---|---|
+| Profile photo | Real, current, face clearly visible. Non-negotiable — the "real person" signal and a Page-creation input |
+| Background banner | 1584×396, from the Canva brand kit (`GO_LIVE_CHECKLIST.md` item 20). ⚠️ Canva connector unauthorised — Design (19) or manual export |
+| Custom URL | `linkedin.com/in/marythuo` (or nearest available). Permanent in practice; claim early |
+| Email verified | `mary.thuo@arikaagency.com` — active as of 2026-08-08 |
+| Phone verified | Account-trust signal; reduces restriction risk |
+| Featured section | Leave empty until there is something substantiable to feature |
+| Workplace verification | **After** the Page exists — verify via company email. This is the badge that says a real person operates the agency (§4.4) |
+
+**Alternate headlines** if the recommended one doesn't sound like you:
+- `Founder, Arika Agency | I build the revenue operating system most companies assume they already have`
+- `Founder, Arika Agency | Before you hire, audit. Before you buy, diagnose`
 
 ---
 
@@ -496,6 +548,7 @@ The proposal's architecture is broadly right and largely already yours. But the 
 
 ## 14. Decision Log
 
+- **2026-08-09 — Manual operation unblocked; humanization pack made paste-ready (§7.8).** Owner asked to clear whatever is blocking manual functioning. Audit found **nothing structural blocking it** — only 4 owner decisions (registration status, approve the six posts, retire profile B, founded date + city) and ~90 minutes of profile/Page setup. Everything still red is deliberately *not* on the manual path: the executor connection (1–2 weeks out by design), the Notion connector (unauthorised — the repo file is the interim queue-of-record), the website (leave the field blank), and the agent layer (unrunnable, and unnecessary for manual). Voice decision **L3 collapses into approving the six drafted posts** rather than being decided in the abstract. — Claude Code (Opus 5)
 - **2026-08-08 — `arikaagency.com` verified non-resolving (live DNS check).** No A record on the apex; curl cannot resolve the host while a control host returns 200. Domain is registered, DNS at Zoho. Confirms decision L14 as a real blocker and narrows it: the site needs a **DNS record + deploy**, not a domain. The Page launches with the Website field empty. Verified rather than assumed, per TechStack discipline. — Claude Code (Opus 5)
 - **2026-08-08 — Page creation form is narrower than the master spec.** LinkedIn's create-Page form requires only **Name · URL · Industry · Organization size · Organization type** plus the authorized-representative attestation; Website, Logo and Tagline are optional at creation. Everything else in §12 (About, specialties, location, founded year, cover, custom button) is added afterwards via **Edit page**. — Claude Code (Opus 5)
 - **2026-08-08 — All company emails confirmed active (owner).** Removes the last gate on Page creation and on workplace verification. **Page creation is now a same-day action**; the critical path moves to the Page's own warm-up and the OAuth setup. — Claude Code (Opus 5)
