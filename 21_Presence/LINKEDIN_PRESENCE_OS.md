@@ -6,6 +6,7 @@
 **Status:** **S1 — personal profile exists, Company Page BLOCKED, nothing published, zero automation.** This file is the single consolidated LinkedIn source of truth: every LinkedIn decision, strategy, and constraint that was scattered across 6 departments, reconciled in one place.
 
 > **Reading order:** `GLOBAL_OS.md` → `21_Presence/PRESENCE_OS.md` → `21_Presence/CONTENT_DISTRIBUTION_ENGINE.md` → **this file.**
+> **Actual posts** (first two weeks, drafted 2026-08-09): [`LINKEDIN_LAUNCH_CONTENT.md`](LINKEDIN_LAUNCH_CONTENT.md).
 > Companions: `21_Presence/PLATFORM_ONBOARDING_TRACKER.md` (account health, all 10 platforms) · `04_Content/PLATFORM_INTELLIGENCE_REGISTRY.md` (platform behaviour) · `04_Content/CONTENT_OS.md` §10 (pillars, houses, Notion schema).
 
 ---
