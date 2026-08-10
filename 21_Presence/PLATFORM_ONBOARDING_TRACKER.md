@@ -51,7 +51,7 @@
 | # | Platform | Stage | Flag-risk | Current note |
 |---|---|---|---|---|
 | — | **Engine / Executor (Postiz)** | ✅ **LIVE** | — | Hostinger KVM 2 + Coolify; Postiz+PG+Redis healthy. App verified; 0 channels connected. |
-| 1 | **LinkedIn** | **S1→S4 ready** | Medium | **Unblocked 2026-08-08.** An established founder profile (Mary Thuo) exists and can create the Page — the "Arika" profile is *not* the path and is a policy risk. Page → dev app → Postiz. See [`LINKEDIN_PRESENCE_OS.md`](LINKEDIN_PRESENCE_OS.md) §4. |
+| 1 | **LinkedIn** | ✅ **S4** | Medium | **Company Page LIVE 2026-08-09** (`Arika Agency`, created from the founder profile). Now in the Page's own manual warm-up — **no dev app for 1–2 weeks.** See [`LINKEDIN_PRESENCE_OS.md`](LINKEDIN_PRESENCE_OS.md) §4. |
 | 2 | **Facebook** | **S1–S2** | **High (90-day bans)** | Personal account + **Page already exist** (pre-existing). Verify personal acct; warm up Page. |
 | 3 | **Instagram** | **S1** | **High** | Account exists, **not yet linked** — needs Professional→**Business** + link to the FB Page. |
 | 4 | **Threads** | **S0** | High | Comes via Meta; start only after IG is established. |
@@ -113,6 +113,7 @@
 | 2026-08-07 | Instagram | → S1 | Account exists; link-to-Page pending |
 | 2026-08-08 | LinkedIn | S1 → S4-ready | Established founder profile identified as the real path; Page unblocked; "Arika" profile flagged for retirement |
 | 2026-08-08 | LinkedIn | S4 **executable** | All company emails confirmed active → Page-creation + workplace verification unblocked; Page master spec written (`LINKEDIN_PRESENCE_OS.md` §12) |
+| 2026-08-09 | LinkedIn | → **S4 ✅** | **Company Page LIVE** (`Arika Agency`, logo set, 0 followers). Page now begins its own manual warm-up; dev app held 1–2 weeks |
 
 ---
 
