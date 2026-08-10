@@ -491,7 +491,7 @@ The proposal's architecture is broadly right and largely already yours. But the 
 | **Page name** | `Arika Agency` | ⚠️ Should match the registered legal entity — confirm with Legal (10); the repo has no registration record |
 | **Public URL** | `linkedin.com/company/arika-agency` | Claim early; permanent |
 | **Website** | *(leave blank at creation)* | 🔴 **Verified 2026-08-08: `arikaagency.com` has no A record and does not resolve.** Domain is registered with DNS at Zoho, but nothing is served at the apex; the site exists only on a `.vercel.app` subdomain, uncommitted (`PRESENCE_OS.md` §3.2). Shipping it is a **DNS + deploy** task (EE 20), not a domain purchase. Field is optional and editable later — leave it empty rather than point at a dead host |
-| **Industry** | `Business Consulting and Services` | ⚠️ Decision — fits "revenue infrastructure" better than `Marketing Services`, which reads as a channel vendor |
+| **Industry** | `Business Consulting and Services` | ✅ **Locked 2026-08-09.** Consulting frame where Tier 1 budget sits; broad enough to hold all four functions. Rejected: `Marketing Services`/`Advertising Services` (files you as a channel vendor — the exact category the Realignment says you are not), `IT Services` (misses revenue architecture), `Software Development` (you don't sell software), `Strategic Management Services` (reads as the generic strategy you position against). **If offered narrower children, take the parent** — the offer spans several |
 | **Company size** | `1 employee` / `1–10` | Honest. Solo + AI (`HR_OS.md`) |
 | **Company type** | Privately Held | — |
 | **Founded** | — | ⚠️ Owner input; do not invent |
@@ -502,10 +502,15 @@ The proposal's architecture is broadly right and largely already yours. But the 
 | **Logo / cover** | From the Canva brand kit | Brand kit exists (`GO_LIVE_CHECKLIST.md` item 20, done) — Design (19) to produce at spec (300×300 · 1128×191) |
 | **Custom button** | `Visit website` | Gated on the website blocker above |
 
-**Tagline options:**
-- `Revenue infrastructure for B2B SaaS. Systems, not activity.`
-- `The revenue operating system most companies assume they already have.`
-- `Marketing, sales, automation and operations — engineered as one revenue system.`
+**Tagline — locked 2026-08-09** (99 chars of 120):
+
+```
+Marketing, sales, automation and operations — engineered as one revenue system. Built for B2B SaaS.
+```
+
+**The non-duplication principle:** profile A's headline leads with the *stance* (`systems, not activity`); the Page tagline leads with the *span* (the four functions as one). If both open the same way the two identities read as a copy-paste rather than two roles in one system (§4.6). Describes what is built rather than asserting a result — nothing to substantiate.
+
+*Alternates:* `Revenue infrastructure for B2B SaaS. Marketing, sales, automation and operations, engineered as one system.` (107, but echoes the headline) · `We build the revenue operating system most B2B SaaS companies assume they already have.` (87 — the most memorable of the set, but it is an **argument, not a description**; hold it as a post hook rather than a Page identity, which needs clarity more than cleverness while there are no followers and no proof).
 
 **About — draft (substantiable only; no clients, no team, no results):**
 
@@ -548,6 +553,7 @@ The proposal's architecture is broadly right and largely already yours. But the 
 
 ## 14. Decision Log
 
+- **2026-08-09 — Page tagline and industry locked (§12).** Tagline: *"Marketing, sales, automation and operations — engineered as one revenue system. Built for B2B SaaS."* (99/120). Chosen on a **non-duplication principle** — profile A leads with the stance, the Page leads with the span, so the two identities complement rather than echo. The more memorable candidate (*"the revenue operating system most B2B SaaS companies assume they already have"*) was deliberately **not** used as the tagline: it is an argument rather than a description, and a Page with no followers or proof needs clarity more than cleverness — held as a post hook instead. Industry: **Business Consulting and Services**, over four rejected alternatives; take the parent if narrower children are offered. Partially resolves L10 — the Page **name** still depends on registration status. — Claude Code (Opus 5)
 - **2026-08-09 — Manual operation unblocked; humanization pack made paste-ready (§7.8).** Owner asked to clear whatever is blocking manual functioning. Audit found **nothing structural blocking it** — only 4 owner decisions (registration status, approve the six posts, retire profile B, founded date + city) and ~90 minutes of profile/Page setup. Everything still red is deliberately *not* on the manual path: the executor connection (1–2 weeks out by design), the Notion connector (unauthorised — the repo file is the interim queue-of-record), the website (leave the field blank), and the agent layer (unrunnable, and unnecessary for manual). Voice decision **L3 collapses into approving the six drafted posts** rather than being decided in the abstract. — Claude Code (Opus 5)
 - **2026-08-08 — `arikaagency.com` verified non-resolving (live DNS check).** No A record on the apex; curl cannot resolve the host while a control host returns 200. Domain is registered, DNS at Zoho. Confirms decision L14 as a real blocker and narrows it: the site needs a **DNS record + deploy**, not a domain. The Page launches with the Website field empty. Verified rather than assumed, per TechStack discipline. — Claude Code (Opus 5)
 - **2026-08-08 — Page creation form is narrower than the master spec.** LinkedIn's create-Page form requires only **Name · URL · Industry · Organization size · Organization type** plus the authorized-representative attestation; Website, Logo and Tagline are optional at creation. Everything else in §12 (About, specialties, location, founded year, cover, custom button) is added afterwards via **Edit page**. — Claude Code (Opus 5)
