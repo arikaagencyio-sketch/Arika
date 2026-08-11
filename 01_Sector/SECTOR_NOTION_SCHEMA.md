@@ -229,6 +229,25 @@ The only additions to the live CRM (do **not** create Sector copies of these obj
 4. Load rows from the xlsx via CSV extraction (no `pandas`/`openpyxl` in-env — a lightweight script or manual export). Start with one sub-sector end-to-end (HealthTech) to validate every relation resolves.
 5. Register the Notion DB IDs back into `13_Tech_Stack/TECHSTACK_OS.md` and this file once created.
 
+## 6. Live Notion IDs (built 2026-08-11)
+
+Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Parent page **SectorOS — Sector Intelligence Layer**: <https://app.notion.com/p/3b921e15eb9381b781f5c85525cef272>. All 10 databases built with two-way relations; spine validated (B2B SaaS → HealthTech → VP RevOps + one intelligence finding all resolve).
+
+| Database | Data source (collection://) | DB page |
+|---|---|---|
+| Sectors Master | `68a5d070-58de-4b4d-8293-0fab0849a4b9` | `2f6cef12fda5452b8a8da461a9e4b43b` |
+| Sub-Sectors (hub) | `dbe10a8b-5c67-4602-9108-12feb540995c` | `80ff8ce36f36431a91dea98056ca3f00` |
+| Sector Intelligence | `72f90a0f-e34e-4c54-9fcd-9af2e108527e` | `97d250a755a9440c8154ecd1c29b9f8e` |
+| ICP Classification | `e557b7a9-9af7-491d-97ad-edc55aa5c455` | `7eda3779949747fca7d62053026615ef` |
+| Prospect Signal Scores | `19d44ea0-09cf-4b08-9e28-4277601c54f4` | `ca06347c9ce141b19c706ab52b0f8709` |
+| Sector Linguistics | `172efe6d-08b5-4c85-b24a-fa7065b3e721` | `224b50cf492c485a8b369be012982aeb` |
+| Sector Calendar (Market Events) | `c14fedb3-6048-4bc5-8a40-6558cc985f57` | `051988c2851f423ead134d5ab83360be` |
+| Agency Opportunity Map | `efd6319c-081e-4a6b-b930-a362ef2bc1b2` | `e6c26dd192fd4dfc93c1f5d3528f4038` |
+| Audience Roles | `e0513cc9-682f-4dd4-965c-e0292abe86e4` | `2ec588347eca435785ad366ea164aab3` |
+| Decision-Maker Registry | `5566c27c-d5db-4a22-9587-e57d0ce5fbbe` | `5e58fae996b143528c249cef56844c64` |
+
+**Remaining data load (not yet done):** the full 22 SaaS sub-sectors + per-sub-sector fields (Sheets 02–11) and ICP/Signal rows. `ICP Classification` and `Prospect Signal Scores` are intentionally empty — they are written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime. Bulk taxonomy load needs a CSV extraction of the xlsx.
+
 ## 5. Coverage check (nothing missed)
 
 Draft 7's 5 DBs → Sectors/Sub-Sectors + Opportunity Map (2,8) · Offers/Clients/Execution now referenced in CRM (§3). Draft 3 mapping template + Draft 5 infra layers + Draft 13 layers 5/6/7/11 → DB 3 `Category` enum. Draft 8 → DB 7. Draft 9/14 → DB 6. Draft 11 → DB 9. Draft 15/16/17 → DB 4 + DB 5 + DB 10. Layers 4 (Journey), 9 (Memory) live outside Notion (repo doctrine + `runtime.jsonl`) per the plan's Part 1 table.
