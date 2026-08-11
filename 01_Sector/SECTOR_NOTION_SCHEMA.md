@@ -1,6 +1,6 @@
 # Sector — Notion Data Model (Schema Spec)
 
-**Department:** Sector (01) · **Status:** Design spec (Phase 1) — build-ready, not yet built in Notion (connector authorization pending).
+**Department:** Sector (01) · **Status:** **Built & live** in Notion (2026-08-11) — all 10 databases exist with two-way relations (IDs in §6); loaded with the reference xlsx taxonomy. **Operating mode is manual-apply** (see §7): the DBs are live, but nothing writes to them unattended.
 **Purpose:** The build specification for the Sector Layer's operational control plane in Notion — the ~10 Sector-owned databases, their fields, relations, and the purpose each field serves. This is the "databases in Notion, active, with the right relations, every field with a purpose" deliverable.
 
 > Read `SECTOR_OS.md` first, then `SECTOR_ACTIVATION_CONTRACT.md`. This file is the *what to build*; the contract is the *how to operate it*.
@@ -58,6 +58,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Sector ID | Text (unique) | ID | slug, e.g. `sec-b2b-saas` — the cross-platform join key |
 | Category | Select | RET | Horizontal SaaS · Vertical SaaS · AI-Native · Multi-Location Vertical |
 | Definition | Text | ID | Draft 3 one-liner: "exists to __ by enabling __ for __" |
+| **Status** | Select | GOV | **Engagement lifecycle** (added 2026-08-11) — `Active` (real, a client is served here) · `Target` (pursuing entry) · `Reference` (intelligence only — the **default meaning of every xlsx-loaded row**) · `Dormant` (parked). Distinct from `Readiness` (market buy-state). The owner sets this as the **exact real sectors + clients** are added; see §7. |
 | Strategic Priority | Select | EXE | Primary · Secondary · Tertiary (maps ICP tiers, `SECTOR_OS.md` §1) |
 | Readiness | Select | EXE | 🟢 Ready Now · 🟡 In Progress · 🔴 Asleep (xlsx Sheet 11) |
 | Intelligence Confidence | Select | GOV | Low · Medium · High |
@@ -78,6 +79,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Revenue Model | Text | RET | subscription/usage/seat/etc. (xlsx Sheet 02) |
 | Core Value Prop | Text | ID | xlsx Sheet 02 |
 | Ecosystem Dependencies | Text | RET | xlsx Sheet 02 |
+| **Status** | Select | GOV | **Engagement lifecycle** (added 2026-08-11): `Active` · `Target` · `Reference` (default for xlsx-loaded rows) · `Dormant`. Distinct from `Readiness` (market buy-state). See §7. |
 | Opportunity Score | Select | EXE | Low · Medium · High · Very High |
 | Readiness | Select | EXE | 🟢/🟡/🔴 (xlsx Sheet 11) |
 | Intelligence Confidence | Select | GOV | Low/Med/High |
@@ -251,11 +253,32 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - ✅ **Agency Opportunity Map** — all **52** (Sheet 08): primary opportunity + entry-point service (with price) + retainer upsell path (with range), each linked to its sub-sector.
 - ✅ **Decision-Maker Registry** — all **52** (buyer titles from Sheet 02 ICP; buying triggers + outreach intel from Sheet 09), each linked to its sub-sector.
 - ✅ **Cleanup done** — the placeholder "HealthTech" validation seed was de-parented + relabeled; its two validation rows (VP RevOps, predictive-signal finding) re-pointed to the real `CRM (MarTech)` sub-sector.
-- ✅ **Sector Calendar** — schema enhanced (Sector color-coding for overlay, Calendar Type = 7 Draft-8 layers, Authoritative Source, Source URL, Last Verified, Refresh Status). Seeded with **12 web-verified entries** (10 flagship events + 2 date-certain regulatory drivers — CSRD Omnibus delay, FSMA 204 delay), color-coded, source-cited, each linked to its sub-sector. Real-time engine spec'd (not built): [`SECTOR_CALENDAR_REFRESH_SPEC.md`](SECTOR_CALENDAR_REFRESH_SPEC.md). *No invented dates* — unverified marked `Needs verification`.
-- ⏳ **Still to load:** Calendar long-tail (full Sheet 10 events/communities + the other 5 layers per sub-sector, via the refresh engine); Sector Intelligence (Sheets 03–07: problems, struggles, revenue intelligence, strategic nodes); Sector Linguistics; Audience Roles.
+- ✅ **Sector Calendar** — schema enhanced (Sector color-coding for overlay, Calendar Type = 7 Draft-8 layers, Authoritative Source, Source URL, Last Verified, Refresh Status). **24 web-verified entries (2026-08-11):** the original 12 + **12 new sector-anchor events** so **every one of the 20 sectors now has at least one real, future-dated anchor** (Aug-2026 → Mar-2027), each color-coded, source-cited (org + Source URL + `Last Verified`), linked to a representative sub-sector, with the Sheet-10 community/entry-strategy captured. All `Confirmed` (VERGE + HIMSS27 upgraded from `Needs verification`). Anchors chosen to be *future* as of Aug 2026 (e.g. Travel/Hosp → The Hospitality Show Nov, not the past June HITEC; BioTech → JPM Jan-2027). *No invented dates* — every date traces to the organizer. Engine spec: [`SECTOR_CALENDAR_REFRESH_SPEC.md`](SECTOR_CALENDAR_REFRESH_SPEC.md).
+- ✅ **Sector Intelligence — Sheet 03 (Problems) loaded (2026-08-11):** **52 findings** (one per sub-sector), `Category = Buying Psychology`, `Evidence` = the sheet's financial-impact range, `Impact` = urgency (High/Medium), `Strategic Implication` = the emotional/business buying-pressure, `Routed To = Marketing + Sales + Offer`, `Confidence = Medium` (the $ figures are owner-curated ranges/hypotheses, not validated — §1 honesty caveat), each linked to its sub-sector. Loader: `scratchpad/gen_intel03.py`.
+- ⏳ **Still to load:** Sector Intelligence **Sheets 04–07** (internal struggles, revenue intelligence, strategic nodes, cross-sector relationship map) — same pattern, next; **Sector Linguistics**; **Audience Roles**. Calendar: the **secondary** Sheet-10 events (each sub-sector lists 2–3; only the anchor is loaded) + the 5 non-Event layers — deliberately not dumped undated (no-fabrication + signal); add via the manual refresh sweep as dates verify.
 - **Intentionally empty:** `ICP Classification` + `Prospect Signal Scores` — written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime, not seeded.
+- **`Status` field added (2026-08-11)** to Sectors Master + Sub-Sectors — engagement lifecycle (`Active`/`Target`/`Reference`/`Dormant`). All current rows are **`Reference`** (empty reads as Reference) until the owner marks the exact real sectors/clients. See §7 for the convention. Not back-filled row-by-row (write-light; the owner is about to curate the real set).
 - Extraction: `scratchpad/xlsx_to_csv.py` (pure-stdlib) → per-sheet CSVs; loaders `gen_subsectors.py` + `gen_loads.py`.
 
 ## 5. Coverage check (nothing missed)
 
 Draft 7's 5 DBs → Sectors/Sub-Sectors + Opportunity Map (2,8) · Offers/Clients/Execution now referenced in CRM (§3). Draft 3 mapping template + Draft 5 infra layers + Draft 13 layers 5/6/7/11 → DB 3 `Category` enum. Draft 8 → DB 7. Draft 9/14 → DB 6. Draft 11 → DB 9. Draft 15/16/17 → DB 4 + DB 5 + DB 10. Layers 4 (Journey), 9 (Memory) live outside Notion (repo doctrine + `runtime.jsonl`) per the plan's Part 1 table.
+
+---
+
+## 7. Operating mode & status convention — *read this before trusting a row*
+
+**Operating mode = MANUAL APPLY, by design (2026-08-11).** These 10 databases are **live**, but nothing writes to them automatically. Every row, relation, and status you see was placed by a human or by Claude Code **applying a change on request** — reading the xlsx / an agent's advisory output / a web-verified source, then writing it in. The Sector agents (`sector-*`) are **advisory**: they *recommend* what should be written; they do not perform the write. This is deliberate and matches `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` doctrine — **we do not document an intention as an automation.** When (and only when) a database gets a real unattended writer, it gets a matrix row first, and this section names it. Until then: *if a row exists, a human/Claude-Code put it there this way.*
+
+**Status convention (the real-vs-reference line).** `Status` (on Sectors Master + Sub-Sectors) is the **engagement lifecycle**, and it is what makes the operational picture honest as the owner adds the *exact* sectors and clients:
+
+| Status | Meaning | Applies to |
+|---|---|---|
+| `Reference` | Intelligence only — no real engagement. **The default for every currently-loaded row** (the 52 xlsx sub-sectors + B2B SaaS are all reference data). | the xlsx taxonomy |
+| `Target` | We are actively pursuing entry / a named prospect exists. | set by owner |
+| `Active` | Real — a client is currently served in this sector/sub-sector (a ClickUp `Client` ID sits in `Related Clients (CRM)`). | set by owner |
+| `Dormant` | Was active/target, now parked. | set by owner |
+
+- **An empty `Status` reads as `Reference`** until explicitly set — so the loaded taxonomy is never mistaken for real engagement.
+- **Clients live in the CRM (ClickUp), not here.** When the owner adds an exact client, the client *record* is a ClickUp `Client`; its ID goes into the sector's `Related Clients (CRM)` text field and the sector flips to `Active`. Sector's Notion **references** the client by ID — it does not store a second copy (§0 law 2, §3).
+- **`Readiness` ≠ `Status`.** `Readiness` (🟢/🟡/🔴) is the *market's* buy-state from xlsx Sheet 11; `Status` is *our* engagement state. A sub-sector can be `Ready Now` (market) but `Reference` (we have no client there yet).

@@ -1,6 +1,6 @@
 # Sector Calendar — Real-Time Refresh Engine (Spec)
 
-**Department:** Sector (01) · **Status:** Agent spec **built** 2026-08-11 (`.claude/agents/sector-calendar-refresher.md`, advisory, registered in the runtime; loop wired to `sector-intelligence-mapper` via `CALENDAR_UPDATED` + `sector-readiness-analyst` via `REGULATORY_CHANGE`). **Not yet a live auto-writer** — the unattended cloud-routine form (writes to Notion) needs an `AUTOMATION_APPROVAL_MATRIX.md` row first. Runs manual/advisory today.
+**Department:** Sector (01) · **Status:** Agent spec **built** 2026-08-11 (`.claude/agents/sector-calendar-refresher.md`, advisory, registered in the runtime; loop wired to `sector-intelligence-mapper` via `CALENDAR_UPDATED` + `sector-readiness-analyst` via `REGULATORY_CHANGE`). **Not yet armed as a live routine.** Key finding (§5a): a claude.ai cloud routine has **no web access**, so the honest unattended form is a **comment-posting staleness watchdog** (flags what's due + where to check it), **never** an unattended date-writer — that would fabricate. Runs manual/advisory today; ready to arm as the comment-watchdog form pending the owner's go + an `AUTOMATION_APPROVAL_MATRIX.md` row.
 **Purpose:** Keep the **Sector Calendar (Market Events)** Notion DB accurate in *real time* — re-verify event dates against authoritative sources, surface newly-announced events and regulatory deadlines, flag delays/cancellations, and **propagate material changes into Sector Intelligence + readiness**. The calendar is a living intelligence surface, not a static table (Draft 8 + owner's real-time directive).
 
 > Governing rule: **no invented dates.** Every dated entry must trace to an authoritative source (the body that runs it) and carry `Last Verified` + `Refresh Status`. Unverifiable dates are marked `Needs verification`, never guessed.
@@ -19,7 +19,7 @@
   6. **Content/Media** — campaign + publishing rhythms.
   7. **Innovation/Trend** — tech-release cadences.
 - **Real source of WHO/WHERE:** xlsx Sheet 10 (`10 EVENTS & COMMUNITIES`) — owner-curated events + communities + entry strategy per sub-sector. This is the seed list the engine keeps dated + fresh.
-- **Seeded so far (2026-08-11, web-verified):** 10 flagship events + 2 date-certain regulatory drivers (CSRD Omnibus delay, FSMA 204 delay). See the DB.
+- **Loaded so far (2026-08-11, web-verified): 24 entries** — 10 flagship events + 2 date-certain regulatory drivers (CSRD Omnibus delay, FSMA 204 delay) + **12 sector-anchor events** giving every one of the 20 sectors ≥1 real future-dated anchor (all `Confirmed`; anchors chosen future-of-Aug-2026). See the DB. Remaining: the secondary Sheet-10 events per sub-sector + the 5 non-Event layers (add as dates verify).
 
 ## 2. The refresh loop (per run)
 
@@ -69,6 +69,17 @@ memory_stream: 01_Sector/_memory/runtime.jsonl
 - **This agent writes to Notion → external state change.** Before it runs unattended it REQUIRES a row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` (Trigger · Action · Risk Class 2 · Rollback = revert to prior Date/Refresh Status · Fallback = mark `Needs verification` · Log destination = `runtime.jsonl` · Human gate · Last verified · Detection = "how do we know it stopped?"). Until then it runs **advisory** (proposes updates for human apply).
 - **No fabrication gate:** an update only writes a date it retrieved from the Authoritative Source this run; otherwise it sets `Needs verification` and reports the gap. VALIDATE source before write.
 - **Escalation:** a Regulatory change that flips a sub-sector's readiness tier escalates to the owner (it changes GTM sequencing).
+
+## 5a. 🔴 What "the live form" can honestly be — the web-access finding (2026-08-11)
+
+Verified against the one live, healthy cloud routine on the account (`trig_01WyyrXEkFZck1D49tm6BfKv`, Design Creative Pipeline — `enabled`, last fired 2026-08-11): **a claude.ai cloud routine's session has `allowed_tools: [Bash, Read, Write, Edit, Glob, Grep]` and a Notion connector — and NO web access** (no WebSearch, no WebFetch, no browser). That single fact governs what an unattended calendar refresher can be, because this agent's whole job depends on *verifying dates against authoritative web sources*:
+
+- ❌ **Cannot** be an unattended "verify-the-web-and-write-the-date" routine. In an environment with no web, "verify" would collapse into "guess" — which violates the calendar's one sacred rule (**no invented dates**; "we are not making up any calendars").
+- ✅ **Can** be an unattended **staleness watchdog + re-verification prompter** — structurally identical to the proven Creative Pipeline pattern (draft + recommend + comment; a human applies). Each run it: reads the Notion calendar, finds entries whose `Last Verified` is stale (per the §2 selection policy) or marked `Needs verification`, and **posts a Notion comment** listing exactly which entries are due and *where to check each* (`Authoritative Source` + `Source URL`). It writes **comments, never dates.** A human — or Claude Code in an interactive session *with* web tools — then does the actual verify + write + event-emit.
+
+So the honest "live" promotion is a self-running *surveillance* of calendar freshness, not a self-writing calendar. It is genuinely unattended and genuinely incapable of fabricating a committed date. The date-write step stays a **manual apply** (matches `SECTOR_NOTION_SCHEMA.md` §7). If a future cloud environment grants web access to the routine, this can be revisited — but only with the no-fabrication gate proven, and a new matrix row.
+
+**Status of promotion (decided 2026-08-11): stays MANUAL — not armed.** The owner chose to keep the refresher manual rather than put a second always-on routine on the account. So: no `RemoteTrigger` is created, and **no `AUTOMATION_APPROVAL_MATRIX.md` row is added** (correct per matrix doctrine — no live row for an automation that isn't running). Freshness sweeps are run on demand: `arika run sector-calendar-refresher` for the advisory proposal, or Claude Code in an interactive session (which *has* web tools) to verify + apply. The honest comment-watchdog form above remains **ready to arm** if the owner later wants it — at which point its matrix row is written on arm.
 
 ## 6. File-design fields (per Draft 13)
 Purpose §Purpose · Authority: subordinate to `SECTOR_ACTIVATION_CONTRACT.md` + the Constitution · Inputs §4 · Outputs: updated calendar rows + emitted events + intelligence findings · Rules §1/§5 · Failure: stale/unreachable source → `Needs verification`, never invent · Escalation §5 · Examples §3 (FSMA 204 / CSRD).
