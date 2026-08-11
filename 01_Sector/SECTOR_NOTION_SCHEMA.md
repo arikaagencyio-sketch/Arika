@@ -251,7 +251,8 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - ✅ **Agency Opportunity Map** — all **52** (Sheet 08): primary opportunity + entry-point service (with price) + retainer upsell path (with range), each linked to its sub-sector.
 - ✅ **Decision-Maker Registry** — all **52** (buyer titles from Sheet 02 ICP; buying triggers + outreach intel from Sheet 09), each linked to its sub-sector.
 - ✅ **Cleanup done** — the placeholder "HealthTech" validation seed was de-parented + relabeled; its two validation rows (VP RevOps, predictive-signal finding) re-pointed to the real `CRM (MarTech)` sub-sector.
-- ⏳ **Still to load:** Sector Intelligence (Sheets 03–07: problems, struggles, revenue intelligence, strategic nodes), Sector Calendar (Sheet 10: events & communities), Sector Linguistics, Audience Roles.
+- ✅ **Sector Calendar** — schema enhanced (Sector color-coding for overlay, Calendar Type = 7 Draft-8 layers, Authoritative Source, Source URL, Last Verified, Refresh Status). Seeded with **12 web-verified entries** (10 flagship events + 2 date-certain regulatory drivers — CSRD Omnibus delay, FSMA 204 delay), color-coded, source-cited, each linked to its sub-sector. Real-time engine spec'd (not built): [`SECTOR_CALENDAR_REFRESH_SPEC.md`](SECTOR_CALENDAR_REFRESH_SPEC.md). *No invented dates* — unverified marked `Needs verification`.
+- ⏳ **Still to load:** Calendar long-tail (full Sheet 10 events/communities + the other 5 layers per sub-sector, via the refresh engine); Sector Intelligence (Sheets 03–07: problems, struggles, revenue intelligence, strategic nodes); Sector Linguistics; Audience Roles.
 - **Intentionally empty:** `ICP Classification` + `Prospect Signal Scores` — written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime, not seeded.
 - Extraction: `scratchpad/xlsx_to_csv.py` (pure-stdlib) → per-sheet CSVs; loaders `gen_subsectors.py` + `gen_loads.py`.
 
