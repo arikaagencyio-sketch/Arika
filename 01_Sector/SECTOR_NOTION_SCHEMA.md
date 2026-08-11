@@ -246,7 +246,11 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 | Audience Roles | `e0513cc9-682f-4dd4-965c-e0292abe86e4` | `2ec588347eca435785ad366ea164aab3` |
 | Decision-Maker Registry | `5566c27c-d5db-4a22-9587-e57d0ce5fbbe` | `5e58fae996b143528c249cef56844c64` |
 
-**Remaining data load (not yet done):** the full 22 SaaS sub-sectors + per-sub-sector fields (Sheets 02–11) and ICP/Signal rows. `ICP Classification` and `Prospect Signal Scores` are intentionally empty — they are written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime. Bulk taxonomy load needs a CSV extraction of the xlsx.
+**Data load status (2026-08-11):**
+- ✅ **Sub-Sectors loaded** — all **52 sub-sectors** (22 SaaS categories × their products) from xlsx Sheet 02, each with GTM motion, revenue model, value prop, ecosystem deps, and readiness (Sheet 11): **23 Ready Now · 21 In Progress · 8 Asleep**. Each linked to the B2B SaaS sector. Extraction: `scratchpad/xlsx_to_csv.py` (pure-stdlib) → per-sheet CSVs.
+- ⏳ **Still to load:** Agency Opportunity Map (Sheet 08), Decision-Maker Registry (Sheet 09), Sector Intelligence findings (Sheets 03–07), Sector Calendar (Sheet 10). Each links to a sub-sector by slug.
+- **Intentionally empty:** `ICP Classification` + `Prospect Signal Scores` — written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime, not seeded.
+- **Cleanup pending:** one placeholder "HealthTech" row (the original validation seed, no readiness set) duplicates the real `...(HealthTech)` products — archive it, or re-point its two validation leaf rows (VP RevOps, predictive-signal finding) to a real sub-sector.
 
 ## 5. Coverage check (nothing missed)
 
