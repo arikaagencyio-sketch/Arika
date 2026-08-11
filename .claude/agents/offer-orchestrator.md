@@ -10,6 +10,8 @@ triggers:
   - type: manual
   - type: event
     on: OFFER_BRIEF_RECEIVED
+  - type: event
+    on: SECTOR_MAPPED
 inputs:
   seed_brief: { type: string, from: event.payload.seed_brief }
 output_schema:

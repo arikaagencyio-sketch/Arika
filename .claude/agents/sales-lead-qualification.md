@@ -12,6 +12,10 @@ triggers:
     cron: "0 9 * * 1-5"
   - type: event
     on: LEAD_CREATED
+  - type: event
+    on: ICP_CLASSIFIED
+  - type: event
+    on: PROSPECT_SCORED
 inputs:
   lead_id: { type: string, from: event.payload.lead_id }
 output_schema:

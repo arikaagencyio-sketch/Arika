@@ -85,7 +85,7 @@ Every workflow defines: `TRIGGER → CONTEXT → RETRIEVAL → ANALYSIS → DECI
 | `SECTOR_MAPPED` | sector map produced | Offer (02) + Marketing (03) + Content (04) |
 | `SECTOR_READINESS_SET` | readiness reclassified | Marketing (03) demand generation |
 
-> ⚠️ Known gap (fix in Phase 4): today `SECTOR_READINESS_SET` has no subscriber and `PROSPECT_IDENTIFIED` (Sector's entry trigger) is emitted by no agent. Reconcile `emits`/`on:` pairs to the intended targets above; `handoff_to` is documentation-only and is not executed.
+> ✅ Wired 2026-08-10: the four emits now reach live subscribers — `PROSPECT_SCORED`/`ICP_CLASSIFIED` → `sales-lead-qualification` (05); `SECTOR_MAPPED` → `offer-orchestrator` (02); `SECTOR_READINESS_SET` → `marketing-demand-generation` (03) — added **additively** (pre-existing consumers in Ops/ClientPartner/Content preserved; events are multicast). `PROSPECT_IDENTIFIED` is an **external** entry trigger by design (webhook/manual), so it has no internal emitter. `handoff_to` remains documentation-only and is not executed. Verified: `arika list` loads 114 agents, 0 skipped.
 
 ## 9. Output requirement (make it executable)
 

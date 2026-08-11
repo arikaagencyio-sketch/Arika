@@ -10,6 +10,8 @@ triggers:
   - type: manual
   - type: event
     on: CAMPAIGN_REQUESTED
+  - type: event
+    on: SECTOR_READINESS_SET
   - type: schedule
     cron: "0 8 * * 1"
 inputs:
