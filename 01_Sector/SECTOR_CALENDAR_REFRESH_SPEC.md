@@ -1,6 +1,6 @@
 # Sector Calendar — Real-Time Refresh Engine (Spec)
 
-**Department:** Sector (01) · **Status:** Design spec (agent not yet built — Phase: refresh-engine).
+**Department:** Sector (01) · **Status:** Agent spec **built** 2026-08-11 (`.claude/agents/sector-calendar-refresher.md`, advisory, registered in the runtime; loop wired to `sector-intelligence-mapper` via `CALENDAR_UPDATED` + `sector-readiness-analyst` via `REGULATORY_CHANGE`). **Not yet a live auto-writer** — the unattended cloud-routine form (writes to Notion) needs an `AUTOMATION_APPROVAL_MATRIX.md` row first. Runs manual/advisory today.
 **Purpose:** Keep the **Sector Calendar (Market Events)** Notion DB accurate in *real time* — re-verify event dates against authoritative sources, surface newly-announced events and regulatory deadlines, flag delays/cancellations, and **propagate material changes into Sector Intelligence + readiness**. The calendar is a living intelligence surface, not a static table (Draft 8 + owner's real-time directive).
 
 > Governing rule: **no invented dates.** Every dated entry must trace to an authoritative source (the body that runs it) and carry `Last Verified` + `Refresh Status`. Unverifiable dates are marked `Needs verification`, never guessed.

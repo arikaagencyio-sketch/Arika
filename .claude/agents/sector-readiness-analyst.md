@@ -10,6 +10,8 @@ triggers:
   - type: manual
   - type: schedule
     cron: "0 8 1 * *"
+  - type: event
+    on: REGULATORY_CHANGE
 inputs:
   subsector: { type: string, from: event.payload.subsector }
 output_schema:
