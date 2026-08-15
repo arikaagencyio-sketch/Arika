@@ -153,19 +153,46 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Decision-language patterns | Text | EXE | "patterns > words" (Draft 9) |
 | Confidence / Source | Select/Text | GOV | |
 
-### DB 7 — Sector Calendar (Market Events)
-**Primary entity:** one market timing event. **AEIT_06:** `Calendar/Event`. **Backing:** Draft 8 + xlsx Sheet 10.
-> ⚠️ **Named distinctly** from Operations (08)'s **7 Cognitive Calendars** (`AGENCY_REVENUE_TARGETS.md`). This is the *sector/market* time dimension, not the agency's operating calendars.
+### DB 7 — Sector Signals (Commercial Intelligence Calendar) — *evolved 2026-08-15 (SCIC)*
+**Primary entity:** one **market signal** — an event, deadline, demand shift, competitor move, regulation, aviation/tech change, etc. — carrying its **commercial interpretation over time**. **AEIT_06:** conforms to the canonical **`Signal / Event`** entity (`type, entity_ref, timestamp → triggers refresh/action`). **Backing:** Draft 8 + xlsx Sheet 10 + web-verified sources. **Live DB:** `collection://c14fedb3-6048-4bc5-8a40-6558cc985f57` — **evolved in place** from "Sector Calendar (Market Events)"; the 24 event/regulatory entries become the first signals.
+> ⚠️ **Named distinctly** from Operations (08)'s canonical **`Calendar`** (the 7 Cognitive Calendars). This is the *market / temporal-intelligence* dimension, not an agency operating calendar. It is a **Signal database with calendar _views_** — Notion Calendar is the visualization layer (§4/§8), not a second store.
+> 🔒 **Honesty gate (the anti-gibberish rule):** every dated record traces to an authoritative source (`Source Tier` + `Source URL` + `Last Verified`); **"real-time" = a freshness cadence, not a live stream** (cloud routines can't browse — ingestion is interactive Claude Code / human on cadence); the **live-booking/property layer is a TEMPLATE** (empty until a client connects RMS/PMS) — **never fabricate a property's numbers**; a **Tier-4 / unverified / stale** signal MUST NOT drive downstream execution.
 
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
-| Event | Title | ID | conference, buying window, fiscal moment |
-| Sub-Sector | Relation → Sub-Sectors | REL | |
-| Calendar Type | Select | RET | Demand · Event · Operational · Financial · Content/Media · Regulatory · Innovation/Trend (Draft 8) |
-| Date / Window | Date (range) | RET/EXE | |
-| Sales / Marketing / Content Relevance | Select ×3 | EXE | Low/Med/High |
-| Preparation Deadline | Date | EXE | lead time |
-| Community / Entry Strategy | Text | EXE | xlsx Sheet 10 |
+| Signal | Title | ID | the event / deadline / shift / move |
+| **Signal Type** | Select | RET | **the classifier (supersedes `Calendar Type`):** Demand · Event/Compression · Seasonality · Holiday/Cultural · Sales/MICE · Travel-Trade · Distribution · Competitor · Regulatory · Economic · Aviation/Connectivity · Technology · Consumer-Behaviour · Risk/Disruption · Supplier/Cost · Industry-Knowledge |
+| Sector | Select | RET | color-coded (multi-sector overlay) |
+| Sub-Sector | Relation → Sub-Sectors | REL | one signal ↦ many sub-sectors allowed |
+| **Geography** | Relation → Geography (DB 11) | REL/geo | Global→Region→Country→City (Property = template level) |
+| Recurrence | Select | RET | annual · seasonal · one-off · uncertain |
+| Change Status | Select | GOV | new · changed · cancelled · unchanged |
+| **Signal Date** | Date (range) | temporal | the event/window (primary calendar view) |
+| Announcement / Source Date | Date | temporal | when the market learned |
+| Strategic Planning Date | Date | temporal | lead-time |
+| Sales Activation Date | Date | temporal | lead-time |
+| Marketing Activation Date | Date | temporal | lead-time |
+| Offer Activation Date | Date | temporal | lead-time |
+| Revenue Watch Date | Date | temporal | lead-time |
+| Execution Deadline | Date | temporal | last sensible action |
+| Last Verified | Date | GOV | freshness |
+| Next Verification | Date | GOV | cadence gate |
+| Review Date | Date | GOV | |
+| Authoritative Source | Text | GOV | the body that runs/owns it |
+| Source URL | URL | GOV | |
+| **Source Tier** | Select | GOV | T1 Primary · T2 Institutional · T3 Commercial-intel · T4 Secondary (T4/unverified can't drive downstream) |
+| Refresh Status | Select | GOV | Confirmed · Annual-recurring · Needs verification · Superseded/Delayed |
+| Confidence | Select | GOV | Low/Med/High |
+| Demand / Revenue / Sales / Marketing / Offer / Distribution / Competitive / Regulatory-Risk Impact | Select ×8 | EXE | Low/Med/High — the commercial interpretation per function |
+| Commercial Priority | Select | EXE | Low/Med/High/Critical |
+| Audience / Market Segment | Text | EXE | leisure/corporate/group/international/etc. |
+| Recommended Action | Text | EXE | |
+| Action Deadline | Date | EXE | **drives a 2nd calendar view** (proves multi-date/lead-time) |
+| Departments Affected | Multi-select | REL | Sales/Marketing/Revenue(Ops)/Offer/Content/Branding/ClientPartner |
+| Status | Select | GOV | monitoring · active · closed |
+| Sector Intelligence | Relation → Sector Intelligence (DB 3) | REL | the interpreted **finding** (calendar→intelligence loop) |
+
+**Migration mapping (existing 24 rows → signals, no data loss):** `Event → Signal` (title) · `Calendar Type → Signal Type` (Demand/Event/Regulatory carry over; the rest map to the nearest of the 16) · `Date/Window → Signal Date` · `Preparation Deadline → Marketing/Sales Activation Date` · `Sales/Marketing/Content Relevance → Sales/Marketing Impact` (Content Relevance retained as informational) · `Community/Entry Strategy → Recommended Action` context · `Authoritative Source / Source URL / Last Verified / Refresh Status / Sector / Sub-Sector` all carry over unchanged. New fields default empty (`Source Tier` back-filled from the existing citations).
 
 ### DB 8 — Agency Opportunity Map
 **Primary entity:** one sub-sector-level agency opportunity. **Backing:** xlsx Sheet 08. **Distinct from** the CRM deal-level `Opportunity` (ClickUp) — this is the *market* opportunity, which *generates* CRM opportunities.
@@ -206,6 +233,60 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Outreach Intelligence | Text | EXE | LinkedIn/channel (xlsx Sheet 09) |
 | Incentives / Fears / KPIs | Text ×3 | ID | Draft 16 stakeholder-map fields |
 | CRM Person | Text (ID) | REL | ClickUp reference |
+
+### DB 11 — Geography *(new 2026-08-15, SCIC — lean, agency-reused)*
+**Primary entity:** one place at one level. **AEIT_06:** proposed **candidate canonical entity** (do not silently canonize — flag for owner/architecture review). Reused by any department that needs a shared geo model; the Sector Signals DB relates to it.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| Name | Title | ID | e.g. "Kenya", "Nairobi" |
+| Level | Select | RET | Global · Region · Country · City · **Property (template level)** |
+| Parent | Relation → Geography (self) | REL | Nairobi→Kenya→East Africa→Africa→Global |
+| ISO / Code | Text | ID | ISO-3166 where applicable |
+| Notes | Text | — | source-market vs. destination, etc. |
+
+### DB 12 — Sector State *(new 2026-08-15, SCIC — the "what's happening now")*
+**Primary entity:** the **current condition** of one sector (× geography). Read **first** by downstream departments. Distilled from the Sector Signals + Intelligence, dated + confidence-gated. Maps SectorOS layer 6/synthesis.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| State | Title | ID | e.g. "B2B SaaS — Global — 2026-Q3" |
+| Sector | Select | RET | |
+| Geography | Relation → Geography | REL | optional scope |
+| Demand Direction | Select | EXE | ↑ · → · ↓ (by segment in Notes) |
+| ADR / Price Pressure | Select | EXE | Low/Med/High (sector-appropriate metric) |
+| Competition | Select | EXE | Low/Med/High |
+| Connectivity / Access | Select | EXE | sector-appropriate (aviation for hospitality, distribution for SaaS) |
+| Tech Disruption | Select | EXE | Low/Med/High |
+| Regulatory Risk | Select | EXE | Low/Med/High |
+| Top Opportunities / Threats | Text ×2 | EXE | |
+| Next 30 / 90-day Critical Signals | Relation → Sector Signals | REL | the signals driving this state |
+| As-of Date | Date | GOV | freshness — the whole point |
+| Confidence | Select | GOV | Low/Med/High |
+
+### DB 13 — Sector Forecast *(new 2026-08-15, SCIC — SectorOS layer 12 "Evolution")*
+**Primary entity:** the **forward trajectory** of one sector. Explicitly probabilistic; never presented as fact.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| Forecast | Title | ID | |
+| Sector | Select | RET | |
+| Geography | Relation → Geography | REL | |
+| Horizon | Select | RET | 30d · 90d · 12mo · 3yr |
+| Likely Trajectory | Text | EXE | the call |
+| Key Drivers | Relation → Sector Signals | REL | what would confirm/break it |
+| Confidence | Select | GOV | Low/Med/High |
+| As-of / Review Date | Date ×2 | GOV | |
+
+### Worked example (depth-proof) — Hospitality *(illustrative only; not a live sector)*
+Hospitality is the reference that sets the depth bar; the schema above must hold **all** of it. Coverage check against the owner's hospitality spec:
+- **The 6-calendar commercial fusion** (Demand · Compression/Event · Sales/MICE · Travel-Trade · Marketing-Demand · Seasonality/Destination) → `Signal Type` values (one DB, filtered views — not 6 DBs).
+- **"It is in which country / property"** → `Geography` relation (Global→Africa→Kenya→Nairobi; Property = template).
+- **Lead-time** (12-mo awareness → 9-mo sales → 90-day marketing → 30-day conversion → 7-day RM) → the 6 activation date fields.
+- **Kenya 2026 public holidays + travel-trade dates** (WTM Africa 13–15 Apr, Indaba 12–14 May, AviaDev 9–10 Sep, WTM London 3–5 Nov, HSMAI MEA 16–18 Nov, etc.) → real signals, `Source Tier` T1/T2, `Signal Type = Holiday/Cultural` or `Travel-Trade`.
+- **The live forecast layer** (pickup, occupancy, ADR, RevPAR, comp-set, SiteMinder/STR/IDeaS) → the **template/property layer** — fields exist, populated only from a client's connected RMS/PMS; **never fabricated**.
+- **Sector State** ("demand ↑, MICE ↑↑, connectivity ↑, ADR pressure ↑…") → DB 12, one dated row.
+- **Signal → department action** (conference announced → occupancy/ADR/MICE/F&B → Revenue/Sales/Marketing/Offer/Content signals) → the 8 impact fields + `Departments Affected` + the event emit.
 
 ---
 
@@ -259,6 +340,8 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - **Intentionally empty:** `ICP Classification` + `Prospect Signal Scores` — written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime, not seeded.
 - **`Status` field added (2026-08-11)** to Sectors Master + Sub-Sectors — engagement lifecycle (`Active`/`Target`/`Reference`/`Dormant`). All current rows are **`Reference`** (empty reads as Reference) until the owner marks the exact real sectors/clients. See §7 for the convention. Not back-filled row-by-row (write-light; the owner is about to curate the real set).
 - Extraction: `scratchpad/xlsx_to_csv.py` (pure-stdlib) → per-sheet CSVs; loaders `gen_subsectors.py` + `gen_loads.py`.
+- 🟢 **SCIC evolution — Phase A + Phase B schema BUILT (2026-08-15):** DB 7 evolved in place into **Sector Signals (Commercial Intelligence Calendar)** (`collection://c14fedb3-…`, renamed) — full signal-object schema live (Signal Type ×16, Geography + Sector Intelligence relations, the 6 lead-time activation dates + Announcement/Next-Verification/Review, Source Tier, the 8 impact fields, Commercial Priority, Confidence, Audience/Market Segment, Recommended Action, Action Deadline, Departments Affected, Status, Recurrence, Change Status). The 24 existing rows are intact (still carry `Calendar Type`; `Signal Type` back-fill pending). New DBs created: **Geography** `collection://e095c661-86cd-4f45-9149-eca1c7195e71` (self-parent hierarchy) · **Sector State** `collection://4a9b8ca5-f042-4938-85af-e0706ee9e1ff` (→ Sectors Master + Geography + Signals) · **Sector Forecast** `collection://920781ae-fabd-4c9f-8045-42b40abf3cda` (→ Sectors Master + Geography + Signals). Doctrine + honesty gate in `SECTOR_ACTIVATION_CONTRACT.md` §12.
+- ⏳ **SCIC remaining (Phase B/C/D):** back-fill the 24 rows' `Signal Type` from `Calendar Type`; build the Notion **calendar views** (Master 365 / 7 / 30 / 90 / High-Impact / Sales / Marketing / Revenue / Competitor / Regulatory-Risk / Travel-Trade / Unverified + a 2nd calendar on `Action Deadline`); upgrade a slice of real signals to full depth (geo + lead-time + impact + linked finding); evolve the refresher → `sector-signal-refresher`.
 
 ## 5. Coverage check (nothing missed)
 

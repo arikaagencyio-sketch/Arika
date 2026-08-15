@@ -61,6 +61,7 @@ Before creating, modifying, querying, or executing any Sector workflow you MUST:
 Map every Sector task to a layer; each layer has a build home (see `SECTOR_OS.md` and the plan's Part-1 table):
 1 Identity · 2 Linguistic · 3 Calendar · 4 Journey · 5 Infrastructure · 6 Intelligence · 7 Governance · 8 Runtime · 9 Memory · 10 Opportunity · 11 Risk · 12 Evolution.
 Homes: **Notion** (Identity, Linguistic, Calendar, Intelligence, Opportunity, Evolution, Audience, ICP, Signal, Decision-Makers — see `SECTOR_NOTION_SCHEMA.md`); **repo doctrine** (Journey, Governance); **runtime** (Runtime layer = 4 agents + event bus); **`01_Sector/_memory/runtime.jsonl`** (Memory).
+> **Layer 3 (Calendar) is operated as the Sector Signal / Commercial Intelligence Calendar (SCIC) — see §12.** Layer 12 (Evolution) is home to **Sector Forecast** and Layer 6 synthesis to **Sector State** (`SECTOR_NOTION_SCHEMA.md` DB 12/13).
 
 ## 6. The Sector Cognition Runtime Loop (Draft 13, 14 steps)
 
@@ -98,6 +99,30 @@ Write Sector docs in **deterministic operational language** (Draft 13): use `MUS
 ## 11. Escalation doctrine
 
 ESCALATE to the owner (human) when: confidence is low on a Class ≥ 2 recommendation · a required dependency is missing · instructions conflict across the §2 hierarchy · an action would be irreversible or external · Tier 2/3 source material is being relied on beyond its truncated coverage (Drafts 16/17 are partial). Escalation format: Problem · Risk · Blocker · Suggested resolution · Required approval.
+
+---
+
+## 12. Sector Signal / Commercial Intelligence Calendar (SCIC) doctrine *(added 2026-08-15)*
+
+**Purpose:** operate the Sector time dimension as a **temporal intelligence layer**, not a content/event calendar. **Authority:** subordinate to §1–§11; authoritative for all signal/calendar work. **Inputs:** authoritative external sources + the Sector Signals DB + Geography/State/Forecast DBs (`SECTOR_NOTION_SCHEMA.md` DB 7, 11–13). **Outputs:** validated signals → interpreted findings → department signals + Sector State. **Examples:** the hospitality worked example (`SECTOR_NOTION_SCHEMA.md` §2, DB 7).
+
+You MUST:
+- treat the Sector time dimension as **one canonical Sector Signal database** conforming to the AEIT_06 `Signal / Event` entity, **named distinctly from Operations' `Calendar`**; use Notion **calendar _views_**, never separate calendar stores per type/view;
+- record each signal as a **full intelligence object** (DB 7 schema): `Signal Type` (16), `Geography`, the lead-time date set, `Source Tier`, freshness, the eight per-department commercial-impact fields, `Recommended Action`, `Departments Affected`, and a relation to the interpreted **Sector Intelligence** finding;
+- run every signal through the lifecycle **Source → Fact → Validation → Interpretation → Sector Impact → Commercial Impact → Recommendation → Department Signal → Action**;
+- keep the **two data layers honest**: (a) externally-verifiable market signals = real, cited (`Source Tier` + URL + `Last Verified`); (b) the **live-booking/property layer = a TEMPLATE**, populated only from a client's connected RMS/PMS — VALIDATE source before write;
+- treat **"real-time" as a freshness cadence** (real-time-critical / daily / weekly / monthly / quarterly / annual) executed by **interactive Claude Code (with web) or a human** — cloud routines cannot browse;
+- keep the **separation of duties**: Notion = system of record + human workspace · Notion Calendar = temporal view layer · Cloud Code = ingest/monitor/normalize/dedupe/classify/impact-score/sync · Sector = interpretation · other departments = consumers;
+- **inspect existing DBs, schema, and the Notion connection and EXTEND** (evolve `collection://c14fedb3-…` in place); route downstream on the **event bus** (reuse `SECTOR_MAPPED`/`REGULATORY_CHANGE`/`CALENDAR_UPDATED`; add at most `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE`).
+
+You MUST NOT:
+- build a separate calendar per signal type or per view, or a parallel Signal DB (duplication, §1/§4);
+- **fabricate** a property's live numbers, an event date, or a forecast presented as fact;
+- let a **Tier-4 / unverified / stale** signal emit a department signal or drive execution (extends §6);
+- stand up paid live data integrations (SiteMinder/STR/IDeaS) without owner approval + credentials;
+- put the refresher on a persistent scheduler or give it auto-write **without an `AUTOMATION_APPROVAL_MATRIX.md` row** — it stays **advisory/manual** until then (owner decision, 2026-08-11).
+
+**Failure conditions:** unreachable/stale source → mark `Needs verification`, never guess; missing Geography/finding relation → REPORT the dependency; conflict with an Ops calendar or CRM entity → ESCALATE (§11). **Cross-refs:** `SECTOR_NOTION_SCHEMA.md` DB 7/11/12/13; `SECTOR_CALENDAR_REFRESH_SPEC.md`; the plan addendum "SCIC".
 
 ---
 
