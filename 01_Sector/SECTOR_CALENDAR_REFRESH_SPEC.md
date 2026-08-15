@@ -1,7 +1,9 @@
-# Sector Calendar — Real-Time Refresh Engine (Spec)
+# Sector Signal — Real-Time Refresh Engine (Spec)
 
-**Department:** Sector (01) · **Status:** Agent spec **built** 2026-08-11 (`.claude/agents/sector-calendar-refresher.md`, advisory, registered in the runtime; loop wired to `sector-intelligence-mapper` via `CALENDAR_UPDATED` + `sector-readiness-analyst` via `REGULATORY_CHANGE`). **Not yet armed as a live routine.** Key finding (§5a): a claude.ai cloud routine has **no web access**, so the honest unattended form is a **comment-posting staleness watchdog** (flags what's due + where to check it), **never** an unattended date-writer — that would fabricate. Runs manual/advisory today; ready to arm as the comment-watchdog form pending the owner's go + an `AUTOMATION_APPROVAL_MATRIX.md` row.
-**Purpose:** Keep the **Sector Calendar (Market Events)** Notion DB accurate in *real time* — re-verify event dates against authoritative sources, surface newly-announced events and regulatory deadlines, flag delays/cancellations, and **propagate material changes into Sector Intelligence + readiness**. The calendar is a living intelligence surface, not a static table (Draft 8 + owner's real-time directive).
+> **Evolved 2026-08-15 (SCIC Phase D):** this spec now governs the full **Sector Signal Refresh** — all 16 signal types + commercial-impact + lead-time + downstream routing, of which calendar-date re-verification is one facet. The agent was renamed `sector-calendar-refresher` → **`sector-signal-refresher`**. (Filename kept for link stability; content generalized.)
+
+**Department:** Sector (01) · **Status:** Agent spec **built** 2026-08-11, **broadened 2026-08-15** (`.claude/agents/sector-signal-refresher.md`, advisory, registered in the runtime; loop wired to `sector-intelligence-mapper` via `CALENDAR_UPDATED` + `sector-readiness-analyst` via `REGULATORY_CHANGE`; `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE` emitted-but-not-yet-subscribed, Contract §8). **Not yet armed as a live routine.** Key finding (§5a): a claude.ai cloud routine has **no web access**, so the honest unattended form is a **comment-posting staleness watchdog** (flags what's due + where to check it), **never** an unattended date/number-writer — that would fabricate. Runs manual/advisory today; ready to arm as the comment-watchdog form pending the owner's go + an `AUTOMATION_APPROVAL_MATRIX.md` row.
+**Purpose:** Keep the **Sector Signals (Commercial Intelligence Calendar)** Notion DB accurate and commercially interpreted in *real time* (= a freshness cadence, not a live stream) — re-verify signal dates against authoritative sources, surface newly-announced signals and regulatory deadlines, flag delays/cancellations, **propose the commercial interpretation** (impact + lead-time + routing), and **propagate material changes into Sector Intelligence + readiness**. The signal layer is a living intelligence surface, not a static table (Draft 8 + SCIC doctrine + owner's real-time directive).
 
 > Governing rule: **no invented dates.** Every dated entry must trace to an authoritative source (the body that runs it) and carry `Last Verified` + `Refresh Status`. Unverifiable dates are marked `Needs verification`, never guessed.
 
@@ -45,22 +47,24 @@ Emits (reuse the runtime event bus): `CALENDAR_UPDATED` → `sector-intelligence
 
 ## 4. Agent spec (to build)
 
+> **Built** — the live spec is `.claude/agents/sector-signal-refresher.md`. Summary frontmatter:
+
 ```yaml
-name: sector-calendar-refresher
+name: sector-signal-refresher
 department: "01"
-description: Re-verifies Sector Calendar dates against authoritative sources and propagates material changes to Sector Intelligence + readiness. Advisory-first.
+description: Monitors the Sector Signals DB — re-verifies all 16 signal types, flags stale/moved/delayed/new, proposes commercial-impact + lead-time + downstream routing. Advisory.
 model: claude-opus-4-8
 execution: prompt
-risk_class: 2            # WRITES to an external system (Notion) → needs approval-matrix row
-requires_human_approval: false   # advisory until the write path is approved
+risk_class: 2            # WRITES to an external system (Notion) → needs approval-matrix row before unattended
+requires_human_approval: true    # advisory until the write path is approved
 triggers:
   - type: manual
   - type: schedule
     cron: "0 7 * * 1"    # weekly near-term sweep (illustrative)
   - type: schedule
-    cron: "0 7 1 * *"    # monthly full + regulatory sweep
-inputs: { scope: { type: string } }   # e.g. "next-90-days" | "regulatory" | sub-sector id
-emits: [CALENDAR_UPDATED, REGULATORY_CHANGE]
+    cron: "0 7 1 * *"    # monthly full + regulatory/economic sweep
+inputs: { scope: { type: string } }   # e.g. "next-90-days" | "regulatory" | a Signal Type | sub-sector id
+emits: [CALENDAR_UPDATED, REGULATORY_CHANGE, DEMAND_SHIFT, COMPRESSION_EVENT, COMPETITOR_MOVE]
 memory_stream: 01_Sector/_memory/runtime.jsonl
 ```
 
@@ -79,7 +83,7 @@ Verified against the one live, healthy cloud routine on the account (`trig_01Wyy
 
 So the honest "live" promotion is a self-running *surveillance* of calendar freshness, not a self-writing calendar. It is genuinely unattended and genuinely incapable of fabricating a committed date. The date-write step stays a **manual apply** (matches `SECTOR_NOTION_SCHEMA.md` §7). If a future cloud environment grants web access to the routine, this can be revisited — but only with the no-fabrication gate proven, and a new matrix row.
 
-**Status of promotion (decided 2026-08-11): stays MANUAL — not armed.** The owner chose to keep the refresher manual rather than put a second always-on routine on the account. So: no `RemoteTrigger` is created, and **no `AUTOMATION_APPROVAL_MATRIX.md` row is added** (correct per matrix doctrine — no live row for an automation that isn't running). Freshness sweeps are run on demand: `arika run sector-calendar-refresher` for the advisory proposal, or Claude Code in an interactive session (which *has* web tools) to verify + apply. The honest comment-watchdog form above remains **ready to arm** if the owner later wants it — at which point its matrix row is written on arm.
+**Status of promotion (decided 2026-08-11): stays MANUAL — not armed.** The owner chose to keep the refresher manual rather than put a second always-on routine on the account. So: no `RemoteTrigger` is created, and **no `AUTOMATION_APPROVAL_MATRIX.md` row is added** (correct per matrix doctrine — no live row for an automation that isn't running). Freshness sweeps are run on demand: `arika run sector-signal-refresher` for the advisory proposal, or Claude Code in an interactive session (which *has* web tools) to verify + apply. The honest comment-watchdog form above remains **ready to arm** if the owner later wants it — at which point its matrix row is written on arm.
 
 ## 6. File-design fields (per Draft 13)
 Purpose §Purpose · Authority: subordinate to `SECTOR_ACTIVATION_CONTRACT.md` + the Constitution · Inputs §4 · Outputs: updated calendar rows + emitted events + intelligence findings · Rules §1/§5 · Failure: stale/unreachable source → `Needs verification`, never invent · Escalation §5 · Examples §3 (FSMA 204 / CSRD).

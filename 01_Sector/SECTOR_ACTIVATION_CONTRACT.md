@@ -85,8 +85,14 @@ Every workflow defines: `TRIGGER → CONTEXT → RETRIEVAL → ANALYSIS → DECI
 | `ICP_CLASSIFIED` | tier set | Sales (05) qualification + Marketing (03) intelligence |
 | `SECTOR_MAPPED` | sector map produced | Offer (02) + Marketing (03) + Content (04) |
 | `SECTOR_READINESS_SET` | readiness reclassified | Marketing (03) demand generation |
+| `CALENDAR_UPDATED` | a signal changed materially | `sector-intelligence-mapper` (01) + `content-intelligence-hub` (04) — **wired** |
+| `REGULATORY_CHANGE` | a regulatory signal moved | `sector-readiness-analyst` (01) + `sales-lead-qualification` (05) — **wired** |
+| `DEMAND_SHIFT` | demand-signal materially changed | Marketing (03) demand + Ops (08) revenue — ⏳ *emitted, not yet subscribed* |
+| `COMPRESSION_EVENT` | a compression/event window opens | Sales (05) meetings + Marketing (03) campaign timing — ⏳ *emitted, not yet subscribed* |
+| `COMPETITOR_MOVE` | competitor signal detected | Marketing (03) market-intelligence + Sales (05) — ⏳ *emitted, not yet subscribed* |
 
-> ✅ Wired 2026-08-10: the four emits now reach live subscribers — `PROSPECT_SCORED`/`ICP_CLASSIFIED` → `sales-lead-qualification` (05); `SECTOR_MAPPED` → `offer-orchestrator` (02); `SECTOR_READINESS_SET` → `marketing-demand-generation` (03) — added **additively** (pre-existing consumers in Ops/ClientPartner/Content preserved; events are multicast). `PROSPECT_IDENTIFIED` is an **external** entry trigger by design (webhook/manual), so it has no internal emitter. `handoff_to` remains documentation-only and is not executed. Verified: `arika list` loads 114 agents, 0 skipped.
+> ✅ Wired 2026-08-10: the four Sector emits reach live subscribers — `PROSPECT_SCORED`/`ICP_CLASSIFIED` → `sales-lead-qualification` (05); `SECTOR_MAPPED` → `offer-orchestrator` (02); `SECTOR_READINESS_SET` → `marketing-demand-generation` (03) — added **additively** (pre-existing consumers in Ops/ClientPartner/Content preserved; events are multicast). `PROSPECT_IDENTIFIED` is an **external** entry trigger by design (webhook/manual), so it has no internal emitter. `handoff_to` remains documentation-only and is not executed.
+> ⏳ Added 2026-08-15 (SCIC Phase D): `sector-signal-refresher` emits the three new SCIC signal events above. `CALENDAR_UPDATED`/`REGULATORY_CHANGE` reuse the already-wired subscribers; `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE` are **emitted-but-not-yet-subscribed** — their target-department handlers (03/05/08) MUST be registered before these carry weight (anti-dead-event rule, Part 2). Because the refresher is advisory/manual (nothing fires unattended), there is **no live dead event** today; the wiring is a documented extension point, activated when a downstream department adopts it. Verified: `arika list` loads all Sector agents, 0 skipped.
 
 ## 9. Output requirement (make it executable)
 

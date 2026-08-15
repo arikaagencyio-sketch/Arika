@@ -74,6 +74,7 @@
 | **Document / Conversation / Meeting** | [NEW] | dept of origin | content, participants, entity_refs | Raw material for knowledge extraction. |
 | **Workflow / Automation / Agent / Skill** | [CRM-adjacent] | owning dept + Automation (16) | trigger, risk_class, matrix_row | Governed by Approval Matrix. |
 | **Calendar** | [NEW] | Operations (08) | one of the 7 Cognitive Calendars | Already defined; entity-ized here. |
+| **Geography** | [CANDIDATE] | *proposed: Sector (01), for shared use* | name, level (Global/Region/Country/City/Property), parent (self-relation), ISO | **Proposal, not yet ratified.** Built in Notion for the Sector Signals layer (SCIC, 2026-08-15) as a lean, reusable place dimension; flagged here so any adopting department (Ops, Marketing, ClientPartner) conforms to one geography model rather than forking. Ratify owner + level-of-granularity before canonizing. |
 
 ---
 
