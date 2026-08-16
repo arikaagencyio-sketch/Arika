@@ -255,6 +255,8 @@ Narrative Level 9 (`… → Consequence → Solution → …`), the atomic conte
 **Story Architecture is canonical**; the agents use it and flag genuine need for the
 other beats rather than silently substituting.
 
+> **⚠️ Superseded by design, 2026-08-16 — not yet replaced.** The schema below is still the live database, but it is scheduled for rebuild as **DB 7** of the Content Intelligence Layer ([`CONTENT_INTELLIGENCE_SCHEMA.md`](CONTENT_INTELLIGENCE_SCHEMA.md)), where 11 of its fields become rollups inherited from upstream intelligence rather than typed by hand. Read that file for the target model; this paragraph remains accurate for what exists **today**. Note two live defects it records: the `Platform` set still contains `Tumblr` and lacks `Threads`/`TikTok`/`YouTube` (the reconciliation staged in PIL §9 on 2026-08-02, never applied), and `content-brief-builder` emits `problem_desire_objection` as one string while the database has three separate columns.
+
 **Notion content-brief database — BUILT 2026-07-03.** Real database created (`https://app.notion.com/p/fef061abc3c440e2bb7979df9461b1d0`, data source `collection://1f0ed36e-a548-4743-9947-f408f8811140`), matching this schema exactly: Title, Objective, Content House (select, all 7 houses above), Pillar (select, all 7 pillars), Campaign, Funnel Stage (select: Awareness/Consideration/Decision/Retention-Advocacy — provisional labels, not sourced from elsewhere in this repo, adjust if a different funnel-stage model is preferred), Platform (multi-select: Instagram/LinkedIn/Facebook/X/Pinterest/Tumblr/Newsletter/Website), Persona, Problem/Desire/Objection, Story/Hook/Narrative, Script, Caption, Visual Direction (handoff notes to Design, 19), Canva Instructions, Publishing Status (select: Not started/In progress/**Ready for Design**/Done — converted 2026-07-04 from Notion's native status type, which doesn't support custom options via the available API, specifically so "Ready for Design" could exist as the Creative Pipeline Automation's real trigger value), Engagement Follow-up (which DM-automation trigger, if any — cross-ref `16_Automation/AUTOMATION_OS.md`'s Engagement Layer). Structure is real; zero content briefs exist in it yet — it's an empty, ready-to-use database, not populated data.
 
 ## 11. RACI / Ownership
@@ -330,6 +332,15 @@ substrate (`arika-runtime/DESIGN.md`) plus two real external systems it does not
 the **Notion content-brief database** (live, 18 properties, **empty**) and the
 **Creative Pipeline cloud routine** (hourly; **dead 2026-07-04 → 2026-07-15**, restored
 and last verified 2026-07-15T09:36:46Z). See §12.
+
+**Data model spec (added 2026-08-16):** [`CONTENT_INTELLIGENCE_SCHEMA.md`](CONTENT_INTELLIGENCE_SCHEMA.md)
+is this department's Notion build specification — 7 new databases plus the rebuilt
+content-brief database, with every property, type, select option, relation, rollup,
+formula, view, seed scope and the field-to-field flow from Sector (01)'s live
+intelligence. It stands to Content as `SECTOR_NOTION_SCHEMA.md` stands to Sector.
+**Status: specified, nothing built** — the Notion connector was disconnected when it
+was written, so §6's ID registry is empty by fact rather than by omission. The live
+brief database and its routine are untouched.
 
 ## 14. Raw Archive Pointer
 
