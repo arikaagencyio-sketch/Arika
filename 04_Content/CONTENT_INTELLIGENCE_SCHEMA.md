@@ -1,6 +1,6 @@
 # Content Intelligence Layer — Notion Data Model (Schema Spec)
 
-**Department:** Content (04) · **Status:** **Specified, not built** (2026-08-16). Architecture approved by owner; Phase 1 paper reconciliation applied. **Phases 2–7 blocked — the Notion connector is disconnected.** No database exists yet; §6 is the ID registry to be filled at build time.
+**Department:** Content (04) · **Status:** **BUILT 2026-08-16** — all 8 databases live in Notion with every relation, rollup and formula resolved (IDs in §6). **Seeded:** DB 1 (10 platforms) and DB 2 (10 narrative positions). **Empty by design:** DB 3, 4, 5, 6, 7 — sector-dependent rows wait on a named sub-sector; DB 8 schema live, 12 offer rows pending. The old content-brief database is **superseded but not yet deleted** — deletion is gated on the cloud routine being re-pointed and verified (§4 note 5).
 **Purpose:** The build specification for the Content Intelligence Layer — 7 new Notion databases plus the rebuilt content-brief database, their fields, relations, rollups, formulas, views, and the exact field-to-field flow from Sector (01)'s live intelligence into a production-ready brief. This is the technical blueprint; it is written so the build can be executed without improvising.
 
 > Read [`GLOBAL_OS.md`](../GLOBAL_OS.md), then [`CONTENT_OS.md`](CONTENT_OS.md) (the what) and [`PLATFORM_INTELLIGENCE_REGISTRY.md`](PLATFORM_INTELLIGENCE_REGISTRY.md) (platform behavioral doctrine) alongside this file. The Sector-side counterpart and the pattern this file follows is [`../01_Sector/SECTOR_NOTION_SCHEMA.md`](../01_Sector/SECTOR_NOTION_SCHEMA.md).
@@ -521,25 +521,33 @@ Of the 19 databases specified: **8 built** (the 6 named as the spec's own "minim
 
 ---
 
-## 6. Live Notion IDs
+## 6. Live Notion IDs *(built 2026-08-16)*
 
-**None yet. Nothing is built.** The Notion connector was disconnected when this specification was written.
+**Workspace:** `dac21e15-eb93-8125-ba65-0003e8debaf5` (Arika Agency's Space).
+**Parent page:** `ContentOS — Content Intelligence Layer` — `3be21e15-eb93-81df-8f9d-fc7639d7d534` · <https://app.notion.com/p/3be21e15eb9381df8f9dfc7639d7d534>
 
-| # | Database | Data source (`collection://`) | DB page |
-|---|---|---|---|
-| — | Parent page `ContentOS — Content Intelligence Layer` | — | *(to be filled)* |
-| 1 | Platform Registry | *(to be filled)* | |
-| 2 | Narrative Intelligence Registry | *(to be filled)* | |
-| 3 | Sector × Platform Intelligence Matrix | *(to be filled)* | |
-| 4 | Campaign Intelligence | *(to be filled)* | |
-| 5 | Content Opportunity | *(to be filled)* | |
-| 6 | Content Translation Matrix | *(to be filled)* | |
-| 7 | Content Briefs v2 | *(to be filled)* | |
-| 8 | Offer Registry (thin) | *(to be filled)* | |
+| # | Database | Data source (`collection://`) | DB page | Rows |
+|---|---|---|---|---|
+| 1 | Platform Registry | `3fe9685e-6cb0-4a62-9a12-a3db999dc88e` | `bb3f22054ccf4f39bdf0507a202452c7` | **10** |
+| 2 | Narrative Intelligence Registry | `e76c2bec-8077-4b84-9db3-f1f819000745` | `326500c11b0e4053854baa22835e7d09` | **10** |
+| 3 | Sector × Platform Intelligence Matrix | `bb21b3fc-b14f-4237-b5cd-9affd08b98fc` | `09c2f29dada84e2fba9213cc4ab06764` | 0 — needs a named sub-sector |
+| 4 | Campaign Intelligence | `6f1f092b-2b26-4bef-94e6-b87e00ba9fb6` | `722d957d420f4663aba3974e54ad2a0b` | 0 — no campaign exists |
+| 5 | Content Opportunity | `b9cd2f53-1e6a-4765-aaf4-4742d7d12520` | `df33ddf3ed1b4323bebc95457e42a1fe` | 0 — seeded by an agent run |
+| 6 | Content Translation Matrix | `9abf586d-d3bd-4401-b416-d5e0af1f3162` | `c6bf37b321d34ac79435a4a80f71b215` | 0 — needs DB 3 |
+| 7 | Content Briefs | `761b3f94-bdbf-4b3d-8234-4cda579697ca` | `264db3ec98834c359a7d314f52765ebb` | 0 — by design |
+| 8 | Offer Registry (thin) | `850f5a23-6533-4f48-89f3-ef6bc7f360b6` | `ec38bf406989477ba4f991915a711ce5` | 0 — **12 rows pending** |
 
-**Superseded:** `collection://1f0ed36e-a548-4743-9947-f408f8811140` (Content Briefs v1, 18 properties, 0 rows) — **not yet deleted.** Deletion is gated on the re-pointed routine firing successfully against DB 7.
+**Group sub-pages:** `01 Intelligence` `3be21e15-eb93-81a7-a403-c20f6247b218` (DB 1, DB 8) · `02 Strategy` `3be21e15-eb93-8191-b9c5-cb5c5460b6b6` (DB 2, DB 3, DB 6) · `03 Content` `3be21e15-eb93-8111-925d-d9e587966850` (DB 4, DB 5, DB 7) · `04 Execution` `3be21e15-eb93-81aa-a046-c327a561ed0d` *(empty, reserved)* · `05 Feedback` `3be21e15-eb93-81ed-b111-c7ed9096612c` *(empty, reserved)*. The two empty groups are deliberate — they name where the blocked layers attach and why each is blocked.
 
-**Workspace:** `dac21e15-eb93-8125-ba65-0003e8debaf5` (Arika Agency's Space). **Page grouping:** `01 Intelligence` (DB 1, DB 8) · `02 Strategy` (DB 2, DB 3, DB 6) · `03 Content` (DB 4, DB 5, DB 7) · `04 Execution` *(empty, reserved)* · `05 Feedback` *(empty, reserved)*. The two empty groups are deliberate — they show where the blocked layers attach.
+**⚠️ Superseded but NOT deleted:** `collection://1f0ed36e-a548-4743-9947-f408f8811140` (Content Briefs v1, 18 properties, 0 rows). It remains the target of cloud routine `trig_01WyyrXEkFZck1D49tm6BfKv`. **Do not delete until** the routine is re-pointed at DB 7 and a live test fires (§9 Gate 1 check 6). Until then the old database is still the production one.
+
+**Sector DB page IDs recovered during this build** — `SECTOR_NOTION_SCHEMA.md` §6 records these three as "no DB-page ID recorded": Geography `10f2b1c23a234d8797e91b8658de4359` · Sector State `ece654da35194ba5b12f5a4bfd5d1d9c` · Sector Forecast `09a9c41ef2794e8dacd6d0ac98c4ff39`. Worth back-filling there.
+
+### Build deviations from the spec — recorded, not silently absorbed
+
+1. **`empty()` does not work on a rollup in Notion formulas** (returns `Type error with formula`); it *does* work on a relation. `Family Integrity` and `Publishable Here` were rewritten to test `format(prop("X")) == ""` instead. `Overlay Integrity` and `Brief Integrity` test relations, so they use `empty()` unchanged. **Carry this into any future formula on this layer.**
+2. **`Desire` and `Objection` are authored text on DB 7, not rollups.** The spec assumed they inherit from DB 5, but the atomic content unit is `Problem → Insight → Solution → Proof → Action` — it has no Desire or Objection field. Their natural upstream is Sector's Audience Roles (`Wants` / `Rejects`), which is **empty**. Authoring them on the brief is the honest interim; the field comments record the intended source.
+3. **`Supersedes` self-relations exist on DB 6 and DB 7 only.** DBs 1–5 and 8 still need them — a two-step operation Notion requires after creation. Outstanding.
 
 ---
 
@@ -622,7 +630,8 @@ Structure is fully verifiable at build time; the spine walk is not, because **a 
 ## 10. Decision Log
 
 - **2026-08-16 — Content Intelligence Layer specified.** Seven new databases plus a rebuilt brief database, landing exactly on the owner specification's own "minimum core" — no expansion, no shortfall. Six proposed databases deliberately not built, each with the rule that forbade it recorded rather than a silent omission; four calendar databases converted to views per `SECTOR_ACTIVATION_CONTRACT.md` §12. Four corrections applied during review: the five-value confidence vocabulary adopted over Sector's three (with a documented boundary mapping, §7); knowledge-maturity and engagement lifecycles kept as separate axes rather than collapsed; the five-field source block adopted; and a field-level audit finding that Sector covers ~15 of 27 audience fields, with the 6 missing ones to be added to Sector's DB 9/10 as an **extension** rather than a second Content-owned store. Two genuine defects surfaced and left for the owner rather than papered over: `content-opportunity-mapper`'s tier gap (totals 5–19 have no valid tier in its own enum), and the DRAGON conflict (persisted as data at `Validating`). — Claude Code (Opus 5)
-- **2026-08-16 — Build blocked at Phase 2.** The Notion MCP connector disconnected mid-session; verified unavailable twice. No database was created, none deleted, and the live content-brief database and its cloud routine are untouched. This specification is the buildable artifact produced instead — the build becomes mechanical once the connector returns. — Claude Code (Opus 5)
+- **2026-08-16 — BUILT. All 8 databases live.** Connector returned; pre-flight confirmed the brief database still had **0 rows** (the condition the whole rebuild depended on) and all 13 Sector data sources resolved. Built in dependency order; the DB 5 ↔ DB 6 circular dependency resolved in one operation as designed (creating DB 6's relation auto-created the reverse on DB 5). Every relation, rollup and formula resolved to its intended target — verified in the returned schemas, not assumed. Seeded DB 1 (10 platforms) and DB 2 (10 narrative positions), both sector-independent. **Honesty audit passed:** DB 2 returns 9 `Active`/`Confirmed` + 1 `Validating`/`Working Hypothesis` (DRAGON, `Proof Layer = None available`, both letter-sets empty); DB 1 returns `Revenue Function = null` on exactly the three platforms PIL profiles lightly (Threads, TikTok, YouTube) and `Account Status = Not created` on all ten. Nothing was invented to fill a field. Three build deviations recorded in §6 rather than absorbed silently. **The old brief database and its cloud routine are untouched** — the rebuild is additive until the routine is re-pointed. — Claude Code (Opus 5)
+- **2026-08-16 — Build blocked at Phase 2 (superseded same day).** The Notion MCP connector disconnected mid-session; verified unavailable twice. This specification was the buildable artifact produced instead. — Claude Code (Opus 5)
 
 ## 11. Changelog
 

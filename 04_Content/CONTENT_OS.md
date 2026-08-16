@@ -333,14 +333,20 @@ the **Notion content-brief database** (live, 18 properties, **empty**) and the
 **Creative Pipeline cloud routine** (hourly; **dead 2026-07-04 → 2026-07-15**, restored
 and last verified 2026-07-15T09:36:46Z). See §12.
 
-**Data model spec (added 2026-08-16):** [`CONTENT_INTELLIGENCE_SCHEMA.md`](CONTENT_INTELLIGENCE_SCHEMA.md)
-is this department's Notion build specification — 7 new databases plus the rebuilt
-content-brief database, with every property, type, select option, relation, rollup,
-formula, view, seed scope and the field-to-field flow from Sector (01)'s live
-intelligence. It stands to Content as `SECTOR_NOTION_SCHEMA.md` stands to Sector.
-**Status: specified, nothing built** — the Notion connector was disconnected when it
-was written, so §6's ID registry is empty by fact rather than by omission. The live
-brief database and its routine are untouched.
+**Content Intelligence Layer — BUILT 2026-08-16.** Data model spec:
+[`CONTENT_INTELLIGENCE_SCHEMA.md`](CONTENT_INTELLIGENCE_SCHEMA.md). It stands to
+Content as `SECTOR_NOTION_SCHEMA.md` stands to Sector. **8 Notion databases now live**
+under parent page `ContentOS — Content Intelligence Layer`
+(`3be21e15-eb93-81df-8f9d-fc7639d7d534`) — Platform Registry, Narrative Intelligence
+Registry, Sector × Platform Matrix, Campaign Intelligence, Content Opportunity,
+Content Translation Matrix, Content Briefs v2, and a thin Offer Registry. All IDs in
+that file's §6. Seeded: 10 platforms, 10 narrative positions. Everything
+sector-dependent is deliberately **0 rows** until a sub-sector is named.
+
+**🔴 The old brief database (`1f0ed36e-…`) is still the production one.** DB 7 exists
+but the Creative Pipeline routine still points at v1. Deletion of v1 is gated on
+re-pointing the routine and a live firing test. Until that happens, nothing about the
+running system has changed.
 
 ## 14. Raw Archive Pointer
 
