@@ -96,9 +96,15 @@ Reddit, Discord, WhatsApp/Telegram communities, Medium, Quora, Behance/Dribbble,
 
 ---
 
-## 5. The per-sector overlay (Sector 01)
+## 5. The per-sector overlay — **owned by Content (04)** *(amended 2026-08-16)*
 
-The profiles in §4 are each platform's **intrinsic baseline**. `01_Sector/Social Media Sector Layering. Draft 14.md` argues correctly that *"each sector uses social media differently"* — buyers, trust systems, urgency cycles, language, and proof differ by sector. That is a **per-sector overlay** applied on top of the baseline, owned by Sector (01), not a competing definition. Order of operations: **baseline (this registry) → sector overlay (Sector) → audience/persona → narrative → production.** Surfacing that draft into `SECTOR_OS.md` is a staged edit in the integration report.
+The profiles in §4 are each platform's **intrinsic baseline**. `01_Sector/Social Media Sector Layering. Draft 14.md` argues correctly that *"each sector uses social media differently"* — buyers, trust systems, urgency cycles, language, and proof differ by sector. That is a **per-sector overlay** applied on top of the baseline, not a competing definition. Order of operations: **baseline (this registry) → sector overlay → audience/persona → narrative → production.** Surfacing that draft into `SECTOR_OS.md` is a staged edit in the integration report.
+
+> **🔴 Ownership amended 2026-08-16 (owner ruling).** This section previously assigned the overlay to **Sector (01)**. It is now owned by **Content (04)**, and the overlay has a real home: the **Sector × Platform Intelligence Matrix**, one row per `(Sub-Sector × Platform)`. Reasoning: Content already owns both halves the overlay combines — this registry (platform behavioral truth) and every downstream consumer of the matrix (`content-opportunity-mapper`, `content-brief-builder`, `content-multiplication-engine`, `content-publishing-gate`). Sector (01) supplies the sector half **by relation** (Sub-Sectors, Sector Intelligence, Linguistics, Decision-Maker Registry, Sector Signals) and remains the canonical owner of every one of those; it does not lose sector truth, and Content does not acquire it.
+>
+> **What the overlay is for.** It is the governance control that makes cross-platform duplication *structurally visible* rather than a matter of judgement. Its `Overlay Verdict` field (`Primary · Secondary · Repurpose-only · Do not publish · Unverified`) is load-bearing: a `Repurpose-only` verdict means no new strategic position may originate on that platform for that sub-sector — it must attach to an existing translation family. That is the difference between multiplication and the *"ten near-identical posts is spam, not leverage"* failure `content-multiplication-engine` is told to avoid.
+>
+> **Status: specified, not built.** Full schema and seed scope: the approved Content Intelligence Architecture plan. Reality-gated — the matrix seeds at 0 rows until a sub-sector is flipped from `Reference` to `Target`.
 
 ---
 
@@ -145,6 +151,8 @@ Everything else (the 8 validation filters, 3 never-publish rules, 4-layer approv
 
 ## 9. Decision Log
 
+- **2026-08-16 — PIL gets a structured Notion mirror; this file stays canonical (owner).** Notion relations cannot point at a markdown file, and the Content Intelligence Architecture needs platform rules to be *rolled up* rather than retyped into every row. Resolution: a **thin Notion Platform registry** carries only the relational/rollup fields (strategic role, revenue function, trust + discovery mechanism, native formats, depth, CTA behaviour, **KPI hierarchy**, repurposing rules, what-not-to-do, launch priority, account status). **This file remains canonical** for the §3 behavioral-profile schema, the §4 profiles, the §1 boundaries and this log. The two must not diverge: the Notion row is a mirror, not a second definition. Rejected alternatives: moving PIL wholly into Notion (would supersede an owner-confirmed canonical registry and move doctrine out of git history), and no registry at all (platform rules would be retyped per row — the duplication this architecture exists to end). — Claude Code (Opus 5)
+- **2026-08-16 — §5 overlay ownership moved Sector (01) → Content (04) (owner).** The per-sector overlay now has a real home, the Sector × Platform Intelligence Matrix. Sector keeps every sector-truth input and supplies them by relation. See §5. Mirrored in `04_Content/CONTENT_OS.md` §8. — Claude Code (Opus 5)
 - **2026-08-02 — Canonical in-scope platform set CONFIRMED (owner).** Resolves the §4 `[OWNER: confirm]` flag. Set = **10 platforms** in launch-priority order: LinkedIn → Facebook → Instagram → Threads → TikTok → Pinterest → Website → X → Newsletter → YouTube. **Tumblr dropped.** All 10 are already PIL-profiled. Decided as part of ratifying the Content Distribution Engine (`21_Presence/CONTENT_DISTRIBUTION_ENGINE.md`); downstream reconciliation of Marketing §10 and the Notion `Platform` field to this set is staged, not yet applied. — Claude Code (Opus 4.8)
 - **2026-07-23 — Platform Intelligence Registry established** as a Content (04)-owned canonical *Intelligence* knowledge-object type, right-sized and reconcile-first (owner decisions, 2026-07-23). Modeled onto the real IntOS architecture rather than as a free-floating "layer." Reconciled against Marketing §10 (downstream distribution twin), Content's Notion `Platform` field (operational tag, no schema change), and Sector's Social Media Sector Layering draft (per-sector overlay). **No new department, no new folder, no new agent, no schema change.** Cross-department cross-reference edits staged in `00_Agency_Governance/enterprise_architecture/PIL_INTEGRATION_REPORT.md`, not applied in this pass. — Claude Code (Opus 4.8)
 - **2026-07-23 — Flagged Marketing §10 vs. Content Notion `Platform` set divergence** (YouTube/TikTok/Threads vs. Tumblr/Website). Proposed canonical union in §4; `[OWNER: confirm in-scope set]`. Not resolved by invention.
@@ -152,4 +160,5 @@ Everything else (the 8 validation filters, 3 never-publish rules, 4-layer approv
 
 ## 10. Changelog
 
+- **v0.2 (2026-08-16):** §5 rewritten — per-sector overlay ownership moved to Content (04) and given a real home (the Sector × Platform Intelligence Matrix). Two decisions logged in §9: the overlay move, and the thin Notion mirror with this file retained as canonical. No profile content changed; the 10-platform set is untouched. — Claude Code (Opus 5)
 - **v0.1 (2026-07-23):** Created. — Claude Code (Opus 4.8)

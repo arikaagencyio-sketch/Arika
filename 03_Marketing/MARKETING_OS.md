@@ -34,6 +34,10 @@ Marketing turns packaged offers (from Offer) into market demand and qualified op
 
 All "grounded" = traceable to this department's own raw drafts per the spot-check in §14, but not citation-verified the way Sales's Agent Registry is, and not backed by real performance data.
 
+> **🔴 `Campaign` entity ownership moved to Content (04), 2026-08-16 (owner-ratified).** `AEIT_06` §2 had named Marketing (03) as the owner of the canonical `Campaign` entity, while `04_Content/CONTENT_OS.md` §10 and `19_Design/DESIGN_OS.md` §10 had *already* agreed to share Campaign as their common organizing unit — three claimants on one entity, never reconciled. Resolved in Content's favour: Content and Design already share the unit operationally, this department holds **no live campaign store**, and campaigns currently originate from content opportunities rather than media buys.
+>
+> **What this department keeps, unchanged:** campaign *strategy* (§5 `marketing-chief-strategist`), channel strategy and the channel portfolio, budget intelligence and the scale/kill/iterate decision (`marketing-attribution-modeling`), demand generation (`marketing-demand-generation`), and **measurement truth** — which remains Marketing's across the whole agency, including for content. **What moved:** the entity and its store only. Marketing relates to campaign records; it does not lose the right to direct them. Full reasoning: `AEIT_06` §6 and `04_Content/CONTENT_OS.md` §8.
+
 ## 4. Workflow Index
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
@@ -166,6 +170,7 @@ Every platform is a **distribution endpoint**, not a separate content strategy �
 
 ## 15. Changelog
 
+- 2026-08-16 — **`Campaign` entity ownership transferred to Content (04)** by owner ratification, as part of the Content Intelligence Architecture v1.0 approval. Amends `AEIT_06` §2, which had named this department the owner while two other departments had already agreed to share the unit. Cross-reference note added to §3 recording precisely what Marketing keeps (campaign strategy, channel strategy, budget intelligence, demand generation, and agency-wide measurement truth) versus what moved (the entity and its store). No capability was removed from this department. — Claude Code (Opus 5)
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring; one confirmed duplicate file removed.
 - 2026-06-30 — `360 Agency Content`, briefly merged in as a subfolder, corrected back out to its own standalone department (`04_Content/`) per owner feedback; Sales department reference updated from (04) to (05) following the resulting renumbering.
 - 2026-06-30 — Content migration: `Elite_Marketing_Agentic_OS/` extracted and spot-verified as genuinely grounded in this department's raw drafts, but confirmed to have no citation system (gap vs. Sales) and no real historical KPI data. Capability Registry, Workflow Index, Agent Roster, Skill Library Index, KPI Dictionary, Standards & SOPs Index, and Triggers/Automation Hooks populated, all marked template/aspirational where applicable. Kenya jurisdiction signal flagged for owner confirmation. — Claude Code (Sonnet 4.6)

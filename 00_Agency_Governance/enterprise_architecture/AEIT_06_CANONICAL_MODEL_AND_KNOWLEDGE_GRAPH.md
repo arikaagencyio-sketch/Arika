@@ -1,7 +1,7 @@
 # AEIT_06 — Canonical Entity Model & Knowledge Graph (Blueprint)
 
-**Version:** v0.1
-**Last updated:** 2026-07-22
+**Version:** v0.2
+**Last updated:** 2026-08-16
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Fills:** `REGISTRY_TAXONOMY_REFERENCE.md` future-state registries **Semantic/Ontology** and
 **Relationship (entity graph)**. Extends `CRM_SCHEMA.md` (6 objects) to the whole enterprise.
@@ -53,7 +53,7 @@
 | **Offer** | [NEW] | Offer (02) | registry_id, pricing, ascension_stage | Index of record = Offer Engineering Registry. |
 | **Lead** | [CRM] | Sales (05) *(gen: 03/04/06)* | source, ICP_fit_score (from Sector), touch_history | SM3. |
 | **Opportunity** | [CRM] | Sales (05) | stage, value, probability | SM3. |
-| **Campaign** | [NEW] | Marketing (03) | channel, offer_id, audience, budget | Demand generation. |
+| **Campaign** | [NEW] | **Content (04)** *(ratified 2026-08-16 — was Marketing 03)* | campaign_id, master_intelligence_id, thesis, objective, offer_id, sector_scope, phase, window | **Owner changed by owner ratification.** Reasoning: `CONTENT_OS.md` §10 and `DESIGN_OS.md` §10 had already agreed to share Campaign as one organizing unit ("so the two departments share one unit of work rather than reconciling two different groupings later"), Marketing (03) holds no live campaign store, and every campaign today originates from a content opportunity rather than a media buy. Marketing (03) remains the consumer for channel/budget/demand execution and is **not** losing campaign *strategy* — it loses only the entity ownership. See `04_Content/CONTENT_OS.md` §8 (2026-08-16). |
 | **Invoice / Payment** | [CRM] | Finance (09) | amount (USD priced/KES invoiced), status | Conversion calculator = roadmap gap. |
 
 ### Creative / delivery domain
@@ -64,6 +64,8 @@
 | **Content** | [NEW] | Content (04) | type, brief_id, narrative, status | The content asset. |
 | **Creative Asset** | [NEW] | Design (19) | asset_type, source_tool, brand_check | Asset Library. |
 | **Experience** | [NEW] | Experience Eng (20) | spec_id, scenes, tech_stack | Interactive builds. |
+| **Platform** | [CANDIDATE] | *proposed: Content (04), for shared use* | platform, code, strategic_role, revenue_function, trust_mechanism, discovery_mechanism, kpi_hierarchy, account_status | **Proposal, not yet ratified.** Already exists as a Content-owned canonical *registry* (`04_Content/PLATFORM_INTELLIGENCE_REGISTRY.md`, 10 platforms profiled, in-scope set owner-confirmed 2026-08-02) — entity-ized here because Marketing (03), Presence (21), Design (19) and Experience Eng (20) all reference platforms and would otherwise fork the model. The markdown registry stays canonical for behavioral doctrine; a thin Notion mirror carries the relational fields. Ratify owner + whether the behavioral profile belongs on the entity before canonizing. |
+| **Narrative Position** | [CANDIDATE] | *proposed: Content (04)* | position_id, position_type, pillar, evidence_status, proof_layer, approved/avoid terminology, authority_level | **Proposal, not yet ratified.** Distinct from the `narrative` *field* on `Content` above: this is the approved strategic position a piece of content expresses, guarded by `content-narrative-architect`. Entity-ized so positions can be versioned and superseded rather than living as prose inside an agent prompt. **Scope limit:** the content-sequencing / market-position altitude only — **not** Branding (12)'s brand-identity narrative and **not** Experience Eng (20)'s experience arc (the 3-way distinction, `CONTENT_OS.md` §10). Ratify the altitude boundary before canonizing. |
 
 ### Knowledge / operations domain (the IntOS substrate)
 | Entity | Tag | Owner | Key fields | Notes |
@@ -112,6 +114,12 @@ Knowledge Obj —[about]→             {any entity}
 Knowledge Obj —[sourced_from]→      Source
 Knowledge Obj —[supersedes]→        Knowledge Obj   (versioning)
 Invoice       —[bills]→             Client (as Account)
+
+# added 2026-08-16 with the Content Intelligence Architecture (candidate entities)
+Narrative Pos —[asserted_on]→       Platform × Sub-Sector   (the overlay)
+Content       —[translates]→        Narrative Position      (one truth, many native expressions)
+Content       —[native_to]→         Platform
+Campaign      —[carries]→           Narrative Position
 ```
 
 ### Every node carries (per the future-state "Relationship" registry)
@@ -135,9 +143,26 @@ freshness(last_verified) · version_history · supersedes/superseded_by`
   dedicated graph DB is a Tech Stack decision sequenced in `AEIT_10` — not pre-decided here.
 
 ## 6. Decision Log
+- **2026-08-16 — `Campaign` ownership moved Marketing (03) → Content (04). Owner-ratified.** The first
+  amendment to this catalogue's ownership column. Three claimants existed on one entity — this file
+  named Marketing, while `CONTENT_OS.md` §10 and `DESIGN_OS.md` §10 had already agreed to share
+  Campaign as a single organizing unit — and `AEIT_04` had never logged it. Resolved in Content's
+  favour on the owner's ruling: Content and Design already share the unit operationally, Marketing
+  holds no live campaign store, and campaigns currently originate from content opportunities.
+  **Marketing keeps campaign strategy, channel, budget and demand execution**; only entity ownership
+  moved. Cross-referenced in `03_Marketing/MARKETING_OS.md` §3. — Claude Code (Opus 5)
+- **2026-08-16 — `Platform` and `Narrative Position` added as `[CANDIDATE]` entities**, following the
+  Geography precedent (tag, proposed owner, key fields, "not yet ratified", where built, what must be
+  ratified). Both are proposed to Content (04). Neither is canonized by this edit — they are flagged
+  so the departments that reference them (Marketing 03, Presence 21, Design 19, Experience Eng 20,
+  Branding 12) conform to one model rather than forking, which is the same failure mode this document
+  exists to prevent. Four candidate edges added to §4. — Claude Code (Opus 5)
 - **2026-07-22 — Canonical model + knowledge graph blueprinted.** Role-not-type modeling adopted;
   ICP Classification owned by Sector per ratified R1; glossary per R2–R4; knowledge-graph edge model
   defined as the IntOS write target. — Claude Code (Opus 4.8)
 
 ## 7. Changelog
+- **v0.2 (2026-08-16):** `Campaign` owner amended to Content (04) by owner ratification; `Platform`
+  and `Narrative Position` added as `[CANDIDATE]` entities; 4 candidate edges added to §4. First
+  amendment since creation. — Claude Code (Opus 5)
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
