@@ -17,6 +17,35 @@
 
 ---
 
+## 0.1 — Sector Universe & the anti-duplication map *(Kernel, 2026-08-16)*
+
+**Sector Universe is now multi-vertical (owner decision 2026-08-16).** A **Sector = any market Arika sells into**, not only a SaaS category. **B2B SaaS becomes one branch** of the universe (its 22 sub-sectors / 52 rows intact); Hospitality, Healthcare (Multi-Location), Real Estate Brokerages, Franchise Systems, etc. are **real verticals** in *Sectors Master*. This supersedes the earlier "B2B SaaS is the only sector" / "Hospitality is illustrative only" framing — the data is kept, the universe is widened. `Sectors Master` already anticipated this (it holds B2B SaaS **plus** 3 non-SaaS verticals; `Category` includes "Multi-Location Vertical").
+
+> **Migration note (SCIC `Sector` select):** DB 7's `Sector` select currently overloads "sector" with SaaS *categories* (MarTech…) **and** one vertical ("Travel & Hospitality"). Harmonize going forward: **verticals** live in *Sectors Master*; **SaaS categories** are *Sub-Sectors*. Existing signal rows are not rewritten in the kernel; new rows follow the harmonized convention.
+
+**This layer is the first live slice of IntOS** (`AEIT_07`), not a parallel intelligence stack: it **conforms to `AEIT_06`**, runs its logic on **`arika-runtime`**, and its stores are **memory only**. The separation is load-bearing — **Notion + `AEIT_06` = memory · `arika-runtime` agents = logic/reasoning · cloud routines under the Approval Matrix = execution.** Do not collapse the OS into "a big Notion database."
+
+**Anti-duplication map — the owner's ~20-DB "Sector OS" reconciles to a small net-new set.** Before feeding sectors, honor this (Rule: `AEIT_06` "departments consume canonical entities; they do not reinvent them"):
+
+| Owner's proposed store | Reality in this repo | Action |
+|---|---|---|
+| Sector Registry · Industry Registry | **DB 1 Sectors Master + DB 2 Sub-Sectors** | **extend** (multi-vertical + Lifecycle State + Priority Score) |
+| Problem · Revenue · Value-Chain · Strategic-Node · Relationship intelligence | **DB 3 Sector Intelligence** `Category` facets (Sheets 03–07) | reuse one DB, many categories; finish Sheets 04–07 |
+| Trigger · Market-Event · Sector Calendar | **DB 7 Sector Signals (SCIC)** | reuse |
+| Audience Intelligence | **DB 9 Audience Roles** | reuse; enrich |
+| Decision-Maker · Company · Acquisition intelligence | **CRM (ClickUp) + CPAROS (06)** — `Company/Lead/Person/Opportunity` | **reference by ID, do NOT rebuild**; DB 10 holds sector-level titles/triggers, resolves to CRM `Person` |
+| Competitive Intelligence (store) | **Marketing (03)** owns `Competitor` (`AEIT_06`) | reference; Sector holds pattern-reads only |
+| Content Intelligence | **Content (04)** owns it (`CONTENT_INTELLIGENCE_SCHEMA.md`) | Sector **feeds** it; does not own it |
+| Sector Sources | **`AEIT_08` Source Registry** (agency-wide) | reference; register sector sources there |
+| Offer-Sector Matrix | **DB 8 Agency Opportunity Map** → Offer (02) | reuse |
+| Sector State · Forecast · Metrics | **DB 12 + DB 13** (SCIC) + the Priority-Score block on DB 1 | extend |
+| Intelligence Updates | `Change Status` + `runtime.jsonl` + IntOS Learning | reuse |
+| Geography | **DB 11** (candidate canonical entity) | reuse |
+
+**Net-new in the kernel (only these four):** (1) the multi-vertical hierarchy upgrade; (2) the **Sector Lifecycle State machine**; (3) the **Sector Priority / Attractiveness Score**; (4) the generalized **Intelligence-Object Contract** (`SECTOR_ACTIVATION_CONTRACT.md`). Everything else = **extend or reference**.
+
+---
+
 ## 1. The relational spine (Draft 7 + 11 + 13)
 
 ```
@@ -50,17 +79,21 @@ Every Sector-owned row must be able to trace to a Sub-Sector, and every actionab
 Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=relation · `GOV`=governance(confidence/source/freshness/status) · `EXE`=execution/decision.
 
 ### DB 1 — Sectors Master
-**Primary entity:** one top-level sector. **AEIT_06:** `Sector`. **Backing:** xlsx Sheet 02, 11. **Rows (initial):** B2B SaaS (primary) + the Tier-3 verticals (Healthcare Multi-Location, Real Estate Brokerages, Franchise Systems).
+**Primary entity:** one **vertical / market** (multi-vertical universe, §0.1). **AEIT_06:** `Sector`. **Backing:** xlsx Sheet 02, 11 (the B2B SaaS branch) + owner-added verticals. **Rows:** B2B SaaS + the non-SaaS verticals (Healthcare Multi-Location, Real Estate Brokerages, Franchise Systems, Hospitality, …), added as the owner ranks the universe.
 
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
-| Sector Name | Title | ID | e.g. "B2B SaaS" |
+| Sector Name | Title | ID | e.g. "B2B SaaS", "Hospitality" |
 | Sector ID | Text (unique) | ID | slug, e.g. `sec-b2b-saas` — the cross-platform join key |
-| Category | Select | RET | Horizontal SaaS · Vertical SaaS · AI-Native · Multi-Location Vertical |
+| Category | Select | RET | Horizontal SaaS · Vertical SaaS · AI-Native · Multi-Location Vertical · **Industry Vertical** (non-SaaS: Hospitality, Healthcare, Real Estate, Franchise, …) |
 | Definition | Text | ID | Draft 3 one-liner: "exists to __ by enabling __ for __" |
-| **Status** | Select | GOV | **Engagement lifecycle** (added 2026-08-11) — `Active` (real, a client is served here) · `Target` (pursuing entry) · `Reference` (intelligence only — the **default meaning of every xlsx-loaded row**) · `Dormant` (parked). Distinct from `Readiness` (market buy-state). The owner sets this as the **exact real sectors + clients** are added; see §7. |
+| **Status** | Select | GOV | **Engagement lifecycle** (added 2026-08-11) — `Active` (real, a client is served here) · `Target` (pursuing entry) · `Reference` (intelligence only — the **default meaning of every xlsx-loaded row**) · `Dormant` (parked). Distinct from `Readiness` (market buy-state) and `Lifecycle State` (OS build state). The owner sets this as the **exact real sectors + clients** are added; see §7. |
 | Strategic Priority | Select | EXE | Primary · Secondary · Tertiary (maps ICP tiers, `SECTOR_OS.md` §1) |
-| Readiness | Select | EXE | 🟢 Ready Now · 🟡 In Progress · 🔴 Asleep (xlsx Sheet 11) |
+| Readiness | Select | EXE | 🟢 Ready Now · 🟡 In Progress · 🔴 Asleep (xlsx Sheet 11) — *market buy-state* |
+| **Lifecycle State** | Select | EXE | **Sector OS state machine** (new 2026-08-16): `Discovered → Mapped → Intelligence-Rich → Validated → Offer-Ready → Acquisition-Ready → Content-Ready → Campaign-Ready → Client-Validated → Authority → Dominance`. **Evidence-gated** (computed by `sector-readiness-analyst`; no self-promotion without the underlying rows). Distinct from `Status` (engagement) + `Readiness` (market). |
+| **Sector Priority Score** | Number | EXE | 0–100 composite (new 2026-08-16) — ranks the universe for GTM focus. 8 dimensions (each 0–10, held in the rationale): Revenue Potential · Capability Fit · Market Growth · Pain Intensity · Buying Capacity · DM Accessibility · Competition Gap · Recurring/Expansion Potential. Computed by the analyst; **advisory**. |
+| **Priority Band** | Select | EXE | `P1 Pursue now` · `P2 Build` · `P3 Monitor` · `P4 Park` — banded from the score. |
+| **Priority Scoring Rationale** | Text | GOV | the 8 sub-scores + a one-line justification each — provenance for the composite (no black-box number). |
 | Intelligence Confidence | Select | GOV | Low · Medium · High |
 | Last Intelligence Update | Date | GOV | freshness |
 | Next Review | Date | GOV | cadence gate |
@@ -79,6 +112,9 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Revenue Model | Text | RET | subscription/usage/seat/etc. (xlsx Sheet 02) |
 | Core Value Prop | Text | ID | xlsx Sheet 02 |
 | Ecosystem Dependencies | Text | RET | xlsx Sheet 02 |
+| **Industry** | Text | ID | the industry within the vertical (multi-vertical, §0.1) — e.g. "Hotels" (Hospitality), "Marketing SaaS" (B2B SaaS) |
+| **Business Model** | Text | RET | e.g. "Independent luxury hotel" · "subscription SaaS" — the owner's hierarchy tail |
+| **Company Archetype** | Text | RET | e.g. "30–100 room property" · "Series A, $5–50M ARR" — the scrape/target profile |
 | **Status** | Select | GOV | **Engagement lifecycle** (added 2026-08-11): `Active` · `Target` · `Reference` (default for xlsx-loaded rows) · `Dormant`. Distinct from `Readiness` (market buy-state). See §7. |
 | Opportunity Score | Select | EXE | Low · Medium · High · Very High |
 | Readiness | Select | EXE | 🟢/🟡/🔴 (xlsx Sheet 11) |
@@ -344,6 +380,7 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - 🟢 **Phase B — back-fill + views DONE (2026-08-15):** all **24 rows' `Signal Type` back-filled** from `Calendar Type` (22 `Event/Compression` + 2 `Regulatory`; verified 0 nulls). `Calendar Type` retained as a legacy shadow column (harmless; can be dropped later). **12 views built** on `collection://c14fedb3-…`: two calendars — **📅 Master Signal Calendar** (by `Signal Date`) + **⏰ Activation Deadlines** (by `Action Deadline`, proves the multi-date/lead-time model) — plus **🗓️ Upcoming — Chronological** (list, sort `Signal Date` ASC), **🔺 High Commercial Impact**, **💰 Sales**, **📢 Marketing**, **📈 Revenue / Pricing**, **🥊 Competitor Movement**, **⚖️ Regulatory / Risk**, **✈️ Travel-Trade**, **🔍 Unverified / Needs Research**, and **🗂️ By Sector** (board). **Note — rolling windows:** "next 7 / 30 / 90 days" are *not* built as separate views because the create-view DSL only supports absolute ISO dates; they are a one-click **native relative-date filter** ("is within the next week/month") added on the Upcoming view in the Notion UI. Six lead-time date columns + `Action Deadline` are empty until Phase C fills a depth slice.
 - 🟢 **Phase C — depth-proof on real data DONE (2026-08-15):** three real signals upgraded to the **full signal object** — **Money20/20 USA 2026** (FinTech compression event → 🇺🇸 USA, six lead-time offsets T-120→event, 8 impact fields, `Departments Affected`, `Source Tier` T1, High priority), **CSRD Wave-2 delay** (→ 🇪🇺 EU, repositioning timeline to the ESRS H1-2026 milestone, linked to an interpreted **Sector Intelligence finding**), **FSMA 204 delay** (→ 🇺🇸 USA, re-time to 2028, linked finding). Geography DB seeded with **Global → EU / USA** (hierarchy live). Two interpreted findings created in the Sector Intelligence DB (`72f90a0f-…`) — proving the **calendar→intelligence loop**. **Honesty:** findings carry only verified regulatory facts (`Confidence: High`, `Source: research`); lead-time dates are **derived planning offsets** (per Contract §12), not invented external dates; no property/booking numbers fabricated.
 - ⏳ **SCIC remaining (Phase C-breadth / D / E):** add a web-verified **economic + technology + competitor** example (fresh sourcing required — no fabrication); evolve the refresher → `sector-signal-refresher` (advisory) + wire the small downstream event set (`DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE`); flag Geography as an `AEIT_06` candidate canonical entity; generalize across sectors + distil `Sector State` per active sector.
+- 🟢 **Sector OS Kernel — K1 (Ontology + Registry) DONE (2026-08-16):** universe is now **multi-vertical** (§0.1) — B2B SaaS is one branch. **DB 1 Sectors Master** extended live with `Lifecycle State` (11-state machine), `Sector Priority Score` (number), `Priority Band` (P1–P4), `Priority Scoring Rationale`; **DB 2 Sub-Sectors** extended live with `Industry` / `Business Model` / `Company Archetype`. The anti-duplication reconciliation map is §0.1. (Fetch confirmed Sub-Sectors is **already relation-wired** to Marketing `Campaigns`, Content `Content Briefs`/`Content Opportunities`, Offer `Offers`, Branding `Narrative Positions`, plus Decision-Makers/ICP/Signal-Scores — the spine is cross-department already; extend, don't rebuild.) Remaining kernel: **K2** Intelligence-Object Contract + Control-Tower spec + construction mandate (`SECTOR_ACTIVATION_CONTRACT.md`); **K3** scoring/state agent + Sheets 04–07 load; **K4** engine↔agent↔event doc; **K5** AEIT ratification. Plan: `plans/from-the-chat-from-dreamy-moth.md` ADDENDUM 2.
 
 ## 5. Coverage check (nothing missed)
 

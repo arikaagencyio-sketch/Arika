@@ -10,6 +10,8 @@ registries **Intelligence / Learning / Feedback**; `GLOBAL_OS.md` §11 item 8 (u
 **Status:** Blueprint — design only. **IntOS is NOT activated in Phase Zero.** Activation is gated
 in `AEIT_10` behind the API key, a proven scheduled runtime, and governance rows.
 
+> **First activated slice (2026-08-16):** the **Sector Layer (01) is being stood up as the first live, sector-scoped instance of this pipeline** — its SCIC signals (Sensing/Collection), Sector Intelligence findings (Knowledge), `Source Tier`/`Confidence`/`Last Verified` (Verification/freshness), and the `arika-runtime` sector agents (Distribution/Execution) conform to `AEIT_06` and prove the pattern IntOS later generalizes agency-wide. The **Collection layer (scraping) stays gated** exactly as above (no web in cloud routines; API key + cost governance + Approval-Matrix rows required). See `01_Sector/SECTOR_ACTIVATION_CONTRACT.md` §13 + `SECTOR_NOTION_SCHEMA.md` §0.1.
+
 > IntOS is the platform that turns the agency from **produce-strong / validate-weak**
 > (`AEIT_03 §2`) into a system that knows what it knows, how sure it is, and when to refresh it.
 > It is the one of the four foundational platforms that does not yet exist — EGOS (Governance),

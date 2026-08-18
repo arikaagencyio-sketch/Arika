@@ -132,6 +132,42 @@ You MUST NOT:
 
 ---
 
+## 13. Sector OS Kernel doctrine *(added 2026-08-16)*
+
+**Purpose:** operate the Sector Layer as **SectorOS** — the **first activated slice of IntOS** (`AEIT_07`), not a parallel intelligence stack. **Authority:** subordinate to §1–§12; authoritative for kernel/ontology/scoring work. **Inputs:** the 14 Sector DBs + `AEIT_06/07/08` + `arika-runtime`. **Outputs:** ranked, state-tracked sectors + contract-conformant intelligence objects that feed the downstream departments. Full design: `SECTOR_NOTION_SCHEMA.md` §0.1; plan addendum "ADDENDUM 2 — Sector OS Kernel".
+
+### 13.1 The three separations (never collapse them)
+- **Memory** = Notion + the `AEIT_06` canonical model. **Logic/reasoning** = `arika-runtime` agents. **Execution** = cloud routines / `RemoteTrigger` under the Approval Matrix. The **Control Tower** is a **read view** over memory (a Notion dashboard answering: what's changing · where money moves · who matters · problems · opportunities · competition · offers · acquisition · content · execution · results · learning) — **not** a new store.
+
+### 13.2 The Sector Universe is multi-vertical
+A **Sector = any market Arika sells into** (B2B SaaS is one branch; Hospitality, Healthcare, Real Estate, Franchise, … are peers). Verticals live in *Sectors Master*; industries/sub-industries in *Sub-Sectors*. Every sector carries a **`Lifecycle State`** (`Discovered → … → Dominance`, evidence-gated) and a **`Sector Priority Score`** (0–100, 8 dimensions, advisory) used to rank GTM focus. Promotion through the state machine REQUIRES the underlying rows to exist — **no self-promotion**.
+
+### 13.3 The Intelligence-Object Contract (the rule that stops the warehouse)
+Every intelligence record MUST answer eight questions — **what · source · when-observed · reliability · which sector · which decision it supports · which system consumes it · what action can result** — which **is** the `AEIT_06` `Knowledge Object` (`claim, entity_ref, confidence, trust, freshness, source_id, state`) expressed through the existing fields (`Source Tier`, `Confidence`, `Last Verified`, `Departments Affected`, `Recommended Action`, the relation to a finding).
+
+**Decision-purpose gate (MUST):** populate a field **only** when it has a **named downstream decision or execution purpose**. A datapoint that no decision consumes is noise — do not collect it, do not store it. This supersedes "collect because we can."
+
+### 13.4 Cloud Code construction mandate (MUST / MUST NOT)
+When building or extending the Sector Layer, Cloud Code:
+
+**MUST**
+- **INSPECT** the existing 14 Sector DBs + `AEIT_06/07/08` + `arika-runtime` **and EXTEND** them; treat SectorOS as IntOS's first live slice.
+- **CONFORM** every record to the Intelligence-Object Contract (§13.3) and the field-purpose discipline (`SECTOR_NOTION_SCHEMA.md` §0).
+- **REFERENCE by ID** the stores other departments own — CRM/CPAROS (`Company/Lead/Person/Opportunity`, ClickUp), Marketing (`Competitor`/`Campaign`), Content (content intelligence), Ops (the 7 Cognitive Calendars), `AEIT_08` (sources).
+- **PRESERVE the three separations** (§13.1); route downstream on the **event bus**, not a new router.
+- keep the **two-data-layer honesty** (externally-verifiable = cited + `Source Tier`; live/enriched = template until sourced) and the **freshness cadence** definition of "real-time".
+
+**MUST NOT**
+- create a **parallel** store for anything already owned (CRM, IntOS, canonical model, Content, Marketing, Ops) — the ~20-DB "Sector OS" reconciles to **extend/reference + 4 net-new** (`SECTOR_NOTION_SCHEMA.md` §0.1);
+- **fabricate** sector data, a decision-maker record, an event date, a number, or a forecast presented as fact;
+- run an **unattended web-scraper / ingestion daemon** (cloud routines have **no web**) — collection is interactive/human or a gated runtime with an API key + `techstack-cost-guardian` + an Approval-Matrix row (`AEIT_07`/`AEIT_10`);
+- let a **Tier-4/unverified/stale** object drive a downstream signal or execution (§6, §12.3).
+
+### 13.5 The engines are the runtime, not new software
+The 7 processing engines (Sensing → Intelligence → Decision → Orchestration → Execution → Feedback) **are** the existing constructs: SCIC + `sector-signal-refresher` (Sensing); Sector Intelligence + `sector-intelligence-mapper` (Intelligence); `sector-signal-scorer` + `sector-readiness-analyst` + the Sector Priority Score (Decision); the event bus §8 (Orchestration); `arika-runtime` triggers under the matrix (Execution); `runtime.jsonl` + §16 (Feedback). Build = **wire them**, not invent them.
+
+---
+
 ## Appendix — Builder-role self-audit (Draft 10 QA gate)
 
 This contract was checked against the 7 builder roles:
