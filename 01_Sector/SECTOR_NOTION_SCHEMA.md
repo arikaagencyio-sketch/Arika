@@ -46,6 +46,31 @@
 
 ---
 
+## 0.2 — Industry Revenue Engine (content model, ADDENDUM 3)
+
+The Sector layer routes each industry through a **land-and-expand ladder** — **Entry** (the easiest pain the industry will pay to solve) → **Expansion** → **Transformation** (operating-system engagement). This ladder **is Offer (02)'s existing Ideal Ascension Model** (Offer Engineering Registry + the Revenue Infrastructure Audit Gateway); Sector **routes**, Offer **owns the offers**. The routing record is **DB 8 → Industry Offer Matrix**.
+
+**The 12 capability families (controlled vocabulary; a view over the departments — `AEIT_03`).** The matrix's Entry/Expansion/Transformation stages reference these codes; each has one owning department. Where an industry needs a productized offer that isn't in the registry yet, the matrix records `GAP — needs OEOS` (an Offer (02) decision), never a fabricated offer.
+
+| Code | Capability | Owner dept |
+|---|---|---|
+| `INT` | Sector & Business Intelligence | Sector (01) + Audits (14) |
+| `STR` | Strategy & Revenue Architecture | Offer (02) + Consulting (15) |
+| `BR` | Brand Revenue & Positioning | Branding (12) |
+| `MKT` | Revenue Marketing | Marketing (03) |
+| `CNT` | Content & Experience Production | Content (04) + Design (19) + Experience Eng (20) |
+| `SAL` | Revenue / Sales OS | Sales (05) |
+| `ACQ` | Client / Partner Acquisition | ClientPartner Acq (06) |
+| `OPS` | Operations Engineering | Operations (08) |
+| `AUTO` | AI Workflow Infrastructure | Automation (16) |
+| `AI-X` | AI Transformation Systems | AI Enablement (17) |
+| `FIN` | Financial Intelligence | Finance (09) |
+| `SCALE` | Scaling & Expansion | Consulting (15) + Client Success (07) |
+
+**Classification axes** (DB 1 verticals / DB 2 industries): `Atlas Layer` (Established/Growth/Frontier/Deep-Future) · `Portfolio Mode` (Market-Ready = scrape+acquire · Enterprise-Strategic = intelligence-led · Frontier-Intelligence = watchlist) · `Priority Tier` (T1–T4) · `Industry Type` (A Marketing / B Sales / C Ops / D Trust-driven → the entry-offer lead). **Tool-Stack Chaos** is a market-intelligence dimension (DB 2 field-group + DB 3 `Category`): per-industry fragmentation risk that feeds outreach; the **Stack Rationalization offer** is *flagged* to Offer (02), not built here.
+
+---
+
 ## 1. The relational spine (Draft 7 + 11 + 13)
 
 ```
@@ -94,6 +119,10 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | **Sector Priority Score** | Number | EXE | 0–100 composite (new 2026-08-16) — ranks the universe for GTM focus. 8 dimensions (each 0–10, held in the rationale): Revenue Potential · Capability Fit · Market Growth · Pain Intensity · Buying Capacity · DM Accessibility · Competition Gap · Recurring/Expansion Potential. Computed by the analyst; **advisory**. |
 | **Priority Band** | Select | EXE | `P1 Pursue now` · `P2 Build` · `P3 Monitor` · `P4 Park` — banded from the score. |
 | **Priority Scoring Rationale** | Text | GOV | the 8 sub-scores + a one-line justification each — provenance for the composite (no black-box number). |
+| **Atlas Layer** | Select | RET | **Established · Growth · Frontier · Deep-Future** (ADDENDUM 3 — the industry atlas) |
+| **Portfolio Mode** | Select | EXE | **Market-Ready · Enterprise-Strategic · Frontier-Intelligence** — how Arika engages this vertical (scrape-and-acquire vs. strategic vs. watchlist) |
+| **Priority Tier** | Select | EXE | **T1 Immediate · T2 High-Value · T3 Emerging · T4 Watchlist** |
+| **Industry Type** | Select | EXE | **A Marketing-driven · B Sales-driven · C Ops-driven · D Trust-driven** — determines the entry-offer *lead* |
 | Intelligence Confidence | Select | GOV | Low · Medium · High |
 | Last Intelligence Update | Date | GOV | freshness |
 | Next Review | Date | GOV | cadence gate |
@@ -115,6 +144,10 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | **Industry** | Text | ID | the industry within the vertical (multi-vertical, §0.1) — e.g. "Hotels" (Hospitality), "Marketing SaaS" (B2B SaaS) |
 | **Business Model** | Text | RET | e.g. "Independent luxury hotel" · "subscription SaaS" — the owner's hierarchy tail |
 | **Company Archetype** | Text | RET | e.g. "30–100 room property" · "Series A, $5–50M ARR" — the scrape/target profile |
+| **Industry Type** | Select | EXE | A/B/C/D (inherited from the vertical, overridable) — ADDENDUM 3 |
+| **Tool-Stack Chaos Risk** | Select | EXE | 🔴 Extreme · 🟠 High · 🟡 Moderate · 🟢 Lower · ⚫ Strategic/Future (ADDENDUM 3 — fragmentation-risk index) |
+| **Typical Tool Stack** | Text | RET | the industry's characteristic systems (e.g. "PMS · CRS · channel-mgr · RMS · CRM · POS · AI") — **transcribed from the atlas, not invented** |
+| **Fragmentation Type** | Select | RET | Duplication · Integration · Intelligence (the 3 chaos types) |
 | **Status** | Select | GOV | **Engagement lifecycle** (added 2026-08-11): `Active` · `Target` · `Reference` (default for xlsx-loaded rows) · `Dormant`. Distinct from `Readiness` (market buy-state). See §7. |
 | Opportunity Score | Select | EXE | Low · Medium · High · Very High |
 | Readiness | Select | EXE | 🟢/🟡/🔴 (xlsx Sheet 11) |
@@ -133,7 +166,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 |---|---|---|---|
 | Finding | Title | ID | one insight |
 | Sub-Sector | Relation → Sub-Sectors | REL | required |
-| Category | Select | RET | Structure · Economics · Value Chain · Buying Psychology · Decision Dynamics · Trust · Governance/Power · Infrastructure · Risk/Fragility · Strategic Node (Draft 13 layers + xlsx Sheets 03–07) |
+| Category | Select | RET | Structure · Economics · Value Chain · Buying Psychology · Decision Dynamics · Trust · Governance/Power · Infrastructure · Risk/Fragility · Strategic Node · **Tool-Stack Chaos** (ADDENDUM 3) (Draft 13 layers + xlsx Sheets 03–07) |
 | Evidence | Text | GOV | what supports it |
 | Source | Select/Text | GOV | xlsx sheet · chat · agent run · research |
 | Confidence | Select | GOV | Low · Medium · High |
@@ -230,19 +263,32 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 
 **Migration mapping (existing 24 rows → signals, no data loss):** `Event → Signal` (title) · `Calendar Type → Signal Type` (Demand/Event/Regulatory carry over; the rest map to the nearest of the 16) · `Date/Window → Signal Date` · `Preparation Deadline → Marketing/Sales Activation Date` · `Sales/Marketing/Content Relevance → Sales/Marketing Impact` (Content Relevance retained as informational) · `Community/Entry Strategy → Recommended Action` context · `Authoritative Source / Source URL / Last Verified / Refresh Status / Sector / Sub-Sector` all carry over unchanged. New fields default empty (`Source Tier` back-filled from the existing citations).
 
-### DB 8 — Agency Opportunity Map
-**Primary entity:** one sub-sector-level agency opportunity. **Backing:** xlsx Sheet 08. **Distinct from** the CRM deal-level `Opportunity` (ClickUp) — this is the *market* opportunity, which *generates* CRM opportunities.
+### DB 8 — Agency Opportunity Map → **Industry Offer Matrix** *(extended ADDENDUM 3)*
+**Primary entity:** one industry's **land-and-expand routing record** (the "which offer, in which order, for this industry" layer other departments consume). **Backing:** xlsx Sheet 08 (SaaS) + the Industry Revenue Engine atlas. **Distinct from** the CRM deal-level `Opportunity` (ClickUp) — this is the *market* routing intelligence, which *generates* CRM opportunities. **Routes onto Offer (02)'s ascension model; it does not own the offers.**
 
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
 | Opportunity | Title | ID | |
-| Sub-Sector | Relation → Sub-Sectors | REL | required |
+| Sub-Sector | Relation → Sub-Sectors | REL | required — the industry |
 | Primary Opportunity | Text | ID | xlsx Sheet 08 |
 | Entry-Point Service | Text | EXE | + illustrative price (hypothesis) |
 | Retainer Upsell Path | Text | EXE | + illustrative range (hypothesis) |
 | Revenue Potential / Urgency / Confidence | Select ×3 | EXE/GOV | |
 | Offer Fit (Offer 02) | Text (ID) | REL | Offer Engineering Registry reference |
 | CRM Opportunities generated | Text (ID list) | REL | ClickUp `Opportunity` ids |
+| **Industry Type** | Select | EXE | A/B/C/D — the entry-offer lead |
+| **Portfolio Mode** / **Priority Tier** | Select ×2 | EXE | Market-Ready/Enterprise/Frontier · T1–T4 |
+| **Entry Capability** | Multi-select | EXE | the capability families that lead (e.g. `MKT`,`CNT`) — §0.2 vocab |
+| **Expansion Capability** | Multi-select | EXE | the adjacent families (e.g. `SAL`,`AUTO`) |
+| **Transformation Capability** | Multi-select | EXE | the OS-level families (e.g. `AI-X`,`OPS`) |
+| **Ladder Offer Refs / OEOS Gap** | Text | REL | per stage: a real Offer registry ref, **or** `GAP — needs OEOS` where an industry-specific offer doesn't exist yet |
+| **Target Decision-Maker** | Relation → Decision-Maker Registry | REL | who to approach (not IT) |
+| **Pain Points** | Relation → Sector Intelligence | REL | the interpreted problems that route the entry |
+| **Buying Triggers / Demand Signals** | Relation → Sector Signals | REL | reuse the SCIC layer |
+| **Outreach Angle** | Text | EXE | the industry-specific opening line |
+| **Scraping Fields** | Text | EXE | the intelligence-profile checklist for this industry |
+| **Cross-sell / Scale Pathway** | Text | EXE | the expansion + replication route |
+| **KPIs** | Text | EXE | outcomes the engagement should move |
 
 ### DB 9 — Audience Roles
 **Primary entity:** one audience-role profile within a sub-sector. **Backing:** Draft 11 (Audience = Sector × Signal × Access). Relates sub-sector → CRM Lead/Person + Content persona.
@@ -381,6 +427,7 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - 🟢 **Phase C — depth-proof on real data DONE (2026-08-15):** three real signals upgraded to the **full signal object** — **Money20/20 USA 2026** (FinTech compression event → 🇺🇸 USA, six lead-time offsets T-120→event, 8 impact fields, `Departments Affected`, `Source Tier` T1, High priority), **CSRD Wave-2 delay** (→ 🇪🇺 EU, repositioning timeline to the ESRS H1-2026 milestone, linked to an interpreted **Sector Intelligence finding**), **FSMA 204 delay** (→ 🇺🇸 USA, re-time to 2028, linked finding). Geography DB seeded with **Global → EU / USA** (hierarchy live). Two interpreted findings created in the Sector Intelligence DB (`72f90a0f-…`) — proving the **calendar→intelligence loop**. **Honesty:** findings carry only verified regulatory facts (`Confidence: High`, `Source: research`); lead-time dates are **derived planning offsets** (per Contract §12), not invented external dates; no property/booking numbers fabricated.
 - ⏳ **SCIC remaining (Phase C-breadth / D / E):** add a web-verified **economic + technology + competitor** example (fresh sourcing required — no fabrication); evolve the refresher → `sector-signal-refresher` (advisory) + wire the small downstream event set (`DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE`); flag Geography as an `AEIT_06` candidate canonical entity; generalize across sectors + distil `Sector State` per active sector.
 - 🟢 **Sector OS Kernel — K1 (Ontology + Registry) DONE (2026-08-16):** universe is now **multi-vertical** (§0.1) — B2B SaaS is one branch. **DB 1 Sectors Master** extended live with `Lifecycle State` (11-state machine), `Sector Priority Score` (number), `Priority Band` (P1–P4), `Priority Scoring Rationale`; **DB 2 Sub-Sectors** extended live with `Industry` / `Business Model` / `Company Archetype`. The anti-duplication reconciliation map is §0.1. (Fetch confirmed Sub-Sectors is **already relation-wired** to Marketing `Campaigns`, Content `Content Briefs`/`Content Opportunities`, Offer `Offers`, Branding `Narrative Positions`, plus Decision-Makers/ICP/Signal-Scores — the spine is cross-department already; extend, don't rebuild.) Remaining kernel: **K2** Intelligence-Object Contract + Control-Tower spec + construction mandate (`SECTOR_ACTIVATION_CONTRACT.md`); **K3** scoring/state agent + Sheets 04–07 load; **K4** engine↔agent↔event doc; **K5** AEIT ratification. Plan: `plans/from-the-chat-from-dreamy-moth.md` ADDENDUM 2.
+- 🟢 **Industry Revenue Engine — P1 (schema) DONE (2026-08-19):** the content model for the multi-vertical universe (§0.2). **DB 1 Sectors Master** extended live with `Atlas Layer` · `Portfolio Mode` · `Priority Tier` · `Industry Type` (A/B/C/D). **DB 2 Sub-Sectors** extended with `Industry Type` + the Tool-Stack field-group (`Tool-Stack Chaos Risk` · `Typical Tool Stack` · `Fragmentation Type`). **DB 8 Agency Opportunity Map → Industry Offer Matrix** (the routing layer) extended live with `Industry Type`/`Portfolio Mode`/`Priority Tier`, the `Entry`/`Expansion`/`Transformation Capability` multi-selects (the 12 families), `Ladder Offer Refs / OEOS Gap`, `Outreach Angle`, `Scraping Fields`, `Cross-sell / Scale Pathway`, `KPIs`, + relations `Target Decision-Maker`→DB 10, `Pain Points`→DB 3, `Buying Triggers / Demand Signals`→DB 7. **DB 3 Sector Intelligence** `Category` gains `Tool-Stack Chaos`. The Entry→Expansion→Transformation **ladder routes onto Offer (02)'s ascension model** (capability-routing + `GAP — needs OEOS` where an industry-specific offer doesn't exist). Remaining: **P2** verticals + Tier-1 industries · **P3** full established economy (~88) · **P4** Growth thinner + Frontier watchlist · **P5** score/rank + OEOS-gap list. Plan: ADDENDUM 3.
 
 ## 5. Coverage check (nothing missed)
 
