@@ -168,6 +168,31 @@ The 7 processing engines (Sensing → Intelligence → Decision → Orchestratio
 
 ---
 
+## 14. Sector Commercial Activation & the per-sector Cross-Loop *(added 2026-08-19)*
+
+**Purpose:** turn the loaded kernel + Industry Revenue Engine into a **live commercial operating loop**, one focus sector at a time — the layer that ends in outreach. **Authority:** subordinate to §1–§13; authoritative for activation/cross-loop/CRM-bridge work. Full design: plan "ADDENDUM 4". Owner-approved 2026-08-19; pilot sector = **Hospitality → Accommodation**.
+
+### 14.1 Focus is data-derived, not owner-blocked
+The **Sector Priority Score** *is* the focus decision. Promote the P1-scored sub-sectors to `Status = Target` **by the score** (advisory; owner may veto/add) — do **not** stall the downstream chain waiting on a fresh manual ruling the scoring already produced. September focus: **B2B SaaS · Hospitality→Accommodation · Professional Services→Legal & Accounting**. Depth-first discipline still holds: per-sector research spends only on `Target` sectors, never sprayed across all 321.
+
+### 14.2 The per-sector Cross-Loop (author it per sector; each sector differs)
+Every `Target` sector is taken through the **same seven links, different content** — the Cognition Runtime Loop (§6) ending in a CRM packet:
+`① WHEN (Sector Signals: seasonality + buying window) → ② WHY (Sector Intelligence: pain/economics/tool-chaos) → ③ HOW (Sector Linguistics) → ④ WHO (Audience Roles + Decision-Maker titles) → ⑤ WHICH (Industry Offer Matrix ladder + offer-match/GAP) → ⑥ WHAT (Outreach Angle + audit/proposal logic) → ⑦ WHERE (CRM packet: Ideal-Target-Profile + offer_id + sector/sub_sector/icp_tier → Lead when real contacts scraped) → outcome → Sector Memory → back to ②.`
+**MUST** author each link's content *per sector* — Hospitality is season-led (buyer GM/Revenue Manager), Professional Services tax-season-led (buyer Managing Partner), B2B SaaS trigger-led (buyer CRO/founder). The same loop, re-voiced. This is why the score routes attention and why the loop is not one generic pipeline.
+
+### 14.3 Sector emits the packet; Sales/Content own the script (never collapse this)
+Sector produces the **intelligence packet** — timing + pain + language + who + offer-match + outreach *angle*. It does **NOT** write the final email/proposal/script — that is **Sales (05)** enablement + **Content (04)**. Route the packet to them; do not re-own their artifact. (Same anti-duplication law as §4/§13.4.)
+
+### 14.4 The CRM is already live — bridge onto it, never rebuild it
+The CRM exists: **ClickUp** — Lead / Opportunity / Client / Engagement-Project / Partner Lists with real fields, FK relations, and status pipelines (`CRM_SCHEMA.md`). Sector **references it by ID** and maps onto it: `sector` / `sub_sector` / `icp_tier` tags + matched `offer_id` + a per-sector **Ideal Target Profile**. **MUST NOT** create a parallel contact/company store. Real `Lead` rows (contact_name/email/company), ICP scores, and Signal scores are **gated** — they require scraped real people/companies (§14.5). Until then the bridge is a **mapping + template**, never populated with a fabricated contact.
+
+### 14.5 Data-source posture (register now; connect gated)
+- The **market/web-intelligence research** (seasons, calendars, regulation, linguistics, decision-maker *titles*, tool-stack, company-website reads) is **public, non-PII** and done **now** by the interactive session's built-in web tools — the honest "profound web researcher" for the pilot. Cloud routines still have **no web** (§13.4); no unattended daemon.
+- The **people/contact-data layer** (real names/emails/dials → CRM) is **paid, PII, Legal-gated** and **DEFERRED** — connect a people-data MCP (Apollo/Clay/Cognism) only after a **Legal posture note + cost governance + an Approval-Matrix row** (`AEIT_08` §5; `AEIT_07`/`AEIT_10`).
+- **Every registered source names where its data feeds** (`AEIT_08` `consumers`) — the §13.3 decision-purpose gate applied to sources: no source without a destination DB.
+
+---
+
 ## Appendix — Builder-role self-audit (Draft 10 QA gate)
 
 This contract was checked against the 7 builder roles:

@@ -71,6 +71,28 @@ The Sector layer routes each industry through a **land-and-expand ladder** — *
 
 ---
 
+## 0.3 — Sector Commercial Activation: the per-sector Cross-Loop & CRM bridge *(ADDENDUM 4, 2026-08-19)*
+
+The activation layer that turns the loaded model into **outreach**, one `Target` sector at a time (pilot = **Hospitality → Accommodation**). It **wires the existing DBs** into a repeatable per-sector loop — it adds **no new store**. Doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §14.
+
+**The per-sector Cross-Loop (same seven links, re-voiced per sector):**
+
+| # | Link | DB(s) | Fill source |
+|---|---|---|---|
+| ① **WHEN** | Commercial Rhythm — seasonality + buying window | **DB 7 Sector Signals** (+ DB 12 Sector State, DB 13 Forecast) | 🟢 web-verified (built-in tools) |
+| ② **WHY** | pain · economics · tool-chaos | **DB 3 Sector Intelligence** | 🟢 web research per target |
+| ③ **HOW** | words to use / avoid · proof-language | **DB 11 Sector Linguistics** (EMPTY) | 🟢 web research per target |
+| ④ **WHO** | 4 audience roles + decision-maker titles | **DB 9 Audience Roles** (EMPTY) + **DB 10 DM Registry** | 🟢 titles/roles · 🔴 named people |
+| ⑤ **WHICH** | land-and-expand ladder + offer-match / GAP | **DB 8 Industry Offer Matrix** (loaded) | ✅ exists |
+| ⑥ **WHAT** | outreach angle + audit/proposal logic | **DB 8** `Outreach Angle` → routes to Sales (05) / Content (04) | ✅ exists → routed |
+| ⑦ **WHERE** | CRM packet: Ideal-Target-Profile + `offer_id` + `sector/sub_sector/icp_tier` | **ClickUp CRM `Lead`** (bridge) | 🟢 mapping · 🔴 real Leads |
+
+**Commercial Rhythm (① — the headline, built into DB 7 as rows + views, no new store).** Per `Target` sector, author web-verified signal rows across the existing `Signal Type` enum — **Seasonality** (peak / shoulder / low + **booking-window lead time** = the "business season / closing season"), **Demand**, **Holiday/Cultural**, **Event/Compression**, **Regulatory** — each with commercial-impact + `Recommended Action` + `Departments Affected` + `Source Tier` + `Last Verified`, mapped onto the six lead-time activation dates (Strategic → Sales → Marketing → Offer → Revenue-Watch → Execution). Distil one **DB 12 Sector State** row ("what's happening now") + a **DB 13 Sector Forecast** row. Live-booking/property numbers stay ⚫ template.
+
+**CRM bridge (⑦ — reference the live ClickUp CRM; `CRM_SCHEMA.md`).** Sector tags `Lead` with `sector / sub_sector / icp_tier` + matched entry-`offer_id`, and assembles a per-sector **Ideal Target Profile** (firmographics + trigger + entry-offer + outreach angle). **Real `Lead` rows are gated on scraping** (paid people-data MCP + Legal + cost — `AEIT_08` §3.1); until then this is a mapping/template. **No fabricated contact.** The script/proposal artifact is owned by Sales (05) + Content (04) — Sector emits the packet.
+
+---
+
 ## 1. The relational spine (Draft 7 + 11 + 13)
 
 ```

@@ -23,11 +23,13 @@ Every empty field resolves to exactly one of four dispositions. **A field is onl
 
 ## 1. The critical path — the unlock sequence (read this first)
 
-The databases are a chain. **One owner decision unblocks most of the empty fields**, and everything else follows a fixed order. Do not fill breadth-first; fill this depth-first for **one target sub-sector at a time**.
+The databases are a chain. **One decision unblocks most of the empty fields**, and everything else follows a fixed order. Do not fill breadth-first; fill this depth-first for **one target sub-sector at a time**.
+
+> **⚑ Reframe (2026-08-19, ADDENDUM 4):** step ① is **superseded** — the focus is now **data-derived, not owner-blocked**. The **Sector Priority Score** already named the September focus (P1: **B2B SaaS · Hospitality→Accommodation · Professional Services→Legal & Accounting**); those are promoted to `Status = Target` **by the score** (advisory; owner may veto/add). The pilot depth-target is **Hospitality → Accommodation** (owner-chosen). The chain below runs now — no fresh naming ruling is waited on.
 
 ```
-① OWNER: mark the September-focus sub-sectors  Status = Target   (Sub-Sectors DB)
-        └─ unblocks EVERYTHING downstream; today all 321 read "Reference"
+① FOCUS (data-derived): promote the P1-scored sub-sectors  Status = Target   (Sub-Sectors DB)
+        └─ score is the decision (advisory); unblocks EVERYTHING downstream
                  │
 ② RESEARCH (🟢, per target sub-sector, web-cited):
         Sector Intelligence findings ─┬─► Sector Linguistics (words to use/avoid)
@@ -168,7 +170,7 @@ These remove standing gaps immediately and are pure transcription/research — s
 3. 🟢 **Sector Intelligence — Sheets 04–07** for the 52 SaaS sub-sectors (same loader as Sheet 03).
 4. 🟢 **Sector DB 1 — `Definition`** for the 3 new grouping verticals; **Geography** tidy-up.
 
-Everything else waits on **① the owner naming the September-focus sub-sectors** — because per-sector research (findings, linguistics, audience, DM titles, signals) should only be spent on markets we are actually entering, not sprayed across 321 rows.
+Everything else is now driven by **① the data-derived focus** (ADDENDUM 4 reframe): per-sector research (findings, linguistics, audience, DM titles, signals) is spent depth-first on the **P1 `Target` sectors** — starting with the **Hospitality → Accommodation** pilot — not sprayed across 321 rows.
 
 ---
 
@@ -184,6 +186,34 @@ Everything else waits on **① the owner naming the September-focus sub-sectors*
 
 ---
 
+## 6.5 Decisions & Gaps ledger (standing view — the owner's "we need to view them")
+
+*Maintained rollup of what is decided, what is still the owner's call, and where the relevant-but-empty fields are. Updated as state changes.*
+
+**✅ Decisions LOCKED**
+- Multi-vertical universe · Sector = the first live IntOS slice · kernel + Industry Revenue Engine loaded (25 verticals · 321 sub-sectors · 87-row Industry Offer Matrix · 211 Intelligence findings).
+- **September focus is data-derived** (P1: B2B SaaS · Hospitality→Accommodation · Professional Services→Legal & Accounting) — not owner-blocked.
+- **Pilot = Hospitality → Accommodation** (owner-chosen). Build the cross-loop here first, then generalize.
+- **Data posture = recommend + register now; paid people-data MCPs deferred** to post-pilot, owner-authorized, gated.
+- CRM = **ClickUp (live)** — Sector bridges onto it, no new store. "real-time" = **freshness cadence**, not a live stream. No unattended web.
+
+**⚑ Decisions OPEN (owner)**
+| # | Decision | Blocks / affects |
+|---|---|---|
+| 1 | **DRAGON** terminology ruling | Content DB 2 belief row 10 |
+| 2 | Review **cadence** for Sectors Master (`Last / Next Review`) | freshness governance |
+| 3 | `Strategic Priority` (Primary/Secondary/Tertiary) per vertical | GTM sequencing beyond the P1 pilot |
+| 4 | **When to authorize the paid people-data MCP** (Apollo/Clay) | real decision-maker contacts → CRM (§6 item 5) |
+| 5 | The **go-live scraping gate** (API key + cost governance + Approval-Matrix row + Legal posture) | all 🔴 contact/company/ICP/Signal fields |
+| 6 | **Zoho Books lapsed-trial** decision (downgrade / pay / re-open) — *money-facing standing flag* | Invoice object (`CRM_SCHEMA.md`) |
+| 7 | Any **campaign idea + context** to seed the DB 4 fast-path (§4) | Content chain shortcut for a `Target` sector |
+
+**🟢 GAPS — empty-but-relevant, fillable now (per `Target` sector, web-cited):** Sector **Linguistics** (EMPTY — blocks Content) · **Audience Roles** (EMPTY — blocks Content) · Sector **Intelligence** for the 88 established industries (none) · Decision-Maker **titles/triggers** for established · **Sector State + Forecast** (empty) · per-sector **Sector Signals** depth (only 3 rows full) · Sheet 07 relationship map (SaaS, pending).
+
+**🔴 / ⚫ GAPS — gated or template (never guessed):** real decision-maker **contacts** + Company data (scraping) · **ICP + Prospect Signal scores** (need real companies) · live-booking/property numbers (⚫ template) · CRM `Related Clients` / `CRM Opportunities` (no real deals yet).
+
+---
+
 ## 7. Honesty ledger (what this plan will never do)
 
 - Never fill Decision-Maker **contacts**, ICP, or Signal Scores by research — those are scraped real data (🔴) or agent runs against real companies.
@@ -196,3 +226,4 @@ Everything else waits on **① the owner naming the September-focus sub-sectors*
 
 ## 8. Changelog
 - **v0.1 (2026-08-19):** Created. Full field-by-field disposition of the 13 Sector + 8 Content databases, the critical-path unlock sequence, the campaign fast-path, and the fillable-today list. Companion to `SECTOR_NOTION_SCHEMA.md` + `CONTENT_INTELLIGENCE_SCHEMA.md`. — Claude Code (Opus 4.8)
+- **v0.2 (2026-08-19, ADDENDUM 4):** Reframed §1 step ① — focus is **data-derived** (Sector Priority Score names the P1 `Target` set), not owner-blocked; pilot = Hospitality→Accommodation. Added **§6.5 Decisions & Gaps ledger** (standing view — locked / open / 🟢 / 🔴-⚫). Updated §5 close to the depth-first-on-P1 discipline. — Claude Code (Opus 4.8)

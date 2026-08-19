@@ -119,6 +119,16 @@ This table is the seed of the "Handoff packet standards" item in `GLOBAL_OS.md` 
 
 *Original entry, superseded same day 2026-06-30:* ~~Confirmed by owner, 2026-06-30: HubSpot.~~
 
+## Sector (01) → CRM bridge (reference; no new object) — *added 2026-08-19*
+
+Sector's commercial-activation loop (`01_Sector/SECTOR_ACTIVATION_CONTRACT.md` §14) ends **in this CRM**, not in a parallel store. Sector does **not** create a contact/company object — it **tags and routes onto the objects above**:
+
+- **On `Lead`:** `sector`, `sub_sector`, `icp_tier` (from Sector's ICP Classification), and the matched entry-`offer_id` — so a scraped decision-maker lands already classified and offer-matched. `ICP_fit_score` stays Sales-set.
+- **On `Opportunity`:** `offer_id` is the Industry-Offer-Matrix entry offer for that sub-sector (the land-and-expand ladder's first rung).
+- **Per-sector Ideal Target Profile** (firmographics + trigger + entry-offer + outreach angle) is assembled by Sector as the "who we'd approach and with what" spec that seeds outreach — the actual script/proposal is owned by **Sales (05) + Content (04)**, not Sector.
+
+**Honesty gate:** real `Lead` rows (contact_name/email/company) are **gated on scraping** (paid people-data MCP + Legal + cost governance + Approval-Matrix row — `AEIT_08` §3.1/§5). Until then the bridge is a **field mapping + template**; no contact is ever fabricated.
+
 ## What this schema deliberately does not specify
 
 - Field-level validation rules, required vs. optional fields in practice, or UI/form design — those follow once ClickUp implementation begins (Tech Stack, 13; see `00_Agency_Governance/GO_LIVE_CHECKLIST.md`).
