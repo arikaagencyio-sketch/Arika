@@ -58,6 +58,27 @@ Governance"). Rolls up the per-department §3 Capability Registries into one age
 | Manage tool stack + verify it | Tech Stack (13) | all | Real inventory + verifier |
 | Govern (constitution, risk, approvals) | Governance (00) | all | Backbone |
 | **Orchestrate / execute agents** | Governance (00) / `arika-runtime` | all | Built; never run persistently |
+
+### Commercial-capability view — the 12 families (Sector Industry Revenue Engine alias)
+
+Sector (01)'s **Industry Revenue Engine** (`01_Sector/SECTOR_NOTION_SCHEMA.md` §0.2) routes each industry's Entry→Expansion→Transformation ladder by **12 commercial-capability families**. These are **not new capabilities or stores** — they are a commercial-facing *alias/rollup* over this map, each reconciling 1:1 to a primary owner here:
+
+| Family | Reconciles to (owner) |
+|---|---|
+| **INT** Intelligence | Sector (01) + Audits (14) |
+| **STR** Strategy & Revenue Architecture | Offer (02) + Consulting (15) |
+| **BR** Branding | Branding (12) |
+| **MKT** Marketing | Marketing (03) |
+| **CNT** Content | Content (04) + Design (19) + Experience Eng (20) |
+| **SAL** Sales | Sales (05) |
+| **ACQ** Acquisition / Partnerships | ClientPartner Acquisition (06) |
+| **OPS** Operations | Operations (08) |
+| **AUTO** Automation | Automation (16) |
+| **AI-X** AI Enablement | AI Enablement (17) |
+| **FIN** Finance | Finance (09) |
+| **SCALE** Scale / Advisory | Consulting (15) + Client Success (07) |
+
+*(Understanding / Experience threads across Experience Eng (20) + Design (19) + Content (04).)* The families are a controlled vocabulary for the Industry Offer Matrix's `Department Dependencies` + ladder routing — reconcile here; do not store separately.
 | Synchronize the 7 Cognitive Calendars | Operations (08) *(calendar-orchestrator)* | all | Real orchestrator |
 
 ---

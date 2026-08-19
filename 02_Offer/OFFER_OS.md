@@ -108,6 +108,23 @@ The owner provided the full "Elite Agency Pricing Architecture System" document 
 | Partner/ecosystem acquisition systems | Referral and partnership infrastructure as a distinct monetizable offer (Draft 20, "CPAROS") — overlaps with ClientPartner Acquisition (06), needs reconciliation when that department migrates | Draft/aspirational |
 | Client portfolio/tier management | Formal system for classifying and progressing clients through tiers — Anchor / Growth / Signal / Experimental / Distribution (Draft 16, most operationally detailed file in the folder) | Draft/aspirational |
 
+### Sector Industry Offer Matrix → ascension-ladder routing + OEOS gap list (from Sector 01, 2026-08-19)
+
+Sector (01)'s **Industry Offer Matrix** (DB 8 / *Agency Opportunity Map*, Notion) routes the established-economy industries' **land-and-expand ladders** (Entry → Expansion → Transformation) onto **this registry** — the 12 offers above **are** the Ideal Ascension Model the matrix references. Sector routes and flags; it does **not** own, engineer, or price offers (that stays here + OEOS). Reconciliation doctrine: `01_Sector/SECTOR_NOTION_SCHEMA.md` §0.2.
+
+**Reconciliation finding (from 87 matrix rows across ~88 industries):** the **Expansion and Transformation rungs are already well-covered** by existing offers — #1 Revenue System Architecture / #3 Outbound Sales Engine / #6 AI Workflow Infrastructure / #7 Business Operating Systems / #11 AI Transformation Systems. **The Entry rung is a systemic gap for every non-SaaS industry:** the current Gateway/entry offers (#4 Demand Generation, #5 Brand Positioning, #10 Revenue Infrastructure Audit) are **B2B-SaaS-tuned**, so each industry's Entry cell is flagged `GAP — needs OEOS`. This is the "current offers are B2B-SaaS-tuned" gap made concrete.
+
+**Consolidated OEOS entry-offer gap list — owner/OEOS decision; NOT auto-created, NOT priced here** (transcribed from the matrix's `Ladder Offer Refs / OEOS Gap` field — full per-industry detail lives on each Notion row):
+- **Named productized-entry gaps:** *Hospitality Revenue Content OS* (Accommodation) · *Property Revenue & Acquisition System* (Real Estate Brokerage) · *Enrollment Revenue System* (Education) · *Construction Bid & Project Lead-Gen*.
+- **Trust/authority-entry pattern** (D Trust-driven; **regulated — Legal (10) gate**): Professional Services, Legal & Accounting, Human Health, Financial Services, Insurance — need an authority-content + trust-led entry offer (nearest #5/#10).
+- **Local/consumer-marketing-entry pattern** (A Marketing-driven): Food & Beverage, Retail / E-commerce, Travel Agencies, Automotive Dealers, Beverages Mfg — need a local/consumer marketing entry offer (nearest #4/#5).
+- **Product/brand-entry** (B Sales-driven mfg): Food Products Manufacturing.
+- **Brand + lead-gen entry** (C Ops-driven): Land Transport & Logistics, Building Construction.
+
+**Flagged proposed offer — "AI & Business Stack Rationalization" (owner/OEOS decision; NOT engineered here).** A 4-product ladder — Stack Audit → Rationalization → Architecture → AI Operating Layer — surfaced by Sector's new **Tool-Stack Chaos** intelligence layer (per-industry fragmentation typed Duplication / Integration / Intelligence). Proposed delivery split: Offer (02) engineering + Automation (16) build + Audits (14) diagnostic, **reusing Tech Stack (13)'s Tool-Registry + "verify-don't-assume" pattern** for the *client's* Tool Governance Matrix. Not in the registry; flagged for OEOS engineering only if the owner greenlights. Source: `01_Sector/SECTOR_NOTION_SCHEMA.md` §0.2 / DB 3 Tool-Stack Chaos.
+
+> These are **routing + gap intelligence**, not new offers. Nothing above is quotable; any real offer still runs through OEOS (§3) + `offer-pricing-floor-analyst` (§10).
+
 ## 4. Workflow Index
 
 | Workflow | Trigger | Steps | Output | Owner | Source |
