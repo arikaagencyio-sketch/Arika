@@ -298,6 +298,10 @@ Revenue Filter = if(Business Objective=="",
 
 **Rollups:** `Signal Deadline` ← Sector Signal `Action Deadline` · `Sub-Sector Status` · `Overlay Verdict` ← DB 3.
 
+> **🔵 The three Sector resolution gates are UPSTREAM filters, not score dimensions** *(recorded 2026-08-20 · owner decision).* Sector (01)'s Resolution Engine (`01_Sector/SECTOR_OS_ARCHITECTURE.md` §4) evaluates **Timeliness** (is this inside an activation window?), **Destination Fit** (does the destination relation resolve?) and **Client Fit** (does the property-type rule match?) **before** an opportunity reaches this database. They are **pass/fail conditions of applicability, not magnitudes of value** — a piece is not *slightly* out of season — so they are deliberately **not** added to the five additive dimensions above. **This schema, the `Total Score` / `Tier` / `Tier 1 Gate` formulas, and `content-opportunity-mapper`'s published `output_schema` are unchanged by that work.** The intent the gates encode: *publish because the conditions make it commercially valuable, not because it is available.*
+>
+> 🔲 **Deferred, not applied:** a `Destination` relation on this DB → Sector's **DB 16 Destination Profile** (specified 2026-08-20, **not yet built**). Until DB 16 exists, destination context reaches an opportunity only through `Sector Signal` → `Geography`. Add the relation in the same pass that builds DB 16 — a relation cannot point at a non-existent database.
+
 > **🔴 Agent schema gap — reported, not papered over.** `content-opportunity-mapper`'s `priority.total` allows `minimum: 5`, but its `tier` enum covers only 20–50. **Totals of 5–19 have no valid tier.** The `Tier` formula surfaces this as `"Below Tier 3 (<20) — schema gap, review"` rather than inventing a fourth tier. The fix belongs in the agent spec and is an owner/architecture call.
 
 **Seed — 0 rows.** When seeded: `content-opportunity-mapper` is run **manually, once**, against a real Sector Intelligence finding and its output hand-applied as one row. That run is simultaneously the seed **and** the acceptance test that this schema accepts the agent's output. Do not hand-write opportunities to fill a backlog — a padded backlog is the exact failure mode the mapper's own honesty guardrails name.
@@ -532,10 +536,12 @@ Of the 19 databases specified: **8 built** (the 6 named as the spec's own "minim
 | 2 | Narrative Intelligence Registry | `e76c2bec-8077-4b84-9db3-f1f819000745` | `326500c11b0e4053854baa22835e7d09` | **10** |
 | 3 | Sector × Platform Intelligence Matrix | `bb21b3fc-b14f-4237-b5cd-9affd08b98fc` | `09c2f29dada84e2fba9213cc4ab06764` | 0 — needs a named sub-sector |
 | 4 | Campaign Intelligence | `6f1f092b-2b26-4bef-94e6-b87e00ba9fb6` | `722d957d420f4663aba3974e54ad2a0b` | 0 — no campaign exists |
-| 5 | Content Opportunity | `b9cd2f53-1e6a-4765-aaf4-4742d7d12520` | `df33ddf3ed1b4323bebc95457e42a1fe` | 0 — seeded by an agent run |
+| 5 | Content Opportunity | `b9cd2f53-1e6a-4765-aaf4-4742d7d12520` | `df33ddf3ed1b4323bebc95457e42a1fe` | ⚠️ **stale** — ≥3 (see note) |
 | 6 | Content Translation Matrix | `9abf586d-d3bd-4401-b416-d5e0af1f3162` | `c6bf37b321d34ac79435a4a80f71b215` | 0 — needs DB 3 |
 | 7 | Content Briefs | `761b3f94-bdbf-4b3d-8234-4cda579697ca` | `264db3ec98834c359a7d314f52765ebb` | 0 — by design |
 | 8 | Offer Registry (thin) | `850f5a23-6533-4f48-89f3-ef6bc7f360b6` | `ec38bf406989477ba4f991915a711ce5` | 0 — **12 rows pending** |
+
+> ⚠️ **The `Rows` column is stale — do not trust it** *(flagged 2026-08-20).* It records the state at build (2026-08-16). Since then §10 logs real rows written to **DB 3, DB 4, DB 6 and DB 7** (2026-08-19, ADDENDUM 4 G2) and `01_Sector/SECTOR_OS.md` §15 records **3 Accommodation Content Opportunities** written to **DB 5** — none of which is reflected above. **Re-read the live counts before any bulk work on this layer**; this column is being left as a flagged known-stale artifact rather than back-filled from changelogs, because a count transcribed from a changelog is not a count.
 
 **Group sub-pages:** `01 Intelligence` `3be21e15-eb93-81a7-a403-c20f6247b218` (DB 1, DB 8) · `02 Strategy` `3be21e15-eb93-8191-b9c5-cb5c5460b6b6` (DB 2, DB 3, DB 6) · `03 Content` `3be21e15-eb93-8111-925d-d9e587966850` (DB 4, DB 5, DB 7) · `04 Execution` `3be21e15-eb93-81aa-a046-c327a561ed0d` *(empty, reserved)* · `05 Feedback` `3be21e15-eb93-81ed-b111-c7ed9096612c` *(empty, reserved)*. The two empty groups are deliberate — they name where the blocked layers attach and why each is blocked.
 
@@ -639,4 +645,5 @@ Structure is fully verifiable at build time; the spine walk is not, because **a 
 
 ## 11. Changelog
 
+- **v0.2 (2026-08-20, Sector OS Architecture Gate 1 — documentation only):** Recorded Sector (01)'s three **Resolution Engine gates** (Timeliness · Destination Fit · Client Fit) as **upstream pass/fail filters, explicitly not DB 5 score dimensions** — so `Total Score` / `Tier` / `Tier 1 Gate` and `content-opportunity-mapper`'s published `output_schema` are untouched (owner decision, 2026-08-20). Noted the future `Destination` relation → Sector **DB 16 Destination Profile** as **deferred until DB 16 is built** (a relation cannot point at a non-existent database). Flagged the §6 `Rows` column as **known-stale** rather than back-filling counts from changelogs. **No Notion write.** Architecture: `01_Sector/SECTOR_OS_ARCHITECTURE.md`; doctrine: `01_Sector/SECTOR_ACTIVATION_CONTRACT.md` §16. — Claude Code (Opus 5)
 - **v0.1 (2026-08-16):** Created. Companion to `CONTENT_OS.md` §8's architecture approval; follows the pattern of `01_Sector/SECTOR_NOTION_SCHEMA.md`. — Claude Code (Opus 5)

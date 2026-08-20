@@ -3,7 +3,7 @@
 **Department:** Sector (01) · **Status:** Active doctrine. **Audience:** Claude Code (in VS Code) and any agent operating the Sector Layer.
 **Role of this file:** the "trigger paragraph" — the operating contract Claude Code reads *before* creating, modifying, querying, or executing anything in the Sector Layer. It makes the runtime read the whole repository, the whole sector, and the cross-department relations before acting. Built from the SectorOS architecture in `Sector Layer Architecture. Draft 13.md`, grounded in the real repository.
 
-> Precedence: this contract is **subordinate** to `00_Agency_Governance/AGENCY_OPERATING_CONSTITUTION.md` and `GLOBAL_OS.md`, and **authoritative** for Sector work below them. Read `SECTOR_OS.md` (what) and `SECTOR_NOTION_SCHEMA.md` (data model) alongside it.
+> Precedence: this contract is **subordinate** to `00_Agency_Governance/AGENCY_OPERATING_CONSTITUTION.md` and `GLOBAL_OS.md`, and **authoritative** for Sector work below them. Read `SECTOR_OS.md` (what), `SECTOR_NOTION_SCHEMA.md` (data model), and [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md) (core-vs-plugin boundary + the Resolution Engine, §16) alongside it.
 
 ---
 
@@ -221,6 +221,35 @@ You MUST NOT:
 **Failure conditions:** unreachable/moved publisher → mark the source `Needs verification` and the signal unchanged, never guess a new date; a signal whose source row does not exist → REPORT the dependency, do not back-fill free text; a route field with no citation → leave blank; conflict with an Operations `Calendar` or a CRM entity → ESCALATE (§11). A change that flips a sub-sector's readiness or invalidates live client work ESCALATES to the owner.
 
 **Cross-refs:** `CALENDAR_INTELLIGENCE.md` (full design) · `SECTOR_NOTION_SCHEMA.md` DB 7 / 11 / **14** / **15** · `SECTOR_CALENDAR_REFRESH_SPEC.md` (cadence + escalation ladder) · `AEIT_08` §1/§3.2/§4/§5 · `13_Tech_Stack/TECHSTACK_OS.md` §3 (Google Calendar + Notion Calendar) · `08_Operations/OPERATIONS_OS.md` (the market-clock bridge — an **input** to the 7 Cognitive Calendars, never an 8th).
+
+---
+
+## 16. Universal Core / Sector Plugin separation *(added 2026-08-20)*
+
+**Purpose:** keep the Sector Layer a **sector-agnostic operating system** whose first implementation happens to be Hospitality — not a hospitality system with other sectors bolted on. **Authority:** subordinate to §1–§15; authoritative for core-vs-plugin classification and for calendar resolution. **Inputs:** the Sector DBs (**13 built · DB 14/15/16 specified, not built**) + a sector's plugin pack. **Outputs:** resolved, layered calendars per sector × geography × property archetype × client. **Full design:** [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md). **Sector #001 = Hospitality** ([`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md)); activation of #002 onward follows [`SECTOR_ACTIVATION_PROTOCOL.md`](SECTOR_ACTIVATION_PROTOCOL.md).
+
+**The governing sentence:** *the calendar is not a store of content — it is a resolved view of live external reality, computed per sector, per geography, per property archetype, per client.*
+
+You MUST:
+- classify every element as **universal** (core, never re-authored), **plugin** (re-authored per sector), or **configurable rule** (core field, plugin-supplied value) — and **state the class** when adding or moving one;
+- author a sector as a **plugin pack** filling the **14-slot Plugin Interface** (`SECTOR_OS_ARCHITECTURE.md` §3), one directory under `01_Sector/sector_plugins/{sector}/`; leave an unresearched slot **empty**, never plausible;
+- **produce calendars by resolution, not by authoring rows** — `Sector → Regional → Property-Type` are *views* over the one canonical DB 7; the **Client Calendar is step 5 of the resolution algorithm**, not a store; the **Execution Calendar is Content (04)'s Briefs**. A 365-day calendar is an **output** of `resolve(...)`, recomputed on change;
+- run the resolution **gates** — `Timeliness · Destination Fit · Client Fit` — as pass/fail *conditions of applicability* **upstream** of Content DB 5's scoring. They are **not** score dimensions: `content-opportunity-mapper`'s published `output_schema` and DB 5's tier formula are a live contract and are not rewritten to accommodate them;
+- add **Destination Profile** (DB 16) and **Market Routes** (DB 15) to the set a material change must **name as invalidated** (extends §15) — alongside Content Opportunities, campaign windows, derived activation dates and agency-calendar entries;
+- **reference by ID** the Entity Registry that already exists: properties, groups, parents and subsidiaries are CRM `Company` rows in **ClickUp** (`AEIT_06`: *roles, not types*). A Sector-side property store is the parallel-company-store ban of §14.4.
+
+You MUST NOT:
+- let a plugin **create a database, field, agent, or event** — if a sector appears to need one, that is a Tier-1 architecture change requiring owner ratification + an `AEIT_06` entry: **ESCALATE**, do not edit the plugin;
+- let a **universal file carry a sector's rule values** — timing offsets, source lists, demand vocabularies, property typologies and destination themes are plugin content wherever they currently sit;
+- build a **calendar per layer** (sector / regional / property-type / client) — restates and extends §15;
+- **replicate a validated sector's database** into a new sector: extract the pattern, author the slots;
+- promote a sector through the **Lifecycle State machine** without the underlying rows (no self-promotion, §13.2);
+- treat a **derived resolution** as an external fact, or a destination's demand character as measured data when it is an owner hypothesis;
+- fabricate a destination's demand numbers or a property's live figures — the property layer stays ⚫ **template** until a client connects a real RMS/PMS.
+
+**Failure conditions:** a validation run returning **identical calendar shapes** across structurally different destinations → the destination/property-type layers are inert; **STOP** and fix the model before loading data. A slot filled with a plausible unsourced value → constitutional breach (`AGENCY_OPERATING_CONSTITUTION.md`), revert it to empty. Removing a sector's plugin breaking the core → the system is that sector's, not a Sector OS; **ESCALATE**.
+
+**Cross-refs:** `SECTOR_OS_ARCHITECTURE.md` (full design) · `SECTOR_ACTIVATION_PROTOCOL.md` (gates + slot classification) · `SECTOR_NOTION_SCHEMA.md` §0.4 + DB 16 · `CALENDAR_INTELLIGENCE.md` §5.2/§12 (rule schemas; values live in the plugin) · `04_Content/CONTENT_INTELLIGENCE_SCHEMA.md` (the three gates as upstream filters) · `08_Operations/OPERATIONS_OS.md` §12a (resolver output is an input to the 7 Calendars, never an 8th).
 
 ---
 

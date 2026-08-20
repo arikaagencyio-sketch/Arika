@@ -93,6 +93,20 @@ The activation layer that turns the loaded model into **outreach**, one `Target`
 
 ---
 
+## 0.4 — Universal Core / Sector Plugin separation *(added 2026-08-20)*
+
+**Every database in this file is Universal Core.** A sector supplies **values**, never structure. Full architecture: [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md); doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §16.
+
+- A **sector plugin** (`01_Sector/sector_plugins/{sector}/`) fills the **14-slot Plugin Interface** — ontology, entity/property archetypes and their signal rules, demand model, geography scope, destination themes, signal-type weighting, timing offsets, source pack, audience/decision-makers, linguistics, offer ladder, content pillars, seasonality/compression threshold, KPI semantics.
+- A plugin **MUST NOT** create a database, field, agent, or event. If a sector appears to need one, that is a **Tier-1 architecture change** requiring owner ratification + an `AEIT_06` entry — escalate, do not edit the plugin.
+- A **universal file MUST NOT carry a sector's rule values.** Timing offsets, source lists, demand vocabularies and property typologies are plugin content wherever they currently sit.
+- **Configurable rules** are the middle case: a core field whose *meaning* is plugin-supplied. DB 12's `ADR / Price Pressure` and `Connectivity / Access`, DB 11's `Property` level, and DB 15's travel-shaped fields (`Booking Lead Time`, `Air Connectivity`, `Visa Friction`) are configurable rules, **not** hospitality contamination — their semantics come from the active plugin's slot **P14**.
+- Sector Plugin **#001 = Hospitality** ([`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md)). Sector #002 onward follows [`SECTOR_ACTIVATION_PROTOCOL.md`](SECTOR_ACTIVATION_PROTOCOL.md).
+
+> ⚠️ **Two open universality questions**, to be ruled at the generalization gate (`SECTOR_ACTIVATION_PROTOCOL.md` §4): whether **DB 15 Market Routes** and **DB 16 Destination Profile** are genuinely universal or belong to a *travel family* of sectors. Both are `[CANDIDATE]` in `AEIT_06` and neither is canonized.
+
+---
+
 ## 1. The relational spine (Draft 7 + 11 + 13)
 
 ```
@@ -188,7 +202,8 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 |---|---|---|---|
 | Finding | Title | ID | one insight |
 | Sub-Sector | Relation → Sub-Sectors | REL | required |
-| Category | Select | RET | Structure · Economics · Value Chain · Buying Psychology · Decision Dynamics · Trust · Governance/Power · Infrastructure · Risk/Fragility · Strategic Node · **Tool-Stack Chaos** (ADDENDUM 3) (Draft 13 layers + xlsx Sheets 03–07) |
+| Category | Select | RET | Structure · Economics · Value Chain · Buying Psychology · Decision Dynamics · Trust · Governance/Power · Infrastructure · Risk/Fragility · Strategic Node · **Tool-Stack Chaos** (ADDENDUM 3) · **Demand Pattern** *(added 2026-08-20)* (Draft 13 layers + xlsx Sheets 03–07) |
+| **Geography** | Relation → Geography (DB 11) | REL | 🔲 *specified 2026-08-20, not applied.* **Optional** — most findings are sector-wide, not place-bound. Set it when a finding is only true somewhere: *"Nairobi MICE demand concentrates Sep–Nov"* is a Nairobi fact, not a Hospitality fact. Without it, destination-scoped intelligence has nowhere to attach and the Resolution Engine cannot narrow by place. |
 | Evidence | Text | GOV | what supports it |
 | Source | Select/Text | GOV | xlsx sheet · chat · agent run · research |
 | Confidence | Select | GOV | Low · Medium · High |
@@ -197,6 +212,8 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Strategic Implication | Text | EXE | the "so what" |
 | Recommended Action | Text | EXE | Draft 4 execution layer |
 | Routed To (Dept) | Multi-select | REL | Offer/Marketing/Sales/Content/Automation (see contract routing) |
+
+> **`Demand Pattern`** *(added 2026-08-20)* — the category that answers the demand questions no existing facet held: **who buys · why · when · from where · what triggers the decision · what influences it · what causes cancellation · what creates repeat, group, corporate, institutional or international demand.** These were previously homeless: `Buying Psychology` covers the buyer's mind, not the demand *flow*. Each row is a normal finding — cited, confidence-rated, routable. Plugin slot **P3**; pairs with DB 9 Audience Roles and DB 15 Market Routes.
 
 ### DB 4 — ICP Classification
 **Primary entity:** one company's tier classification. **AEIT_06:** `ICP Classification` (canonical, Sector-owned). **Backing:** `SECTOR_OS.md` §1. **Writer:** agent `sector-icp-fit`.
@@ -371,10 +388,13 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
 | Name | Title | ID | e.g. "Kenya", "Nairobi" |
-| Level | Select | RET | Global · Region · Country · City · **Property (template level)** |
+| Level | Select | RET | Global · Region · Country · City · **Destination** *(added 2026-08-20)* · **Property (template level)** |
 | Parent | Relation → Geography (self) | REL | Nairobi→Kenya→East Africa→Africa→Global |
 | ISO / Code | Text | ID | ISO-3166 where applicable |
 | Notes | Text | — | source-market vs. destination, etc. |
+| **Destination Profile** | Relation → Destination Profile (DB 16) | REL | 🔲 *specified 2026-08-20, not applied.* At most one — the commercial reading of this place. Blank for places that are only a location (a country, an origin market). |
+
+> **`Destination` level** *(added 2026-08-20)* — sits between `City` and `Property`. It exists because **Maasai Mara is not a city**: it is a demand destination with no municipal identity, and forcing it to `City` misrepresents the hierarchy. Diani is the same case. **The level stays lean and descriptive** — all commercial meaning lives in DB 16, so Geography remains a shareable place-tree that Operations, Marketing or ClientPartner can adopt without inheriting sector semantics.
 
 ### DB 12 — Sector State *(new 2026-08-15, SCIC — the "what's happening now")*
 **Primary entity:** the **current condition** of one sector (× geography). Read **first** by downstream departments. Distilled from the Sector Signals + Intelligence, dated + confidence-gated. Maps SectorOS layer 6/synthesis.
@@ -466,7 +486,46 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 
 **Seed set (Pass 2, Kenya-inbound):** `Germany → Kenya` · `UK → Kenya` · `US → Kenya` · `Regional Africa → Kenya`.
 
-### Worked example (depth-proof) — Hospitality *(illustrative only; not a live sector)*
+### DB 16 — Destination Profile *(net-new, specified 2026-08-20 · Sector OS Architecture — NOT YET BUILT)*
+**Primary entity:** one **place read as a market** — its durable commercial character. **AEIT_06:** no existing canonical entity covers this — flag as a **`[CANDIDATE]`** alongside Geography (DB 11) and Market Routes (DB 15); **do not silently canonize.** **Backing:** [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md) §3 slot P5, §4.1 step 3.
+
+**Why it exists.** DB 11 Geography is a **place-tree**, kept deliberately lean because it is proposed for agency-wide reuse. DB 12 Sector State is a **dated snapshot** ("what's happening now"). Neither can hold the durable answer to *"what is this place, commercially?"* — that Nairobi is a corporate/MICE market, Mombasa a beach/family market, and Maasai Mara a migration-led international-leisure market. Without it, the Resolution Engine cannot narrow a sector calendar to a **regional** one, and every destination returns the same content.
+
+> ⚠️ **Universality is open.** Whether a destination profile is genuinely universal or belongs to a **travel family** of sectors is unresolved — a B2B SaaS geography may carry no demand-theme meaning at all. Ruled at the generalization gate (`SECTOR_ACTIVATION_PROTOCOL.md` §4). Until then this is a Sector-owned object, not a canonized entity.
+
+> 🔒 **Honesty gate.** Every field is 🟢 **web-cited or blank**. A destination's demand numbers, visitor volumes, and any property's occupancy/ADR/RevPAR are **never** fabricated — they stay ⚫ template until a real source or client system provides them. A blank field is a research task, not a defect.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| Destination | Title | ID | e.g. "Nairobi", "Maasai Mara" |
+| Destination ID | Text (unique) | ID | slug, e.g. `dest_maasai_mara` |
+| **Geography** | Relation → Geography (DB 11) | REL | **required, at most one** — the place this profiles. Level `City` / `Destination` |
+| Destination Type | Select | RET | Urban · Coastal · Wilderness/Conservancy · Highland · Island · Transit hub — *structural, not commercial* |
+| **Demand Themes** | Multi-select | EXE | **the controlled vocabulary is plugin-supplied (slot P5)** — this is the field that makes Nairobi ≠ Mombasa ≠ Maasai Mara |
+| Primary / Secondary Audiences | Relation ×2 → Audience Roles (DB 9) | REL/EXE | who actually comes here, in priority order |
+| Travel / Purchase Motivations | Text | EXE | 🟢 cited or blank — *why* they come |
+| **Seasonal Demand** | Relation → Sector Signals (DB 7) | REL/EXE | the `Seasonality` signals that govern this place. **Not re-typed** — the season lives in DB 7 |
+| **Events** | Relation → Sector Signals (DB 7) | REL/EXE | the compression/event/holiday signals scoped here |
+| **Market Routes** | Relation → Market Routes (DB 15) | REL | the origin markets that feed this destination |
+| **Asset / Property Archetypes** | Multi-select | EXE | which archetypes exist here (plugin slot P2) — the property-type calendar's other half |
+| Content Angles | Text | EXE | what is worth saying about this place, and why it converts |
+| Visual Language | Text | EXE | what this place looks like — routes to Design (19) |
+| Booking / Decision Triggers | Text | EXE | what actually causes the commitment |
+| **Commercial Opportunities** | Relation → Industry Offer Matrix (DB 8) | REL/EXE | which offers this destination's demand shape supports |
+| Related Intelligence | Relation → Sector Intelligence (DB 3) | REL | the place-scoped findings (via DB 3's new `Geography`) |
+| Related Entities (CRM) | Text (ID list) | REL | ClickUp `Company` IDs — **reference only.** Properties are CRM `Company` rows; this DB never stores one |
+| Sub-Sector | Relation → Sub-Sectors (DB 2) | REL | which industry reads this place this way |
+| Source / Source URL | Text + URL | GOV | 🟢 per claim |
+| Source Tier | Select | GOV | same enum as DB 7 — T4 cannot drive downstream |
+| Confidence | Select | GOV | Low · Medium · High |
+| Last Verified / Next Review | Date ×2 | GOV | freshness + cadence gate |
+| Supersedes / Superseded By | Relation → Destination Profile (self) | REL | version, never overwrite |
+
+**Cardinality:** one profile per `(Geography × Sub-Sector)`. The same city read by two industries is two rows — a hotel's Nairobi and a law firm's Nairobi are not the same market.
+
+**Seed set (Gate 4, web-verified):** `Nairobi` · `Mombasa` · `Maasai Mara` — the three validation destinations. `Diani` gets a profile when an engagement needs it.
+
+### Worked example (depth-proof) — Hospitality *(illustrative only — see the plugin for the live rules)*
 Hospitality is the reference that sets the depth bar; the schema above must hold **all** of it. Coverage check against the owner's hospitality spec:
 - **The 6-calendar commercial fusion** (Demand · Compression/Event · Sales/MICE · Travel-Trade · Marketing-Demand · Seasonality/Destination) → `Signal Type` values (one DB, filtered views — not 6 DBs).
 - **"It is in which country / property"** → `Geography` relation (Global→Africa→Kenya→Nairobi; Property = template).
@@ -521,6 +580,7 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 | Sector Forecast *(added 2026-08-15)* | `920781ae-fabd-4c9f-8045-42b40abf3cda` | — |
 | **Signal Sources (DB 14)** | 🔲 **not built** — specified 2026-08-19 | — |
 | **Market Routes (DB 15)** | 🔲 **not built** — specified 2026-08-19 | — |
+| **Destination Profile (DB 16)** | 🔲 **not built** — specified 2026-08-20 | — |
 
 **Data load status (2026-08-11):**
 - ✅ **Sub-Sectors** — all **52** (22 SaaS categories × products) from xlsx Sheet 02, each with GTM motion, revenue model, value prop, ecosystem deps, readiness (Sheet 11): **23 Ready Now · 21 In Progress · 8 Asleep**; each linked to the B2B SaaS sector.
@@ -545,6 +605,8 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - 🔲 **LSEI — Pass 1 (DECIDE) DONE, nothing built (2026-08-19).** Owner directive: make the sector calendars *live* — real external sources, subscribable feeds, origin↔destination direction, reusable timing clocks, change-versioning. Reconciled the seeding proposal (~17 calendar layers · a 15-folder domain · 6 engines) down to **2 net-new DBs + 1 spec file**, per Contract §13.4/§13.5. Written this pass: [`CALENDAR_INTELLIGENCE.md`](CALENDAR_INTELLIGENCE.md) (the LSEI spec) · **DB 14 Signal Sources** + **DB 15 Market Routes** specified above · DB 7 extensions (`Signal Source`/`Market Routes`/`Signal Role`/`Previous Signal Date`/`Change Reason` + 5 `Signal Type` values) · the DB 7 retirement list · `SECTOR_ACTIVATION_CONTRACT.md` §15 · the refresh escalation ladder · `AEIT_08` §3.2 candidate source pack · Google Calendar + Notion Calendar registered in Tech Stack. **Verified live before designing (2026-08-19):** DB 7 holds **28 rows**, of which the Hospitality slice is **4** — three seasonality rows sourced to *hotel-tech marketing blogs* (`T3`) and one trade show; `Source Tier` is **null on 20 of 28**; Geography holds **3 rows** (Global/EU/USA — no Africa, no Kenya, no city level). That gap between the architecture and the data is what this pass exists to close. **Nothing was written to Notion.** Pass 2 builds DB 14/15, web-verifies every candidate source before `active`, populates Kenya-inbound Geography + Routes, re-sources the 4 blog-sourced rows to T1, and back-fills the null tiers.
 
 - ✅ **LSEI — Pass 2a EXECUTED: views fixed, pilot calendar built, cleanup done (2026-08-20).** **(1) Views.** The `Default view` — the tab Notion opens first — had **no sort and no filter**, which is why a 2027 row greeted the reader before a November 2026 one; the twelve views built on 2026-08-15 were all correctly sorted but sat *behind* it. Renamed **⚡ Next Up — Operating View**, sorted `Signal Date` ASC, filtered to the forward window. `🗓️ Upcoming — Chronological` was **not upcoming** (no date filter — it showed everything including the two 2028 regulatory rows); filter added. Two new views: **🎯 Accommodation — Pilot Calendar** (filtered to the `Target` sub-sector) and **🚨 Gate Watch — Act Now** (sorted by `Action Deadline` — the anti-silent-expiry surface). **(2) Geography** grew 3 → **10**: Global → Africa → Kenya → {Nairobi, Mombasa, Diani, Maasai Mara}, plus Germany and the UK as origin markets. **(3) Pilot calendar** — 6 new web-verified Kenya-inbound signals, replacing a slice that had **zero Kenyan rows**: **MKTE 2026** (6–8 Oct, Uhuru Gardens, **T1** — verified on the Kenya Tourism Board's own site; the anchor event, 47 days out), Kenya school December holiday (10 weeks from 26 Oct, T3, boundary conflict flagged), Kenya peak/festive season (Dec 15 – Jan 5, T3), Mashujaa Day, Jamhuri Day (both T4 — gazette not read), WTM Africa 2027 (T3, Low confidence, aggregator-sourced). **December 2026, previously empty across every sector, now holds two signals.** **(4) Back-fill:** `Source Tier` was null on **21 of 28** rows — all now `T1 Primary`, since each already named its organiser (a classification of recorded provenance, not a new claim; `Last Verified` untouched). `Signal Role` set on 32 of 34 rows (the two cross-sector regulatory rows stay null — travel direction does not apply to them). **(5) Vendor-blog cull:** the generic peak-season row is marked **`Superseded/Delayed`** with a `Change Reason` — it asserted a *northern-hemisphere summer* peak, which is directionally wrong for Kenya, whose peak is Dec–Jan; shoulder-season downgraded; the low-season row **kept** (it carries a real thesis and drives live content) but flagged that its Nov–Feb dates are Kenyan *peak*, not low. **Nothing deleted.** **(6) Schema cleanup** per the retirement list above. **Still not built: DB 14 Signal Sources and DB 15 Market Routes** — and therefore the Activation Window and Plays layers remain open.
+
+- 🔲 **Sector OS Architecture — Gate 1 (DECIDE) DONE, nothing built (2026-08-20).** Owner directive: separate the Universal Core from sector-specific logic, with Hospitality as Sector Implementation #001, and make the calendar an output of intelligence rather than a content store. **Audit finding:** the layer is substantially built — the only genuinely *new* object is **Destination Intelligence**; the "Entity Registry" is the live ClickUp CRM `Company` (reference, never rebuild); the "Client Calendar" is a **resolution, not a store**; and **no performance store exists anywhere** (Marketing 03 owns it and has none), so the feedback edge stays doctrine. Written this pass: [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md) (three tiers · the **14-slot Sector Plugin Interface** · the **Resolution Engine** · the five calendar layers as views over one store · contamination register · the generalization test) · [`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md) (Sector #001) · [`SECTOR_ACTIVATION_PROTOCOL.md`](SECTOR_ACTIVATION_PROTOCOL.md) (skeleton, completed at Gate 9) · §0.4 above · **DB 16 Destination Profile** specified · DB 3 `Geography` relation + `Demand Pattern` category · DB 11 `Destination` level · `SECTOR_ACTIVATION_CONTRACT.md` §16. **Nothing was written to Notion.** Gate 2 builds DB 14/15/16 and applies the DB 3/DB 11 extensions.
 
 ## 5. Coverage check (nothing missed)
 

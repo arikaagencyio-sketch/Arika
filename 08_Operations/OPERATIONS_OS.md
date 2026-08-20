@@ -190,6 +190,8 @@ This is not a formality. Three existing rules converge on it:
 - `SECTOR_NOTION_SCHEMA.md` DB 7's warning that Sector Signals is **named distinctly** from Operations' canonical `Calendar` — it is the *market/temporal-intelligence* dimension, not an agency operating calendar.
 - The anti-duplication law (`SECTOR_ACTIVATION_CONTRACT.md` §13.4) — Sector references Ops' calendars, Ops references Sector's signals; neither copies the other.
 
+> **Extended 2026-08-20 — the boundary holds for the resolved calendars too.** Sector's Calendar Resolution Engine (`01_Sector/SECTOR_OS_ARCHITECTURE.md` §4) produces a **layered** output — Sector / Regional / Property-Type / Client / Execution. **None of those is an Operations calendar.** Layers 1–3 are views over Sector's own DB 7; layer 4 is a resolution step; layer 5 is Content (04)'s Briefs. The resolver's output reaches Operations **only** as the same market-clock input described above, via the same events. **Still seven.** Doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §16.
+
 **Where each lands:**
 
 | Sector event | Enters | As |

@@ -129,6 +129,14 @@ doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §15. These rows will be **mirrored in
 2026-08-19). Other destinations, outbound routes, and other sectors get source rows when their
 cross-loop is authored — never pre-populated (`SECTOR_ACTIVATION_CONTRACT.md` §14.1).
 
+> 📌 **Ownership of the *selection*** *(added 2026-08-20).* This registry is the canonical home of the
+> **source rows** — that is `AEIT_08`'s job, agency-wide. But **which** sources a sector needs, and
+> **why** each class matters for its demand model, is **sector plugin content**: slot **P8** of the
+> 14-slot Sector Plugin Interface (`01_Sector/SECTOR_OS_ARCHITECTURE.md` §3), authored in
+> `01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`. The rows below stay here; the
+> reasoning that selects them lives in the plugin, so a second sector adds a pack rather than editing
+> this file's rationale. Doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §16.
+
 **Tier 1 — Destination authority (Kenya).** The destination-side spine.
 
 | source_id | Publisher (the body that owns it) | category | consumers | state |

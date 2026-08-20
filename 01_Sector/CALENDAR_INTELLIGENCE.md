@@ -87,7 +87,7 @@ Maps directly onto DB 7 / DB 14's existing `Source Tier` enum. **A source's tier
 - **A lower tier never overrides a higher one.** If an aggregator and the organizer disagree, the organizer wins and the aggregator row is marked `Superseded/Delayed`.
 - **T4 / unverified / stale signals cannot drive downstream execution** — pre-existing rule (Contract §6, §12), restated here because the source pack makes it newly tempting.
 
-> 🔴 **Standing correction this file exists to fix.** The four Hospitality rows currently in DB 7 (Peak / Shoulder / Low season + Independent Hotel Show Miami) are sourced to hotel-tech marketing blogs at `T3` — a *vendor's* seasonality claim, not a destination authority's. They are **not deleted**: Pass 2 re-sources them to T1 and supersedes any claim the T1 source contradicts.
+> 🔴 **The failure mode this hierarchy exists to catch.** A **vendor's** claim about a market is not the market authority's claim, however convenient it is to cite. Where live rows are found sourced to vendor content at `T3`, they are **re-sourced to T1 and superseded on contradiction — never deleted.** The current open instance (the Hospitality seasonality rows) is tracked in [`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md) slot **P8**.
 
 ---
 
@@ -151,22 +151,24 @@ The proposal asked for a standalone Timing Engine with multiple clocks. It recon
 4. When should sales act? → `Sales Activation Date`
 5. When does the opportunity close? → `Action Deadline` / `Execution Deadline`
 
-### 5.2 The rule table (seed — Hospitality)
+### 5.2 The rule table — schema here, values in the sector plugin
 
-Offsets are **derived planning offsets, never external facts** (Contract §12). They are configurable sector rules, not hardcoded assumptions, and are re-tuned as real outcomes accumulate in `01_Sector/_memory/runtime.jsonl`.
+> 📦 **Moved 2026-08-20.** The **Hospitality** rows that used to sit in this section are **sector rule values**, not universal engine content, and now live in [`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md) **slot P7** — moved verbatim, nothing lost (`SECTOR_ACTIVATION_CONTRACT.md` §16). This section keeps the **schema** and the **rules that govern any sector's table**.
+
+**The schema.** One row per `(Signal Type × Signal Role)`, six offsets, written into DB 7's six existing activation date fields:
 
 | Sector · Signal Type · Role | Strategic | Marketing | Sales | Offer | Revenue Watch | Action Deadline |
 |---|---|---|---|---|---|---|
-| Hospitality · `Event/Compression` · destination-side | T-180 | T-120 | T-90 | T-60 | T-30 | T-7 |
-| Hospitality · `Seasonality` · destination-side | T-270 | T-180 | T-120 | T-90 | T-45 | T-14 |
-| Hospitality · `Sales/MICE` · destination-side | T-365 | T-240 | T-180 | T-120 | T-60 | T-30 |
-| Hospitality · `Holiday/School-Holiday` · **origin-side** | T-240 | T-150 | T-120 | T-90 | T-45 | T-21 |
-| Hospitality · `Travel-Trade` (Arika's own attendance) | T-120 | T-90 | T-60 | T-45 | — | T-14 |
-| Any sector · `Regulatory` | T-365 | T-180 | T-270 | T-180 | T-90 | T-30 |
+| *(supplied by the active sector plugin, slot P7)* | T-n | T-n | T-n | T-n | T-n | T-n |
+| **Any sector · `Regulatory`** | T-365 | T-180 | T-270 | T-180 | T-90 | T-30 |
 
-**Two rules govern the table:**
+The `Regulatory` row is **genuinely universal** — it derives from the FSMA/CSRD worked examples and holds across sectors, so it stays here rather than being copied into every plugin.
+
+Offsets are **derived planning offsets, never external facts** (Contract §12). They are configurable sector rules, not hardcoded assumptions, and are re-tuned as real outcomes accumulate in `01_Sector/_memory/runtime.jsonl`.
+
+**Two rules govern any sector's table:**
 - **Origin-side signals run on longer clocks than destination-side ones** — a German school holiday drives a booking decision months before the trip; a destination event compresses inventory closer in.
-- **A row without a real research basis is left empty, not filled with a plausible number.** The Hospitality rows above derive from the pilot's booking-window research; the `Regulatory` row derives from the FSMA/CSRD worked examples. Other sectors get rows when their cross-loop is authored — **not before.**
+- **A row without a real research basis is left empty, not filled with a plausible number.** A sector gets rows when its cross-loop is authored — **not before.**
 
 ### 5.3 What is *not* modelled
 The proposal named nine parallel clocks (event / demand / booking / marketing / content / sales / production / travel / recovery). Six activation dates already exist and are unfilled on 25 of 28 live rows. **Fill the six before inventing three more.** Post-event retention is carried in `Recommended Action` until a real engagement proves a dedicated field is needed.
@@ -210,7 +212,9 @@ And the reverse is a **different route object entirely**: `Kenya → Dubai` is n
 
 Which direction Arika is working in is a property of the **client engagement**, not of the calendar. A Kenyan lodge selling to German travellers and a Dubai hotel selling to African travellers consume the *same* signal store through *different* routes. The calendar therefore never assumes a direction — it stores both sides and lets the route resolve it.
 
-**Current scope (owner decision, 2026-08-19): Kenya-inbound.** Pass 2 seeds `Germany → Kenya`, `UK → Kenya`, `US → Kenya`, and `Regional Africa → Kenya`. Outbound and Gulf routes are built when a real engagement requires them — not pre-populated as a world atlas.
+**Scope is plugin content, not engine content** *(clarified 2026-08-20)*. Which routes a sector actually builds is slot **P4** of its plugin — the active Hospitality scope (Kenya-inbound, owner decision 2026-08-19) lives in [`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md). The universal rule: **routes are built when a real engagement requires them — never pre-populated as a world atlas.**
+
+*(The place names used throughout §6 are illustrations of the direction mechanic, not scope decisions.)*
 
 ### 6.3 Honesty
 Route fields — booking lead time, air connectivity, visa friction, currency context — are **web-cited per route or left blank**. They are never estimated to make a row look complete. A blank route field is a research task, not a defect.
@@ -228,7 +232,7 @@ A calendar that overwrites a moved date has destroyed the most valuable thing it
 3. Set `Change Status` and `Refresh Status` accordingly.
 4. **Name what it invalidates** — the rule that makes this an operating system rather than a table:
 
-> When a signal's date moves, the change MUST name the downstream work it invalidates: affected **Market Routes**, **Content Opportunities**, **campaign windows**, derived **activation dates**, and any **agency-calendar** entry computed from it.
+> When a signal's date moves, the change MUST name the downstream work it invalidates: affected **Market Routes**, **Destination Profiles** *(added 2026-08-20)*, **Content Opportunities**, **campaign windows**, derived **activation dates**, and any **agency-calendar** entry computed from it.
 
 5. Emit the appropriate event (`CALENDAR_UPDATED` · `REGULATORY_CHANGE` · `COMPRESSION_EVENT` · `DEMAND_SHIFT`).
 
@@ -303,19 +307,25 @@ Every `Target` sector authors the **same links, different content** (Contract §
 
 **Rule:** a sector gets timing-rule rows and registered sources when its cross-loop is authored, never pre-emptively. Depth-first on `Target` sectors (Contract §14.1) — the discipline that stops this becoming a 321-sector data-collection project.
 
+> 📦 **Formalized 2026-08-20.** "The same links, different content" is now a **stated interface**: the 14-slot Sector Plugin Interface in [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md) §3, of which this file's §5.2 (timing) and §12 (sources) are slots **P7** and **P8**. The table above is the cross-sector *comparison* that motivates the interface; the per-sector *values* live in `sector_plugins/{sector}/`.
+
 ---
 
-## 12. Candidate source pack — Hospitality, Kenya-inbound
+## 12. Source pack — the classes here, the sector's candidates in its plugin
 
-**Every row below is `state = candidate`.** Per `AEIT_08` §5, *a source enters `active` only after a live verification call proves it answers.* The material that seeded this file names many sources and specific claims (feed capabilities, event counts, revised dates); **none of it is transcribed here as fact.** Pass 2 verifies each against the live publisher, records the real `Feed Type` and ICS URL if one exists, and only then promotes it. The registry rows live in `AEIT_08` §3.2.
+> 📦 **Moved 2026-08-20.** The **Hospitality, Kenya-inbound** candidate pack that used to sit in this section is **sector content** and now lives in [`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md) **slot P8** — moved, nothing lost. The agency-wide registry rows remain in `AEIT_08` §3.2, which is their canonical home (`SECTOR_ACTIVATION_CONTRACT.md` §16). This section keeps the **classes** every sector's pack must cover.
 
-| Class | Candidates | Why |
+**Every source row starts at `state = candidate`.** Per `AEIT_08` §5, *a source enters `active` only after a live verification call proves it answers.* Seeding material — however specific its claims about feed capabilities, event counts or revised dates — is a **lead list, not evidence**, and is never transcribed as fact.
+
+**The classes a sector's pack MUST cover** (what changes per sector is *which publishers occupy each class*, and whether a class is even populated):
+
+| Class | What occupies it | Why the class exists |
 |---|---|---|
-| **T1 · Kenya destination authority** | Kenya Tourism Board / Magical Kenya events · Kenya public-holiday source (government gazette) · Kenya school-terms calendar (Ministry of Education) · KICC + Nairobi/Mombasa/Diani venue calendars | The destination-side spine. Public holidays and school terms are date-certain and directly move domestic + regional demand. |
-| **T1 · Origin-market authority** | Germany public-holiday + **state-level** school-holiday calendars · UK equivalents · US federal holidays · regional-Africa holiday sources | The origin-side clock. German state school holidays are staggered by Land and are the single highest-value inbound-planning driver for a Kenya-inbound route. |
-| **T1/T2 · Travel trade & MICE** | WTM Africa · Africa's Travel Indaba · AviaDev Africa · ITB · WTM London · HSMAI · ICCA · Cvent · AHLA | Where the *trade* meets — Arika's own attendance calendar and the client's MICE-demand calendar. Two different uses, one registry. |
-| **T1 · Federations (the literal F1 model)** | FIA championship calendars · Safari Rally · World Athletics · major marathons | The reference case: an official body publishing a structured, amendable calendar. Verify per event — never assume a series' dates. |
-| **T3 · Aggregators / event APIs** | Event-data providers · ticketing discovery APIs · trade-show directories | Breadth and machine-readability. **Registered candidate, paid/keyed, cost-gated** — same posture as the Tier-2 people-data set (`AEIT_08` §3.1). Discovery only; they never outrank the organizer (§2). |
+| **T1 · Destination-side authority** | The bodies that own the dated reality where demand lands — official calendars, government registries, venues | The destination-side spine; date-certain and directly demand-moving |
+| **T1 · Origin-side authority** | The bodies that govern when the *source market* is released — holiday and institutional calendars | The origin-side clock, on longer offsets (§5.2) |
+| **T1/T2 · Trade & industry bodies** | Where the trade meets. **Two distinct uses, one registry:** Arika's own attendance, and the client's demand calendar — separated by `Signal Role` | Institutional dates that move both sides |
+| **T1 · Federations / governing bodies** | The reference case: an official body publishing a structured, **amendable** calendar. **Verify per event, never per series** | Amendments are why `Previous Signal Date` + `Change Reason` exist |
+| **T3 · Aggregators / APIs** | Machine-readable breadth. **Registered, not connected** — paid/keyed, cost-gated (same posture as the §3.1 people-data set) | **Discovery only.** They never outrank the organizer (§2) |
 
 Each candidate must carry a named **`consumers`** destination DB before promotion — the decision-purpose gate (Contract §13.3): *no source without a downstream home.*
 
@@ -335,9 +345,10 @@ Each candidate must carry a named **`consumers`** destination DB before promotio
 
 ## 14. Cross-references
 
-`SECTOR_ACTIVATION_CONTRACT.md` §12 (SCIC) · §13 (Kernel) · §14 (Cross-Loop) · **§15 (LSEI doctrine)** · `SECTOR_NOTION_SCHEMA.md` DB 7 / 11 / 12 / 13 / **14 / 15** · `SECTOR_CALENDAR_REFRESH_SPEC.md` (cadence + escalation ladder) · `AEIT_08` §1 (Source entity) · §3.2 (the candidate pack) · §4 (Intelligence Calendar) · §5 (registration gate) · `13_Tech_Stack/TECHSTACK_OS.md` §3 (Google Calendar + Notion Calendar) · `08_Operations/OPERATIONS_OS.md` (the market-clock bridge into the 7 Cognitive Calendars) · `.claude/agents/sector-signal-refresher.md` (extended in Pass 2).
+`SECTOR_ACTIVATION_CONTRACT.md` §12 (SCIC) · §13 (Kernel) · §14 (Cross-Loop) · **§15 (LSEI doctrine)** · **§16 (Core/Plugin separation)** · [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md) (Plugin Interface + Resolution Engine) · [`sector_plugins/hospitality/HOSPITALITY_PLUGIN.md`](sector_plugins/hospitality/HOSPITALITY_PLUGIN.md) (slots P7/P8) · `SECTOR_NOTION_SCHEMA.md` DB 7 / 11 / 12 / 13 / **14 / 15 / 16** · `SECTOR_CALENDAR_REFRESH_SPEC.md` (cadence + escalation ladder) · `AEIT_08` §1 (Source entity) · §3.2 (the candidate pack) · §4 (Intelligence Calendar) · §5 (registration gate) · `13_Tech_Stack/TECHSTACK_OS.md` §3 (Google Calendar + Notion Calendar) · `08_Operations/OPERATIONS_OS.md` (the market-clock bridge into the 7 Cognitive Calendars) · `.claude/agents/sector-signal-refresher.md` (extended in Pass 2).
 
 ## 15. Changelog
 
+- **v0.3 (2026-08-20, Sector OS Architecture Gate 1):** Made this file **sector-agnostic**. §5.2 now carries the timing-rule **schema** + the genuinely-universal `Any sector · Regulatory` row; the five Hospitality rows moved verbatim to the plugin (slot **P7**). §12 now carries the **classes** of source every sector's pack must cover; the Kenya-inbound candidate pack moved to the plugin (slot **P8**) — the agency-wide registry rows stay in `AEIT_08` §3.2, their canonical home. **Nothing deleted; pointers left behind.** §7's invalidation list gains **Destination Profiles** (the new DB 16). §11 now points at the formal 14-slot Plugin Interface it had informally described. Doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §16. — Claude Code (Opus 5)
 - **v0.2 (2026-08-20, Pass 2a):** Applied the parts that needed no new database. `Signal Type` 16 → 21 (adds School-Holiday · Sports · Mega-Event · Trade/Fashion · Cruise/Port, per §8); `Signal Role` created and set on 32 of 34 rows (§6 direction, at signal level); `Previous Signal Date` + `Change Reason` created (§7); the operating views built (§10); the Hospitality timing rules (§5.2) written as real activation dates on the Kenya pilot signals. **Diagnosis that drove it:** the calendar had been built for coverage, not operation — one anchor per sector, and a `Target` sub-sector whose only seasonality was destination-less and vendor-blog-sourced. The generic peak-season row was found to be *directionally wrong* for Kenya (northern-summer peak vs Kenya's Dec–Jan) and is now `Superseded/Delayed` with a reason, not deleted. §12's candidate pack is still unregistered — DB 14/15 do not exist. — Claude Code (Opus 5)
 - **v0.1 (2026-08-19):** Created (Pass 1 — DECIDE). Specifies the source hierarchy, feed taxonomy + Google/Notion Calendar sync architecture, the Timing Rule table, the Market Direction doctrine, change-versioning, colour semantics, the demand-surge rule, the Control Tower read-view contract, sector generalization, and the Kenya-inbound candidate source pack. Reconciles the seeding proposal's ~17 calendars / 15 folders / 6 engines down to **2 net-new databases and this file**. Builds nothing — DB 14/15 and all source verification are Pass 2. — Claude Code (Opus 5)
