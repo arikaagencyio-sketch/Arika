@@ -129,6 +129,8 @@ doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §15. These rows will be **mirrored in
 2026-08-19). Other destinations, outbound routes, and other sectors get source rows when their
 cross-loop is authored — never pre-populated (`SECTOR_ACTIVATION_CONTRACT.md` §14.1).
 
+> ✅ **The Sector-owned mirror now exists** *(2026-08-20).* **DB 14 Signal Sources** was built live in Notion (`collection://13741534-e31d-4ff8-bebf-dd50133e20af`) conforming to the §1 Source entity schema — `Authority Level`, `Feed Type`, `Cadence`, `State`, `Legal Posture`, `Auth`/`Cost`, `Consumers`, and a `Supersedes`/`Superseded By` chain. **It holds 0 rows.** The §5 registration gate is therefore fully in force and completely unexercised: **not one source below has been verified, and no URL has been recorded for any of them.** A table that can hold sources is not a registry of sources.
+
 > 📌 **Ownership of the *selection*** *(added 2026-08-20).* This registry is the canonical home of the
 > **source rows** — that is `AEIT_08`'s job, agency-wide. But **which** sources a sector needs, and
 > **why** each class matters for its demand model, is **sector plugin content**: slot **P8** of the

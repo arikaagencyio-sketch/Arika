@@ -1,7 +1,7 @@
 # Sector OS — Universal Core / Sector Plugin Architecture
 
-**Department:** Sector (01) · **Status:** Gate 1 (DECIDE) complete — architecture only, **nothing built, nothing written to Notion**.
-**Version:** v0.1 (2026-08-20)
+**Department:** Sector (01) · **Status:** Gate 1 (DECIDE) + Gate 2 (SCHEMA APPLY) complete — the model exists and is wired; **no rows, no sources promoted, no dates or contacts created**.
+**Version:** v0.2 (2026-08-20) — Gate 1 (DECIDE) + **Gate 2 (SCHEMA APPLY) executed**. DB 14/15/16 are built and wired; **all three hold 0 rows.**
 
 **Purpose.** State the boundary between what is **universal** in the Sector Operating System and what belongs to a **single sector's plugin**, so that Sector #002 can be activated by authoring a plugin rather than by re-deriving the architecture. Define the Resolution Engine that turns intelligence into a live, layered calendar.
 **Authority.** Subordinate to `00_Agency_Governance/AGENCY_OPERATING_CONSTITUTION.md`, `GLOBAL_OS.md`, and [`SECTOR_ACTIVATION_CONTRACT.md`](SECTOR_ACTIVATION_CONTRACT.md). Authoritative for core-vs-plugin classification and for the resolution algorithm. The data model remains [`SECTOR_NOTION_SCHEMA.md`](SECTOR_NOTION_SCHEMA.md); the calendar engine remains [`CALENDAR_INTELLIGENCE.md`](CALENDAR_INTELLIGENCE.md).
@@ -31,9 +31,11 @@ The Sector Layer is **substantially built**. This architecture separates and com
 | DB 10 Decision-Maker Registry | **live** — 52 SaaS + 4 Accommodation titles | titles only; named people are 🔴 gated |
 | DB 11 Geography | **live** — 10 rows: `Global → Africa → Kenya → {Nairobi, Mombasa, Diani, Maasai Mara}` + Germany, UK | `AEIT_06` `[CANDIDATE]` canonical entity |
 | DB 12 Sector State · DB 13 Sector Forecast | **live** — Accommodation rows exist | dated, confidence-gated |
-| **DB 14 Signal Sources** | 🔲 **specified, not built** | LSEI Pass 2 outstanding |
-| **DB 15 Market Routes** | 🔲 **specified, not built** | LSEI Pass 2 outstanding |
-| **DB 16 Destination Profile** | 🔲 **specified this pass, not built** | the net-new object §3 P5 requires |
+| DB 14 Signal Sources | ✅ **built 2026-08-20** — 0 rows | `13741534-…`; the registration gate is live, no source is `active` |
+| DB 15 Market Routes | ✅ **built 2026-08-20** — 0 rows | `c8585c52-…`; route fields are cited-or-blank by field comment |
+| DB 16 Destination Profile | ✅ **built 2026-08-20** — 0 rows | `ed957373-…`; the net-new object §3 P5 requires |
+
+> **Gate 2 executed 2026-08-20.** All three previously-unbuilt databases now exist; DB 7 is wired to DB 14/15; DB 3 and DB 11 carry their extensions. Full build record + the two deviations: `SECTOR_NOTION_SCHEMA.md` §6. **Structure only — 0 rows in all three.** The state is now *"the model can hold the intelligence"*, not *"the intelligence exists."*
 
 **Runtime.** `arika-runtime` (agent registry · executor · governance · memory-writer · 5 trigger types: `manual · schedule · event · webhook · join`). Sector agents: `sector-icp-fit` · `sector-intelligence-mapper` · `sector-readiness-analyst` · `sector-signal-refresher` · `sector-signal-scorer` — all **Class 1/2, advisory**, operating mode **manual-apply**.
 
@@ -78,8 +80,10 @@ The Sector Layer is **substantially built**. This architecture separates and com
 1. **No Destination Intelligence exists.** DB 11 Geography is a lean *place-tree* deliberately kept shareable (`AEIT_06` `[CANDIDATE]`). Nothing in the repo can express that Nairobi is a corporate/MICE market, Mombasa a beach/family market, and Maasai Mara a migration-led international-leisure market. **This is the one genuinely new object.**
 2. **The Entity Registry already exists — in ClickUp.** Properties, groups, parents and subsidiaries are `Company` (`AEIT_06` Party domain: *"Prospect/Client/Partner/Competitor are roles, not types"*). A Sector-side property store would be a parallel contact/company store, banned by `SECTOR_ACTIVATION_CONTRACT.md` §14.4.
 3. **No performance store exists anywhere.** Marketing (03) owns performance; it holds no live campaign or performance database. The `INTELLIGENCE ← FEEDBACK` return edge is therefore **doctrine only** (`runtime.jsonl` + IntOS Learning). Flagged in §6; **not built here**.
-4. **A stale row count.** `CONTENT_INTELLIGENCE_SCHEMA.md` §6 records Content DB 5 as `0 — seeded by an agent run`, but `SECTOR_OS.md` §15 (2026-08-19, ADDENDUM 4 G2) records **3 real Accommodation Content Opportunities** created there. The schema's count is stale. Corrected in this pass's edit to that file; the live count should be re-read before any bulk work on DB 5.
+4. **A stale row count.** `CONTENT_INTELLIGENCE_SCHEMA.md` §6 records Content DB 5 as `0 — seeded by an agent run`, but `SECTOR_OS.md` §15 (2026-08-19, ADDENDUM 4 G2) records **3 real Accommodation Content Opportunities** created there. The schema's count is stale. Flagged in that file; the live count should be re-read before any bulk work on DB 5.
 5. **Hospitality rules are inside universal files.** See §5.
+6. **Documented ≠ applied** *(found at Gate 2, 2026-08-20)*. Two changelog claims did not match the live workspace: DB 3's `Category` was missing the `Tool-Stack Chaos` option that ADDENDUM 3 records as added on 2026-08-19, and Geography holds **11** rows where the schema recorded 10. Both are now closed. **The lesson is architectural, not clerical:** a changelog entry is a record of intent, not proof of state — so every gate from here reads the live system before it writes, and verifies by query after. This is the same discipline Tech Stack (13) invented after finding 4 of its 30 inventory rows false.
+7. **Two mis-levelled places.** Maasai Mara and Diani carry `Level = City`. Neither is a city. The `Destination` level now exists to hold them; the re-levelling itself is plugin-scope data work (slot P4) and is the first Gate 3 action.
 
 ---
 
@@ -272,4 +276,5 @@ Operationally, at Gate 9:
 
 ## 9. Changelog
 
+- **v0.2 (2026-08-20, Gate 2 — SCHEMA APPLY):** Built the three missing databases live in Notion — **DB 14 Signal Sources**, **DB 15 Market Routes** (both specified 2026-08-19 and unbuilt since), and **DB 16 Destination Profile**. Wired DB 7 to DB 14/15, extended DB 3 (`Geography` relation + `Demand Pattern`) and DB 11 (`Destination` level). **Verified non-destructive by query rather than assumed:** both select ALTERs preserved every option ID byte-identically; DB 3 retains 215 rows and Geography 11, with zero nulls. Two findings recorded rather than quietly fixed: a **documented-but-never-applied** DB 3 option (`Tool-Stack Chaos`, claimed 2026-08-19) and **two mis-levelled places** (Maasai Mara, Diani) whose correction is deliberately deferred to Gate 3 as plugin-scope data work. Added finding 6 — *documented ≠ applied* — as a standing verification discipline. **All three new databases hold 0 rows.** — Claude Code (Opus 5)
 - **v0.1 (2026-08-20, Gate 1 — DECIDE):** Created. Audited the live Sector Layer (13 built DBs, 3 specified-unbuilt, 5 agents, 9 events / 6 wired), mapped cross-department ownership, and recorded five findings — including that **Destination Intelligence is the only genuinely new object** (Entity Registry is the ClickUp CRM; the Client Calendar is a resolution, not a store; no performance store exists anywhere; Content DB 5's documented row count is stale). Defined the three tiers, the **14-slot Sector Plugin Interface**, the **Resolution Engine** (with the three engine gates deliberately kept *out* of Content DB 5's score to protect the `content-opportunity-mapper` contract), the five calendar layers as views over one store, the live-change propagation rule, the contamination register + migration, the gap register, and the generalization/falsification test. **Nothing built; no Notion or ClickUp write; `.claude/agents/` untouched.** — Claude Code (Opus 5)
