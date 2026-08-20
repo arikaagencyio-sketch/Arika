@@ -193,6 +193,37 @@ The CRM exists: **ClickUp** — Lead / Opportunity / Client / Engagement-Project
 
 ---
 
+## 15. Live Sector Event Intelligence (LSEI) doctrine *(added 2026-08-19)*
+
+**Purpose:** operate the sector calendar as a **live, sourced, directional timing backbone** — not a table of dates. **Authority:** subordinate to §1–§14; authoritative for source-registry, market-route, timing-rule, and calendar-sync work. Extends §12 (SCIC); does not replace it. **Inputs:** registered external publishers (DB 14) → Sector Signals (DB 7) × Geography (DB 11) × Market Routes (DB 15). **Outputs:** route-scoped signals with derived activation clocks → interpreted findings → department signals → the 7 Cognitive Calendars. **Full design:** [`CALENDAR_INTELLIGENCE.md`](CALENDAR_INTELLIGENCE.md).
+
+**The governing sentence:** *the agency calendar is not the source of truth — it is a rendered view of live external reality, computed per market route.*
+
+You MUST:
+- **trace every dated signal to a registered `Signal Sources` (DB 14) row.** Free-text provenance is no longer sufficient. A signal **inherits** its source's `Authority Level` and may never out-rank its publisher;
+- respect the **source hierarchy** (`CALENDAR_INTELLIGENCE.md` §2): a **T4 source may discover but may not confirm**; where an aggregator and the organizer disagree, **the organizer wins** and the aggregator claim is marked `Superseded/Delayed`;
+- **register before trusting** — a source enters `State = active` only after a **live verification call proves it answers** (`AEIT_08` §5). Candidates stay `candidate`. Every source names a **`consumers`** destination DB (the §13.3 decision-purpose gate);
+- **compute commercial meaning per Market Route, not per event.** Set `Signal Role` (`Destination-side` / `Origin-side` / `Both`) on every signal, and relate it to the routes it actually affects. `Kenya → Dubai` and `Dubai → Kenya` are different rows with different clocks;
+- **derive activation dates only from the §5 Timing Rule table** in `CALENDAR_INTELLIGENCE.md`, and label them as **derived planning offsets** — never as facts obtained from the source (extends §12);
+- **record a change as a version, never an overwrite.** Write `Previous Signal Date` + `Change Reason`, append a dated line to the page body naming the confirming source and tier, set `Change Status`, and emit the matching event;
+- **name what a change invalidates.** When a signal's date moves, the change MUST name the downstream work it breaks — affected **Market Routes**, **Content Opportunities**, **campaign windows**, derived **activation dates**, and any **agency-calendar** entry computed from it. *This is the difference between a database row edit and operating-system behaviour;*
+- keep the **calendar-sync separation**: subscribed external calendars (Google Calendar ICS → Notion Calendar) are an **input and a cross-check**; only a signal that has been through the DB 7 lifecycle is actionable intelligence.
+
+You MUST NOT:
+- build a calendar per layer, per view, per sector, or per direction — the ~17 proposed layers are **`Signal Type` values and filtered views** on the one canonical DB (§12);
+- let a **T4 / unverified / stale** signal drive a route, a clock, a department signal, or an agency-calendar entry (extends §6, §12);
+- present a **derived timing offset** as an external fact, or a **compression read** as a forecast of occupancy or price;
+- **estimate** a route's booking lead time, air connectivity, visa friction, or currency context to fill a blank — 🟢 web-cited or empty (a blank is a research task, not a defect);
+- fabricate a destination's demand numbers or a property's live figures — the property layer stays ⚫ **template** until a client connects a real RMS/PMS;
+- add timing-rule rows or register sources for a sector whose cross-loop has not been authored — **depth-first on `Target` sectors** (§14.1);
+- create a source, route, or calendar **without a named downstream consumer** (§13.3).
+
+**Failure conditions:** unreachable/moved publisher → mark the source `Needs verification` and the signal unchanged, never guess a new date; a signal whose source row does not exist → REPORT the dependency, do not back-fill free text; a route field with no citation → leave blank; conflict with an Operations `Calendar` or a CRM entity → ESCALATE (§11). A change that flips a sub-sector's readiness or invalidates live client work ESCALATES to the owner.
+
+**Cross-refs:** `CALENDAR_INTELLIGENCE.md` (full design) · `SECTOR_NOTION_SCHEMA.md` DB 7 / 11 / **14** / **15** · `SECTOR_CALENDAR_REFRESH_SPEC.md` (cadence + escalation ladder) · `AEIT_08` §1/§3.2/§4/§5 · `13_Tech_Stack/TECHSTACK_OS.md` §3 (Google Calendar + Notion Calendar) · `08_Operations/OPERATIONS_OS.md` (the market-clock bridge — an **input** to the 7 Cognitive Calendars, never an 8th).
+
+---
+
 ## Appendix — Builder-role self-audit (Draft 10 QA gate)
 
 This contract was checked against the 7 builder roles:

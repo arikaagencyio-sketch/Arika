@@ -110,6 +110,87 @@ the loop.
 
 ---
 
+## 3.2 Event-calendar source pack — Hospitality, Kenya-inbound *(added 2026-08-19 · LSEI Pass 1)*
+
+The **live external calendars** the Sector Signals layer follows — the layer that was missing when
+`Authoritative Source` was free text on a Notion row. Design: `01_Sector/CALENDAR_INTELLIGENCE.md`;
+doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §15. These rows will be **mirrored into the Sector-owned
+`Signal Sources` DB (DB 14)** — which conforms to the §1 schema above rather than rivalling it.
+
+> 🔴 **Every row below is `state = candidate`.** Per §5, *a source enters `active` only after a live
+> verification call proves it answers.* The owner's seeding material named many publishers and made
+> specific claims about them (ICS availability, API capabilities, event counts, revised dates).
+> **None of it is transcribed here as fact, and no URLs are recorded yet** — a URL written from
+> memory is exactly the fabrication this registry exists to prevent. Pass 2 locates and verifies each
+> publisher's real calendar, records the actual `Feed Type` (and ICS/API endpoint **only if one
+> genuinely exists**), then promotes the row.
+
+**Scope discipline.** The pack is **Hospitality → Accommodation, Kenya-inbound only** (owner decision
+2026-08-19). Other destinations, outbound routes, and other sectors get source rows when their
+cross-loop is authored — never pre-populated (`SECTOR_ACTIVATION_CONTRACT.md` §14.1).
+
+**Tier 1 — Destination authority (Kenya).** The destination-side spine.
+
+| source_id | Publisher (the body that owns it) | category | consumers | state |
+|---|---|---|---|---|
+| `src_ke_tourism_events` | Kenya's national tourism authority — official events calendar | Tourism board/DMO | Sector Signals · Sector State | **candidate** |
+| `src_ke_public_holidays` | Kenya government — gazetted public holidays | Government registry | Sector Signals (`Holiday/Cultural`) · Market Routes | **candidate** |
+| `src_ke_school_terms` | Kenya Ministry of Education — school term dates | Government registry | Sector Signals (`School-Holiday`) · Market Routes | **candidate** |
+| `src_ke_venues` | Nairobi/Mombasa/Diani conference + venue calendars (KICC and peers) | Venue | Sector Signals (`Sales/MICE`) | **candidate** |
+
+**Tier 1 — Origin-market authority (the source markets for Kenya inbound).** The **origin-side**
+clock — the half the previous model had no way to express. German school holidays are staggered by
+*Land* and are the highest-value inbound-planning driver on this route set.
+
+| source_id | Publisher | category | consumers | state |
+|---|---|---|---|---|
+| `src_de_holidays_school` | Germany — federal public holidays + **state-level** school-holiday calendars | Government registry | Sector Signals · Market Routes (`Germany → Kenya`) | **candidate** |
+| `src_uk_holidays_school` | UK — bank holidays + school term dates | Government registry | Sector Signals · Market Routes (`UK → Kenya`) | **candidate** |
+| `src_us_holidays` | US — federal holidays | Government registry | Sector Signals · Market Routes (`US → Kenya`) | **candidate** |
+| `src_africa_regional_holidays` | Regional-Africa public-holiday sources (per country, as routes are added) | Government registry | Sector Signals · Market Routes (`Regional Africa → Kenya`) | **candidate** |
+
+**Tier 1/2 — Travel trade & MICE.** Two distinct uses, one registry: Arika's **own** attendance
+calendar, and the client's **MICE-demand** calendar. `Signal Role` separates them.
+
+| source_id | Publisher | category | consumers | state |
+|---|---|---|---|---|
+| `src_wtm_africa` · `src_indaba` · `src_aviadev` | African travel-trade show operators | Trade body | Sector Signals (`Travel-Trade`) | **candidate** |
+| `src_itb` · `src_wtm_london` | Global travel-trade show operators | Trade body | Sector Signals (`Travel-Trade`) | **candidate** |
+| `src_hsmai` · `src_icca` · `src_ahla` · `src_cvent` | Hospitality-industry + business-events associations | Trade body | Sector Signals (`Sales/MICE`) · Offer (02) | **candidate** |
+
+**Tier 1 — Federations (the literal F1 model).** The reference case for this whole design: an
+official body publishing a structured, **amendable** calendar that an ecosystem synchronizes off.
+
+| source_id | Publisher | category | consumers | state |
+|---|---|---|---|---|
+| `src_fia_calendars` | FIA — championship calendars (the pattern-setter; amendments are published) | Federation | Sector Signals (`Sports`) | **candidate** |
+| `src_ke_motorsport` · `src_athletics` | The bodies running the events that actually compress the Kenyan/regional market (rally, athletics, major marathons) | Federation | Sector Signals (`Sports` · `Event/Compression`) | **candidate** |
+
+⚠️ **Verify per event, never per series.** A championship calendar is the *publisher's* current
+statement, not a guarantee; the FIA's own calendars carry in-season amendments. That is precisely why
+`Previous Signal Date` + `Change Reason` exist (`SECTOR_CALENDAR_REFRESH_SPEC.md` §2b).
+
+**Tier 3 — Aggregators / event APIs.** Breadth and machine-readability. Same posture as the §3.1
+Tier-2 people-data set: **registered, not connected.**
+
+| source_id | Publisher | category | consumers | state |
+|---|---|---|---|---|
+| `src_event_api_predicthq` · `src_event_api_ticketmaster` | Event-data / ticketing discovery APIs | Event API | Sector Signals (discovery only) | **candidate — GATED (cost + key + capability unverified)** |
+| `src_tradeshow_directories` | Trade-show / event directories | Aggregator | Sector Signals (discovery only) | **candidate — GATED** |
+
+🔒 **Discovery only.** A T3 aggregator may surface that an event exists; the dated record must then
+be sourced to the T1/T2 publisher before it is `Confirmed`, and an aggregator **never outranks the
+organizer** (`CALENDAR_INTELLIGENCE.md` §2). Their claimed capabilities — ICS/API coverage, event
+counts, demand-surge scoring — are **unverified** and must be proven with a live call before any
+spend is approved (`techstack-cost-guardian` + an Approval-Matrix row).
+
+**Standing correction this pack exists to fix.** The Hospitality signals currently in the live DB are
+sourced to hotel-technology **marketing blogs** at `T3` — a vendor's seasonality claim, not a
+destination authority's — and `Source Tier` is null on 20 of the 28 rows. Pass 2 re-sources them to
+T1 and supersedes any claim a T1 publisher contradicts. **Nothing is deleted.**
+
+---
+
 ## 4. The Intelligence Calendar (refresh / decay / revalidation)
 
 Information is dynamic; **nothing is assumed permanently correct.** This is an operational rhythm
@@ -160,7 +241,18 @@ Automation adopted after the 11-day outage (`AUTOMATION_OS.md:152`).
   source names its `consumers` DB (decision-purpose gate). Population is still narrow (Sector's stack);
   other departments' sources remain deferred. — Claude Code (Opus 4.8)
 
+- **2026-08-19 — Event-calendar source pack registered as candidates (§3.2), driven by Sector's LSEI
+  Pass 1.** The first sources registered for *following an external calendar* rather than for
+  research or enrichment. Covers Kenya destination authority, the origin-market holiday/school
+  calendars that drive Kenya-inbound demand, travel-trade + MICE bodies, sports federations (the
+  FIA-calendar pattern this design is modelled on), and gated event APIs. **Every row is
+  `candidate`; no URLs recorded and no capability claimed** — the §5 registration gate is the whole
+  point, and the seeding material's claims are unverified. Also confirms this registry's §1 schema
+  is the parent of the Sector-owned `Signal Sources` DB (DB 14), not a rival to it. — Claude Code (Opus 5)
+
 ## 8. Changelog
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
 - **v0.2 (2026-08-19):** Added §3.1 — the Sector Commercial Activation MCP stack (Tier-1 market/web
   now; Tier-2 people-data gated). First non-illustrative rows. — Claude Code (Opus 4.8)
+- **v0.3 (2026-08-19):** Added §3.2 — the Hospitality/Kenya-inbound event-calendar source pack, all
+  `candidate`. Extends the registry from *how we research* to *which calendars we follow*. — Claude Code (Opus 5)

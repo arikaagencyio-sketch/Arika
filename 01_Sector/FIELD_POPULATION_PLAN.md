@@ -197,6 +197,8 @@ Everything else is now driven by **① the data-derived focus** (ADDENDUM 4 refr
 - **Data posture = recommend + register now; paid people-data MCPs deferred** to post-pilot, owner-authorized, gated.
 - CRM = **ClickUp (live)** — Sector bridges onto it, no new store. "real-time" = **freshness cadence**, not a live stream. No unattended web.
 
+- **LSEI (2026-08-19)** — calendar layer becomes source-backed + directional. **2 net-new DBs** (14 Signal Sources · 15 Market Routes); **Google Calendar → Notion Calendar** as the sync/view path; **market scope = Kenya-inbound**; **decide-then-apply**. Spec: [`CALENDAR_INTELLIGENCE.md`](CALENDAR_INTELLIGENCE.md); doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §15.
+
 **⚑ Decisions OPEN (owner)**
 | # | Decision | Blocks / affects |
 |---|---|---|
@@ -207,8 +209,13 @@ Everything else is now driven by **① the data-derived focus** (ADDENDUM 4 refr
 | 5 | The **go-live scraping gate** (API key + cost governance + Approval-Matrix row + Legal posture) | all 🔴 contact/company/ICP/Signal fields |
 | 6 | **Zoho Books lapsed-trial** decision (downgrade / pay / re-open) — *money-facing standing flag* | Invoice object (`CRM_SCHEMA.md`) |
 | 7 | Any **campaign idea + context** to seed the DB 4 fast-path (§4) | Content chain shortcut for a `Target` sector |
+| 8 | **Google Calendar account** to hold the external `.ics` subscriptions (which address, agency-owned) | the whole live-calendar follow layer (`TECHSTACK_OS.md` §3) |
+| 9 | **Paid event-API cost gate** (event-data / ticketing discovery APIs, `AEIT_08` §3.2 T3) | breadth of event discovery — T1 sources work without it |
+| 10 | Owner of the undocumented **`Platform Overlays`** relation on DB 7 (`collection://bb21b3fc-…`) | must be identified before DB 7 is extended (`SECTOR_NOTION_SCHEMA.md` DB 7 flag) |
 
 **🟢 GAPS — empty-but-relevant, fillable now (per `Target` sector, web-cited):** Sector **Linguistics** (EMPTY — blocks Content) · **Audience Roles** (EMPTY — blocks Content) · Sector **Intelligence** for the 88 established industries (none) · Decision-Maker **titles/triggers** for established · **Sector State + Forecast** (empty) · per-sector **Sector Signals** depth (only 3 rows full) · Sheet 07 relationship map (SaaS, pending).
+
+**🟢 GAPS — LSEI (specified 2026-08-19, built in Pass 2):** **DB 14 Signal Sources** (not built — the candidate pack is `AEIT_08` §3.2, every row unverified) · **DB 15 Market Routes** (not built — seed set `Germany/UK/US/Regional-Africa → Kenya`) · DB 7 **extensions** (`Signal Source`/`Market Routes`/`Signal Role`/`Previous Signal Date`/`Change Reason` + 5 `Signal Type` values) · **Geography** Kenya-inbound tree (holds only Global/EU/USA today — no Africa, no city level) · **`Source Tier` null on 20 of 28** signal rows (back-fill) · the **4 Hospitality rows sourced to vendor blogs** (re-source to T1, supersede on contradiction — 🔴 never delete) · DB 7 **retirement list** (legacy `Calendar Type`; title `Event` → `Signal`; `Content Relevance`; `Community / Entry Strategy`).
 
 **🔴 / ⚫ GAPS — gated or template (never guessed):** real decision-maker **contacts** + Company data (scraping) · **ICP + Prospect Signal scores** (need real companies) · live-booking/property numbers (⚫ template) · CRM `Related Clients` / `CRM Opportunities` (no real deals yet).
 
@@ -227,3 +234,4 @@ Everything else is now driven by **① the data-derived focus** (ADDENDUM 4 refr
 ## 8. Changelog
 - **v0.1 (2026-08-19):** Created. Full field-by-field disposition of the 13 Sector + 8 Content databases, the critical-path unlock sequence, the campaign fast-path, and the fillable-today list. Companion to `SECTOR_NOTION_SCHEMA.md` + `CONTENT_INTELLIGENCE_SCHEMA.md`. — Claude Code (Opus 4.8)
 - **v0.2 (2026-08-19, ADDENDUM 4):** Reframed §1 step ① — focus is **data-derived** (Sector Priority Score names the P1 `Target` set), not owner-blocked; pilot = Hospitality→Accommodation. Added **§6.5 Decisions & Gaps ledger** (standing view — locked / open / 🟢 / 🔴-⚫). Updated §5 close to the depth-first-on-P1 discipline. — Claude Code (Opus 4.8)
+- **v0.3 (2026-08-19, LSEI Pass 1):** Recorded the LSEI decisions in §6.5 (2 net-new DBs · Google/Notion Calendar sync · Kenya-inbound scope · decide-then-apply), added **3 open owner decisions** (Google Calendar account · paid event-API cost gate · the unowned `Platform Overlays` relation), and added the **LSEI 🟢 gap block** — DB 14/15 unbuilt, Geography missing Africa/Kenya, `Source Tier` null on 20 of 28 signal rows, and the 4 vendor-blog-sourced Hospitality rows awaiting re-sourcing to T1. — Claude Code (Opus 5)

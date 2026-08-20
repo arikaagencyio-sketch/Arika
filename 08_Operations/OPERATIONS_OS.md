@@ -123,6 +123,7 @@ It answers the Vision's Layer 7 question — *"Can we deliver without breaking t
 - **2026-07-14 — Confirmed the dual scope** (agency operations AND client operations) as co-equal; neither may starve the other.
 - **2026-07-14 — IRIS classified as an alias for the unified system, not a separate department** — it appears in one draft (itself generic AI output) and is conceptually identical to the Vision's Revenue Intelligence and Execution System.
 - **2026-07-14 — Capacity model confirmed as a genuine gap, not filled.** `operations-capacity-planner` must flag it on every run rather than invent utilization/headcount figures.
+- **2026-08-19 — Sector's market clock accepted as an *input* to the 7 Cognitive Calendars, explicitly not an 8th calendar** (§12a). Adopts Sector (01)'s orphaned `COMPRESSION_EVENT` / `DEMAND_SHIFT` emissions into `operations-calendar-orchestrator` (Opportunity + Strategic chiefly), preserving the seven-calendar rule, the Sector-Signals-vs-Ops-Calendar naming separation, and the T4/stale gate. **Specified only — wired in LSEI Pass 2** once the signals are source- and route-backed. See `01_Sector/CALENDAR_INTELLIGENCE.md`.
 
 ## 9. Risk / Incident Log
 
@@ -171,9 +172,35 @@ Core rules extracted:
 | `SCOPE_DEFINED` (from Client Success 07) | event | `operations-delivery-scheduler` |
 | `DELIVERY_SCHEDULED` · `QA_GATE_REQUESTED` | event | `operations-delivery-qa` |
 | `PROJECT_IN_DELIVERY` · `QA_FAILED` | event | `operations-delivery-risk` |
+| `COMPRESSION_EVENT` · `DEMAND_SHIFT` (from Sector 01) | event | `operations-calendar-orchestrator` — **the market clock** *(specified 2026-08-19, wired in LSEI Pass 2)* |
 | manual | CLI | any of the eight |
 
 **Emitted:** `STATE_REPORTED` · `ALIGNMENT_BROKEN` · `DAILY_PLAN_SET` · `CALENDARS_SYNCED` · `CALENDAR_CONFLICT_FLAGGED` · `OPPORTUNITY_FILTERED` · `CAPACITY_ASSESSED` · `OVERSELL_RISK_FLAGGED` · `DELIVERY_SCHEDULED` · `PROJECT_IN_DELIVERY` · `QA_PASSED` / `QA_FAILED` · **`DELIVERY_COMPLETE`** (→ Finance 09) · `DELIVERY_RISK_FLAGGED` · `DELIVERY_BLOCKED`.
+
+### 12a. The market clock — Sector Signals as an input to the 7 Calendars *(specified 2026-08-19 · LSEI)*
+
+Sector (01)'s signal layer has been emitting `COMPRESSION_EVENT` and `DEMAND_SHIFT` with **no subscriber** since 2026-08-15 (`SECTOR_ACTIVATION_CONTRACT.md` §8 records them as *emitted-but-not-yet-subscribed*). Operations is their correct home: a market compression — a destination about to be squeezed by several concurrent events — is exactly the kind of external timing fact that should move the **Opportunity** and **Strategic** calendars.
+
+**The boundary, stated so it is not crossed later:**
+
+> The market clock is an **input to the existing seven calendars. It is never an eighth.**
+
+This is not a formality. Three existing rules converge on it:
+- `operations-calendar-orchestrator`'s own instruction — *"don't invent a calendar the owner didn't name; there are seven."*
+- `SECTOR_NOTION_SCHEMA.md` DB 7's warning that Sector Signals is **named distinctly** from Operations' canonical `Calendar` — it is the *market/temporal-intelligence* dimension, not an agency operating calendar.
+- The anti-duplication law (`SECTOR_ACTIVATION_CONTRACT.md` §13.4) — Sector references Ops' calendars, Ops references Sector's signals; neither copies the other.
+
+**Where each lands:**
+
+| Sector event | Enters | As |
+|---|---|---|
+| `COMPRESSION_EVENT` | **Opportunity** (chiefly), **Operational/Capacity** | A demand window worth pursuing — and a delivery-capacity question, since a window we cannot staff is an oversell risk, not an opportunity |
+| `DEMAND_SHIFT` | **Strategic**, **Pipeline Probability** | A change in the market's buying rhythm — affects sequencing and close-timing assumptions |
+| `REGULATORY_CHANGE` | **Strategic** | Already routed to Sector readiness; reaches Ops through sequencing |
+
+**Gate (inherited, not new):** a **T4 / unverified / stale** signal MUST NOT reach a calendar (`SECTOR_ACTIVATION_CONTRACT.md` §15). And the orchestrator's existing honesty rule still binds — it reasons from state given and memory streams; **no dashboard or BI is connected**, and a market signal does not change that.
+
+**Status: specified, not wired.** The subscription is added to `.claude/agents/operations-calendar-orchestrator.md` in **LSEI Pass 2**, once Sector's `Signal Sources` (DB 14) and `Market Routes` (DB 15) exist — so the event carries a sourced, route-scoped signal rather than a bare date. Wiring it earlier would create a live subscriber to an unsourced emitter, which is the failure this whole pass is correcting.
 
 **Governance:** every agent is advisory (Class 1–2). **No automation acts** — invoicing from `DELIVERY_COMPLETE` is **Class 3** and needs a row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` plus human sign-off. Operations enforces that gate; it does not bypass it — and urgency is explicitly not an exception.
 

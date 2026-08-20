@@ -37,7 +37,36 @@ TRIGGER → SELECT entries due for re-verification → for each:
 → REPORT changes → route to Sector Intelligence + Readiness
 ```
 
-**Selection policy (real-time without waste):** near-term entries (next 90 days) re-verified weekly; 90–365 days monthly; regulatory deadlines monthly (they move rarely but matter enormously); `Needs verification` entries every run until resolved.
+### 2a. Selection policy — the proximity escalation ladder *(upgraded 2026-08-19, LSEI)*
+
+The original two-band policy (near-term weekly / mid-term monthly) under-watches the window where a date change does the most damage: the last 30 days, when campaigns are already live and money is already committed. Replaced by a **proximity ladder** — monitoring intensity rises as the signal approaches, so effort is spent where a change is both most likely to appear and most expensive to miss.
+
+| Time to `Signal Date` | Monitoring level | Re-verify |
+|---|---|---|
+| > 180 days | Normal | Monthly |
+| 180 – 90 days | Elevated | Fortnightly |
+| 90 – 30 days | High | Weekly |
+| < 30 days | **Critical** | Every run |
+| < 7 days | **Critical** | Every run — *and a change escalates immediately* |
+
+**Overrides (these win over the ladder):**
+- `Needs verification` → every run, until resolved.
+- `Superseded/Delayed` → every run, until a new date is confirmed or the signal is closed.
+- **Regulatory** and **Economic** → at least monthly regardless of distance; they move rarely, and when they move they move budgets (FSMA 204, CSRD Wave 2).
+- **`Source Tier` drives a floor, not just the ladder:** `T3`/`T4`-sourced signals are re-verified at **one level higher** than their distance implies, and cannot reach `Confirmed` without a T1/T2 source (`CALENDAR_INTELLIGENCE.md` §2). *This is the rule that would have caught the Hospitality seasonality rows sourced to vendor blogs.*
+- **`Annual-recurring`** → verified once per cycle at the T-180 boundary, when next year's edition is normally published. Never auto-rolled forward — a recurring event is a **prediction** until its next edition is published.
+
+**Source-side cadence (DB 14, new).** The ladder above governs *signals*; each **`Signal Sources`** row separately carries its own `Cadence` + `Next Verification`, because a publisher can go stale independently of any single event. `Last Synced ≠ Last Verified` — a feed can keep delivering while the body behind it has moved, renamed, or stopped maintaining the calendar.
+
+### 2b. Change-history write rule *(added 2026-08-19, LSEI)*
+
+A moved date **must not silently overwrite** the old one. On any material change (moved · cancelled · postponed · venue changed · new edition):
+
+1. `Previous Signal Date` ← the prior value; `Change Reason` ← what changed + the confirming source.
+2. Append a dated line to the signal's page body: *what changed · when · which source · what tier.*
+3. Set `Change Status` + `Refresh Status`.
+4. **Name what it invalidates** — affected Market Routes, Content Opportunities, campaign windows, derived activation dates, agency-calendar entries (Contract §15). This is the step that makes the calendar an operating system rather than a table.
+5. Emit the matching event (§3).
 
 ## 3. Propagation — why "the update determines the whole intelligence"
 

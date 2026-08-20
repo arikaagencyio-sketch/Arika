@@ -283,6 +283,31 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Status | Select | GOV | monitoring · active · closed |
 | Sector Intelligence | Relation → Sector Intelligence (DB 3) | REL | the interpreted **finding** (calendar→intelligence loop) |
 
+#### DB 7 — LSEI extensions *(specified 2026-08-19 — NOT YET APPLIED)*
+Additions that make the signal layer **sourced, directional, and change-aware**. Design: `CALENDAR_INTELLIGENCE.md`.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| **Signal Source** | Relation → Signal Sources (DB 14) | REL/GOV | **replaces free-text provenance.** `Authoritative Source` + `Source URL` stay as the human-readable label; the relation is what makes a source re-followable and supersedable. `Source Tier` is inherited from the source row — a signal may not out-rank its publisher. |
+| **Market Routes** | Relation → Market Routes (DB 15) | REL/EXE | one signal ↦ many routes. **This is where commercial meaning is computed** (§6). |
+| **Signal Role** | Select | EXE | `Destination-side` (compresses inventory at the destination) · `Origin-side` (releases demand from the origin) · `Both` (e.g. Ramadan — opposite meanings per side) |
+| **Previous Signal Date** | Date | GOV | the value before the last material change — **a moved date must not silently overwrite** (§7) |
+| **Change Reason** | Text | GOV | what changed, and which source confirmed it. The narrative log lives in the page body. |
+
+**`Signal Type` — +5 values** (16 → 21), absorbing the layers the seeding proposal wanted as separate calendars: `Sports` · `Mega-Event` · `School-Holiday` · `Trade/Fashion` · `Cruise/Port`. Colour assignments: `CALENDAR_INTELLIGENCE.md` §8.
+
+**`Sector` select — needs reconciliation.** It currently offers only the **20 B2B-SaaS sub-sector names + Cross-Sector (Regulatory)** — a pre-multi-vertical artifact. There is **no `Hospitality` option**; the pilot's rows sit under `Travel & Hospitality`, which is a *SaaS* sub-sector, not the Hospitality vertical. Fix in Pass 2 by **preferring the `Sub-Sector` relation** (which already resolves to the 25-vertical universe) and either extending or deprecating the flat select. Do not add vertical names one at a time.
+
+#### DB 7 — retirement list *(flagged 2026-08-19 — do NOT silently drop)*
+| Item | Why | Action |
+|---|---|---|
+| `Calendar Type` (legacy 7-value select) | Fully superseded by `Signal Type`; back-fill completed 2026-08-15 and it has been a "legacy shadow column" since | Retire in Pass 2 after confirming no view filters on it |
+| Title property named **`Event`** | Pre-SCIC naming. The DB holds signals, not only events — a seasonality window and a regulatory deadline are not "events" | Rename `Event` → `Signal` |
+| `Content Relevance` | Likely covered by the 8 impact fields + `Departments Affected` | Verify no consumer, then retire |
+| `Community / Entry Strategy` | Sheet-10 carry-over; overlaps `Recommended Action` | Verify no consumer, then retire |
+
+> ⚠️ **Undocumented relation found (2026-08-19).** DB 7 carries a live **`Platform Overlays`** relation to `collection://bb21b3fc-b14f-4237-b5cd-9affd08b98fc`, which is **not specified anywhere in this schema**. Identify its owning department before extending DB 7 — per §0 law 2, an unowned cross-department relation is exactly how parallel stores start.
+
 **Migration mapping (existing 24 rows → signals, no data loss):** `Event → Signal` (title) · `Calendar Type → Signal Type` (Demand/Event/Regulatory carry over; the rest map to the nearest of the 16) · `Date/Window → Signal Date` · `Preparation Deadline → Marketing/Sales Activation Date` · `Sales/Marketing/Content Relevance → Sales/Marketing Impact` (Content Relevance retained as informational) · `Community/Entry Strategy → Recommended Action` context · `Authoritative Source / Source URL / Last Verified / Refresh Status / Sector / Sub-Sector` all carry over unchanged. New fields default empty (`Source Tier` back-filled from the existing citations).
 
 ### DB 8 — Agency Opportunity Map → **Industry Offer Matrix** *(extended ADDENDUM 3)*
@@ -382,6 +407,63 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Confidence | Select | GOV | Low/Med/High |
 | As-of / Review Date | Date ×2 | GOV | |
 
+### DB 14 — Signal Sources *(net-new, specified 2026-08-19 · LSEI — NOT YET BUILT)*
+**Primary entity:** one **external calendar/feed publisher** — the body Arika follows to keep a signal true. **AEIT_06:** conforms to the canonical **`Source`** entity; this is the **Sector-owned instance** of the `AEIT_08` §1 Source Registry schema, not a rival registry — the field set below deliberately mirrors it. **Backing:** `CALENDAR_INTELLIGENCE.md` §2/§3/§12 + the `AEIT_08` §3.2 candidate pack. **Why it exists:** before this, `Authoritative Source` was free text on DB 7 — nothing recorded feed type, cadence, or state, so a source could be re-Googled but never re-*followed*.
+
+> 🔒 **Registration gate (`AEIT_08` §5):** a source enters `State = active` **only after a live verification call proves it answers.** Everything in the candidate pack starts at `candidate`. No source is registered on faith.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| Source Name | Title | ID | e.g. "Kenya Tourism Board — events calendar" |
+| Source ID | Text (unique) | ID | slug, e.g. `src_ktb_events` — the join key into `AEIT_08` |
+| Owner Body | Text | ID | **who actually publishes it** — the tier test (§2) is about the publisher, not the page |
+| **Authority Level** | Select | GOV | `T1 Primary` · `T2 Institutional` · `T3 Commercial-intel` · `T4 Secondary` — same enum as DB 7 `Source Tier`, so a signal inherits its source's tier |
+| Category | Select | RET | Tourism board/DMO · Government registry · Education ministry · Federation · Event organizer · Venue · Trade body · Event API · Aggregator · News/social |
+| Calendar URL | URL | GOV | the human page |
+| **Feed Type** | Select | EXE | `ICS` · `API` · `RSS` · `JSON` · `HTML` · `sitemap` · `scrape` · `manual` — **determines snapshot vs. subscription** (§3) |
+| **Feed URL (ICS/API)** | URL | EXE | the machine endpoint, **only if one genuinely exists** — blank is the honest default |
+| Geography | Relation → Geography (DB 11) | REL | what it covers |
+| **Signal Role** | Select | EXE | `Destination-side` · `Origin-side` · `Both` — a German school-holiday source and a Kenyan venue calendar sit on opposite sides of a route |
+| Sub-Sector | Relation → Sub-Sectors (DB 2) | REL | which industries consume it |
+| Cadence | Select | GOV | real-time-critical · daily · weekly · monthly · quarterly · annual · event-driven |
+| Last Synced / Last Verified | Date ×2 | GOV | **synced ≠ verified** — a feed can deliver while its publisher has moved |
+| Next Verification | Date | GOV | cadence gate (escalation ladder, `SECTOR_CALENDAR_REFRESH_SPEC.md` §2) |
+| **State** | Select | GOV | `candidate` · `active` · `superseded` · `archived` — supersession, never deletion (`AEIT_08` §5) |
+| Supersedes / Superseded By | Relation → Signal Sources (self) | REL | keeps the chain auditable |
+| Legal Posture | Select + Text | GOV | ToS/robots/PII note → Legal (10) flag. **Any `scrape` source requires this before `active`** |
+| Auth / Cost | Select ×2 | GOV | none/key/oauth/account · free/metered/subscription → `techstack-cost-guardian` |
+| Fallback Source | Relation → Signal Sources (self) | REL | what to use if this fails |
+| **Consumers** | Multi-select | REL | destination DB(s) — **the decision-purpose gate (Contract §13.3): no source without a downstream home** |
+| Signals | Relation → Sector Signals (DB 7) | REL | what it has produced |
+| Confidence / Notes | Select + Text | GOV | |
+
+### DB 15 — Market Routes *(net-new, specified 2026-08-19 · LSEI — NOT YET BUILT)*
+**Primary entity:** one **directed origin → destination market pair.** **AEIT_06:** no existing canonical entity covers this — flag as a **`[CANDIDATE]`** alongside Geography (do not silently canonize). **Backing:** `CALENDAR_INTELLIGENCE.md` §6. **Why it exists:** the commercial meaning of a physical event is a property of the **route**, not the event. `Kenya → Dubai` and `Dubai → Kenya` are different rows, different audiences, different clocks — nothing in the repo could express that.
+
+> ⚠️ **Direction is a property of the client engagement, not of the calendar.** The signal store holds both sides (`Signal Role`); the route resolves which side matters for a given client. **Current scope: Kenya-inbound** (owner decision 2026-08-19) — outbound/Gulf routes are built when a real engagement needs them, never pre-populated as a world atlas.
+
+| Field | Type | Purpose | Notes |
+|---|---|---|---|
+| Route | Title | ID | `"Germany → Kenya"` — direction is in the name |
+| Route ID | Text (unique) | ID | `route_de_ke` |
+| Origin Geography | Relation → Geography (DB 11) | REL | required |
+| Destination Geography | Relation → Geography (DB 11) | REL | required |
+| **Direction** | Select | RET | `Inbound` (into the client's destination) · `Outbound` · `Domestic` — relative to the destination |
+| Primary / Secondary Audience | Text ×2 | EXE | leisure · corporate · group · VFR · MICE · safari · beach |
+| **Booking Lead Time** | Text | EXE | 🟢 web-cited per route or **blank** — never estimated (§6.3) |
+| Seasonality Overlap | Relation → Sector Signals (DB 7) | REL | the destination seasons this route hits |
+| Holiday / School-Calendar Overlap | Relation → Sector Signals (DB 7) | REL | the **origin-side** clock — the reason this DB earns its place |
+| Air Connectivity | Text | EXE | routes/carriers/capacity — 🟢 cited or blank |
+| Visa Friction | Select + Text | EXE | Low/Medium/High + the actual requirement → Legal (10) if it becomes a client claim |
+| Currency / Economic Context | Text | EXE | FX direction, purchasing power — cited or blank |
+| Preferred Channels / Messaging | Text ×2 | EXE | routes to Marketing (03) + Content (04) |
+| Campaign Window | Date (range) | EXE | derived from the §5 Timing Rules — **a planning offset, not an external fact** |
+| Travel-Trade Sources | Relation → Signal Sources (DB 14) | REL | which registered sources cover this pair |
+| Sub-Sector | Relation → Sub-Sectors (DB 2) | REL | e.g. Accommodation (Hotels) |
+| Confidence / Last Verified | Select + Date | GOV | |
+
+**Seed set (Pass 2, Kenya-inbound):** `Germany → Kenya` · `UK → Kenya` · `US → Kenya` · `Regional Africa → Kenya`.
+
 ### Worked example (depth-proof) — Hospitality *(illustrative only; not a live sector)*
 Hospitality is the reference that sets the depth bar; the schema above must hold **all** of it. Coverage check against the owner's hospitality spec:
 - **The 6-calendar commercial fusion** (Demand · Compression/Event · Sales/MICE · Travel-Trade · Marketing-Demand · Seasonality/Destination) → `Signal Type` values (one DB, filtered views — not 6 DBs).
@@ -428,10 +510,15 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 | ICP Classification | `e557b7a9-9af7-491d-97ad-edc55aa5c455` | `7eda3779949747fca7d62053026615ef` |
 | Prospect Signal Scores | `19d44ea0-09cf-4b08-9e28-4277601c54f4` | `ca06347c9ce141b19c706ab52b0f8709` |
 | Sector Linguistics | `172efe6d-08b5-4c85-b24a-fa7065b3e721` | `224b50cf492c485a8b369be012982aeb` |
-| Sector Calendar (Market Events) | `c14fedb3-6048-4bc5-8a40-6558cc985f57` | `051988c2851f423ead134d5ab83360be` |
-| Agency Opportunity Map | `efd6319c-081e-4a6b-b930-a362ef2bc1b2` | `e6c26dd192fd4dfc93c1f5d3528f4038` |
+| Sector Signals (Commercial Intelligence Calendar) *(renamed 2026-08-15 from "Sector Calendar (Market Events)")* | `c14fedb3-6048-4bc5-8a40-6558cc985f57` | `051988c2851f423ead134d5ab83360be` |
+| Agency Opportunity Map → Industry Offer Matrix | `efd6319c-081e-4a6b-b930-a362ef2bc1b2` | `e6c26dd192fd4dfc93c1f5d3528f4038` |
 | Audience Roles | `e0513cc9-682f-4dd4-965c-e0292abe86e4` | `2ec588347eca435785ad366ea164aab3` |
 | Decision-Maker Registry | `5566c27c-d5db-4a22-9587-e57d0ce5fbbe` | `5e58fae996b143528c249cef56844c64` |
+| Geography *(added 2026-08-15)* | `e095c661-86cd-4f45-9149-eca1c7195e71` | — |
+| Sector State *(added 2026-08-15)* | `4a9b8ca5-f042-4938-85af-e0706ee9e1ff` | — |
+| Sector Forecast *(added 2026-08-15)* | `920781ae-fabd-4c9f-8045-42b40abf3cda` | — |
+| **Signal Sources (DB 14)** | 🔲 **not built** — specified 2026-08-19 | — |
+| **Market Routes (DB 15)** | 🔲 **not built** — specified 2026-08-19 | — |
 
 **Data load status (2026-08-11):**
 - ✅ **Sub-Sectors** — all **52** (22 SaaS categories × products) from xlsx Sheet 02, each with GTM motion, revenue model, value prop, ecosystem deps, readiness (Sheet 11): **23 Ready Now · 21 In Progress · 8 Asleep**; each linked to the B2B SaaS sector.
@@ -452,6 +539,8 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - 🟢 **Sector OS Kernel — K1 (Ontology + Registry) DONE (2026-08-16):** universe is now **multi-vertical** (§0.1) — B2B SaaS is one branch. **DB 1 Sectors Master** extended live with `Lifecycle State` (11-state machine), `Sector Priority Score` (number), `Priority Band` (P1–P4), `Priority Scoring Rationale`; **DB 2 Sub-Sectors** extended live with `Industry` / `Business Model` / `Company Archetype`. The anti-duplication reconciliation map is §0.1. (Fetch confirmed Sub-Sectors is **already relation-wired** to Marketing `Campaigns`, Content `Content Briefs`/`Content Opportunities`, Offer `Offers`, Branding `Narrative Positions`, plus Decision-Makers/ICP/Signal-Scores — the spine is cross-department already; extend, don't rebuild.) Remaining kernel: **K2** Intelligence-Object Contract + Control-Tower spec + construction mandate (`SECTOR_ACTIVATION_CONTRACT.md`); **K3** scoring/state agent + Sheets 04–07 load; **K4** engine↔agent↔event doc; **K5** AEIT ratification. Plan: `plans/from-the-chat-from-dreamy-moth.md` ADDENDUM 2.
 - 🟢 **Industry Revenue Engine — P1 (schema) DONE (2026-08-19):** the content model for the multi-vertical universe (§0.2). **DB 1 Sectors Master** extended live with `Atlas Layer` · `Portfolio Mode` · `Priority Tier` · `Industry Type` (A/B/C/D). **DB 2 Sub-Sectors** extended with `Industry Type` + the Tool-Stack field-group (`Tool-Stack Chaos Risk` · `Typical Tool Stack` · `Fragmentation Type`). **DB 8 Agency Opportunity Map → Industry Offer Matrix** (the routing layer) extended live with `Industry Type`/`Portfolio Mode`/`Priority Tier`, the `Entry`/`Expansion`/`Transformation Capability` multi-selects (the 12 families), `Ladder Offer Refs / OEOS Gap`, `Outreach Angle`, `Scraping Fields`, `Cross-sell / Scale Pathway`, `KPIs`, + relations `Target Decision-Maker`→DB 10, `Pain Points`→DB 3, `Buying Triggers / Demand Signals`→DB 7. **DB 3 Sector Intelligence** `Category` gains `Tool-Stack Chaos`. The Entry→Expansion→Transformation **ladder routes onto Offer (02)'s ascension model** (capability-routing + `GAP — needs OEOS` where an industry-specific offer doesn't exist). Remaining: **P2** verticals + Tier-1 industries · **P3** full established economy (~88) · **P4** Growth thinner + Frontier watchlist · **P5** score/rank + OEOS-gap list. Plan: ADDENDUM 3.
 - 🟢 **Industry Revenue Engine — P2 → P5 DONE (2026-08-19):** **P2/P3** loaded the **21 established-economy verticals** + **88 division-level industries** as Sub-Sectors (each with Industry Type + Tool-Stack Chaos read) + **87 Industry Offer Matrix rows** (Entry→Expansion→Transformation capability ladder + `Ladder Offer Refs / OEOS Gap`). **P4** added 3 grouping verticals (Growth / Transformation Economy · Frontier Industries · Deep-Future Watchlist) + **48 Growth overlay rows** (thin, transcribed ladder coding, SaaS-branch overlaps cross-referenced not duplicated) + **14 watchlist rows** — Frontier as the source's **10 named clusters** + Deep-Future as **4 thematic rows**, every member enumerated in-body, `Tool-Stack Chaos Risk = Strategic/Future` (clustered per the source's "maintain Watchlists" doctrine + lean preference; explodable to per-industry rows later). **P5** ran the `sector-readiness-analyst` scoring framework (8 dims → 0–100, P1–P4; advisory, Confidence Medium) and wrote `Sector Priority Score`/`Priority Band`/`Priority Scoring Rationale` to the **10 decision-critical verticals** (B2B SaaS + 9 T1). **September focus (P1): B2B SaaS 88 · Hospitality 78 · Professional Services 76.** OEOS entry-offer gap list + flagged Stack Rationalization offer → `02_Offer/OFFER_OS.md` §3; 12-family alias → `AEIT_03`. **Totals: 25 verticals · 202 Sub-Sectors** (52 SaaS + 88 established + 48 Growth + 14 Frontier/Deep-Future) · matrix rows unchanged at 87 (Growth/Frontier deliberately carry no matrix rows). No fabricated offers/prices/data; per-company scoring + scraping deferred/gated (Part E). **ADDENDUM 3 complete.**
+
+- 🔲 **LSEI — Pass 1 (DECIDE) DONE, nothing built (2026-08-19).** Owner directive: make the sector calendars *live* — real external sources, subscribable feeds, origin↔destination direction, reusable timing clocks, change-versioning. Reconciled the seeding proposal (~17 calendar layers · a 15-folder domain · 6 engines) down to **2 net-new DBs + 1 spec file**, per Contract §13.4/§13.5. Written this pass: [`CALENDAR_INTELLIGENCE.md`](CALENDAR_INTELLIGENCE.md) (the LSEI spec) · **DB 14 Signal Sources** + **DB 15 Market Routes** specified above · DB 7 extensions (`Signal Source`/`Market Routes`/`Signal Role`/`Previous Signal Date`/`Change Reason` + 5 `Signal Type` values) · the DB 7 retirement list · `SECTOR_ACTIVATION_CONTRACT.md` §15 · the refresh escalation ladder · `AEIT_08` §3.2 candidate source pack · Google Calendar + Notion Calendar registered in Tech Stack. **Verified live before designing (2026-08-19):** DB 7 holds **28 rows**, of which the Hospitality slice is **4** — three seasonality rows sourced to *hotel-tech marketing blogs* (`T3`) and one trade show; `Source Tier` is **null on 20 of 28**; Geography holds **3 rows** (Global/EU/USA — no Africa, no Kenya, no city level). That gap between the architecture and the data is what this pass exists to close. **Nothing was written to Notion.** Pass 2 builds DB 14/15, web-verifies every candidate source before `active`, populates Kenya-inbound Geography + Routes, re-sources the 4 blog-sourced rows to T1, and back-fills the null tiers.
 
 ## 5. Coverage check (nothing missed)
 
