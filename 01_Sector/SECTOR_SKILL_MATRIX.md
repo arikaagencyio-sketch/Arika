@@ -1,6 +1,6 @@
 # Sector — Skill Matrix
 
-**Department:** Sector (01) · **Version:** v0.2 (2026-08-24) · **Status:** Gate 3 — **Phase 1 authored.** `S01` and `S02` are live at `.claude/skills/`; S03–S12 remain contract-only.
+**Department:** Sector (01) · **Version:** v0.3 (2026-08-24) · **Status:** Gate 3 — **Phase 1 authored and run.** `S01` and `S02` are live at `.claude/skills/` and have executed against Notion; S03–S12 remain contract-only.
 **Reads:** [`SECTOR_WRITE_CONTRACT.md`](SECTOR_WRITE_CONTRACT.md) (the rules) · [`contracts/sector-databases.json`](contracts/sector-databases.json) (the field contracts) · [`SECTOR_DISCOVERY_INVENTORY.md`](SECTOR_DISCOVERY_INVENTORY.md) (why)
 
 > **The architectural law this file implements:** *agents decide what is true; skills decide how that truth becomes a valid database state.* Five Sector agents already exist and remain in scope — none of the twelve skills below duplicates one.
@@ -73,7 +73,7 @@ Writes the language map, the four audience roles and the buyer titles for one su
 
 | | |
 |---|---|
-| **Triggers** | A sub-sector flipped to `Status = Target` · activation **Gate C** |
+| **Triggers** | A sub-sector flipped to `Status = Target` · activation **Gate E** · a role lens missing its language map |
 | **Context required** | `sub_sector_id`; plugin **P9** + **P10** if a plugin exists |
 | **Reads** | Web research per target · plugin P9/P10 · existing DM rows for the SaaS branch |
 | **Refuses** | **Any named individual** · a `Role Lens` with no matching DB9 `Role` · vocabulary not grounded in the research run |
@@ -391,5 +391,6 @@ Sequenced by what is actually blocked, not by skill number.
 
 ## 8. Changelog
 
+- **v0.3 (2026-08-24, Gate 3 — PHASE 1 RUN):** **The skill layer executed for the first time.** S02 created the three missing DB 6 role lenses (Operator, Amplifier, Enabler) for the `Target` sub-sector, taking it to 4/4; S01 co-ran on the same `research_run_id` and created 2 DB 3 findings. DB 9 and DB 10 were **`NO_OP`** — already complete, verified before research — which is the duplicate-detection step working rather than a skill finding nothing to do. Both runs logged to `01_Sector/_memory/skill_runs.jsonl` and **validated against the execution-record schema**, the first time that schema met real data. **Defect found by running it: S02's §2 trigger said activation `Gate C`, but §4 maps S02 to `Gate E` — `Gate C` is S11's (author the plugin).** Every other skill's gate reference was checked and is consistent; S02 was the single outlier. Corrected to `Gate E`. This is exactly what the first run was meant to surface: a contract inconsistency invisible on the page and obvious the moment something had to act on it. — Claude Code (Opus 5)
 - **v0.2 (2026-08-24, Gate 3 — PHASE 1 AUTHORED):** **The department's first two skills exist.** `sector-audience-language-mapper` (S02) and `sector-finding-writer` (S01) authored at `.claude/skills/`, following the Experience Engineering precedent — two frontmatter keys, prose procedure, pointers into the write contract rather than a restatement of it. Both implement their §2 contract: context resolution and stop conditions, duplicate detection before research, explicit mutation mode, the eligibility gates, page-body provenance for the three schemas that cannot hold it, per-field write boundaries, and an execution record. **Row counts were measured live for the first time and three of six were wrong (F19)** — DB6 `0→1`, DB9 `0→4`, DB10 `52→57`. Phase 1's premise was therefore restated: DB9 is complete for the one `Target` sub-sector, and the real gap is three DB6 role lenses. **Nothing written to Notion in this pass** — the skills exist; running them is the next unit of work. — Claude Code (Opus 5)
 - **v0.1 (2026-08-24, Gate 1 — CONTRACT):** Created. Twelve skills specified by **write boundary**, each with trigger, context requirement, read contract, field scope, refusals, co-run rules and loops. Skill→database→**field** ownership assigned for every field in `contracts/sector-databases.json`; no field left unassigned. Dependency graph and the two non-negotiable co-run pairs recorded. **The letter-gate A–I ↔ numbered-gate 1–9 mapping is authored here for the first time**, including the honest note that numbered Gates 4, 7 and 8 are defined nowhere. S09 recorded as superseding the planned Gate-5 resolver agent per owner decision. **No `SKILL.md` authored.** — Claude Code (Opus 5)

@@ -70,10 +70,10 @@ Nothing in the repo is called a write contract, and `grep` for `SECTOR_WRITE_CON
 |---|---|---|---|---|---|---|
 | DB1 | Sectors Master | one vertical / market | 20 | 25 ✅ | loaded | S07 |
 | DB2 | **Sub-Sectors** | one industry — **the hub** | 37 | 321 ✅ | loaded · **exactly 1 `Target`** | S07 |
-| DB3 | Sector Intelligence | one structured finding | 15 | 215 ✅ | SaaS branch only | S01 |
+| DB3 | Sector Intelligence | one structured finding | 15 | **217 ✅** | 215 SaaS branch + **2 written by S01** | S01 |
 | DB4 | ICP Classification | one company's tier | 9 | 0 | empty by design (gated) | S12 |
 | DB5 | Prospect Signal Scores | one scoring event | 13 | 0 | empty by design (gated) | S12 |
-| DB6 | **Sector Linguistics** | one language map | 13 | **1 ✅** | **1 of 4 role lenses** *(was recorded 0)* | S02 |
+| DB6 | Sector Linguistics | one language map | 13 | **4 ✅** | **4 of 4 role lenses — unblocked by S02** | S02 |
 | DB7 | Sector Signals (SCIC) | one signal over time | 45 | 34 | 3 rows deep | S04 |
 | DB8 | Agency Opportunity Map | one offer ladder | 25 | 87 | 3 relations empty | S08 |
 | DB9 | **Audience Roles** | one role profile | 14 | **4 ✅** | **all 4 lenses, 1 sub-sector** *(was recorded 0)* | S02 |
