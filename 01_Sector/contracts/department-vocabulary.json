@@ -1,0 +1,120 @@
+{
+  "_meta": {
+    "artifact": "Canonical department routing vocabulary",
+    "version": "0.2",
+    "authored": "2026-08-24",
+    "resolves": "OWNER_INPUT_NEEDED.md item 31a · finding F2 (SECTOR_DISCOVERY_INVENTORY.md §7.1)",
+    "status": "DECIDED AND APPLIED — repo artifacts and both live Notion option sets. Verified: every pre-existing option ID survived byte-identically; zero rows lost a value.",
+
+    "the_problem_it_fixed": "Two disjoint department vocabularies existed on Sector-owned fields. `Sector Intelligence.Routed To` offered 5 values; `Sector Signals.Departments Affected` offered 7. Between them they could not name TEN departments Sector demonstrably routes to. The sharpest proof: DB 16 `Visual Language` states in its own Notion field description that it routes to Design (19) — a department neither vocabulary could express. A packet routed on one field could not be received by a workflow reading the other.",
+
+    "the_governing_rule": "AEIT_06: 'departments consume canonical entities; they do not reinvent them.' GLOBAL_OS.md §4 IS the canonical department registry. The vocabulary is therefore not a Sector-curated subset — it is the registry itself. Curating a subset is exactly how the original two drifted apart, so a third curated subset would have repeated the failure.",
+
+    "naming_convention": "Plain department names, taken VERBATIM from GLOBAL_OS.md §4. No numeric prefix. The department number is carried as `dept` metadata here, not inside the value string. Two reasons: (1) §4's names ARE the plain forms, so this is literally verbatim rather than a decorated variant; (2) it made the Notion migration purely additive — see `notion_migration.rename_is_destructive`.",
+
+    "scope_of_change": "These two fields are the ONLY department-enum fields in any Notion schema across the whole repository (verified by grep over every *_SCHEMA.md and *_OS.md). No other department is affected."
+  },
+
+  "vocabulary": [
+    { "value": "Agency Governance",        "dept": "00", "dir": "00_Agency_Governance",        "evidenced_route": true,  "evidence": "ESCALATE target — a Tier-1 architecture change requires owner ratification + an AEIT_06 entry (SECTOR_ACTIVATION_CONTRACT.md §16)" },
+    { "value": "Sector",                    "dept": "01", "dir": "01_Sector",                   "evidenced_route": true,  "evidence": "intra-department — CALENDAR_UPDATED → sector-intelligence-mapper; REGULATORY_CHANGE → sector-readiness-analyst. Needed to express these two edges honestly rather than implying they leave the department." },
+    { "value": "Offer",                     "dept": "02", "dir": "02_Offer",                    "evidenced_route": true,  "evidence": "DB2.Offers relation · DB8 `Offer Fit (Offer 02)` · SECTOR_MAPPED → offer-orchestrator", "pre_existing_on": ["DB3", "DB7"] },
+    { "value": "Marketing",                 "dept": "03", "dir": "03_Marketing",                "evidenced_route": true,  "evidence": "SECTOR_READINESS_SET → marketing-demand-generation · DB15 `Preferred Channels`", "pre_existing_on": ["DB3", "DB7"] },
+    { "value": "Content",                   "dept": "04", "dir": "04_Content",                  "evidenced_route": true,  "evidence": "9 native relations · SECTOR_MAPPED → content-intelligence-hub · DB16 `Content Angles`", "pre_existing_on": ["DB3", "DB7"] },
+    { "value": "Sales",                     "dept": "05", "dir": "05_Sales",                    "evidenced_route": true,  "evidence": "ICP_CLASSIFIED + PROSPECT_SCORED → sales-lead-qualification · DB8 `Outreach Angle`", "pre_existing_on": ["DB3", "DB7"] },
+    { "value": "ClientPartner Acquisition", "dept": "06", "dir": "06_ClientPartner_Acquisition","evidenced_route": true,  "evidence": "ICP_CLASSIFIED → clientpartner-partner-sourcing", "supersedes_legacy": "ClientPartner (DB7)" },
+    { "value": "Client Success",            "dept": "07", "dir": "07_Client_Success",           "evidenced_route": true,  "evidence": "DB8 capability family `SCALE` — owned by Consulting (15) + Client Success (07)" },
+    { "value": "Operations",                "dept": "08", "dir": "08_Operations",               "evidenced_route": true,  "evidence": "PROSPECT_SCORED → operations-opportunity-filter · DB8 capability family `OPS`", "supersedes_legacy": "Revenue (Ops) (DB7)" },
+    { "value": "Finance",                   "dept": "09", "dir": "09_Finance",                  "evidenced_route": true,  "evidence": "DB8 capability family `FIN`" },
+    { "value": "Legal",                     "dept": "10", "dir": "10_Legal",                    "evidenced_route": true,  "evidence": "DB14 `Legal Posture` (any scrape source requires it before `active`) · DB15 `Visa Requirement` routes to Legal if it becomes a client claim" },
+    { "value": "HR / People Ops",           "dept": "11", "dir": "11_HR_People_Ops",            "evidenced_route": false, "evidence": "No Sector→HR route exists today. Included because the vocabulary is the canonical registry, not a curated subset — an unused option costs nothing; a missing one costs a route." },
+    { "value": "Branding",                  "dept": "12", "dir": "12_Branding",                 "evidenced_route": true,  "evidence": "already an option on DB7 · DB8 capability family `BR`", "pre_existing_on": ["DB7"] },
+    { "value": "Tech Stack",                "dept": "13", "dir": "13_Tech_Stack",               "evidenced_route": true,  "evidence": "DB14 `Cost` — its own field description routes metered/subscription sources to techstack-cost-guardian" },
+    { "value": "Audits & Diagnostics",      "dept": "14", "dir": "14_Audits_Diagnostics",       "evidenced_route": true,  "evidence": "DB8 capability family `INT` — owned by Sector (01) + Audits (14)" },
+    { "value": "Consulting & Advisory",     "dept": "15", "dir": "15_Consulting_Advisory",      "evidenced_route": true,  "evidence": "DB8 capability families `STR` and `SCALE`" },
+    { "value": "Automation",                "dept": "16", "dir": "16_Automation",               "evidenced_route": true,  "evidence": "already an option on DB3 · DB8 capability family `AUTO`", "pre_existing_on": ["DB3"] },
+    { "value": "AI Enablement",             "dept": "17", "dir": "17_AI_Enablement",            "evidenced_route": true,  "evidence": "DB8 capability family `AI-X`" },
+    { "value": "Design",                    "dept": "19", "dir": "19_Design",                   "evidenced_route": true,  "evidence": "DB16 `Visual Language` — its own field description says it routes to Design (19). This was the sharpest proof the old vocabulary was too narrow: a Sector field routed somewhere the taxonomy could not express." },
+    { "value": "Experience Engineering",    "dept": "20", "dir": "20_Experience_Engineering",   "evidenced_route": true,  "evidence": "DB8 capability family `CNT` — owned by Content (04) + Design (19) + Experience Engineering (20)" },
+    { "value": "Presence",                  "dept": "21", "dir": "21_Presence",                 "evidenced_route": false, "evidence": "No wired Sector→Presence edge today. Presence is the outbound mirror of IntOS and consumes market truth by design (GLOBAL_OS.md §5), so a route is expected rather than speculative." }
+  ],
+
+  "excluded": [
+    {
+      "dept": "18",
+      "name": "Cross-Domain Synthesis",
+      "reason": "NOT an active department. GLOBAL_OS.md §4: 'early whole-agency synthesis draft, kept as historical/reference material… (reference archive, no OS file)'. No OS file, no owner, no agents — it cannot receive or act on a handoff.",
+      "count_note": "This is why the vocabulary has 21 values for 22 numbered entries."
+    }
+  ],
+
+  "summary": {
+    "total_values": 21,
+    "with_evidenced_route_today": 19,
+    "available_but_unused": ["HR / People Ops", "Presence"],
+    "verified_against": "All 21 names compared programmatically to GLOBAL_OS.md §4 — exact match, zero paraphrase."
+  },
+
+  "notion_migration": {
+    "_status": "APPLIED 2026-08-24. Both fields verified after the change.",
+
+    "rename_is_destructive": {
+      "_headline": "A Notion select/multi-select option CANNOT be renamed through this DDL. `ALTER COLUMN … SET MULTI_SELECT(...)` matches options BY NAME: an option whose name changes is dropped and a new one created, and every row holding the old option loses that value.",
+      "_how_it_was_established": "Empirically, before touching real data. A throwaway option `ZZ Migration Probe` was added to DB 7, its ID recorded, then the same ALTER was issued with the name changed to `ZZ Probe Renamed`. The ID changed from `MmE3MGFhMmYtY2NmYi00ZjQxLTkyYmQtMmRjNTU0YTdkNmFk` to `YzlmZTU0NDgtNWMzNy00YTZhLTllYTYtNzk3ZTNkN2UzZTk3`, proving drop-and-recreate. The 7 real options, whose names were unchanged in the same statements, kept their IDs throughout. The probe was then removed.",
+      "_what_it_prevented": "The originally-planned migration used `NN Name` values (e.g. `Sales` → `05 Sales`), which would have renamed all 12 existing options across the two fields. Executed, it would have silently stripped the department values from every one of the 249 rows.",
+      "_the_rule_for_any_future_option_change": "Adding options is safe. Removing an unused option is safe. RENAMING is a data migration, not a schema change — it requires re-tagging every affected row at page level first, or accepting the loss. Verify by comparing option IDs before and after, never by assuming.",
+      "_precedent_note": "SECTOR_OS.md §15 (Gate 2) records ALTER COLUMN … SET SELECT operations where 'every option ID survived byte-identically'. That is consistent with this finding: those operations added options without renaming any."
+    },
+
+    "method_used": "ADD-ONLY. No option was renamed. Existing values were passed through unchanged, and the missing canonical values were appended.",
+
+    "DB3": {
+      "database": "Sector Intelligence",
+      "collection_url": "collection://72f90a0f-e34e-4c54-9fcd-9af2e108527e",
+      "field": "Routed To",
+      "rows": 215,
+      "before": ["Offer", "Marketing", "Sales", "Content", "Automation"],
+      "added": ["Agency Governance", "Sector", "ClientPartner Acquisition", "Client Success", "Operations", "Finance", "Legal", "HR / People Ops", "Branding", "Tech Stack", "Audits & Diagnostics", "Consulting & Advisory", "AI Enablement", "Design", "Experience Engineering", "Presence"],
+      "after_count": 21,
+      "legacy_strays": [],
+      "note": "All 5 pre-existing values were already canonical, so this field now holds EXACTLY the canonical vocabulary with no deprecated entries.",
+      "verified": "All 5 pre-existing option IDs unchanged after the write."
+    },
+
+    "DB7": {
+      "database": "Sector Signals (Commercial Intelligence Calendar)",
+      "collection_url": "collection://c14fedb3-6048-4bc5-8a40-6558cc985f57",
+      "field": "Departments Affected",
+      "rows": 34,
+      "before": ["Sales", "Marketing", "Revenue (Ops)", "Offer", "Content", "Branding", "ClientPartner"],
+      "added": ["Agency Governance", "Sector", "ClientPartner Acquisition", "Client Success", "Operations", "Finance", "Legal", "HR / People Ops", "Tech Stack", "Audits & Diagnostics", "Consulting & Advisory", "Automation", "AI Enablement", "Design", "Experience Engineering", "Presence"],
+      "after_count": 23,
+      "verified": "All 7 pre-existing option IDs unchanged after the write.",
+      "legacy_strays": [
+        {
+          "value": "Revenue (Ops)",
+          "canonical": "Operations",
+          "status": "DEPRECATED — retained because removing it would strip the value from any row using it.",
+          "rationale": "The only live value that is not a department name. Resolves to Operations (08): GLOBAL_OS.md §4 names 08 as Operations, and the revenue rhythm it refers to sits there — `operations-calendar-orchestrator` synchronizes the 7 Cognitive Calendars incl. Revenue and Pipeline, and `operations-daily-command` turns revenue targets into ranked daily actions. Owner-confirmed 2026-08-24.",
+          "retirement": "Row-level re-tag: for each row carrying `Revenue (Ops)`, add `Operations` and remove the legacy value; then drop the option. Requires page updates, not a schema change."
+        },
+        {
+          "value": "ClientPartner",
+          "canonical": "ClientPartner Acquisition",
+          "status": "DEPRECATED — retained for the same reason.",
+          "rationale": "A truncation of the §4 name rather than a different meaning.",
+          "retirement": "Same row-level re-tag procedure."
+        }
+      ]
+    },
+
+    "residual_work": "Two DB 7 legacy options remain pending a row-level re-tag (at most 34 rows, likely far fewer). This is data migration, not schema work, and is deliberately NOT bundled with the vocabulary decision. Until it runs, S04 writes canonical values on new rows and re-tags legacy values opportunistically when it touches a row for another reason."
+  },
+
+  "consumed_by": [
+    "01_Sector/contracts/intelligence-object.schema.json ($defs/department)",
+    "01_Sector/contracts/sector-databases.json (DB3.Routed To, DB7.Departments Affected)",
+    "01_Sector/SECTOR_WRITE_CONTRACT.md §1.1",
+    "skills S01, S04, S08, S10"
+  ]
+}

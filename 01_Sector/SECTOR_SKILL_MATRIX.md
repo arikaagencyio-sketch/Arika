@@ -38,7 +38,7 @@
 | Sales · Marketing · Operations | **event bus only** | S10 |
 | Design (19) · EE (20) · Presence (21) · Audits (14) · Client Success (07) | **nothing exists** | — |
 
-DB16 `Visual Language` is explicitly documented as routing to Design (19) — a department that appears in **neither** routing vocabulary. The field routes somewhere the taxonomy cannot express (finding F2).
+DB16 `Visual Language` is explicitly documented as routing to Design (19) — a department that appeared in **neither** routing vocabulary. The field routed somewhere the taxonomy could not express, which was the sharpest proof of finding F2. **Resolved in contract 2026-08-24:** one canonical 21-value vocabulary, taken from `GLOBAL_OS.md` §4 rather than curated ([`SECTOR_WRITE_CONTRACT.md`](SECTOR_WRITE_CONTRACT.md) §1.1 · [`contracts/department-vocabulary.json`](contracts/department-vocabulary.json)). The two live Notion option sets are not yet migrated.
 
 ---
 

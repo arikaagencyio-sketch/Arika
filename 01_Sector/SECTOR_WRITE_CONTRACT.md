@@ -43,12 +43,32 @@ Every Sector intelligence record MUST answer all eight. A record missing any one
 | 4 | **reliability** | how much weight it carries | `Confidence` |
 | 5 | **which sector** | resolved through the Sub-Sector hub, never asserted from free text | `Sub-Sector` (+ `Geography` when place-bound) |
 | 6 | **which decision it supports** | the decision-purpose gate | `Strategic Implication` |
-| 7 | **which system consumes it** | must be non-empty | `Routed To` / `Departments Affected` |
+| 7 | **which system consumes it** | must be non-empty; values come from the canonical department vocabulary (§1.1) | `Routed To` / `Departments Affected` |
 | 8 | **what action can result** | an observation with no available action is not intelligence | `Recommended Action` |
 
 This **is** `AEIT_06`'s `Knowledge Object` (`claim, entity_ref, confidence, trust, freshness, source_id, state`) expressed through fields that already exist. It does not add a store, a field or an entity.
 
-### 1.1 Three databases cannot carry it in-schema
+### 1.1 The canonical department vocabulary (Q7)
+
+**Decided 2026-08-24.** Machine-readable: [`contracts/department-vocabulary.json`](contracts/department-vocabulary.json).
+
+Q7 answers *which department consumes this*, so it needs one vocabulary. It previously had two, and they were disjoint: `Routed To` offered 5 values, `Departments Affected` offered 7, and neither could name Design (19), Experience Engineering (20), Audits (14), Client Success (07), Legal (10), Tech Stack (13), Finance (09), Consulting (15), AI Enablement (17) or Presence (21). A packet routed on one field could not be received by a workflow reading the other.
+
+**The vocabulary is not a Sector-curated subset — it is `GLOBAL_OS.md` §4, the canonical department registry**, per `AEIT_06`: *"departments consume canonical entities; they do not reinvent them."* Curating a subset is exactly how the original two drifted apart, so the fix is to stop curating.
+
+21 values, names **verbatim** from §4 — no numeric prefix, because §4's names are the plain forms:
+
+`Agency Governance · Sector · Offer · Marketing · Content · Sales · ClientPartner Acquisition · Client Success · Operations · Finance · Legal · HR / People Ops · Branding · Tech Stack · Audits & Diagnostics · Consulting & Advisory · Automation · AI Enablement · Design · Experience Engineering · Presence`
+
+**18 Cross-Domain Synthesis is excluded** — `GLOBAL_OS.md` §4 records it as not an active department (reference archive, no OS file, no owner), so it cannot receive or act on a handoff.
+
+**Two values have no evidenced route today** — `HR / People Ops` and `Presence`. They are included anyway: an unused option costs nothing, a missing one costs a route, and the missing-route failure is precisely what created F2. The other 19 each have a named route recorded in the JSON.
+
+**Applied to Notion 2026-08-24.** DB 3 `Routed To` now holds exactly these 21. DB 7 `Departments Affected` holds these 21 **plus two deprecated legacy options** — `Revenue (Ops)` (canonical: **Operations**, owner-confirmed) and `ClientPartner` (canonical: **ClientPartner Acquisition**). **Never write a deprecated value on a new row;** retire them by re-tagging the affected rows, then dropping the option.
+
+> ⚠️ **A Notion select option cannot be renamed.** `ALTER COLUMN … SET MULTI_SELECT(...)` matches options **by name** — change the name and the old option is dropped, a new one created, and **every row holding it loses that value**. This was established empirically before the migration ran, with a throwaway probe option whose ID changed on rename while the untouched options kept theirs. The originally-planned `Sales` → `05 Sales` style migration would have silently stripped the department values from all 249 rows. **Adding an option is safe; removing an unused one is safe; renaming is a data migration, not a schema change.** Always verify by comparing option IDs before and after — never by assuming.
+
+### 1.2 Three databases cannot carry it in-schema
 
 | DB | Provenance present | Missing |
 |---|---|---|
@@ -57,6 +77,8 @@ This **is** `AEIT_06`'s `Knowledge Object` (`claim, entity_ref, confidence, trus
 | DB10 Decision-Maker Registry | **none** | all of Q2, Q3, Q4 |
 
 **Rule until a schema change is ratified:** the skill records Q2 and Q3 **in the page body**, as a dated provenance line — `Source · Tier · Verified YYYY-MM-DD`. It does **not** silently write a row that cannot answer the eight questions and it does **not** pretend the fields exist. Adding them is Gate 2+ work (finding F14).
+
+*(§1.1's vocabulary is now decided **and applied** in Notion. This one is not: it remains **decided in contract, pending in Notion**. A skill writes what the live schema can hold and records the rest in the page body — never a value the field cannot legally take, and never silence.)*
 
 ---
 

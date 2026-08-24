@@ -102,16 +102,18 @@
   "$defs": {
     "department": {
       "type": "string",
-      "description": "PROPOSED unified department vocabulary — finding F2. Today TWO disjoint vocabularies exist: DB3 `Routed To` has 5 values, DB7 `Departments Affected` has 7, and NEITHER covers Design(19), Experience Engineering(20), Presence(21), Audits(14) or Client Success(07). A handoff routed on one cannot be received by a workflow reading the other. Unifying them is the single highest-value schema change for making workflows composable, and it is a Gate 2+ Notion change — NOT applied here.",
+      "description": "The canonical department routing vocabulary — resolves finding F2 and OWNER_INPUT_NEEDED item 31a. It is not a Sector-curated subset: it IS the GLOBAL_OS.md §4 department registry, per AEIT_06's rule that 'departments consume canonical entities; they do not reinvent them.' Values and names are taken verbatim from §4 so this enum cannot drift from the registry by paraphrase. Full rationale, per-department route evidence and the Notion migration map: `department-vocabulary.json`.",
       "enum": [
-        "00_Governance", "01_Sector", "02_Offer", "03_Marketing", "04_Content",
-        "05_Sales", "06_ClientPartner", "07_ClientSuccess", "08_Operations",
-        "09_Finance", "10_Legal", "11_HR", "12_Branding", "13_TechStack",
-        "14_Audits", "15_Consulting", "16_Automation", "17_AIEnablement",
-        "19_Design", "20_ExperienceEngineering", "21_Presence"
+        "Agency Governance", "Sector", "Offer", "Marketing", "Content",
+        "Sales", "ClientPartner Acquisition", "Client Success", "Operations",
+        "Finance", "Legal", "HR / People Ops", "Branding", "Tech Stack",
+        "Audits & Diagnostics", "Consulting & Advisory", "Automation",
+        "AI Enablement", "Design", "Experience Engineering", "Presence"
       ],
-      "_status": "PROPOSED, NOT RATIFIED. Adopting it requires an owner decision and a Notion select migration on two fields.",
-      "_excluded": "18_Cross_Domain_Synthesis is deliberately absent — GLOBAL_OS.md §4 records it as NOT an active department (reference archive, no OS file, no owner)."
+      "_status": "DECIDED AND APPLIED 2026-08-24 — repo artifacts and both live Notion option sets. Verified: every pre-existing option ID survived byte-identically; zero rows lost a value.",
+      "_legacy_values_still_live": "DB 7 `Departments Affected` also retains two deprecated options — `Revenue (Ops)` (canonical: Operations) and `ClientPartner` (canonical: ClientPartner Acquisition). They are retained because removing an option strips its value from any row using it. A row-level re-tag retires them. Do not write them on new rows.",
+      "_excluded": "18 Cross-Domain Synthesis is deliberately absent — GLOBAL_OS.md §4 records it as NOT an active department (reference archive, no OS file, no owner), so it cannot receive or act on a handoff.",
+      "_note": "19 of the 21 have an evidenced Sector route today. `11 HR / People Ops` and `21 Presence` do not, and are included because the vocabulary is the canonical registry rather than a curated subset — an unused option costs nothing; a missing one costs a route, which is precisely how F2 arose."
     }
   },
 
@@ -124,7 +126,7 @@
       "reliability": { "confidence": "Medium", "confidence_basis": "consistent across multiple commercial-intel sources; no T1 publisher confirms the range for Kenya specifically" },
       "which_sector": { "sub_sector_id": "sub-accommodation", "sector_id": "sec-hospitality", "geography_id": "geo-kenya" },
       "which_decision": "Whether the OTA Leakage & Direct-Booking Audit is a defensible gateway offer for this market",
-      "which_consumer": ["02_Offer", "04_Content"],
+      "which_consumer": ["Offer", "Content"],
       "what_action": "Route to Offer (02) as the gateway-offer thesis; route to Content (04) as the 'OTA tax' narrative"
     }
   ]

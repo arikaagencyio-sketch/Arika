@@ -212,7 +212,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Freshness | Select | GOV | Fresh · Aging · Stale |
 | Strategic Implication | Text | EXE | the "so what" |
 | Recommended Action | Text | EXE | Draft 4 execution layer |
-| Routed To (Dept) | Multi-select | REL | Offer/Marketing/Sales/Content/Automation (see contract routing) |
+| Routed To (Dept) | Multi-select | REL | **Canonical department vocabulary — 21 values, = `GLOBAL_OS.md` §4** ([`contracts/department-vocabulary.json`](contracts/department-vocabulary.json)). ✅ **Applied 2026-08-24** — holds exactly the 21, no deprecated entries. |
 
 > 🔴 **Documentation-vs-live drift found and closed (2026-08-20).** The 2026-08-19 ADDENDUM 3 changelog records *"**DB 3** `Category += Tool-Stack Chaos`"*, but a live read of the data source found the option **did not exist** — `Category` held only the original 10. The documented change had never been applied, so any attempt to write a Tool-Stack-Chaos finding would have failed. **`Tool-Stack Chaos` was created live in this pass**, alongside `Demand Pattern`, restoring the documented state. Verified after the change: all **215 rows** retain their `Category` value, 0 nulls. *Recorded rather than silently fixed — a changelog entry is not proof a change landed.*
 
@@ -299,7 +299,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Audience / Market Segment | Text | EXE | leisure/corporate/group/international/etc. |
 | Recommended Action | Text | EXE | |
 | Action Deadline | Date | EXE | **drives a 2nd calendar view** (proves multi-date/lead-time) |
-| Departments Affected | Multi-select | REL | Sales/Marketing/Revenue(Ops)/Offer/Content/Branding/ClientPartner |
+| Departments Affected | Multi-select | REL | **Same canonical 21-value vocabulary as DB 3 `Routed To`** — that the two now share one vocabulary is the point ([`contracts/department-vocabulary.json`](contracts/department-vocabulary.json)). ✅ **Applied 2026-08-24.** Plus 2 **deprecated** legacy options retained so no row loses a value: `Revenue (Ops)` → canonical **Operations**; `ClientPartner` → canonical **ClientPartner Acquisition**. Never write a deprecated value on a new row. |
 | Status | Select | GOV | monitoring · active · closed |
 | Sector Intelligence | Relation → Sector Intelligence (DB 3) | REL | the interpreted **finding** (calendar→intelligence loop) |
 
