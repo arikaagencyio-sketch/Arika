@@ -64,20 +64,20 @@ Nothing in the repo is called a write contract, and `grep` for `SECTOR_WRITE_CON
 
 16 Sector-owned databases. Field-by-field detail is in [`contracts/sector-databases.json`](contracts/sector-databases.json).
 
-> **On row counts.** Every count below is taken from the repository's own population records (`SECTOR_OS.md` §15 changelogs, `FIELD_POPULATION_PLAN.md`, `HOSPITALITY_PLUGIN.md`). **Live counts were not run** — this workspace plan does not include the Notion query API. A count here is a repo claim, not a measurement. Schemas *were* fetched live.
+> **On row counts — corrected 2026-08-24.** The Gate 0 note said the query API was unavailable on this plan. **That was wrong: it is metered, not absent.** Six databases were then measured with a live `SELECT COUNT(*)` before the workspace quota was exhausted — and **three of the six were wrong** (F19). Counts marked ✅ are measurements; the rest are still repo claims from `SECTOR_OS.md` §15 changelogs, `FIELD_POPULATION_PLAN.md` and `HOSPITALITY_PLUGIN.md`. **A population claim in a changelog is not a row count.** Schemas were always fetched live.
 
 | # | Database | Entity | Fields | Rows | State | Writer |
 |---|---|---|---|---|---|---|
-| DB1 | Sectors Master | one vertical / market | 20 | 25 | loaded | S07 |
-| DB2 | **Sub-Sectors** | one industry — **the hub** | 37 | 321 | loaded | S07 |
-| DB3 | Sector Intelligence | one structured finding | 15 | 215 | SaaS branch only | S01 |
+| DB1 | Sectors Master | one vertical / market | 20 | 25 ✅ | loaded | S07 |
+| DB2 | **Sub-Sectors** | one industry — **the hub** | 37 | 321 ✅ | loaded · **exactly 1 `Target`** | S07 |
+| DB3 | Sector Intelligence | one structured finding | 15 | 215 ✅ | SaaS branch only | S01 |
 | DB4 | ICP Classification | one company's tier | 9 | 0 | empty by design (gated) | S12 |
 | DB5 | Prospect Signal Scores | one scoring event | 13 | 0 | empty by design (gated) | S12 |
-| DB6 | **Sector Linguistics** | one language map | 13 | **0** | **blocking Content** | S02 |
+| DB6 | **Sector Linguistics** | one language map | 13 | **1 ✅** | **1 of 4 role lenses** *(was recorded 0)* | S02 |
 | DB7 | Sector Signals (SCIC) | one signal over time | 45 | 34 | 3 rows deep | S04 |
 | DB8 | Agency Opportunity Map | one offer ladder | 25 | 87 | 3 relations empty | S08 |
-| DB9 | **Audience Roles** | one role profile | 14 | **0** | **blocking Content** | S02 |
-| DB10 | Decision-Maker Registry | one buyer title | 9 | 52 | SaaS + 4 Hospitality | S02 |
+| DB9 | **Audience Roles** | one role profile | 14 | **4 ✅** | **all 4 lenses, 1 sub-sector** *(was recorded 0)* | S02 |
+| DB10 | Decision-Maker Registry | one buyer title | 9 | **57 ✅** | 53 SaaS + 4 Hospitality *(was recorded 52)* | S02 |
 | DB11 | Geography | one place, one level | 9 | 11 | 2 mis-levelled | S05 |
 | DB12 | Sector State | what is happening now | 14 | 0 | empty | S06 |
 | DB13 | Sector Forecast | forward trajectory | 10 | 0 | empty | S06 |
@@ -323,6 +323,7 @@ Because `sector-signal-refresher` is manual/advisory and `01_Sector/_memory/` do
 | **F16** | `◐` used as an honesty state but absent from the legend | ✅ **fixed this pass** |
 | **F17** | Contract §3/§7 and `SECTOR_OS.md` §16 say "4 agents"; there are 5, one Class 2 | ✅ **fixed this pass** |
 | **F18** | Letter gates A–I and numbered gates 1–9 are unmapped | ✅ **fixed this pass** — `SECTOR_SKILL_MATRIX.md` §4 |
+| **F19** | **Gate 0 recorded the Notion query API as unavailable; it is metered, not absent.** Six counts were then measured and **three were wrong** — DB6 `0→1`, DB9 `0→4`, DB10 `52→57`, all under-recording work actually done. `HOSPITALITY_PLUGIN.md` P9/P10 asserted this content was live and were **correct**; the inventory contradicted them and was wrong. | ✅ **fixed 2026-08-24** — six counts now measured and marked ✅; **ten remain unverified claims** (quota exhausted). Verify the rest when quota resets. |
 
 ---
 
@@ -332,6 +333,7 @@ Because `sector-signal-refresher` is manual/advisory and `01_Sector/_memory/` do
 2. **The substrate is markdown + Claude Code + Notion MCP.** Not because it is ideal, but because it is what exists — and because manual-apply inherits the `AUTOMATION_APPROVAL_MATRIX.md` exemption that `CONTENT_INTELLIGENCE_SCHEMA.md:562` already grants, naming Sector as operating under it.
 3. **Assemble the write contract; do not invent it.** ~70% is written. The work is consolidation plus generalising the change-history rule beyond signals.
 4. **Three databases unblock the most.** DB6 and DB9 unblock Content and are fillable now. DB14 unblocks the honesty of every signal.
+   **Revised 2026-08-24 (F19):** DB9 is *not* empty — all four role lenses exist for the one `Target` sub-sector. DB6 has one of four. So the highest-return work is **narrower and more specific than Gate 0 thought**: three missing DB6 role-lens rows, not a bulk load of two databases.
 5. **Say what does not work.** Event chaining, the feedback loop (no performance store exists anywhere in the agency), and enforcement of any of these contracts. A skill layer that implies otherwise is the same failure mode as the 11-day outage: documentation asserting a state nobody verified.
 
 ---

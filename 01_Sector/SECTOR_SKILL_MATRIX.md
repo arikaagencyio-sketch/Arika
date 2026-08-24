@@ -1,6 +1,6 @@
 # Sector — Skill Matrix
 
-**Department:** Sector (01) · **Version:** v0.1 (2026-08-24) · **Status:** Gate 1 — contract only. **No skill authored.** `.claude/skills/` still contains only the four Experience Engineering skills.
+**Department:** Sector (01) · **Version:** v0.2 (2026-08-24) · **Status:** Gate 3 — **Phase 1 authored.** `S01` and `S02` are live at `.claude/skills/`; S03–S12 remain contract-only.
 **Reads:** [`SECTOR_WRITE_CONTRACT.md`](SECTOR_WRITE_CONTRACT.md) (the rules) · [`contracts/sector-databases.json`](contracts/sector-databases.json) (the field contracts) · [`SECTOR_DISCOVERY_INVENTORY.md`](SECTOR_DISCOVERY_INVENTORY.md) (why)
 
 > **The architectural law this file implements:** *agents decide what is true; skills decide how that truth becomes a valid database state.* Five Sector agents already exist and remain in scope — none of the twelve skills below duplicates one.
@@ -377,7 +377,7 @@ Sequenced by what is actually blocked, not by skill number.
 
 | Phase | Skills | Unblocks |
 |---|---|---|
-| **1 · Unblock** | S02, S01 | DB6 + DB9 are at zero rows and block the entire Content chain. Highest return in the library. |
+| **1 · Unblock** ✅ **authored 2026-08-24** | S02, S01 | [`.claude/skills/sector-audience-language-mapper/`](../.claude/skills/sector-audience-language-mapper/SKILL.md) · [`.claude/skills/sector-finding-writer/`](../.claude/skills/sector-finding-writer/SKILL.md). **Scope corrected by live measurement (F19):** DB9 is not empty — all four role lenses exist for the one `Target` sub-sector — and DB6 holds one of four. The unblocking work is **three missing DB6 role lenses (Operator, Amplifier, Enabler)**, not a bulk load. |
 | **2 · Make it honest** | S03, S04 | No source is `active`, so no signal can inherit a tier. Provenance before volume. |
 | **3 · Prove it** | S05, S06, S09 | Gates E/F. Fix the two mis-levelled Geography rows first. **Run the falsification test before loading more data.** |
 | **4 · Commercialise** | S08, S10, S07 | Closes the three empty relations on 87 rows; opens the boundary. |
@@ -391,4 +391,5 @@ Sequenced by what is actually blocked, not by skill number.
 
 ## 8. Changelog
 
+- **v0.2 (2026-08-24, Gate 3 — PHASE 1 AUTHORED):** **The department's first two skills exist.** `sector-audience-language-mapper` (S02) and `sector-finding-writer` (S01) authored at `.claude/skills/`, following the Experience Engineering precedent — two frontmatter keys, prose procedure, pointers into the write contract rather than a restatement of it. Both implement their §2 contract: context resolution and stop conditions, duplicate detection before research, explicit mutation mode, the eligibility gates, page-body provenance for the three schemas that cannot hold it, per-field write boundaries, and an execution record. **Row counts were measured live for the first time and three of six were wrong (F19)** — DB6 `0→1`, DB9 `0→4`, DB10 `52→57`. Phase 1's premise was therefore restated: DB9 is complete for the one `Target` sub-sector, and the real gap is three DB6 role lenses. **Nothing written to Notion in this pass** — the skills exist; running them is the next unit of work. — Claude Code (Opus 5)
 - **v0.1 (2026-08-24, Gate 1 — CONTRACT):** Created. Twelve skills specified by **write boundary**, each with trigger, context requirement, read contract, field scope, refusals, co-run rules and loops. Skill→database→**field** ownership assigned for every field in `contracts/sector-databases.json`; no field left unassigned. Dependency graph and the two non-negotiable co-run pairs recorded. **The letter-gate A–I ↔ numbered-gate 1–9 mapping is authored here for the first time**, including the honest note that numbered Gates 4, 7 and 8 are defined nowhere. S09 recorded as superseding the planned Gate-5 resolver agent per owner decision. **No `SKILL.md` authored.** — Claude Code (Opus 5)

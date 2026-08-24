@@ -6,7 +6,8 @@
     "generated_by": "Claude Code (Opus 5) — Gate 0",
     "source_of_truth": "Live Notion data-source schemas, fetched 2026-08-21/24 via MCP, reconciled against 01_Sector/SECTOR_NOTION_SCHEMA.md",
     "authority": "The LIVE schema is authoritative for what exists. SECTOR_NOTION_SCHEMA.md is authoritative for why a field exists. Where they disagree, both are recorded and the divergence is flagged in `_divergences`. Neither is silently preferred.",
-    "row_counts": "Row counts are taken from the repository's own population records (SECTOR_OS.md §15 changelogs, FIELD_POPULATION_PLAN.md, HOSPITALITY_PLUGIN.md). Live SQL counts were NOT run — this workspace plan does not include the query API. A count here is a repo claim, not a measurement.",
+    "row_counts": "TWO KINDS, never blurred. `row_count_verified` + `verified_date` = a live SELECT COUNT(*) actually ran. `row_count_claimed` = the repository's own population records (SECTOR_OS.md §15 changelogs, FIELD_POPULATION_PLAN.md, HOSPITALITY_PLUGIN.md) — a repo claim, not a measurement.",
+    "row_counts_2026_08_24_update": "The query API IS available on this plan, contrary to the Gate 0 note — it is metered, not absent. Six databases were verified before the workspace quota was exhausted: DB1, DB2, DB3, DB6, DB9, DB10. THREE OF THE SIX WERE WRONG (DB6 0→1, DB9 0→4, DB10 52→57), all in the same direction: the repo under-recorded work that had actually been done. The remaining ten are still unverified claims and are labelled as such. Verify the rest when quota resets rather than trusting the claim.",
     "consumed_by": "01_Sector/SECTOR_WRITE_CONTRACT.md, 01_Sector/SECTOR_SKILL_MATRIX.md"
   },
 
@@ -45,7 +46,8 @@
       "aeit06_entity": "Sector",
       "owner_dept": "01",
       "writer_skills": ["S07"],
-      "row_count_claimed": 25,
+      "row_count_verified": 25,
+      "verified_date": "2026-08-24",
       "purpose": "The canonical Sector Registry. Every other Sector store resolves its market identity here.",
       "fields": [
         { "name": "Sector Name", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S07" },
@@ -81,7 +83,9 @@
       "aeit06_entity": "Sub-sector",
       "owner_dept": "01",
       "writer_skills": ["S07"],
-      "row_count_claimed": 321,
+      "row_count_verified": 321,
+      "verified_date": "2026-08-24",
+      "row_count_note": "Verified live by status breakdown: 1 Target (Accommodation) + 267 Reference + 53 with no Status set. EXACTLY ONE sub-sector is Target, which is the entire current scope of S01/S02.",
       "purpose": "THE HUB. Every Sector query traverses it; 14 relations attach here. A careless write propagates everywhere.",
       "hub": true,
       "fields": [
@@ -135,8 +139,9 @@
       "aeit06_entity": "Knowledge Object",
       "owner_dept": "01",
       "writer_skills": ["S01"],
-      "row_count_claimed": 215,
-      "row_count_note": "SaaS branch only. The 88 established non-SaaS industries have zero findings.",
+      "row_count_verified": 215,
+      "verified_date": "2026-08-24",
+      "row_count_note": "Claim CONFIRMED by live count. SaaS branch only. The 88 established non-SaaS industries have zero findings.",
       "purpose": "The atomic intelligence write of the department. Every other intelligence artifact is assembled from these rows.",
       "fields": [
         { "name": "Finding", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S01", "intelligence_object_question": "what" },
@@ -228,8 +233,9 @@
       "entity": "One sub-sector's language map, at one role lens",
       "owner_dept": "01",
       "writer_skills": ["S02"],
-      "row_count_claimed": 0,
-      "row_count_note": "BLOCKING. Repo names this as a structural blocker on the entire downstream Content chain.",
+      "row_count_verified": 1,
+      "verified_date": "2026-08-24",
+      "row_count_note": "CORRECTED — the Gate 0 claim of 0 was WRONG. One complete row exists: 'Accommodation — hotelier revenue & distribution language', Role Lens = Buyer, all five layers filled, Confidence Medium. HOSPITALITY_PLUGIN.md slot P10 was right and the inventory was wrong. Still blocking, but precisely: the Target sub-sector has 1 of its 4 role lenses mapped. The gap is Operator, Amplifier and Enabler — not a bulk load.",
       "blocking": true,
       "fields": [
         { "name": "Language Map", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S02" },
@@ -364,8 +370,9 @@
       "entity": "One audience-role profile for one sub-sector",
       "owner_dept": "01",
       "writer_skills": ["S02"],
-      "row_count_claimed": 0,
-      "row_count_note": "BLOCKING. Repo names this as a structural blocker on downstream Content.",
+      "row_count_verified": 4,
+      "verified_date": "2026-08-24",
+      "row_count_note": "CORRECTED — the Gate 0 claim of 0 was WRONG. All FOUR canonical role lenses exist for the Accommodation sub-sector (Operator, Buyer, Amplifier, Enabler), each with Content Persona, Access Paths and Primary Signal Type. HOSPITALITY_PLUGIN.md slot P9 was right and the inventory was wrong. NOT blocking for the one Target sub-sector; still empty for all 88 established non-SaaS industries.",
       "blocking": true,
       "fields": [
         { "name": "Audience Profile", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S02" },
@@ -399,8 +406,9 @@
       "entity": "One buyer TITLE for one sub-sector — never a named person",
       "owner_dept": "01",
       "writer_skills": ["S02"],
-      "row_count_claimed": 52,
-      "row_count_note": "SaaS branch + 4 Hospitality titles. The 88 established non-SaaS industries have none.",
+      "row_count_verified": 57,
+      "verified_date": "2026-08-24",
+      "row_count_note": "CORRECTED — the Gate 0 claim of 52 was low by 5. 53 SaaS-branch titles + 4 Hospitality titles verified against the Accommodation sub-sector relation (General Manager, Owner/MD, Director of Revenue, DOSM). The 88 established non-SaaS industries have none.",
       "fields": [
         { "name": "Buyer Title", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S02", "validation": "A TITLE. Writing a person's name here is a contract breach — people resolve to CRM Person." },
         { "name": "Sub-Sector", "notion_type": "relation", "field_class": "relation", "purpose_tag": "REL", "required": true, "relation_target": "collection://dbe10a8b-5c67-4602-9108-12feb540995c", "writer_skill": "S02" },
@@ -635,6 +643,7 @@
   ],
 
   "_divergences": [
+    { "id": "F19", "db": "DB6/DB9/DB10", "field": "row counts", "live": "DB6 = 1 row, DB9 = 4 rows, DB10 = 57 rows (verified by live SELECT COUNT(*) 2026-08-24)", "spec": "the Gate 0 inventory recorded DB6 = 0 BLOCKING, DB9 = 0 BLOCKING, DB10 = 52", "resolution": "FIXED HERE. Three of the six databases checked had wrong counts, all under-recording work that had actually been done. HOSPITALITY_PLUGIN.md slots P9/P10 asserted this content was live and were CORRECT; the inventory contradicted them and was wrong. Root cause: Gate 0 recorded the query API as unavailable, so counts came from repo changelogs rather than measurement. The API is metered, not absent. LESSON: a population claim in a changelog is not a row count.", "unverified_remainder": "DB4, DB5, DB7, DB8, DB11, DB12, DB13, DB14, DB15, DB16 still carry row_count_claimed and were NOT measured — the workspace query quota was exhausted after six. Do not treat them as verified." },
     { "id": "F8", "db": "DB3", "field": "Translations", "live": "relation to collection://9abf586d-... exists", "spec": "absent from the DB 3 field table in SECTOR_NOTION_SCHEMA.md §2", "resolution": "RECORDED, NOT RESOLVED. Second instance of undocumented live-vs-spec relation drift (the first was Platform Overlays)." },
     { "id": "F1", "db": "DB7", "field": "Sector", "live": "21-option select mixing SaaS categories with one vertical; no Hospitality option", "spec": "SECTOR_NOTION_SCHEMA.md §0.1 already flags this as needing harmonization but does not deprecate it", "resolution": "RECORDED. Deprecation is a Gate 2+ Notion change." },
     { "id": "F4", "db": "DB4/DB5", "field": "pairing relation", "live": "no relation between ICP Classification and Prospect Signal Scores", "spec": "SECTOR_NOTION_SCHEMA.md calls for tier PAIRED with score", "resolution": "RECORDED. Blocks S12." },
