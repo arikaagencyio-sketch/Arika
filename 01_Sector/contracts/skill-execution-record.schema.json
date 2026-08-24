@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arika.agency/schemas/sector/skill-execution-record.schema.json",
+  "title": "Sector Skill Execution Record",
+  "description": "The observability envelope every Sector skill run appends to 01_Sector/_memory/skill_runs.jsonl. Deliberately MIRRORS the envelope that arika-runtime/src/memory-writer.ts already writes for agent runs, so a future code runtime reads one format rather than two.",
+
+  "_provenance": {
+    "authored": "2026-08-24",
+    "mirrors": "arika-runtime/src/memory-writer.ts — {timestamp, agent, department, stream, event_type, source, payload}",
+    "divergence": "`agent` becomes `skill`; `event_type` is 'skill_run' not 'agent_run'; `source` is 'claude-code' not 'arika-runtime'. Everything else is deliberately identical.",
+    "why_a_separate_file": "01_Sector/_memory/runtime.jsonl does not exist on disk, which is proof no Sector AGENT has ever executed through the runtime. Writing skill runs into a separate file keeps that signal readable — mixing them would destroy the evidence that the agent path is untouched.",
+    "enforcement": "NOT machine-enforced. Written by the skill, for the human and for the next session."
+  },
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["timestamp", "skill", "department", "stream", "event_type", "source", "payload"],
+
+  "properties": {
+    "timestamp": { "type": "string", "format": "date-time" },
+    "skill": { "type": "string", "pattern": "^sector-[a-z-]+$", "description": "e.g. sector-finding-writer" },
+    "skill_id": { "type": "string", "pattern": "^S(0[1-9]|1[0-2])$", "description": "S01-S12, per SECTOR_SKILL_MATRIX.md" },
+    "department": { "type": "string", "const": "01" },
+    "stream": { "type": "string", "const": "skill" },
+    "event_type": { "type": "string", "const": "skill_run" },
+    "source": { "type": "string", "const": "claude-code", "description": "The apply step is a human-invoked interactive session. Not a daemon, not a cron." },
+
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_id", "trigger", "context", "decision"],
+      "properties": {
+        "execution_id": { "type": "string", "description": "Stable id for this run. Reused on retry so a repeated run is recognisable as the same intent." },
+
+        "trigger": {
+          "type": "object",
+          "required": ["kind"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "type": "string", "enum": ["manual", "gate", "research_pass", "cadence", "signal_change", "downstream_request"] },
+            "detail": { "type": "string" },
+            "gate": { "type": ["string", "null"], "enum": ["A", "B", "C", "D", "E", "F", "G", "H", "I", null], "description": "The per-sector activation gate, if this run is part of one. SECTOR_ACTIVATION_PROTOCOL.md — nine gates, A through I." }
+          }
+        },
+
+        "context": {
+          "type": "object",
+          "description": "The resolved Sector Execution Context. A run with an unresolved context MUST NOT reach a write — it stops and records a resolution_failure instead.",
+          "required": ["resolved"],
+          "additionalProperties": false,
+          "properties": {
+            "resolved": { "type": "boolean" },
+            "resolution_failure": { "type": ["string", "null"], "description": "Why context could not be resolved. Populated ONLY when resolved=false. Never 'defaulted to Hospitality'." },
+            "sub_sector_id": { "type": ["string", "null"] },
+            "sub_sector_name": { "type": ["string", "null"] },
+            "sub_sector_status": { "type": ["string", "null"], "enum": ["Active", "Target", "Reference", "Dormant", null] },
+            "sector_id": { "type": ["string", "null"] },
+            "sector_name": { "type": ["string", "null"] },
+            "geography_ids": { "type": "array", "items": { "type": "string" } },
+            "plugin": { "type": ["string", "null"], "description": "e.g. hospitality. NULL is legal — the core must resolve without a plugin (the falsification test)." },
+            "plugin_version": { "type": ["string", "null"] },
+            "plugin_slots_used": { "type": "array", "items": { "type": "string", "pattern": "^P(1[0-4]|[1-9])$" } },
+            "plugin_slots_unavailable": { "type": "array", "items": { "type": "string" }, "description": "Slots this run NEEDED but found unauthored. Recorded rather than worked around." }
+          }
+        },
+
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "agent_proposal": { "type": ["string", "null"], "description": "Which agent proposed this, if any. NULL for the 9 databases with no proposing agent." },
+            "evidence_refs": { "type": "array", "items": { "type": "string" } },
+            "source_ids": { "type": "array", "items": { "type": "string" } },
+            "research_run_id": { "type": ["string", "null"], "description": "Shared by co-running skills. S01 and S02 MUST carry the same value." }
+          }
+        },
+
+        "validation": {
+          "type": "object",
+          "description": "Which gates were run and what they returned. A skipped gate is recorded as skipped, never omitted.",
+          "additionalProperties": false,
+          "properties": {
+            "schema": { "$ref": "#/$defs/gateResult" },
+            "context_resolution": { "$ref": "#/$defs/gateResult" },
+            "decision_purpose": { "$ref": "#/$defs/gateResult" },
+            "evidence_sufficient": { "$ref": "#/$defs/gateResult" },
+            "confidence_matches_evidence": { "$ref": "#/$defs/gateResult" },
+            "tier_and_freshness": { "$ref": "#/$defs/gateResult" },
+            "no_fabrication": { "$ref": "#/$defs/gateResult" },
+            "relation_targets_exist": { "$ref": "#/$defs/gateResult" },
+            "cross_database_coherence": { "$ref": "#/$defs/gateResult" }
+          }
+        },
+
+        "decision": {
+          "type": "string",
+          "enum": ["CREATE", "UPDATE", "VERSION", "SUPERSEDE", "NO_OP", "REJECT", "ESCALATE"],
+          "description": "The mutation mode. Explicit on every run — never implied by what happened."
+        },
+        "decision_reason": { "type": "string" },
+
+        "writes": {
+          "type": "array",
+          "description": "What actually changed. Empty on NO_OP, REJECT and ESCALATE.",
+          "items": {
+            "type": "object",
+            "required": ["db_id", "record_id", "fields_changed"],
+            "additionalProperties": false,
+            "properties": {
+              "db_id": { "type": "string", "pattern": "^DB(1[0-6]|[1-9])$" },
+              "record_id": { "type": "string" },
+              "fields_changed": { "type": "array", "items": { "type": "string" } },
+              "previous_values": { "type": "object", "description": "Required on VERSION and SUPERSEDE. Historical truth is never silently overwritten." },
+              "invalidates": { "type": "array", "items": { "type": "string" }, "description": "What this change makes untrue elsewhere. SECTOR_CALENDAR_REFRESH_SPEC.md §2b step 4 — 'this is the difference between a database row edit and operating-system behaviour'." }
+            }
+          }
+        },
+
+        "post_write_verification": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "verified": { "type": "boolean", "description": "Was the write read back and confirmed? 'Documented != applied' — SECTOR_OS_ARCHITECTURE.md §1.3 finding 6." },
+            "method": { "type": "string" },
+            "discrepancies": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+
+        "events": {
+          "type": "array",
+          "description": "Events this run WOULD emit. Note: `emits` is declarative metadata in this repo — arika-runtime never calls eventBus.publish(). Recording intent is honest; claiming a publish is not.",
+          "items": {
+            "type": "object",
+            "required": ["event", "subscriber_check"],
+            "additionalProperties": false,
+            "properties": {
+              "event": { "type": "string" },
+              "subscriber_check": { "type": "string", "enum": ["has_subscribers", "NO_SUBSCRIBERS_HANDOFF_FAILURE"] },
+              "subscribers": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+
+        "requires_human_approval": { "type": "boolean" },
+        "approval_reasons": { "type": "array", "items": { "type": "string" } },
+        "escalation": { "type": ["string", "null"], "description": "What was escalated and to whom. Tier-1 architecture questions land here." },
+        "errors": { "type": "array", "items": { "type": "string" } },
+        "loops_registered": { "type": "array", "items": { "type": "string", "enum": ["activation", "refresh", "signal_change", "calendar_recomputation", "feedback", "failure_recovery"] } }
+      }
+    }
+  },
+
+  "$defs": {
+    "gateResult": {
+      "type": "object",
+      "required": ["result"],
+      "additionalProperties": false,
+      "properties": {
+        "result": { "type": "string", "enum": ["pass", "fail", "skipped", "not_applicable"] },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}

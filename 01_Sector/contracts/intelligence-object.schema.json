@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arika.agency/schemas/sector/intelligence-object.schema.json",
+  "title": "Sector Intelligence Object",
+  "description": "The eight questions every Sector intelligence record MUST answer. Source: SECTOR_ACTIVATION_CONTRACT.md §13.3, where they are stated as ONE PROSE SENTENCE and never enumerated or encoded. This file is the first machine-readable form of that rule. It conforms to AEIT_06's `Knowledge Object` (claim, entity_ref, confidence, trust, freshness, source_id, state) expressed through the existing Notion fields.",
+
+  "_provenance": {
+    "authored": "2026-08-24",
+    "derived_from": "01_Sector/SECTOR_ACTIVATION_CONTRACT.md §13.3",
+    "invents_nothing": "Every constraint below already exists in prose somewhere in 01_Sector/. This file changes the REPRESENTATION, not the rule.",
+    "enforcement": "NOT machine-enforced. No validator reads this file today — `arika-runtime` validates agent frontmatter only and cannot see `.claude/skills/`. A skill conforms by following it. Stated plainly so no reader mistakes this schema for a gate."
+  },
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["what", "source", "when_observed", "reliability", "which_sector", "which_decision", "which_consumer", "what_action"],
+
+  "properties": {
+    "what": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Q1 — the claim itself. One finding, not a paragraph of context.",
+      "notion_field": { "DB3": "Finding", "DB7": "Signal" }
+    },
+    "source": {
+      "type": "object",
+      "description": "Q2 — where the claim comes from. A claim with no source is not a finding.",
+      "required": ["authority", "tier"],
+      "additionalProperties": false,
+      "properties": {
+        "authority": { "type": "string", "minLength": 1, "description": "The publishing body. The tier test is about the publisher, not the page." },
+        "url": { "type": ["string", "null"], "format": "uri", "description": "NULL is the honest default. A URL written from memory is fabrication." },
+        "tier": { "type": "string", "enum": ["T1 Primary", "T2 Institutional", "T3 Commercial-intel", "T4 Secondary"], "description": "INHERITED from the registered source (DB14 Authority Level). A record may never out-rank its publisher." },
+        "source_id": { "type": ["string", "null"], "description": "DB14 Source ID slug. NULL only while the source registry is empty." },
+        "kind": { "type": "string", "enum": ["xlsx", "chat", "agent run", "research"] }
+      },
+      "notion_field": { "DB3": "Evidence + Source", "DB7": "Authoritative Source + Source URL + Source Tier + Signal Source" }
+    },
+    "when_observed": {
+      "type": "object",
+      "description": "Q3 — when this was true, and when it was last checked. Freshness is not optional metadata; it is what stops truth decaying into fiction.",
+      "required": ["last_verified", "freshness"],
+      "additionalProperties": false,
+      "properties": {
+        "last_verified": { "type": "string", "format": "date" },
+        "next_verification": { "type": ["string", "null"], "format": "date", "description": "Derived from the proximity escalation ladder — SECTOR_CALENDAR_REFRESH_SPEC.md §2a." },
+        "freshness": { "type": "string", "enum": ["Fresh", "Aging", "Stale"] }
+      },
+      "notion_field": { "DB3": "Freshness", "DB7": "Last Verified + Next Verification" }
+    },
+    "reliability": {
+      "type": "object",
+      "description": "Q4 — how much weight this carries. Confidence MUST match the evidence; weak evidence plus High confidence is a constitutional breach, not a rounding error.",
+      "required": ["confidence"],
+      "additionalProperties": false,
+      "properties": {
+        "confidence": { "type": "string", "enum": ["Low", "Medium", "High"] },
+        "confidence_basis": { "type": "string", "description": "Why this confidence and not the next one up." }
+      },
+      "notion_field": { "DB3": "Confidence", "DB7": "Confidence" },
+      "content_boundary_mapping": {
+        "_note": "Content (04) uses a 5-value vocabulary. The documented mapping covers only 3 of 5 — a known lossy edge (F9).",
+        "High": "Confirmed",
+        "Medium": "Working Hypothesis",
+        "Low": "Experimental",
+        "UNMAPPED_content_side": ["Strong Signal", "Deprecated"]
+      }
+    },
+    "which_sector": {
+      "type": "object",
+      "description": "Q5 — the market this is true of. Resolved through the Sub-Sector hub, never asserted from free text.",
+      "required": ["sub_sector_id"],
+      "additionalProperties": false,
+      "properties": {
+        "sub_sector_id": { "type": "string", "minLength": 1 },
+        "sector_id": { "type": ["string", "null"], "description": "Resolved via DB2 Parent Sector. Never supplied independently." },
+        "geography_id": { "type": ["string", "null"], "description": "Set ONLY when the claim is true somewhere specific. 'Nairobi MICE demand concentrates Sep-Nov' is a Nairobi fact, not a Hospitality fact." }
+      },
+      "notion_field": { "DB3": "Sub-Sector + Geography", "DB7": "Sub-Sector + Geography" }
+    },
+    "which_decision": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Q6 — the decision this supports. THE DECISION-PURPOSE GATE (Contract §13.3): populate a field only when it has a named downstream decision. A datapoint no decision consumes is noise — do not collect it, do not store it.",
+      "notion_field": { "DB3": "Strategic Implication" }
+    },
+    "which_consumer": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/department" },
+      "description": "Q7 — which system consumes it. MUST be non-empty. See $defs/department for the vocabulary problem this exposes.",
+      "notion_field": { "DB3": "Routed To", "DB7": "Departments Affected" }
+    },
+    "what_action": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Q8 — what can actually be done. An observation with no available action is not actionable intelligence.",
+      "notion_field": { "DB3": "Recommended Action", "DB7": "Recommended Action" }
+    }
+  },
+
+  "$defs": {
+    "department": {
+      "type": "string",
+      "description": "PROPOSED unified department vocabulary — finding F2. Today TWO disjoint vocabularies exist: DB3 `Routed To` has 5 values, DB7 `Departments Affected` has 7, and NEITHER covers Design(19), Experience Engineering(20), Presence(21), Audits(14) or Client Success(07). A handoff routed on one cannot be received by a workflow reading the other. Unifying them is the single highest-value schema change for making workflows composable, and it is a Gate 2+ Notion change — NOT applied here.",
+      "enum": [
+        "00_Governance", "01_Sector", "02_Offer", "03_Marketing", "04_Content",
+        "05_Sales", "06_ClientPartner", "07_ClientSuccess", "08_Operations",
+        "09_Finance", "10_Legal", "11_HR", "12_Branding", "13_TechStack",
+        "14_Audits", "15_Consulting", "16_Automation", "17_AIEnablement",
+        "19_Design", "20_ExperienceEngineering", "21_Presence"
+      ],
+      "_status": "PROPOSED, NOT RATIFIED. Adopting it requires an owner decision and a Notion select migration on two fields.",
+      "_excluded": "18_Cross_Domain_Synthesis is deliberately absent — GLOBAL_OS.md §4 records it as NOT an active department (reference archive, no OS file, no owner)."
+    }
+  },
+
+  "examples": [
+    {
+      "_comment": "Shape only. Values are illustrative and deliberately reference the pilot's real, cited finding rather than inventing one.",
+      "what": "Effective OTA commission for independent Kenyan properties runs 15-30%, above the headline rate",
+      "source": { "authority": "web research, 2026-08-19", "url": null, "tier": "T3 Commercial-intel", "source_id": null, "kind": "research" },
+      "when_observed": { "last_verified": "2026-08-19", "next_verification": "2026-11-19", "freshness": "Fresh" },
+      "reliability": { "confidence": "Medium", "confidence_basis": "consistent across multiple commercial-intel sources; no T1 publisher confirms the range for Kenya specifically" },
+      "which_sector": { "sub_sector_id": "sub-accommodation", "sector_id": "sec-hospitality", "geography_id": "geo-kenya" },
+      "which_decision": "Whether the OTA Leakage & Direct-Booking Audit is a defensible gateway offer for this market",
+      "which_consumer": ["02_Offer", "04_Content"],
+      "what_action": "Route to Offer (02) as the gateway-offer thesis; route to Content (04) as the 'OTA tax' narrative"
+    }
+  ]
+}

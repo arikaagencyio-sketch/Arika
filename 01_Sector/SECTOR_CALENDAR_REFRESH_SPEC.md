@@ -1,6 +1,6 @@
 # Sector Signal — Real-Time Refresh Engine (Spec)
 
-> **Evolved 2026-08-15 (SCIC Phase D):** this spec now governs the full **Sector Signal Refresh** — all 16 signal types + commercial-impact + lead-time + downstream routing, of which calendar-date re-verification is one facet. The agent was renamed `sector-calendar-refresher` → **`sector-signal-refresher`**. (Filename kept for link stability; content generalized.)
+> **Evolved 2026-08-15 (SCIC Phase D):** this spec now governs the full **Sector Signal Refresh** — all signal types + commercial-impact + lead-time + downstream routing, of which calendar-date re-verification is one facet. *(The enum was 16 types when this was written; it has been **21 since 2026-08-20**.)* The agent was renamed `sector-calendar-refresher` → **`sector-signal-refresher`**. (Filename kept for link stability; content generalized.)
 
 **Department:** Sector (01) · **Status:** Agent spec **built** 2026-08-11, **broadened 2026-08-15** (`.claude/agents/sector-signal-refresher.md`, advisory, registered in the runtime; loop wired to `sector-intelligence-mapper` via `CALENDAR_UPDATED` + `sector-readiness-analyst` via `REGULATORY_CHANGE`; `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE` emitted-but-not-yet-subscribed, Contract §8). **Not yet armed as a live routine.** Key finding (§5a): a claude.ai cloud routine has **no web access**, so the honest unattended form is a **comment-posting staleness watchdog** (flags what's due + where to check it), **never** an unattended date/number-writer — that would fabricate. Runs manual/advisory today; ready to arm as the comment-watchdog form pending the owner's go + an `AUTOMATION_APPROVAL_MATRIX.md` row.
 **Purpose:** Keep the **Sector Signals (Commercial Intelligence Calendar)** Notion DB accurate and commercially interpreted in *real time* (= a freshness cadence, not a live stream) — re-verify signal dates against authoritative sources, surface newly-announced signals and regulatory deadlines, flag delays/cancellations, **propose the commercial interpretation** (impact + lead-time + routing), and **propagate material changes into Sector Intelligence + readiness**. The signal layer is a living intelligence surface, not a static table (Draft 8 + SCIC doctrine + owner's real-time directive).
@@ -72,7 +72,9 @@ A moved date **must not silently overwrite** the old one. On any material change
 
 A material calendar change is itself sector intelligence. On `REGULATORY_CHANGE` / `CALENDAR_UPDATED`, the engine writes a **Sector Intelligence** finding (Category = `Risk/Fragility` or `Strategic Node`) and flags the affected sub-sector's **readiness** for re-scoring. Worked example already in the data: **FSMA 204 slipped Jan 2026 → Jul 2028** and **CSRD Wave 2 slipped to 2028** — both reduce the near-term AgriTech/FoodTech/EnergyTech urgency that Sheet 11 readiness leaned on. That is the calendar → intelligence → leverage loop, live.
 
-Emits (reuse the runtime event bus): `CALENDAR_UPDATED` → `sector-intelligence-mapper` (01) + `content-intelligence-hub` (04, timing for campaigns); `REGULATORY_CHANGE` → `sector-readiness-analyst` (01) + `sales-lead-qualification` (05, timing triggers).
+Emits (reuse the runtime event bus): `CALENDAR_UPDATED` → `sector-intelligence-mapper` (01); `REGULATORY_CHANGE` → `sector-readiness-analyst` (01).
+
+> 🔴 **Corrected 2026-08-24.** This line previously also listed `content-intelligence-hub` (04) and `sales-lead-qualification` (05) as subscribers. **Neither agent subscribes to these events** — verified by grepping every `on:` trigger across all 115 agent files. Both events reach only Sector's own agents and **never leave the department**, so the "calendar → intelligence → leverage loop" described above closes *within* Sector and does not currently reach Content or Sales. Ground truth: [`SECTOR_EVENT_CATALOG.md`](SECTOR_EVENT_CATALOG.md) §3.
 
 ## 4. Agent spec (to build)
 
@@ -81,7 +83,7 @@ Emits (reuse the runtime event bus): `CALENDAR_UPDATED` → `sector-intelligence
 ```yaml
 name: sector-signal-refresher
 department: "01"
-description: Monitors the Sector Signals DB — re-verifies all 16 signal types, flags stale/moved/delayed/new, proposes commercial-impact + lead-time + downstream routing. Advisory.
+description: Monitors the Sector Signals DB — re-verifies all 21 signal types, flags stale/moved/delayed/new, proposes commercial-impact + lead-time + downstream routing. Advisory.
 model: claude-opus-4-8
 execution: prompt
 risk_class: 2            # WRITES to an external system (Notion) → needs approval-matrix row before unattended

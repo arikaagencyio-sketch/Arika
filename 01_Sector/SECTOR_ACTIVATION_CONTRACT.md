@@ -37,7 +37,7 @@ On any conflict, higher overrides lower — and **never silently**; state the co
 ## 3. Repository responsibility (read before you build)
 
 Before creating, modifying, querying, or executing any Sector workflow you MUST:
-1. Read the Sector Layer: `SECTOR_OS.md`, this contract, `SECTOR_NOTION_SCHEMA.md`, the 4 agents (`.claude/agents/sector-*.md`), and the relevant raw drafts.
+1. Read the Sector Layer: `SECTOR_OS.md`, this contract, `SECTOR_NOTION_SCHEMA.md`, [`SECTOR_WRITE_CONTRACT.md`](SECTOR_WRITE_CONTRACT.md) (before any write), the **5** agents (`.claude/agents/sector-*.md`), and the relevant raw drafts.
 2. Read the **cross-department ownership map** (§4) — identify what already exists before creating anything.
 3. **Reuse** existing schemas, agents, events, and conventions. Treat repo structure as an implementation dependency, not documentation.
 4. If a needed dependency is missing, **report the dependency** — do not silently invent an implementation.
@@ -60,7 +60,7 @@ Before creating, modifying, querying, or executing any Sector workflow you MUST:
 
 Map every Sector task to a layer; each layer has a build home (see `SECTOR_OS.md` and the plan's Part-1 table):
 1 Identity · 2 Linguistic · 3 Calendar · 4 Journey · 5 Infrastructure · 6 Intelligence · 7 Governance · 8 Runtime · 9 Memory · 10 Opportunity · 11 Risk · 12 Evolution.
-Homes: **Notion** (Identity, Linguistic, Calendar, Intelligence, Opportunity, Evolution, Audience, ICP, Signal, Decision-Makers — see `SECTOR_NOTION_SCHEMA.md`); **repo doctrine** (Journey, Governance); **runtime** (Runtime layer = 4 agents + event bus); **`01_Sector/_memory/runtime.jsonl`** (Memory).
+Homes: **Notion** (Identity, Linguistic, Calendar, Intelligence, Opportunity, Evolution, Audience, ICP, Signal, Decision-Makers — see `SECTOR_NOTION_SCHEMA.md`); **repo doctrine** (Journey, Governance); **runtime** (Runtime layer = 5 agents + event bus); **`01_Sector/_memory/runtime.jsonl`** (Memory).
 > **Layer 3 (Calendar) is operated as the Sector Signal / Commercial Intelligence Calendar (SCIC) — see §12.** Layer 12 (Evolution) is home to **Sector Forecast** and Layer 6 synthesis to **Sector State** (`SECTOR_NOTION_SCHEMA.md` DB 12/13).
 
 ## 6. The Sector Cognition Runtime Loop (Draft 13, 14 steps)
@@ -73,7 +73,7 @@ Any non-trivial Sector task follows: **1** identify sector → **2** read this c
 
 Before activating any workflow, VALIDATE that: the schema exists · required DBs + relations exist · a trigger exists · the owning agent/skill exists · the output destination exists · an audit/memory path exists · a feedback path exists. If any is missing, **report it**.
 
-Automation gate: Sector's 4 agents are **Class 1 (internal, advisory)** — no approval-matrix row is required while they only recommend. A row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` (columns: Trigger · Action · Risk Class · Rollback · Fallback · Log destination · Human gate · Last-verified · Detection) becomes **required** the moment any agent acts externally or is put on a persistent scheduler. Class ≥ 3 requires human sign-off.
+Automation gate: Sector's **5** agents are advisory — **four Class 1 (internal intelligence) and `sector-signal-refresher` Class 2 with `requires_human_approval: true`** — so no approval-matrix row is required while they only recommend. **The same exemption covers the twelve Sector skills** ([`SECTOR_SKILL_MATRIX.md`](SECTOR_SKILL_MATRIX.md)): they are manual-apply by construction, since `arika-runtime` has no Notion client and cannot invoke a skill, so the apply step is a human-invoked Claude Code session (`04_Content/CONTENT_INTELLIGENCE_SCHEMA.md` §7 — "the same doctrine Sector operates under"). A row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` (columns: Trigger · Action · Risk Class · Rollback · Fallback · Log destination · Human gate · Last-verified · Detection) becomes **required** the moment any agent acts externally or is put on a persistent scheduler. Class ≥ 3 requires human sign-off.
 
 ## 8. Trigger & routing requirement (reuse the runtime)
 
@@ -85,14 +85,15 @@ Every workflow defines: `TRIGGER → CONTEXT → RETRIEVAL → ANALYSIS → DECI
 | `ICP_CLASSIFIED` | tier set | Sales (05) qualification + Marketing (03) intelligence |
 | `SECTOR_MAPPED` | sector map produced | Offer (02) + Marketing (03) + Content (04) |
 | `SECTOR_READINESS_SET` | readiness reclassified | Marketing (03) demand generation |
-| `CALENDAR_UPDATED` | a signal changed materially | `sector-intelligence-mapper` (01) + `content-intelligence-hub` (04) — **wired** |
-| `REGULATORY_CHANGE` | a regulatory signal moved | `sector-readiness-analyst` (01) + `sales-lead-qualification` (05) — **wired** |
+| `CALENDAR_UPDATED` | a signal changed materially | `sector-intelligence-mapper` (01) — **wired, intra-department only.** ⚠️ `content-intelligence-hub` (04) was listed here and **does not subscribe** — see the correction below |
+| `REGULATORY_CHANGE` | a regulatory signal moved | `sector-readiness-analyst` (01) — **wired, intra-department only.** ⚠️ `sales-lead-qualification` (05) was listed here and **does not subscribe** — see the correction below |
 | `DEMAND_SHIFT` | demand-signal materially changed | Marketing (03) demand + Ops (08) revenue — ⏳ *emitted, not yet subscribed* |
 | `COMPRESSION_EVENT` | a compression/event window opens | Sales (05) meetings + Marketing (03) campaign timing — ⏳ *emitted, not yet subscribed* |
 | `COMPETITOR_MOVE` | competitor signal detected | Marketing (03) market-intelligence + Sales (05) — ⏳ *emitted, not yet subscribed* |
 
 > ✅ Wired 2026-08-10: the four Sector emits reach live subscribers — `PROSPECT_SCORED`/`ICP_CLASSIFIED` → `sales-lead-qualification` (05); `SECTOR_MAPPED` → `offer-orchestrator` (02); `SECTOR_READINESS_SET` → `marketing-demand-generation` (03) — added **additively** (pre-existing consumers in Ops/ClientPartner/Content preserved; events are multicast). `PROSPECT_IDENTIFIED` is an **external** entry trigger by design (webhook/manual), so it has no internal emitter. `handoff_to` remains documentation-only and is not executed.
-> ⏳ Added 2026-08-15 (SCIC Phase D): `sector-signal-refresher` emits the three new SCIC signal events above. `CALENDAR_UPDATED`/`REGULATORY_CHANGE` reuse the already-wired subscribers; `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE` are **emitted-but-not-yet-subscribed** — their target-department handlers (03/05/08) MUST be registered before these carry weight (anti-dead-event rule, Part 2). Because the refresher is advisory/manual (nothing fires unattended), there is **no live dead event** today; the wiring is a documented extension point, activated when a downstream department adopts it. Verified: `arika list` loads all Sector agents, 0 skipped.
+> ⏳ Added 2026-08-15 (SCIC Phase D): `sector-signal-refresher` emits the three new SCIC signal events above. `CALENDAR_UPDATED`/`REGULATORY_CHANGE` were recorded as reusing the already-wired subscribers — **this was wrong, see the correction below**; `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE` are **emitted-but-not-yet-subscribed** — their target-department handlers (03/05/08) MUST be registered before these carry weight (anti-dead-event rule, Part 2). Because the refresher is advisory/manual (nothing fires unattended), there is **no live dead event** today; the wiring is a documented extension point, activated when a downstream department adopts it. Verified: `arika list` loads all Sector agents, 0 skipped.
+> 🔴 **CORRECTION 2026-08-24 — two dead *edges*, found by regenerating the subscriber map from ground truth.** The 2026-08-15 entry above assumed `CALENDAR_UPDATED` and `REGULATORY_CHANGE` could "reuse the already-wired subscribers." They cannot: the wiring belonged to *different* events. Grepping every `on:` trigger across all 115 agent files shows **`content-intelligence-hub` subscribes to `SECTOR_MAPPED`, `MARKET_SIGNAL_MAPPED`, `OFFER_ENGINEERED`, `ADVOCACY_CAPTURED` and `BUYER_PSYCHOLOGY_MAPPED` — not `CALENDAR_UPDATED`**, and **`sales-lead-qualification` subscribes to `LEAD_CREATED`, `ICP_CLASSIFIED` and `PROSPECT_SCORED` — not `REGULATORY_CHANGE`**. Both events therefore reach only Sector's own agents and **never leave the department**. This makes `SECTOR_OS_ARCHITECTURE.md` §1.1's *"Six reach a live subscriber"* true at the event level but misleading at the edge level. Neither edge appeared in any gap register — the same *"a changelog entry is a record of intent, not proof of state"* failure this contract already names (§1.3 finding 6), which nothing caught because nothing regenerated the list. Ground truth now lives in [`SECTOR_EVENT_CATALOG.md`](SECTOR_EVENT_CATALOG.md) and [`contracts/event-catalog.json`](contracts/event-catalog.json), regenerated by grep rather than copied. **Wiring a real subscriber is a Content (04) / Sales (05) change and is not made here.** The anti-dead-event rule now covers dead edges too: S10 re-reads the catalog before every handoff.
 
 ## 9. Output requirement (make it executable)
 

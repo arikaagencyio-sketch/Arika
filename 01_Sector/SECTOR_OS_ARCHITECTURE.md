@@ -136,7 +136,7 @@ The fixed contract every sector pack MUST fill. Each slot names the universal fi
 | **P13** | **Seasonality model + compression threshold** — the sector's season shape and its own `≥ N signals in a rolling window` value | DB 7 · the `CALENDAR_INTELLIGENCE.md` §9 rule, made configurable |
 | **P14** | **KPI semantics** — what DB 12's sector-appropriate fields mean here (`ADR / Price Pressure`, `Connectivity / Access`) | DB 12 · Marketing (03) |
 
-**Plugin honesty states.** Every slot carries one: 🟢 web-cited · 🟡 owner-curated · 🔴 gated (needs paid/PII data) · ⚫ template (needs a client system) · ⬜ unauthored.
+**Plugin honesty states.** Every slot carries one: 🟢 web-cited · 🟡 owner-curated · 🔴 gated (needs paid/PII data) · ⚫ template (needs a client system) · ⬜ unauthored · **◐ partial** (some of the slot is authored and cited; a named sub-layer is explicitly ⬜). *(`◐` was added to the legend 2026-08-24 — it was already in active use in the Sector #001 slot table for P3 and P12 while being defined nowhere. A state in use but undeclared is exactly the drift this legend exists to prevent.)*
 
 **Depth-first rule (inherited, `SECTOR_ACTIVATION_CONTRACT.md` §14.1).** A sector gets plugin rows **only when its cross-loop is authored** — never pre-emptively across the 321 sub-sectors.
 

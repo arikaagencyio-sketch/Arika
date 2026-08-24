@@ -2,14 +2,18 @@
 
 **Sector:** Hospitality (vertical) → **Accommodation (Hotels)** (sub-sector, `Status = Target`)
 **Interface:** [`../../SECTOR_OS_ARCHITECTURE.md`](../../SECTOR_OS_ARCHITECTURE.md) §3 — the 14-slot Sector Plugin Interface
-**Status:** Gate 1 (DECIDE) — **config pack only. Nothing in this file has been written to Notion.**
+**Status:** Gate 1 (DECIDE) — **config pack only. No *rows* from this file have been written to Notion.**
+
+> ⚠️ **Precision correction (2026-08-24).** This line previously read *"Nothing in this file has been written to Notion,"* which is not accurate. **Two of this pack's vocabularies are already live Notion option sets** on DB 16 Destination Profile — `Demand Themes` (23 options, slot **P5**) and `Asset / Property Archetypes` (10 options, slot **P2**) — each stamped `PLUGIN-SUPPLIED VOCABULARY (slot Pn)` in its own Notion field description. They arrived with the Gate 2 schema apply, because a select option set *is* schema. **No rows exist**; the vocabularies do. The distinction matters: the blanket claim read as though the plugin had had no effect on the workspace.
 **Version:** v0.1 (2026-08-20)
 
 > **What this file is.** A **doctrine/config pack**, not runtime code. The word "plugin" here is deliberately *not* the repo's runtime sense (`finos-plugin`, `bois`, which are executable) — hence the directory `sector_plugins/`, not `plugins/`. This pack supplies **values** into Universal Core fields. It **MUST NOT** create a store, a field, an agent, or an event.
 
 > **What this file is not.** A second copy of the pilot. Work already live in Notion (signals, findings, linguistics, audience roles, decision-maker titles, the entry offer) is **referenced by its owning store**, never re-typed here. Re-typing upstream truth downstream is the duplication the architecture exists to end.
 
-**Honesty legend:** 🟢 web-cited · 🟡 owner-curated (hypothesis) · 🔴 gated (paid/PII/Legal) · ⚫ template (needs a client system) · ⬜ unauthored
+**Honesty legend:** 🟢 web-cited · 🟡 owner-curated (hypothesis) · 🔴 gated (paid/PII/Legal) · ⚫ template (needs a client system) · ⬜ unauthored · ◐ partial (some authored and cited; a named sub-layer explicitly ⬜)
+
+**Machine-readable sidecar:** [`plugin.config.json`](plugin.config.json) carries the mechanically-read slots — **P2** (the signal→archetype rule matrix), **P5** (demand-theme vocabulary), **P6** (signal-type weighting), **P7** (activation offsets) and **P13** (compression threshold). It is **derived from this file**, which stays the source of truth; if the two disagree, the markdown wins and the JSON is regenerated. It exists because `SECTOR_OS_ARCHITECTURE.md` §4.1 steps 4 and 6 require the Resolution Engine to *read* P2 and P7, and a markdown table cannot be read by a procedure. It creates no store, field, agent or event — it is a representation change, not a new value.
 
 ---
 

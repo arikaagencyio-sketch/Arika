@@ -1,7 +1,7 @@
 # Owner Input Needed — Consolidated Tracker
 
 **Status:** Living document — updated as each department's content migration surfaces new items. Review in one sitting once migration is further along, or pick off items anytime.
-**Last updated:** 2026-07-19
+**Last updated:** 2026-08-24 (Sector 01 — items 31a–31e added by the Skill Layer Gate 0/1 pass)
 
 > ⚠️ **This tracker went stale between 2026-07-09 and 2026-07-19 and was re-synced on 2026-07-19.** Six departments were built in that window (13, 14, 15, 16, 17, 10, 11) and **none of the owner actions they surfaced had rolled up here** — including the two largest open items in the agency (engage counsel, engage an accountant). Items 57–69 close that gap. **The roll-up is manual and nothing enforces it**, which is the same class of failure Automation (16) found in its own estate: a document that describes a live process, while nothing re-checks whether the process ran. Treat the drift as a known property of this file, not a one-off.
 
@@ -40,6 +40,16 @@ When an item is resolved, move it to "Resolved" at the bottom with the date and 
 ## Department: Sector (01)
 
 *(item 31 resolved 2026-06-30 — see Resolved table)*
+
+**Surfaced 2026-08-24 by the Skill Layer Gate 0/1 pass** (`01_Sector/SECTOR_DISCOVERY_INVENTORY.md` §7). These are decisions, not research tasks — none can be filled by reading the drafts.
+
+| # | Needs a decision on | Why it cannot be inferred | Blocks |
+|---|---|---|---|
+| 31a | **One canonical department vocabulary.** `Sector Intelligence.Routed To` offers 5 values; `Sector Signals.Departments Affected` offers 7; the sets are disjoint and **neither covers Design (19), Experience Engineering (20), Presence (21), Audits (14) or Client Success (07)**. A proposed 21-value enum is in `01_Sector/contracts/intelligence-object.schema.json` `$defs/department`. | Which departments may legitimately receive a Sector handoff is a scope decision, not a fact. It also implies a Notion select migration on two live fields. | **Every routing skill (S01, S04, S08, S10).** Highest-value schema change for making workflows composable; retrofitting after twelve skills exist is far more expensive. |
+| 31b | **Are Market Routes (DB 15) and Destination Profile (DB 16) universal, or a travel-family object?** Both are `[CANDIDATE]` in `AEIT_06` and neither is canonised. `SECTOR_ACTIVATION_PROTOCOL.md` §4 rates plugin slot P5 confidence **low** — *"For B2B SaaS, geography may carry no demand-theme meaning."* | Only a second, non-travel sector running through the Protocol can answer it — and that is **Gate I**, which has not run. | S05 and S09 for any non-travel sector; the honesty of calling SectorOS sector-agnostic. |
+| 31c | **Does a derived `plugin.config.json` sidecar breach the plugin rule?** `SECTOR_ACTIVATION_CONTRACT.md` §16 forbids a plugin creating "a store, a field, an agent, or an event." The sidecar creates none of those — it re-represents authored values so the Resolution Engine can read slots P2/P7, which existed only as markdown tables. Built this pass under that reading. | It is a doctrine interpretation, and §16 says escalate rather than interpret. | Ratify or revert. If reverted, S09 cannot mechanically read the plugin and the falsification test at Gate F becomes much harder to prove. |
+| 31d | **Wire or retire the three dead events + two dead edges.** `DEMAND_SHIFT`, `COMPRESSION_EVENT`, `COMPETITOR_MOVE` have zero subscribers; `CALENDAR_UPDATED` and `REGULATORY_CHANGE` reach only Sector's own agents despite three files claiming otherwise. | Registering a handler is a change to a Content (04) / Sales (05) / Marketing (03) agent — another department's scope. | S10 must report any handoff into these as `HANDOFF_FAILURE` until resolved. |
+| 31e | **Five Notion schema fixes, queued not applied** (Gate 2 work): re-level Maasai Mara + Diani `City`→`Destination`; deprecate the `Sector` select on DB 7; add the ICP↔Score relation; convert `Total Score` to a formula; add provenance fields to DB 6/9/10. | Each is a live-workspace change with downstream effects; the decide→apply separation is deliberate. | S12 is blocked on the ICP↔Score relation and the score formula. Geography mis-levelling corrupts every resolution run meanwhile. |
 
 ## Department: Offer (02)
 

@@ -1,0 +1,282 @@
+{
+  "_meta": {
+    "plugin": "hospitality",
+    "plugin_number": "001",
+    "version": "0.1",
+    "generated": "2026-08-24",
+    "derived_from": "01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md v0.1",
+
+    "what_this_is": "A DERIVED sidecar carrying only the plugin slots that a resolver must read MECHANICALLY. HOSPITALITY_PLUGIN.md remains the authored source of truth; this file is generated from it and must never be edited independently. If the two disagree, the markdown wins and this file is regenerated.",
+
+    "why_it_exists": "SECTOR_OS_ARCHITECTURE.md §4.1 step 4 requires the Resolution Engine to FILTER by the plugin's property-type rule (P2), and step 6 to DERIVE activation dates from the plugin timing table (P7). Both existed only as markdown tables, so no resolver could read them. This gap was flagged nowhere in the repo before Gate 0.",
+
+    "why_it_does_not_breach_the_plugin_rule": "SECTOR_ACTIVATION_CONTRACT.md §16 forbids a plugin from creating 'a store, a field, an agent, or an event'. This file creates none of those. It is a REPRESENTATION of values that already exist in the authored pack — the same values, in a form a procedure can read. No new value is introduced here, and every entry carries a pointer back to the markdown section it came from.",
+
+    "honesty_legend": {
+      "green": "web-cited",
+      "yellow": "owner-curated (hypothesis)",
+      "red": "gated (paid/PII/Legal)",
+      "black": "template (needs a client system)",
+      "unauthored": "not researched — explicitly null, never defaulted"
+    },
+
+    "slots_included": ["P2", "P5", "P6", "P7", "P13"],
+    "slots_excluded": {
+      "P1": "ontology — lives in DB1/DB2 as rows, already machine-readable in Notion",
+      "P3": "demand model — partial; the demand-pattern layer is unauthored",
+      "P4": "geography scope — lives in DB11 as rows",
+      "P8": "source pack — every row is `candidate` with NO URL recorded; encoding unverified sources would give them false solidity",
+      "P9": "audience/DM — lives in DB9/DB10 as rows",
+      "P10": "linguistics — lives in DB6 as rows",
+      "P11": "offer ladder — owned by Offer (02), routed via DB8",
+      "P12": "content pillars — partial; pillar/angle set unauthored",
+      "P14": "KPI semantics — prose field-meaning, consumed by a human reader not a filter"
+    }
+  },
+
+  "P2": {
+    "slot": "Entity/asset typology + property-type rules",
+    "state": "yellow",
+    "source_section": "HOSPITALITY_PLUGIN.md §P2",
+    "lands_in": ["DB2.Company Archetype", "DB16.Asset / Property Archetypes", "Resolution Engine step 4"],
+    "notion_status": "The archetype VOCABULARY is already live as the DB16 `Asset / Property Archetypes` multi-select option set, stamped 'PLUGIN-SUPPLIED VOCABULARY (slot P2)' in its own Notion field description. The RULE MATRIX below is not in Notion and has no home there — it is a filter, not a field.",
+
+    "archetype_vocabulary": [
+      "City / Conference Hotel", "Business Hotel", "Beach Resort", "Safari Lodge",
+      "Tented Camp", "Boutique Property", "Serviced Apartment", "Villa",
+      "Destination Property", "Hospitality Group"
+    ],
+
+    "property_type_rule": {
+      "_semantics": "moves_demand = this Signal Type materially moves this archetype's demand. does_not_move = it largely does not. A Signal Type absent from BOTH lists is UNRULED for that archetype — the resolver must treat it as unknown, not as false.",
+      "_falsifiability": "This is a structured statement of the owner's sector reasoning, NOT measured data. It is a falsifiable default; the Gate F validation run exists to break it. Where a real client's performance contradicts a row, the row changes.",
+
+      "City / Conference Hotel": {
+        "moves_demand": ["Sales/MICE", "Event/Compression", "Trade/Fashion", "Mega-Event", "Regulatory"],
+        "does_not_move": ["School-Holiday", "Cruise/Port"],
+        "note": "Regulatory here means corporate travel policy."
+      },
+      "Business Hotel": {
+        "moves_demand": ["Sales/MICE", "Aviation/Connectivity", "Economic", "Event/Compression"],
+        "does_not_move": ["Seasonality", "Sports"],
+        "note": "Seasonality is excluded in its leisure sense."
+      },
+      "Beach Resort": {
+        "moves_demand": ["Seasonality", "School-Holiday", "Holiday/Cultural", "Cruise/Port", "Mega-Event"],
+        "does_not_move": ["Sales/MICE", "Trade/Fashion"],
+        "note": "School-Holiday applies BOTH origin-side and destination-side here. Sales/MICE is secondary rather than absent."
+      },
+      "Safari Lodge": {
+        "moves_demand": ["Seasonality", "School-Holiday", "Aviation/Connectivity", "Risk/Disruption"],
+        "does_not_move": ["Sales/MICE", "Cruise/Port", "Trade/Fashion"],
+        "note": "Seasonality means wildlife/migration. School-Holiday is ORIGIN-SIDE with a long lead."
+      },
+      "Tented Camp": {
+        "moves_demand": ["Seasonality", "School-Holiday", "Aviation/Connectivity", "Risk/Disruption"],
+        "does_not_move": ["Sales/MICE", "Cruise/Port", "Trade/Fashion"],
+        "note": "Shares the Safari Lodge rule — the markdown groups them on one row."
+      },
+      "Boutique Property": {
+        "moves_demand": ["Event/Compression", "Consumer-Behaviour", "Holiday/Cultural"],
+        "does_not_move": ["Sales/MICE"]
+      },
+      "Serviced Apartment": {
+        "moves_demand": ["Sales/MICE", "Economic", "Regulatory"],
+        "does_not_move": ["Seasonality", "Sports"],
+        "note": "Sales/MICE here means extended stay."
+      },
+      "Villa": {
+        "moves_demand": ["School-Holiday", "Holiday/Cultural", "Seasonality"],
+        "does_not_move": ["Sales/MICE", "Distribution"]
+      },
+      "Destination Property": {
+        "moves_demand": null,
+        "does_not_move": null,
+        "state": "unauthored",
+        "note": "Present in the vocabulary and in the live DB16 option set, but carries NO row in the markdown rule matrix. Explicitly unruled rather than defaulted."
+      },
+      "Hospitality Group": {
+        "moves_demand": "INHERIT_UNION_OF_MEMBER_ARCHETYPES",
+        "does_not_move": [],
+        "note": "A parent, not a bookable unit. The resolver computes the union of its properties' archetypes."
+      }
+    }
+  },
+
+  "P5": {
+    "slot": "Destination demand-theme vocabulary",
+    "state": "yellow",
+    "source_section": "HOSPITALITY_PLUGIN.md §P5",
+    "lands_in": ["DB16.Demand Themes"],
+    "notion_status": "LIVE. This exact 23-value set is the DB16 `Demand Themes` multi-select option set, stamped 'PLUGIN-SUPPLIED VOCABULARY (slot P5)'.",
+
+    "demand_themes": [
+      "Corporate", "Business Travel", "Conferences/MICE", "Diplomacy", "Urban Leisure",
+      "Dining", "Staycation", "Transit/Gateway", "Beach", "Luxury", "Family",
+      "School Groups", "Weddings", "Romance/Honeymoon", "Cultural", "Domestic Tourism",
+      "International Tourism", "Corporate Retreat", "Safari/Wildlife", "Conservation",
+      "Photography", "Adventure", "Seasonal Migration"
+    ],
+
+    "proposed_assignments": {
+      "_status": "OWNER HYPOTHESES, NOT VERIFIED. Recorded so Gate F has something to falsify. MUST be web-verified before they become DB16 rows.",
+      "Nairobi": {
+        "themes": ["Corporate", "Business Travel", "Conferences/MICE", "Diplomacy", "Urban Leisure", "Dining", "Staycation", "Transit/Gateway"],
+        "shape": "short-lead, destination-side, weekday-weighted, event- and MICE-led",
+        "state": "yellow"
+      },
+      "Mombasa": {
+        "themes": ["Beach", "Luxury", "Family", "School Groups", "Weddings", "Romance/Honeymoon", "Cultural", "Domestic Tourism", "International Tourism", "Corporate Retreat"],
+        "shape": "mixed origin/destination-side, festive-peak compression, holiday-calendar-led",
+        "state": "yellow"
+      },
+      "Maasai Mara": {
+        "themes": ["Safari/Wildlife", "Conservation", "Luxury", "Family", "Photography", "Adventure", "Seasonal Migration", "International Tourism"],
+        "shape": "long-lead, origin-side dominant, wildlife-season-led",
+        "state": "yellow"
+      },
+      "Diani": {
+        "themes": null,
+        "shape": null,
+        "state": "unauthored",
+        "note": "In Geography (DB11), no profile proposed."
+      }
+    }
+  },
+
+  "P6": {
+    "slot": "Signal-type profile",
+    "state": "yellow",
+    "source_section": "HOSPITALITY_PLUGIN.md §P6",
+    "lands_in": ["DB7 views and weighting"],
+    "_semantics": "Which of the core's 21 Signal Type values carry weight for this sector. Weight is ORDINAL, not numeric — the markdown states bands, not scores, and inventing numbers here would be fabrication.",
+
+    "dominant": ["Seasonality", "Event/Compression", "Holiday/Cultural", "School-Holiday", "Sales/MICE", "Travel-Trade"],
+    "secondary": ["Aviation/Connectivity", "Demand", "Sports", "Mega-Event", "Consumer-Behaviour", "Distribution"],
+    "watch": ["Regulatory", "Economic", "Risk/Disruption", "Supplier/Cost", "Competitor"],
+    "low_relevance": ["Technology", "Trade/Fashion", "Cruise/Port", "Industry-Knowledge"],
+
+    "conditional": {
+      "Cruise/Port": "low_relevance EXCEPT at Mombasa, where it moves Beach Resort demand (see P2)."
+    },
+
+    "coverage_check": {
+      "total_signal_types": 21,
+      "classified": 21,
+      "note": "All 21 live Signal Type values are classified. If the core extends the enum again, this slot goes stale and must be re-authored."
+    },
+
+    "cross_sector_contrast": {
+      "_why_this_slot_exists": "Same 21 values, different weight per sector.",
+      "B2B SaaS": ["Regulatory", "Event/Compression", "Demand"],
+      "Professional Services": ["Regulatory", "Seasonality", "Demand"]
+    }
+  },
+
+  "P7": {
+    "slot": "Timing rule table",
+    "state": "green",
+    "source_section": "HOSPITALITY_PLUGIN.md §P7 (migrated verbatim from CALENDAR_INTELLIGENCE.md §5.2 on 2026-08-20)",
+    "lands_in": ["DB7 six activation date fields", "DB15.Campaign Window", "Resolution Engine step 6"],
+
+    "_semantics": "Offsets are DERIVED PLANNING OFFSETS, never external facts (SECTOR_ACTIVATION_CONTRACT.md §12). Values are days before the signal date, expressed as negative integers. A resolver MUST label every date it derives from these as a planning offset.",
+
+    "_governing_rules": [
+      "Origin-side signals run on LONGER clocks than destination-side ones. A German school holiday drives a booking decision months before the trip; a destination event compresses inventory closer in.",
+      "A row without a real research basis is left NULL, not filled with a plausible number."
+    ],
+
+    "offsets": [
+      {
+        "signal_type": "Event/Compression", "signal_role": "Destination-side",
+        "strategic": -180, "marketing": -120, "sales": -90, "offer": -60, "revenue_watch": -30, "action_deadline": -7,
+        "state": "green"
+      },
+      {
+        "signal_type": "Seasonality", "signal_role": "Destination-side",
+        "strategic": -270, "marketing": -180, "sales": -120, "offer": -90, "revenue_watch": -45, "action_deadline": -14,
+        "state": "green"
+      },
+      {
+        "signal_type": "Sales/MICE", "signal_role": "Destination-side",
+        "strategic": -365, "marketing": -240, "sales": -180, "offer": -120, "revenue_watch": -60, "action_deadline": -30,
+        "state": "green"
+      },
+      {
+        "signal_type": "Holiday/Cultural", "signal_role": "Origin-side",
+        "strategic": -240, "marketing": -150, "sales": -120, "offer": -90, "revenue_watch": -45, "action_deadline": -21,
+        "state": "green",
+        "note": "The markdown groups Holiday and School-Holiday on one origin-side row."
+      },
+      {
+        "signal_type": "School-Holiday", "signal_role": "Origin-side",
+        "strategic": -240, "marketing": -150, "sales": -120, "offer": -90, "revenue_watch": -45, "action_deadline": -21,
+        "state": "green",
+        "note": "Same row as Holiday/Cultural in the source table."
+      },
+      {
+        "signal_type": "Travel-Trade", "signal_role": "Both",
+        "strategic": -120, "marketing": -90, "sales": -60, "offer": -45, "revenue_watch": null, "action_deadline": -14,
+        "state": "green",
+        "note": "This row is Arika's OWN attendance clock, not a client-demand clock. revenue_watch is genuinely absent in the source, not unauthored."
+      },
+      {
+        "signal_type": "Sports", "signal_role": null,
+        "strategic": null, "marketing": null, "sales": null, "offer": null, "revenue_watch": null, "action_deadline": null,
+        "state": "unauthored",
+        "note": "Blank until researched. A resolver encountering this MUST report the offset as unavailable, not substitute a neighbour's."
+      },
+      {
+        "signal_type": "Mega-Event", "signal_role": null,
+        "strategic": null, "marketing": null, "sales": null, "offer": null, "revenue_watch": null, "action_deadline": null,
+        "state": "unauthored"
+      },
+      {
+        "signal_type": "Cruise/Port", "signal_role": null,
+        "strategic": null, "marketing": null, "sales": null, "offer": null, "revenue_watch": null, "action_deadline": null,
+        "state": "unauthored"
+      },
+      {
+        "signal_type": "Aviation/Connectivity", "signal_role": null,
+        "strategic": null, "marketing": null, "sales": null, "offer": null, "revenue_watch": null, "action_deadline": null,
+        "state": "unauthored"
+      }
+    ],
+
+    "universal_row_not_included": {
+      "signal_type": "Regulatory", "scope": "Any sector",
+      "offsets": { "strategic": -365, "marketing": -180, "sales": -270, "offer": -180, "revenue_watch": -90, "action_deadline": -30 },
+      "note": "This row is UNIVERSAL and lives in CALENDAR_INTELLIGENCE.md §5.2, not in the plugin. Reproduced here for resolver completeness ONLY — a plugin must never own a universal rule. If the two ever disagree, the core file wins."
+    }
+  },
+
+  "P13": {
+    "slot": "Seasonality model + compression threshold",
+    "state": "yellow",
+    "source_section": "HOSPITALITY_PLUGIN.md §P13",
+    "lands_in": ["DB7", "CALENDAR_INTELLIGENCE.md §9 rule, made configurable"],
+
+    "compression_threshold": {
+      "min_signals": 3,
+      "min_commercial_priority": ["High", "Critical"],
+      "window_days": 14,
+      "scope": "same Geography",
+      "on_trigger": ["create DB3 finding with Category = Strategic Node", "emit COMPRESSION_EVENT"],
+      "state": "yellow",
+      "note": "INHERITED FROM THE CORE DEFAULT — not yet tuned for hospitality. Retune once real destination density exists.",
+      "WARNING": "COMPRESSION_EVENT has ZERO subscribers (see contracts/event-catalog.json). Triggering this threshold today produces a HANDOFF_FAILURE, not a routed signal."
+    },
+
+    "commercial_rhythm": {
+      "_the_reframe": "Low season is Arika's BUYING window, not a dead period. Occupancy pain is visible and the GM/Revenue Manager finally has capacity to engage. The client's low season is the agency's high season.",
+      "_live_rows": "4 DB7 signals (Peak, Shoulder, Low-season buying window, one trade show), 1 DB12 Sector State, 1 DB13 Forecast.",
+      "_correction_on_record": "Of the three original seasonality rows, all were sourced to hotel-technology MARKETING BLOGS at T3 — a vendor's seasonality claim, not a destination authority's. The generic peak-season row was found DIRECTIONALLY WRONG for Kenya (it asserted a northern-hemisphere summer peak; Kenya's peak is Dec-Jan) and is now Superseded/Delayed. The shoulder row was downgraded. The low-season row was kept but flagged that its Nov-Feb dates are Kenyan PEAK, not low."
+    },
+
+    "forecast_layer": {
+      "state": "black",
+      "fields": ["pickup", "occupancy", "ADR", "RevPAR", "comp-set"],
+      "note": "TEMPLATE ONLY. Populated exclusively from a client's connected RMS/PMS. Never fabricated, never estimated."
+    }
+  }
+}
