@@ -212,6 +212,11 @@ Overrides that beat the ladder: `Needs verification` → every run · `Supersede
 
 **Origin:** `AEIT_08` §5. A source enters `State = active` **only after a live verification call proves it answers**. No source is registered on faith. Any `scrape` source requires a Legal (10) posture note before `active` — a Class-2+ gate. **Supersession, never deletion.**
 
+**Two clarifications from the first registration pass (2026-08-24), both generalisable:**
+
+- **Authority and reachability are different axes.** `Authority Level` describes the *publisher*; `State` describes whether we can actually follow it. A government ministry whose site fails TLS is still `T1 Primary` and still `candidate` — do not downgrade the tier to express a connection problem, and do not promote on authority alone. Two of two Kenyan ministry domains failed this way in one session.
+- **`Last Verified` means last *successful* verification.** A failed attempt leaves the field **blank** and is recorded in the row's notes with the URL tried and what came back. A date in that field reads as proof the source answered; writing one for a failed call is the same class of error as a plausible `Feed URL`.
+
 ### 4.6 Vocabulary gate
 
 Every `vocab` field validates against the **live** Notion option set, fetched at write time — not against a value remembered from a spec. Two option sets are known-divergent from their documentation (F1, F13); a remembered value can be silently wrong.

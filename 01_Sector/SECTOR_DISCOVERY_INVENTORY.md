@@ -81,7 +81,7 @@ Nothing in the repo is called a write contract, and `grep` for `SECTOR_WRITE_CON
 | DB11 | Geography | one place, one level | 9 | 11 | 2 mis-levelled | S05 |
 | DB12 | Sector State | what is happening now | 14 | 0 | empty | S06 |
 | DB13 | Sector Forecast | forward trajectory | 10 | 0 | empty | S06 |
-| DB14 | **Signal Sources** | one external publisher | 28 | **0** | **all candidate** | S03 |
+| DB14 | Signal Sources | one external publisher | 28 | **4 ✅** | **2 active · 2 blocked by TLS** | S03 |
 | DB15 | Market Routes | origin→destination pair | 23 | 0 | empty · universality open | S05 |
 | DB16 | Destination Profile | commercial read of a place | 27 | 0 | empty · universality open | S05 |
 
@@ -90,7 +90,7 @@ Nothing in the repo is called a write contract, and `grep` for `SECTOR_WRITE_CON
 ### 1.1 What the counts actually mean
 
 - **Structurally complete, about half-loaded.** The taxonomy (346 rows across DB1+DB2), the intelligence corpus (215) and the offer matrix (87) are real. Nine databases hold nothing.
-- **Three databases are blocking, for different reasons.** DB6 and DB9 block the entire downstream Content chain and are fillable *now* (🟢 research). DB14 blocks the honesty of every signal — with no `active` source, **no signal can legitimately inherit an authority tier**.
+- **Three databases were blocking, for different reasons — all three have now moved.** DB6 and DB9 blocked the entire downstream Content chain; both are complete for the one `Target` sub-sector as of 2026-08-24 (S02). DB14 blocked the honesty of every signal, because with no `active` source **no signal could legitimately inherit an authority tier**; it now holds 2 active sources (S03), so three DB 7 rows can inherit a real tier and the remaining seven still cannot. **Partially unblocked is the honest description — not solved.**
 - **Two are empty correctly.** DB4 and DB5 require real scraped companies, which are Legal-gated and deferred. Seeding them with examples would be a constitutional breach.
 - **Depth is thin where it looks thick.** DB3's 215 findings are the SaaS branch; the 88 established non-SaaS industries have zero. DB7's 34 signals include only 3 with full lead-time and impact depth.
 

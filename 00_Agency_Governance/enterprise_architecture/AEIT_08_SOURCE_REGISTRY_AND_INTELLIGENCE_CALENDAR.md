@@ -129,7 +129,7 @@ doctrine: `SECTOR_ACTIVATION_CONTRACT.md` §15. These rows will be **mirrored in
 2026-08-19). Other destinations, outbound routes, and other sectors get source rows when their
 cross-loop is authored — never pre-populated (`SECTOR_ACTIVATION_CONTRACT.md` §14.1).
 
-> ✅ **The Sector-owned mirror now exists** *(2026-08-20).* **DB 14 Signal Sources** was built live in Notion (`collection://13741534-e31d-4ff8-bebf-dd50133e20af`) conforming to the §1 Source entity schema — `Authority Level`, `Feed Type`, `Cadence`, `State`, `Legal Posture`, `Auth`/`Cost`, `Consumers`, and a `Supersedes`/`Superseded By` chain. **It holds 0 rows.** The §5 registration gate is therefore fully in force and completely unexercised: **not one source below has been verified, and no URL has been recorded for any of them.** A table that can hold sources is not a registry of sources.
+> ✅ **The Sector-owned mirror now exists** *(2026-08-20).* **DB 14 Signal Sources** was built live in Notion (`collection://13741534-e31d-4ff8-bebf-dd50133e20af`) conforming to the §1 Source entity schema — `Authority Level`, `Feed Type`, `Cadence`, `State`, `Legal Posture`, `Auth`/`Cost`, `Consumers`, and a `Supersedes`/`Superseded By` chain. **It held 0 rows until 2026-08-24; it now holds 4** — the first sources ever registered in this agency, written by Sector skill `sector-source-registrar` (S03). **The §5 registration gate has now been exercised, and it bit.** Of four Kenya destination-authority sources called live: **2 promoted to `active`** — Kenya Tourism Board / MKTE (`src_ktb_mkte`) and Kenya Law / Public Holidays Act Cap. 110 (`src_ke_public_holidays`), each verified from the publisher's own site — and **2 held at `candidate`** because `www.education.go.ke`, `education.go.ke` and `www.interior.go.ke` all returned **`certificate has expired`**. Both are unimpeachably T1 publishers and neither could be promoted, which is the gate working as designed: **`Authority Level` describes the publisher, `State` describes whether we can actually follow it, and they are different axes.** **`Feed URL (ICS/API)` is blank on all four** — not one publishes an ICS or an API, and none was invented. A table that can hold sources is not a registry of sources; four rows is a start, not a registry either.
 
 > 📌 **Ownership of the *selection*** *(added 2026-08-20).* This registry is the canonical home of the
 > **source rows** — that is `AEIT_08`'s job, agency-wide. But **which** sources a sector needs, and
@@ -141,11 +141,15 @@ cross-loop is authored — never pre-populated (`SECTOR_ACTIVATION_CONTRACT.md` 
 
 **Tier 1 — Destination authority (Kenya).** The destination-side spine.
 
+> **Registration pass 1 — 2026-08-24.** Four rows written; **2 active, 2 candidate**. Two refinements this pass made to the plan above, both worth carrying. **(1) `src_ke_public_holidays` was split in two.** The *statute* (Cap. 110) fixes the recurring dates and is reachable; only a *Gazette notice* can add or move a holiday in a given year, and that is a different publisher on a different cadence (`event-driven`, not `annual`). One source row could not honestly carry both. **(2) `src_ke_tourism_events` was NOT satisfied by `src_ktb_mkte`.** KTB's own expo is one event; the tourism authority's full events calendar is a broader source still unlocated. Registering the narrow one does not close the broad one — kept as two rows so the gap stays visible.
+
 | source_id | Publisher (the body that owns it) | category | consumers | state |
 |---|---|---|---|---|
-| `src_ke_tourism_events` | Kenya's national tourism authority — official events calendar | Tourism board/DMO | Sector Signals · Sector State | **candidate** |
-| `src_ke_public_holidays` | Kenya government — gazetted public holidays | Government registry | Sector Signals (`Holiday/Cultural`) · Market Routes | **candidate** |
-| `src_ke_school_terms` | Kenya Ministry of Education — school term dates | Government registry | Sector Signals (`School-Holiday`) · Market Routes | **candidate** |
+| `src_ke_tourism_events` | Kenya's national tourism authority — official **events calendar** (the full calendar, still unlocated) | Tourism board/DMO | Sector Signals · Sector State | **candidate** |
+| `src_ktb_mkte` | **Kenya Tourism Board — Magical Kenya Travel Expo** *(added 2026-08-24)* | Tourism board/DMO | Sector Signals | ✅ **active 2026-08-24** |
+| `src_ke_public_holidays` | **Kenya Law (National Council for Law Reporting)** — Public Holidays Act Cap. 110 | Government registry | Sector Signals (`Holiday/Cultural`) · Market Routes | ✅ **active 2026-08-24** |
+| `src_ke_gazette` | **Ministry of Interior** — Kenya Gazette holiday declarations *(split out 2026-08-24)* | Government registry | Sector Signals | **candidate** — TLS cert expired |
+| `src_ke_school_terms` | Kenya Ministry of Education — school term dates | Education ministry | Sector Signals (`School-Holiday`) · Market Routes | **candidate** — TLS cert expired |
 | `src_ke_venues` | Nairobi/Mombasa/Diani conference + venue calendars (KICC and peers) | Venue | Sector Signals (`Sales/MICE`) | **candidate** |
 
 **Tier 1 — Origin-market authority (the source markets for Kenya inbound).** The **origin-side**
