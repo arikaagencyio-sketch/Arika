@@ -148,7 +148,7 @@ Intended shape (not yet an executable automation; reality-gated):
 | Proposed agent | One job | Risk class | Pattern reused |
 |---|---|---|---|
 | `presence-orchestrator` | The Decision layer: which direction/layer/sector gets attention; resolves conflict across presence agents | 2 | `sales-executive-intelligence` |
-| `presence-layer-registrar` | Gate for entering/superseding a Presence Layer Registry row; enforces one-owner + economic-job + reality-label | 2 | `techstack-inventory-registrar` |
+| `presence-layer-registrar` | Gate for entering/superseding a Presence Layer Registry row; enforces one-owner + economic-job + reality-label. `PRESENCE_LAYER_PROPOSED` / `PRESENCE_LAYER_SUPERSESSION_PROPOSED` → `PRESENCE_LAYER_REGISTERED` / `_BLOCKED` / `PRESENCE_LAYER_SUPERSEDED` | 2 | `techstack-inventory-registrar` |
 | `presence-economics-gate` | The Presence Intelligence Filter: no asset ships without an economic job + ≥1 of five movements | 2 | `content-publishing-gate` |
 | `presence-discovery-authority` | Orchestrate entity/KGO/schema/citation/branded-search; contract to Marketing SEO/AEO/GEO + EE technical | 2 | `marketing-seo-aeo-geo` |
 | `presence-engagement` | Two-way presence / community (COS Layer 7); routes DM-automation to Automation (16) | 2 | — (new capability) |

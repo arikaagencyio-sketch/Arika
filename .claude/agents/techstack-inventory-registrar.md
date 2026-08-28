@@ -11,7 +11,7 @@ triggers:
   - type: event
     on: TOOL_PROPOSED
   - type: event
-    on: TOOL_SUPERSEDED
+    on: TOOL_SUPERSESSION_PROPOSED
 output_schema:
   type: object
   additionalProperties: false
@@ -44,7 +44,7 @@ output_schema:
     dependents: { type: array, items: { type: string } }
     blocking_reasons: { type: array, items: { type: string } }
 memory_stream: 13_Tech_Stack/_memory/runtime.jsonl
-emits: [TOOL_REGISTERED, TOOL_REGISTRATION_BLOCKED]
+emits: [TOOL_REGISTERED, TOOL_REGISTRATION_BLOCKED, TOOL_SUPERSEDED]
 handoff_to: [techstack-connection-verifier, techstack-cost-guardian]
 ---
 

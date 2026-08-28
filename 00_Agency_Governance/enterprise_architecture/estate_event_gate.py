@@ -27,15 +27,20 @@ Checks, in order of what they protect:
                        the measurement. Written after that audit claimed Presence held
                        5 of the 11 unassigned producers; it held 6. A number inside a
                        sentence is a claim like any other and needs its test (R1).
+  6  NO NEW RE-ENTRY   no agent may emit an event it also subscribes to unless the edge
+                       is already recorded in the register. The bus is a bare node
+                       EventEmitter - no cycle detection, no depth limit, no dedupe -
+                       so a pure loop (sole emitter == sole subscriber == same agent)
+                       does not terminate once executor.ts starts publishing.
 """
 import io, os, re, sys, glob, json, collections
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 REG  = os.path.join(os.path.dirname(__file__), "estate-event-register.json")
 DOC  = os.path.join(os.path.dirname(__file__), "AEIT_11_ESTATE_AUDIT.md")
-BASELINE = {"agents": 115, "emit_declarations": 199, "emit_distinct": 193,
-            "subscriptions": 184, "sub_distinct": 145, "union_distinct": 267,
-            "both_ends": 71, "emit_no_sub": 122, "sub_no_emit": 74}
+BASELINE = {"agents": 115, "emit_declarations": 201, "emit_distinct": 195,
+            "subscriptions": 184, "sub_distinct": 145, "union_distinct": 269,
+            "both_ends": 71, "emit_no_sub": 124, "sub_no_emit": 74}
 
 
 def parse():
@@ -107,6 +112,33 @@ def check_audit_prose(measured, entries, fail):
             fail.append("PROSE DRIFT: section 3.1 lists %d holes; the register holds %d." % (len(listed), nu))
 
 
+def check_reentrancy(emit, sub, reg, fail):
+    """Check 6 - an agent that emits what it subscribes to re-enters itself.
+
+    The bus (arika-runtime/src/triggers/event-bus.ts) is a bare node EventEmitter:
+    publish() calls emitter.emit() synchronously with no cycle detection, no depth
+    limit and no dedupe. A PURE loop - sole emitter == sole subscriber == same agent -
+    therefore does not terminate. Three exist today, all in Finance (09).
+
+    They are recorded rather than fixed: they belong to their departments. This check
+    fails on any edge NOT already recorded, so the set cannot grow silently.
+    """
+    known = reg.get("known_reentrant_edges", {})
+    allowed = set(known.get("pure_nonterminating", [])) | set(known.get("shared_topic", []))
+    for e in sorted(set(emit) & set(sub)):
+        if set(emit[e]) & set(sub[e]) and e not in allowed:
+            who = sorted(set(emit[e]) & set(sub[e]))
+            pure = len(emit[e]) == 1 and len(sub[e]) == 1
+            fail.append("NEW RE-ENTRANT EDGE: %s is emitted and subscribed by %s%s. "
+                        "The bus has no cycle detection - record it in "
+                        "known_reentrant_edges or break the loop."
+                        % (e, ", ".join(who),
+                           " and NOTHING ELSE TOUCHES IT, so it would not terminate" if pure else ""))
+    for e in sorted(allowed):
+        if not (set(emit.get(e, [])) & set(sub.get(e, []))):
+            fail.append("STALE RE-ENTRANCY RECORD: %s is listed as re-entrant and is no longer. "
+                        "Remove it." % e)
+
 def main():
     fail, warn = [], []
     emit, sub, dept, zero = parse()
@@ -151,6 +183,7 @@ def main():
     else:
         warn.append("executor.ts not found - the runtime-reality check did not run.")
 
+    check_reentrancy(emit, sub, reg, fail)
     check_audit_prose(measured, entries, fail)
 
     for k, v in sorted(BASELINE.items()):
@@ -167,6 +200,10 @@ def main():
           % (measured["both_ends"], measured["emit_no_sub"], measured["sub_no_emit"]))
     print("  register: external %d | manual %d | PRODUCER UNASSIGNED %d"
           % (c["external_entry_point"], c["manual_entry_point"], c["producer_unassigned"]))
+    kr = reg.get("known_reentrant_edges", {})
+    print("  re-entrant edges: %d recorded, of which %d would NOT terminate"
+          % (len(kr.get("pure_nonterminating", [])) + len(kr.get("shared_topic", [])),
+             len(kr.get("pure_nonterminating", []))))
     print()
     for w in warn:
         print("  WARN  " + w)

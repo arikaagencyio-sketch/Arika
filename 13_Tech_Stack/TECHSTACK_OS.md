@@ -103,6 +103,7 @@ The **Sales CRM** space (`901511301824`) holds two structures, both empty:
 | Weekly stack verification | Cron `23 7 * * 1` (`techstack-connection-verifier`) | Free read-only call per connectable tool → compare to §3's claim → report drift + dependents at risk | `STACK_VERIFIED` / `STACK_DRIFT_DETECTED` | Mary Thuo |
 | Daily cost check | Cron `29 7 * * *` (`techstack-cost-guardian`) | Free balance/plan call per paid account → runway in units, not credits → flag expiring trials **before** they lapse | `STACK_COST_HEALTHY` / `_DEGRADED` / `STACK_CAPABILITY_BLOCKED` | Mary Thuo |
 | Tool registration | `TOOL_PROPOSED` (`techstack-inventory-registrar`) | Classify → verify live (or record `verifiable: false`) → assign status class → record supersession chain | `TOOL_REGISTERED` / `_BLOCKED` | Mary Thuo |
+| Tool supersession | `TOOL_SUPERSESSION_PROPOSED` (`techstack-inventory-registrar`) | Verify the replacement, record the chain, name the dependents at risk | `TOOL_SUPERSEDED` | Mary Thuo |
 
 ## 5. Agent Roster
 
@@ -112,7 +113,7 @@ The **Sales CRM** space (`901511301824`) holds two structures, both empty:
 |---|---|---|---|
 | `techstack-connection-verifier` | 1 | weekly cron `23 7 * * 1` → `STACK_VERIFIED` / `STACK_DRIFT_DETECTED` | Proves each tool answers a **free read-only call**; reports drift vs. §3 in **both** directions |
 | `techstack-cost-guardian` | 1 | daily cron `29 7 * * *` → `STACK_COST_HEALTHY` / `_DEGRADED` / `STACK_CAPABILITY_BLOCKED` | Plans, trials, credits, quotas. Converts balances into **runway** ("2 images left", not "44 credits") |
-| `techstack-inventory-registrar` | 2 | `TOOL_PROPOSED` → `TOOL_REGISTERED` / `_BLOCKED` | The gate into §3 — enforces live verification, the **named-vs-connected** distinction, and an unbroken supersession chain |
+| `techstack-inventory-registrar` | 2 | `TOOL_PROPOSED` / `TOOL_SUPERSESSION_PROPOSED` → `TOOL_REGISTERED` / `_BLOCKED` / `TOOL_SUPERSEDED` | The gate into §3 — enforces live verification, the **named-vs-connected** distinction, and an unbroken supersession chain |
 
 **`techstack-connection-verifier` is the cron this department's own rule always implied.** §3 said *"verified via a live API call rather than assumed"* — correct, and never scheduled, which is why 4 rows rotted undetected.
 

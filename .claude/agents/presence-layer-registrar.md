@@ -11,7 +11,7 @@ triggers:
   - type: event
     on: PRESENCE_LAYER_PROPOSED
   - type: event
-    on: PRESENCE_LAYER_SUPERSEDED
+    on: PRESENCE_LAYER_SUPERSESSION_PROPOSED
 output_schema:
   type: object
   additionalProperties: false
@@ -34,7 +34,7 @@ output_schema:
     one_owner_ok: { type: boolean }
     blocking_reasons: { type: array, items: { type: string } }
 memory_stream: 21_Presence/_memory/runtime.jsonl
-emits: [PRESENCE_LAYER_REGISTERED, PRESENCE_LAYER_BLOCKED]
+emits: [PRESENCE_LAYER_REGISTERED, PRESENCE_LAYER_BLOCKED, PRESENCE_LAYER_SUPERSEDED]
 handoff_to: [presence-orchestrator, presence-economics-gate]
 ---
 

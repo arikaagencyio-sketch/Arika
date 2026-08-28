@@ -1,7 +1,7 @@
 {
  "$comment": "Register of every event an agent subscribes to that NO agent emits. Required by AEIT_11 R7. Enforced by estate_event_gate.py.",
  "standard": "AEIT_11 Runtime Truth Standard",
- "baseline_measured": "2026-08-29",
+ "baseline_measured": "2026-08-29 (re-measured after owner item 32b)",
  "classifications": {
   "external_entry_point": "A system outside the agent estate produces it. Reaches the runtime through webhook-server.ts, the only publish() call site. Correct as-is; needs no build.",
   "manual_entry_point": "A human produces it by running the agent. Correct as-is; needs no build. Must be LABELLED or a reader mistakes it for a break.",
@@ -565,15 +565,15 @@
    "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
   },
   {
-   "event": "PRESENCE_LAYER_SUPERSEDED",
-   "classification": "producer_unassigned",
+   "event": "PRESENCE_LAYER_SUPERSESSION_PROPOSED",
+   "classification": "manual_entry_point",
    "waiting_agents": [
     "presence-layer-registrar"
    ],
    "waiting_departments": [
     "21"
    ],
-   "evidence": "Named nowhere else. presence-layer-registrar waits on it and emits PRESENCE_LAYER_REGISTERED / _BLOCKED - it never emits the supersession it waits for."
+   "evidence": "RESOLVED 2026-08-29 (owner item 32b). Same defect and same fix as TOOL_SUPERSESSION_PROPOSED; presence-layer-registrar now emits PRESENCE_LAYER_SUPERSEDED as its result."
   },
   {
    "event": "PRESENCE_LEGAL_EXPOSURE",
@@ -781,15 +781,15 @@
    "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
   },
   {
-   "event": "TOOL_SUPERSEDED",
-   "classification": "producer_unassigned",
+   "event": "TOOL_SUPERSESSION_PROPOSED",
+   "classification": "manual_entry_point",
    "waiting_agents": [
     "techstack-inventory-registrar"
    ],
    "waiting_departments": [
     "13"
    ],
-   "evidence": "Named nowhere else. techstack-inventory-registrar waits on it and emits TOOL_REGISTERED - the supersession half of its own contract has no producer."
+   "evidence": "RESOLVED 2026-08-29 (owner item 32b). Was TOOL_SUPERSEDED - an inbound trigger wearing an outbound name, and the only trigger in dept 13 not request-shaped. Renamed to match TOOL_PROPOSED; a person proposes the supersession. The registrar now EMITS TOOL_SUPERSEDED as its result."
   },
   {
    "event": "TRUST_REVIEW_REQUESTED",
@@ -835,5 +835,20 @@
    ],
    "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
   }
- ]
+ ],
+ "known_reentrant_edges": {
+  "$comment": "Agents that emit an event they also subscribe to. The bus is a bare node EventEmitter with NO cycle detection, depth limit or dedupe, so each of these RE-ENTERS the moment executor.ts starts publishing - and a PURE loop (sole emitter == sole subscriber == same agent) does not terminate. Recorded, not fixed: all are Finance (09) and Offer (02) and belong to those departments. estate_event_gate.py check 6 fails on any edge not listed here.",
+  "pure_nonterminating": [
+   "CAPITAL_ALLOCATED",
+   "CASHFLOW_WARNING",
+   "GROWTH_CAPACITY_EVALUATED"
+  ],
+  "shared_topic": [
+   "BUDGET_THRESHOLD_EXCEEDED",
+   "CLIENT_PROFITABILITY_UPDATED",
+   "OFFER_BRIEF_RECEIVED",
+   "RESERVE_TARGET_BREACHED",
+   "TAX_RESERVED"
+  ]
+ }
 }
