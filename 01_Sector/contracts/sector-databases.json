@@ -436,10 +436,10 @@
       "owner_dept": "01",
       "writer_skills": ["S05"],
       "row_count_claimed": 11,
-      "row_count_note": "Global > Africa > Kenya > {Nairobi, Mombasa, Diani, Maasai Mara}, plus Germany and UK as origin markets.",
+      "row_count_note": "Global > Africa > Kenya > {Nairobi, Mombasa} at City and {Diani, Maasai Mara} at Destination, plus Germany and UK as origin markets. Levels corrected 2026-08-28 (F3 closed).",
       "fields": [
         { "name": "Name", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "writer_skill": "S05" },
-        { "name": "Level", "notion_type": "select", "field_class": "vocab", "purpose_tag": "RET", "required": true, "writer_skill": "S05", "allowed_values": ["Global", "Region", "Country", "City", "Destination", "Property"], "DEFECT": "F3 — Maasai Mara and Diani are still Level=City. The Destination level exists specifically for them. Resolution Engine step 1 filters by geography SUBTREE, so a wrong level returns a wrong signal set SILENTLY.", "configurable_rule": "The 'Property' level's meaning is plugin-supplied (P14), not universal." },
+        { "name": "Level", "notion_type": "select", "field_class": "vocab", "purpose_tag": "RET", "required": true, "writer_skill": "S05", "allowed_values": ["Global", "Region", "Country", "City", "Destination", "Property"], "DEFECT_RESOLVED": "F3 — CLOSED 2026-08-28 by S05. Maasai Mara and Diani re-levelled City -> Destination, the level created for exactly them at Gate 2 and never applied. Both verified Level=Destination with the Parent relation to Kenya intact. Corrected BEFORE any consumer existed: S09 has not been built, so no resolution had run against the wrong subtree.", "configurable_rule": "The 'Property' level's meaning is plugin-supplied (P14), not universal." },
         { "name": "ISO / Code", "notion_type": "text", "field_class": "direct", "purpose_tag": "ID", "writer_skill": "S05" },
         { "name": "Parent", "notion_type": "relation", "field_class": "relation", "purpose_tag": "REL", "relation_target": "collection://e095c661-86cd-4f45-9149-eca1c7195e71", "writer_skill": "S05", "note": "self-referential — the subtree spine" },
         { "name": "Notes", "notion_type": "text", "field_class": "direct", "purpose_tag": "RET", "writer_skill": "S05" },

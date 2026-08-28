@@ -78,7 +78,7 @@ Nothing in the repo is called a write contract, and `grep` for `SECTOR_WRITE_CON
 | DB8 | Agency Opportunity Map | one offer ladder | 25 | 87 | 3 relations empty | S08 |
 | DB9 | **Audience Roles** | one role profile | 14 | **4 ✅** | **all 4 lenses, 1 sub-sector** *(was recorded 0)* | S02 |
 | DB10 | Decision-Maker Registry | one buyer title | 9 | **57 ✅** | 53 SaaS + 4 Hospitality *(was recorded 52)* | S02 |
-| DB11 | Geography | one place, one level | 9 | 11 | 2 mis-levelled | S05 |
+| DB11 | Geography | one place, one level | 9 | 11 | **levels corrected (F3 closed)** | S05 |
 | DB12 | Sector State | what is happening now | 14 | 0 | empty | S06 |
 | DB13 | Sector Forecast | forward trajectory | 10 | 0 | empty | S06 |
 | DB14 | Signal Sources | one external publisher | 28 | **4 ✅** | **2 active · 2 blocked by TLS** | S03 |
