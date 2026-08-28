@@ -140,6 +140,78 @@ The fixed contract every sector pack MUST fill. Each slot names the universal fi
 
 **Depth-first rule (inherited, `SECTOR_ACTIVATION_CONTRACT.md` §14.1).** A sector gets plugin rows **only when its cross-loop is authored** — never pre-emptively across the 321 sub-sectors.
 
+
+### 3.1 The P2 rule matrix — the totality rule
+
+**Universal. The *mechanism* below is core and never re-authored; only the cell values are plugin.**
+
+> **Why this section exists.** The first Gate F run (2026-08-28, `SECTOR_ACTIVATION_PROTOCOL.md` §3a) found that
+> Sector #001's P2 matrix ruled on **none** of the signal types actually present for one of its three live archetypes,
+> and that **`Travel-Trade` — which slot P6 classifies as *dominant* for that sector — appeared in no archetype row at all.**
+> Step 4 of the Resolution Engine did nothing for that archetype. Nothing was wrong with any rule that *was* written;
+> the defect was that **a sparse matrix cannot tell you what it is missing.** This section makes it able to.
+
+**Rule 1 — the matrix is total, not sparse.** Every (`archetype` × `Signal Type`) cell resolves to one of five verdicts.
+**Absence is not a verdict.**
+
+| Verdict | Means | Step 4 does |
+|---|---|---|
+| `moves` | materially moves this archetype's demand | passes the filter |
+| `moves_weakly` | real but secondary | passes, carrying lower weight |
+| `does_not_move` | **considered and rejected** | filtered out |
+| `not_applicable` | **structurally impossible for this archetype**, in any market | filtered out |
+| `unruled` | **not yet considered** — a *declared* gap, with a reason and a date | carried through as **unknown, not false** |
+
+Those are five different facts. Today a sparse matrix collapses the last three into one blank, so *"we decided this does
+not move"*, *"this cannot apply"* and *"nobody has thought about it"* are indistinguishable — which is exactly how a
+sector's dominant signal type went unruled without anyone noticing.
+
+> **`moves` means *moves*, not *moves up*.** A signal that **suppresses** an archetype's demand moves it as
+> surely as one that creates it. A verdict records **materiality, not direction of benefit** — a rule read as
+> *"is this good for us"* will systematically miss every suppression signal in the sector.
+
+**Rule 2 — every ruled cell carries four fields.**
+
+| Field | Values | Why |
+|---|---|---|
+| `verdict` | the five above | the decision itself |
+| `direction` | `destination-side` · `origin-side` · `both` | **A property of the *pair*, not of the signal.** A school holiday is origin-side for a lodge selling to Europe and both-sided for a resort selling into its own domestic market. Step 2 needs this and currently infers it from the signal alone. |
+| `basis` | `observed` · `owner_reasoning` · `inherited(<archetype>)` | What kind of claim this is. |
+| `falsifier` | one sentence | **What would prove this cell wrong.** |
+
+**A cell with no `falsifier` may not hold `moves`.** *A rule that cannot be wrong is not a rule* — the same discipline
+this system already applies to a forecast (`DB 13 Likely Trajectory`) and for the same reason.
+
+**Rule 3 — `basis` governs what a cell may be used for.** `owner_reasoning` is a **planning default**, exactly like a
+derived activation date: it may filter a calendar; it may **not** be cited as evidence in a client-facing claim. Only
+`observed` promotes — and `observed` requires a real outcome fed back through a cited finding, because *no performance
+store exists anywhere in the agency* (§1.3). Until one does, an honest plugin is mostly `owner_reasoning`, and says so.
+
+**Rule 4 — the coverage gate, which runs BEFORE Gate F.** Mechanical, and cheap enough to run every time:
+
+1. Every `Signal Type` that P6 marks **`dominant`** or **`secondary`** MUST be ruled (verdict not `unruled`) for **every**
+   archetype in the vocabulary. `watch` and `low_relevance` types may remain `unruled`.
+2. Every archetype in the live `Asset / Property Archetypes` option set MUST appear in P2.
+3. Report `ruled %` per archetype **and** per signal type. A signal type at 0% across all archetypes is the
+   `Travel-Trade` failure, and it is now a visible number rather than an absence.
+
+**Gate F does not run against an archetype that fails check 1.** A falsification test on an unruled archetype cannot
+falsify anything — it measures the gaps in the plugin, not the structure of the market.
+
+**Rule 5 — authoring order, because totality is a *target*, not a first sitting.** A full matrix is
+`archetypes × 21 signal types`; forcing all of it at once produces plausible guesses, and **a guess is worse than a declared
+`unruled`** — the blank is honest, the guess is not. Author in tiers:
+
+| Tier | Scope | When |
+|---|---|---|
+| **1 — must** | P6-`dominant` types × archetypes present in the live geography | before Gate F |
+| **2** | P6-`secondary` types × the same archetypes | before the sector is quoted externally |
+| **3** | everything else | on demand, when an archetype or a place actually enters scope |
+
+**The same totality discipline applies to P7.** Its `unauthored` rows are the identical failure in the timing table:
+a resolver that meets one reports the offsets **unavailable**, which is correct behaviour and still a gap. P7's rows are
+already explicitly `state: unauthored` rather than absent — P2 is being brought up to that standard, not the reverse.
+
 ---
 
 ## 4. The Resolution Engine
@@ -267,7 +339,8 @@ Operationally, at Gate 9:
 
 1. Every reference from a Tier-1 file into `sector_plugins/hospitality/` is a **pointer**, resolvable or absent — never a dependency that changes core behaviour.
 2. `resolve()` with a plugin-less sector returns: signals scoped by sub-sector and geography, **no** timing derivation (P7 absent → activation dates blank, not guessed), **no** property-type filter (P2 absent → no narrowing), **no** destination enrichment (P5 absent → themes blank). That is a *valid, honest, empty* result.
-3. The mechanical check: `grep -in "hospitality\|kenya\|nairobi\|mombasa\|mara\|safari\|hotel\|ota"` across the Tier-1 files returns only pointers, explicitly-labelled illustrations, and the cross-sector comparison table — **no rule values**.
+3. The mechanical check: `grep -inE "hospitality|kenya|nairobi|mombasa|\bmara\b|safari|hotel|\bota\b"`
+   > ⚠️ **Word-boundary anchoring added 2026-08-28, because the original pattern was noisy enough to hide a real hit.** Unanchored, `ota` matches **total**, **totality**, **quota** and **notation**, and `mara` matches nothing useful without boundaries. A §3.1 review returned 5 hits of which **4 were the word "totality"** — a check whose false positives outnumber its findings 4:1 trains its reader to skim, which is how the one real hit gets waved through. *A test nobody reads carefully is not a test.* across the Tier-1 files returns only pointers, explicitly-labelled illustrations, and the cross-sector comparison table — **no rule values**.
 
 **Second-sector proof.** The Protocol is not considered validated until one non-hospitality sector (Professional Services → Legal & Accounting, or B2B SaaS) has been taken through it and produced a *structurally different* calendar shape without a core edit.
 
@@ -280,4 +353,5 @@ Operationally, at Gate 9:
 ## 9. Changelog
 
 - **v0.2 (2026-08-20, Gate 2 — SCHEMA APPLY):** Built the three missing databases live in Notion — **DB 14 Signal Sources**, **DB 15 Market Routes** (both specified 2026-08-19 and unbuilt since), and **DB 16 Destination Profile**. Wired DB 7 to DB 14/15, extended DB 3 (`Geography` relation + `Demand Pattern`) and DB 11 (`Destination` level). **Verified non-destructive by query rather than assumed:** both select ALTERs preserved every option ID byte-identically; DB 3 retains 215 rows and Geography 11, with zero nulls. Two findings recorded rather than quietly fixed: a **documented-but-never-applied** DB 3 option (`Tool-Stack Chaos`, claimed 2026-08-19) and **two mis-levelled places** (Maasai Mara, Diani) whose correction is deliberately deferred to Gate 3 as plugin-scope data work. Added finding 6 — *documented ≠ applied* — as a standing verification discipline. **All three new databases hold 0 rows.** — Claude Code (Opus 5)
+- **v0.2 (2026-08-28, Gate 3 — THE P2 TOTALITY RULE):** **§3.1 added: the P2 rule matrix is now total, not sparse.** The first Gate F run found that Sector #001's matrix ruled on **none** of the signal types present for one of its three live archetypes, and that **`Travel-Trade` — that sector's own P6-*dominant* type — was ruled by no archetype at all. Nothing was wrong with any rule that *was* written; the defect was that **a sparse matrix cannot tell you what it is missing.** Five verdicts replace two lists (`moves` · `moves_weakly` · `does_not_move` · `not_applicable` · `unruled`), because *"considered and rejected"*, *"structurally impossible"* and *"nobody has thought about it"* are three different facts that a blank collapses into one. Every ruled cell carries `verdict` · `direction` (**a property of the pair, not the signal**) · `basis` · **`falsifier`** — and **a cell with no falsifier may not hold `moves`**, the same discipline already applied to a forecast. `basis: owner_reasoning` is a **planning default, not evidence**: it may filter a calendar, it may not be cited to a client. A **runnable coverage gate** ([`contracts/p2_coverage_gate.py`](contracts/p2_coverage_gate.py)) reports ruled % per archetype and per signal type and **blocks Gate F** on an unruled Tier-1 archetype — *a falsification test on an unruled archetype measures gaps in the plugin, not the structure of the market*. Authoring is **tiered** (dominant × live archetypes first) because 210 cells forced at once produces guesses, and **a guess is worse than a declared gap**. **The gate proved itself during authoring**: it caught a regression in the very restructure that introduced it, when migrating the dominant types silently dropped `Mega-Event` and `Aviation/Connectivity` rulings for three archetypes. — Claude Code (Opus 5)
 - **v0.1 (2026-08-20, Gate 1 — DECIDE):** Created. Audited the live Sector Layer (13 built DBs, 3 specified-unbuilt, 5 agents, 9 events / 6 wired), mapped cross-department ownership, and recorded five findings — including that **Destination Intelligence is the only genuinely new object** (Entity Registry is the ClickUp CRM; the Client Calendar is a resolution, not a store; no performance store exists anywhere; Content DB 5's documented row count is stale). Defined the three tiers, the **14-slot Sector Plugin Interface**, the **Resolution Engine** (with the three engine gates deliberately kept *out* of Content DB 5's score to protect the `content-opportunity-mapper` contract), the five calendar layers as views over one store, the live-change propagation rule, the contamination register + migration, the gap register, and the generalization/falsification test. **Nothing built; no Notion or ClickUp write; `.claude/agents/` untouched.** — Claude Code (Opus 5)

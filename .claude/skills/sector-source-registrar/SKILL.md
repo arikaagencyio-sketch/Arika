@@ -65,6 +65,11 @@ Three rules that decide most cases:
 
 ## Step 4 · Legal Posture — required, and a real gate
 
+> **`HTML` means a human reads a published page. It is not a scrape — until you automate it.**
+> Record `Legal Posture Note` saying so explicitly. The moment anyone configures automated extraction against an
+> `HTML` source, its `Feed Type` becomes `scrape` and it goes to **Legal (10)** before it may stay `active`.
+> The distinction is the whole reason `HTML` and `scrape` are separate options rather than one.
+
 `Legal Posture` is **required on every row**: `Not assessed` · `Cleared` · `Needs review` · `Blocked`.
 
 | Access pattern | Posture |
@@ -106,11 +111,29 @@ Set `Next Verification` from the §4.4 proximity ladder, not from habit. Annual-
 
 ---
 
+## Two rules the first bulk registration proved (2026-08-28)
+
+**1. A feed is proven by CONTENT-TYPE, never by a status code.** Probing 24 publishers for `/feed`, `/rss.xml`,
+`/events.ics` and `/feed.xml` returned nine apparent hits at HTTP 200. **Seven were `text/html`** — single-page apps
+answering 200 to any path. Only **three** were real (`application/rss+xml`). A status-code check would have
+registered **seven fabricated RSS feeds**, each of which would then have been trusted to refresh itself and would
+have silently gone stale. *Check `%{content_type}`, and record what you actually found.*
+
+**2. A vendor is `T1` about itself.** This department rightly downgrades vendor blogs to `T3` when they make market
+claims. But a vendor announcing **its own conference date** is the body that sets the date. **The tier is a property
+of the claim, not of the publisher's business model** — see `src_salesforce_dreamforce`, `src_hubspot_inbound`,
+`src_freightwaves_f3` and `src_alm_legalweek`: all `T1` for their own events, all still `T3` for commentary.
+The corollary is a real trap: a source can be **`T1` for one claim and unbacked for another in the same signal**
+— see `src_efrag_esrs`, which is the ESRS standard-setter (T1) but **not** the authority for the Commission's
+reporting delay. **Register the source against the claim, not against the row.**
+
 ## Refuse
 
 - **`active` without a live verification call in this session.** No exceptions for a source the owner named.
 - A `Feed URL` that was not actually retrieved. Blank beats plausible.
 - A `scrape` source with `Legal Posture = Not assessed`.
+- **Recording a `Feed Type` of `RSS` / `ICS` / `JSON` on the strength of a status code alone.**
+- Setting `Last Verified` on a source whose verification call did **not** succeed.
 - A source with empty `Consumers`.
 - An `Authority Level` above what the publisher supports — the aggregator that lists an event is never T1 for it.
 - Deleting a superseded row.

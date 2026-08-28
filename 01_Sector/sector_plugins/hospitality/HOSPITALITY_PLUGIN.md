@@ -52,7 +52,7 @@
 
 ---
 
-## P2 — Entity/asset typology + property-type rules ★ new this pass
+## P2 — Entity/asset typology + property-type rules
 
 **The Entity Registry is the ClickUp CRM `Company` object.** A property, a group, a parent and a subsidiary are all `Company` with roles and relationships (`AEIT_06`: *"Prospect/Client/Partner/Competitor are roles, not types"*). This plugin does **not** create a property store; it supplies the **archetype vocabulary** and the **rule that says which signals move which archetype's demand** — the property-type calendar layer (`SECTOR_OS_ARCHITECTURE.md` §4.1 step 4).
 
@@ -60,22 +60,103 @@
 
 `City / Conference Hotel` · `Business Hotel` · `Beach Resort` · `Safari Lodge` · `Tented Camp` · `Boutique Property` · `Serviced Apartment` · `Villa` · `Destination Property` · `Hospitality Group` (a parent, not a bookable unit)
 
-**The property-type rule** — which `Signal Type` values materially move each archetype's demand. This is the filter, not a description:
+---
+
+### Tier 1 — the six P6-dominant signal types × the three archetypes in live geography
+
+**Restructured 2026-08-28 onto the P2 totality framework** (`SECTOR_OS_ARCHITECTURE.md` §3.1). The previous two-list format could not distinguish *considered and rejected* from *never considered*, which is how `Travel-Trade` — this sector's own P6-**dominant** signal type — ended up ruled by **no archetype at all** while the matrix looked complete. Every cell below now carries a verdict, a direction, a basis and **a falsifier**.
+
+> ⚠️ **`basis: owner_reasoning` means these are planning defaults, not evidence.** They may filter a calendar; they may **not** be cited in a client-facing claim. Promotion to `observed` requires a real outcome fed back as a cited finding — and no performance store exists yet, so every cell here is deliberately a hypothesis with a named way to break it.
+
+#### City / Conference Hotel
+
+| `Signal Type` | Verdict | Direction | Basis | Falsifier — what would prove this cell wrong |
+|---|---|---|---|---|
+| `Seasonality` ★ | `moves_weakly` | `destination-side` | `owner_reasoning` | If Nairobi city-hotel occupancy tracks the leisure season curve rather than the corporate/event calendar, this is `moves`. Note the effect runs OPPOSITE to the leisure archetypes: the Kenyan festive peak EMPTIES corporate demand. |
+| `Event/Compression` | **`moves`** | `destination-side` | `owner_reasoning` | If host-city occupancy does not lift in the event week, this is `does_not_move`. |
+| `Holiday/Cultural` ★ | **`moves`** | `both` | `owner_reasoning` | If Kenyan public-holiday weeks leave Nairobi corporate occupancy flat, this is `does_not_move`. The two directions run opposite: the holiday SUPPRESSES corporate demand at the destination while RELEASING domestic leisure from the origin. |
+| `School-Holiday` | `does_not_move` | `origin-side` | `owner_reasoning` | If a domestic family segment shows up in city-hotel weekend occupancy during school breaks, this is `moves_weakly`. |
+| `Sales/MICE` | **`moves`** | `destination-side` | `owner_reasoning` | If conference-hotel occupancy does not correlate with the MICE booking calendar, the archetype is misnamed. |
+| `Travel-Trade` ★ | **`moves`** | `destination-side` | `owner_reasoning` | If Nairobi conference-hotel occupancy does not lift during the MKTE week, this is `does_not_move` and Travel-Trade is only Arika's own attendance clock rather than a client-demand signal. |
+
+**Tier 2 — the same archetype, its remaining ruled signal types.**
+
+| `Signal Type` | Verdict | Direction | Basis | Falsifier |
+|---|---|---|---|---|
+| `Trade/Fashion` | **`moves`** | `destination-side` | `owner_reasoning` | If the host city has no trade or fashion calendar of scale, this is `unruled` FOR THIS MARKET rather than `moves` - the rule was authored for the archetype generically, and Kenya may simply not carry the signal. |
+| `Mega-Event` | **`moves`** | `destination-side` | `owner_reasoning` | If a mega-event in the host country does not lift capital-city conference-hotel demand, this is `does_not_move`. |
+| `Regulatory` | **`moves`** | `origin-side` | `owner_reasoning` | Regulatory here means CORPORATE TRAVEL POLICY, not tourism regulation. If policy changes do not show up in city-hotel corporate rate volumes, this is `does_not_move`. |
+| `Cruise/Port` | `does_not_move` | `destination-side` | `owner_reasoning` | For a city hotel in a PORT city such as Mombasa, cruise calls may move day-rate and short-stay demand. If so this is `moves_weakly` and the archetype needs splitting by whether the city is a port - which would be the first evidence that `City / Conference Hotel` is two archetypes wearing one name. |
+
+#### Safari Lodge
+
+| `Signal Type` | Verdict | Direction | Basis | Falsifier — what would prove this cell wrong |
+|---|---|---|---|---|
+| `Seasonality` | **`moves`** | `destination-side` | `owner_reasoning` | If lodge occupancy does not track the migration/wildlife calendar, the sector's core seasonality model is wrong. |
+| `Event/Compression` ★ | `moves_weakly` | `destination-side` | `owner_reasoning` | If lodge bookings show no lift in the +/-7 days around major Nairobi conferences, this is `does_not_move` and the pre/post-conference safari extension is folklore. |
+| `Holiday/Cultural` ★ | `moves_weakly` | `origin-side` | `owner_reasoning` | If KE-resident lodge bookings do not concentrate around public holidays, this is `does_not_move`. |
+| `School-Holiday` | **`moves`** | `origin-side` | `owner_reasoning` | If lodge arrivals do not cluster in European and domestic school breaks, the origin-side clock is wrong and P7's -240 strategic offset goes with it. |
+| `Sales/MICE` | `does_not_move` | `destination-side` | `owner_reasoning` | If incentive travel (the I in MICE) proves material for lodges, this is `moves` - incentive is the one MICE leg that fits a lodge. |
+| `Travel-Trade` ★ | **`moves`** | `destination-side` | `owner_reasoning` | If lodge trade allocations are set outside expo cycles - direct, year-round contracting - this is `does_not_move`. |
+
+**Tier 2 — the same archetype, its remaining ruled signal types.**
+
+| `Signal Type` | Verdict | Direction | Basis | Falsifier |
+|---|---|---|---|---|
+| `Aviation/Connectivity` | **`moves`** | `destination-side` | `owner_reasoning` | If lodge arrivals do not respond to airstrip/charter or long-haul route capacity changes, this is `does_not_move`. CURRENTLY UNTESTABLE: no aviation source is registered in DB 14 at all (owner item 31g). |
+| `Risk/Disruption` | **`moves`** | `both` | `owner_reasoning` | If security advisories or weather disruption do not move lodge cancellation rates, this is `does_not_move`. |
+| `Trade/Fashion` | `does_not_move` | `destination-side` | `owner_reasoning` | If any fashion or trade calendar drives lodge demand, this is `moves_weakly`. |
+| `Cruise/Port` | `not_applicable` | — | `structural` | A safari lodge is inland by definition. Not a market judgement - a structural fact about the archetype, in any geography. |
+
+#### Beach Resort
+
+| `Signal Type` | Verdict | Direction | Basis | Falsifier — what would prove this cell wrong |
+|---|---|---|---|---|
+| `Seasonality` | **`moves`** | `destination-side` | `owner_reasoning` | If Diani occupancy does not track the coast high/low season, the seasonality model is wrong for the coast. |
+| `Event/Compression` ★ | `does_not_move` | `destination-side` | `owner_reasoning` | If Diani occupancy lifts around Mombasa or Nairobi events, this is `moves_weakly`. |
+| `Holiday/Cultural` | **`moves`** | `both` | `owner_reasoning` | If public-holiday weeks do not lift coast occupancy, this is `does_not_move`. |
+| `School-Holiday` | **`moves`** | `both` | `owner_reasoning` | If the Kenyan school calendar does not move domestic coast occupancy, the both-sided reading is wrong and this is origin-side only. |
+| `Sales/MICE` ★ | `moves_weakly` | `destination-side` | `owner_reasoning` | If resort group business is immaterial against leisure, this is `does_not_move`. UPGRADED from `does_not_move` 2026-08-28: the old table's own note said 'secondary rather than absent', which is precisely what `moves_weakly` exists to record and the two-list format could not express. |
+| `Travel-Trade` ★ | **`moves`** | `destination-side` | `owner_reasoning` | If beach-resort allocations are contracted outside expo and trade cycles, this is `does_not_move`. |
+
+**Tier 2 — the same archetype, its remaining ruled signal types.**
+
+| `Signal Type` | Verdict | Direction | Basis | Falsifier |
+|---|---|---|---|---|
+| `Cruise/Port` | **`moves`** | `destination-side` | `owner_reasoning` | If Mombasa cruise calls do not move coast resort demand, this is `does_not_move`. P6 already flags Cruise/Port as low-relevance EXCEPT at Mombasa - this cell is where that exception actually lives. |
+| `Mega-Event` | **`moves`** | `destination-side` | `owner_reasoning` | If a mega-event elsewhere in the country does not spill into coast leisure demand, this is `does_not_move`. |
+| `Trade/Fashion` | `does_not_move` | `destination-side` | `owner_reasoning` | If a trade or fashion calendar drives coast resort demand, this is `moves_weakly`. |
+
+★ = authored 2026-08-28 to close the Tier-1 coverage gap the first Gate F run exposed. **8 of the 18 Tier-1 cells were missing**, including every `Travel-Trade` cell.
+
+**Two verdicts that only the new format could express.**
+
+- `Beach Resort` × `Sales/MICE` moved from `does_not_move` to **`moves_weakly`**. The old table's own footnote read *"Sales/MICE is secondary rather than absent"* — it knew the answer and had nowhere to put it, so the filter dropped resort group business entirely.
+- `Safari Lodge` and `Tented Camp` × `Cruise/Port` moved from `does_not_move` to **`not_applicable`**. A lodge is inland *by definition*; that is a structural fact about the archetype in any geography, not a judgement about this market, and it never needs re-authoring for Sector #002.
+
+> **`moves` records materiality, not benefit.** `City / Conference Hotel` × `Holiday/Cultural` is `moves` because a public holiday **empties** a conference hotel while releasing domestic leisure — one signal, two opposite directions. A matrix read as *"is this good for us"* misses every suppression signal in the sector.
+
+---
+
+### Tier 3 — archetypes not in live geography, retained in the old two-list form
+
+**Not yet migrated, and that is the framework working as designed.** Tier 3 is authored *on demand*, when an archetype actually enters scope — forcing 210 cells now would produce plausible guesses, and **a guess is worse than a declared gap**.
 
 | Archetype | Signals that move it | Signals that largely do not |
 |---|---|---|
-| City / Conference Hotel | `Sales/MICE` · `Event/Compression` · `Trade/Fashion` · `Mega-Event` · `Regulatory` (corporate travel policy) | `School-Holiday` (origin-side leisure) · `Cruise/Port` |
-| Business Hotel | `Sales/MICE` · `Aviation/Connectivity` · `Economic` · `Event/Compression` | `Seasonality` (leisure) · `Sports` |
-| Beach Resort | `Seasonality` · `School-Holiday` (origin **and** destination) · `Holiday/Cultural` · `Cruise/Port` · `Mega-Event` | `Sales/MICE` (secondary) · `Trade/Fashion` |
-| Safari Lodge / Tented Camp | `Seasonality` (wildlife/migration) · `School-Holiday` (**origin-side**, long lead) · `Aviation/Connectivity` · `Risk/Disruption` | `Sales/MICE` · `Cruise/Port` · `Trade/Fashion` |
+| Business Hotel | `Sales/MICE` · `Aviation/Connectivity` · `Economic` · `Event/Compression` | `Seasonality` · `Sports` |
 | Boutique Property | `Event/Compression` · `Consumer-Behaviour` · `Holiday/Cultural` | `Sales/MICE` |
-| Serviced Apartment | `Sales/MICE` (extended stay) · `Economic` · `Regulatory` | `Seasonality` (leisure) · `Sports` |
+| Serviced Apartment | `Sales/MICE` · `Economic` · `Regulatory` | `Seasonality` · `Sports` |
 | Villa | `School-Holiday` · `Holiday/Cultural` · `Seasonality` | `Sales/MICE` · `Distribution` |
-| Hospitality Group | inherits the union of its properties' archetypes | — |
 
-🟡 **Honesty:** this table is a structured statement of the owner's sector reasoning, not measured data. It is a **falsifiable default** — the Gate 6 validation run exists to break it. Where a real client's performance contradicts a row, the row changes.
+`Tented Camp` — **`inherited(Safari Lodge)`**. The source table grouped them on one row; the inheritance is now explicit rather than implied by layout.
 
----
+### Declared `unruled` — gaps with a reason, not blanks
+
+- **`Destination Property`** — Present in the live DB 16 `Asset / Property Archetypes` option set and never defined in this pack. Before it can be ruled, the owner must say what it IS: a standalone property that constitutes the destination (a lodge or resort with no competing supply nearby), or a distinct commercial category. Until then every cell is `unruled` - a declared gap, not an oversight.
+- **`Hospitality Group`** — Not a bookable unit. Rules by INHERITANCE: the union of its member properties' archetypes. That is a rule, not a gap - but the union operator is unimplemented, so a resolver meeting a Group today must report it unresolvable rather than guessing a member archetype.
+
+🟡 **Honesty:** this matrix is a structured statement of the owner's sector reasoning, not measured data. It is a **falsifiable default** — Gate F exists to break it. Where a real client's performance contradicts a cell, the cell changes and its `basis` becomes `observed`.
 
 ## P3 — Demand model
 
