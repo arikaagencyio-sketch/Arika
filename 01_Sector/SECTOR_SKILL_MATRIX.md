@@ -124,7 +124,7 @@ Writes one market signal with its full commercial interpretation — the 21-valu
 
 **Consumes the existing proposal shape directly.** `sector-signal-refresher.output_schema.proposed_updates[]` is already `{signal, field, current, proposed, source, source_tier, confidence}` — a field-level diff with provenance. S04 takes exactly this and does not invent a second format.
 
-**On the scope axis:** write `Sub-Sector` (the relation) as the canonical scope. The `Sector` select is a deprecated overloaded axis with **no Hospitality option at all** (F1) — populate it only for continuity with existing rows, never rely on it for filtering.
+**On the scope axis:** write `Sub-Sector` (the relation) as the canonical scope. The select is now named **`Sector (deprecated — use Sub-Sector)`** live (renamed 2026-08-28) — a deprecated overloaded axis with **no Hospitality option at all** (F1). Populate it only for continuity with existing rows, never rely on it for filtering.
 
 **Unauthored plugin offsets** (`Sports`, `Mega-Event`, `Cruise/Port`, `Aviation/Connectivity` for Sector #001) are `null` in the sidecar. S04 **reports the offset as unavailable**; it never substitutes a neighbouring row's value.
 

@@ -119,6 +119,10 @@ answering 200 to any path. Only **three** were real (`application/rss+xml`). A s
 registered **seven fabricated RSS feeds**, each of which would then have been trusted to refresh itself and would
 have silently gone stale. *Check `%{content_type}`, and record what you actually found.*
 
+**1b. A timeout is a property of the CHECK, not always of the source.** One national statistics office timed out at a 12-second limit and returned **200 at 40 seconds**. It is slow, not down — and a short-timeout sweep would have recorded a live T1 government publisher as unreachable. That is the false-feed trap in mirror image: *the first check invented a source that was not there; this one would have destroyed a source that was.* **Retry a failure on a longer timeout before recording it.**
+
+**1c. Re-test an unreachable source on cadence — reachability is a property of the moment, authority is not.** Three `.go.ke` hosts were blocked by expired certificates on 2026-08-24 and correctly held at `candidate`. Re-tested on 2026-08-28, **two of them answer** and were promoted. Because the block had been recorded in `State` rather than as a tier downgrade, promotion took **one verification call** instead of a re-argument about authority. **But promoting a source does NOT re-tier the signals that cite something else** — a reachable T1 publisher never retroactively upgrades a claim that was taken from a T3 aggregator. Re-source the claim, or leave it where it is.
+
 **2. A vendor is `T1` about itself.** This department rightly downgrades vendor blogs to `T3` when they make market
 claims. But a vendor announcing **its own conference date** is the body that sets the date. **The tier is a property
 of the claim, not of the publisher's business model** — see `src_salesforce_dreamforce`, `src_hubspot_inbound`,

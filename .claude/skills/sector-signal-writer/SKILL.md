@@ -97,7 +97,7 @@ Overrides that beat the ladder: `Needs verification` → every run · `Supersede
 
 **Not yours:** `Sector Intelligence` (S01) · `Market Routes` (S05) · `Platform Overlays` and `Content Opportunities` (S10).
 
-**Trap 1 — `Sub-Sector` is the scope axis, not `Sector`.** The `Sector` select is a **deprecated overloaded axis** (F1): it mixes SaaS categories with verticals and has **no Hospitality option at all**. Populate it only for continuity with existing rows; **never filter or resolve on it**, and do not extend it one name at a time.
+**Trap 1 — `Sub-Sector` is the scope axis, not `Sector`.** The select is now literally named **`Sector (deprecated — use Sub-Sector)`** in Notion (renamed 2026-08-28, owner item 31e) — a **column** rename, so all 21 options kept their IDs and no row lost a value. It is a **deprecated overloaded axis** (F1): it mixes SaaS categories with verticals and has **no Hospitality option at all**. Populate it only for continuity with existing rows; **never filter or resolve on it**, and do not extend it one name at a time. *A deprecation that lives only in a markdown file is not a deprecation — someone will populate the field. The name now says so in the UI.*
 
 **Trap 2 — `Departments Affected` carries two deprecated options.** `Revenue (Ops)` (canonical: **Operations**) and `ClientPartner` (canonical: **ClientPartner Acquisition**) are still live only because removing an option strips it from every row using it. **Never write either on a new row.** Validate against the live option set at write time.
 
