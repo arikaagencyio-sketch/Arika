@@ -127,7 +127,7 @@ Every agent carries this department's honesty caveats: Layer A is generic doctri
 | S05 | ◐ [`sector-place-profiler`](../.claude/skills/sector-place-profiler/SKILL.md) | DB 11 · DB 15 · DB 16 | 3 · **built; DB 11 only** |
 | S06 | ✅ [`sector-state-distiller`](../.claude/skills/sector-state-distiller/SKILL.md) | DB 12 · DB 13 | 3 · **built** |
 | S07 | `sector-taxonomy-registrar` | DB 1 · DB 2 | 4 · commercialise |
-| S08 | `sector-offer-router` | DB 8 | 4 · commercialise |
+| S08 | ◐ [`sector-offer-router`](../.claude/skills/sector-offer-router/SKILL.md) | DB 8 | 4 · commercialise |
 | S09 | ✅ [`sector-calendar-resolver`](../.claude/skills/sector-calendar-resolver/SKILL.md) | **nothing** — resolution is computed, never stored | 3 · **built; Gate F run** |
 | S10 | `sector-handoff-packet` | the department boundary only | 4 · commercialise |
 | S11 | `sector-plugin-author` | `sector_plugins/{sector}/` | 5 · generalise |
