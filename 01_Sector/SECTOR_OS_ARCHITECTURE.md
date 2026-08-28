@@ -39,7 +39,7 @@ The Sector Layer is **substantially built**. This architecture separates and com
 
 **Runtime.** `arika-runtime` (agent registry · executor · governance · memory-writer · 5 trigger types: `manual · schedule · event · webhook · join`). Sector agents: `sector-icp-fit` · `sector-intelligence-mapper` · `sector-readiness-analyst` · `sector-signal-refresher` · `sector-signal-scorer` — all **Class 1/2, advisory**, operating mode **manual-apply**.
 
-**Events.** Nine canonical Sector emits. **Six reach a live subscriber** (`PROSPECT_SCORED`, `ICP_CLASSIFIED`, `SECTOR_MAPPED`, `SECTOR_READINESS_SET`, `CALENDAR_UPDATED`, `REGULATORY_CHANGE`). **Three are emitted but unsubscribed** (`DEMAND_SHIFT`, `COMPRESSION_EVENT`, `COMPETITOR_MOVE`) — documented extension points, not live dead events, because the emitter is advisory/manual.
+**Events.** Nine canonical Sector emits, restated 2026-08-28 against [`AEIT_11 Runtime Truth Standard`](../00_Agency_Governance/enterprise_architecture/AEIT_11_RUNTIME_TRUTH_STANDARD.md). **Six are `CONNECTED`** — a subscriber is verified (`PROSPECT_SCORED`, `ICP_CLASSIFIED`, `SECTOR_MAPPED`, `SECTOR_READINESS_SET`, `CALENDAR_UPDATED`, `REGULATORY_CHANGE`). 🔴 **NONE is `LIVE`.** `CONNECTED` means a subscriber exists; `LIVE` requires an observed delivery, and **nothing publishes agent-to-agent** — `executor.ts` returns `emitted` and never calls the bus, whose only `publish()` site is an inbound external webhook. The previous wording, *“six reach a live subscriber”*, was true of the subscription and false of the delivery. **Three are `DESIGNED` and were retired from the runtime contract on 2026-08-28** (owner decision 31d): `DEMAND_SHIFT`, `COMPRESSION_EVENT`, `COMPETITOR_MOVE` — **archived, not deleted**. Their intent is preserved in [`contracts/event-catalog.json`](contracts/event-catalog.json); only the operational claim is struck.
 
 ### 1.2 Dependency map — who owns what (never duplicate)
 
@@ -252,13 +252,16 @@ resolve(sector, geography, property_type, client, window) →
  7 SCORE   Content DB 5's five additive dimensions (unchanged)
            THEN pass/fail three engine gates:
              · Timeliness      — inside an activation window?
-             · Destination Fit — does the destination relation resolve?
+             · Destination Fit — does a DB 16 DESTINATION PROFILE resolve?   ← ruled 31h
              · Client Fit      — does the property-type rule match?
 
  8 EMIT    Content Opportunities (Content DB 5) → Content Briefs (Content DB 7)
 ```
 
 **Corrected 2026-08-28 by the first Gate F run.** Step 1 originally read *"geography ∈ DB 11 subtree"*. A place at the tree's lowest level is a **leaf** — it has no subtree — so a place-scoped resolution against descendants alone returns **zero signals** whenever the applicable signals are tagged one level up, which is exactly where broad signals belong. **Signals are inherited downward:** the scope is the place's **ancestor chain ∪ its subtree**. A country-level signal reaches every place in that country; a city-level signal reaches that city alone, because *a sibling is not an ancestor*. The clause as written produced an **empty calendar for a leaf place, with no error** — and it was invisible until something ran it.
+
+> **`Destination Fit` ruled 2026-08-28 (owner decision 31h): reading (b) — a DB 16 Destination Profile must resolve.**
+> The competing reading was *“does the signal's `Geography` relation resolve”*, which passes for essentially every geography-tagged signal. **A gate that never fails is not a gate.** Under the ruling the gate does real work: a place with no Destination Profile blocks its opportunities until one is written, so the gate reports where the model is thin instead of waving it through. *It asks whether the PLACE is understood, not whether the signal is placeable.*
 
 **Why gates, not score dimensions (owner decision 2026-08-20).** Content DB 5 runs a live 5-dimension additive score with formula-enforced tier thresholds, written by `content-opportunity-mapper` against a published `output_schema`. Timeliness, Destination Fit and Client Fit are **conditions of applicability**, not magnitudes of value — a piece is not *slightly* out of season. Modelling them as gates preserves the live agent contract and expresses the intent exactly: *publish because the conditions make it commercially valuable, not because it is available.*
 
@@ -290,7 +293,8 @@ signal changes (date · cancellation · new edition · venue · tier)
         │     Opportunities · campaign windows · derived activation dates ·
         │     any agency-calendar entry computed from it
         ├─► re-run §4.1 for the affected slice only
-        └─► emit CALENDAR_UPDATED · REGULATORY_CHANGE · COMPRESSION_EVENT · DEMAND_SHIFT
+        └─► emit CALENDAR_UPDATED · REGULATORY_CHANGE       (CONNECTED)
+             COMPRESSION_EVENT · DEMAND_SHIFT           (DESIGNED — retired 31d)
 ```
 
 *Naming what a change invalidates is the difference between a database row edit and operating-system behaviour.* Destination Profile is added to that invalidation list by this file; the rest is the existing §7 rule in `CALENDAR_INTELLIGENCE.md`.

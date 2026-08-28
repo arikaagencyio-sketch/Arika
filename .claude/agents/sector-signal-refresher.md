@@ -64,7 +64,7 @@ output_schema:
           signal: { type: string }
           target_departments: { type: array, items: { type: string } }
 memory_stream: 01_Sector/_memory/runtime.jsonl
-emits: [CALENDAR_UPDATED, REGULATORY_CHANGE, DEMAND_SHIFT, COMPRESSION_EVENT, COMPETITOR_MOVE]
+emits: [CALENDAR_UPDATED, REGULATORY_CHANGE]  # DEMAND_SHIFT, COMPRESSION_EVENT, COMPETITOR_MOVE retired from the runtime contract 2026-08-28 (owner decision 31d); archived at reality_state DESIGNED in 01_Sector/contracts/event-catalog.json, not deleted
 handoff_to: [sector-intelligence-mapper, sector-readiness-analyst]
 ---
 

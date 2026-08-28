@@ -95,7 +95,7 @@ triggers:
   - type: schedule
     cron: "0 7 1 * *"    # monthly full + regulatory/economic sweep
 inputs: { scope: { type: string } }   # e.g. "next-90-days" | "regulatory" | a Signal Type | sub-sector id
-emits: [CALENDAR_UPDATED, REGULATORY_CHANGE, DEMAND_SHIFT, COMPRESSION_EVENT, COMPETITOR_MOVE]
+emits: [CALENDAR_UPDATED, REGULATORY_CHANGE]  # the other three retired from the runtime contract 2026-08-28 (owner decision 31d) and archived at DESIGNED - see AEIT_11 R5
 memory_stream: 01_Sector/_memory/runtime.jsonl
 ```
 

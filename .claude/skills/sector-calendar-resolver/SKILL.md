@@ -95,10 +95,12 @@ Six derived dates per signal: Strategic Planning · Marketing Activation · Sale
 | Gate | Asks |
 |---|---|
 | **Timeliness** | Is today inside the activation window — i.e. before the Action Deadline? |
-| **Destination Fit** | Does the destination relation resolve? |
+| **Destination Fit** | **Does a DB 16 Destination Profile resolve?** |
 | **Client Fit** | Does the property-type rule match? |
 
 > **The gates are conditions of applicability, not magnitudes of value.** *A piece is not slightly out of season.* They sit **upstream** of Content's score and are deliberately not added to its five dimensions (owner decision 2026-08-20, `CONTENT_INTELLIGENCE_SCHEMA.md`). **Running them as score dimensions is a refusal.**
+
+> **`Destination Fit` was ruled by the owner on 2026-08-28 (item 31h): it asks whether a DB 16 **Destination Profile** resolves** — *not* merely whether the signal's `Geography` relation resolves. The rejected reading passes for essentially every geography-tagged signal, and **a gate that never fails is not a gate**. Under the ruling, a place with **no** Destination Profile blocks its opportunities until one is written. **That is the gate working**: it reports where the model is thin rather than waving it through. As of 2026-08-28 that means Nairobi, Diani and Maasai Mara pass and **Mombasa does not**.
 
 **A failed Timeliness gate is a live finding, not a filter.** A signal whose Action Deadline has already passed means the window was missed — surface it by name.
 
@@ -128,6 +130,7 @@ Loop: `calendar_recomputation`.
 - Treating a derived activation date as an external fact.
 - Substituting an offset for an `unauthored` P7 row, or borrowing a neighbouring signal type's.
 - Running the three gates as score dimensions instead of pass/fail conditions.
+- Passing `Destination Fit` on a signal whose geography merely resolves. **The ruling is that a Destination Profile must resolve** (31h).
 - Re-scoring Content DB 5's five dimensions.
 - Including a `Needs verification` or `Superseded/Delayed` signal in a client-facing calendar.
 - Reporting a resolution as complete when DB 15 or DB 16 is empty — say which steps were no-ops.
@@ -135,6 +138,8 @@ Loop: `calendar_recomputation`.
 
 ## Appendix · A dated snapshot — re-measure it, do not trust it
 
-**Measured 2026-08-28.** DB 7 held 34 signals, 11 of them hospitality; **8 survived the status/tier gate**. DB 11 held 11 places. **DB 15 held 0 rows and DB 16 held 0 rows**, so steps 2 and 3 were no-ops and the first Gate F run exercised 4 of the 8 steps.
+**Re-measured 2026-08-28, end of day.** DB 7 held 34 signals, 11 of them hospitality; **8 survived the status/tier gate**. DB 11 held **13** places. **DB 15 held 5 routes and DB 16 held 3 profiles**, so **steps 2 and 3 both run** and Gate F reached **6 of the 8 steps** — up from 4 on the first run.
 
-That ratio is the thing to weigh before quoting a resolution: the engine can produce structurally different calendars today, but it is doing so on geography and one plugin rule alone.
+Only **step 5** (needs a real client) and **step 8** (hands to S10) are unexercised, and neither is a gap.
+
+**What to weigh before quoting a resolution:** DB 16 holds three profiles and DB 15 five routes. The engine now produces structurally different calendars *for the three places that have them* — and `Destination Fit` (31h) correctly **blocks** any place that does not, which today means Mombasa.
