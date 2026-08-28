@@ -198,10 +198,24 @@ organizer** (`CALENDAR_INTELLIGENCE.md` §2). Their claimed capabilities — ICS
 counts, demand-surge scoring — are **unverified** and must be proven with a live call before any
 spend is approved (`techstack-cost-guardian` + an Approval-Matrix row).
 
-**Standing correction this pack exists to fix.** The Hospitality signals currently in the live DB are
-sourced to hotel-technology **marketing blogs** at `T3` — a vendor's seasonality claim, not a
-destination authority's — and `Source Tier` is null on 20 of the 28 rows. Pass 2 re-sources them to
-T1 and supersedes any claim a T1 publisher contradicts. **Nothing is deleted.**
+**Standing correction this pack exists to fix.** The Hospitality signals in the live DB are sourced to
+hotel-technology **marketing blogs** at `T3` — a vendor's seasonality claim, not a destination
+authority's. Pass 2 re-sources them to T1 and supersedes any claim a T1 publisher contradicts.
+**Nothing is deleted.**
+
+> **Re-measured 2026-08-28, and the shape of the problem has changed.** The line above said
+> *"`Source Tier` is null on 20 of the 28 rows"* — that was true when written and is **now false**.
+> DB 7 holds **34 rows and not one has a null tier**: **25 `T1 Primary`, 7 `T3`, 2 `T4`**. The gap is no
+> longer missing tiers; it is **unbacked** ones. **Zero of the 34 rows is linked to a registered source**
+> (`Signals` relation on DB 14 is empty across the board), so every one of those 25 T1 claims is a
+> hand-assignment with no publisher behind it.
+>
+> **Where the risk actually sits is the opposite of what this pack assumed.** Only **1** of the 25 T1 rows
+> is Hospitality (MKTE); the other **24 are the SaaS branch**, which this Kenya-inbound source pack was
+> never scoped to cover and which nobody has questioned. The Hospitality slice is the *honest* one — its
+> 9 non-MKTE rows sit at T3/T4 and say so in their own source fields. **An unexamined T1 is more
+> dangerous than an admitted T3**, because only the first will silently pass the tier gate. S04 must
+> therefore re-tier against registered sources across **all 34 rows**, not just the 10 Hospitality ones.
 
 ---
 

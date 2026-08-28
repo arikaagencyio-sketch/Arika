@@ -269,8 +269,9 @@
       "entity": "One market signal, tracked over time",
       "owner_dept": "01",
       "writer_skills": ["S04"],
-      "row_count_claimed": 34,
-      "row_count_note": "Only 3 carry full lead-time + impact depth.",
+      "row_count_verified": 34,
+      "verified_date": "2026-08-28",
+      "row_count_note": "Only 3 carry full lead-time + impact depth. TIER STATE re-measured 2026-08-28: 25 T1 Primary, 7 T3, 2 T4, ZERO null - and ZERO linked to a registered source (the DB 14 `Signals` relation is empty across all 34). Every tier on this table is a hand-assignment. 24 of the 25 T1 rows are the SaaS branch, never covered by the Kenya-inbound P8 source pack; only 1 (MKTE) is Hospitality. See divergence F20.",
       "purpose": "The single signal store. All five calendar layers are VIEWS over this — never a calendar per layer.",
       "fields": [
         { "name": "Signal", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S04" },
@@ -645,6 +646,7 @@
   ],
 
   "_divergences": [
+    { "id": "F20", "db": "DB7", "field": "Source Tier", "live": "34 rows: 25 T1 Primary, 7 T3, 2 T4, zero null - and zero linked to any DB 14 source", "spec": "AEIT_08 3.2 states `Source Tier` is null on 20 of the 28 rows and frames the problem as MISSING tiers", "resolution": "RECORDED 2026-08-28, and it INVERTS the assumed problem. The spec was true when written; the table has since grown and been filled in by hand. The gap is not missing tiers but UNBACKED ones - no signal inherits from a registered publisher because none is linked. Worse, 24 of the 25 T1 claims are the SaaS branch, outside the Kenya-inbound source pack and unexamined, while the 9 flagged Hospitality rows honestly declare themselves T3/T4. AN UNEXAMINED T1 IS MORE DANGEROUS THAN AN ADMITTED T3 - only the first passes the tier gate silently. Blocks nothing today; sets S04 scope to all 34 rows, not the 10 Hospitality ones. AEIT_08 3.2 corrected in place." },
     { "id": "F19", "db": "DB6/DB9/DB10", "field": "row counts", "live": "DB6 = 1 row, DB9 = 4 rows, DB10 = 57 rows (verified by live SELECT COUNT(*) 2026-08-24)", "spec": "the Gate 0 inventory recorded DB6 = 0 BLOCKING, DB9 = 0 BLOCKING, DB10 = 52", "resolution": "FIXED HERE. Three of the six databases checked had wrong counts, all under-recording work that had actually been done. HOSPITALITY_PLUGIN.md slots P9/P10 asserted this content was live and were CORRECT; the inventory contradicted them and was wrong. Root cause: Gate 0 recorded the query API as unavailable, so counts came from repo changelogs rather than measurement. The API is metered, not absent. LESSON: a population claim in a changelog is not a row count.", "unverified_remainder": "DB4, DB5, DB7, DB8, DB11, DB12, DB13, DB14, DB15, DB16 still carry row_count_claimed and were NOT measured — the workspace query quota was exhausted after six. Do not treat them as verified." },
     { "id": "F8", "db": "DB3", "field": "Translations", "live": "relation to collection://9abf586d-... exists", "spec": "absent from the DB 3 field table in SECTOR_NOTION_SCHEMA.md §2", "resolution": "RECORDED, NOT RESOLVED. Second instance of undocumented live-vs-spec relation drift (the first was Platform Overlays)." },
     { "id": "F1", "db": "DB7", "field": "Sector", "live": "21-option select mixing SaaS categories with one vertical; no Hospitality option", "spec": "SECTOR_NOTION_SCHEMA.md §0.1 already flags this as needing harmonization but does not deprecate it", "resolution": "RECORDED. Deprecation is a Gate 2+ Notion change." },

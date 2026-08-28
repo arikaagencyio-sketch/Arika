@@ -105,7 +105,7 @@ Registers an external publisher so a signal can be **re-followed**, not merely r
 
 **Must also verify the `Consumers` declaration against the actual relations** — it is a hand-maintained shadow that omits Sub-Sectors, Audience Roles and the DM Registry, and can drift silently (F10).
 
-**Blocking today:** zero sources are `active`, so **no signal can legitimately inherit an authority tier.** Every Hospitality candidate is `state = candidate` with **no URL recorded** — deliberately, because a URL written from memory is the fabrication the registry exists to prevent.
+**Status 2026-08-28 (re-measured).** No longer *"zero sources active"* — S03's first pass registered **4 sources, 2 `active`** (`src_ktb_mkte`, `src_ke_public_holidays`), so tier inheritance is now possible for the first time. **But no signal uses it yet: the `Signals` relation on DB 14 is empty across all 34 DB 7 rows.** Registering a source and inheriting from it are two different steps, and only the first has happened.
 
 ---
 
@@ -127,6 +127,10 @@ Writes one market signal with its full commercial interpretation — the 21-valu
 **On the scope axis:** write `Sub-Sector` (the relation) as the canonical scope. The `Sector` select is a deprecated overloaded axis with **no Hospitality option at all** (F1) — populate it only for continuity with existing rows, never rely on it for filtering.
 
 **Unauthored plugin offsets** (`Sports`, `Mega-Event`, `Cruise/Port`, `Aviation/Connectivity` for Sector #001) are `null` in the sidecar. S04 **reports the offset as unavailable**; it never substitutes a neighbouring row's value.
+
+> 🔴 **Scope correction, measured 2026-08-28 — S04 is bigger than the Hospitality slice.** DB 7 holds **34 rows, none with a null tier**: **25 `T1 Primary`, 7 `T3`, 2 `T4`** — and **zero linked to a registered source**. So all 25 T1 claims are hand-assignments with nothing behind them. Only **1** of those 25 is Hospitality (MKTE); the other **24 are the SaaS branch**, which the Kenya-inbound P8 source pack never covered and which nobody has questioned.
+>
+> **The Hospitality slice is the honest one** — its 9 non-MKTE rows sit at T3/T4 and say so in their own source fields (*"gazette notice not directly read"*). **An unexamined T1 is more dangerous than an admitted T3**, because only the first passes the tier gate silently. S04 must re-tier against registered sources across **all 34 rows**, and should expect the 24 SaaS-branch T1s to be the larger problem, not the 9 flagged Hospitality ones.
 
 ---
 
