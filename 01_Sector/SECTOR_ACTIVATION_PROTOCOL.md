@@ -128,6 +128,39 @@ Mara/Diani `Adventure`+`Conservation`. **No two destinations share a `Destinatio
 **Still not exercised:** **step 2** (SCOPE by Market Route direction) — DB 15 remains at **0 rows**, so origin-side signals are
 still read only domestically and the Germany/UK origin markets connect to nothing. **Step 5** is correctly skipped: no client.
 
+
+### Gate F — THIRD RUN, 2026-08-28 (DB 15 populated; 6 of 8 steps)
+
+DB 15 went 0 → **5 routes**, so **step 2 (SCOPE by Signal Role × Market Route direction) now runs**. The engine exercises
+**6 of its 8 steps**. Only **step 5** (needs a real client) and **step 8** (hands to S10, unbuilt) remain — and neither is a gap.
+
+| | Nairobi | Maasai Mara | Diani |
+|---|---|---|---|
+| step 1 signals | 5 | 4 | 5 |
+| **step 2 origin routes** | **4** — US, UK, Germany, Uganda | **2** — US, UK | **2** — Germany, Italy |
+| step 3 themes | Urban Leisure · Cultural · Dining · Luxury | Safari/Wildlife · Seasonal Migration · Conservation · Luxury · Adventure · Cultural | Beach · Adventure · Conservation · Dining |
+| step 4 P2 | 3 `moves`, 2 `moves_weakly` | 2 `moves`, 2 `moves_weakly` | 5 `moves` |
+
+> ⭐ **The strongest structural result so far: Maasai Mara and Diani have COMPLETELY DISJOINT origin markets.**
+> Two places at the same `Destination` level, under the same country, in the same sub-sector — and they draw from
+> **entirely different source markets**. Maasai Mara pulls US + UK long-haul into JKIA; Diani pulls Italy + Germany,
+> and **Italy lands 72% at Mombasa, not Nairobi**. An origin-side signal on the Italian route compresses **coast**
+> inventory and touches the Mara not at all. *That is the difference Gate F was built to detect, and it is now
+> measured rather than reasoned.*
+
+**Every figure above comes from TRI's `Annual Tourism Sector Performance Report 2025`** — arrivals by nationality and by
+port of entry. **This is the first structural difference in the department backed by counts rather than by owner reasoning.**
+
+**What the routes falsified.**
+
+| # | Finding |
+|---|---|
+| **RF7** | **The geography tree's two origin markets were never measured.** It carried **Germany and UK**. Measured 2025 arrivals rank Germany **8th** — behind United States, Uganda, Tanzania, United Kingdom, India, Italy and China. The UK holds up (largest European market); **Germany was in the model while five larger markets were not.** |
+| **RF8** | **The model had no regional origin market at all.** Uganda (234,552) is Kenya's 2nd largest source overall; **Uganda + Tanzania = 444,083, more than the United States.** Uganda arrives **by land** (Busia 105,544, Malaba 32,198) for **trade, business, education and VFR** — so neither air connectivity nor the leisure seasonality clock models it. |
+| **RF9** | **P7's origin-side clock has no signal to run on.** Its `-240` strategic offset is justified in the plugin by *“a German school holiday drives a booking decision months before the trip.”* DB 7 contains **no German school-holiday signal** — its only origin-side rows are Kenyan public holidays. The route now exists; the signal that would travel along it does not. |
+
+**Still not exercised:** step 5 — correctly, no client exists. Step 8 hands off through S10, which is unbuilt and blocked on owner items 31h and 31d.
+
 ---
 
 ## 4. Slot classification — PROVISIONAL
