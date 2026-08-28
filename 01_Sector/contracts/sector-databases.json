@@ -454,6 +454,9 @@
     {
       "db_id": "DB12",
       "name": "Sector State",
+      "row_count_verified": 1,
+      "verified_date": "2026-08-28",
+      "row_count_note": "First row written 2026-08-28 by S06 (Hospitality/Kenya). ALL SIX state selects deliberately left EMPTY - none is derivable from existing rows, and the per-field reason is recorded in the page body. Confidence=Low because only 3 of 34 DB 7 signals are source-backed. See escalation: Tech Disruption and Regulatory Risk have NO P14 mapping in any sector.",
       "collection_url": "collection://4a9b8ca5-f042-4938-85af-e0706ee9e1ff",
       "page_url": "https://app.notion.com/p/ece654da35194ba5b12f5a4bfd5d1d9c",
       "entity": "What is happening in this market NOW",
@@ -483,6 +486,9 @@
     {
       "db_id": "DB13",
       "name": "Sector Forecast",
+      "row_count_verified": 0,
+      "verified_date": "2026-08-28",
+      "row_count_note": "Still 0 BY DECISION, not by omission. S06 declined to write a forecast on 2026-08-28: a trajectory claim needs drivers the current evidence base cannot supply, and a forecast that cannot be falsified is not a forecast.",
       "collection_url": "collection://920781ae-fabd-4c9f-8045-42b40abf3cda",
       "page_url": "https://app.notion.com/p/09a9c41ef2794e8dacd6d0ac98c4ff39",
       "entity": "Forward trajectory for a market over a horizon",
