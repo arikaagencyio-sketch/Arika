@@ -618,9 +618,9 @@
       "owner_dept": "01",
       "writer_skills": ["S05"],
       "row_count_claimed": 0,
-      "row_count_verified": 0,
+      "row_count_verified": 3,
       "verified_date": "2026-08-28",
-      "row_count_note": "Still 0, verified live during the S09 Gate F run. CONSEQUENCE: Resolution Engine step 3 (ENRICH from Destination Profile) DID NO WORK - and step 3 is the step that would most distinguish one destination from another. Gate F therefore passed on 4 of 8 steps. Also blocks the strict reading of the Destination Fit gate (owner item 31h).",
+      "row_count_note": "0 -> 3 on 2026-08-28 (Maasai Mara, Diani, Nairobi), sourced to the Kenya Tourism Board destination pages at T1. STEP 3 OF THE RESOLUTION ENGINE NOW RUNS, and the Gate F re-run passes on 5 of 8 steps instead of 4. P5 required its proposed themes be web-verified first: for Maasai Mara 6 of 8 verified and Family + Photography were REJECTED for want of evidence; for Nairobi only 2 of 8 survived because a tourism board is silent on the corporate/MICE axis; Diani had NO P5 proposal at all and was authored from scratch. SUPERSEDED NOTE: Resolution Engine step 3 (ENRICH from Destination Profile) DID NO WORK on the first Gate F run (ENRICH from Destination Profile) DID NO WORK - and step 3 is the step that would most distinguish one destination from another. Gate F therefore passed on 4 of 8 steps. Also blocks the strict reading of the Destination Fit gate (owner item 31h).",
       "FINDING": "Two of this database's option sets are LIVE PLUGIN VOCABULARY. 'Demand Themes' (23 options) is slot P5 and 'Asset / Property Archetypes' (10 options) is slot P2, both stamped as such in their own Notion field descriptions. This means the Hospitality plugin's blanket claim that 'Nothing in this file has been written to Notion' is imprecise: no ROWS exist, but the P2/P5 VOCABULARIES are already canonical Notion options. Flagged in HOSPITALITY_PLUGIN.md.",
       "fields": [
         { "name": "Destination", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "writer_skill": "S05" },

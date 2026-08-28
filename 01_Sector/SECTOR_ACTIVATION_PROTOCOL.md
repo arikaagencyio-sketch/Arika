@@ -99,6 +99,35 @@ Step 1's status gate dropped 3 of the 11 (two `Needs verification`, one `Superse
 **Nothing was written.** A resolution is an output; `Offer-Ready` is not claimed from this run, because Gate F's
 qualification above means the exit evidence is provisional rather than settled.
 
+
+### Gate F — SECOND RUN, 2026-08-28 (DB 16 populated)
+
+**What changed since the first run.** DB 16 went 0 → **3 rows**, so **step 3 (ENRICH) now does real work**, and P2's Tier-1 cells
+were authored, so **step 4 has no unruled cells left**. The engine now exercises **5 of its 8 steps**, up from 4.
+
+| | Nairobi | Maasai Mara | Diani |
+|---|---|---|---|
+| **step 3** `Destination Type` | **Urban** | **Wilderness/Conservancy** | **Coastal** |
+| **step 3** archetypes | City / Conference Hotel + Business Hotel | Safari Lodge + Tented Camp | Beach Resort |
+| **step 3** demand themes | Urban Leisure · Cultural · Dining · Luxury | Safari/Wildlife · Seasonal Migration · Conservation · Luxury · Adventure · Cultural | Beach · Adventure · Conservation · Dining |
+| **step 1** signals | 5 | 4 | 5 |
+| **step 4** P2 | 3 `moves`, 2 `moves_weakly` | 2 `moves`, 2 `moves_weakly` | **5 `moves`** |
+| **step 4** unruled | **0** *(was 5)* | **0** *(was 2)* | 0 |
+
+**Every pairwise comparison differs on 6 themes.** Shared: Nairobi/Mara `Cultural`+`Luxury`; Nairobi/Diani `Dining`;
+Mara/Diani `Adventure`+`Conservation`. **No two destinations share a `Destination Type`, an archetype set, or a theme set.**
+**Gate F passes, and on a materially stronger mechanism than the first run.**
+
+> ⚠️ **One honest observation that cuts against the plugin work.** Authoring P2's Tier-1 cells removed every `unruled`
+> — and in doing so made **step 4 stop discriminating by exclusion**: nothing is now filtered out at any of the three places.
+> It still discriminates by **weight** (Diani 5 `moves`; Nairobi 3+2; Mara 2+2), but the structural difference the gate detects
+> has **migrated from step 4 to step 3**. That is the correct outcome rather than a defect — a Kenyan public holiday genuinely
+> does move a city hotel, a lodge and a beach resort, just differently — but it means **the falsification now rests on destination
+> enrichment, and DB 16 has exactly three rows.** Do not read this pass as stronger than it is.
+
+**Still not exercised:** **step 2** (SCOPE by Market Route direction) — DB 15 remains at **0 rows**, so origin-side signals are
+still read only domestically and the Germany/UK origin markets connect to nothing. **Step 5** is correctly skipped: no client.
+
 ---
 
 ## 4. Slot classification — PROVISIONAL
