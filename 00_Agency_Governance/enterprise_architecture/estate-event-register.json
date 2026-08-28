@@ -1,0 +1,839 @@
+{
+ "$comment": "Register of every event an agent subscribes to that NO agent emits. Required by AEIT_11 R7. Enforced by estate_event_gate.py.",
+ "standard": "AEIT_11 Runtime Truth Standard",
+ "baseline_measured": "2026-08-29",
+ "classifications": {
+  "external_entry_point": "A system outside the agent estate produces it. Reaches the runtime through webhook-server.ts, the only publish() call site. Correct as-is; needs no build.",
+  "manual_entry_point": "A human produces it by running the agent. Correct as-is; needs no build. Must be LABELLED or a reader mistakes it for a break.",
+  "producer_unassigned": "DEFECT. An agent waits on something nobody has been given the job of producing. Remedy is an OWNERSHIP DECISION, not a build."
+ },
+ "entries": [
+  {
+   "event": "ACQUISITION_AUDIT_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "clientpartner-acquisition-diagnostic"
+   ],
+   "waiting_departments": [
+    "06"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "ADVISORY_SCOPE_CHECK_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "consulting-scope-guardian"
+   ],
+   "waiting_departments": [
+    "15"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "ADVISORY_SESSION_HELD",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "consulting-decision-log"
+   ],
+   "waiting_departments": [
+    "15"
+   ],
+   "evidence": "Same sentence in CONSULTING_ADVISORY_OS.md. The department declared this before the standard existed."
+  },
+  {
+   "event": "ADVISORY_SESSION_SCHEDULED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "consulting-advisory-prep"
+   ],
+   "waiting_departments": [
+    "15"
+   ],
+   "evidence": "15_Consulting/CONSULTING_ADVISORY_OS.md states it outright: 'a session is scheduled and held by humans; nothing publishes either event.'"
+  },
+  {
+   "event": "AI_GOVERNANCE_CHECK_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "ai-enablement-governance-gate"
+   ],
+   "waiting_departments": [
+    "17"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "AI_TRANSFORMATION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "ai-enablement-readiness-assessor"
+   ],
+   "waiting_departments": [
+    "17"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "ASSET_CATALOG_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "design-asset-librarian"
+   ],
+   "waiting_departments": [
+    "19"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "ASSET_GENERATED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "design-brand-environment-consistency-checker"
+   ],
+   "waiting_departments": [
+    "19"
+   ],
+   "evidence": "19_Design/DESIGN_OS.md lists the trigger as 'manual - ASSET_GENERATED - BRAND_CHECK_REQUESTED'; generation happens in an external tool."
+  },
+  {
+   "event": "AUDIT_ENGAGEMENT_SIGNED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "audits-scoping"
+   ],
+   "waiting_departments": [
+    "14"
+   ],
+   "evidence": "An engagement is signed by people. 14_Audits/AUDITS_DIAGNOSTICS_OS.md names it as the department's entry trigger."
+  },
+  {
+   "event": "AUTHORITY_OPPORTUNITY",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "presence-authority-pr"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Named nowhere else. presence-authority-pr waits on it and itself emits AUTHORITY_OPPORTUNITY_FLAGGED - a near-name, not the same event."
+  },
+  {
+   "event": "AUTOMATION_HEALTH_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "automation-reliability-monitor"
+   ],
+   "waiting_departments": [
+    "16"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "AUTOMATION_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "automation-approval-gate"
+   ],
+   "waiting_departments": [
+    "16"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BRAND_AUDIT_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "branding-brand-audit"
+   ],
+   "waiting_departments": [
+    "12"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BRAND_CHECK_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "design-brand-environment-consistency-checker"
+   ],
+   "waiting_departments": [
+    "19"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BRAND_CONSISTENCY_REVIEW_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-brand-strategist"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BRAND_DEFINITION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "branding-brand-definition"
+   ],
+   "waiting_departments": [
+    "12"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BRAND_GOVERNANCE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "branding-governance-validator"
+   ],
+   "waiting_departments": [
+    "12"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BUILD_SPEC_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-technical-director"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "BUSINESS_OS_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "automation-process-architect"
+   ],
+   "waiting_departments": [
+    "16"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "CAMERA_SPEC_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-3d-director"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "CAMPAIGN_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "marketing-demand-generation"
+   ],
+   "waiting_departments": [
+    "03"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "CAPACITY_STRAIN_DETECTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "hr-capacity-monitor"
+   ],
+   "waiting_departments": [
+    "11"
+   ],
+   "evidence": "11_HR/HR_OS.md states it outright: 'CAPACITY_STRAIN_DETECTED and ROLE_DEFINITION_REQUESTED have no emitter - manual today.'"
+  },
+  {
+   "event": "CLAIM_REVIEW_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "sales-risk-trust-governance"
+   ],
+   "waiting_departments": [
+    "05"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "CONTRACT_ENDING",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "client-success-offboarding"
+   ],
+   "waiting_departments": [
+    "07"
+   ],
+   "evidence": "07_Client_Success/CLIENTSUCCESS_OS.md routes it to offboarding. It is a date-derived fact about a CRM record; nothing computes dates."
+  },
+  {
+   "event": "CREATIVE_GATE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-creative-director"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "CRM_DESIGN_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "clientpartner-crm-architect"
+   ],
+   "waiting_departments": [
+    "06"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "DEV_SURFACE_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "presence-developer-surface"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "DISCOVERY_COMPLETED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "sales-customer-psychology"
+   ],
+   "waiting_departments": [
+    "05"
+   ],
+   "evidence": "Named NOWHERE in the repository except this one trigger. sales-customer-psychology waits on a discovery call that no agent, skill or connector reports."
+  },
+  {
+   "event": "ENGAGEMENT_CLASSIFICATION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "hr-engagement-classifier"
+   ],
+   "waiting_departments": [
+    "11"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "ENGAGEMENT_RECEIVED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "presence-engagement"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Named nowhere else. Inbound platform engagement would naturally be external, but no connector is registered in 13_Tech_Stack - so no producer exists in either direction."
+  },
+  {
+   "event": "ENTITY_SIGNAL_REVIEW",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "presence-discovery-authority"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "EXPENSE_APPROVED",
+   "classification": "external_entry_point",
+   "waiting_agents": [
+    "finance-cashflow-agent",
+    "finance-compliance-agent",
+    "finance-leakage-agent",
+    "finance-profitability-agent"
+   ],
+   "waiting_departments": [
+    "09"
+   ],
+   "evidence": "Same typed financial contract. Approval happens in the accounting system, not in an agent."
+  },
+  {
+   "event": "EXPENSE_SUBMITTED",
+   "classification": "external_entry_point",
+   "waiting_agents": [
+    "finance-leakage-agent"
+   ],
+   "waiting_departments": [
+    "09"
+   ],
+   "evidence": "Same typed financial contract; 16_Automation/automation-catalog.md routes it by amount/budget/role."
+  },
+  {
+   "event": "EXPERIENCE_PROJECT_SCOPED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "experience-engineering-narrative-architect"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "20_Experience_Engineering/EXPERIENCE_ENGINEERING_OS.md uses it as the chain's first trigger, but no EE agent scopes a project and none emits it."
+  },
+  {
+   "event": "FUNNEL_DIAGNOSTIC_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "marketing-funnel-architect"
+   ],
+   "waiting_departments": [
+    "03"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "GENERATION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "design-production-engine-coordinator"
+   ],
+   "waiting_departments": [
+    "19"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "HEALTH_SCORE_DROPPED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "client-success-health-retention"
+   ],
+   "waiting_departments": [
+    "07"
+   ],
+   "evidence": "The health score is computed by client-success-health-retention, which is also the subscriber. Nothing emits the drop - the loop is open at both ends."
+  },
+  {
+   "event": "INSPIRATION_SHARED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "design-inspiration-curator"
+   ],
+   "waiting_departments": [
+    "19"
+   ],
+   "evidence": "19_Design/DESIGN_OS.md lists the trigger as 'manual - INSPIRATION_SHARED'. The owner shares a link; there is no producer to build."
+  },
+  {
+   "event": "INTEL_VERIFIED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "presence-orchestrator"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Named nowhere else. presence-orchestrator waits on verified intelligence; the nearest emitted event is techstack's unrelated STACK_VERIFIED."
+  },
+  {
+   "event": "LEGAL_EXPOSURE_CHECK_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "legal-exposure-register"
+   ],
+   "waiting_departments": [
+    "10"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "LEGAL_REVIEW_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "legal-counsel-router"
+   ],
+   "waiting_departments": [
+    "10"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "MOTION_SPEC_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-motion-director"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "NARRATIVE_REVIEW_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "content-narrative-architect",
+    "experience-engineering-narrative-architect"
+   ],
+   "waiting_departments": [
+    "04",
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "OPPORTUNITY_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "operations-opportunity-filter"
+   ],
+   "waiting_departments": [
+    "08"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "OWNER_SUSTAINABILITY_CHECK_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "hr-owner-sustainability"
+   ],
+   "waiting_departments": [
+    "11"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "PARTNER_ECOSYSTEM_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "clientpartner-partner-ecosystem-architect"
+   ],
+   "waiting_departments": [
+    "06"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "PARTNER_ENABLEMENT_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "clientpartner-partner-enablement"
+   ],
+   "waiting_departments": [
+    "06"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "PAYROLL_EXECUTED",
+   "classification": "external_entry_point",
+   "waiting_agents": [
+    "finance-cashflow-agent",
+    "finance-compliance-agent"
+   ],
+   "waiting_departments": [
+    "09"
+   ],
+   "evidence": "Same typed financial contract; payroll is executed outside the agent estate."
+  },
+  {
+   "event": "PRESENCE_ASSET_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "presence-economics-gate"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "PRESENCE_LAYER_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "presence-layer-registrar"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "PRESENCE_LAYER_SUPERSEDED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "presence-layer-registrar"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Named nowhere else. presence-layer-registrar waits on it and emits PRESENCE_LAYER_REGISTERED / _BLOCKED - it never emits the supersession it waits for."
+  },
+  {
+   "event": "PRESENCE_LEGAL_EXPOSURE",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "presence-legal-liaison"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Named nowhere else. presence-legal-liaison waits on it and emits PRESENCE_EXPOSURE_ROUTED."
+  },
+  {
+   "event": "PRESENCE_PLANNING_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "presence-orchestrator"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "PRESENCE_PUBLISHED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "presence-discovery-authority"
+   ],
+   "waiting_departments": [
+    "21"
+   ],
+   "evidence": "Named nowhere else. presence-discovery-authority cannot act on a publication no agent announces."
+  },
+  {
+   "event": "PROSPECT_IDENTIFIED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "sector-icp-fit",
+    "sector-signal-scorer"
+   ],
+   "waiting_departments": [
+    "01"
+   ],
+   "evidence": "01_Sector/SECTOR_EVENT_CATALOG.md already records it as an external entry point by design."
+  },
+  {
+   "event": "PUBLISH_GATE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "content-publishing-gate"
+   ],
+   "waiting_departments": [
+    "04"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "QA_GATE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "operations-delivery-qa"
+   ],
+   "waiting_departments": [
+    "08"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "QUANTIFICATION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "audits-quantification"
+   ],
+   "waiting_departments": [
+    "14"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "QUOTE_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "offer-pricing-floor-analyst"
+   ],
+   "waiting_departments": [
+    "02"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "REVENUE_RECEIVED",
+   "classification": "external_entry_point",
+   "waiting_agents": [
+    "finance-cashflow-agent",
+    "finance-cfo-agent",
+    "finance-compliance-agent",
+    "finance-profitability-agent",
+    "finance-treasury-agent",
+    "hr-owner-sustainability"
+   ],
+   "waiting_departments": [
+    "09",
+    "11"
+   ],
+   "evidence": "Declared in the runtime's typed financial contract `financialEventTypes` (arika-runtime types.d.ts). Produced by the accounting system, delivered by webhook-server.ts -> bus.publish(). The ONLY publish path that exists."
+  },
+  {
+   "event": "ROLE_DEFINITION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "hr-role-architect"
+   ],
+   "waiting_departments": [
+    "11"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "ROLLOUT_GATE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "ai-enablement-adoption-tracker"
+   ],
+   "waiting_departments": [
+    "17"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "SCENE_COPY_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-copywriter"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "STACK_COST_CHECK_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "techstack-cost-guardian"
+   ],
+   "waiting_departments": [
+    "13"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "STACK_VERIFICATION_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "techstack-connection-verifier"
+   ],
+   "waiting_departments": [
+    "13"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "STORYBOARD_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-storyboard-artist"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "SUBAUDIT_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "audits-subaudit-analyst"
+   ],
+   "waiting_departments": [
+    "14"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "TECHNICAL_GATE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-qa-performance-reviewer"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "TOOL_PROPOSED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "techstack-inventory-registrar"
+   ],
+   "waiting_departments": [
+    "13"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "TOOL_SUPERSEDED",
+   "classification": "producer_unassigned",
+   "waiting_agents": [
+    "techstack-inventory-registrar"
+   ],
+   "waiting_departments": [
+    "13"
+   ],
+   "evidence": "Named nowhere else. techstack-inventory-registrar waits on it and emits TOOL_REGISTERED - the supersession half of its own contract has no producer."
+  },
+  {
+   "event": "TRUST_REVIEW_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "clientpartner-trust-governor"
+   ],
+   "waiting_departments": [
+    "06"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "UI_SPEC_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-ui-designer"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "UX_REVIEW_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "experience-engineering-ux-strategist"
+   ],
+   "waiting_departments": [
+    "20"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  },
+  {
+   "event": "WORKFLOW_INFRASTRUCTURE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "automation-workflow-architect"
+   ],
+   "waiting_departments": [
+    "16"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
+  }
+ ]
+}

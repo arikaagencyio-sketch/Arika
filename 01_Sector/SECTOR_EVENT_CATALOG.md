@@ -11,7 +11,7 @@
 ## 0. Three facts about how events work here
 
 **1. `emits` is declarative metadata that nothing publishes.**
-`arika-runtime/src/executor.ts:79` returns `emitted: spec.emits ?? []`, but never calls `eventBus.publish()` and does not import the bus. Across the estate, `emits` is declared **196 times** and published **zero times**. The only publish site is an external webhook POST. **Agent-to-agent event chaining does not work today.**
+`arika-runtime/src/executor.ts:79` returns `emitted: spec.emits ?? []`, but never calls `eventBus.publish()` and does not import the bus. Across the estate, `emits` is declared **199 times** (193 distinct names) and published **zero times** — re-measured 2026-08-29, see [`AEIT_11_ESTATE_AUDIT.md`](../00_Agency_Governance/enterprise_architecture/AEIT_11_ESTATE_AUDIT.md). The only publish site is an external webhook POST. **Agent-to-agent event chaining does not work today.**
 
 **2. The subscriber registry is one loop.**
 `arika-runtime/src/index.ts` lines 17–31 walk every loaded agent spec and call `eventBus.on(t.on, …)` for each `type: event` trigger. That loop is the entire registry. There is no topic registry, no broker config, no enum, no validation — `spec-schema.ts` declares `emits: z.array(z.string())`, so **a typo binds silently to nothing**.

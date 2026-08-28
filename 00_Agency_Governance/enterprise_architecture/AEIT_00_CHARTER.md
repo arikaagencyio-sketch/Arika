@@ -72,6 +72,8 @@ today's coherence bugs.
 | 08 | `AEIT_08_SOURCE_REGISTRY_AND_INTELLIGENCE_CALENDAR.md` | Global source registry spec + refresh/decay calendar | ✅ |
 | 09 | `AEIT_09_INTERFACE_CONTRACT_STANDARD.md` | Cross-department handoff-packet standard | ✅ |
 | 10 | `AEIT_10_ROADMAP_AND_RISK.md` | Prioritized, reality-gated roadmap + risk register | ✅ |
+| 11 | `AEIT_11_RUNTIME_TRUTH_STANDARD.md` | Five reality states, seven rules, three axes — what operates vs what is merely specified | ✅ owner-ratified 2026-08-28 |
+| 11a | `AEIT_11_ESTATE_AUDIT.md` + `estate_event_gate.py` | The standard measured across all 115 agents, and the runnable gate that keeps it measured | ✅ 2026-08-29 |
 
 Each artifact fills a gap the repo itself already names — either in `GLOBAL_OS.md` §11 (Open Gaps)
 or `REGISTRY_TAXONOMY_REFERENCE.md` "Future-state — not yet built." Traceability table:
@@ -85,6 +87,7 @@ or `REGISTRY_TAXONOMY_REFERENCE.md` "Future-state — not yet built." Traceabili
 | `AEIT_08` | §11 item 1: **Agency Global Source Registry** (Open) |
 | `AEIT_09` | §11 item 6: **Handoff packet standards** (Partially open); future-state **Protocol** |
 | `AEIT_10` | §11 item 9 (Dashboard spine) sequenced; overall roadmap |
+| `AEIT_11` | Not a named gap — arose from owner decision **31d**. Answers the question the register itself could not: *which of these entries describes something that runs?* |
 
 ---
 
