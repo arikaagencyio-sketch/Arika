@@ -271,7 +271,7 @@
       "writer_skills": ["S04"],
       "row_count_verified": 34,
       "verified_date": "2026-08-28",
-      "row_count_note": "Only 3 carry full lead-time + impact depth. TIER STATE re-measured 2026-08-28: 25 T1 Primary, 7 T3, 2 T4, ZERO null - and ZERO linked to a registered source (the DB 14 `Signals` relation is empty across all 34). Every tier on this table is a hand-assignment. 24 of the 25 T1 rows are the SaaS branch, never covered by the Kenya-inbound P8 source pack; only 1 (MKTE) is Hospitality. See divergence F20.",
+      "row_count_note": "Only 3 carry full lead-time + impact depth. TIER STATE after S04 pass 1 (2026-08-28): 27 T1 Primary, 7 T3, 0 T4 - and 3 of 34 BACKED by a registered source. Jamhuri Day and Mashujaa Day moved T4 -> T1 on the statute, which is why DB 7 now has no T4 rows at all; MKTE was already T1 and gained its relation. THE REMAINING 24 T1 CLAIMS ARE UNBACKED and are the SaaS branch, never covered by the Kenya-inbound P8 source pack. Backed/unbacked is derived from the pre-pass measurement plus three verified writes, not a fresh full re-count - the query quota was exhausted. See divergence F20.",
       "purpose": "The single signal store. All five calendar layers are VIEWS over this — never a calendar per layer.",
       "fields": [
         { "name": "Signal", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "disposition": "green", "writer_skill": "S04" },
