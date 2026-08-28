@@ -436,6 +436,10 @@
       "owner_dept": "01",
       "writer_skills": ["S05"],
       "row_count_claimed": 11,
+      "row_count_verified": 11,
+      "verified_date": "2026-08-28",
+      "levels_verified": "Global(Global) > {European Union, Africa}(Region) + {United States, Germany, United Kingdom}(Country); Africa > Kenya(Country) > {Nairobi, Mombasa}(City) + {Diani, Maasai Mara}(Destination). Re-levelling confirmed live during the S09 Gate F run.",
+      "SCOPE_RULE": "RESOLUTION SCOPE IS ANCESTOR CHAIN UNION SUBTREE, not subtree alone. Corrected 2026-08-28 in SECTOR_OS_ARCHITECTURE.md 4.1 after the first Gate F run: a Destination-level place is a LEAF, so the literal subtree clause returned ZERO signals for Maasai Mara with no error. Signals are inherited downward; a sibling is not an ancestor.",
       "row_count_note": "Global > Africa > Kenya > {Nairobi, Mombasa} at City and {Diani, Maasai Mara} at Destination, plus Germany and UK as origin markets. Levels corrected 2026-08-28 (F3 closed).",
       "fields": [
         { "name": "Name", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "writer_skill": "S05" },
@@ -567,6 +571,9 @@
       "owner_dept": "01",
       "writer_skills": ["S05"],
       "row_count_claimed": 0,
+      "row_count_verified": 0,
+      "verified_date": "2026-08-28",
+      "row_count_note": "Still 0, verified live during the S09 Gate F run. CONSEQUENCE: Resolution Engine step 2 (SCOPE by Signal Role x Market Route direction) DID NO WORK. With no route, origin-side signals can only be read domestically, and the Germany/UK origin markets in DB11 connect to nothing.",
       "purpose": "The origin-side clock — the reason this database earns its place.",
       "fields": [
         { "name": "Route", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "writer_skill": "S05", "note": "direction is in the name, e.g. 'Germany → Kenya'" },
@@ -607,6 +614,9 @@
       "owner_dept": "01",
       "writer_skills": ["S05"],
       "row_count_claimed": 0,
+      "row_count_verified": 0,
+      "verified_date": "2026-08-28",
+      "row_count_note": "Still 0, verified live during the S09 Gate F run. CONSEQUENCE: Resolution Engine step 3 (ENRICH from Destination Profile) DID NO WORK - and step 3 is the step that would most distinguish one destination from another. Gate F therefore passed on 4 of 8 steps. Also blocks the strict reading of the Destination Fit gate (owner item 31h).",
       "FINDING": "Two of this database's option sets are LIVE PLUGIN VOCABULARY. 'Demand Themes' (23 options) is slot P5 and 'Asset / Property Archetypes' (10 options) is slot P2, both stamped as such in their own Notion field descriptions. This means the Hospitality plugin's blanket claim that 'Nothing in this file has been written to Notion' is imprecise: no ROWS exist, but the P2/P5 VOCABULARIES are already canonical Notion options. Flagged in HOSPITALITY_PLUGIN.md.",
       "fields": [
         { "name": "Destination", "notion_type": "title", "field_class": "direct", "purpose_tag": "ID", "required": true, "writer_skill": "S05" },

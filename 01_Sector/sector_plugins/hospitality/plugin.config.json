@@ -269,7 +269,7 @@
 
     "commercial_rhythm": {
       "_the_reframe": "Low season is Arika's BUYING window, not a dead period. Occupancy pain is visible and the GM/Revenue Manager finally has capacity to engage. The client's low season is the agency's high season.",
-      "_live_rows": "4 DB7 signals (Peak, Shoulder, Low-season buying window, one trade show), 1 DB12 Sector State, 1 DB13 Forecast.",
+      "_live_rows": "CORRECTED 2026-08-28 by live measurement. 4 DB7 seasonality/trade signals (Peak, Shoulder, Low-season buying window, one trade show) - confirmed. DB12 Sector State = 1 row (written 2026-08-28 by S06, all six state selects deliberately empty). DB13 Forecast = 0 rows: the claim of 1 forecast was never true. Standing rule (F19): a population claim in a changelog is not a row count.",
       "_correction_on_record": "Of the three original seasonality rows, all were sourced to hotel-technology MARKETING BLOGS at T3 — a vendor's seasonality claim, not a destination authority's. The generic peak-season row was found DIRECTIONALLY WRONG for Kenya (it asserted a northern-hemisphere summer peak; Kenya's peak is Dec-Jan) and is now Superseded/Delayed. The shoulder row was downgraded. The low-season row was kept but flagged that its Nov-Feb dates are Kenyan PEAK, not low."
     },
 

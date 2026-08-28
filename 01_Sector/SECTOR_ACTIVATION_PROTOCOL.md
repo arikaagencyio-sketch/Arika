@@ -54,6 +54,53 @@ Each gate names its **entry condition**, its **work**, its **exit evidence**, an
 
 ---
 
+## 3a. Gate F — first run record (Sector #001, 2026-08-28)
+
+> **This section is a labelled record of the pilot run, not protocol content.** It is here because Gate F is one of the
+> two falsification gates and its result has to be inspectable. Sector #002 re-runs the gate; it does not inherit this.
+
+**Method.** Skill [`S09 sector-calendar-resolver`](../.claude/skills/sector-calendar-resolver/SKILL.md) was run three
+times — once per validation place — over a 365-day window from 2026-08-28, with **no client**, against live rows.
+Inputs measured the same day: DB 7 = 34 signals (11 in scope), DB 11 = 11 places, **DB 15 = 0**, **DB 16 = 0**.
+Step 1's status gate dropped 3 of the 11 (two `Needs verification`, one `Superseded/Delayed`), leaving **8**.
+
+**Result — the three outputs are structurally different.**
+
+| | Nairobi | Maasai Mara | Diani |
+|---|---|---|---|
+| `Level` | City | **Destination** | **Destination** |
+| Archetype (P2) | City / Conference Hotel | Safari Lodge | Beach Resort |
+| Signals after step 1 | **5** | **4** | **5** |
+| *which signals* | Shoulder · **MKTE** · Mashujaa · Low · Jamhuri | Shoulder · Mashujaa · Low · Jamhuri | Shoulder · Mashujaa · Low · Jamhuri · **Kenya peak** |
+| Step 4: archetype moves demand | **0 of 5** | **2 of 4** | **5 of 5** |
+| Step 4: unruled | **5** | 2 | **0** |
+| Governing offset clock | Travel-Trade (`-120` strategic) | Seasonality (`-270`) | Seasonality (`-270`) |
+
+**Nairobi and Diani both return five signals and are not the same output** — different membership, and a
+0-of-5 versus 5-of-5 archetype match. *Volume is not structure.* **Gate F passes its stated exit condition.**
+
+> ⚠️ **It passes on 4 of the 8 steps, and that qualification is part of the result.** DB 15 and DB 16 are empty, so
+> **step 2 (SCOPE by route direction) and step 3 (ENRICH from Destination Profile) did no work** — and step 3 is
+> precisely the step that would most distinguish one destination from another. Step 5 was correctly skipped (no client).
+> The difference above is produced by **geography and one plugin rule**. The architecture is **not falsified**;
+> it is **under-tested**. Re-run once DB 15 and DB 16 hold rows, and treat this pass as provisional until then.
+
+**What the run found that no reading had found.**
+
+| # | Finding | Consequence |
+|---|---|---|
+| **RF1** | Step 1's scope clause said *subtree* only. A `Destination`-level place is a leaf, so the literal clause returned **0 signals for Maasai Mara** and 1 each for Nairobi and Diani. | **Corrected in place** — `SECTOR_OS_ARCHITECTURE.md` §4.1 now reads *ancestor chain ∪ subtree*. Left alone it produced an empty calendar with no error. |
+| **RF2** | The P2 rule matrix rules on **none** of the five signal types present for the `City / Conference Hotel` archetype — step 4 is a no-op there. And `Travel-Trade`, which slot **P6 calls dominant for the sector**, appears in no archetype row at all. | Owner item **31i**. The plugin cannot filter the sector's own dominant signal type. |
+| **RF3** | `The Hospitality Show 2026` is `T1 — Confirmed — Medium` and has **no `Geography`**. It is therefore invisible to every place-scoped resolution. | An untagged signal is an unreachable signal, regardless of tier. Fix by tagging, not by relaxing the filter. |
+| **RF4** | The **Timeliness** gate fired live: `Shoulder Season`'s derived Action Deadline was **2026-08-18**, ten days before the run. | First proof the calendar can go stale silently. A failed Timeliness gate is a finding, not a filter. |
+| **RF5** | **Destination Fit** has two defensible readings — does the *signal's* geography relation resolve (it does), or does a *Destination Profile* resolve (it cannot; DB 16 is empty and Content DB 5's `Destination` relation was deferred until DB 16 exists). | Owner item **31h**. Under the strict reading, no opportunity can pass the gate today in any place. |
+| **RF6** | P7's `Travel-Trade` row has **no `revenue_watch` offset** in the source. MKTE's revenue-watch date was reported **unavailable**. | Correct behaviour, recorded so it is not later "fixed" by substituting a neighbour's number. |
+
+**Nothing was written.** A resolution is an output; `Offer-Ready` is not claimed from this run, because Gate F's
+qualification above means the exit evidence is provisional rather than settled.
+
+---
+
 ## 4. Slot classification — PROVISIONAL
 
 Every element is **universal** (core, never re-authored), **plugin** (re-authored per sector), or **configurable rule** (core field, plugin-supplied value). **This table is a hypothesis until Gate I of Hospitality #001 confirms it.**

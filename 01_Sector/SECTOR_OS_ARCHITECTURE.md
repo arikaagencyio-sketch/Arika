@@ -29,7 +29,7 @@ The Sector Layer is **substantially built**. This architecture separates and com
 | DB 8 Industry Offer Matrix | **live** — 87 rows | routes onto Offer (02)'s ascension model |
 | DB 9 Audience Roles | **live** — 4 Accommodation rows | otherwise empty |
 | DB 10 Decision-Maker Registry | **live** — 52 SaaS + 4 Accommodation titles | titles only; named people are 🔴 gated |
-| DB 11 Geography | **live** — 10 rows: `Global → Africa → Kenya → {Nairobi, Mombasa, Diani, Maasai Mara}` + Germany, UK | `AEIT_06` `[CANDIDATE]` canonical entity |
+| DB 11 Geography | **live** — **11 rows, re-measured 2026-08-28** (the earlier count of 10 was never a measurement): `Global → Africa → Kenya → {Nairobi, Mombasa}` at `City` and `{Diani, Maasai Mara}` at **`Destination`**, plus European Union, United States, Germany, UK | `AEIT_06` `[CANDIDATE]` canonical entity |
 | DB 12 Sector State · DB 13 Sector Forecast | **live** — Accommodation rows exist | dated, confidence-gated |
 | DB 14 Signal Sources | ✅ **built 2026-08-20** — 0 rows | `13741534-…`; the registration gate is live, no source is `active` |
 | DB 15 Market Routes | ✅ **built 2026-08-20** — 0 rows | `c8585c52-…`; route fields are cited-or-blank by field comment |
@@ -83,7 +83,7 @@ The Sector Layer is **substantially built**. This architecture separates and com
 4. **A stale row count.** `CONTENT_INTELLIGENCE_SCHEMA.md` §6 records Content DB 5 as `0 — seeded by an agent run`, but `SECTOR_OS.md` §15 (2026-08-19, ADDENDUM 4 G2) records **3 real Accommodation Content Opportunities** created there. The schema's count is stale. Flagged in that file; the live count should be re-read before any bulk work on DB 5.
 5. **Hospitality rules are inside universal files.** See §5.
 6. **Documented ≠ applied** *(found at Gate 2, 2026-08-20)*. Two changelog claims did not match the live workspace: DB 3's `Category` was missing the `Tool-Stack Chaos` option that ADDENDUM 3 records as added on 2026-08-19, and Geography holds **11** rows where the schema recorded 10. Both are now closed. **The lesson is architectural, not clerical:** a changelog entry is a record of intent, not proof of state — so every gate from here reads the live system before it writes, and verifies by query after. This is the same discipline Tech Stack (13) invented after finding 4 of its 30 inventory rows false.
-7. **Two mis-levelled places.** Maasai Mara and Diani carry `Level = City`. Neither is a city. The `Destination` level now exists to hold them; the re-levelling itself is plugin-scope data work (slot P4) and is the first Gate 3 action.
+7. ~~**Two mis-levelled places.**~~ — ✅ **RESOLVED 2026-08-28 by skill S05.** Maasai Mara and Diani carried `Level = City`; neither is a city, and the `Destination` level had existed for exactly them since Gate 2 without ever being applied. Both are now `Destination`, verified live. **It mattered because §4.1 step 1 filters by geography and a wrong level returns a wrong signal set with no error** — and it was corrected before S09 existed, so no resolution had ever run against the wrong tree.
 
 ---
 
@@ -153,7 +153,8 @@ resolve(sector, geography, property_type, client, window) →
 
  1 SELECT  signals FROM DB 7
            WHERE sub_sector ∈ sector
-             AND (geography ∈ DB 11 subtree  OR  a DB 15 route touches it)
+             AND (geography ∈ (ANCESTOR CHAIN of the place ∪ its subtree)
+                  OR  a DB 15 route touches it)
              AND (signal_date ∨ any activation_date) ∈ window
              AND source_tier ≠ T4
              AND refresh_status ∉ {Needs verification, Superseded/Delayed}
@@ -184,6 +185,8 @@ resolve(sector, geography, property_type, client, window) →
 
  8 EMIT    Content Opportunities (Content DB 5) → Content Briefs (Content DB 7)
 ```
+
+**Corrected 2026-08-28 by the first Gate F run.** Step 1 originally read *"geography ∈ DB 11 subtree"*. A place at the tree's lowest level is a **leaf** — it has no subtree — so a place-scoped resolution against descendants alone returns **zero signals** whenever the applicable signals are tagged one level up, which is exactly where broad signals belong. **Signals are inherited downward:** the scope is the place's **ancestor chain ∪ its subtree**. A country-level signal reaches every place in that country; a city-level signal reaches that city alone, because *a sibling is not an ancestor*. The clause as written produced an **empty calendar for a leaf place, with no error** — and it was invisible until something ran it.
 
 **Why gates, not score dimensions (owner decision 2026-08-20).** Content DB 5 runs a live 5-dimension additive score with formula-enforced tier thresholds, written by `content-opportunity-mapper` against a published `output_schema`. Timeliness, Destination Fit and Client Fit are **conditions of applicability**, not magnitudes of value — a piece is not *slightly* out of season. Modelling them as gates preserves the live agent contract and expresses the intent exactly: *publish because the conditions make it commercially valuable, not because it is available.*
 
