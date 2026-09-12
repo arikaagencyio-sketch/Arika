@@ -1,7 +1,7 @@
 # AEIT_11 — Runtime Truth Standard
 
-**Version:** v0.2
-**Last updated:** 2026-08-29
+**Version:** v0.2.2
+**Last updated:** 2026-09-12
 **Owner:** Agency Governance (00)
 **Status:** Standard — **owner-ratified 2026-08-28**, arising from decision 31d.
 **Measured against the whole estate:** [`AEIT_11_ESTATE_AUDIT.md`](AEIT_11_ESTATE_AUDIT.md) — enforced by [`estate_event_gate.py`](estate_event_gate.py).
@@ -103,6 +103,8 @@ Per `AEIT_06`, *departments consume canonical entities; they do not reinvent the
 
 **On any absence:** say which of R7's three it is. “No producer” is not a finding; *“no producer has been assigned”*, *“the assigned producer is unbuilt”* and *“the producer is the accounting system”* are three findings with three different owners.
 
+**A date is a claim.** “Measured 2026-08-28” needs its test named like any other state: `ls -l` on what you wrote, `git log -1 --format=%cd` on what you committed. **An assumed date is indistinguishable from a measured one, and it decays silently** — which is why `CONNECTED` and `LIVE` carry `last_verified` (R3) and why the estate gate prints the age of its own measurement.
+
 **Make the test runnable wherever it can be.** A described gate decays; a gate with an exit code does not. `estate_event_gate.py` re-derives the estate's reality states on demand and fails on an unclassified absence — including the parser bug that would have made the whole estate look clean.
 
 **The cheapest possible version, and the one that matters most:** when you write a sentence claiming something operates, **ask what you would run to prove it.** If the answer is *"nothing — it's in the spec"*, that is `DESIGNED`.
@@ -111,7 +113,8 @@ Per `AEIT_06`, *departments consume canonical entities; they do not reinvent the
 
 ## 6. Changelog
 
-- **v0.2.1 (2026-08-29) — R7 proved itself on the first item it was applied to.** Owner item **32b** (*two registrars can register and cannot supersede*) was recorded as an unbuilt-owner case, i.e. **a build**. Investigating before building found it was a **naming** defect instead: the trigger and the result shared one name, so adding the emit would have created a self-loop — and `arika-runtime`'s bus is a bare `EventEmitter` with **no cycle detection**. Fixed by renaming the triggers. 🔴 **The search found 8 re-entrant edges already in the estate, 3 of which do not terminate.** Unassigned producers **11 → 9**. **The lesson is R1's, not R7's:** *R7 tells you which remedy to reach for; it does not excuse you from running the test.* — Claude Code (Opus 5)
-- **v0.2 (2026-08-29) — R7 added; first estate-wide measurement.** Run across all 115 agents and the 20 departments that carry them — see [`AEIT_11_ESTATE_AUDIT.md`](AEIT_11_ESTATE_AUDIT.md). **R7 (absence has three states)** generalised from a correction: a field reported as unowned was owned-and-unbuilt. Of the estate's **74 orphaned waits**, 4 are external entry points, 59 are manual, and **11 are genuinely unassigned** — 6 of them in Presence (21) alone. Corrects §1's `emits` count from 196 to **199** (193 distinct names); the earlier figure matched neither quantity. Ships [`estate_event_gate.py`](estate_event_gate.py), falsified the same day. — Claude Code (Opus 5)
+- **v0.2.2 (2026-09-12) — R1 applies to dates.** The estate audit was re-verified 15 days on with no drift, and **its own dates were wrong** — 23 occurrences of a `2026-08-29` that never happened, for work whose file mtimes and commit both read `2026-08-28`. Corrected, and the gate gained a **freshness check** so age is visible from the exit line (R3: `CONNECTED` and `LIVE` decay; R4: warn, do not fail). **Added to §5:** a date is a claim, and R1 wants its test named. — Claude Code (Opus 5)
+- **v0.2.1 (2026-08-28) — R7 proved itself on the first item it was applied to.** Owner item **32b** (*two registrars can register and cannot supersede*) was recorded as an unbuilt-owner case, i.e. **a build**. Investigating before building found it was a **naming** defect instead: the trigger and the result shared one name, so adding the emit would have created a self-loop — and `arika-runtime`'s bus is a bare `EventEmitter` with **no cycle detection**. Fixed by renaming the triggers. 🔴 **The search found 8 re-entrant edges already in the estate, 3 of which do not terminate.** Unassigned producers **11 → 9**. **The lesson is R1's, not R7's:** *R7 tells you which remedy to reach for; it does not excuse you from running the test.* — Claude Code (Opus 5)
+- **v0.2 (2026-08-28) — R7 added; first estate-wide measurement.** Run across all 115 agents and the 20 departments that carry them — see [`AEIT_11_ESTATE_AUDIT.md`](AEIT_11_ESTATE_AUDIT.md). **R7 (absence has three states)** generalised from a correction: a field reported as unowned was owned-and-unbuilt. Of the estate's **74 orphaned waits**, 4 are external entry points, 59 are manual, and **11 are genuinely unassigned** — 6 of them in Presence (21) alone. Corrects §1's `emits` count from 196 to **199** (193 distinct names); the earlier figure matched neither quantity. Ships [`estate_event_gate.py`](estate_event_gate.py), falsified the same day. — Claude Code (Opus 5)
 
 - **v0.1 (2026-08-28) — created; owner-ratified.** Arising from owner decision **31d**: *retire the dead events from the active runtime contract, but archive the intent — "the system should always tell you what exists, what is designed, what is connected, and what is merely intended."* Generalised from seven verified instances of one defect found across the Sector (01) build programme, all of which were **true statements about intent filed where statements about operation belonged**. Retires `DEAD` as a catalog value. Establishes the three orthogonal axes so the Reality axis does not absorb the Evidence and Reachability vocabularies that already exist. — Claude Code (Opus 5)

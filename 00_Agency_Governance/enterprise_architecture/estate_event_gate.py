@@ -13,7 +13,7 @@ Checks, in order of what they protect:
   0  PARSER INTEGRITY  every agent must yield at least one parseable `emits`.
                        An `emits: [A, B]` inline list read by a block-only regex
                        silently reports zero edges and a clean estate. That bug
-                       happened on 2026-08-29; this check exists because of it.
+                       happened on 2026-08-28; this check exists because of it.
   1  ORPHAN REGISTER   every event an agent waits on that NO agent emits must be
                        classified in estate-event-register.json (AEIT_11 R7).
   2  NO STALE ENTRIES  a registered orphan that has since gained an emitter must be
@@ -27,13 +27,17 @@ Checks, in order of what they protect:
                        the measurement. Written after that audit claimed Presence held
                        5 of the 11 unassigned producers; it held 6. A number inside a
                        sentence is a claim like any other and needs its test (R1).
+  7  FRESHNESS         the measurement carries a date. AEIT_11 R3: CONNECTED and LIVE
+                       decay, so a passing gate that has not been run in a month is a
+                       claim about a month ago. Warns past 30 days; never fails on it
+                       (R4 - a downgrade is ordinary reporting).
   6  NO NEW RE-ENTRY   no agent may emit an event it also subscribes to unless the edge
                        is already recorded in the register. The bus is a bare node
                        EventEmitter - no cycle detection, no depth limit, no dedupe -
                        so a pure loop (sole emitter == sole subscriber == same agent)
                        does not terminate once executor.ts starts publishing.
 """
-import io, os, re, sys, glob, json, collections
+import io, os, re, sys, glob, json, datetime, collections
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 REG  = os.path.join(os.path.dirname(__file__), "estate-event-register.json")
@@ -139,6 +143,29 @@ def check_reentrancy(emit, sub, reg, fail):
             fail.append("STALE RE-ENTRANCY RECORD: %s is listed as re-entrant and is no longer. "
                         "Remove it." % e)
 
+def check_freshness(reg, warn):
+    """Check 7 - how old is the thing that passed?
+
+    Added 2026-09-12 after every date in this audit turned out to say 2026-08-29 for
+    work done on 2026-08-28. The date had never been measured - it was assumed from a
+    previous session and repeated. R1 does not exempt a date: if you write one, name
+    what you would read to prove it (`ls -l`, `git log -1 --format=%cd`).
+    """
+    today = datetime.date.today()
+    measured = reg.get("baseline_measured", "")[:10]
+    verified = reg.get("last_verified", "")[:10]
+    line = "measured %s | last verified %s | today %s" % (measured or "?", verified or "never", today)
+    try:
+        age = (today - datetime.date(*map(int, verified.split("-")))).days
+    except Exception:
+        warn.append("FRESHNESS: no readable last_verified in the register. " + line)
+        return line, None
+    if age > 30:
+        warn.append("FRESHNESS: last verified %d days ago. A passing gate this old is a claim "
+                    "about %s, not about today (AEIT_11 R3). Re-run and update last_verified."
+                    % (age, verified))
+    return line, age
+
 def main():
     fail, warn = [], []
     emit, sub, dept, zero = parse()
@@ -183,6 +210,7 @@ def main():
     else:
         warn.append("executor.ts not found - the runtime-reality check did not run.")
 
+    fresh_line, age = check_freshness(reg, warn)
     check_reentrancy(emit, sub, reg, fail)
     check_audit_prose(measured, entries, fail)
 
@@ -204,6 +232,7 @@ def main():
     print("  re-entrant edges: %d recorded, of which %d would NOT terminate"
           % (len(kr.get("pure_nonterminating", [])) + len(kr.get("shared_topic", [])),
              len(kr.get("pure_nonterminating", []))))
+    print("  %s%s" % (fresh_line, "" if age is None else "  (%d days)" % age))
     print()
     for w in warn:
         print("  WARN  " + w)

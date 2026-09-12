@@ -1,7 +1,8 @@
 # AEIT_11 — Estate Audit
 
-**Version:** v0.2
-**Measured:** 2026-08-29 (re-measured the same day, after owner item 32b)
+**Version:** v0.2.1
+**Measured:** 2026-08-28 (re-measured the same day, after owner item 32b)
+**Re-verified:** 2026-09-12 — gate re-run, all six checks pass, **no drift in 15 days**
 **Owner:** Agency Governance (00)
 **Status:** Measurement. Re-runnable — `python 00_Agency_Governance/enterprise_architecture/estate_event_gate.py`
 **Standard:** [`AEIT_11_RUNTIME_TRUTH_STANDARD.md`](AEIT_11_RUNTIME_TRUTH_STANDARD.md)
@@ -32,7 +33,7 @@
 | **Emitter, no subscriber** | **124** | `DESIGNED` | Specified; nothing consumes it |
 | **Subscriber, no emitter** | **74** | see §3 | Something waits; nothing produces |
 
-**No edge in the estate is `LIVE`.** `arika-runtime/src/executor.ts` returns `emitted: spec.emits ?? []` and never imports the event bus; `publish()` has exactly one call site, `webhook-server.ts`, and it is inbound. **Re-verified 2026-08-29 by reading the file, not by citing the earlier finding** — R2: a state is never inherited.
+**No edge in the estate is `LIVE`.** `arika-runtime/src/executor.ts` returns `emitted: spec.emits ?? []` and never imports the event bus; `publish()` has exactly one call site, `webhook-server.ts`, and it is inbound. **Re-verified 2026-08-28 by reading the file, not by citing the earlier finding** — R2: a state is never inherited.
 
 **0 of 184 subscriptions has ever fired.** Of the 12 executions the estate has ever recorded, 8 were `manual` and 4 were `schedule`. **None was `event`.**
 
@@ -68,7 +69,7 @@ The 4 external ones are the financial events — `REVENUE_RECEIVED`, `EXPENSE_SU
 
 **Presence (21) holds 5 of the 9** — it held 6 of 11 until item 32b closed one of them. It is the newest department, and its event surface was written without producers — a whole department's inbound edges are `INTENDED`, not `DESIGNED`. **That is one decision to take, not five.**
 
-**Two registrars superseded nothing — ✅ FIXED 2026-08-29 (owner item 32b), and the fix was not the
+**Two registrars superseded nothing — ✅ FIXED 2026-08-28 (owner item 32b), and the fix was not the
 one this audit first proposed.** `techstack-inventory-registrar` and `presence-layer-registrar` each emitted only the
 `REGISTERED` half and waited on a `SUPERSEDED` event nothing raised. **A registry that can only add is an append-only
 log wearing a registry's name** — and supersession is precisely the discipline both departments were built to
@@ -132,11 +133,46 @@ Every agent declares a `memory_stream`. **115 of 115 declare one; 4 of 20 exist.
 
 > ⚠️ **A correction this audit is obliged to make.** On 2026-08-28 an execution record justified a claim with *"no `runtime.jsonl` exists anywhere."* **Four exist**, holding 12 records. The conclusion that `sector-readiness-analyst` had never run was correct — `01_Sector/_memory/runtime.jsonl` does not exist — but *the reason given for it was false*, and a false reason is not a smaller defect than a false claim. **It is the same defect this standard exists to prevent, committed inside the work that defined it.**
 
+
+## 5.1 The test for `LIVE` had composed dates in it
+
+`AEIT_11` §2 names **a dated execution record** as the test for `LIVE`. Sector's store of those records,
+`01_Sector/_memory/skill_runs.jsonl`, holds 14.
+
+🔴 **8 of the 14 are timestamped after the file was last written** — by up to **17.3 hours**. The log's
+last write was `2026-08-28T13:13:09Z`; records claim times running to `2026-08-29T06:30:00Z`. Their own
+`execution_id`s mostly say `2026-08-28`, which is the giveaway: **the ids were read and the timestamps were
+incremented**, walking past midnight into a day that had not happened.
+
+| Claimed | Ahead of the last write | Record |
+|---|---|---|
+| `2026-08-28T15:40Z` | +2.4h | `s09-...-gate-f-falsification-run-1` |
+| `2026-08-28T18:20Z` | +5.1h | `s03-...-bulk-backing-run-1` |
+| `2026-08-28T20:10Z` | +6.9h | `s03-...-kenya-authority-pack-1` |
+| `2026-08-28T22:30Z` | +9.3h | `s05-...-db16-first-profiles-1` |
+| `2026-08-29T01:15Z` | +12.0h | `s05-...-db15-market-routes-1` |
+| `2026-08-29T03:40Z` | +14.4h | `s09-...-owner-rulings-31d-31h` |
+| `2026-08-29T05:10Z` | +15.9h | `s10-...-offer-ready-promotion-and-exit-built` |
+| `2026-08-29T06:30Z` | +17.3h | `s07-...-authored-after-ownership-audit` |
+
+**They are grandfathered, not rewritten.** An observability log is append-only; *a store you edit when it
+embarrasses you is not evidence.* They stay, named, in
+[`01_Sector/contracts/skill_run_gate.py`](../../01_Sector/contracts/skill_run_gate.py), and nothing new may join them.
+
+**What this does and does not invalidate.** The *substance* of those records — which rows were written, which
+gates were checked, which evidence was read — was verified against Notion at the time and is unaffected. What
+is unreliable is **when**. So a record still proves a run happened; **it does not prove the hour it happened**, and
+any freshness or cadence claim resting on those eight is a claim about an invented clock.
+
+> **This is the sharpest instance the audit has found, because it is inside the test itself.** R1 says a state may
+> only be claimed with its named test. The named test for `LIVE` is a dated record — **so a fabricated date
+> does not weaken the evidence, it removes it.**
+
 ## 6. Count corrections
 
 Three figures recorded before this audit are wrong. They were measured once and then repeated.
 
-| Claim | Recorded | Measured 2026-08-29 | Where |
+| Claim | Recorded | Measured 2026-08-28 | Where |
 |---|---|---|---|
 | `emits` declarations | 196 | **199** (193 distinct names) | `AEIT_11` §1, `SECTOR_DISCOVERY_INVENTORY` §0.2 |
 | Distinct event names | 270 | **267** | `SECTOR_DISCOVERY_INVENTORY` §0.2 |
@@ -157,8 +193,11 @@ Each is out by three in the same direction, and **196 is neither the declaration
 | 4 | `executor.ts` still does not publish | **Every `CONNECTED` edge silently becoming a `LIVE` claim.** If this fires, re-derive the estate; never inherit (R2). |
 | 5 | **Every count this document states in prose equals the measurement** | A number written into a sentence decaying while the sentence stays confident. **This check was written because the count it guards was wrong on the day it was written** — see below. |
 | 6 | **No agent emits an event it also subscribes to**, unless the edge is already in the register | **A non-terminating loop the first time the runtime publishes.** §3.2. This check would have caught this audit's own first proposed remedy for item 32b. |
+| 7 | **The measurement's own age**, printed on every run, warning past 30 days | A passing gate nobody has run in a month reading as a statement about today (R3). Added after §9 v0.2.1. |
 
-**Falsified 2026-08-29.** With one real orphan removed from the register, one ghost entry added, and one unruled entry added, the gate returned **4 failures and exit 1**; restored, exit 0.
+A **second** gate covers the observability store — [`01_Sector/contracts/skill_run_gate.py`](../../01_Sector/contracts/skill_run_gate.py): schema, unique ids, append order, **no record timestamped after the log was written**, and no record naming a skill with no `SKILL.md`. **Falsified 2026-09-12** with a future-dated record naming a non-existent skill — 2 failures, exit 1. See §5.1.
+
+**Falsified 2026-08-28.** With one real orphan removed from the register, one ghost entry added, and one unruled entry added, the gate returned **4 failures and exit 1**; restored, exit 0.
 
 **Check 5 was falsified against a real error.** This document first stated that Presence held **5** of the 11 unassigned producers. **It holds 6** — `ENGAGEMENT_RECEIVED` was dropped from a hand-written list while the count was taken from the same list. Reintroducing that, plus a wrong section heading and the stale `270`, produced **3 failures and exit 1**. *The register was right the whole time; only the prose was wrong* — which is precisely the failure mode that put `196` and `270` into three files for days.
 
@@ -171,7 +210,7 @@ Each is out by three in the same direction, and **196 is neither the declaration
 | # | Decision | Who |
 |---|---|---|
 | 1 | **Presence (21): 5 orphaned waits** — every remaining inbound edge the department has. Assign producers, or mark the edges `INTENDED` and stop routing through them. | Owner + 21 |
-| 2 | ✅ **CLOSED 2026-08-29.** Two registrars could not supersede. Fixed by renaming the inbound trigger, not by adding an emit — §3.1. | 13, 21 |
+| 2 | ✅ **CLOSED 2026-08-28.** Two registrars could not supersede. Fixed by renaming the inbound trigger, not by adding an emit — §3.1. | 13, 21 |
 | 2b | 🔴 **NEW: 8 re-entrant edges, 3 of which do not terminate** (§3.2). Break the loops, or add cycle detection to the bus, **before** `executor.ts` ever publishes. | 09, 02 + runtime |
 | 3 | `HEALTH_SCORE_DROPPED` — a self-loop with no producer at either end. | 07 |
 | 4 | `EXPERIENCE_PROJECT_SCOPED` — the EE chain's first trigger has no producer. | 20 |
@@ -181,6 +220,8 @@ Each is out by three in the same direction, and **196 is neither the declaration
 
 ## 9. Changelog
 
-- **v0.2 (2026-08-29) — owner item 32b applied, and it was not the build this audit said it was.** v0.1 recorded the two registrars' missing supersession as *a build, because the owner is already named*. **Investigating before building found the opposite:** the trigger and the result shared one name, so adding the emit would have created a **self-loop through a bus with no cycle detection**. Fixed by renaming the triggers to `TOOL_SUPERSESSION_PROPOSED` / `PRESENCE_LAYER_SUPERSESSION_PROPOSED` and emitting the `SUPERSEDED` results. **Unassigned producers 11 → 9; Presence 6 → 5.** 🔴 **The search turned up a bigger finding than the fix:** 8 re-entrant edges already exist and **3 do not terminate** — which promotes *“don't wire the runtime first”* from advice to a blocker. Adds **check 6** so the set cannot grow silently. — Claude Code (Opus 5)
+- **v0.2.1 (2026-09-12) — re-verified, and a date defect corrected inside the document that defines the rule against them.** Re-ran the gate 15 days after the measurement: **all six checks pass, nothing has drifted.** 🔴 **But every date in v0.1 and v0.2 said `2026-08-29`, and the work was done on `2026-08-28`** — file mtimes 19:16–19:21, committed 19:22:31. **Nothing happened on the 29th.** 23 occurrences across 9 files, all corrected. The date was never measured; it was assumed from the previous session and then repeated — *the same shape as the `196` that sat in three files, and the third time this audit has caught itself.* **R1 does not exempt a date:** if you write one, name what you would read to prove it — here, `ls -l` and `git log -1 --format=%cd`. The gate now prints the measurement date beside today's and **warns past 30 days**, so a document going stale is visible from the exit line rather than from an audit. 🔴 **Pulling that thread found the worse version one layer down** (§5.1): **8 of the 14 skill execution records are timestamped up to 17.3 hours after the log was last written** — and a dated execution record is `AEIT_11`'s named test for `LIVE`, so a fabricated date there does not weaken the evidence, it removes it. Grandfathered rather than rewritten (an append-only log you edit is not evidence) and fenced by a second gate, [`skill_run_gate.py`](../../01_Sector/contracts/skill_run_gate.py). — Claude Code (Opus 5)
 
-- **v0.1 (2026-08-29) — created.** First estate-wide run of `AEIT_11` across all 115 agents and the 20 departments that carry them. Establishes the three states of absence (R7), generalised from a correction: a field reported as unowned turned out to be owned-and-unbuilt. Registers all 74 orphaned waits, of which **11 are real holes and 6 of those are Presence (21)**. Ships a six-check gate whose fifth check reads this document's own numbers back against the measurement, after the first draft of it miscounted Presence. Corrects three decayed counts. Ships a runnable gate, falsified on the day. Records that the audit's own first parser silently reported an empty estate. — Claude Code (Opus 5)
+- **v0.2 (2026-08-28) — owner item 32b applied, and it was not the build this audit said it was.** v0.1 recorded the two registrars' missing supersession as *a build, because the owner is already named*. **Investigating before building found the opposite:** the trigger and the result shared one name, so adding the emit would have created a **self-loop through a bus with no cycle detection**. Fixed by renaming the triggers to `TOOL_SUPERSESSION_PROPOSED` / `PRESENCE_LAYER_SUPERSESSION_PROPOSED` and emitting the `SUPERSEDED` results. **Unassigned producers 11 → 9; Presence 6 → 5.** 🔴 **The search turned up a bigger finding than the fix:** 8 re-entrant edges already exist and **3 do not terminate** — which promotes *“don't wire the runtime first”* from advice to a blocker. Adds **check 6** so the set cannot grow silently. — Claude Code (Opus 5)
+
+- **v0.1 (2026-08-28) — created.** First estate-wide run of `AEIT_11` across all 115 agents and the 20 departments that carry them. Establishes the three states of absence (R7), generalised from a correction: a field reported as unowned turned out to be owned-and-unbuilt. Registers all 74 orphaned waits, of which **11 are real holes and 6 of those are Presence (21)**. Ships a six-check gate whose fifth check reads this document's own numbers back against the measurement, after the first draft of it miscounted Presence. Corrects three decayed counts. Ships a runnable gate, falsified on the day. Records that the audit's own first parser silently reported an empty estate. — Claude Code (Opus 5)

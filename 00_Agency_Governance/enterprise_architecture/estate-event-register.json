@@ -1,7 +1,7 @@
 {
- "$comment": "Register of every event an agent subscribes to that NO agent emits. Required by AEIT_11 R7. Enforced by estate_event_gate.py.",
+ "$comment": "Register of every event an agent subscribes to that NO agent emits. Required by AEIT_11 R7. Enforced by estate_event_gate.py. baseline_measured is when the estate was read; last_verified is the most recent gate run that agreed with it (AEIT_11 R3 - CONNECTED and LIVE decay).",
  "standard": "AEIT_11 Runtime Truth Standard",
- "baseline_measured": "2026-08-29 (re-measured after owner item 32b)",
+ "baseline_measured": "2026-08-28 (re-measured after owner item 32b)",
  "classifications": {
   "external_entry_point": "A system outside the agent estate produces it. Reaches the runtime through webhook-server.ts, the only publish() call site. Correct as-is; needs no build.",
   "manual_entry_point": "A human produces it by running the agent. Correct as-is; needs no build. Must be LABELLED or a reader mistakes it for a break.",
@@ -573,7 +573,7 @@
    "waiting_departments": [
     "21"
    ],
-   "evidence": "RESOLVED 2026-08-29 (owner item 32b). Same defect and same fix as TOOL_SUPERSESSION_PROPOSED; presence-layer-registrar now emits PRESENCE_LAYER_SUPERSEDED as its result."
+   "evidence": "RESOLVED 2026-08-28 (owner item 32b). Same defect and same fix as TOOL_SUPERSESSION_PROPOSED; presence-layer-registrar now emits PRESENCE_LAYER_SUPERSEDED as its result."
   },
   {
    "event": "PRESENCE_LEGAL_EXPOSURE",
@@ -789,7 +789,7 @@
    "waiting_departments": [
     "13"
    ],
-   "evidence": "RESOLVED 2026-08-29 (owner item 32b). Was TOOL_SUPERSEDED - an inbound trigger wearing an outbound name, and the only trigger in dept 13 not request-shaped. Renamed to match TOOL_PROPOSED; a person proposes the supersession. The registrar now EMITS TOOL_SUPERSEDED as its result."
+   "evidence": "RESOLVED 2026-08-28 (owner item 32b). Was TOOL_SUPERSEDED - an inbound trigger wearing an outbound name, and the only trigger in dept 13 not request-shaped. Renamed to match TOOL_PROPOSED; a person proposes the supersession. The registrar now EMITS TOOL_SUPERSEDED as its result."
   },
   {
    "event": "TRUST_REVIEW_REQUESTED",
@@ -850,5 +850,6 @@
    "RESERVE_TARGET_BREACHED",
    "TAX_RESERVED"
   ]
- }
+ },
+ "last_verified": "2026-09-12"
 }

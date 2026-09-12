@@ -37,7 +37,7 @@ But:
 
 **Agent-to-agent event chaining does not work.** Across the estate: **267** distinct event names, **199 emit declarations** across **193** distinct names, 184 subscriptions across 145 names, **122 orphaned emits**. The frontmatter across 115 agents reads as though the chain is live. `arika-runtime/DESIGN.md` §4 admits it obliquely; nothing else does.
 
-> ⚠️ **Corrected 2026-08-29.** This section first recorded *270 distinct / 196 emitted / 125 orphaned* — each three too high, and **196 matched neither the declaration count nor the distinct-name count**. The figures were measured once and then repeated. They are now produced by [`estate_event_gate.py`](../00_Agency_Governance/enterprise_architecture/estate_event_gate.py), which re-derives them and fails on drift; the full estate reading is [`AEIT_11_ESTATE_AUDIT.md`](../00_Agency_Governance/enterprise_architecture/AEIT_11_ESTATE_AUDIT.md).
+> ⚠️ **Corrected 2026-08-28.** This section first recorded *270 distinct / 196 emitted / 125 orphaned* — each three too high, and **196 matched neither the declaration count nor the distinct-name count**. The figures were measured once and then repeated. They are now produced by [`estate_event_gate.py`](../00_Agency_Governance/enterprise_architecture/estate_event_gate.py), which re-derives them and fails on drift; the full estate reading is [`AEIT_11_ESTATE_AUDIT.md`](../00_Agency_Governance/enterprise_architecture/AEIT_11_ESTATE_AUDIT.md).
 
 ### 0.3 The write contract is ~70% already written, scattered across five files
 
