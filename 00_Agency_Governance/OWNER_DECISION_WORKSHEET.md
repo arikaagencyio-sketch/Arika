@@ -7,6 +7,8 @@
 > **[`OWNER_INPUT_NEEDED.md`](OWNER_INPUT_NEEDED.md) is the live record.** It carries every open item, every decision and the reasoning behind each.
 >
 > **Kept, not deleted** — it is the only record of *how* the 2026-06-30 decisions were reasoned and which ones the owner overrode (item 40B is the notable one: the owner went further than the recommendation and promoted four offer-divisions to real departments). Deleting it would lose that. **Regenerating it is a separate, deliberate piece of work**, not a side effect of a Sector pass — and a worksheet regenerated half-attentively would be worse than one honestly marked stale.
+>
+> **One exception, 2026-09-13:** item 71 (Offer) was added at the owner's request as a single live [DECISION] entry — see *Post-freeze addition* near the bottom. **The file was not regenerated:** the tally and every other section remain frozen at 2026-06-30.
 
 **Purpose:** This is the working companion to [`OWNER_INPUT_NEEDED.md`](OWNER_INPUT_NEEDED.md) — that file is the technical tracker (what's open, why, where it lives); this file is the action surface. Every still-open tracker item is below, sorted into two kinds:
 
@@ -81,7 +83,22 @@ These will close on their own as the agency operates. No action needed now; they
 
 ---
 
+## Post-freeze addition — Offer department (2026-09-13)
+
+*Added individually at the owner's request. Not part of the frozen 2026-06-30 sort above.*
+
+### Item 71 — Hospitality Revenue Content OS: hotel segmentation and test prices **[DECISION]**
+**The question:** Approve the H1/H2/H3 hotel segmentation — H1 30–60 rooms · H2 61–120 rooms · H3 121–250 rooms or 2–5 properties — for internal pricing design, or not? And supply test prices, or wait for real cost-to-deliver and deal data?
+**My recommendation:** Approve H1/H2/H3 **for internal design only**. **Do not supply test prices** until a cost-to-deliver model and delivery capacity exist.
+**Why:** It prevents fake pricing while letting the offer architecture keep maturing. The Sector → Offer control test is complete for control flow, and the pricing agent correctly returned `insufficient_data` because no hotel floor exists — a test price entered before cost and capacity exist would have nothing real to be checked against, so it would validate a guess.
+**Blocks:** hospitality-specific pricing floors · the pricing agent's positive test · registry promotion · any quotable offer.
+**Your decision:** *(open)*
+**Canonical record:** `OWNER_INPUT_NEEDED.md` item 71 · `02_Offer/OEOS - Hospitality Division - Hospitality Revenue Content OS (Structural, Non-Pricing). Draft 41.md` §11–§12
+
+---
+
 ## Changelog
 
 - 2026-06-30 — Created at owner's request, as a working action-companion to `OWNER_INPUT_NEEDED.md`. Sorted all 18 open tracker items into [DECISION] (13 items, with reasoned recommendations) vs. [WAITING ON DATA] (5 items, no action possible). — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Owner made 2 new real decisions outside this worksheet's original 18 items, as part of go-live preparation: **Zoho CRM** (replacing the already-resolved item 5/HubSpot) paired with **Zoho Books** (closing item 25), and **Claude (Anthropic API)** as the agency-standard LLM (closing items 27 and 28). See `OWNER_INPUT_NEEDED.md`'s Changelog "Zoho/Claude entry" and the new `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 4.6)
+- 2026-09-13 — **Added item 71 (Offer) as a single post-freeze [DECISION] entry**, at the owner's request: approve H1/H2/H3 hotel segmentation for internal design only; no test prices until cost-to-deliver and delivery capacity exist. **Not a regeneration** — the banner, tally and all other sections stay frozen at 2026-06-30. — Claude Code (Opus 5)
