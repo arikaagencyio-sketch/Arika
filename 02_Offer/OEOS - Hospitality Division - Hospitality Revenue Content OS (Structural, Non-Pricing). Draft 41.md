@@ -494,3 +494,83 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 ## 10. Change log
 
 - **2026-09-13 — Created from the structural OEOS test; remains non-pricing.** Built from the successful `offer-oeos-engineer` structural run (`02_Offer/_memory/runtime.jsonl` line 4, 2026-09-13T17:27:40Z; the first run with the corrected top-level `requiresHumanApproval: true`), routed by `offer-orchestrator`'s enriched re-intake (line 2, `needs_more_seed_data`). Expanded the run's 11 non-pricing phase summaries into purpose / decisions / inputs / deliverables / gates / risks, the full 17-stage journey, a role-based delivery model and an eight-gate QC system, using `HOSPITALITY_PLUGIN.md` and `OFFER_OS.md` §3 as context. **Phase 11 is BLOCKED** on cost-to-deliver, delivery capacity, owner-approved price band, owner-approved audit-fee credit policy, and proof-generation method. **Surfaced, not resolved:** three-way ICP / direct-share conflict (seed vs plugin vs test fixture); no engineered redirect route for pricing/rate-strategy or tech-stack findings; §10's pricing floors are B2B-SaaS ARR-band and have no hospitality segmentation. The TEST_FIXTURE values were supplied for the test run and are not real. Status unchanged: **Working Hypothesis / Not Quotable**, not in the registry, no event published, `offer-pricing-floor-analyst` not run. — Claude Code (Opus 5)
+- **2026-09-13 — Added §11 Commercial Test Model (owner review required).** Proposed hotel H-band segmentation (H1/H2/H3), a leakage severity layer (L1/L2/L3), price-free commercial rules for audit / entry build / governance retainer, and the pricing-floor agent test contract (B2B SaaS ARR floors barred; expected `insufficient_data`). Nothing adopted; no prices; Phase 11 still BLOCKED. — Claude Code (Opus 5)
+
+---
+
+## 11. Commercial Test Model — Owner Review Required
+
+> 🧪 **TEST MODEL ONLY · NOT QUOTABLE · NOT APPROVED PRICING · FOR PRICING-FLOOR AGENT TEST ONLY**
+>
+> Proposed by Claude Code on 2026-09-13 for owner review. **Contains no prices and no amounts.** Every band, severity level and rule below is a proposal until the owner confirms it (§11.5). It does not change §3's diagnostic gate and does **not** unblock Phase 11 (§5).
+
+### 11.1 Hotel segmentation — H-bands (proposed)
+
+Proposed as this offer's segmentation variable in place of the B2B SaaS ARR bands (§9 #6), and as the basis for reconciling the ICP conflict (§2.3, §9 #7).
+
+| Band | Size | Buying process | Defining conditions |
+|---|---|---|---|
+| **H1 — Small independent property** | 30–60 rooms | Owner/GM-led | Low internal marketing capacity · OTA dependency problem visible |
+| **H2 — Mid-size independent property** | 61–120 rooms | GM plus Revenue Manager or Sales/Marketing lead | Active OTA dependency · underdeveloped direct-booking engine |
+| **H3 — Larger independent or small group** | 121–250 rooms, or 2–5 properties | Multiple stakeholders | Direct-booking upside must be validated by audit |
+
+**Points the owner should weigh:**
+- **The bands are wider than every existing ICP.** H1–H3 span 30–250 rooms; the seed is 30–150, the plugin pilot 30–100, the test fixture 50–150. Confirming the bands also means deciding whether H3 is in the launch ICP.
+- **H3 small groups vs the anti-ICP.** The seed excludes chains with a central brand.com team. Proposed: a 2–5 property group qualifies as H3 only if it has no such team.
+- **H3 groups need per-property archetypes.** Plugin P2 rules a `Hospitality Group` by inheritance from its members' archetypes, and that union operator is unimplemented — so each property in an H3 group is profiled on its own.
+- **Proposed tie-break.** Room count (or property count) sets the band; the profile conditions are recorded at Qualification. Where they disagree — e.g. a 50-room property with a full revenue team — the band stays room-based and the mismatch is noted.
+
+### 11.2 Leakage severity layer (proposed)
+
+| Level | Definition | Can be known | Proposed consequence |
+|---|---|---|---|
+| **L1** | Direct-booking gap visible but not yet quantified | Discovery / Qualification — before any data | Audit only; no build discussion |
+| **L2** | Client data confirms meaningful OTA leakage | Qualification (if the property shares channel data) or Audit | Audit proceeds; build **not** proposed on L2 alone — disposition OPEN |
+| **L3** | Leakage material enough to justify a build + governance retainer | **Audit output only** | Build + retainer **eligible** — only together with an eligible root cause (§11.3) |
+
+- **"Meaningful" (L2) and "material" (L3) have no threshold.** Defining them is part of the same owner decision as "dominant" (§3 G6, §9 #9), and must use client-system data only (QG6).
+- **Severity is not root cause.** Severity measures *how much* leaks; §3's classification says *why*. Both are required; neither substitutes for the other.
+
+### 11.3 Commercial rules (proposed — no prices)
+
+| Component | Proposed rule |
+|---|---|
+| **Audit** | Segmented by **H-band × leakage severity**. Only L1 or L2 can exist before the audit — L3 is an audit output and cannot scope the audit that produces it. How an H3 multi-property audit scales with property count is OPEN. |
+| **Entry build** | Sold **only after** the audit confirms a **content/messaging (a)** or **booking-journey messaging (b)** root cause **and** L3 severity. Technical booking-engine (b), pricing/rate strategy (c) and tech-stack/integration (d) redirect per §3, at any severity. |
+| **Governance retainer** | Tied to **governance and optimization obligations** — cadence, reporting, optimization, QA. **No performance guarantee and no performance fee.** Results are reported from client data, never promised. |
+| **Pricing floor** | B2B SaaS ARR floors barred — see §11.4. |
+
+**Eligibility — severity × root cause:**
+
+| Severity | (a) content/messaging · (b) journey messaging | (b) technical · (c) rate strategy · (d) tech-stack |
+|---|---|---|
+| **L1** | Audit only — root cause not yet known | Audit only — root cause not yet known |
+| **L2** | Audit; no build proposal — disposition OPEN | Redirect (§3) |
+| **L3** | Entry build + governance retainer **eligible** | Redirect (§3) |
+
+### 11.4 Pricing-floor agent — test contract
+
+- **B2B SaaS ARR floors must not be used.** `OFFER_OS.md` §10's Bands A–D and their floors are derived from B2B SaaS offers. Hotels are not segmented by ARR, and **no hospitality floor exists**.
+- **Required result until hospitality floors are added:**
+
+| Field | Expected value |
+|---|---|
+| `arr_band` | `"unknown"` |
+| `setup_floor` | `null` |
+| `retainer_floor` | `null` |
+| `floor_check` | `"insufficient_data"` |
+| `requiresHumanApproval` | `true` |
+| `variance_notes` | States that no hospitality floor exists and SaaS floors were not applied |
+
+- **Spec gap — the agent does not enforce this on its own.** `.claude/agents/offer-pricing-floor-analyst.md` returns `insufficient_data` only when an ARR band "can't be determined"; nothing stops it mapping a hotel's revenue onto Bands A–D. **A run that returns any band A–D or a non-null floor fails this test.** The test input must state that no hospitality floor exists. A durable fix (a sector-aware floor rule in the spec) is not made here — owner decision.
+- **Test input:** H-band + severity level + root-cause verdict, all labelled TEST_FIXTURE. `proposed_price` stays empty unless the owner approves test prices (§11.5 #4).
+
+### 11.5 Owner decisions required before pricing test
+
+1. **Confirm H1/H2/H3 segmentation — or replace it.**
+2. **Choose the audit commercial shape:** paid standalone audit vs audit credited into build.
+3. **Choose the entry commercial shape:** entry build + retainer vs audit + monthly retainer.
+4. **Approve whether test prices may be used for internal agent testing.**
+5. **Define who owns delivery capacity.**
+
+These map onto §9 rather than adding to it: #1 answers §9 #6 and part of #7 · #2 is part of §9 #4 · #3 is §9 #12 · #5 is part of §9 #2 · **#4 is new.**
