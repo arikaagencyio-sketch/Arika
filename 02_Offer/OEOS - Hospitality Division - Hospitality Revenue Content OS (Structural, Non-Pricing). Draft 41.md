@@ -343,8 +343,8 @@ Each phase is **structurally complete at design level only** — not validated a
 
 | # | Input | Why it is required | Decides / supplies | Status |
 |---|---|---|---|---|
-| 1 | **Cost-to-deliver** | A floor cannot protect margin that has not been measured | Owner, with Finance (09) | **Missing** |
-| 2 | **Delivery capacity** | Pricing and SLAs depend on how many concurrent properties can be served, and by whom | Owner; Operations (08) capacity planner; HR (11) if delegation is needed | **Missing** — no capacity model exists |
+| 1 | **Cost-to-deliver** | A floor cannot protect margin that has not been measured | Owner, with Finance (09) | **Missing** — inputs itemised in `Hospitality Revenue Content OS - Delivery Capacity and Cost Model Worksheet.md` §5 |
+| 2 | **Delivery capacity** | Pricing and SLAs depend on how many concurrent properties can be served, and by whom | Owner; Operations (08) capacity planner; HR (11) if delegation is needed | **Missing** — no capacity model exists; questions and readiness gate in the same worksheet §6–§7 |
 | 3 | **Owner-approved price band** | For the audit, the entry offer and the retainer | Owner | **Missing** |
 | 4 | **Owner-approved audit-fee credit policy** | The only proposed risk reversal; unapproved and flagged weak | Owner | **Missing** |
 | 5 | **Proof-generation method** | How audit findings and outcomes become approved, consented case evidence | Owner; Client Success (07) advocacy; Legal (10) for claims | **Missing** |
@@ -497,6 +497,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-13 — Added §11 Commercial Test Model (owner review required).** Proposed hotel H-band segmentation (H1/H2/H3), a leakage severity layer (L1/L2/L3), price-free commercial rules for audit / entry build / governance retainer, and the pricing-floor agent test contract (B2B SaaS ARR floors barred; expected `insufficient_data`). Nothing adopted; no prices; Phase 11 still BLOCKED. — Claude Code (Opus 5)
 - **2026-09-13 — Added §12 test record: Hospitality Sector → Offer Control Test.** COMPLETE for control-flow validation (manual runs, log lines 1–5, no events published); NOT COMPLETE for commercial launch or quoting. Records the eight validated steps, the two runtime defects fixed on the way, what the test does not prove, nine remaining blockers, and the next owner decision (item 71). Documentation only. — Claude Code (Opus 5)
 - **2026-09-13 — Owner Decision 71 recorded: H1/H2/H3 approved for internal pricing design only.** §11.1 marked approved (H3 only if there is no central brand.com / direct-booking team); §11.2's L1–L3 approved as a separate design axis (L3 knowable only after the audit); §11.5 #1 decided and #4 deferred (no test prices until cost-to-deliver and delivery capacity are defined); §1, §5.1, §9 #6–#7 and §12.4–§12.5 updated to match. **Not approved:** public pricing, test price figures, quotability. **Price floors remain blocked** — no hotel floor exists. Status unchanged: **Working Hypothesis / Not Quotable.** — Claude Code (Opus 5)
+- **2026-09-13 — Cross-referenced the Delivery Capacity and Cost Model Worksheet** from §5.1 (inputs 1–2) and §12.4. The worksheet lists the variables, capacity questions and a seven-item readiness gate that must pass before any `TEST_FIXTURE` price figure exists. No prices added; still Not Quotable. — Claude Code (Opus 5)
 
 ---
 
@@ -623,8 +624,8 @@ Both recorded in `arika-runtime/DECISIONS.md`.
 
 - ~~Hotel pricing segmentation (H1/H2/H3) is only a test model — not approved~~ → ✅ approved for **internal pricing design only** (Owner Decision 71, 2026-09-13); **not** approved for public pricing, test prices or quoting
 - No hotel-specific pricing floors exist
-- No cost-to-deliver model
-- No delivery capacity or delivery owner
+- No cost-to-deliver model — inputs to define: `Hospitality Revenue Content OS - Delivery Capacity and Cost Model Worksheet.md` §5
+- No delivery capacity or delivery owner — capacity questions and the pricing-test readiness gate: same worksheet §6–§7
 - No owner-approved price band
 - No audit-fee credit policy
 - No proof-generation method
