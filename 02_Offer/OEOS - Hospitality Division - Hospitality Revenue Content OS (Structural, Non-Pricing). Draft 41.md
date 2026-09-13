@@ -471,7 +471,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 
 | # | Decision | Needed for | Decider | Blocks |
 |---|---|---|---|---|
-| 1 | **Cost-to-deliver**. *Narrowed 2026-09-14 for the MVP: hours framework drafted in bands only (Worksheet §12); numeric hours need an owner-set scale; no cost in money* | Phase 11; floor | Owner + Finance (09) | Pricing |
+| 1 | **Cost-to-deliver**. *Narrowed 2026-09-14 for the MVP: planning hours set from an owner-approved scale — audit-only redirect path 13–32 hours, audit + blueprint path 29–60 hours, both excluding legal (Worksheet §12); no cost in money* | Phase 11; floor | Owner + Finance (09) | Pricing |
 | 2 | **Delivery capacity** and a **named delivery owner**. *Narrowed 2026-09-13: for the MVP only, provisional capacity of one H1/H2 client at a time, owner solo + AI (Worksheet §6.1); full-offer capacity and delivery owner still open* | Phase 11; SLAs; §7 | Owner; Operations (08); HR (11) | Pricing; delivery |
 | 3 | **Owner-approved price band** — audit, entry, retainer | Phase 11 | Owner | Proposal; Agreement |
 | 4 | **Owner-approved audit-fee credit policy**, including whether credit applies on redirect | Risk reversal; G5 | Owner | Proposal |
@@ -512,6 +512,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-14 — Cross-referenced the MVP commercial shape** (§11.3 MVP note, §11.5 #2–#3, §12.5): diagnostic-first, two-stage, audit-gated; G6 passed for the H1/H2 MVP only. Also brought §11.5 #5 up to date with the 2026-09-13 provisional capacity decision. Full record in the Worksheet §1.5. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-14 — Cross-referenced the MVP legal/privacy review packet** (§12.5): prepared for counsel, not a review; G5 still blocked, G2 still blocked only by legal. Full record in the Worksheet §11. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-14 — Cross-referenced the MVP hours-only cost-to-deliver framework** (§9 #1, §12.5): banded hours only, no numeric hours or money; G5 and G7 still blocked. Full record in the Worksheet §12. Still **Not Quotable.** — Claude Code (Opus 5)
+- **2026-09-14 — Cross-referenced the owner-approved band-to-hours scale** (§9 #1, §12.5): MVP planning hours excluding legal; no cost in money; G5 and G7 still blocked. Full record in the Worksheet §12.2–§12.4. Still **Not Quotable.** — Claude Code (Opus 5)
 
 ---
 
@@ -679,3 +680,5 @@ Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
 **Legal/privacy review packet prepared for the H1/H2 MVP (2026-09-14) — not a review:** the client data handled (MD1–MD8, interview notes, screenshots, the analysis workbook, M1–M7), the tools that would touch it, and seven contract and review questions — data-processing terms, sub-processor list, confidentiality, AI-use disclosure, acceptance and revisions, no performance guarantee, and no approval sought for pricing or claims. Counsel is named but neither letter of engagement is signed, and no drafted scope covers template review or the sub-processor register, so readiness gate G5 stays **blocked** and G2 stays blocked only by legal. QG4 and §9 #15–#16 are unchanged. Record: Worksheet §11. **Not quotable.**
 
 **MVP hours-only cost-to-deliver framework drafted for owner review (2026-09-14):** every role banded in hours terms for the audit-only redirect path and the audit + blueprint path, with legal/compliance BLOCKED and the analytics rule (M with the minimum audit data set complete, L otherwise). **No numeric hours are written** — the repo has no precedent, and its operations and HR doctrine forbid inventing hours — so the owner must first set a band-to-hours scale. Not delivery capacity, not a cost in money, not a price; one H1/H2 client at a time stays the provisional capacity. G5 and G7 remain blocked; Phase 11 stays **BLOCKED**. Record: Worksheet §12. **Not quotable.**
+
+**MVP band-to-hours scale approved by the owner for internal planning only (2026-09-14):** XS 1–2 · S 3–5 · M 6–10 · L 11–18 hours per role, per engagement. Planning totals, **excluding legal**: the audit-only redirect path runs 13–32 hours and the audit + blueprint path 29–60 hours, depending on data completeness and conditional roles. Legal/compliance stays BLOCKED and outside every total. Not a delivery promise, quote, price or cost in money; one H1/H2 client at a time stays the provisional capacity. G5 and G7 remain blocked. Record: Worksheet §12.2–§12.4. **Not quotable.**

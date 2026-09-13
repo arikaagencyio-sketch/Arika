@@ -1,7 +1,7 @@
 # Hospitality Revenue Content OS — Delivery Capacity and Cost Model Worksheet
 
 > ⚠️ **INTERNAL WORKSHEET · NOT QUOTABLE · NO PRICES.**
-> This file names **what must be known** before any test price or price floor can exist. It contains **no price, no currency, no amount, no rate, no margin and no capacity figure** — every quantity below is a **variable to be supplied**, not a value. §10 adds **relative effort bands (XS–XL), owner-approved for internal MVP planning only** — not hours, not money. §12 frames hours **in bands only** — no numeric hours, no money.
+> This file names **what must be known** before any test price or price floor can exist. It contains **no price, no currency, no amount, no rate, no margin and no capacity figure** — every quantity below is a **variable to be supplied**, not a value. §10 adds **relative effort bands (XS–XL), owner-approved for internal MVP planning only** — not hours, not money. §12 sets **internal planning hours** from an owner-approved band-to-hours scale — hours only, **no money**.
 
 ## 1. Status
 
@@ -222,7 +222,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 
 | # | Variable | Unit | Applies to | Who supplies | Known now? |
 |---|---|---|---|---|---|
-| V1 | **Effort by role** | Hours or effort units per role, per package | P1, P2, P3, P4 hand-off | Owner, with Operations (08) | ◐ **MVP bands owner-approved (§10.8)** for internal planning only; legal not estimated; hours framed in bands (§12) — numeric hours not set |
+| V1 | **Effort by role** | Hours or effort units per role, per package | P1, P2, P3, P4 hand-off | Owner, with Operations (08) | ◐ **MVP bands owner-approved (§10.8)** for internal planning only; legal not estimated; planning hours set from the owner-approved scale (§12), excluding legal |
 | V2 | **Number of audit data sources** | Count per client (booking engine, PMS/CRS exports, channel manager, OTA extranets, web analytics, email/CRM) | P1, P3 | Per client, at Qualification · ✅ MVP minimum data set decided (§1.4) | ◐ **MVP minimum defined (§1.4):** MD1 and MD4 required; the actual source count still varies by client stack |
 | V3 | **Number of pages / assets / messages** | Count per build; count per retainer cycle | P2, P3 | Owner — from minimum viable scope (§6 Q5) | ❌ |
 | V4 | **Number of review rounds** | Rounds per deliverable | P1–P3 | Owner — ✅ MVP policy set (§1.3); full-offer revision policy open (`Draft 41` §9 #14) | ◐ **MVP: one included round per M1–M7 output** (§1.3); P2 beyond Phase 1 and P3 open |
@@ -230,7 +230,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | V6 | **Design / content production load** | Assets per build; assets per retainer cycle | P2, P3 | Owner + Design (19) | ❌ |
 | V7 | **Reporting cadence** | Reports per period | P3 | `Draft 41` — **monthly** [RUN]; effort per report unknown | ◐ cadence only |
 | V8 | **Compliance / legal review requirement** | Reviews per engagement; reviews per new template | P1–P3 | Legal (10) | ❌ blocked on counsel |
-| V9 | **Owner time requirement** | Senior-only effort per engagement (verdict, redirect, approvals, client relationship) | P1–P3 | Owner | ◐ **MVP: L-hours on the audit + blueprint path, M-hours on the audit-only path** (§12.3) — numeric hours not set |
+| V9 | **Owner time requirement** | Senior-only effort per engagement (verdict, redirect, approvals, client relationship) | P1–P3 | Owner | ◐ **MVP: 11–18 hours (L) on the audit + blueprint path, 6–10 hours (M) on the audit-only path** (§12.3) — planning hours, not capacity |
 | V10 | **H-band and severity scaling** | How V1–V9 change from H1 → H3 and L1 → L3 (qualitative first) | P1–P3 | Owner (axes approved by Decision 71) | ❌ |
 
 **MVP effect on these variables — values still blank.** V3 counts blueprint items (journey structure, page/message hierarchy, key messaging blocks) plus the sections given sample copy — not finished pages, messages or produced assets (§1.2) · V4 is one included revision round per M1–M7 output (§1.3) · V6 design load is deferred with production · V7 does not apply until the retainer returns · V8 narrows to audit-data handling terms · V10 narrows to H1 → H2, since H3 is out of the MVP. **No hours or cost value has been entered** — relative effort bands only, in §10.
@@ -368,7 +368,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | G4 | **Tool cost categories identified** | ✅ **Passed — MVP tool-category identification only** (§5.1–§5.2, 2026-09-13): six categories identified by the check; the four gaps closed by provisional owner choices (§5.2); nurture platform not required. **Still open:** actual tool costs · vendors · legal/privacy approval (G5) · live connection checks. Not passed for the full offer; not converted into prices | Every MVP category confirmed — met at category level (§5.2); the nurture platform returns with nurture | Tech Stack (13) |
 | G5 | **Legal / compliance review path identified** | ❌ **Blocked — no engaged counsel for these matters** (§11.1): Ndwiga Law Advocates LLP is named, both letters of engagement are unsigned, and no drafted scope covers template review or the sub-processor register (item 59) · **scope reduced for the MVP** (no consent sends) · **scope added 2026-09-13 (§5.2):** the client-data storage platform, any cloud-hosted tool holding client data, and any interview recording · **review packet prepared 2026-09-14 (§11) — not a review path** | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
 | G6 | **Audit / build / retainer commercial shape selected** | ✅ **Passed — H1/H2 MVP only** (§1.5, 2026-09-14): diagnostic-first, two-stage, audit-gated — Stage 1 Gateway Audit always first; Stage 2 blueprint only on a confirmed content or journey-messaging root cause. **Not passed for the full offer** (build beyond Phase 1, retainer — `Draft 41` §11.5 #2–#3). Prices, fee credit and payment terms are outside this gate and stay blocked | Owner choice recorded — done for the MVP; two readings to confirm (§1.5; §8 #24) | Offer (02) |
-| G7 | **Owner approves use of `TEST_FIXTURE` figures** | ⏸ deferred by Owner Decision 71 until cost-to-deliver and capacity exist — *capacity now exists provisionally for the MVP (G3); cost-to-deliver does not — hours are framed only in bands pending an owner-set scale (§12), and no cost in money exists* | Owner decision recorded | Owner |
+| G7 | **Owner approves use of `TEST_FIXTURE` figures** | ⏸ deferred by Owner Decision 71 until cost-to-deliver and capacity exist — *capacity now exists provisionally for the MVP (G3); planning hours now exist for the MVP (§12, excluding legal); cost-to-deliver in money does not* | Owner decision recorded | Owner |
 
 **Also required before a *positive* pricing-floor test — beyond this gate:**
 - **A method for deriving a hotel floor.** §10's method averages comparable offers; no comparable hotel offer exists.
@@ -404,8 +404,8 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 22 | M6 baseline when only the three-month audit window is supplied — request a seasonally comparable period, or state the limitation in M6? | Offer (02) | Owner | M6 measurement validity |
 | 23 | ~~MVP tool choices for the four §5.1 gaps~~ ✅ **Decided provisionally 2026-09-13, at category level (§5.2):** client folder outside this repository · spreadsheet workbook (app not chosen) · document-format deliverables · phone, video or in-person interview with typed notes, no recording by default. **Still open:** vendors (none registered in `TECHSTACK_OS.md` §3 for these uses), costs, legal/privacy review, live checks | Tech Stack (13) + Offer (02) | Owner | ~~G4~~ — passed at category level; storage platform and vendors must be settled before real client use |
 | 24 | Confirm the two §1.5 readings: (1) M7 closes Stage 1 when the MVP stops on a redirect, and appears in Stage 2 only for a limitation or secondary redirect; (2) severity does not gate Stage 2 for the MVP, although `Draft 41` §11.3's unapproved proposal required L3 | Offer (02) | Owner | What Stage 1 and Stage 2 deliver — not G6 |
-| 25 | **Band-to-hours scale for the MVP** (§12.2) — supply or approve an hours range per MVP engagement for XS, S, M and L, and confirm the counting rules. Until then hours stay banded | Offer (02) + Operations (08) | Owner | Numeric hours; cost-to-deliver; G7 |
-| 26 | Confirm the redirect-path bands — owner M and delivery QA XS (§10.4) — which §10.8's approval of the full-path §10.3 bands did not name | Offer (02) | Owner | Audit-only path hours (§12.3) |
+| 25 | ~~**Band-to-hours scale for the MVP** (§12.2)~~ ✅ **Scale approved 2026-09-14:** XS 1–2 · S 3–5 · M 6–10 · L 11–18 hours per role, per engagement — internal MVP planning only. **Still to confirm:** the proposed counting rules (§12.2) | Offer (02) + Operations (08) | Owner | ~~Numeric hours~~ — set · cost-to-deliver in money · G7 |
+| 26 | ~~Confirm the redirect-path bands~~ ✅ **Confirmed 2026-09-14:** audit-only redirect path owner/strategist **M**, delivery QA **XS** | Offer (02) | Owner | ~~Audit-only path hours~~ — set (§12.3) |
 
 ---
 
@@ -424,6 +424,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **2026-09-14 — MVP commercial shape recorded (owner decision, internal MVP design only).** Added §1.5: diagnostic-first, two-stage, audit-gated. Stage 1, the Gateway Audit, always comes first and produces M1–M2 under §1.4 and the diagnostic gate; a non-content root cause ends the MVP. Stage 2, the Phase 1 blueprint, opens only on a confirmed content or journey-messaging root cause and produces M3–M6, plus M7 where needed — blueprint with sample copy only. **G6 marked passed for the H1/H2 MVP only.** §8 #7 structure decided (the credit question stays with pricing), #8 decided for the MVP, new #24 to confirm two readings: M7's place on a redirect, and severity not gating Stage 2 despite `Draft 41` §11.3's unapproved L3 proposal. §10.4 stage note added. **Still blocked:** prices, price band, cost-to-deliver, hotel floors, test figures, fee credit, payment terms. **No prices, no currency, no quote language.** — Claude Code (Opus 5)
 - **2026-09-14 — Legal/privacy review packet prepared for the H1/H2 MVP (not a review).** Added §11: review-path status; client data handled (MD1–MD8, owner-captured screenshots, the analysis workbook, M1–M7); the tools that would touch it; seven contract and review questions (LQ1–LQ7) mapped to the unreviewed templates and the counsel brief; gate effects. **G5 kept blocked:** counsel is named (Ndwiga Law Advocates LLP), but neither letter of engagement is signed, and `LEGAL_OS.md` §5 records that no drafted letter covers template review or the sub-processor register. **G2 still blocked only by legal.** The G5 row and §8 #6 corrected from "no counsel" to that precise state. **Correction:** §5.1–§5.2 said DPA Annex B lists only ClickUp; it drafts nine rows. Fixed there; `TECHSTACK_OS.md` §9 still carries the stale sentence and was not modified. Written from repo documents; not legal advice. **No prices, no currency, no quote language.** — Claude Code (Opus 5)
 - **2026-09-14 — MVP hours-only cost-to-deliver framework added (§12; owner review required).** Hours are expressed **in bands only — no numeric hours.** The repo has no delivery-hours precedent, and `OPERATIONS_CONSTITUTION.md` §7, `PEOPLE_DOCTRINE.md` §8 and `CLAUDE.md` forbid inventing them. Added: a band-to-hours scale left `[OWNER TO SET]`, with proposed counting rules; hours bands per role for the audit-only redirect path and the audit + blueprint path; the analytics M/L rule; legal BLOCKED; an owner-load stack without totals; the one-client provisional capacity warning; and a blank first-delivery actuals table. V1, V9 and G7 updated; new §8 #25 (band-to-hours scale) and #26 (confirm redirect-path bands). **G5 and G7 remain blocked. No money, rates, currency, prices, fees, floors, test figures or quote language.** — Claude Code (Opus 5)
+- **2026-09-14 — Owner-approved band-to-hours scale recorded (internal MVP planning only).** §12.2 filled: XS 1–2 · S 3–5 · M 6–10 · L 11–18 hours per role, per engagement. §8 #26 confirmed: audit-only redirect path owner/strategist M, delivery QA XS. §12.3 converted to hours; §12.4 adds planning totals **excluding legal** — audit-only redirect path 13–22 hours with complete minimum data or 18–30 hours with messy data or no revenue by channel (up to 32 if scope changes); audit + blueprint path 29–48 or 34–56 hours (up to 60 with both conditional roles). Legal/compliance stays BLOCKED and outside every total. One-client-at-a-time capacity warning kept. **Still to confirm:** the proposed counting rules (§8 #25). V1, V9, G7, §12.1 and §12.6 updated. **Not a delivery promise, quote, price or cost in money; G5 and G7 still blocked. No currency, rates, fees, floors or test figures.** — Claude Code (Opus 5)
 
 ---
 
@@ -639,9 +640,9 @@ G1, G3, G4 and G6 are unchanged.
 
 ## 12. MVP Hours-Only Cost-to-Deliver Estimate — Owner Review Required
 
-> ⚠️ **HOURS FRAMEWORK · BANDED ONLY · NO NUMERIC HOURS · NO MONEY.** Planning assumptions for owner review, H1/H2 MVP only. **Not** approved delivery capacity, **not** a price, **not** a cost in money, and **not** a rate, fee, floor, test figure or quote. **G5 and G7 stay blocked.** The offer remains **Working Hypothesis / Not Quotable.**
+> ⚠️ **HOURS ONLY · OWNER-APPROVED PLANNING SCALE (2026-09-14) · NO MONEY.** Internal planning ranges, H1/H2 MVP only. **Not** a public delivery promise, **not** approved delivery capacity, **not** a quote or price, **not** a cost in money, and **not** a rate, fee, floor or test figure. **Not approved** for the full offer, H3 groups, the retainer, nurture, implementation, or two clients at once. **G5 and G7 stay blocked.** The offer remains **Working Hypothesis / Not Quotable.**
 
-### 12.1 Why no numeric hours are written
+### 12.1 Why hours needed an owner-set scale
 
 Numeric hour ranges were to be used **only if the repo already permits estimated hours**. It does not:
 
@@ -654,17 +655,19 @@ Numeric hour ranges were to be used **only if the repo already permits estimated
 
 V1's unit ("hours or effort units") allows hours to be recorded, but **no source supplies them.** Hours therefore stay in bands until the owner sets a band-to-hours scale (§12.2; §8 #25).
 
+✅ **Resolved 2026-09-14:** the owner approved the scale (§12.2). The hours below are **owner-sourced, not invented**, which is what the rules above require.
+
 ### 12.2 Band-to-hours scale — owner to set
 
-Every cell stays `[OWNER TO SET]` until the owner supplies or approves a range. Once set, every row in §12.3 converts without further judgement.
+✅ **Owner-approved 2026-09-14 — internal MVP planning only.** Hours per role, per MVP engagement. Every row in §12.3 converts from this scale without further judgement.
 
-| Band | Hours per MVP engagement | Rule |
+| Band | Hours per role, per MVP engagement | Rule |
 |---|---|---|
-| **XS** | `[OWNER TO SET]` | Smallest band — an occasional touchpoint |
-| **S** | `[OWNER TO SET]` | Above XS |
-| **M** | `[OWNER TO SET]` | Above S |
-| **L** | `[OWNER TO SET]` | Above M |
-| **XL** | Not needed | No MVP role is XL (§10.1) |
+| **XS** | **1–2 hours** | Smallest band — an occasional touchpoint |
+| **S** | **3–5 hours** | Above XS |
+| **M** | **6–10 hours** | Above S |
+| **L** | **11–18 hours** | Above M |
+| **XL** | Not set | No MVP role is XL (§10.1) |
 
 **Proposed counting rules — owner to confirm,** so the scale means the same thing in every row:
 - **Counted:** hands-on work; AI-assisted drafting and the owner's review of AI output (A6); the one included revision round per output (§1.3); client calls, including the buyer interview.
@@ -672,30 +675,39 @@ Every cell stays `[OWNER TO SET]` until the owner supplies or approves a range. 
 
 ### 12.3 Hours by role and path
 
-Bands in hours terms, from the owner-approved §10.3 bands (§10.8) and the §10.4 path split. Stage 1 is the Gateway Audit; Stage 2 is the Phase 1 blueprint, opened only when the diagnostic gate passes (§1.5).
+Owner-approved §10.3 bands (§10.8), the §10.4 path split (redirect-path bands confirmed 2026-09-14, §8 #26), converted with the §12.2 scale. Stage 1 is the Gateway Audit; Stage 2 is the Phase 1 blueprint, opened only when the diagnostic gate passes (§1.5).
 
 | Role | Audit-only redirect path — Stage 1 only; ends at M1, M2, M7 | Audit + blueprint path — Stage 1, then Stage 2 | Stages active |
 |---|---|---|---|
-| **Owner / strategist** | **M-hours** ¹ | **L-hours** | Both — buyer interview, verdict and readout in Stage 1; blueprint approvals in Stage 2; review throughout |
-| **Offer engineer** | XS-hours, *only if scope changes* | XS-hours, *only if scope changes* | Either |
-| **Content strategist** | None | **M-hours** | Stage 2 |
-| **Light copy / sample-copy producer** | None | **S-hours** | Stage 2 |
-| **Analytics / reporting** | **M-hours** when the §1.4 minimum audit data set is complete · **L-hours** when data is messy or revenue by channel is missing | Same rule | Stage 1 (M1, M2 and M7 evidence); Stage 2 (M6) |
-| **Delivery QA** — owner self-review | **XS-hours** ¹ | **S-hours** | Both |
+| **Owner / strategist** | **M — 6–10 hours** | **L — 11–18 hours** | Both — buyer interview, verdict and readout in Stage 1; blueprint approvals in Stage 2; review throughout |
+| **Offer engineer** | XS — 1–2 hours, *only if scope changes* | XS — 1–2 hours, *only if scope changes* | Either |
+| **Content strategist** | None | **M — 6–10 hours** | Stage 2 |
+| **Light copy / sample-copy producer** | None | **S — 3–5 hours** | Stage 2 |
+| **Analytics / reporting** | **M — 6–10 hours** when the §1.4 minimum audit data set is complete · **L — 11–18 hours** when data is messy or revenue by channel is missing | Same two alternatives | Stage 1 (M1, M2 and M7 evidence); Stage 2 (M6) |
+| **Delivery QA** — owner self-review | **XS — 1–2 hours** | **S — 3–5 hours** | Both |
 | **Legal / compliance review** | **BLOCKED — not estimated** | **BLOCKED — not estimated** | Until a legal review path exists (G5; §11) |
 | **Design support** | Deferred — none | Deferred — none | — |
-| **Automation / booking-journey advisor** | None — a technical finding is a redirect | Deferred — **XS-hours only if separately triggered** by a booking-journey messaging cause | Stage 2, if triggered |
+| **Automation / booking-journey advisor** | None — a technical finding is a redirect | Deferred — **XS — 1–2 hours, only if separately triggered** by a booking-journey messaging cause | Stage 2, if triggered |
 
-¹ **Owner to confirm (§8 #26):** the redirect-path owner (M) and delivery QA (XS) bands come from §10.4's path split. §10.8 approved the §10.3 bands, which describe the full path (A7).
+The redirect-path owner (M) and delivery QA (XS) bands were **confirmed by the owner 2026-09-14** (§8 #26).
 
 **No per-stage sub-bands are given.** §10 approved one band per role per engagement; splitting a band between Stage 1 and Stage 2 would be a new estimate. The first real delivery should record the split (§12.5).
 
 ### 12.4 Owner load and capacity warning
 
-- **Every active row is the owner's time today.** No delegate exists (§4; §6.1), so the owner's load for one engagement is the stack of active bands:
-  - **Audit-only redirect path:** M (owner) + M or L (analytics) + XS (QA) + XS if scope changes.
-  - **Audit + blueprint path:** L (owner) + M (content strategist) + M or L (analytics) + S (sample copy) + S (QA) + XS if scope changes + XS if the advisor is triggered.
-- **No total is computed.** Bands cannot be added until the §12.2 scale exists.
+- **Every active row is the owner's time today.** No delegate exists (§4; §6.1), so the totals below are the owner's own planning hours for one engagement.
+
+**Planning ranges per engagement — EXCLUDING LEGAL.** Legal/compliance is BLOCKED and not estimated, so every total understates the real figure by an unknown amount.
+
+| Path and roles | Minimum data complete (analytics M) | Data messy or revenue by channel missing (analytics L) |
+|---|---|---|
+| **Audit-only redirect path** — owner M + analytics + QA XS | **13–22 hours** | **18–30 hours** |
+| + offer engineer, if scope changes | 14–24 hours | 19–32 hours |
+| **Audit + blueprint path** — owner L + content strategist M + sample copy S + analytics + QA S | **29–48 hours** | **34–56 hours** |
+| + one conditional role (offer engineer or triggered advisor) | 30–50 hours | 35–58 hours |
+| + both conditional roles | 31–52 hours | 36–60 hours |
+
+**How the totals are built:** the low ends and the high ends of each active role in §12.3, added separately. They follow the proposed counting rules in §12.2, which the owner has **not yet confirmed** (§8 #25). They exclude legal, any owner-approved extra revision round, first-use tool verification, pre-sale work and elapsed waiting time.
 - ⚠️ **Capacity warning — unchanged.** **One H1/H2 MVP client at a time** remains the **provisional** capacity (§6.1). These hours are **planning assumptions, not approved delivery capacity.** Weekly owner delivery time (Q7) is still unanswered, so hours cannot yet become a calendar duration or justify a second concurrent client. **Revisit after the first real delivery.**
 
 ### 12.5 First real delivery — record actuals
@@ -716,8 +728,8 @@ The first real MVP delivery is the only source of real hours this repo will have
 
 | Item | Result |
 |---|---|
-| **Hours-only cost-to-deliver** | ◐ **Framework drafted** — every role and both paths banded in hours terms; **numeric hours not set** (§12.1–§12.2) |
+| **Hours-only cost-to-deliver** | ✅ **Planning hours set for the MVP** — owner-approved scale (2026-09-14); both paths in hours, **excluding legal** (§12.3–§12.4). Counting rules still to confirm (§8 #25) |
 | **Cost in money** | ❌ **Not drafted** — no rate, cost or currency. Converting hours to money needs a cost basis that is not set here, and tool costs are unknown (§5.2) |
 | **G2** | ◐ Unchanged — blocked only by legal |
 | **G5** | ❌ Unchanged — no legal review path (§11) |
-| **G7** | ⏸ **Blocked** — needs G2 and G5 passed, numeric hours, cost-to-deliver in money, and owner approval (Decision 71) |
+| **G7** | ⏸ **Blocked** — needs G2 and G5 passed, cost-to-deliver in money, and owner approval (Decision 71). Numeric planning hours now exist, but they are not a cost |
