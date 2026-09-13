@@ -1,6 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { AgentSpec } from "./spec-schema.js";
-import { baseOutputSchema } from "./spec-schema.js";
+import { baseOutputSchema, MAX_NONSTREAMING_TOKENS } from "./spec-schema.js";
 import { requiresHumanApproval } from "./governance.js";
 import { writeMemory } from "./memory-writer.js";
 import { runFinosAgent } from "./wrappers/finos.js";
@@ -81,6 +81,12 @@ export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunRes
 }
 
 /**
+ * Response budget for a `prompt` agent that declares no `max_tokens`. Thinking
+ * and the structured JSON share it; 2048 truncated Offer (02)'s 12-field schema.
+ */
+export const DEFAULT_MAX_TOKENS = 16_000;
+
+/**
  * Calls Claude for a `prompt` agent, generalizing finos's
  * `ClaudeAgentRuntime.run()` (09_Finance/finos-plugin/src/ai-agents/runtime.ts):
  * the spec body is the system prompt, the context is the user message, and the
@@ -101,11 +107,13 @@ async function runPromptAgent(spec: AgentSpec, ctx: RunContext): Promise<Record<
     "\nAnalyze this within your mandate and respond with a structured recommendation matching the required schema.",
   ].join("\n");
 
+  const maxTokens = spec.max_tokens ?? DEFAULT_MAX_TOKENS;
+
   // `thinking`, `output_config`, and the `claude-opus-4-8` id are ahead of the
   // pinned SDK types; the cast matches finos's proven call shape exactly.
   const response = await getClient().messages.create({
     model: spec.model,
-    max_tokens: 2048,
+    max_tokens: maxTokens,
     system: spec.systemPrompt,
     thinking: { type: "adaptive" },
     output_config: {
@@ -115,11 +123,30 @@ async function runPromptAgent(spec: AgentSpec, ctx: RunContext): Promise<Record<
     messages: [{ role: "user", content: userMessage }],
   } as Anthropic.MessageCreateParamsNonStreaming);
 
+  return parseStructuredOutput(spec.name, response, maxTokens);
+}
+
+/**
+ * Reads a prompt agent's structured recommendation out of a Claude response.
+ * A reply cut off at `max_tokens` is reported as truncation — its partial JSON
+ * would otherwise surface as an unhelpful "Unterminated string" parse error.
+ */
+export function parseStructuredOutput(
+  agentName: string,
+  response: Pick<Anthropic.Message, "content" | "stop_reason">,
+  maxTokens: number,
+): Record<string, unknown> {
+  if (response.stop_reason === "max_tokens") {
+    throw new Error(
+      `Agent ${agentName} output was truncated: the model hit max_tokens (${maxTokens}) before finishing its structured JSON. ` +
+        `Declare a larger \`max_tokens\` in the agent spec (ceiling ${MAX_NONSTREAMING_TOKENS}).`,
+    );
+  }
   const textBlock = response.content.find(
     (block): block is Anthropic.TextBlock => block.type === "text",
   );
   if (!textBlock) {
-    throw new Error(`Agent ${spec.name} returned no text content.`);
+    throw new Error(`Agent ${agentName} returned no text content (stop_reason: ${response.stop_reason}).`);
   }
   return JSON.parse(textBlock.text) as Record<string, unknown>;
 }

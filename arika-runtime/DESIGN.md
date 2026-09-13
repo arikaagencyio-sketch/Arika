@@ -33,6 +33,7 @@ output_schema:                     # optional but recommended; a JSON Schema obj
   additionalProperties: false
   required: [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel]
   properties: { ... }
+max_tokens: 16000                  # optional; prompt only — response budget (thinking + JSON share it). Default 16000, max 21333
 memory_stream: 05_Sales/.../runtime.jsonl   # optional; repo-relative JSONL path
 emits: [LEAD_QUALIFIED]            # optional; events published after a run
 handoff_to: [sales-sales-execution]# optional; downstream agents (documentation for now)

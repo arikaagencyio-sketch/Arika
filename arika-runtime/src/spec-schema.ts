@@ -48,6 +48,13 @@ export const triggerSchema = z
 
 export type Trigger = z.infer<typeof triggerSchema>;
 
+/**
+ * The largest `max_tokens` the Anthropic SDK accepts on a non-streaming call
+ * (it refuses any request it estimates at over 10 minutes: 600s × 128000 / 3600).
+ * The executor does not stream, so no spec may ask for more.
+ */
+export const MAX_NONSTREAMING_TOKENS = 21_333;
+
 export const frontmatterSchema = z
   .object({
     name: z.string().min(1),
@@ -65,6 +72,11 @@ export const frontmatterSchema = z
     inputs: z.record(z.unknown()).optional(),
     // A JSON Schema object; kept permissive on purpose.
     output_schema: z.record(z.unknown()).optional(),
+    /**
+     * `prompt` only: the Claude response budget, shared by thinking and the
+     * structured output. Omit to use the executor's DEFAULT_MAX_TOKENS.
+     */
+    max_tokens: z.number().int().positive().max(MAX_NONSTREAMING_TOKENS).optional(),
     memory_stream: z.string().optional(),
     emits: z.array(z.string()).optional(),
     handoff_to: z.array(z.string()).optional(),

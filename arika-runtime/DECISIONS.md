@@ -3,6 +3,30 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-09-13 — Prompt-agent response budget + truncation handling
+
+**Found by:** the first live Sector → Offer test. `offer-orchestrator` reached Claude
+but failed with `Unterminated string in JSON at position 4758` — the reply was cut
+off at `max_tokens: 2048`, which thinking and a 12-field `output_schema` share. The
+2048 was inherited from finos's call shape, sized for the 5-field base envelope.
+
+**Decision:**
+- **Default raised to 16000** (`DEFAULT_MAX_TOKENS`, `src/executor.ts`).
+- **Specs may declare `max_tokens`**, validated as a positive integer capped at
+  21333 (`MAX_NONSTREAMING_TOKENS`) — the SDK refuses any larger non-streaming call,
+  so an over-budget spec fails at load, not mid-run.
+- **A `stop_reason: "max_tokens"` reply now throws "output was truncated"** naming the
+  budget, instead of a JSON parse error. Both are tests, not comments.
+
+**Deliberately NOT changed:** streaming (not needed under the ceiling), and
+finos-plugin's own `max_tokens: 2048` (`09_Finance/finos-plugin/src/ai-agents/runtime.ts`)
+— its agents return the small base envelope; revisit if a finance agent truncates.
+
+**Verified:** `npm test` → 15/15. Re-run of the same manual `offer-orchestrator` call
+succeeded (`registry_action: needs_more_seed_data`) and wrote the first line of
+`02_Offer/_memory/runtime.jsonl` — the live Claude call, unverified since Session 1,
+is now closed end-to-end for a prompt agent.
+
 ## 2026-07-15 — The `join` barrier
 
 **Decision:** add a fifth trigger type, `join`, rather than flag the gap a second time.

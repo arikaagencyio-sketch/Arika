@@ -5,7 +5,8 @@ import { join } from "node:path";
 import { readFileSync, rmSync } from "node:fs";
 
 import { requiresHumanApproval, classToLevel, levelToClass } from "../dist/governance.js";
-import { frontmatterSchema } from "../dist/spec-schema.js";
+import { frontmatterSchema, MAX_NONSTREAMING_TOKENS } from "../dist/spec-schema.js";
+import { DEFAULT_MAX_TOKENS, parseStructuredOutput } from "../dist/executor.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
 import { EventBus } from "../dist/triggers/event-bus.js";
@@ -89,6 +90,38 @@ test("schema: risk_class must be 0-4", () => {
     triggers: [{ type: "manual" }],
   });
   assert.equal(r.success, false);
+});
+
+test("schema: max_tokens is optional, a positive integer, and capped at the non-streaming ceiling", () => {
+  const base = { name: "x", department: "02", description: "d", risk_class: 1, triggers: [{ type: "manual" }] };
+  const ok = (max_tokens) => frontmatterSchema.safeParse({ ...base, max_tokens }).success;
+
+  assert.equal(frontmatterSchema.safeParse(base).data.max_tokens, undefined, "omitted → executor default");
+  assert.equal(ok(16000), true);
+  assert.equal(ok(MAX_NONSTREAMING_TOKENS), true);
+  // Above the ceiling the SDK refuses a non-streaming call outright.
+  assert.equal(ok(MAX_NONSTREAMING_TOKENS + 1), false);
+  assert.equal(ok(0), false);
+  assert.equal(ok(1.5), false);
+  assert.ok(DEFAULT_MAX_TOKENS <= MAX_NONSTREAMING_TOKENS, "the default itself must be callable");
+});
+
+test("executor: a max_tokens stop is reported as truncation, not a JSON parse error", () => {
+  // The 2026-09-13 offer-orchestrator failure: partial JSON, cut mid-string.
+  const truncated = { stop_reason: "max_tokens", content: [{ type: "text", text: '{"summary":"Hospitality intake, the OTA' }] };
+  assert.throws(
+    () => parseStructuredOutput("offer-orchestrator", truncated, 2048),
+    (err) => /truncated/.test(err.message) && /2048/.test(err.message) && !/Unterminated/.test(err.message),
+  );
+
+  // Truncated during thinking — no text block at all — is still truncation.
+  assert.throws(
+    () => parseStructuredOutput("offer-orchestrator", { stop_reason: "max_tokens", content: [{ type: "thinking" }] }, 2048),
+    /truncated/,
+  );
+
+  const complete = { stop_reason: "end_turn", content: [{ type: "thinking" }, { type: "text", text: '{"summary":"ok"}' }] };
+  assert.deepEqual(parseStructuredOutput("offer-orchestrator", complete, DEFAULT_MAX_TOKENS), { summary: "ok" });
 });
 
 test("registry: loads every agent; the legacy migration is complete", () => {
