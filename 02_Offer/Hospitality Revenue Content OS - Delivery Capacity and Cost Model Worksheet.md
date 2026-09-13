@@ -37,7 +37,7 @@
 | M1 | Audit Findings Snapshot | D1 — report | P1 |
 | M2 | Leakage Root-Cause Classification | D1 — the (a)–(d) verdict; §3 diagnostic gate | P1 |
 | M3 | Direct Booking Message Strategy | D2 — scoped to messaging | P2 Phase 1 |
-| M4 | Booking Journey Copy/Content Blueprint | D5 — as a blueprint | P2 Phase 1 |
+| M4 | Booking Journey Copy/Content Blueprint | D5 — **blueprint with sample copy**, not D5's full copy package (§1.2) | P2 Phase 1 |
 | M5 | Basic Direct-Booking Content Plan | D3 — basic version | P2 Phase 1 |
 | M6 | Measurement Plan | Baseline and measurement design (§7's seasonally comparable baseline) — **not** D7's monthly reporting | P2 Phase 1 |
 | M7 | Redirect Recommendation — only if the root cause is pricing/rate strategy or tech-stack/integration | P4 hand-off | P1 |
@@ -46,9 +46,24 @@
 
 **Still not approved:** prices · a public offer · the retainer · test price figures · legal claims · performance guarantees. The full offer remains **Working Hypothesis / Not Quotable.**
 
-**Two scope edges this decision does not settle** — both change effort, so both are open decisions (§8 #17–#18):
-- **Does M4 include finished copy, or only the blueprint** (structure, messages, page-by-page direction)?
-- **Is D4 content production outside the MVP?** It is not in the output list, so this worksheet treats it as deferred — to be confirmed.
+**The two scope edges this decision left open are now settled** by Owner Decision #17 (§1.2): M4's depth, and the exclusion of D4 content production (§8 #17–#18).
+
+### 1.2 M4 depth — Owner Decision #17 (2026-09-13)
+
+✅ **Decided for INTERNAL DESIGN ONLY.** M4 is a **strategic blueprint, not a production build.**
+
+| M4 includes | M4 excludes |
+|---|---|
+| Blueprint and structure of the booking journey | Full finished copy for every page or message |
+| Page / message hierarchy | Full content production (D4) |
+| Key messaging blocks | Implementation inside booking tools or the website CMS |
+| Sample copy examples for **critical sections only** | |
+
+**What follows from it:**
+- **D4 content production is outside the MVP.** The decision excludes full content production and keeps the MVP "a strategic blueprint, not a full production build" — the confirmation §8 #18 asked for. *If D4 was meant to stay open as a separate question, #18 reopens and G1 returns to partial.*
+- **No implementation work.** Nothing is built inside a booking engine or CMS — consistent with `Draft 41` §3, where technical journey work is a redirect, not this offer.
+- **Sample copy is client-facing text, so the content gates apply to it:** QG2 (no outcome claims — the proof method is blocked, so samples carry none), QG3 (benchmarks labelled), QG5 (no price) and QG7 (positioning). Legal claims and performance guarantees remain unapproved.
+- **"Critical sections" has no fixed count.** Which sections receive sample copy is an estimation assumption, to be stated when V1 and V3 are estimated (G2).
 
 ---
 
@@ -57,7 +72,7 @@
 | # | Package | What is delivered (from `Draft 41`) | MVP (§1.1) | Estimable today? |
 |---|---|---|---|---|
 | P1 | **Gateway — OTA Leakage & Direct-Booking Audit** | D1: client-data diagnosis, (a)–(d) leakage verdict, one-page roadmap (§6) | ✅ **In** — M1, M2, M7 | **Structure yes, effort no** — audit duration still open (`Draft 41` §9 #13) |
-| P2 | **Entry Build — Direct Booking Engine setup** | D2 strategy · D3 revenue-year content calendar · D4 content production · D5 booking-journey messaging · D6 email/WhatsApp nurture · baseline for D7 | ◐ **Phase 1 only** — M3–M6, the message/journey blueprint. D4 production, D6 nurture and implementation deferred | **Structure yes, effort no** — MVP scope now chosen; effort not estimated |
+| P2 | **Entry Build — Direct Booking Engine setup** | D2 strategy · D3 revenue-year content calendar · D4 content production · D5 booking-journey messaging · D6 email/WhatsApp nurture · baseline for D7 | ◐ **Phase 1 only** — M3–M6, the message/journey blueprint with sample copy (§1.2). D4 production, D6 nurture and implementation deferred | **Structure yes, effort not yet** — MVP scope fully chosen (§1.1–§1.2); effort estimation can start (G2) |
 | P3 | **Governance Retainer — monthly optimization/governance** | D7 monthly reporting · optimization of D4–D6 · QBR · governance QA | ⏸ **Deferred** | Not needed for the MVP |
 | P4 | **Redirect paths** | The hand-off when the audit finds a non-content root cause (§3) | ◐ **Hand-off only** — M7, inside P1; the redirected work is out of scope | **No** — none of the destinations is engineered |
 
@@ -99,7 +114,7 @@ Which workstreams each package needs, and what drives the effort. **No hours, no
 | **Sector / client diagnosis** | ✅ In | M1, M2 | H1/H2 only — no multi-property profiling |
 | **Data collection + channel-mix analysis** | ✅ In | M1, M2, M6 | Audit data only; no monthly pulls |
 | **Direct-booking message strategy** | ✅ In | M3 | Only after an (a) or (b)-messaging verdict |
-| **Booking-journey copy / content** | ◐ In, as a blueprint | M4, M5 | Finished copy vs blueprint undecided (§8 #17); D4 production deferred (§8 #18) |
+| **Booking-journey copy / content** | ◐ In, as a blueprint | M4, M5 | Structure, page/message hierarchy, key messaging blocks, sample copy for critical sections (§1.2) · no full copy, no D4 production, no booking-tool/CMS implementation |
 | **Email or WhatsApp nurture** | ⏸ Deferred | — | Removes the nurture-platform and consent-send dependencies from the MVP |
 | **Reporting** | ◐ Reduced | M1, M6 | Audit report and measurement plan; monthly reporting deferred with the retainer |
 | **Client communication** | ✅ In | All | Audit readout and blueprint approvals; no QBR |
@@ -117,13 +132,13 @@ Role-based. The only named person is the owner of record already confirmed in th
 |---|---|---|---|---|---|---|---|---|
 | **Owner / strategist** | Senior Diagnostic Reviewer · Account Lead (default) | ● | ● | ● | **Required** | ✅ **In** — M2 verdict, M7 redirect, approvals | **Yes, by default** — the agency owner (Offer (02) owner of record, `OFFER_OS.md`: Mary Thuo); **not** a confirmed delivery assignment | Weekly time available for delivery after running the agency; how many senior-only tasks (verdict, redirect, approvals) one engagement consumes |
 | **Offer engineer** | — (Offer 02 function) | ◐ | ◐ | — | **Conditional** — package design and scope changes, not routine delivery | ◐ Conditional — scope changes only | **Yes** — owner + advisory `offer-oeos-engineer`; no separate person | How often a client needs scope customization beyond the standard package |
-| **Content strategist** | Revenue-Content Strategist | ◐ | ● | ◐ | **Required** for P2 | ✅ **In** — M3, M4, M5 | **No** | Effort per strategy + calendar; how much AI drafting reduces it |
-| **Copy / content producer** | Content Producer · Conversion Copywriter | — | ● | ● | **Required** for P2, P3 | ◐ **Conditional** — only if M4 includes finished copy (§8 #17) | **No** | Output per cycle; revision load |
+| **Content strategist** | Revenue-Content Strategist | ◐ | ● | ◐ | **Required** for P2 | ✅ **In** — M3; M4 structure, hierarchy and messaging blocks; M5 | **No** | Effort per strategy + calendar; how much AI drafting reduces it |
+| **Copy / content producer** | Content Producer · Conversion Copywriter | — | ● | ● | **Required** for P2, P3 | ◐ **Light** — sample copy for critical sections only (§1.2); no full copy, no production. Could sit with the content strategist rather than a separate role | **No** | Output per cycle; revision load · *MVP:* how many critical sections are sampled; review rounds on samples |
 | **Design support** | — (Design 19) | — | ◐ | ◐ | **Conditional** — when content or landing pages need visuals | ⏸ **Deferred** — no production in the MVP | **No** | Image-generation runway was near-exhausted when last verified (`TECHSTACK_OS.md` §3, 2026-07-15); Canva authentication lapsed (same date) |
-| **Automation or booking-journey advisor** | Lifecycle Engineer · journey-messaging side of Conversion Copywriter | — | ◐ | ◐ | **Conditional** — nurture needs consent + a platform; technical engine work is a redirect, not this role | ⏸ **Deferred** — nurture excluded; journey-messaging direction sits with the content strategist in M4 | **No** | No nurture platform registered; every automation needs an approval-matrix row (`AUTOMATION_APPROVAL_MATRIX.md`) |
+| **Automation or booking-journey advisor** | Lifecycle Engineer · journey-messaging side of Conversion Copywriter | — | ◐ | ◐ | **Conditional** — nurture needs consent + a platform; technical engine work is a redirect, not this role | ⏸ **Deferred** — nurture excluded; no booking-tool or CMS implementation (§1.2); journey-messaging direction sits with the content strategist in M4 | **No** | No nurture platform registered; every automation needs an approval-matrix row (`AUTOMATION_APPROVAL_MATRIX.md`) |
 | **Analytics / reporting** | Audit Analyst · Reporting Analyst | ● | ◐ | ● | **Required** | ✅ **In** — M1, M2, M6; no monthly reporting | **No** | Data-access effort per client; whether pulls can be automated given integration-type stack chaos |
-| **Legal / compliance review** | — (Legal 10) | ◐ | ● | ◐ | **Required** once client data or client-facing sends exist | ◐ **Reduced** — audit-data handling terms; no consent review while nurture is deferred | **Blocked** — no counsel engaged (`OWNER_INPUT_NEEDED.md` item 59); `legal-counsel-router` routes, it does not review | Review turnaround; whether review is per template or per engagement |
-| **Delivery QA** | QA gates (`Draft 41` §8) · Operations (08) delivery QA | ● | ● | ● | **Required** | ✅ **In** — reduced gate set (§3.1) | **Blocked** — advisory `operations-delivery-qa` exists; no named human reviewer | Whether QA can be the owner (self-review) or needs a second person |
+| **Legal / compliance review** | — (Legal 10) | ◐ | ● | ◐ | **Required** once client data or client-facing sends exist | ◐ **Reduced** — audit-data handling terms; no consent review while nurture is deferred; sample copy carries no claims (QG2), so no claims review | **Blocked** — no counsel engaged (`OWNER_INPUT_NEEDED.md` item 59); `legal-counsel-router` routes, it does not review | Review turnaround; whether review is per template or per engagement |
+| **Delivery QA** | QA gates (`Draft 41` §8) · Operations (08) delivery QA | ● | ● | ● | **Required** | ✅ **In** — reduced gate set (§3.1); sample copy adds QG2, QG3, QG5 and QG7 checks (§1.2) | **Blocked** — advisory `operations-delivery-qa` exists; no named human reviewer | Whether QA can be the owner (self-review) or needs a second person |
 
 **Two structural constraints that bound every row:**
 - **The delegability ceiling.** Senior-expert-only work — the audit verdict, redirect decisions, Class 3 approvals — stays with one person however many agents exist (`11_HR_People_Ops/PEOPLE_DOCTRINE.md`; `Draft 41` §12 Phase 12). More agents raise the volume arriving at that ceiling, not the ceiling.
@@ -148,7 +163,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | V9 | **Owner time requirement** | Senior-only effort per engagement (verdict, redirect, approvals, client relationship) | P1–P3 | Owner | ❌ |
 | V10 | **H-band and severity scaling** | How V1–V9 change from H1 → H3 and L1 → L3 (qualitative first) | P1–P3 | Owner (axes approved by Decision 71) | ❌ |
 
-**MVP effect on these variables — values still blank.** V3 counts blueprint and plan items, not produced assets (unless M4 includes finished copy) · V6 design load is deferred with production · V7 does not apply until the retainer returns · V8 narrows to audit-data handling terms · V10 narrows to H1 → H2, since H3 is out of the MVP. **No effort or cost value has been entered.**
+**MVP effect on these variables — values still blank.** V3 counts blueprint items (journey structure, page/message hierarchy, key messaging blocks) plus the sections given sample copy — not finished pages, messages or produced assets (§1.2) · V4 applies to the blueprint and the samples only · V6 design load is deferred with production · V7 does not apply until the retainer returns · V8 narrows to audit-data handling terms · V10 narrows to H1 → H2, since H3 is out of the MVP. **No effort or cost value has been entered.**
 
 **V5 — tool / API cost categories** (categories, not costs; each must be verified per `TECHSTACK_OS.md` discipline):
 - **Model usage** — Anthropic API, for any `arika-runtime` agent used in delivery
@@ -171,7 +186,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | Q2 | **What is solo-owner work vs AI-assisted work?** And does AI-assisted work still consume owner review time? | AI-assisted drafting is not free if every output needs senior review | Owner |
 | Q3 | **What can be delegated — and to whom?** No delegate exists today | Delegation changes cost structure and triggers HR (11) classification questions | Owner + HR (11) |
 | Q4 | **What must wait for another department?** Legal (10): contract, DPA, consent · Operations (08): capacity model, scheduling · Content (04): publishing gate, brief pipeline · Design (19): image runway, Canva authentication · Tech Stack (13): nurture platform | A dependency with no date makes a delivery timeline — and so a price — unfounded | Each named department |
-| Q5 | ~~What is the minimum viable delivery scope?~~ ◐ **Answered for internal design (§1.1, 2026-09-13):** audit + Entry Build Phase 1 blueprint, H1/H2 only; nurture, retainer and H3 deferred. **Still open:** finished copy vs blueprint in M4; confirm D4 production is out | Scope is the largest single driver of V1, V3 and V6 | Owner (Offer 02) |
+| Q5 | ~~What is the minimum viable delivery scope?~~ ✅ **Answered for the MVP, internal design only (§1.1–§1.2, 2026-09-13):** audit + Entry Build Phase 1 blueprint with sample copy, H1/H2 only; nurture, retainer, H3, D4 production and booking-tool/CMS implementation deferred. *Full-offer scope (P2 beyond Phase 1, P3) not chosen* | Scope is the largest single driver of V1, V3 and V6 | Owner (Offer 02) |
 | Q6 | **Does an H3 engagement count as more than one unit of capacity?** (2–5 properties, multiple stakeholders) — ⏸ *deferred: H3 is out of the MVP (§1.1)* | If H3 consumes several slots, its cost cannot be one band's cost | Owner |
 | Q7 | **How much owner time per week is actually available for client delivery?** | V9 has no ceiling without it | Owner |
 | Q8 | **Does demand cluster by season?** Low season is the buying window (Plugin P13), and client approvals slow in peak season (`Draft 41` §8) | Sales and delivery load may peak together | Owner + Sector (01) |
@@ -184,8 +199,8 @@ Role-based. The only named person is the owner of record already confirmed in th
 
 | # | Gate item | Status (2026-09-13) | Evidence required to pass | Owning department |
 |---|---|---|---|---|
-| G1 | **Delivery scope chosen** (minimum viable P1/P2/P3 scope) | ◐ **Partially passed — MVP only** (§1.1, 2026-09-13) | Q5 answered in writing — done for the MVP; M4 copy depth and the D4 exclusion still to confirm | Offer (02) |
-| G2 | **Role effort estimated** (V1 for every required role, per package) | ❌ | V1 filled, labelled estimate | Offer (02) + Operations (08) |
+| G1 | **Delivery scope chosen** (minimum viable P1/P2/P3 scope) | ✅ **Passed — MVP only** (§1.1–§1.2, 2026-09-13) · **not passed for the full offer** — P2 beyond Phase 1 and P3 scope not chosen | Q5 answered in writing — done for the MVP, including M4 depth (#17) and the D4 exclusion (#18) | Offer (02) |
+| G2 | **Role effort estimated** (V1 for every required role, per package) | ❌ **Not started — can now start for the MVP** (scope fixed by §1.1–§1.2) | V1 filled, labelled estimate. MVP roles: owner/strategist, content strategist, analytics/reporting, delivery QA, light sample copy. Legal review effort cannot be sized until a review path exists (G5) | Offer (02) + Operations (08) |
 | G3 | **Capacity owner assigned** | ❌ | A named owner for delivery capacity; Q1 answered | Operations (08) |
 | G4 | **Tool cost categories identified** | ◐ categories listed (§5 V5); **for the MVP the nurture platform is no longer required** (nurture deferred) | Every MVP category confirmed; the nurture platform returns with nurture | Tech Stack (13) |
 | G5 | **Legal / compliance review path identified** | ❌ no counsel (item 59) — **scope reduced for the MVP** (no consent sends) | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
@@ -202,8 +217,8 @@ Role-based. The only named person is the owner of record already confirmed in th
 
 | # | Decision | Owning department | Decider | Blocks |
 |---|---|---|---|---|
-| 1 | ~~Minimum viable delivery scope (Q5)~~ ◐ **Decided for internal design (§1.1)** — edges open as #17–#18 | Offer (02) | Owner | G1 (partial) |
-| 2 | Effort estimates by role (V1) | Offer (02) + Operations (08) | Owner | G2 |
+| 1 | ~~Minimum viable delivery scope (Q5)~~ ✅ **Decided for the MVP, internal design only (§1.1–§1.2)** | Offer (02) | Owner | ~~G1~~ — passed for the MVP |
+| 2 | Effort estimates by role (V1) — *can start for the MVP* | Offer (02) + Operations (08) | Owner | G2 |
 | 3 | Delivery capacity model and its owner (Q1, Q6, Q7) | Operations (08) | Owner | G3 |
 | 4 | What is delegated, and under what engagement type (Q3) | HR (11) | Owner | Q2–Q3 |
 | 5 | Email / WhatsApp nurture platform — ⏸ *not needed for the MVP* | Tech Stack (13) | Owner | Nurture, when it returns |
@@ -218,8 +233,8 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 14 | Image-generation runway and Canva re-authentication | Design (19) + Tech Stack (13) | Owner | Design support role |
 | 15 | Redirect destinations for (c), (d) and technical (b) | Offer (02) | Owner | P4 |
 | 16 | Launch ICP — *narrowed: the MVP is H1/H2 only* | Offer (02) + Sector (01) | Owner | Qualification |
-| 17 | Does M4 include finished copy, or only the blueprint? | Offer (02) + Content (04) | Owner | V3, V4, copy/content producer role |
-| 18 | Confirm D4 content production is outside the MVP | Offer (02) | Owner | V3, V6 |
+| 17 | ~~Does M4 include finished copy, or only the blueprint?~~ ✅ **Decided 2026-09-13 (Owner Decision #17):** blueprint and structure, page/message hierarchy, key messaging blocks, sample copy for critical sections — no full finished copy, no full content production, no booking-tool/CMS implementation (§1.2) | Offer (02) + Content (04) | Owner | ~~V3, V4, copy/content producer role~~ — unblocked |
+| 18 | ~~Confirm D4 content production is outside the MVP~~ ✅ **Confirmed by Decision #17's wording** — "not a full production build" (§1.2) | Offer (02) | Owner | ~~V3, V6~~ — unblocked |
 | 19 | H3 group / property-profile handling — needed before H3 returns (the Hospitality plugin's P2 group-union operator is unimplemented) | Sector (01) + Offer (02) | Owner | H3 |
 
 ---
@@ -228,3 +243,4 @@ Role-based. The only named person is the owner of record already confirmed in th
 
 - **2026-09-13 — Created.** Internal worksheet to unblock the two decisions that gate all pricing work on the Hospitality Revenue Content OS: cost-to-deliver and delivery capacity. Maps four packages (audit, build, retainer, redirect hand-off) against ten workstreams and nine roles, lists ten cost variables and nine tool-cost categories, poses eight capacity questions, and defines a seven-item readiness gate that must fully pass before any `TEST_FIXTURE` price figure is written. **Contains no price, currency, amount, rate, margin or capacity figure.** Surfaced while building it: **no email or WhatsApp nurture platform is registered** in Tech Stack (13), so the nurture workstream cannot be sized. Status of the offer unchanged: **Working Hypothesis / Not Quotable**, not registered. — Claude Code (Opus 5)
 - **2026-09-13 — MVP delivery scope recorded (owner decision, internal design only).** Added §1.1: Gateway audit + Entry Build Phase 1 (Direct Booking Message/Journey Blueprint), H1/H2 only; nurture implementation, governance retainer and H3 deferred; seven MVP outputs (M1–M7) mapped to `Draft 41` deliverables. §2 and §4 gained an MVP column, §3 an MVP overlay, §5 a note on which variables the MVP narrows. G1 marked **partially passed (MVP only)**; G4, G5 and G6 annotated for the reduced scope; Q5 answered for the MVP, Q6 deferred; three new open decisions (#17–#19). **Cost and effort left blank.** Still not approved: prices, public offer, retainer, test price figures, legal claims, performance guarantees. — Claude Code (Opus 5)
+- **2026-09-13 — Owner Decision #17 recorded: M4 is a blueprint, not a production build (internal design only).** Added §1.2: M4 includes blueprint and structure, page/message hierarchy, key messaging blocks and sample copy for critical sections; excludes full finished copy, full content production and booking-tool/CMS implementation. #17 decided; #18 closed by the same decision's wording (D4 production outside the MVP). **G1 now passed for the MVP only** — not for the full offer. G2 marked ready to start for the MVP. §2, §3.1, §4, §5 and Q5 updated for the effort implications: the copy/content producer drops to light sample copy, and sample copy triggers QG2, QG3, QG5 and QG7 checks. **Cost and effort still blank; no prices.** — Claude Code (Opus 5)
