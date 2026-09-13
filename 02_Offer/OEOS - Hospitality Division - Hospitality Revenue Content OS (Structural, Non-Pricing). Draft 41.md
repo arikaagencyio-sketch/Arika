@@ -509,6 +509,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-13 — Cross-referenced the owner's approval of the MVP role-effort bands** (§12.5): internal MVP planning only, no hours or money; G2 now blocked only by the legal review path. Full record in the Worksheet §10.8. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-13 — Cross-referenced the MVP tool-category check** (§12.5): G4 partial — four tool-category gaps; nurture platform not required. Full record in the Worksheet §5.1. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-13 — Cross-referenced the provisional MVP tool choices** (§12.5): G4 passed for MVP tool-category identification only; costs, vendors, legal/privacy approval and live checks still open. Full record in the Worksheet §5.2. Still **Not Quotable.** — Claude Code (Opus 5)
+- **2026-09-14 — Cross-referenced the MVP commercial shape** (§11.3 MVP note, §11.5 #2–#3, §12.5): diagnostic-first, two-stage, audit-gated; G6 passed for the H1/H2 MVP only. Also brought §11.5 #5 up to date with the 2026-09-13 provisional capacity decision. Full record in the Worksheet §1.5. Still **Not Quotable.** — Claude Code (Opus 5)
 
 ---
 
@@ -566,6 +567,8 @@ Approved as a **separate** pricing-design axis alongside the H-bands, for intern
 | **L2** | Audit; no build proposal — disposition OPEN | Redirect (§3) |
 | **L3** | Entry build + governance retainer **eligible** | Redirect (§3) |
 
+*MVP note (2026-09-14):* for the MVP, the owner's two-stage shape opens the Phase 1 blueprint on root cause alone. Severity is recorded as **not** gating it, pending owner confirmation (Worksheet §1.5, §8 #24). This table stays a proposal for the full offer.
+
 ### 11.4 Pricing-floor agent — test contract
 
 - **B2B SaaS ARR floors must not be used.** `OFFER_OS.md` §10's Bands A–D and their floors are derived from B2B SaaS offers. Hotels are not segmented by ARR, and **no hospitality floor exists**.
@@ -586,10 +589,10 @@ Approved as a **separate** pricing-design axis alongside the H-bands, for intern
 ### 11.5 Owner decisions required before pricing test
 
 1. ~~Confirm H1/H2/H3 segmentation — or replace it.~~ ✅ **Decided 2026-09-13 (Decision 71): approved for internal pricing design only**, with the H3 no-central-team condition; L1–L3 approved as a separate design axis.
-2. **Choose the audit commercial shape:** paid standalone audit vs audit credited into build. — *open*
-3. **Choose the entry commercial shape:** entry build + retainer vs audit + monthly retainer. — *open*
+2. **Choose the audit commercial shape:** paid standalone audit vs audit credited into build. — ◐ *MVP structure decided 2026-09-14: the audit is always a standalone first stage and gates the blueprint (Worksheet §1.5). Whether its fee is credited stays open with §9 #4 — no fee credit approved*
+3. **Choose the entry commercial shape:** entry build + retainer vs audit + monthly retainer. — ◐ *MVP decided 2026-09-14: audit-gated two stages, no retainer (Worksheet §1.5); full-offer shape still open*
 4. ~~Approve whether test prices may be used for internal agent testing.~~ ⏸ **Not approved yet (Decision 71):** no test prices until cost-to-deliver and delivery capacity are defined — reopens then.
-5. **Define who owns delivery capacity.** — *open*
+5. **Define who owns delivery capacity.** — ◐ *MVP decided provisionally 2026-09-13: the owner, solo with AI, one H1/H2 MVP client at a time (Worksheet §6.1); full offer still open*
 
 These map onto §9 rather than adding to it: #1 answers §9 #6 and part of #7 · #2 is part of §9 #4 · #3 is §9 #12 · #5 is part of §9 #2 · **#4 is new.**
 
@@ -668,3 +671,5 @@ Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
 **MVP tool categories checked against Tech Stack (2026-09-13, internal design only):** readiness gate G4 stays **partial**. Identified: AI-assisted drafting, manual website/booking-path review, manual owner QA, agency email for client correspondence, engagement tracking, and client analytics via exports. **Not required:** the email/WhatsApp nurture platform (nurture is out of MVP scope), design and image tools, landing-page hosting. **Missing or ambiguous:** client-data storage/versioning, a spreadsheet/analysis tool, the client-deliverable document tool or format, and the buyer-interview channel. Tool costs remain unknown and are not prices. Record: Worksheet §5.1. **Not quotable.**
 
 **MVP tool choices approved provisionally, for internal design only (2026-09-13):** client data in a dedicated folder outside this repository · a spreadsheet workbook (app not chosen) · document-format deliverables for M1–M7 · buyer interview by phone, video or in person with typed notes, recording not approved by default. Readiness gate G4 now **passes for MVP tool-category identification only**. Costs, vendors, legal/privacy approval (G5, still blocked) and live connection checks remain open. Record: Worksheet §5.2. **Not quotable.**
+
+**MVP commercial shape approved for internal design only (2026-09-14):** diagnostic-first, two-stage and audit-gated. **Stage 1 — Gateway Audit** always comes first and produces M1 and M2 under the Worksheet §1.4 minimum data set and the diagnostic gate; a pricing/rate strategy, booking-engine technology, integration or other non-content root cause ends the MVP there. **Stage 2 — Phase 1 blueprint** opens only on a confirmed content/messaging or booking-journey messaging root cause, and produces M3–M6, plus M7 where a redirect or limitation needs documenting — blueprint with sample copy only. Readiness gate G6 **passes for the H1/H2 MVP only**. No prices, price band, test figures, fee credit, payment terms or quote language. Record: Worksheet §1.5. **Not quotable.**

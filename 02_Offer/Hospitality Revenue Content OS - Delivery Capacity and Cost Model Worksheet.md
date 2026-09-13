@@ -110,6 +110,31 @@
 - **Flagged, not decided: three months is an audit window, not a seasonal baseline.** M6 uses a seasonally comparable baseline (§1.1, M6), which three months may not supply (§8 #22).
 - **Flagged, not decided: guest communication assets (MD5) may contain guest personal data.** The audit-data handling terms still have no review path (G5). *This file does not assess the law.*
 
+### 1.5 MVP commercial shape — owner decision (2026-09-14)
+
+✅ **Approved for INTERNAL MVP DESIGN ONLY — a diagnostic-first, two-stage, audit-gated shape.** This is an internal packaging decision: **no prices, no currency, no price band, no test figures, no fee credit, no payment terms, no quote language.** The offer remains **Working Hypothesis / Not Quotable.**
+
+| | Stage 1 — Gateway Audit | Stage 2 — Phase 1 Direct Booking Message/Journey Blueprint |
+|---|---|---|
+| **When** | **Always first** | **Only if Stage 1 confirms** a content/messaging or booking-journey messaging root cause |
+| **Produces** | M1 Audit Findings Snapshot · M2 Leakage Root-Cause Classification | M3–M6 · M7 only where a redirect or limitation needs documenting |
+| **Governed by** | §1.4 minimum audit data set · the diagnostic gate (QG1) | Blueprint limits (§1.1–§1.2) · revision policy (§1.3) |
+| **Excludes** | — | Full content production · implementation · nurture · retainer · booking-tool or website work |
+| **Stops the MVP** | A pricing/rate strategy, booking-engine technology, integration or other non-content root cause — **the MVP does not proceed to Stage 2** | — |
+
+**Commercial rule — the MVP is audit-gated:** the audit controls whether the blueprint stage is delivered.
+
+**Two readings to confirm** (§8 #24) — both affect what gets delivered, not whether G6 passes:
+- **Where M7 sits on a redirect.** The decision lists M7 under Stage 2, but a redirect finding stops the MVP before Stage 2 opens. §1.1 and the redirect path in §10.4 place the redirect recommendation at the end of the audit. *Recorded as: M7 closes Stage 1 when the MVP stops on a redirect, and appears in Stage 2 only for a limitation or a secondary redirect.*
+- **Severity does not gate Stage 2.** The decision opens Stage 2 on root cause alone. `Draft 41` §11.3's proposed rule — never approved — also required L3 severity and left L2 "disposition OPEN". L2/L3 thresholds are undefined (§8 #12), so a severity gate could not operate today. *Recorded as: for the MVP, severity does not gate Stage 2.*
+
+**Consistent with earlier decisions:**
+- **A desk review cannot open Stage 2** — without the buyer interview (MD7) there is no diagnosis to confirm a root cause (§1.4).
+- **Capacity** — §6.1's one client at a time already covers both stages for that client.
+- **Effort** — Stage 1 alone is §10.4's redirect path; Stage 1 followed by Stage 2 is the full path.
+
+**Still blocked — unchanged by this decision:** prices · price band · cost-to-deliver in hours and costs · hotel floors · test figures (G7) · audit-fee credit policy (`Draft 41` §9 #4) · payment terms and contract language (Legal (10); G5).
+
 ---
 
 ## 2. Delivery packages to estimate
@@ -342,7 +367,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | G3 | **Capacity owner assigned** | ✅ **Passed — MVP only, provisional** (§6.1, 2026-09-13): the owner delivers solo with AI and holds the cap; Q1 answered as one H1/H2 MVP client at a time · **not passed for the full offer** · not proven capacity — revisit after the first real MVP delivery | A named owner for delivery capacity; Q1 answered — both met within MVP scope | Operations (08) |
 | G4 | **Tool cost categories identified** | ✅ **Passed — MVP tool-category identification only** (§5.1–§5.2, 2026-09-13): six categories identified by the check; the four gaps closed by provisional owner choices (§5.2); nurture platform not required. **Still open:** actual tool costs · vendors · legal/privacy approval (G5) · live connection checks. Not passed for the full offer; not converted into prices | Every MVP category confirmed — met at category level (§5.2); the nurture platform returns with nurture | Tech Stack (13) |
 | G5 | **Legal / compliance review path identified** | ❌ no counsel (item 59) — **scope reduced for the MVP** (no consent sends) · **scope added 2026-09-13 (§5.2):** the client-data storage platform, any cloud-hosted tool holding client data, and any interview recording | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
-| G6 | **Audit / build / retainer commercial shape selected** | ❌ (`Draft 41` §11.5 #2, #3) — **reframed for the MVP:** the retainer is deferred, so the MVP question is how the audit and the Phase 1 blueprint are packaged | Owner choice recorded | Offer (02) |
+| G6 | **Audit / build / retainer commercial shape selected** | ✅ **Passed — H1/H2 MVP only** (§1.5, 2026-09-14): diagnostic-first, two-stage, audit-gated — Stage 1 Gateway Audit always first; Stage 2 blueprint only on a confirmed content or journey-messaging root cause. **Not passed for the full offer** (build beyond Phase 1, retainer — `Draft 41` §11.5 #2–#3). Prices, fee credit and payment terms are outside this gate and stay blocked | Owner choice recorded — done for the MVP; two readings to confirm (§1.5; §8 #24) | Offer (02) |
 | G7 | **Owner approves use of `TEST_FIXTURE` figures** | ⏸ deferred by Owner Decision 71 until cost-to-deliver and capacity exist — *capacity now exists provisionally for the MVP (G3); cost-to-deliver does not (G2 partial; no hours or costs)* | Owner decision recorded | Owner |
 
 **Also required before a *positive* pricing-floor test — beyond this gate:**
@@ -361,8 +386,8 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 4 | What is delegated, and under what engagement type (Q3) | HR (11) | Owner | Q2–Q3 |
 | 5 | Email / WhatsApp nurture platform — ⏸ *not needed for the MVP* | Tech Stack (13) | Owner | Nurture, when it returns |
 | 6 | Legal review path — counsel engagement (item 59) | Legal (10) | Owner | G2 (legal effort), G5, QG4, contract, consent |
-| 7 | Audit commercial shape — paid standalone vs credited into build | Offer (02) | Owner | G6 |
-| 8 | Entry commercial shape — build + retainer vs audit + monthly retainer · *for the MVP (retainer deferred): how the audit and the Phase 1 blueprint are packaged* | Offer (02) | Owner | G6 |
+| 7 | Audit commercial shape — paid standalone vs credited into build — ◐ *structure decided for the MVP 2026-09-14 (§1.5): the audit is always a standalone first stage and can end the MVP; whether its fee is credited is a pricing question, held with the audit-fee credit policy (`Draft 41` §9 #4)* | Offer (02) | Owner | ~~G6~~ — passed for the MVP; the credit question blocks pricing, not G6 |
+| 8 | Entry commercial shape — build + retainer vs audit + monthly retainer · ✅ *MVP decided 2026-09-14 (§1.5): audit-gated two stages, no retainer; full-offer shape still open* | Offer (02) | Owner | ~~G6~~ — passed for the MVP |
 | 9 | Approval to use `TEST_FIXTURE` figures | Offer (02) | Owner | G7 |
 | 10 | Hotel floor derivation method | Offer (02) + Finance (09) | Owner | Any floor |
 | 11 | Pricing-agent spec support for H-bands | Offer (02) + runtime | Owner | Positive agent test |
@@ -378,6 +403,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 21 | Desk-review handling when the buyer interview (MD7) is missing — is a desk review offered as an MVP engagement, does it count as one capacity unit (§6.1), and what does it deliver beyond M1? | Offer (02) + Audits & Diagnostics (14) | Owner | Desk-review path bands (§10.4); capacity counting |
 | 22 | M6 baseline when only the three-month audit window is supplied — request a seasonally comparable period, or state the limitation in M6? | Offer (02) | Owner | M6 measurement validity |
 | 23 | ~~MVP tool choices for the four §5.1 gaps~~ ✅ **Decided provisionally 2026-09-13, at category level (§5.2):** client folder outside this repository · spreadsheet workbook (app not chosen) · document-format deliverables · phone, video or in-person interview with typed notes, no recording by default. **Still open:** vendors (none registered in `TECHSTACK_OS.md` §3 for these uses), costs, legal/privacy review, live checks | Tech Stack (13) + Offer (02) | Owner | ~~G4~~ — passed at category level; storage platform and vendors must be settled before real client use |
+| 24 | Confirm the two §1.5 readings: (1) M7 closes Stage 1 when the MVP stops on a redirect, and appears in Stage 2 only for a limitation or secondary redirect; (2) severity does not gate Stage 2 for the MVP, although `Draft 41` §11.3's unapproved proposal required L3 | Offer (02) | Owner | What Stage 1 and Stage 2 deliver — not G6 |
 
 ---
 
@@ -393,6 +419,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **2026-09-13 — Owner review of the MVP role-effort bands recorded (internal MVP planning only).** Added §10.8: the §10.3 bands approved unchanged — owner/strategist L · offer engineer XS · content strategist M · sample-copy producer S · analytics/reporting M, or L when data is messy or revenue by channel is missing · delivery QA S as owner self-review · legal/compliance BLOCKED, not estimated · design support deferred · automation/booking-journey advisor deferred, XS only if separately triggered by a booking-journey messaging cause. H1/H2 MVP only; no H3, full offer, retainer, nurture, website/CMS/booking-tool implementation or concurrent clients. **G2 now blocked only by the legal review path / legal effort estimate; G5 unchanged, still blocked.** §4 QA row, V1, §6.1, G2, §8 #2 and §10 header, §10.3, §10.5 and §10.7 updated. **No hours, costs, prices, floors or test figures.** — Claude Code (Opus 5)
 - **2026-09-13 — MVP tool categories checked against `13_Tech_Stack/TECHSTACK_OS.md` (internal design only).** Added §5.1. **Can proceed on existing or manual tools:** website/booking-path review (manual) and owner QA (manual). **Partly:** audit data collection and review, document drafting, and measurement-plan drafting — Claude and agency email exist, but no analysis tool, file storage or client-deliverable format is registered. **Missing:** file storage/versioning. **Identified:** AI-assisted drafting, website/booking-path review, owner QA, client correspondence, engagement tracking, client analytics via exports. **Nurture platform confirmed not required** (nurture out of MVP scope). **G4 kept PARTIAL** — four gaps: client-data storage/versioning, spreadsheet/analysis tool, client-deliverable document tool or format, buyer-interview channel and notes; new §8 #23. Also noted: this repository is not a place for client data (auto-sync commits, OneDrive folder); Annex B lists only ClickUp (for G5); verify ClickUp, Notion and the Zoho mail plan before first use. Documents only — no live connection calls. **Tool costs unknown; no prices, no currency, no subscriptions, no vendor commitments.** — Claude Code (Opus 5)
 - **2026-09-13 — Provisional MVP tool choices recorded (owner decision, internal MVP design only).** Added §5.2: client data in a dedicated folder outside this git repository — never client data, hotel exports, guest data, interview notes or deliverable drafts inside it; a spreadsheet workbook (app not chosen, no vendor named as approved); document-format deliverables for M1–M7 (template design and production formatting not decided); buyer interview by phone, video or in person with typed notes, with recording not approved by default and, if ever used, requiring explicit client consent plus legal/privacy review first. **G4 marked passed for MVP tool-category identification only.** Still open: tool costs, vendors, legal/privacy approval, live connection checks. G5 kept blocked, with storage platform, cloud-hosted client-data tools and recording added to its scope. §5.1's G4 result marked superseded; V5 and §8 #23 updated. Flagged: a client folder outside the repository but under OneDrive would still be on an unregistered platform. `TECHSTACK_OS.md` not modified. **No prices, no currency, no vendor approvals.** — Claude Code (Opus 5)
+- **2026-09-14 — MVP commercial shape recorded (owner decision, internal MVP design only).** Added §1.5: diagnostic-first, two-stage, audit-gated. Stage 1, the Gateway Audit, always comes first and produces M1–M2 under §1.4 and the diagnostic gate; a non-content root cause ends the MVP. Stage 2, the Phase 1 blueprint, opens only on a confirmed content or journey-messaging root cause and produces M3–M6, plus M7 where needed — blueprint with sample copy only. **G6 marked passed for the H1/H2 MVP only.** §8 #7 structure decided (the credit question stays with pricing), #8 decided for the MVP, new #24 to confirm two readings: M7's place on a redirect, and severity not gating Stage 2 despite `Draft 41` §11.3's unapproved L3 proposal. §10.4 stage note added. **Still blocked:** prices, price band, cost-to-deliver, hotel floors, test figures, fee credit, payment terms. **No prices, no currency, no quote language.** — Claude Code (Opus 5)
 
 ---
 
@@ -458,6 +485,8 @@ Bands are **ordinal and relative within one MVP engagement**: they rank how much
 | Automation / booking-journey advisor | Deferred · XS if triggered | — (a technical finding is a redirect) |
 
 **Desk-review path (buyer interview missing, §1.4): not banded.** It ends at M1 without a signed verdict, so it should be no larger than the redirect path. Whether it is offered, and how it counts against capacity, is open (§8 #21).
+
+**Stages (§1.5):** the redirect path is Stage 1 alone; the full path is Stage 1 followed by Stage 2.
 
 ### 10.5 G2 readiness result
 
