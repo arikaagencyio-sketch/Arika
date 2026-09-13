@@ -3,6 +3,33 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-09-13 — The agent's own approval flag raises the gate
+
+**Found by:** three consecutive Sector → Offer test runs (`offer-orchestrator` ×2,
+`offer-oeos-engineer` ×1). Each recommendation returned `requiresHumanApproval: true`;
+each top-level result — and each memory line — said `false`. The gate was computed
+*before* the agent ran, from `risk_class` and the spec flag alone, so the agent's
+answer could never reach it. For Offer that is the dangerous direction: pricing,
+claims, and registry changes reported as needing no sign-off.
+
+**Decision:** the gate is now decided in `finalizeRun`, after the agent answers:
+
+`requiresHumanApproval = risk_class >= 3 || spec.requires_human_approval || recommendation.requiresHumanApproval === true`
+
+- The agent can **raise** the gate for its run, never lower it; class 3+ still forces it.
+- Only a literal `true` counts. All three execution paths (prompt, finos-plugin via its
+  `recommendationSchema`, bois via `run_brand_task.py`) return this camelCase key, so
+  one rule covers every department.
+- The result and the memory line get the same value.
+
+**Not changed:** the three existing lines in `02_Offer/_memory/runtime.jsonl` still say
+`false` — the log is append-only. Their `payload.recommendation.requiresHumanApproval`
+carries the true value.
+
+**Verified:** `npm test` → 18/18, including the three approval cases (low-risk + agent
+true → true; low-risk + agent false or absent → false; class 3/4 + agent false → true),
+each asserted on both the top-level result and the logged line.
+
 ## 2026-09-13 — Prompt-agent response budget + truncation handling
 
 **Found by:** the first live Sector → Offer test. `offer-orchestrator` reached Claude

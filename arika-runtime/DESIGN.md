@@ -66,7 +66,9 @@ base envelope alone.
 ## 4. Executor lifecycle — `runAgent(name, context)`
 
 1. Look the spec up in the registry (throw if unknown).
-2. Compute governance: `requiresHumanApproval = risk_class >= 3 || spec.requires_human_approval`.
+2. Compute governance **after** the agent answers (step 3):
+   `requiresHumanApproval = risk_class >= 3 || spec.requires_human_approval || recommendation.requiresHumanApproval === true`.
+   The agent can raise the gate for its run, never lower it; the same value goes to the result and the memory line.
 3. Dispatch by `execution`:
    - `prompt` → call Claude with the body as `system`, the context as the user
      message, and the spec's `output_schema` (or the base envelope) enforced via
@@ -153,7 +155,8 @@ in the repo (`12_Branding/bois/core/memory/store.py`):
 - **Risk model:** the Constitution's Class 0–4 (`00_Agency_Governance/AGENCY_OPERATING_CONSTITUTION.md` §5)
   is supreme. The finos/Sales `low/medium/high/critical` labels map to it:
   low→1, medium→2, high→3, critical→4. `requires_human_approval` is forced true at
-  class ≥ 3 regardless of what the frontmatter says.
+  class ≥ 3 regardless of what the frontmatter or the agent's output says, and is
+  also raised by an agent whose recommendation returns `requiresHumanApproval: true`.
 - **No automation fires without an approval-matrix row.** Advisory recommendations
   are Class 0–1 (informational); executing any recommended action requires a row in
   `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` + human sign-off for Class 3+.

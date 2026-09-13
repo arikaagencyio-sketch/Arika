@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import type { AgentSpec } from "./spec-schema.js";
 import { baseOutputSchema, MAX_NONSTREAMING_TOKENS } from "./spec-schema.js";
-import { requiresHumanApproval } from "./governance.js";
+import { agentRequestsApproval, requiresHumanApproval } from "./governance.js";
 import { writeMemory } from "./memory-writer.js";
 import { runFinosAgent } from "./wrappers/finos.js";
 import { runBoisAgent } from "./wrappers/bois.js";
@@ -44,8 +44,6 @@ function getClient(): Anthropic {
  * recommendation and writes memory; it never performs a state-changing action.
  */
 export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunResult> {
-  const humanGate = requiresHumanApproval(spec.risk_class, spec.requires_human_approval);
-
   let recommendation: Record<string, unknown>;
   switch (spec.execution) {
     case "prompt":
@@ -60,6 +58,26 @@ export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunRes
     default:
       throw new Error(`execution: "${spec.execution}" is not wired in this session (agent ${spec.name}).`);
   }
+
+  return finalizeRun(spec, ctx, recommendation);
+}
+
+/**
+ * Governs and records a finished run. The approval gate is decided here, after
+ * the agent has answered, so its own `requiresHumanApproval: true` raises the
+ * gate — the top-level result and the memory line must never report "no
+ * sign-off" while the recommendation itself asks for one.
+ */
+export function finalizeRun(
+  spec: AgentSpec,
+  ctx: RunContext,
+  recommendation: Record<string, unknown>,
+): RunResult {
+  const humanGate = requiresHumanApproval(
+    spec.risk_class,
+    spec.requires_human_approval,
+    agentRequestsApproval(recommendation),
+  );
 
   const memoryPath = writeMemory(spec, {
     trigger: ctx.trigger,

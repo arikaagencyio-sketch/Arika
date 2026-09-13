@@ -22,8 +22,18 @@ export function classToLevel(riskClass: number): RiskLevel {
 /**
  * Human sign-off is mandatory at Constitution Class 3+ — "with no exceptions
  * carved out by convenience or urgency" (Constitution §3 #5). A spec may also
- * opt in at a lower class, but can never opt out at class 3+.
+ * opt in at a lower class, and so may the agent's own output for one run.
+ * Nothing can opt out at class 3+, and nothing can lower a gate already raised.
  */
-export function requiresHumanApproval(riskClass: number, specFlag = false): boolean {
-  return riskClass >= 3 || specFlag;
+export function requiresHumanApproval(riskClass: number, specFlag = false, agentFlag = false): boolean {
+  return riskClass >= 3 || specFlag || agentFlag;
+}
+
+/**
+ * Whether a run's recommendation asks for human sign-off. Every execution path
+ * (prompt, finos-plugin, bois) returns this camelCase key; only a literal `true`
+ * raises the gate.
+ */
+export function agentRequestsApproval(recommendation: Record<string, unknown>): boolean {
+  return recommendation.requiresHumanApproval === true;
 }

@@ -6,7 +6,7 @@ import { readFileSync, rmSync } from "node:fs";
 
 import { requiresHumanApproval, classToLevel, levelToClass } from "../dist/governance.js";
 import { frontmatterSchema, MAX_NONSTREAMING_TOKENS } from "../dist/spec-schema.js";
-import { DEFAULT_MAX_TOKENS, parseStructuredOutput } from "../dist/executor.js";
+import { DEFAULT_MAX_TOKENS, finalizeRun, parseStructuredOutput } from "../dist/executor.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
 import { EventBus } from "../dist/triggers/event-bus.js";
@@ -20,6 +20,8 @@ test("governance: human approval is forced at Constitution class 3+", () => {
   assert.equal(requiresHumanApproval(4), true);
   assert.equal(requiresHumanApproval(1, true), true, "a spec may opt in at a lower class");
   assert.equal(requiresHumanApproval(4, false), true, "a spec can never opt out at class 3+");
+  assert.equal(requiresHumanApproval(1, false, true), true, "the agent's own output may opt in");
+  assert.equal(requiresHumanApproval(4, false, false), true, "the agent can never opt out at class 3+");
 });
 
 test("governance: risk level <-> class mapping", () => {
@@ -248,4 +250,51 @@ test("memory-writer: appends a bois-compatible JSONL line", () => {
   assert.equal(line.payload.trigger, "manual");
   assert.equal(line.payload.recommendation.summary, "ok");
   rmSync(file, { force: true });
+});
+
+// Runs the real post-agent path (gate + memory write) with a canned recommendation,
+// returning both the top-level result and the line it logged.
+function finalizeWith(riskClass, recommendation) {
+  const file = join(tmpdir(), `arika-approval-${process.pid}-${Math.random().toString(36).slice(2)}.jsonl`);
+  const spec = {
+    name: "t-offer",
+    department: "02",
+    execution: "prompt",
+    risk_class: riskClass,
+    requires_human_approval: false,
+    memory_stream: file,
+    emits: [],
+  };
+  try {
+    const result = finalizeRun(spec, { trigger: "manual", input: {} }, recommendation);
+    const logged = JSON.parse(readFileSync(file, "utf8").trim());
+    return { result, logged };
+  } finally {
+    rmSync(file, { force: true });
+  }
+}
+
+test("approval: a low-risk agent that asks for sign-off raises the top-level gate", () => {
+  // The Offer (02) test runs: class 1, recommendation said true, top level said false.
+  for (const riskClass of [0, 1, 2]) {
+    const { result, logged } = finalizeWith(riskClass, { summary: "quote-bound", requiresHumanApproval: true });
+    assert.equal(result.requiresHumanApproval, true, `class ${riskClass}: top-level must honour the agent`);
+    assert.equal(logged.payload.requiresHumanApproval, true, `class ${riskClass}: memory line must match`);
+  }
+});
+
+test("approval: a low-risk agent that does not ask for sign-off stays ungated", () => {
+  const { result, logged } = finalizeWith(1, { summary: "internal", requiresHumanApproval: false });
+  assert.equal(result.requiresHumanApproval, false);
+  assert.equal(logged.payload.requiresHumanApproval, false);
+  // An output without the flag cannot raise the gate either.
+  assert.equal(finalizeWith(1, { summary: "no flag" }).result.requiresHumanApproval, false);
+});
+
+test("approval: risk class 3+ forces sign-off even when the agent says false", () => {
+  for (const riskClass of [3, 4]) {
+    const { result, logged } = finalizeWith(riskClass, { summary: "x", requiresHumanApproval: false });
+    assert.equal(result.requiresHumanApproval, true, `class ${riskClass} must force approval`);
+    assert.equal(logged.payload.requiresHumanApproval, true);
+  }
 });
