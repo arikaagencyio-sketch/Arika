@@ -1,7 +1,7 @@
 # Automation Approval Matrix
 
 **Status:** v0.4 — one real automation, **restored 2026-07-15 after an 11-day undetected outage**. All other rows below remain illustrative templates.
-**Last updated:** 2026-07-15
+**Last updated:** 2026-09-13 — standing gap re-stated: the API key now works for manual calls, so the schedule triggers are inert only because no scheduler is running or approved. Previously 2026-07-15.
 
 > **🔴 This document asserted an automation was live while it was dead, for 11 days.** The row below said *"made live 2026-07-04"* — true for 3 hours and 41 minutes. See `16_Automation/AUTOMATION_OS.md` §9 for the incident.
 >
@@ -33,13 +33,15 @@ When any department builds a real automation (a Triggers/Automation Hooks entry 
 
 ---
 
-### 🔴 Standing gap: 21 runtime cron triggers, 1 matrix row
+### 🔴 Standing gap: 30 runtime schedule triggers, 1 matrix row
 
-`arika-runtime` declares **21 `schedule` triggers**. This matrix has **one** real row — the one above.
+`arika-runtime` declares **30 `type: schedule` triggers across 29 agent specs** — re-counted from `.claude/agents/*.md` on 2026-09-13 (this section read 21). This matrix has **one** real row — the one above.
 
-**Not a live breach only because the runtime is not running.** It is a local Node process with no `ANTHROPIC_API_KEY` and no daemon; its cron triggers are **declared, not scheduled**. One `npx tsx src/index.ts` with a key turns 21 undocumented automations on at once — no rows, no rollback, no fallback, in direct violation of this document's own rule.
+**Still not a live breach — but the reason has narrowed to one.** **Manual prompt-agent calls now work:** the Anthropic key was verified by use on 2026-09-13 through five successful manual Offer runs (`13_Tech_Stack/TECHSTACK_OS.md` §3). The triggers stay **declared, not scheduled** only because **no scheduler or daemon is running — and none has been approved.** Starting the runtime scheduler (`arika-runtime/src/index.ts`) could activate **all 30 declared schedule triggers at once** — no rows, no rollback, no fallback, in direct violation of this document's own rule. **The safety blocker is now governance approval and daemon control, not key absence.** A key that works for manual Offer calls does not make any of the 29 scheduled agents approved, verified or safe to run unattended.
 
-**Rows are deliberately not written yet.** Whether this is 21 rows or one covering row (shared rollback: disable the scheduler; shared fallback: `arika run <name>` manually) is an **owner decision**, and writing 21 rows for agents that have never run once would document an intention as a fact — the exact error that made the row above unreliable.
+*Was (until 2026-09-13): "Not a live breach only because the runtime is not running. It is a local Node process with no `ANTHROPIC_API_KEY` and no daemon … One `npx tsx src/index.ts` with a key turns 21 undocumented automations on at once."*
+
+**Rows are deliberately not written yet.** Whether this is 30 rows or one covering row (shared rollback: disable the scheduler; shared fallback: `arika run <name>` manually) is an **owner decision** (`OWNER_INPUT_NEEDED.md` item 58), and writing 30 rows for triggers with no approved operating history would document an intention as a fact — the exact error that made the row above unreliable.
 
 **Until then:** `automation-approval-gate` (16) returns `blocked` on any request to run the runtime as a persistent service. **Manual `arika run` is fine and needs no row** — a human invoking an advisory agent is not an automation.
 
@@ -78,8 +80,11 @@ Evidence: `arika-runtime` has **no daemon, service, container, or process-manage
 
 **That reframes the owner decision.** The question was *"28 rows, or one covering row?"* It should be: **what must be true before the scheduler is ever started?** — because that single command, not the specs, is what puts automation into production. See `16_Automation/AUTOMATION_OS.md` for the department that learned this the hard way when its only live routine died unwatched for 11 days.
 
+> **2026-09-13 note — this section is a 2026-07-19 snapshot.** The count is now **30** schedule triggers across 29 specs (re-counted), and the Anthropic key now works for manual calls — so the transition warned about above no longer needs anyone to add a key, only to start a scheduler. The `runtime.jsonl` total ("8 in total") and "zero scheduled executions" are as of 2026-07-19 and were **not re-measured here**. ⚠️ **Unresolved conflict:** this section attributes six 2026-07-19 runs to "the API-key verification", while `OWNER_INPUT_NEEDED.md` item 57 recorded the key as "verified absent 2026-07-19". Both cannot be right; not settled in this pass.
+
 ## Changelog
 
+- 2026-09-13 — **Standing gap re-stated: the API key is no longer why the schedule triggers are inert.** Removed *"no `ANTHROPIC_API_KEY`"* from the not-a-live-breach reasoning — manual prompt-agent calls were verified by use on 2026-09-13 (`13_Tech_Stack/TECHSTACK_OS.md` §3). What remains: no scheduler or daemon is running or approved; starting one could activate all declared schedule triggers at once against **1** real row; the blocker is governance approval and daemon control. Trigger count re-counted **21 → 30** across 29 specs. Dated note added to the 2026-07-19 section (which said 28), recording a conflict with owner item 57. **No rows added** — still an owner decision (item 58). No agents run; nothing declared live or tested. — Claude Code (Opus 5)
 - 2026-08-15 — **`sector-calendar-refresher` evolved → `sector-signal-refresher` (Sector 01, SCIC Phase D) — still advisory, still NO live row (by design).** Scope broadened from calendar-date re-verification to all 16 signal types + commercial-impact/lead-time/routing proposals; now also *emits* `DEMAND_SHIFT`/`COMPRESSION_EVENT`/`COMPETITOR_MOVE` (emitted-but-not-yet-subscribed, `SECTOR_ACTIVATION_CONTRACT.md` §8). The risk profile is unchanged — it remains a Class 2 external-write automation run **manual/advisory only**, so per this matrix's doctrine no row is added until it is ever wired to auto-write. The Class-2 row requirement (rollback = revert prior field values; fallback = mark `Needs verification`; detection = staleness check) still applies at arm time. Spec: `01_Sector/SECTOR_CALENDAR_REFRESH_SPEC.md`. — Claude Code (Opus 4.8)
 - 2026-08-11 — **`sector-calendar-refresher` (Sector 01) specified — advisory, NO live row added (by design).** A new runtime agent that re-verifies the Sector Calendar's dates against authoritative sources and proposes updates; it declares `risk_class: 2` because its *intended* live form (a cloud routine that writes to Notion + emits `CALENDAR_UPDATED`/`REGULATORY_CHANGE`) is an external-write automation. Per this matrix's own doctrine (don't document an intention as a fact; manual `arika run` of an advisory agent needs no row), **no row is added yet** — it runs manual/advisory only. A real row (rollback = revert prior Date/Refresh Status; fallback = mark `Needs verification`; detection = staleness check) is REQUIRED before it is ever wired to auto-write. Adds 2 more dormant `schedule` triggers to the standing-gap pile (see above). Spec: `01_Sector/SECTOR_CALENDAR_REFRESH_SPEC.md`. — Claude Code (Opus 4.8)
 - 2026-07-04 — **Creative Pipeline Automation went live.** Both build blockers resolved same day (Notion cloud-routines connector confirmed already attached; "Publishing Status" given a real "Ready for Design" trigger value). Real routine created via `RemoteTrigger` (`trig_01WyyrXEkFZck1D49tm6BfKv`, hourly cron `7 * * * *`, Notion connector only — deliberately no OpenArt/Canva connector attached, making the credit-spend gate infrastructural rather than instruction-only). Closes `OWNER_INPUT_NEEDED.md` items 54-55 and `GO_LIVE_CHECKLIST.md` Phase 9 items 41-43. — Claude Code (Sonnet 5)
