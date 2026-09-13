@@ -484,7 +484,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 | 11 | **Risk-reversal redesign** (credit flagged weak) | Positioning | Owner | Proposal |
 | 12 | **Entry commercial shape** — build + governance retainer vs audit fee + monthly retainer | Phase 11 structure | Owner | Pricing |
 | 13 | **Audit scope and duration** (seed: "days", no figure) | Timeline; pricing | Owner | Gateway productization |
-| 14 | **Revision policy, SLA durations, approval windows, min / ideal / aggressive timelines** | Phases 6–8 | Owner | Agreement |
+| 14 | **Revision policy, SLA durations, approval windows, min / ideal / aggressive timelines**. *Narrowed 2026-09-13: MVP revision policy decided — one included round per M1–M7 output, internal policy only, not contract language (Worksheet §1.3); SLAs, approval windows, timelines and full-offer revision policy still open* | Phases 6–8 | Owner | Agreement |
 | 15 | **Contract template** with data-processing and outcome-data-sharing terms | Agreement | Legal (10) | Agreement |
 | 16 | **Consent / compliance position** for WhatsApp and email, including origin-market guests | QG4 | Legal (10) | Nurture |
 | 17 | **DOSM role** in the buying and approval process | Stakeholder map | Owner + Sector (01) | — |
@@ -504,6 +504,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-13 — Cross-referenced Owner Decision #17** (§12.5): M4 is a blueprint with sample copy for critical sections — not full copy, content production, or booking-tool/CMS implementation. Full record in the Worksheet §1.2. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-13 — Cross-referenced the MVP Role-Effort Estimate** (§12.5): relative bands only, owner review required; legal BLOCKED; G2 partial. Full record in the Worksheet §10. Phase 11 still BLOCKED; still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-13 — Cross-referenced the provisional MVP capacity decision** (§7 note, §9 #2, §12.5): one H1/H2 MVP client at a time, owner solo + AI; not proven — revisit after the first real MVP delivery. Full record in the Worksheet §6.1. Phase 11 still BLOCKED; still **Not Quotable.** — Claude Code (Opus 5)
+- **2026-09-13 — Cross-referenced the MVP revision policy** (§9 #14, §12.5): one included round per M1–M7 output; internal policy only, not contract language. Full record in the Worksheet §1.3. Still **Not Quotable.** — Claude Code (Opus 5)
 
 ---
 
@@ -653,3 +654,5 @@ Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
 **MVP role-effort estimate drafted — owner review required (2026-09-13):** relative bands (XS–XL) only, no hours and no money, for one H1/H2 engagement — see Worksheet §10. Legal/compliance review is BLOCKED and not estimated; readiness gate G2 is **partial, not passed**. This fills none of Phase 11's blocked inputs by itself: cost-to-deliver still needs hours and costs, and delivery capacity still needs owner confirmation. **Not quotable.**
 
 **MVP delivery capacity approved provisionally (2026-09-13):** one H1/H2 MVP client at a time, owner solo + AI assistance; approved MVP scope only; every client-facing output owner-reviewed. Excludes H3 groups, retainer delivery, email/WhatsApp nurture implementation and website/CMS/booking-tool implementation. Two or more concurrent clients and H3 capacity are **not approved**. **Not proven operating capacity** — revisit after the first real MVP delivery. Record: Worksheet §6.1; readiness gate G3 passed for the MVP only. Phase 11 stays **BLOCKED**: cost-to-deliver, price band, audit-fee credit policy and proof method are still missing. **Not quotable.**
+
+**MVP revision policy approved (2026-09-13):** one included revision round per client-facing output (M1–M7), limited to accuracy, clarity, fit and client-specific context. Revisions add no new scope or deliverables, implementation, full content production, nurture execution, website/CMS/booking-tool work or retainer activity. Additional rounds are not approved; any exception needs owner approval before delivery. **Internal delivery-scope policy only — not contract language.** Record: Worksheet §1.3. **Not quotable.**
