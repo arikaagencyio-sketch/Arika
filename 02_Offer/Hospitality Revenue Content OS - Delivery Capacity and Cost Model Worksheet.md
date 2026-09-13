@@ -276,7 +276,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **Landing-page hosting** — no implementation.
 - **Content / brief system** (Notion) — optional, not required.
 
-**For G5, not G4:** every tool that touches client data is a sub-processor, and `10_Legal/templates/DPA.md` Annex B lists only ClickUp (§9). Zoho mail, Claude and any storage choice are not listed.
+**For G5, not G4:** every tool that touches client data is a sub-processor. `10_Legal/templates/DPA.md` Annex B drafts nine rows — ClickUp, Zoho Books, Anthropic (Claude), Notion, Canva, OpenArt, KIE.ai, Vercel and an unnamed mailbox provider — with every location and transfer mechanism marked "to verify". Zoho mail is not named, and the MVP's storage, spreadsheet and video-call tools are not listed (§11.3). *Corrected 2026-09-14: this line said Annex B lists only ClickUp, repeating a stale sentence in `TECHSTACK_OS.md` §9.*
 
 **Verify before first use.** Tech Stack treats every row as a claim with a shelf life: ClickUp (2026-07-15), Notion (2026-07-03) and the Zoho mail plan need a live check before the first MVP delivery. This is not a G4 blocker — G4 identifies categories; it does not verify connections.
 
@@ -306,7 +306,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 **What stays open:**
 - **Actual tool costs** — unknown; not converted into prices, floors or test figures.
 - **Vendors** — none chosen or registered for storage, spreadsheets or video calls. No subscription or vendor commitment is made.
-- **Legal / privacy approval** — the storage platform, any cloud-hosted spreadsheet or video-call app holding client data, the existing tools that already touch client data (Zoho mail, Claude), and any interview recording all wait on a legal review path. **G5 stays blocked**, and Annex B lists only ClickUp (§5.1).
+- **Legal / privacy approval** — the storage platform, any cloud-hosted spreadsheet or video-call app holding client data, the existing tools that already touch client data (Zoho mail, Claude), and any interview recording all wait on a legal review path. **G5 stays blocked**, and the draft Annex B neither lists the MVP's storage, spreadsheet or video-call tools nor names Zoho mail (§11.3).
 - **Live connection checks** — ClickUp, Notion and the Zoho mail plan still need verifying before first use (§5.1).
 
 **Flagged — "outside the repository" is necessary, not sufficient.** This repository already sits under OneDrive, which `TECHSTACK_OS.md` §3 does not register. A client folder placed elsewhere under OneDrive would still be on an unreviewed platform, so where the folder lives is part of the storage-platform review.
@@ -363,10 +363,10 @@ Role-based. The only named person is the owner of record already confirmed in th
 | # | Gate item | Status (2026-09-13) | Evidence required to pass | Owning department |
 |---|---|---|---|---|
 | G1 | **Delivery scope chosen** (minimum viable P1/P2/P3 scope) | ✅ **Passed — MVP only** (§1.1–§1.2, 2026-09-13) · **not passed for the full offer** — P2 beyond Phase 1 and P3 scope not chosen | Q5 answered in writing — done for the MVP, including M4 depth (#17) and the D4 exclusion (#18) | Offer (02) |
-| G2 | **Role effort estimated** (V1 for every required role, per package) | ◐ **PARTIAL — blocked only by the legal review path / legal effort estimate** (MVP only, 2026-09-13): ✅ bands owner-approved for internal MVP planning (§10.8) · ✅ revision policy (§1.3) and minimum audit data set (§1.4) decided · ❌ legal/compliance BLOCKED, not estimated | V1 filled, labelled estimate — met for every MVP role except legal; legal effort is estimated once a review path exists (G5); one §10.7 decision remains | Offer (02) + Operations (08) |
+| G2 | **Role effort estimated** (V1 for every required role, per package) | ◐ **PARTIAL — blocked only by the legal review path / legal effort estimate** (MVP only, 2026-09-13): ✅ bands owner-approved for internal MVP planning (§10.8) · ✅ revision policy (§1.3) and minimum audit data set (§1.4) decided · ❌ legal/compliance BLOCKED, not estimated | V1 filled, labelled estimate — met for every MVP role except legal; legal effort is estimated once a review path exists (G5; questions packaged in §11); one §10.7 decision remains | Offer (02) + Operations (08) |
 | G3 | **Capacity owner assigned** | ✅ **Passed — MVP only, provisional** (§6.1, 2026-09-13): the owner delivers solo with AI and holds the cap; Q1 answered as one H1/H2 MVP client at a time · **not passed for the full offer** · not proven capacity — revisit after the first real MVP delivery | A named owner for delivery capacity; Q1 answered — both met within MVP scope | Operations (08) |
 | G4 | **Tool cost categories identified** | ✅ **Passed — MVP tool-category identification only** (§5.1–§5.2, 2026-09-13): six categories identified by the check; the four gaps closed by provisional owner choices (§5.2); nurture platform not required. **Still open:** actual tool costs · vendors · legal/privacy approval (G5) · live connection checks. Not passed for the full offer; not converted into prices | Every MVP category confirmed — met at category level (§5.2); the nurture platform returns with nurture | Tech Stack (13) |
-| G5 | **Legal / compliance review path identified** | ❌ no counsel (item 59) — **scope reduced for the MVP** (no consent sends) · **scope added 2026-09-13 (§5.2):** the client-data storage platform, any cloud-hosted tool holding client data, and any interview recording | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
+| G5 | **Legal / compliance review path identified** | ❌ **Blocked — no engaged counsel for these matters** (§11.1): Ndwiga Law Advocates LLP is named, both letters of engagement are unsigned, and no drafted scope covers template review or the sub-processor register (item 59) · **scope reduced for the MVP** (no consent sends) · **scope added 2026-09-13 (§5.2):** the client-data storage platform, any cloud-hosted tool holding client data, and any interview recording · **review packet prepared 2026-09-14 (§11) — not a review path** | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
 | G6 | **Audit / build / retainer commercial shape selected** | ✅ **Passed — H1/H2 MVP only** (§1.5, 2026-09-14): diagnostic-first, two-stage, audit-gated — Stage 1 Gateway Audit always first; Stage 2 blueprint only on a confirmed content or journey-messaging root cause. **Not passed for the full offer** (build beyond Phase 1, retainer — `Draft 41` §11.5 #2–#3). Prices, fee credit and payment terms are outside this gate and stay blocked | Owner choice recorded — done for the MVP; two readings to confirm (§1.5; §8 #24) | Offer (02) |
 | G7 | **Owner approves use of `TEST_FIXTURE` figures** | ⏸ deferred by Owner Decision 71 until cost-to-deliver and capacity exist — *capacity now exists provisionally for the MVP (G3); cost-to-deliver does not (G2 partial; no hours or costs)* | Owner decision recorded | Owner |
 
@@ -385,7 +385,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 3 | Delivery capacity model and its owner (Q1, Q6, Q7) — ✅ *MVP decided provisionally (§6.1): one H1/H2 client at a time, owner solo + AI; Q6, Q7 and full-offer capacity still open* | Operations (08) | Owner | ~~G3~~ — passed for the MVP; revisit after the first real MVP delivery |
 | 4 | What is delegated, and under what engagement type (Q3) | HR (11) | Owner | Q2–Q3 |
 | 5 | Email / WhatsApp nurture platform — ⏸ *not needed for the MVP* | Tech Stack (13) | Owner | Nurture, when it returns |
-| 6 | Legal review path — counsel engagement (item 59) | Legal (10) | Owner | G2 (legal effort), G5, QG4, contract, consent |
+| 6 | Legal review path — counsel engagement (item 59) — *counsel named, letters unsigned; no drafted scope covers template review or the sub-processor register; MVP questions packaged 2026-09-14 (§11)* | Legal (10) | Owner | G2 (legal effort), G5, QG4, contract, consent |
 | 7 | Audit commercial shape — paid standalone vs credited into build — ◐ *structure decided for the MVP 2026-09-14 (§1.5): the audit is always a standalone first stage and can end the MVP; whether its fee is credited is a pricing question, held with the audit-fee credit policy (`Draft 41` §9 #4)* | Offer (02) | Owner | ~~G6~~ — passed for the MVP; the credit question blocks pricing, not G6 |
 | 8 | Entry commercial shape — build + retainer vs audit + monthly retainer · ✅ *MVP decided 2026-09-14 (§1.5): audit-gated two stages, no retainer; full-offer shape still open* | Offer (02) | Owner | ~~G6~~ — passed for the MVP |
 | 9 | Approval to use `TEST_FIXTURE` figures | Offer (02) | Owner | G7 |
@@ -420,6 +420,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **2026-09-13 — MVP tool categories checked against `13_Tech_Stack/TECHSTACK_OS.md` (internal design only).** Added §5.1. **Can proceed on existing or manual tools:** website/booking-path review (manual) and owner QA (manual). **Partly:** audit data collection and review, document drafting, and measurement-plan drafting — Claude and agency email exist, but no analysis tool, file storage or client-deliverable format is registered. **Missing:** file storage/versioning. **Identified:** AI-assisted drafting, website/booking-path review, owner QA, client correspondence, engagement tracking, client analytics via exports. **Nurture platform confirmed not required** (nurture out of MVP scope). **G4 kept PARTIAL** — four gaps: client-data storage/versioning, spreadsheet/analysis tool, client-deliverable document tool or format, buyer-interview channel and notes; new §8 #23. Also noted: this repository is not a place for client data (auto-sync commits, OneDrive folder); Annex B lists only ClickUp (for G5); verify ClickUp, Notion and the Zoho mail plan before first use. Documents only — no live connection calls. **Tool costs unknown; no prices, no currency, no subscriptions, no vendor commitments.** — Claude Code (Opus 5)
 - **2026-09-13 — Provisional MVP tool choices recorded (owner decision, internal MVP design only).** Added §5.2: client data in a dedicated folder outside this git repository — never client data, hotel exports, guest data, interview notes or deliverable drafts inside it; a spreadsheet workbook (app not chosen, no vendor named as approved); document-format deliverables for M1–M7 (template design and production formatting not decided); buyer interview by phone, video or in person with typed notes, with recording not approved by default and, if ever used, requiring explicit client consent plus legal/privacy review first. **G4 marked passed for MVP tool-category identification only.** Still open: tool costs, vendors, legal/privacy approval, live connection checks. G5 kept blocked, with storage platform, cloud-hosted client-data tools and recording added to its scope. §5.1's G4 result marked superseded; V5 and §8 #23 updated. Flagged: a client folder outside the repository but under OneDrive would still be on an unregistered platform. `TECHSTACK_OS.md` not modified. **No prices, no currency, no vendor approvals.** — Claude Code (Opus 5)
 - **2026-09-14 — MVP commercial shape recorded (owner decision, internal MVP design only).** Added §1.5: diagnostic-first, two-stage, audit-gated. Stage 1, the Gateway Audit, always comes first and produces M1–M2 under §1.4 and the diagnostic gate; a non-content root cause ends the MVP. Stage 2, the Phase 1 blueprint, opens only on a confirmed content or journey-messaging root cause and produces M3–M6, plus M7 where needed — blueprint with sample copy only. **G6 marked passed for the H1/H2 MVP only.** §8 #7 structure decided (the credit question stays with pricing), #8 decided for the MVP, new #24 to confirm two readings: M7's place on a redirect, and severity not gating Stage 2 despite `Draft 41` §11.3's unapproved L3 proposal. §10.4 stage note added. **Still blocked:** prices, price band, cost-to-deliver, hotel floors, test figures, fee credit, payment terms. **No prices, no currency, no quote language.** — Claude Code (Opus 5)
+- **2026-09-14 — Legal/privacy review packet prepared for the H1/H2 MVP (not a review).** Added §11: review-path status; client data handled (MD1–MD8, owner-captured screenshots, the analysis workbook, M1–M7); the tools that would touch it; seven contract and review questions (LQ1–LQ7) mapped to the unreviewed templates and the counsel brief; gate effects. **G5 kept blocked:** counsel is named (Ndwiga Law Advocates LLP), but neither letter of engagement is signed, and `LEGAL_OS.md` §5 records that no drafted letter covers template review or the sub-processor register. **G2 still blocked only by legal.** The G5 row and §8 #6 corrected from "no counsel" to that precise state. **Correction:** §5.1–§5.2 said DPA Annex B lists only ClickUp; it drafts nine rows. Fixed there; `TECHSTACK_OS.md` §9 still carries the stale sentence and was not modified. Written from repo documents; not legal advice. **No prices, no currency, no quote language.** — Claude Code (Opus 5)
 
 ---
 
@@ -547,3 +548,86 @@ Bands are **ordinal and relative within one MVP engagement**: they rank how much
 - **Delivery QA as owner self-review is confirmed**, closing §4's "to confirm" note. QA effort sits with the owner, inside §6.1's one-client cap.
 - **Not covered:** the desk-review path still has no bands (§8 #21).
 - **Revisit with §6.1:** after the first real MVP delivery, compare actual effort with these bands.
+
+---
+
+## 11. Legal / Privacy Review Packet — H1/H2 MVP (prepared, not reviewed)
+
+> ⚠️ **PREPARED FOR COUNSEL · NOT LEGAL ADVICE · NOT A REVIEW.** Written by an AI from this repository's documents. It states **questions, not answers**, and classifies nothing as lawful or unlawful. It does **not** pass G5, and it approves no contract term, price, public claim, quote or tool for real client use. The offer remains **Working Hypothesis / Not Quotable.** Nothing here has been sent.
+
+### 11.1 Review-path status — why G5 stays blocked
+
+| Fact | Source |
+|---|---|
+| Counsel is **named**: Ndwiga Law Advocates LLP (Sarah Ndwiga, Managing Partner) | `10_Legal/LEGAL_ENTITY_SETUP.md` |
+| **Two Letters of Engagement (29 July and 6 August 2026) — neither signed.** The drafted reply is marked "DRAFT FOR OWNER APPROVAL. Not sent." Nothing later is recorded | `10_Legal/_correspondence/`; `10_Legal/LEGAL_OS.md` §2 |
+| **No drafted letter covers this packet's core matters.** `legal-counsel-router` stays `blocked_no_reviewer` for six matters no letter covers: template review, s.48 cross-border transfers, SCCs, FX terms, **the sub-processor register**, and the AI-governance reviewer | `LEGAL_OS.md` §5 |
+| **All seven templates are unreviewed AI drafts** — "Do not sign, send, or rely on any of these until a Kenyan-qualified advocate has reviewed them" | `10_Legal/templates/README.md` |
+| Tracker: **item 59** (engage counsel). Its row still reads "reply awaited" (2026-07-19) and predates both letters | `OWNER_INPUT_NEEDED.md` item 59 |
+
+**Result: no legal review path exists for the MVP's matters — G5 stays ❌.** Opening it is an owner action: an agreed engagement whose scope covers review of the templates cited in §11.4 and the sub-processor register for this MVP. When a review happens, `templates/README.md` requires the reviewer, date, changes and jurisdictions to be recorded in `LEGAL_OS.md` §8.
+
+### 11.2 Client data handled in the MVP
+
+"May contain personal data?" records **what the data could contain**, for counsel to classify. It is not a legal classification.
+
+| Data | From | May contain personal data? | Where it lives | Rule already set | Question |
+|---|---|---|---|---|---|
+| **MD1** room-nights by channel, last three months | Client export | Aggregated counts: unlikely. A raw booking export: guest names, contact details, stay dates | Client folder; spreadsheet workbook (§5.2) | Never inside this repository (§5.2) | LQ1 — request aggregated counts only? |
+| **MD2** revenue by channel, if available | Client export | As MD1; commercially confidential either way | As MD1 | As MD1 | LQ1, LQ3 |
+| **MD3** OTA commission rate or estimate | Client | Commercial rather than personal; confidential | Client folder; workbook | Recorded as unknown if not supplied — never invented (§1.4) | LQ3 |
+| **MD4** direct-booking path — URL, screenshots or notes, CTA, landing pages | Public site; client | Public pages: unlikely. Booking-engine back-office or confirmation screenshots: guest records | Client folder | — | LQ1 — limit to public-facing pages and redacted screenshots? |
+| **MD5** guest communication assets — confirmation email, pre-arrival message, WhatsApp scripts | Client | Templates: unlikely. Real sent messages: guest personal data, possibly of guests from origin markets such as Germany and the UK (`Draft 41` QG4) | Client folder | Reviewed only; no nurture implementation (§1.4) | LQ1 — templates only, or redacted samples? Which regime applies to guest data? |
+| **MD6** content and campaign assets | Client | Usually not; subscriber lists or identifiable guest content could | Client folder | — | LQ1 — exclude lists and identifiable guest content? |
+| **MD7** buyer interview notes | GM, Owner/MD or Revenue Manager | **Yes** — the interviewee's identity, role and stated views | Client folder | Typed notes; **no recording by default**; recording needs explicit client consent and legal/privacy review first (§5.2) | LQ1, LQ3 |
+| **MD8** constraints | Client | Unlikely | Client folder | — | — |
+| **Owner-captured website / booking-path screenshots and notes** | Public site | Unlikely for public pages | Client folder | — | As MD4 |
+| **Spreadsheet analysis workbook** | Derived from MD1–MD3 | Only what its inputs contain | Client folder | App not chosen (§5.2) | LQ2 |
+| **Client deliverables M1–M7** | Arika | Designed to carry aggregates, not guest-level data; confidential commercial findings | Client folder; document format (§5.2) | Revision policy (§1.3); blueprint limits (§1.2); QG2, QG3, QG5 | LQ3, LQ5, LQ6 |
+
+**The threshold question behind every row:** SOW §10.1 requires each engagement to state whether it involves processing personal data, and its drafting note warns that "a CRM audit is almost always personal-data processing". LQ1 asks counsel to answer that for this MVP.
+
+### 11.3 Tools that would touch MVP data
+
+| Tool / category | MVP use | In `TECHSTACK_OS.md` §3? | In the draft DPA Annex B? | Question |
+|---|---|---|---|---|
+| **Dedicated client folder outside this repository** | All client files | Platform not chosen; not registered | No | LQ2 — platform, hosting location, access control, deletion at close. Under OneDrive it would sit on an unregistered platform (§5.2) |
+| **Spreadsheet app** | Analysis workbook | No spreadsheet tool registered | No | LQ2 — local or cloud; a cloud app is a sub-processor |
+| **Document tool / format** | M1–M7 | Authoring app not chosen | No | LQ2 — only if cloud-hosted; delivery channel for finished documents |
+| **Zoho mail** (agency mailboxes) | Client correspondence; receiving exports | Email hosting on Zoho noted; product and plan unconfirmed (§9) | Only as an unnamed "[Email/domain provider]" row; Zoho Books is listed separately | LQ2 — name it; is email an acceptable channel for booking exports? |
+| **Claude (Anthropic)** | AI-assisted drafting and analysis | Yes — Claude Pro plan; API key verified by use for manual runtime calls | Yes — "Yes, if a prompt contains it"; location and transfer "to verify" | LQ2, LQ4 — which terms govern client data on the plan used; retention; training use (Annex B note); limit inputs to aggregates? |
+| **ClickUp** (optional engagement tracking) | Client contact record | Yes — built; live-verified 2026-07-15 | Yes | LQ2 — confirm the entry covers MVP client contacts |
+| **Phone / video call / note-taking** | Buyer interview (MD7) | No calendar connected; no video-call or transcription tool registered | No | LQ2 — a video platform would be a sub-processor |
+| **Recording** | Not approved | Not registered | No | LQ1 — only if recording is ever proposed |
+
+### 11.4 Contract and review questions
+
+Positions cited are **unreviewed template drafts**. "Brief" numbers refer to `10_Legal/COUNSEL_ENGAGEMENT_BRIEF.md` §5.
+
+| # | Question | Current drafted position (unreviewed) | Existing counsel question |
+|---|---|---|---|
+| **LQ1** | **Data-processing terms.** Is the MVP audit personal-data processing (SOW §10.1)? If so, does `DPA.md` apply as drafted, and what goes in its Annex A for this MVP? Can data minimisation — aggregated exports, templates rather than sent messages, redacted screenshots — keep guest-level data out? Which regime applies to guest data from origin markets (`Draft 41` QG4)? What notice does the interviewee need, and what would recording require if it were ever proposed? | SOW §10; `DPA.md`; `LEGAL_RESEARCH.md` §4 | Brief Q3 (template review) · Q1 (s.48 transfers) |
+| **LQ2** | **Sub-processor list updates.** Annex B would need the client-folder platform, any cloud spreadsheet or document tool, Zoho mail by name, and any video-call platform. Is the Anthropic entry adequate for client data? Does any of this need a documented cross-border basis before first use? | `DPA.md` §5 and Annex B | Brief Q6 (register) · Q1 (s.48) · Q7 (SCCs — only if EU/UK personal data is in scope) |
+| **LQ3** | **Confidentiality and client-data handling.** Does MSA §6 cover hotel commercial data (channel mix, revenue, OTA commission) and interview content? Is an NDA needed before the data request, since the audit data can arrive before any MSA is signed? What retention and deletion applies to exports, workbooks and notes at engagement close? | MSA §6; MSA §4 with §6.5 (return or destroy); `NDA.md` | Brief Q3 |
+| **LQ4** | **AI-assisted drafting disclosure.** Is the disclosure in `API_AND_AI_TOOLING_TERMS.md` §1 plus MSA §8.5 enough for this MVP? Should the SOW ask for the client's AI-use policy up front? The MVP's owner review of every client-facing output (§6.1) matches the drafted human-review clause (§2) | API & AI tooling terms §1–§4 and its open item 5; MSA §8.5 | Brief Q3. **Brief Q4 (AI-governance reviewer) is not triggered** — the MVP deploys no AI into client systems |
+| **LQ5** | **Client approval of findings and revisions.** How does SOW §8 acceptance — review window, deemed acceptance, no-charge correction of deficiencies — fit the MVP's one included revision round (§1.3)? Does accepting M2 mean agreeing with the diagnosis, or only receiving it? How is a disputed verdict handled, given that Stage 2 opens only on Stage 1's verdict (§1.5)? | SOW §8; MSA §2.3 (change requests) | Brief Q3 |
+| **LQ6** | **No performance guarantee.** Do MSA §8.3 and SOW §12 cover audit findings, revenue-leakage estimates (or "unquantified"), measurement-plan targets and sample copy? Sector benchmarks are always labelled and never promised (QG3), and the disclaimer must match what is said in sales conversations | MSA §8.3; SOW §12; `CLAIMS_SUBSTANTIATION_POLICY.md` §5 | Brief Q3 |
+| **LQ7** | **No legal approval is sought for public pricing or claims.** This packet asks counsel to review MVP data handling and contract terms only. It seeks **no** approval of any price, public offer, marketing claim, case study or testimonial — those stay blocked (QG2 proof method, QG5 pricing gate, Not Quotable) | `CLAIMS_SUBSTANTIATION_POLICY.md` | — |
+
+**Before any signature, outside this packet:** entity formation (Brief Q2) and ODPC registration (Brief Q8) sit within the letters' drafted scope, which is unsigned (`LEGAL_OS.md` §16).
+
+### 11.5 Gates affected
+
+| Gate | Status | Why |
+|---|---|---|
+| **G2** | ◐ **Blocked only by legal** | Legal/compliance effort cannot be estimated until a review path exists. The packet names the documents and questions that effort would cover |
+| **G5** | ❌ **Blocked** | No signed engagement, and no drafted letter covers template review or the sub-processor register (§11.1). A prepared packet is not a review path |
+| **G7** | ⏸ **Blocked** | Needs every gate passed, cost-to-deliver in hours and costs (Decision 71), and owner approval |
+
+G1, G3, G4 and G6 are unchanged.
+
+### 11.6 Using the packet
+
+- **Owner action only.** Whether and when to share it with counsel is the owner's decision, as part of agreeing scope under item 59. Nothing has been sent, and no agent was run.
+- **It adds to, not replaces,** `COUNSEL_ENGAGEMENT_REVIEW.md`'s 24 questions and the counsel brief.
+- **When a review happens:** record it in `LEGAL_OS.md` §8, per `templates/README.md`; then reassess G5 and estimate G2's legal effort.
