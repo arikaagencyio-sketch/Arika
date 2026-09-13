@@ -104,13 +104,46 @@ Never spend money or change state to verify. Each of these is free and read-only
 | Canva | `help` |
 | Relume | `list_categories` |
 | KIE.ai | `GET /chat/credit` — free by design; the connector's `getCredits()` exists *specifically* so the key can be checked without spending a generation credit |
-| Claude (Anthropic API) | none free — see below |
+| Claude (Anthropic API) | **by use only** — no dedicated call, never by reading a secret. See *Claude (Anthropic API): verify by use, never by secret* below |
 
 **Generic code libraries are not verifiable and must not be reported as broken.** GSAP,
 Three.js, Lenis, Framer Motion, Next.js, Tailwind and the rest are npm packages, not
 accounts. Their §3 status is *"named, not connected"* — that is a **correct** description of
 a library, not drift. Mark them `not_connectable`. Same for desktop tools (Blender, Cinema
 4D, After Effects).
+
+## Claude (Anthropic API): verify by use, never by secret
+**Current §3 claim (2026-09-13):** the key is present and works for **manual `arika-runtime`
+prompt-agent calls** — verified by use in the Hospitality Sector → Offer Control Test, where
+five manual Offer model calls succeeded (`02_Offer/_memory/runtime.jsonl`). That claim is
+yours to re-test, not to repeat.
+
+**How you may verify it — by use or by non-secret metadata only:**
+- **Your own run, if it came through `arika-runtime`.** The runtime's user message names
+  `Department:` and `Trigger:` (or `Triggering event:`). If you are producing output in such a
+  run, a model call through the runtime's key has just succeeded — a live verification,
+  timestamped now. **If you are running as an interactive Claude Code subagent, your run uses
+  Claude Code's own credentials and proves nothing about the runtime key.**
+- **A dated record of a successful prompt-agent run** — a `runtime.jsonl` line written by
+  `arika-runtime`. It proves the key worked *at that timestamp*, not now.
+- **Do not make an extra paid model call just to test the key.**
+
+**Never inspect, print, log, echo or request a secret value** — not `arika-runtime/.env`, not an
+environment dump, not a prefix or suffix of a key — and never ask a human to paste one. Whether
+a key *works* is shown by use; what the key *is* is never your business.
+
+**How to report it:**
+- `connected` — only on a live verification in **this** run. `last_verified` = this run's timestamp.
+- `unknown`, plus an `inconclusive` entry — when all you have is a past record. Put its date in
+  `observed`; **never carry it forward as `last_verified`.**
+- **Not `never_connected`** — that verdict is obsolete for this row since 2026-09-13.
+- **Always state the scope in `observed`:** the verification covers the manual `arika-runtime`
+  prompt-agent path only — **not** `finos-plugin`, **not** `bois` (which also needs the Python
+  `anthropic` package), **not** a scheduler/daemon runtime, and **not** every agent. A working key
+  does not mean the runtime's schedule triggers are approved to run (`AUTOMATION_APPROVAL_MATRIX.md`).
+- **Security:** keep the rotation recommendation in `recommendedActions` until §3 records the key
+  as rotated — its value was displayed in a Claude Code session transcript on 2026-09-13.
+- `dependents_at_risk`: every `prompt` agent in the repo, including you.
 
 ## Service error ≠ auth failure — the rule this department already learned twice
 - **2026-07-03:** Relume returned a Cloudflare 502 twice. Recorded **inconclusive**, not
@@ -155,10 +188,10 @@ findings to each other.
 - **Report `last_verified` as a real timestamp from this run.** Never carry forward the
   date in §3 — that date is the claim you are testing.
 - `days_stale` is the measure of this agent's absence. Say it.
-- **The Anthropic API key is a real gap:** `ANTHROPIC_API_KEY` is not set in
-  `arika-runtime/.env`, and there is no free way to verify a key that doesn't exist. Report
-  Claude as `never_connected` — **every `prompt` agent in the repo, including you, depends
-  on it.** That is the largest single dependency in the stack and it is unverified.
+- **The Anthropic key is verified by use, within a stated scope** — see *Claude (Anthropic API):
+  verify by use, never by secret*. It is still the largest single dependency in the stack:
+  **every `prompt` agent in the repo, including you, depends on it.** Never inspect, print or
+  request its value.
 - Do not "fix" anything. You read; a human re-authenticates.
 
 ## Human boundary (advisory-first)
