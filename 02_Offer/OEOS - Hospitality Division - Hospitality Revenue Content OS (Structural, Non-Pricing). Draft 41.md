@@ -393,6 +393,8 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 ## 7. Delivery model
 
 > **Role-based only.** No human is named for delivery — none is confirmed in the repo. **Delivery owner: BLOCKED / unassigned.** Per `OFFER_OS.md` §3, these are AI-assisted functional roles, not headcount; the owner currently orchestrates solo with AI, and hiring decisions are deferred to HR (11). **Capacity: unquantified.**
+>
+> **MVP update (2026-09-13):** for the approved MVP only, the owner delivers **solo with AI assistance**, with a **provisional capacity of one H1/H2 MVP client at a time** — not proven capacity; revisit after the first real MVP delivery (Worksheet §6.1). The full offer's delivery owner and capacity remain unassigned and unquantified.
 
 ### 7.1 Roles
 
@@ -470,7 +472,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 | # | Decision | Needed for | Decider | Blocks |
 |---|---|---|---|---|
 | 1 | **Cost-to-deliver** | Phase 11; floor | Owner + Finance (09) | Pricing |
-| 2 | **Delivery capacity** and a **named delivery owner** | Phase 11; SLAs; §7 | Owner; Operations (08); HR (11) | Pricing; delivery |
+| 2 | **Delivery capacity** and a **named delivery owner**. *Narrowed 2026-09-13: for the MVP only, provisional capacity of one H1/H2 client at a time, owner solo + AI (Worksheet §6.1); full-offer capacity and delivery owner still open* | Phase 11; SLAs; §7 | Owner; Operations (08); HR (11) | Pricing; delivery |
 | 3 | **Owner-approved price band** — audit, entry, retainer | Phase 11 | Owner | Proposal; Agreement |
 | 4 | **Owner-approved audit-fee credit policy**, including whether credit applies on redirect | Risk reversal; G5 | Owner | Proposal |
 | 5 | **Proof-generation method** | QG2; Referral; positioning proof | Owner; Client Success (07); Legal (10) | Any claim |
@@ -501,6 +503,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-13 — Cross-referenced the MVP delivery scope decision** (§12.5): audit + Entry Build Phase 1 blueprint, H1/H2 only, internal design only; nurture, retainer and H3 deferred. Full record in the Delivery Capacity and Cost Model Worksheet §1.1. The full offer remains **Working Hypothesis / Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-13 — Cross-referenced Owner Decision #17** (§12.5): M4 is a blueprint with sample copy for critical sections — not full copy, content production, or booking-tool/CMS implementation. Full record in the Worksheet §1.2. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-13 — Cross-referenced the MVP Role-Effort Estimate** (§12.5): relative bands only, owner review required; legal BLOCKED; G2 partial. Full record in the Worksheet §10. Phase 11 still BLOCKED; still **Not Quotable.** — Claude Code (Opus 5)
+- **2026-09-13 — Cross-referenced the provisional MVP capacity decision** (§7 note, §9 #2, §12.5): one H1/H2 MVP client at a time, owner solo + AI; not proven — revisit after the first real MVP delivery. Full record in the Worksheet §6.1. Phase 11 still BLOCKED; still **Not Quotable.** — Claude Code (Opus 5)
 
 ---
 
@@ -648,3 +651,5 @@ Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
 **M4 depth decided (Owner Decision #17, 2026-09-13):** the MVP's booking-journey output is a **blueprint** — structure, page/message hierarchy, key messaging blocks and sample copy for critical sections. It is **not** D5's full copy package (§6), **not** D4 content production, and **not** implementation inside booking tools or a website CMS; this also confirms D4 is outside the MVP. Record and effort implications: Worksheet §1.2. Internal design only — **still not quotable.**
 
 **MVP role-effort estimate drafted — owner review required (2026-09-13):** relative bands (XS–XL) only, no hours and no money, for one H1/H2 engagement — see Worksheet §10. Legal/compliance review is BLOCKED and not estimated; readiness gate G2 is **partial, not passed**. This fills none of Phase 11's blocked inputs by itself: cost-to-deliver still needs hours and costs, and delivery capacity still needs owner confirmation. **Not quotable.**
+
+**MVP delivery capacity approved provisionally (2026-09-13):** one H1/H2 MVP client at a time, owner solo + AI assistance; approved MVP scope only; every client-facing output owner-reviewed. Excludes H3 groups, retainer delivery, email/WhatsApp nurture implementation and website/CMS/booking-tool implementation. Two or more concurrent clients and H3 capacity are **not approved**. **Not proven operating capacity** — revisit after the first real MVP delivery. Record: Worksheet §6.1; readiness gate G3 passed for the MVP only. Phase 11 stays **BLOCKED**: cost-to-deliver, price band, audit-fee credit policy and proof method are still missing. **Not quotable.**
