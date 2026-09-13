@@ -495,6 +495,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 
 - **2026-09-13 — Created from the structural OEOS test; remains non-pricing.** Built from the successful `offer-oeos-engineer` structural run (`02_Offer/_memory/runtime.jsonl` line 4, 2026-09-13T17:27:40Z; the first run with the corrected top-level `requiresHumanApproval: true`), routed by `offer-orchestrator`'s enriched re-intake (line 2, `needs_more_seed_data`). Expanded the run's 11 non-pricing phase summaries into purpose / decisions / inputs / deliverables / gates / risks, the full 17-stage journey, a role-based delivery model and an eight-gate QC system, using `HOSPITALITY_PLUGIN.md` and `OFFER_OS.md` §3 as context. **Phase 11 is BLOCKED** on cost-to-deliver, delivery capacity, owner-approved price band, owner-approved audit-fee credit policy, and proof-generation method. **Surfaced, not resolved:** three-way ICP / direct-share conflict (seed vs plugin vs test fixture); no engineered redirect route for pricing/rate-strategy or tech-stack findings; §10's pricing floors are B2B-SaaS ARR-band and have no hospitality segmentation. The TEST_FIXTURE values were supplied for the test run and are not real. Status unchanged: **Working Hypothesis / Not Quotable**, not in the registry, no event published, `offer-pricing-floor-analyst` not run. — Claude Code (Opus 5)
 - **2026-09-13 — Added §11 Commercial Test Model (owner review required).** Proposed hotel H-band segmentation (H1/H2/H3), a leakage severity layer (L1/L2/L3), price-free commercial rules for audit / entry build / governance retainer, and the pricing-floor agent test contract (B2B SaaS ARR floors barred; expected `insufficient_data`). Nothing adopted; no prices; Phase 11 still BLOCKED. — Claude Code (Opus 5)
+- **2026-09-13 — Added §12 test record: Hospitality Sector → Offer Control Test.** COMPLETE for control-flow validation (manual runs, log lines 1–5, no events published); NOT COMPLETE for commercial launch or quoting. Records the eight validated steps, the two runtime defects fixed on the way, what the test does not prove, nine remaining blockers, and the next owner decision (item 71). Documentation only. — Claude Code (Opus 5)
 
 ---
 
@@ -574,3 +575,59 @@ Proposed as this offer's segmentation variable in place of the B2B SaaS ARR band
 5. **Define who owns delivery capacity.**
 
 These map onto §9 rather than adding to it: #1 answers §9 #6 and part of #7 · #2 is part of §9 #4 · #3 is §9 #12 · #5 is part of §9 #2 · **#4 is new.**
+
+---
+
+## 12. Test record — Hospitality Sector → Offer Control Test
+
+| Field | Value |
+|---|---|
+| **Test name** | Hospitality Sector → Offer Control Test |
+| **Date** | 2026-09-13 |
+| **Status** | ✅ **COMPLETE for control-flow validation.** ⛔ **NOT COMPLETE for commercial launch or quoting.** |
+| **Mode** | Manual. Each agent was invoked by hand (`arika run`) and each hand-off was carried by hand. **No event was published and no agent-to-agent chaining was exercised** — `executor.ts` does not publish (AEIT_11 gate check 4). |
+| **Evidence** | `02_Offer/_memory/runtime.jsonl` lines 1–5 (append-only; not rewritten) |
+
+### 12.1 Validated flow
+
+| # | Step | Result | Evidence |
+|---|---|---|---|
+| 1 | Sector intelligence | Hospitality → Accommodation sector intelligence exists via the Hospitality plugin (Sector Plugin #001) | `HOSPITALITY_PLUGIN.md` P3, P9–P11 |
+| 2 | `offer-orchestrator` intake | Accepted the seed as a valid intake but required more seed data | Log line 1 · `needs_more_seed_data` |
+| 3 | Enriched re-intake | Allowed structural (non-pricing) routing; registry action stayed `needs_more_seed_data` | Log line 2 |
+| 4 | `offer-oeos-engineer` | Produced a non-pricing structural OEOS outline; Phase 11 BLOCKED; no tier carries a figure | Log lines 3–4 (line 4 is the source run) |
+| 5 | Draft 41 | Expanded that outline into a controlled internal non-pricing artifact | This file §0–§10 |
+| 6 | Commercial Test Model | Added H1/H2/H3 as **test labels only** | §11 |
+| 7 | `offer-pricing-floor-analyst` | Correctly returned `insufficient_data` (`arr_band: unknown`, both floors `null`) and did **not** apply SaaS ARR floors | Log line 5 |
+| 8 | Static `OFFER_PRICED` | Removed, so an `insufficient_data` outcome cannot announce a priced offer | Spec `emits: []` · `OFFER_OS.md` §12 · AEIT_11 v0.2.2, gate passed |
+
+### 12.2 Runtime defects the test found and fixed
+
+- **Truncated replies** — structured output was cut off at `max_tokens: 2048`. Default raised to 16000; a `max_tokens` stop is now reported as truncation.
+- **Dropped approval flag** — an agent's own `requiresHumanApproval: true` never reached the top-level result. Now merged: log lines 1–3 carry the old `false`, lines 4–5 the corrected `true`.
+
+Both recorded in `arika-runtime/DECISIONS.md`.
+
+### 12.3 What this test does not prove
+
+- **Event-driven chaining** — never exercised; the runtime does not publish.
+- **Unprompted SaaS-floor refusal** — step 7's input stated that no hotel floors exist. The agent's spec still has no rule stopping it mapping a hotel onto ARR Bands A–D (§11.4).
+- **Anything commercial** — no price, proof, capacity or client result was produced or validated.
+
+### 12.4 Known remaining blockers
+
+- Hotel pricing segmentation (H1/H2/H3) is only a test model — not approved
+- No hotel-specific pricing floors exist
+- No cost-to-deliver model
+- No delivery capacity or delivery owner
+- No owner-approved price band
+- No audit-fee credit policy
+- No proof-generation method
+- Redirect paths for pricing/rate-strategy and tech-stack/integration root causes are not engineered
+- Legal / consent gates are unresolved — contract and data terms; WhatsApp/email consent
+
+### 12.5 Next decision
+
+> **Owner must decide whether to approve the H1/H2/H3 hotel segmentation model for internal pricing design, and whether to supply test prices or wait for real cost/deal data.**
+
+Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
