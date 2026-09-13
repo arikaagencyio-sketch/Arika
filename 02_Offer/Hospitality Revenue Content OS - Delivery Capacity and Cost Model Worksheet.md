@@ -1,7 +1,7 @@
 # Hospitality Revenue Content OS — Delivery Capacity and Cost Model Worksheet
 
 > ⚠️ **INTERNAL WORKSHEET · NOT QUOTABLE · NO PRICES.**
-> This file names **what must be known** before any test price or price floor can exist. It contains **no price, no currency, no amount, no rate, no margin and no capacity figure** — every quantity below is a **variable to be supplied**, not a value. §10 adds **relative effort bands (XS–XL) for owner review** — not hours, not money.
+> This file names **what must be known** before any test price or price floor can exist. It contains **no price, no currency, no amount, no rate, no margin and no capacity figure** — every quantity below is a **variable to be supplied**, not a value. §10 adds **relative effort bands (XS–XL), owner-approved for internal MVP planning only** — not hours, not money.
 
 ## 1. Status
 
@@ -183,7 +183,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | **Automation or booking-journey advisor** | Lifecycle Engineer · journey-messaging side of Conversion Copywriter | — | ◐ | ◐ | **Conditional** — nurture needs consent + a platform; technical engine work is a redirect, not this role | ⏸ **Deferred** — nurture excluded; no booking-tool or CMS implementation (§1.2); journey-messaging direction sits with the content strategist in M4 | **No** | No nurture platform registered; every automation needs an approval-matrix row (`AUTOMATION_APPROVAL_MATRIX.md`) |
 | **Analytics / reporting** | Audit Analyst · Reporting Analyst | ● | ◐ | ● | **Required** | ✅ **In** — M1, M2, M6; no monthly reporting | **No** | Data-access effort per client; whether pulls can be automated given integration-type stack chaos |
 | **Legal / compliance review** | — (Legal 10) | ◐ | ● | ◐ | **Required** once client data or client-facing sends exist | ◐ **Reduced** — audit-data handling terms; no consent review while nurture is deferred; sample copy carries no claims (QG2), so no claims review | **Blocked** — no counsel engaged (`OWNER_INPUT_NEEDED.md` item 59); `legal-counsel-router` routes, it does not review | Review turnaround; whether review is per template or per engagement |
-| **Delivery QA** | QA gates (`Draft 41` §8) · Operations (08) delivery QA | ● | ● | ● | **Required** | ✅ **In** — reduced gate set (§3.1); sample copy adds QG2, QG3, QG5 and QG7 checks (§1.2) | **MVP: the owner, by implication** — solo delivery plus owner review of every client-facing output (§6.1) makes QA owner self-review; *to confirm* · advisory `operations-delivery-qa` exists · full offer: no named human reviewer | Whether QA can be the owner (self-review) or needs a second person |
+| **Delivery QA** | QA gates (`Draft 41` §8) · Operations (08) delivery QA | ● | ● | ● | **Required** | ✅ **In** — reduced gate set (§3.1); sample copy adds QG2, QG3, QG5 and QG7 checks (§1.2) | **MVP: the owner — self-review, confirmed 2026-09-13 (§10.8)** · advisory `operations-delivery-qa` exists · full offer: no named human reviewer | MVP: owner self-review (§10.8) · full offer: whether a second person is needed |
 
 **Two structural constraints that bound every row:**
 - **The delegability ceiling.** Senior-expert-only work — the audit verdict, redirect decisions, Class 3 approvals — stays with one person however many agents exist (`11_HR_People_Ops/PEOPLE_DOCTRINE.md`; `Draft 41` §12 Phase 12). More agents raise the volume arriving at that ceiling, not the ceiling.
@@ -197,7 +197,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 
 | # | Variable | Unit | Applies to | Who supplies | Known now? |
 |---|---|---|---|---|---|
-| V1 | **Effort by role** | Hours or effort units per role, per package | P1, P2, P3, P4 hand-off | Owner, with Operations (08) | ◐ **MVP bands drafted (§10)** — owner review required; legal not estimated; no hours |
+| V1 | **Effort by role** | Hours or effort units per role, per package | P1, P2, P3, P4 hand-off | Owner, with Operations (08) | ◐ **MVP bands owner-approved (§10.8)** for internal planning only; legal not estimated; no hours |
 | V2 | **Number of audit data sources** | Count per client (booking engine, PMS/CRS exports, channel manager, OTA extranets, web analytics, email/CRM) | P1, P3 | Per client, at Qualification · ✅ MVP minimum data set decided (§1.4) | ◐ **MVP minimum defined (§1.4):** MD1 and MD4 required; the actual source count still varies by client stack |
 | V3 | **Number of pages / assets / messages** | Count per build; count per retainer cycle | P2, P3 | Owner — from minimum viable scope (§6 Q5) | ❌ |
 | V4 | **Number of review rounds** | Rounds per deliverable | P1–P3 | Owner — ✅ MVP policy set (§1.3); full-offer revision policy open (`Draft 41` §9 #14) | ◐ **MVP: one included round per M1–M7 output** (§1.3); P2 beyond Phase 1 and P3 open |
@@ -259,7 +259,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 
 **What this does not settle:**
 - **Weekly owner delivery time (Q7)** — the rule is a client count, not a time budget.
-- **The §10 effort bands are still unreviewed** (G2 partial). If review moves a band materially, revisit this rule before the first delivery.
+- ~~**The §10 effort bands are still unreviewed** (G2 partial). If review moves a band materially, revisit this rule before the first delivery.~~ ✅ **Bands owner-approved unchanged 2026-09-13 (§10.8)**, so this rule stands as recorded; revisit after the first real MVP delivery.
 - **No timeline or SLA** follows from it (`Draft 41` §9 #13–#14).
 - **No start condition.** No client can begin while the offer is Not Quotable and the audit-data terms have no review path (G5).
 - **Not a price input on its own**, and not quotable.
@@ -273,7 +273,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | # | Gate item | Status (2026-09-13) | Evidence required to pass | Owning department |
 |---|---|---|---|---|
 | G1 | **Delivery scope chosen** (minimum viable P1/P2/P3 scope) | ✅ **Passed — MVP only** (§1.1–§1.2, 2026-09-13) · **not passed for the full offer** — P2 beyond Phase 1 and P3 scope not chosen | Q5 answered in writing — done for the MVP, including M4 depth (#17) and the D4 exclusion (#18) | Offer (02) |
-| G2 | **Role effort estimated** (V1 for every required role, per package) | ◐ **PARTIAL — not passed** (MVP only, §10, 2026-09-13): bands drafted for every active MVP role; ✅ revision policy (§1.3) and minimum audit data set (§1.4) decided for the MVP; **still open:** legal BLOCKED, not estimated · owner review of the bands pending | V1 filled, labelled estimate — owner-confirmed bands satisfy V1's effort units; legal effort estimated once a review path exists (G5); §10.7 lists the decisions needed — two remain | Offer (02) + Operations (08) |
+| G2 | **Role effort estimated** (V1 for every required role, per package) | ◐ **PARTIAL — blocked only by the legal review path / legal effort estimate** (MVP only, 2026-09-13): ✅ bands owner-approved for internal MVP planning (§10.8) · ✅ revision policy (§1.3) and minimum audit data set (§1.4) decided · ❌ legal/compliance BLOCKED, not estimated | V1 filled, labelled estimate — met for every MVP role except legal; legal effort is estimated once a review path exists (G5); one §10.7 decision remains | Offer (02) + Operations (08) |
 | G3 | **Capacity owner assigned** | ✅ **Passed — MVP only, provisional** (§6.1, 2026-09-13): the owner delivers solo with AI and holds the cap; Q1 answered as one H1/H2 MVP client at a time · **not passed for the full offer** · not proven capacity — revisit after the first real MVP delivery | A named owner for delivery capacity; Q1 answered — both met within MVP scope | Operations (08) |
 | G4 | **Tool cost categories identified** | ◐ categories listed (§5 V5); **for the MVP the nurture platform is no longer required** (nurture deferred) | Every MVP category confirmed; the nurture platform returns with nurture | Tech Stack (13) |
 | G5 | **Legal / compliance review path identified** | ❌ no counsel (item 59) — **scope reduced for the MVP** (no consent sends) | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
@@ -291,7 +291,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | # | Decision | Owning department | Decider | Blocks |
 |---|---|---|---|---|
 | 1 | ~~Minimum viable delivery scope (Q5)~~ ✅ **Decided for the MVP, internal design only (§1.1–§1.2)** | Offer (02) | Owner | ~~G1~~ — passed for the MVP |
-| 2 | Effort estimates by role (V1) — ◐ *MVP bands drafted (§10); owner review required* | Offer (02) + Operations (08) | Owner | G2 |
+| 2 | Effort estimates by role (V1) — ✅ *MVP bands owner-approved for internal planning (§10.8); legal effort not estimated (§8 #6); no hours* | Offer (02) + Operations (08) | Owner | G2 — legal effort only |
 | 3 | Delivery capacity model and its owner (Q1, Q6, Q7) — ✅ *MVP decided provisionally (§6.1): one H1/H2 client at a time, owner solo + AI; Q6, Q7 and full-offer capacity still open* | Operations (08) | Owner | ~~G3~~ — passed for the MVP; revisit after the first real MVP delivery |
 | 4 | What is delegated, and under what engagement type (Q3) | HR (11) | Owner | Q2–Q3 |
 | 5 | Email / WhatsApp nurture platform — ⏸ *not needed for the MVP* | Tech Stack (13) | Owner | Nurture, when it returns |
@@ -324,12 +324,15 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **2026-09-13 — MVP delivery capacity decision recorded (owner decision, provisional).** Added §6.1: one H1/H2 MVP client at a time, owner solo + AI assistance; approved MVP scope only; every client-facing output owner-reviewed; excludes H3, retainer delivery, nurture implementation and website/CMS/booking-tool implementation; **not proven operating capacity — revisit after the first real MVP delivery.** Two or more concurrent clients and H3 capacity **not approved**. **G3 marked passed for the MVP only, provisional:** the gate's two evidence items (a named capacity owner; Q1 answered) are met within MVP scope. Not passed for the full offer. Q1 answered, Q2 partly answered, Q6 and Q7 annotated; §4 owner and delivery QA rows, G7, §8 #3 and §10.6–§10.7 updated. **No prices, no hours, no money.** — Claude Code (Opus 5)
 - **2026-09-13 — MVP revision policy recorded (owner decision, internal delivery-scope policy only).** Added §1.3: one included revision round per client-facing output (M1–M7), limited to accuracy, clarity, fit and client-specific context; no new scope or deliverables, implementation, full content production, nurture execution, website/CMS/booking-tool work or retainer activity; additional rounds not approved; exceptions need owner approval before delivery; not public contract language. A4 converted from assumption to policy — **no band changes**. §8 #13 marked decided for the MVP; G2 narrowed (three blockers remain: legal review path, minimum audit data set, owner review of the bands); V4, §5's MVP note, the analytics row, §10.5 and §10.7 updated. Flagged, not decided: an M2 revision that changes the root-cause class re-enters QG1 and can switch path. **No prices, no hours, no money.** — Claude Code (Opus 5)
 - **2026-09-13 — MVP minimum audit data set recorded (owner decision, internal design only).** Added §1.4: eight data items (MD1–MD8) and a data-sufficiency rule. MD1 channel room-nights and MD4 direct-booking path are required; without MD2 revenue by channel, revenue leakage is unquantified; without the MD7 buyer interview, the work is a desk review, not a diagnosis; MD3 commission is recorded as unknown rather than invented; a dominant pricing/rate or booking-engine tech finding redirects. §8 #20 marked decided for the MVP; **G2 narrowed — now blocked only by the legal review path and owner review of the bands**. Analytics band set to **M with complete minimum data, L when data is messy or MD2 is unavailable** (A5, §10.3, §10.4). Buyer interview added to the owner row. V2, §10.5 and §10.7 updated. New open decisions: #21 desk-review handling, #22 M6 baseline from a three-month window. Flagged for confirmation: "if #1 and #4 are missing" read as both required. **No prices, no hours, no money.** — Claude Code (Opus 5)
+- **2026-09-13 — Owner review of the MVP role-effort bands recorded (internal MVP planning only).** Added §10.8: the §10.3 bands approved unchanged — owner/strategist L · offer engineer XS · content strategist M · sample-copy producer S · analytics/reporting M, or L when data is messy or revenue by channel is missing · delivery QA S as owner self-review · legal/compliance BLOCKED, not estimated · design support deferred · automation/booking-journey advisor deferred, XS only if separately triggered by a booking-journey messaging cause. H1/H2 MVP only; no H3, full offer, retainer, nurture, website/CMS/booking-tool implementation or concurrent clients. **G2 now blocked only by the legal review path / legal effort estimate; G5 unchanged, still blocked.** §4 QA row, V1, §6.1, G2, §8 #2 and §10 header, §10.3, §10.5 and §10.7 updated. **No hours, costs, prices, floors or test figures.** — Claude Code (Opus 5)
 
 ---
 
 ## 10. MVP Role-Effort Estimate — Owner Review Required
 
 > ⚠️ **DRAFT ESTIMATE · OWNER REVIEW REQUIRED · NOT HOURS · NOT MONEY.** Relative effort bands for **one MVP engagement**, reasoned from §1.1–§1.2 of this worksheet and `Draft 41` §6–§8. Nothing here is measured, and no agent was run. The bands are **not** converted to hours or money, and they are **not** a capacity figure or a pricing input until the owner confirms them. The offer remains **Working Hypothesis / Not Quotable.**
+>
+> ✅ **Owner review recorded 2026-09-13 (§10.8):** the §10.3 bands are approved for **internal MVP planning only** — no hours, no cost, no prices, no quote, no public or commercial use. Approval does **not** make them a pricing input.
 
 **Scope estimated:** the approved MVP only — Gateway audit + Entry Build Phase 1 blueprint, outputs M1–M7, M4 as blueprint + sample copy, H1/H2 only. **Excluded:** H3 groups, the retainer, email/WhatsApp nurture implementation, and booking-tool or website implementation.
 
@@ -367,10 +370,10 @@ Bands are **ordinal and relative within one MVP engagement**: they rank how much
 | **Content strategist** | M3 Direct Booking Message Strategy · M4 journey structure, page/message hierarchy and key messaging blocks · M5 Basic Direct-Booking Content Plan · QG7 positioning check | **Blueprint** | **M** | A2, A3, A4, A6. Blueprint only — no calendar production, no D4 content | Runs only after an (a) or (b)-messaging verdict · per-client target definition undefined (`Draft 41` §9 #8) · launch archetype scope open (`Draft 41` §9 #18) |
 | **Light copy / sample-copy producer** | Sample copy for a limited set of critical sections inside M4 · one revision round · self-check against QG2 (no outcome claims), QG3 (benchmark labels) and QG5 (no price) | **Blueprint** | **S** | A2, A4, A6. May be performed by the content strategist rather than a separate role | Which sections are "critical" is an assumption (A2), not a decision · proof method BLOCKED, so samples carry no outcome claims |
 | **Analytics / reporting** | Data-sufficiency check against §1.4 · data ingestion and channel-mix analysis · M1 Audit Findings Snapshot · evidence for the M2 classification · M7 evidence pack when redirecting · M6 Measurement Plan (baseline and measurement design) · QG6 data integrity | **Both** | **M** if the minimum data set is complete · **L** if data is messy or MD2 revenue by channel is unavailable | A4, A5, A6. One revision round on M1, M2, M6 and M7 (§1.3). No monthly reporting (retainer deferred); client-system data only | Data quality is known only at intake, so M or L is set per engagement (§1.4) · audit scope and duration open (`Draft 41` §9 #13) · per-client target undefined for M6 (`Draft 41` §9 #8) |
-| **Delivery QA** | Reduced gate set across M1–M7 — QG1, QG2, QG3, QG5, QG6, QG7 · completeness check before the audit readout and before blueprint handover | **Both** | **S** | A4. Checks, not rework; QG4 and QG8 are not triggered while nurture is deferred | No named reviewer (§4) — if the owner self-reviews, this effort lands on the owner |
+| **Delivery QA** | Reduced gate set across M1–M7 — QG1, QG2, QG3, QG5, QG6, QG7 · completeness check before the audit readout and before blueprint handover | **Both** | **S** — owner self-review | A4. Checks, not rework; QG4 and QG8 are not triggered while nurture is deferred | Owner self-review confirmed for the MVP (§10.8) — this effort lands on the owner |
 | **Legal / compliance review path** | Audit-data handling terms (§3.1) · client contract terms | **Both** | **BLOCKED — not estimated** | — | No counsel engaged (`OWNER_INPUT_NEEDED.md` item 59; §8 #6) · `legal-counsel-router` routes, it does not review · contract template with data terms missing (`Draft 41` §9 #15) |
 | **Design support** | None in the MVP — no produced assets | Neither | **Deferred — not estimated** | A3 | Returns with content production · image-generation runway and Canva authentication (§8 #14) |
-| **Automation / booking-journey advisor** | None by default. **Trigger: the audit finds a booking-journey root cause.** A messaging-side (b) finding keeps journey direction inside M4 (content strategist), with at most a light advisor review. A technical (b) finding is a redirect (M7), and the redirected work is out of scope | Blueprint, *only if triggered* | **Deferred — not estimated** · *XS if triggered and the owner wants a separate review* | A3 — no booking-tool or CMS work in any case | No nurture platform registered (§3) · no engineered destination for a technical (b) redirect (§2, P4b) |
+| **Automation / booking-journey advisor** | None by default. **Trigger: the audit finds a booking-journey root cause.** A messaging-side (b) finding keeps journey direction inside M4 (content strategist), with at most a light advisor review. A technical (b) finding is a redirect (M7), and the redirected work is out of scope | Blueprint, *only if triggered* | **Deferred — not estimated** · *XS only if separately triggered after the audit finds a booking-journey messaging cause (§10.8)* | A3 — no booking-tool or CMS work in any case | No nurture platform registered (§3) · no engineered destination for a technical (b) redirect (§2, P4b) |
 
 ### 10.4 Effort by delivery path
 
@@ -390,14 +393,14 @@ Bands are **ordinal and relative within one MVP engagement**: they rank how much
 
 ### 10.5 G2 readiness result
 
-**◐ G2 — PARTIAL, not passed** (§7).
+**◐ G2 — PARTIAL, not passed** (§7). *Updated 2026-09-13: blocked **only** by the legal review path / legal effort estimate.*
 
 - **Done:** a labelled band now exists for every active MVP role except legal. V1's unit is "hours *or effort units*", so owner-confirmed bands can satisfy it.
 - **Why it is not passed:**
   1. **Legal review path unresolved** — the one required role with no estimate (G5; §8 #6).
   2. ~~**Revision policy unresolved**~~ ✅ **Decided for the MVP 2026-09-13 (§1.3):** one included round per output — matches A4, so no band changes.
   3. ~~**Data-source range unresolved**~~ ✅ **Decided for the MVP 2026-09-13 (§1.4):** minimum audit data set defined; analytics is M with complete minimum data, L when data is messy or MD2 is unavailable.
-  4. **Bands not yet owner-reviewed** — V1 needs an estimate the owner stands behind.
+  4. ~~**Bands not yet owner-reviewed**~~ ✅ **Approved by the owner 2026-09-13 (§10.8)** for internal MVP planning only.
 - **Not this step:** converting bands to hours or money. That comes later, for cost-to-deliver, and before any `TEST_FIXTURE` figure (G7).
 
 ### 10.6 Capacity implication — not a capacity claim
@@ -411,13 +414,39 @@ Bands are **ordinal and relative within one MVP engagement**: they rank how much
 
 ### 10.7 Open decisions — what moves G2 from partial to passed
 
-**Required for G2 to pass:**
+**Required for G2 to pass — only #1 remains open:**
 
 | # | Decision | Why G2 needs it | Decider | Reference |
 |---|---|---|---|---|
 | 1 | **Name a review path for the audit-data handling terms** — and whether review is once per template or per engagement | Legal is the only required role with no estimate | Owner + Legal (10) | §8 #6; item 59 |
 | 2 | ~~**Revision policy** — confirm one round per client-approved output, or set another~~ ✅ **Decided for the MVP 2026-09-13 (§1.3):** one included round per M1–M7 output | ~~Changes the content strategist, sample-copy and owner bands~~ — bands unchanged | Owner | §8 #13; `Draft 41` §9 #14 |
 | 3 | ~~**Minimum audit data set** — what counts as basic channel-mix data, and the data-source range an MVP audit accepts~~ ✅ **Decided for the MVP 2026-09-13 (§1.4)** | ~~Decides whether analytics stays M~~ — analytics is M or L per engagement | Owner | V2; §8 #20 |
-| 4 | **Owner review of the §10.3 bands** — confirm, adjust or reject each | V1 must be an estimate the owner stands behind | Owner | §10.3 |
+| 4 | ~~**Owner review of the §10.3 bands** — confirm, adjust or reject each~~ ✅ **Approved 2026-09-13 (§10.8)** — internal MVP planning only | ~~V1 must be an estimate the owner stands behind~~ — done | Owner | §10.3; §10.8 |
 
-**Worth settling alongside, but not required for G2:** a working limit for "critical sections" (A2 — keeps sample copy at S) · whether the owner may self-review delivery QA (implied yes under §6.1 — confirm) · weekly owner delivery time (Q7 → §6.1 revisit) · audit scope and duration (`Draft 41` §9 #13 → timeline) · the "dominant" definition (`Draft 41` §9 #9 → verdict effort).
+**Worth settling alongside, but not required for G2:** a working limit for "critical sections" (A2 — keeps sample copy at S) · ~~whether the owner may self-review delivery QA~~ ✅ confirmed — owner self-review for the MVP (§10.8) · weekly owner delivery time (Q7 → §6.1 revisit) · audit scope and duration (`Draft 41` §9 #13 → timeline) · the "dominant" definition (`Draft 41` §9 #9 → verdict effort).
+
+### 10.8 Owner review of the bands — decision (2026-09-13)
+
+✅ **The §10.3 bands are approved for INTERNAL MVP PLANNING ONLY** — no hours, no cost, no prices, no quote, no public or commercial use.
+
+| Role | Approved band |
+|---|---|
+| Owner / strategist | **L** |
+| Offer engineer | **XS** |
+| Content strategist | **M** |
+| Light copy / sample-copy producer | **S** |
+| Analytics / reporting | **M** when the §1.4 minimum audit data set is complete · **L** when data is messy or revenue by channel (MD2) is missing |
+| Delivery QA | **S**, performed as **owner self-review** for the MVP |
+| Legal / compliance review | **BLOCKED** — not estimated until a legal review path exists |
+| Design support | **Deferred** |
+| Automation / booking-journey advisor | **Deferred** — **XS only if separately triggered** after the audit finds a booking-journey messaging cause |
+
+**Applies only to the H1/H2 MVP.** **Not approved:** H3 · full offer delivery · retainer delivery · nurture implementation · website/CMS/booking-tool implementation · two clients at once.
+
+**Not converted:** the bands are not hours, costs, prices, price floors or test figures, and approving them creates none of those. The offer remains **Working Hypothesis / Not Quotable.**
+
+**What follows:**
+- **G2's owner-review blocker is resolved.** G2 is now blocked **only** by the legal review path / legal effort estimate (§7; §10.5). **G5 stays blocked.**
+- **Delivery QA as owner self-review is confirmed**, closing §4's "to confirm" note. QA effort sits with the owner, inside §6.1's one-client cap.
+- **Not covered:** the desk-review path still has no bands (§8 #21).
+- **Revisit with §6.1:** after the first real MVP delivery, compare actual effort with these bands.
