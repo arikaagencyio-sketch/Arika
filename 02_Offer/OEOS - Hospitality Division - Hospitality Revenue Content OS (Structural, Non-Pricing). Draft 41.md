@@ -514,6 +514,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-14 — Cross-referenced the MVP hours-only cost-to-deliver framework** (§9 #1, §12.5): banded hours only, no numeric hours or money; G5 and G7 still blocked. Full record in the Worksheet §12. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-14 — Cross-referenced the owner-approved band-to-hours scale** (§9 #1, §12.5): MVP planning hours excluding legal; no cost in money; G5 and G7 still blocked. Full record in the Worksheet §12.2–§12.4. Still **Not Quotable.** — Claude Code (Opus 5)
 - **2026-09-14 — Cross-referenced the owner-approved hours counting rules** (§12.5): MVP planning totals unchanged; legal excluded; G5 and G7 still blocked. Full record in the Worksheet §12.2. Still **Not Quotable.** — Claude Code (Opus 5)
+- **2026-09-14 — Cross-referenced the meeting-time decision** (§12.5): audit readout and blueprint approval conversations are inside the owner / strategist band; totals unchanged. Full record in the Worksheet §8 #27. Still **Not Quotable.** — Claude Code (Opus 5)
 
 ---
 
@@ -685,3 +686,5 @@ Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
 **MVP band-to-hours scale approved by the owner for internal planning only (2026-09-14):** XS 1–2 · S 3–5 · M 6–10 · L 11–18 hours per role, per engagement. Planning totals, **excluding legal**: the audit-only redirect path runs 13–32 hours and the audit + blueprint path 29–60 hours, depending on data completeness and conditional roles. Legal/compliance stays BLOCKED and outside every total. Not a delivery promise, quote, price or cost in money; one H1/H2 client at a time stays the provisional capacity. G5 and G7 remain blocked. Record: Worksheet §12.2–§12.4. **Not quotable.**
 
 **MVP hours counting rules approved by the owner (2026-09-14):** the planning hours include owner review of AI-assisted output, preparation of M1–M7, internal QA/self-review, one included revision round per output, audit-data review and analysis, and the buyer interview with typed notes. They exclude client waiting time and client-side delays, pre-sale work, legal/compliance review (BLOCKED), tool setup and live connection checks, and anything outside the H1/H2 MVP. The totals are unchanged. Not pricing, a money cost, a quote or a delivery SLA; G5 and G7 remain blocked. Record: Worksheet §12.2. **Not quotable.**
+
+**Meeting time confirmed (2026-09-14):** the audit readout and blueprint approval conversations count inside the owner / strategist hour band. The planning totals are unchanged. Record: Worksheet §12.2, §8 #27. **Not quotable.**

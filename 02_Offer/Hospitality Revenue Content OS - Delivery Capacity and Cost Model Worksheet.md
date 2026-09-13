@@ -406,7 +406,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 24 | Confirm the two §1.5 readings: (1) M7 closes Stage 1 when the MVP stops on a redirect, and appears in Stage 2 only for a limitation or secondary redirect; (2) severity does not gate Stage 2 for the MVP, although `Draft 41` §11.3's unapproved proposal required L3 | Offer (02) | Owner | What Stage 1 and Stage 2 deliver — not G6 |
 | 25 | ~~**Band-to-hours scale for the MVP** (§12.2)~~ ✅ **Decided 2026-09-14:** the scale — XS 1–2 · S 3–5 · M 6–10 · L 11–18 hours per role, per engagement — **and** the counting rules (§12.2), internal MVP planning only | Offer (02) + Operations (08) | Owner | ~~Numeric hours~~ — set · cost-to-deliver in money · G7 |
 | 26 | ~~Confirm the redirect-path bands~~ ✅ **Confirmed 2026-09-14:** audit-only redirect path owner/strategist **M**, delivery QA **XS** | Offer (02) | Owner | ~~Audit-only path hours~~ — set (§12.3) |
-| 27 | Are client meetings other than the buyer interview — the audit readout and blueprint approval conversations — counted in the hour ranges? The approved counting rules do not name them; the totals currently read them as inside the owner band (§12.2) | Offer (02) | Owner | How owner hours are read — not G7 |
+| 27 | ~~Are client meetings other than the buyer interview counted in the hour ranges?~~ ✅ **Decided 2026-09-14:** the audit readout and blueprint approval conversations are included inside the owner / strategist band (§12.2); totals unchanged | Offer (02) | Owner | ~~How owner hours are read~~ — settled |
 
 ---
 
@@ -427,6 +427,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **2026-09-14 — MVP hours-only cost-to-deliver framework added (§12; owner review required).** Hours are expressed **in bands only — no numeric hours.** The repo has no delivery-hours precedent, and `OPERATIONS_CONSTITUTION.md` §7, `PEOPLE_DOCTRINE.md` §8 and `CLAUDE.md` forbid inventing them. Added: a band-to-hours scale left `[OWNER TO SET]`, with proposed counting rules; hours bands per role for the audit-only redirect path and the audit + blueprint path; the analytics M/L rule; legal BLOCKED; an owner-load stack without totals; the one-client provisional capacity warning; and a blank first-delivery actuals table. V1, V9 and G7 updated; new §8 #25 (band-to-hours scale) and #26 (confirm redirect-path bands). **G5 and G7 remain blocked. No money, rates, currency, prices, fees, floors, test figures or quote language.** — Claude Code (Opus 5)
 - **2026-09-14 — Owner-approved band-to-hours scale recorded (internal MVP planning only).** §12.2 filled: XS 1–2 · S 3–5 · M 6–10 · L 11–18 hours per role, per engagement. §8 #26 confirmed: audit-only redirect path owner/strategist M, delivery QA XS. §12.3 converted to hours; §12.4 adds planning totals **excluding legal** — audit-only redirect path 13–22 hours with complete minimum data or 18–30 hours with messy data or no revenue by channel (up to 32 if scope changes); audit + blueprint path 29–48 or 34–56 hours (up to 60 with both conditional roles). Legal/compliance stays BLOCKED and outside every total. One-client-at-a-time capacity warning kept. **Still to confirm:** the proposed counting rules (§8 #25). V1, V9, G7, §12.1 and §12.6 updated. **Not a delivery promise, quote, price or cost in money; G5 and G7 still blocked. No currency, rates, fees, floors or test figures.** — Claude Code (Opus 5)
 - **2026-09-14 — Owner-approved hours counting rules recorded (internal MVP planning only).** §12.2's proposed rules replaced by the approved ones. **Included:** owner review of AI-assisted output, preparation of M1–M7, internal QA/self-review, one included revision round per output, audit-data review and analysis, buyer interview time and typed notes. **Excluded:** client waiting time, client-side delays, pre-sale/sales work, legal/compliance review (BLOCKED, not estimated), tool setup and live connection checks, work outside the H1/H2 MVP. §8 #25 marked fully decided; §12.4 confirms the totals use these rules (figures unchanged); §12.6 updated. New §8 #27 flags that the audit readout and blueprint approval conversations are not named — the totals read them as inside the owner band. **G5 and G7 still blocked. Not pricing, a money cost, a quote or a delivery SLA.** — Claude Code (Opus 5)
+- **2026-09-14 — §8 #27 decided (owner decision, hours meaning only).** The audit readout and blueprint approval conversations are **included inside the owner / strategist hour band** for the H1/H2 MVP, confirming the reading §12.2 had recorded. §12.2's table gains the row, its flagged reading becomes a decision, and §12.6 is updated. **§12 totals unchanged** (audit-only redirect path 13–32 hours; audit + blueprint path 29–60 hours, excluding legal). Legal stays excluded and BLOCKED; G5 and G7 still blocked. **Not a delivery SLA, pricing, money cost, quote or public-facing statement.** — Claude Code (Opus 5)
 
 ---
 
@@ -681,11 +682,12 @@ V1's unit ("hours or effort units") allows hours to be recorded, but **no source
 | One included revision round per client-facing output (§1.3) | Legal / compliance review — **BLOCKED, not estimated** |
 | Audit-data review and analysis | Tool setup and live connection checks (§5.1) |
 | Buyer interview time and typed notes (MD7) | Any work outside the H1/H2 MVP scope |
+| Audit readout and blueprint approval conversations — inside the owner / strategist band (§8 #27) | |
 
 **Readings recorded with the approval:**
 - **Hours are effort, not calendar duration.** Waiting time and client-side delays sit outside them; audit duration is still open (`Draft 41` §9 #13).
 - **Extra revision rounds are outside the ranges.** Only the one included round is counted, so any owner-approved exception (§1.3) adds hours on top.
-- **Flagged, not decided — client meetings other than the buyer interview.** The approved list names the buyer interview but not the audit readout or blueprint approval conversations, which sit in the owner role (§10.3). The earlier proposal counted client calls. *Until confirmed, the totals read them as inside the owner band, as §10.3 does* (§8 #27).
+- ✅ **Decided 2026-09-14 — client meetings other than the buyer interview** (§8 #27): the audit readout and blueprint approval conversations are **included inside the owner / strategist hour band**, as §10.3 already assumed. The §12 totals are unchanged.
 
 ### 12.3 Hours by role and path
 
@@ -742,7 +744,7 @@ The first real MVP delivery is the only source of real hours this repo will have
 
 | Item | Result |
 |---|---|
-| **Hours-only cost-to-deliver** | ✅ **Planning hours set for the MVP** — owner-approved scale (2026-09-14); both paths in hours, **excluding legal** (§12.3–§12.4), under owner-approved counting rules (§12.2). One clarification open: client meetings other than the buyer interview (§8 #27) |
+| **Hours-only cost-to-deliver** | ✅ **Planning hours set for the MVP** — owner-approved scale (2026-09-14); both paths in hours, **excluding legal** (§12.3–§12.4), under owner-approved counting rules (§12.2), with the audit readout and blueprint approval conversations counted inside the owner / strategist band (§8 #27) |
 | **Cost in money** | ❌ **Not drafted** — no rate, cost or currency. Converting hours to money needs a cost basis that is not set here, and tool costs are unknown (§5.2) |
 | **G2** | ◐ Unchanged — blocked only by legal |
 | **G5** | ❌ Unchanged — no legal review path (§11) |
