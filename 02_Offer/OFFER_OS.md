@@ -351,6 +351,7 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 - 2026-09-13 — **Provisional MVP tool choices recorded** (§8): worksheet gate G4 now passed for MVP tool-category identification only; costs, vendors, legal/privacy approval and live checks still open; G5 still blocked. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 - 2026-09-14 — **MVP commercial shape recorded** (§8): diagnostic-first, two-stage, audit-gated; worksheet gate G6 passed for the H1/H2 MVP only. G2 and G5 still blocked by the legal review path. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 - 2026-09-14 — **Legal/privacy review packet prepared** (Hospitality Revenue Content OS H1/H2 MVP; worksheet §11): client data, tools and seven contract and review questions for counsel. **Not a review** — G5 stays blocked (counsel named, letters unsigned, no drafted scope for template review or the sub-processor register); G2 still blocked only by legal. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
+- 2026-09-14 — **MVP hours-only cost-to-deliver framework drafted** (Hospitality Revenue Content OS; worksheet §12): hours in bands only — **no numeric hours**, because no delivery-hours precedent exists and Operations/HR doctrine forbids inventing them; the owner is to set a band-to-hours scale. No money, rates or prices; G5 and G7 still blocked. Registry table untouched; still Not Quotable. — Claude Code (Opus 5)
 
 ## 16. Memory / Feedback Loop / Cadence
 
