@@ -141,6 +141,14 @@ test("registry: loads every agent; the legacy migration is complete", () => {
   assert.equal(skipped.length, 0, `migration complete: expected 0 legacy specs, got ${skipped.length}: ${skipped.join(", ")}`);
   assert.equal(agents.get("finance-cfo-agent").execution, "finos-plugin");
   assert.equal(agents.get("finance-treasury-agent").risk_class, 4);
+  // A static success event on an agent whose verdict can be negative announces a result
+  // that never happened. Until the runtime has conditional emits, the pricing analyst
+  // declares none (02_Offer/OFFER_OS.md §12).
+  assert.deepEqual(
+    agents.get("offer-pricing-floor-analyst").emits,
+    [],
+    "offer-pricing-floor-analyst must not statically emit OFFER_PRICED",
+  );
 });
 
 test("schema: join trigger requires 2+ distinct events", () => {

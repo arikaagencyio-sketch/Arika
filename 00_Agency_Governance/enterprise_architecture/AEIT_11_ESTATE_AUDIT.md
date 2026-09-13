@@ -1,8 +1,8 @@
 # AEIT_11 — Estate Audit
 
-**Version:** v0.2.1
-**Measured:** 2026-08-28 (re-measured the same day, after owner item 32b)
-**Re-verified:** 2026-09-12 — gate re-run, all six checks pass, **no drift in 15 days**
+**Version:** v0.2.2
+**Measured:** 2026-08-28 (re-measured the same day, after owner item 32b); **re-measured 2026-09-13** after `offer-pricing-floor-analyst`'s static `OFFER_PRICED` emit was removed
+**Re-verified:** 2026-09-13 — gate re-run after the change, all checks pass; four counts moved by one each, as predicted (§9 v0.2.2)
 **Owner:** Agency Governance (00)
 **Status:** Measurement. Re-runnable — `python 00_Agency_Governance/enterprise_architecture/estate_event_gate.py`
 **Standard:** [`AEIT_11_RUNTIME_TRUTH_STANDARD.md`](AEIT_11_RUNTIME_TRUTH_STANDARD.md)
@@ -18,9 +18,9 @@
 | | Measured |
 |---|---|
 | Agents | **115**, across 20 departments |
-| `emits` declarations | **201** (**195** distinct event names; 4 events have more than one emitter) |
+| `emits` declarations | **200** (**194** distinct event names; 4 events have more than one emitter) |
 | Event subscriptions | **184** (**145** distinct event names) |
-| Distinct events in the estate | **269** |
+| Distinct events in the estate | **268** |
 | Agents that have ever produced a dated execution record | **6** |
 
 **Test:** parse every `.claude/agents/*.md` frontmatter; count `emits:` (both the block form and the inline `[A, B]` form) and every `on:` under `triggers:`. Cross-reference. Count records in every declared `memory_stream`.
@@ -30,7 +30,7 @@
 | | Events | Reality state | Why |
 |---|---|---|---|
 | **Both ends named** | **71** (16 cross-department) | `CONNECTED` | An emitter and a subscriber both name it |
-| **Emitter, no subscriber** | **124** | `DESIGNED` | Specified; nothing consumes it |
+| **Emitter, no subscriber** | **123** | `DESIGNED` | Specified; nothing consumes it |
 | **Subscriber, no emitter** | **74** | see §3 | Something waits; nothing produces |
 
 **No edge in the estate is `LIVE`.** `arika-runtime/src/executor.ts` returns `emitted: spec.emits ?? []` and never imports the event bus; `publish()` has exactly one call site, `webhook-server.ts`, and it is inbound. **Re-verified 2026-08-28 by reading the file, not by citing the earlier finding** — R2: a state is never inherited.
@@ -186,7 +186,7 @@ Each is out by three in the same direction, and **196 is neither the declaration
 
 | # | Check | Protects against |
 |---|---|---|
-| 0 | **Parser integrity** — every agent must yield at least one parseable `emits` | A block-only regex reading inline `emits: [A, B]` as zero and reporting a **clean estate**. *This happened during this audit* — see below. |
+| 0 | **Parser integrity** — every agent must yield at least one parseable `emits`, or declare `emits: []` explicitly (listed by name on every run) | A block-only regex reading inline `emits: [A, B]` as zero and reporting a **clean estate**. *This happened during this audit* — see below. |
 | 1 | Every orphaned wait is classified (R7) | A new hole appearing and going unnamed |
 | 2 | No stale register entries | The register describing a repo that moved on |
 | 3 | No `producer_unassigned` still marked UNCLASSIFIED | A hole parked instead of ruled on |
@@ -219,6 +219,8 @@ A **second** gate covers the observability store — [`01_Sector/contracts/skill
 **Only 2b touches the runtime, and it is the one that must come first.** Making the estate event-driven is one change to `executor.ts` — **and taking it before 2b would hang the process.** Wiring `publish()` today would fire 184 subscriptions that have never run once, into 9 waits nobody owns, through a bus with no cycle detection and 3 loops that do not terminate.
 
 ## 9. Changelog
+
+- **v0.2.2 (2026-09-13) — one unsafe static emit removed, and check 0 taught the difference between "emits nothing" and "parsed nothing".** `offer-pricing-floor-analyst` declared `emits: [OFFER_PRICED]` on every result. The Hospitality negative pricing-floor test returned `floor_check: insufficient_data` — a result that, the moment `executor.ts` publishes, would have announced a priced offer that was never priced. The spec now declares `emits: []`, and `OFFER_OS.md` §12 records the conditional rule (`OFFER_PRICED` only on `above_floor` / `at_floor`, once conditional emits exist). **Removing the emit tripped check 0 by design:** the parser-integrity check could not tell a deliberate empty declaration from a missed parse. Check 0 now accepts an explicit `emits: []`, **lists every such agent by name on each run**, and still fails an agent with no parseable `emits`. **Falsified the same day** against five fake agents in a temporary directory: `[]` and `[ ]` accepted as declared-none; a missing `emits` line still failed; inline and block forms still parsed. **Counts were predicted before the run and confirmed by it:** declarations 201 → **200**, distinct emitted 195 → **194**, distinct events 269 → **268**, emitter-only 124 → **123**. `OFFER_PRICED` had one emitter and no subscriber, so subscriptions (184), connected edges (71) and orphaned waits (74) are unchanged. Dates are the gate's own `today` line. ⚠️ **Not re-measured in this change — §1's execution-record count and §5's `LIVE` axis are now stale:** `02_Offer/_memory/runtime.jsonl` exists with 5 manual records from 3 Offer agents (2026-09-13), so "6 of 115", "4 of 20 exist" and "12 executions" understate the estate. — Claude Code (Opus 5)
 
 - **v0.2.1 (2026-09-12) — re-verified, and a date defect corrected inside the document that defines the rule against them.** Re-ran the gate 15 days after the measurement: **all six checks pass, nothing has drifted.** 🔴 **But every date in v0.1 and v0.2 said `2026-08-29`, and the work was done on `2026-08-28`** — file mtimes 19:16–19:21, committed 19:22:31. **Nothing happened on the 29th.** 23 occurrences across 9 files, all corrected. The date was never measured; it was assumed from the previous session and then repeated — *the same shape as the `196` that sat in three files, and the third time this audit has caught itself.* **R1 does not exempt a date:** if you write one, name what you would read to prove it — here, `ls -l` and `git log -1 --format=%cd`. The gate now prints the measurement date beside today's and **warns past 30 days**, so a document going stale is visible from the exit line rather than from an audit. 🔴 **Pulling that thread found the worse version one layer down** (§5.1): **8 of the 14 skill execution records are timestamped up to 17.3 hours after the log was last written** — and a dated execution record is `AEIT_11`'s named test for `LIVE`, so a fabricated date there does not weaken the evidence, it removes it. Grandfathered rather than rewritten (an append-only log you edit is not evidence) and fenced by a second gate, [`skill_run_gate.py`](../../01_Sector/contracts/skill_run_gate.py). — Claude Code (Opus 5)
 

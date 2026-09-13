@@ -35,7 +35,10 @@ output_schema:
     floor_check: { type: string, enum: [above_floor, at_floor, below_floor, insufficient_data] }
     variance_notes: { type: array, items: { type: string } }
 memory_stream: 02_Offer/_memory/runtime.jsonl
-emits: [OFFER_PRICED]
+# No static emit. A static OFFER_PRICED would announce a priced offer on an
+# insufficient_data or below_floor result. It returns only as a CONDITIONAL emit
+# (above_floor / at_floor) once the runtime supports one - 02_Offer/OFFER_OS.md §12.
+emits: []
 citations:
   - OFFER_OS.md §10 — segmented-mean pricing-floor methodology + first provisional floor (2026-06-30)
 ---

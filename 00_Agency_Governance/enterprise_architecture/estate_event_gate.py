@@ -14,6 +14,11 @@ Checks, in order of what they protect:
                        An `emits: [A, B]` inline list read by a block-only regex
                        silently reports zero edges and a clean estate. That bug
                        happened on 2026-08-28; this check exists because of it.
+                       An agent that genuinely emits nothing must say so with an
+                       explicit `emits: []`. That is accepted, and listed by name on
+                       every run, so "declared none" can never hide a missed parse.
+                       Added 2026-09-13 for offer-pricing-floor-analyst, whose static
+                       OFFER_PRICED announced a priced offer on results that priced nothing.
   1  ORPHAN REGISTER   every event an agent waits on that NO agent emits must be
                        classified in estate-event-register.json (AEIT_11 R7).
   2  NO STALE ENTRIES  a registered orphan that has since gained an emitter must be
@@ -42,13 +47,15 @@ import io, os, re, sys, glob, json, datetime, collections
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 REG  = os.path.join(os.path.dirname(__file__), "estate-event-register.json")
 DOC  = os.path.join(os.path.dirname(__file__), "AEIT_11_ESTATE_AUDIT.md")
-BASELINE = {"agents": 115, "emit_declarations": 201, "emit_distinct": 195,
-            "subscriptions": 184, "sub_distinct": 145, "union_distinct": 269,
-            "both_ends": 71, "emit_no_sub": 124, "sub_no_emit": 74}
+# Re-measured 2026-09-13: offer-pricing-floor-analyst's static OFFER_PRICED removed
+# (one emitter, no subscriber) - declarations, distinct emits, union and emit-only each -1.
+BASELINE = {"agents": 115, "emit_declarations": 200, "emit_distinct": 194,
+            "subscriptions": 184, "sub_distinct": 145, "union_distinct": 268,
+            "both_ends": 71, "emit_no_sub": 123, "sub_no_emit": 74}
 
 
 def parse():
-    emit, sub, dept, zero = collections.defaultdict(list), collections.defaultdict(list), {}, []
+    emit, sub, dept, zero, none = collections.defaultdict(list), collections.defaultdict(list), {}, [], []
     for a in sorted(glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md"))):
         n = os.path.basename(a)[:-3]
         s = io.open(a, encoding="utf-8").read()
@@ -61,14 +68,18 @@ def parse():
             for e in re.findall(r"-\s+([A-Za-z_][A-Za-z0-9_]*)", mb.group(1)):
                 emit[e].append(n); got += 1
         mi = re.search(r"^emits:\s*\[([^\]]*)\]", fm, re.M)
+        declared_none = False
         if mi:
-            for e in [x.strip() for x in mi.group(1).split(",") if x.strip()]:
+            names = [x.strip() for x in mi.group(1).split(",") if x.strip()]
+            for e in names:
                 emit[e].append(n); got += 1
+            declared_none = not names
         if got == 0:
-            zero.append(n)
+            # An explicit `emits: []` is a declaration; no parseable emits at all is a fault.
+            (none if declared_none else zero).append(n)
         for e in re.findall(r"^\s+on:\s*([A-Za-z_][A-Za-z0-9_]*)", fm, re.M):
             sub[e].append(n)
-    return emit, sub, dept, zero
+    return emit, sub, dept, zero, none
 
 
 def check_audit_prose(measured, entries, fail):
@@ -168,7 +179,7 @@ def check_freshness(reg, warn):
 
 def main():
     fail, warn = [], []
-    emit, sub, dept, zero = parse()
+    emit, sub, dept, zero, none = parse()
     n_agents = len(glob.glob(os.path.join(ROOT, ".claude", "agents", "*.md")))
 
     if zero:
@@ -232,6 +243,7 @@ def main():
     print("  re-entrant edges: %d recorded, of which %d would NOT terminate"
           % (len(kr.get("pure_nonterminating", [])) + len(kr.get("shared_topic", [])),
              len(kr.get("pure_nonterminating", []))))
+    print("  explicit `emits: []` (declared none): %s" % (", ".join(none) if none else "none"))
     print("  %s%s" % (fresh_line, "" if age is None else "  (%d days)" % age))
     print()
     for w in warn:
