@@ -50,7 +50,7 @@
 **Why it is blocked from quotation.**
 1. **Phase 11 is BLOCKED** on five missing inputs: cost-to-deliver, delivery capacity, owner-approved price band, owner-approved audit-fee credit policy, proof-generation method (§5).
 2. **No proof exists.** `Proof Status = Proof required — named`; no Arika case study exists [SEED].
-3. **No pricing segmentation exists for hotels.** The department's provisional floors (`OFFER_OS.md` §10) are ARR-band segmented for B2B SaaS; the seed says hospitality pricing segments by "property-size / ARR band" but no hospitality band has been defined (§9).
+3. **No hotel pricing floors exist.** Hotel segmentation is approved for **internal pricing design only** (H1/H2/H3 — Owner Decision 71, 2026-09-13, §11.1), but no floor has been computed for any band, and the department's provisional floors (`OFFER_OS.md` §10) are ARR-band segmented for B2B SaaS and must not be applied (§11.4).
 4. **Every sizing and outcome number in the test brief is a TEST_FIXTURE**, and they conflict with the seed and the plugin (§2.3).
 5. **`requiresHumanApproval` is true** on both the orchestrator and OEOS runs — anything quoted, sold or published needs human sign-off.
 
@@ -350,7 +350,7 @@ Each phase is **structurally complete at design level only** — not validated a
 | 5 | **Proof-generation method** | How audit findings and outcomes become approved, consented case evidence | Owner; Client Success (07) advocacy; Legal (10) for claims | **Missing** |
 
 **Additional pricing blockers surfaced in this file:**
-- **Hospitality pricing segmentation variable** — `OFFER_OS.md` §10's provisional floors are ARR-band (B2B SaaS) segmented; no property-size or revenue band exists for hotels. Applying the existing floors to this offer would be a category error.
+- **Hotel pricing floors do not exist.** The segmentation variable is now decided for internal design — H1/H2/H3 (§11.1, Owner Decision 71) — but no floor has been computed for any H-band, and `OFFER_OS.md` §10's provisional floors are ARR-band (B2B SaaS) segmented. Applying them to this offer would still be a category error. **Price floors remain blocked.**
 - **Commercial shape** — seed "audit fee + monthly retainer" vs run "entry build + governance retainer" (§2.3).
 
 ### 5.2 Ladder structure — no figures
@@ -474,8 +474,8 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 | 3 | **Owner-approved price band** — audit, entry, retainer | Phase 11 | Owner | Proposal; Agreement |
 | 4 | **Owner-approved audit-fee credit policy**, including whether credit applies on redirect | Risk reversal; G5 | Owner | Proposal |
 | 5 | **Proof-generation method** | QG2; Referral; positioning proof | Owner; Client Success (07); Legal (10) | Any claim |
-| 6 | **Hospitality pricing segmentation variable** (property size vs revenue band) | Using §10's floor method at all | Owner | Pricing floor |
-| 7 | **ICP reconciliation** — 30–150 vs 50–150 vs 30–100 rooms; <30% vs 15–25% direct share | Qualification; targeting | Owner + Sector (01) | Qualification |
+| 6 | ~~Hospitality pricing segmentation variable (property size vs revenue band)~~ ✅ **Decided 2026-09-13 (Owner Decision 71): H1/H2/H3 room/property bands, for internal pricing design only** | Using §10's floor method at all | Owner | Hotel floors — none exist yet |
+| 7 | **ICP reconciliation** — 30–150 vs 50–150 vs 30–100 rooms; <30% vs 15–25% direct share. *Narrowed, not closed (Decision 71): the H-bands approved for internal design span 30–250 rooms; the launch ICP is still unreconciled* | Qualification; targeting | Owner + Sector (01) | Qualification |
 | 8 | **Transformation metric** — per-client target definition and seasonally comparable baseline | Strategy; reporting | Owner | Strategy; any outcome language |
 | 9 | **Definition of "dominant"** and the mixed-finding rule | QG1; standardization | Owner | Audit verdicts at scale |
 | 10 | **Redirect destinations** for (c), (d) and technical (b) — none is engineered | §3 routes | Owner; Offer (02) intake | Honest redirects |
@@ -496,6 +496,7 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 - **2026-09-13 — Created from the structural OEOS test; remains non-pricing.** Built from the successful `offer-oeos-engineer` structural run (`02_Offer/_memory/runtime.jsonl` line 4, 2026-09-13T17:27:40Z; the first run with the corrected top-level `requiresHumanApproval: true`), routed by `offer-orchestrator`'s enriched re-intake (line 2, `needs_more_seed_data`). Expanded the run's 11 non-pricing phase summaries into purpose / decisions / inputs / deliverables / gates / risks, the full 17-stage journey, a role-based delivery model and an eight-gate QC system, using `HOSPITALITY_PLUGIN.md` and `OFFER_OS.md` §3 as context. **Phase 11 is BLOCKED** on cost-to-deliver, delivery capacity, owner-approved price band, owner-approved audit-fee credit policy, and proof-generation method. **Surfaced, not resolved:** three-way ICP / direct-share conflict (seed vs plugin vs test fixture); no engineered redirect route for pricing/rate-strategy or tech-stack findings; §10's pricing floors are B2B-SaaS ARR-band and have no hospitality segmentation. The TEST_FIXTURE values were supplied for the test run and are not real. Status unchanged: **Working Hypothesis / Not Quotable**, not in the registry, no event published, `offer-pricing-floor-analyst` not run. — Claude Code (Opus 5)
 - **2026-09-13 — Added §11 Commercial Test Model (owner review required).** Proposed hotel H-band segmentation (H1/H2/H3), a leakage severity layer (L1/L2/L3), price-free commercial rules for audit / entry build / governance retainer, and the pricing-floor agent test contract (B2B SaaS ARR floors barred; expected `insufficient_data`). Nothing adopted; no prices; Phase 11 still BLOCKED. — Claude Code (Opus 5)
 - **2026-09-13 — Added §12 test record: Hospitality Sector → Offer Control Test.** COMPLETE for control-flow validation (manual runs, log lines 1–5, no events published); NOT COMPLETE for commercial launch or quoting. Records the eight validated steps, the two runtime defects fixed on the way, what the test does not prove, nine remaining blockers, and the next owner decision (item 71). Documentation only. — Claude Code (Opus 5)
+- **2026-09-13 — Owner Decision 71 recorded: H1/H2/H3 approved for internal pricing design only.** §11.1 marked approved (H3 only if there is no central brand.com / direct-booking team); §11.2's L1–L3 approved as a separate design axis (L3 knowable only after the audit); §11.5 #1 decided and #4 deferred (no test prices until cost-to-deliver and delivery capacity are defined); §1, §5.1, §9 #6–#7 and §12.4–§12.5 updated to match. **Not approved:** public pricing, test price figures, quotability. **Price floors remain blocked** — no hotel floor exists. Status unchanged: **Working Hypothesis / Not Quotable.** — Claude Code (Opus 5)
 
 ---
 
@@ -503,25 +504,29 @@ Gateway audit (one-time) → Entry (Direct Booking Engine) → Governance / opti
 
 > 🧪 **TEST MODEL ONLY · NOT QUOTABLE · NOT APPROVED PRICING · FOR PRICING-FLOOR AGENT TEST ONLY**
 >
-> Proposed by Claude Code on 2026-09-13 for owner review. **Contains no prices and no amounts.** Every band, severity level and rule below is a proposal until the owner confirms it (§11.5). It does not change §3's diagnostic gate and does **not** unblock Phase 11 (§5).
+> Proposed by Claude Code on 2026-09-13 for owner review. **Contains no prices and no amounts.**
+>
+> ✅ **Owner Decision 71 (2026-09-13):** the H1/H2/H3 segmentation (§11.1) and the L1–L3 severity axis (§11.2) are **approved for INTERNAL PRICING DESIGN ONLY** — **not** for public pricing, **not** for test price figures, and **not** as a quotable structure. Everything else in this section remains a proposal (§11.5). It does not change §3's diagnostic gate and does **not** unblock Phase 11 (§5): **price floors remain blocked, and the offer remains Working Hypothesis / Not Quotable.**
 
-### 11.1 Hotel segmentation — H-bands (proposed)
+### 11.1 Hotel segmentation — H-bands (✅ owner-approved for internal pricing design only — Decision 71, 2026-09-13)
 
-Proposed as this offer's segmentation variable in place of the B2B SaaS ARR bands (§9 #6), and as the basis for reconciling the ICP conflict (§2.3, §9 #7).
+**Approved** as this offer's segmentation variable **for internal pricing design only**, in place of the B2B SaaS ARR bands (§9 #6). **Not approved:** public pricing, test price figures, or any quotable use. **No hotel-specific floors exist**, so no band carries a price or a floor. The bands remain the basis for reconciling the ICP conflict (§2.3, §9 #7), which is still open.
 
 | Band | Size | Buying process | Defining conditions |
 |---|---|---|---|
 | **H1 — Small independent property** | 30–60 rooms | Owner/GM-led | Low internal marketing capacity · OTA dependency problem visible |
 | **H2 — Mid-size independent property** | 61–120 rooms | GM plus Revenue Manager or Sales/Marketing lead | Active OTA dependency · underdeveloped direct-booking engine |
-| **H3 — Larger independent or small group** | 121–250 rooms, or 2–5 properties | Multiple stakeholders | Direct-booking upside must be validated by audit |
+| **H3 — Larger independent or small group** | 121–250 rooms, or 2–5 properties | Multiple stakeholders | Direct-booking upside must be validated by audit · **only if there is no central brand.com / direct-booking team** (owner condition, Decision 71) |
 
-**Points the owner should weigh:**
-- **The bands are wider than every existing ICP.** H1–H3 span 30–250 rooms; the seed is 30–150, the plugin pilot 30–100, the test fixture 50–150. Confirming the bands also means deciding whether H3 is in the launch ICP.
-- **H3 small groups vs the anti-ICP.** The seed excludes chains with a central brand.com team. Proposed: a 2–5 property group qualifies as H3 only if it has no such team.
+**Notes on the bands** (status marked per point):
+- **The bands are wider than every existing ICP.** H1–H3 span 30–250 rooms; the seed is 30–150, the plugin pilot 30–100, the test fixture 50–150. Approving the bands for internal design (Decision 71) did **not** decide whether H3 is in the launch ICP — still open.
+- **H3 vs the anti-ICP — ✅ decided (Decision 71).** The seed excludes chains with a central brand.com team. Owner condition: a property or group is H3 **only if there is no central brand.com / direct-booking team**.
 - **H3 groups need per-property archetypes.** Plugin P2 rules a `Hospitality Group` by inheritance from its members' archetypes, and that union operator is unimplemented — so each property in an H3 group is profiled on its own.
 - **Proposed tie-break.** Room count (or property count) sets the band; the profile conditions are recorded at Qualification. Where they disagree — e.g. a 50-room property with a full revenue team — the band stays room-based and the mismatch is noted.
 
-### 11.2 Leakage severity layer (proposed)
+### 11.2 Leakage severity layer (✅ approved as a separate internal pricing-design axis — Decision 71, 2026-09-13)
+
+Approved as a **separate** pricing-design axis alongside the H-bands, for internal design only. **L3 is only knowable after the audit**, so it can never scope or price the audit that produces it. The L2 and L3 thresholds remain undefined.
 
 | Level | Definition | Can be known | Proposed consequence |
 |---|---|---|---|
@@ -568,11 +573,11 @@ Proposed as this offer's segmentation variable in place of the B2B SaaS ARR band
 
 ### 11.5 Owner decisions required before pricing test
 
-1. **Confirm H1/H2/H3 segmentation — or replace it.**
-2. **Choose the audit commercial shape:** paid standalone audit vs audit credited into build.
-3. **Choose the entry commercial shape:** entry build + retainer vs audit + monthly retainer.
-4. **Approve whether test prices may be used for internal agent testing.**
-5. **Define who owns delivery capacity.**
+1. ~~Confirm H1/H2/H3 segmentation — or replace it.~~ ✅ **Decided 2026-09-13 (Decision 71): approved for internal pricing design only**, with the H3 no-central-team condition; L1–L3 approved as a separate design axis.
+2. **Choose the audit commercial shape:** paid standalone audit vs audit credited into build. — *open*
+3. **Choose the entry commercial shape:** entry build + retainer vs audit + monthly retainer. — *open*
+4. ~~Approve whether test prices may be used for internal agent testing.~~ ⏸ **Not approved yet (Decision 71):** no test prices until cost-to-deliver and delivery capacity are defined — reopens then.
+5. **Define who owns delivery capacity.** — *open*
 
 These map onto §9 rather than adding to it: #1 answers §9 #6 and part of #7 · #2 is part of §9 #4 · #3 is §9 #12 · #5 is part of §9 #2 · **#4 is new.**
 
@@ -616,7 +621,7 @@ Both recorded in `arika-runtime/DECISIONS.md`.
 
 ### 12.4 Known remaining blockers
 
-- Hotel pricing segmentation (H1/H2/H3) is only a test model — not approved
+- ~~Hotel pricing segmentation (H1/H2/H3) is only a test model — not approved~~ → ✅ approved for **internal pricing design only** (Owner Decision 71, 2026-09-13); **not** approved for public pricing, test prices or quoting
 - No hotel-specific pricing floors exist
 - No cost-to-deliver model
 - No delivery capacity or delivery owner
@@ -631,3 +636,5 @@ Both recorded in `arika-runtime/DECISIONS.md`.
 > **Owner must decide whether to approve the H1/H2/H3 hotel segmentation model for internal pricing design, and whether to supply test prices or wait for real cost/deal data.**
 
 Rolled up as `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 71.
+
+**Partially decided 2026-09-13 (Owner Decision 71):** H1/H2/H3 approved for **internal pricing design only**; test prices **not** approved until cost-to-deliver and delivery capacity are defined. **Still open:** test prices · cost-to-deliver · delivery capacity · price band. Item 71 stays open, narrowed.

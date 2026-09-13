@@ -87,12 +87,13 @@ These will close on their own as the agency operates. No action needed now; they
 
 *Added individually at the owner's request. Not part of the frozen 2026-06-30 sort above.*
 
-### Item 71 — Hospitality Revenue Content OS: hotel segmentation and test prices **[DECISION]**
+### Item 71 — Hospitality Revenue Content OS: hotel segmentation and test prices **[DECISION — PARTIALLY DECIDED 2026-09-13]**
 **The question:** Approve the H1/H2/H3 hotel segmentation — H1 30–60 rooms · H2 61–120 rooms · H3 121–250 rooms or 2–5 properties — for internal pricing design, or not? And supply test prices, or wait for real cost-to-deliver and deal data?
 **My recommendation:** Approve H1/H2/H3 **for internal design only**. **Do not supply test prices** until a cost-to-deliver model and delivery capacity exist.
 **Why:** It prevents fake pricing while letting the offer architecture keep maturing. The Sector → Offer control test is complete for control flow, and the pricing agent correctly returned `insufficient_data` because no hotel floor exists — a test price entered before cost and capacity exist would have nothing real to be checked against, so it would validate a guess.
 **Blocks:** hospitality-specific pricing floors · the pricing agent's positive test · registry promotion · any quotable offer.
-**Your decision:** *(open)*
+**Your decision (2026-09-13, Owner Decision 71):** ✅ Approve H1/H2/H3 for **internal pricing design only** — matches the recommendation — with one condition added: **H3 applies only if there is no central brand.com/direct-booking team.** L1/L2/L3 may be used as a separate design axis (L3 knowable only after the audit). ❌ No public pricing; not quotable. ⏸ **No test prices** until cost-to-deliver and delivery capacity are defined.
+**Still open:** test prices · cost-to-deliver · delivery capacity · price band.
 **Canonical record:** `OWNER_INPUT_NEEDED.md` item 71 · `02_Offer/OEOS - Hospitality Division - Hospitality Revenue Content OS (Structural, Non-Pricing). Draft 41.md` §11–§12
 
 ---
@@ -102,3 +103,4 @@ These will close on their own as the agency operates. No action needed now; they
 - 2026-06-30 — Created at owner's request, as a working action-companion to `OWNER_INPUT_NEEDED.md`. Sorted all 18 open tracker items into [DECISION] (13 items, with reasoned recommendations) vs. [WAITING ON DATA] (5 items, no action possible). — Claude Code (Sonnet 4.6)
 - 2026-06-30 — Owner made 2 new real decisions outside this worksheet's original 18 items, as part of go-live preparation: **Zoho CRM** (replacing the already-resolved item 5/HubSpot) paired with **Zoho Books** (closing item 25), and **Claude (Anthropic API)** as the agency-standard LLM (closing items 27 and 28). See `OWNER_INPUT_NEEDED.md`'s Changelog "Zoho/Claude entry" and the new `00_Agency_Governance/GO_LIVE_CHECKLIST.md`. — Claude Code (Sonnet 4.6)
 - 2026-09-13 — **Added item 71 (Offer) as a single post-freeze [DECISION] entry**, at the owner's request: approve H1/H2/H3 hotel segmentation for internal design only; no test prices until cost-to-deliver and delivery capacity exist. **Not a regeneration** — the banner, tally and all other sections stay frozen at 2026-06-30. — Claude Code (Opus 5)
+- 2026-09-13 — **Item 71 partially decided** (Owner Decision 71): H1/H2/H3 approved for internal pricing design only, matching the recommendation, with the H3 no-central-team condition added; no test prices until cost-to-deliver and delivery capacity are defined. Still open: test prices, cost-to-deliver, delivery capacity, price band. — Claude Code (Opus 5)
