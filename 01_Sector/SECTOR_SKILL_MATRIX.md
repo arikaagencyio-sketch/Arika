@@ -1,6 +1,6 @@
 # Sector — Skill Matrix
 
-**Department:** Sector (01) · **Version:** v0.8 (2026-08-28) · **Status:** Gate 3 — **Phases 1–3 built. The Gate F falsification test has run and passed, with a stated qualification.** `S01`–`S06` and `S09` are live at `.claude/skills/` and have executed against Notion. S07, S08, S10–S12 remain contract-only.
+**Department:** Sector (01) · **Version:** v0.9 (2026-09-13) · **Status:** Gate 3 — **Phases 1–4 built.** **Ten of the twelve skills exist at `.claude/skills/` (S01–S10).** Nine have executed against Notion; **S08 is built and has never run.** Only **S11 and S12** remain contract-only. The Gate F falsification test has run three times and passed, with a stated qualification.
 **Reads:** [`SECTOR_WRITE_CONTRACT.md`](SECTOR_WRITE_CONTRACT.md) (the rules) · [`contracts/sector-databases.json`](contracts/sector-databases.json) (the field contracts) · [`SECTOR_DISCOVERY_INVENTORY.md`](SECTOR_DISCOVERY_INVENTORY.md) (why)
 
 > **The architectural law this file implements:** *agents decide what is true; skills decide how that truth becomes a valid database state.* Five Sector agents already exist and remain in scope — none of the twelve skills below duplicates one.
@@ -105,7 +105,7 @@ Registers an external publisher so a signal can be **re-followed**, not merely r
 
 **Must also verify the `Consumers` declaration against the actual relations** — it is a hand-maintained shadow that omits Sub-Sectors, Audience Roles and the DM Registry, and can drift silently (F10).
 
-**Status 2026-08-28 (re-measured).** No longer *"zero sources active"* — S03's first pass registered **4 sources, 2 `active`** (`src_ktb_mkte`, `src_ke_public_holidays`), so tier inheritance is now possible for the first time. **But no signal uses it yet: the `Signals` relation on DB 14 is empty across all 34 DB 7 rows.** Registering a source and inheriting from it are two different steps, and only the first has happened.
+**Status 2026-09-13 (re-measured).** **DB 14 holds 33 rows.** This paragraph previously read *"4 sources, 2 `active`"* — true of S03's **first** pass on 2026-08-24, and already false by the end of that week: two further S03 runs (`bulk-backing`, `kenya-authority-pack`) followed on 2026-08-28 and the count was never revised here. *A status line dated to the first run of three is a changelog entry wearing a status line's clothes.* Tier inheritance became possible on 2026-08-24 and **3 of 34 DB 7 signals now use it**; the other 31 still do not. Registering a source and inheriting from it remain two different steps.
 
 ---
 
@@ -197,7 +197,9 @@ Writes an industry's land-and-expand routing record against the twelve capabilit
 | **Refuses** | An offer name absent from the registry · a price presented as validated rather than hypothesis · re-owning Sales' or Content's artifact |
 | **Runs after** | S01, S02, S04 |
 
-**Its concrete job on existing data:** close the three relations — `Pain Points`, `Buying Triggers / Demand Signals`, `Target Decision-Maker` — that are **empty across all 87 rows**.
+**Its concrete job on existing data:** close the three relations — `Pain Points`, `Buying Triggers / Demand Signals`, `Target Decision-Maker` — that are **empty across all 139 rows**.
+
+> 🔴 **Corrected 2026-09-13 by measurement: DB 8 holds 139 rows, not 87.** The 87 was a `row_count_claimed` in `contracts/sector-databases.json` — the repository's own population record, never a `SELECT COUNT(*)` — and this file repeated it as though it were measured. **A 60% undercount survived four revisions of this document** because every reader inherited it instead of querying it. Now `row_count_verified` with today's date. *This is `AEIT_11` R1 on the smallest possible scale: the claim was cheap to test and nobody tested it.*
 
 ---
 
@@ -280,9 +282,9 @@ Writes the tier classification and the 90-point score for a real company. Delibe
 | **Reads** | `sector-icp-fit` and `sector-signal-scorer` proposals against real firmographics |
 | **Refuses** | A score for a company not in the CRM · a tier without rationale · **a seeded example row** |
 | **Blocked until** | API key + cost governance + Legal posture + an Approval-Matrix row |
-| **Hands off** | `PROSPECT_SCORED` · `ICP_CLASSIFIED` → Sales (05) — **both live, 2 subscribers each** |
+| **Hands off** | `PROSPECT_SCORED` · `ICP_CLASSIFIED` → Sales (05) — both **`CONNECTED`**, 2 subscribers each, **neither with an observed delivery** |
 
-**Two schema defects block it:** DB4 and DB5 carry **no relation to each other** (F4), and `Total Score` is a plain number rather than a formula over its six components (F5). Both must be fixed before S12 can honour its paired-write contract.
+**Two schema defects block it:** DB4 and DB5 carry **no relation to each other** (F4), and `Total Score` is a plain number rather than a formula over its six components (F5). Both must be fixed before S12 can honour its paired-write contract. **Both re-verified live 2026-09-13** — still open, now actioned under owner item 31e.
 
 ---
 
@@ -359,19 +361,21 @@ Two gate vocabularies are in active use and **were mapped to each other nowhere*
 
 Ground truth: [`SECTOR_EVENT_CATALOG.md`](SECTOR_EVENT_CATALOG.md) · [`contracts/event-catalog.json`](contracts/event-catalog.json).
 
-| Event | Emitting skill | Subscribers | State |
-|---|---|---|---|
-| `SECTOR_MAPPED` | S01 | Content (04), Offer (02) | ✅ live |
-| `SECTOR_READINESS_SET` | S07 | Marketing (03) | ✅ live |
-| `ICP_CLASSIFIED` | S12 | Sales (05), ClientPartner (06) | ✅ live |
-| `PROSPECT_SCORED` | S12 | Sales (05), Operations (08) | ✅ live |
-| `CALENDAR_UPDATED` | S04 | Sector (01) only | ⚠️ intra-department |
-| `REGULATORY_CHANGE` | S04 | Sector (01) only | ⚠️ intra-department |
-| `DEMAND_SHIFT` | S04 | — | 🔴 dead |
-| `COMPRESSION_EVENT` | S04 | — | 🔴 dead |
-| `COMPETITOR_MOVE` | S04 | — | 🔴 dead |
+Reality vocabulary: [`AEIT_11`](../00_Agency_Governance/enterprise_architecture/AEIT_11_RUNTIME_TRUTH_STANDARD.md) §2.
 
-**Runtime caveat.** `emits` is declarative metadata — `arika-runtime/src/executor.ts` never calls `eventBus.publish()`. A skill records the event it *would* emit and whether that event has a subscriber. It never asserts a publish happened.
+| Event | Emitting skill | Subscribers | Reality state |
+|---|---|---|---|
+| `SECTOR_MAPPED` | S01 | Content (04), Offer (02) | **`CONNECTED`** |
+| `SECTOR_READINESS_SET` | S07 | Marketing (03) | **`CONNECTED`** |
+| `ICP_CLASSIFIED` | S12 | Sales (05), ClientPartner (06) | **`CONNECTED`** |
+| `PROSPECT_SCORED` | S12 | Sales (05), Operations (08) | **`CONNECTED`** |
+| `CALENDAR_UPDATED` | S04 | Sector (01) only | **`CONNECTED`** — ⚠️ intra-department |
+| `REGULATORY_CHANGE` | S04 | Sector (01) only | **`CONNECTED`** — ⚠️ intra-department |
+| `DEMAND_SHIFT` | S04 | — | **`DESIGNED`** — retired 2026-08-28 (31d) |
+| `COMPRESSION_EVENT` | S04 | — | **`DESIGNED`** — retired 2026-08-28 (31d) |
+| `COMPETITOR_MOVE` | S04 | — | **`DESIGNED`** — retired 2026-08-28 (31d) |
+
+**Runtime caveat — and it is why none of these is `LIVE`.** `emits` is declarative metadata; `arika-runtime/src/executor.ts` never calls `eventBus.publish()`. A verified subscriber earns `CONNECTED`, never `LIVE` — that requires *a dated execution record*, and no Sector event has one. A skill records the event it *would* emit and whether that event has a subscriber. **It never asserts a publish happened.**
 
 ---
 
@@ -384,8 +388,8 @@ Sequenced by what is actually blocked, not by skill number.
 | **1 · Unblock** ✅ **authored 2026-08-24** | S02, S01 | [`.claude/skills/sector-audience-language-mapper/`](../.claude/skills/sector-audience-language-mapper/SKILL.md) · [`.claude/skills/sector-finding-writer/`](../.claude/skills/sector-finding-writer/SKILL.md). **Scope corrected by live measurement (F19):** DB9 is not empty — all four role lenses exist for the one `Target` sub-sector — and DB6 holds one of four. The unblocking work is **three missing DB6 role lenses (Operator, Amplifier, Enabler)**, not a bulk load. |
 | **2 · Make it honest** ✅ **S03 + S04 built and run** | S03, S04 | [`.claude/skills/sector-source-registrar/`](../.claude/skills/sector-source-registrar/SKILL.md). DB 14 went 0 → 4 rows (2 `active`, 2 blocked by expired TLS certs on `.go.ke`). **Three DB 7 signals can now inherit a registered T1 tier; the other seven still cannot.** S04 is the remaining half — it re-tiers the signals against what S03 registered. |
 | **3 · Prove it** ✅ **S05 + S06 + S09 built; F3 fixed; Gate F run** | S05, S06, S09 | Gates E/F. **Gate F passed 2026-08-28** — three validation places, three structurally different calendars — **but on 4 of the 8 steps**, because DB 15 and DB 16 are empty. Re-run when they hold rows. Record: `SECTOR_ACTIVATION_PROTOCOL.md` §3a. |
-| **4 · Commercialise** | S08, S10, S07 | Closes the three empty relations on 87 rows; opens the boundary. |
-| **5 · Generalise & gate** | S11, S12 | S11 after Sector #001 proves universality; S12 after the scraping gate opens. |
+| **4 · Commercialise** ✅ **S07 + S08 + S10 authored 2026-08-28** | S08, S10, S07 | [`sector-taxonomy-registrar`](../.claude/skills/sector-taxonomy-registrar/SKILL.md) · [`sector-offer-router`](../.claude/skills/sector-offer-router/SKILL.md) · [`sector-handoff-packet`](../.claude/skills/sector-handoff-packet/SKILL.md). **S07 and S10 have run; S08 had not, until 2026-09-13.** Closes the three empty relations on **139** rows; opens the boundary. |
+| **5 · Generalise & gate** 🔲 | S11, S12 | **The only two skills that do not exist.** S11 after Sector #001 proves universality (Gate I); S12 after the scraping gate opens **and** F4/F5 are fixed. |
 
 ---
 
@@ -395,6 +399,7 @@ Sequenced by what is actually blocked, not by skill number.
 
 ## 8. Changelog
 
+- **v0.9 (2026-09-13) — the matrix stopped under-reporting its own department.** 🔴 **Three skills were built on 2026-08-28 and this file still called them contract-only sixteen days later.** S07, S08 and S10 all have a `SKILL.md`; S07 and S10 had run. **The defect is directional and that matters** — a department that under-reports what it has sends the next reader to rebuild it, which is how the same thing gets authored twice. **Corrected by measurement, not by memory:** ten skills on disk (S01–S10), **only S11 and S12 genuinely absent**. **Three counts replaced with queried values:** DB 14 `4 → 33` sources (the status line was pinned to the first of three S03 runs), DB 8 **`87 → 139` rows** (a `row_count_claimed` that survived four revisions of this file because every reader inherited it), and the §5 event table migrated off the retired `✅ live` / `🔴 dead` vocabulary onto `AEIT_11`'s five states — **zero Sector events are `LIVE`.** **The class, not the instances, is now gated:** [`contracts/sector_truth_gate.py`](contracts/sector_truth_gate.py) checks the skill inventory against disk in both directions, and went red on exactly these rows before this pass. — Claude Code (Opus 5)
 - **v0.8 (2026-08-28, Gate 3 — PHASE 3 COMPLETE / GATE F RUN):** **S09 `sector-calendar-resolver` authored and run; the Gate F falsification test passed with a stated qualification.** Three validation places, three structurally different calendars: Nairobi **5** signals with **0 of 5** matching its archetype rule, Maasai Mara **4** with **2 of 4**, Diani **5** with **5 of 5**. *Nairobi and Diani both return five and are not the same output* — **volume is not structure**. **But the pass came from 4 of the 8 steps**: DB 15 and DB 16 are empty (verified live), so step 2 (route direction) and step 3 (Destination Profile enrichment) did no work, and step 3 is the one that would most distinguish destinations. The architecture is **not falsified; it is under-tested**, and this pass is provisional until those two tables hold rows. **Six findings the run produced that no reading had.** **RF1 — corrected in place:** §4.1's SELECT scoped geography to the *subtree*, but a `Destination`-level place is a **leaf**, so the literal clause returned **zero signals for Maasai Mara** — an empty calendar with no error. The scope is **ancestor chain ∪ subtree**; signals are inherited downward. **RF2:** the P2 matrix rules on **none** of the five signal types present for `City / Conference Hotel`, and `Travel-Trade` — which **P6 calls dominant for the sector** — appears in no archetype row at all (owner item **31i**). **RF3:** a `T1 — Confirmed` signal with no `Geography` is invisible to every place-scoped resolution. **RF4:** the Timeliness gate fired live — one derived Action Deadline had passed ten days before the run. **RF5:** `Destination Fit` has two defensible readings and under the strict one nothing can pass today (owner item **31h**). **RF6:** a genuinely absent P7 offset was reported unavailable rather than substituted. **S09 wrote nothing, by design** — a resolution is an output, and if it must persist it leaves through S10. — Claude Code (Opus 5)
 - **v0.7 (2026-08-28, Gate 3 — STATE LAYER LIVE):** **S06 `sector-state-distiller` authored and run.** DB 12 has its first row — Hospitality/Kenya — and **the notable result is what it does not contain: all six state selects are empty.** None is derivable from existing rows, and each blank carries its reason in the page body. `Demand Direction` has no demand data (the Kenya signals are **calendar events**, not demand measurements); `Price Pressure` has no ADR source (the OTA finding is about *commission*, a different thing); **`Connectivity / Access` has no aviation source in DB 14 at all** — a source-pack gap, not a research gap; `Competition` needs STR/CoStar-class comp-set data nobody has registered. `Confidence = Low`, because only **3 of 34** DB 7 signals are source-backed and all three are calendar events — *three date-certain events do not describe a market's condition*. **The no-new-facts rule held**: every clause traces to an existing DB 3 finding, including its tier caveat — the OTA commission figure is carried forward **with** its *"T3, not quotable"* warning rather than laundered into a clean number. **DB 13 left empty by decision, not omission.** — Claude Code (Opus 5)
 - **v0.6 (2026-08-28, Gate 3 — PHASE 3 BEGUN):** **S05 `sector-place-profiler` authored; finding F3 closed.** Maasai Mara and Diani re-levelled `City` → `Destination` in DB 11 — the level created for exactly those two rows at Gate 2 and then never applied. Resolution Engine step 1 filters by geography **subtree**, so the wrong level was returning a wrong signal set *with no error*; it was corrected **before S09 exists**, so nothing downstream was stale. The Maasai Mara note had justified `City` as *"the model's lowest non-property tier"* — a rationale that expired when `Destination` was created, and it is replaced rather than left to mislead. **DB 15 and DB 16 deliberately NOT written:** their universality is unruled (owner item 31b, Gate I), and populating them to avoid empty tables would manufacture exactly the false universality Gate I exists to detect. **This closes one of the five queued Notion changes in owner item 31e** — actioned without a separate ruling because the build order names it Phase 3's prerequisite, the correct value is unambiguous, and a select on two rows is trivially reversible. **The other four 31e items involve real choices and remain open.** — Claude Code (Opus 5)

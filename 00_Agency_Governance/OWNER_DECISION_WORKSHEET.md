@@ -1,5 +1,13 @@
 # Owner Decision Worksheet
 
+> 🔴 **FROZEN AT 2026-06-30 — DO NOT USE THIS FILE AS THE ACTION SURFACE. Note added 2026-09-13.**
+>
+> This worksheet sorted the **18 items that were open on 2026-06-30** and has not been regenerated since. Its tally below still reads *"0 open [DECISION] items"*, which is **badly false**: more than twenty are open, including the two largest in the agency (engage counsel, engage an accountant), and **eleven departments have been built since this file was last touched** — Legal (10), HR (11), Tech Stack (13), Audits (14), Consulting (15), Automation (16), AI Enablement (17), Design (19), Experience Engineering (20), Presence (21), and the whole Sector (01) skill layer.
+>
+> **[`OWNER_INPUT_NEEDED.md`](OWNER_INPUT_NEEDED.md) is the live record.** It carries every open item, every decision and the reasoning behind each.
+>
+> **Kept, not deleted** — it is the only record of *how* the 2026-06-30 decisions were reasoned and which ones the owner overrode (item 40B is the notable one: the owner went further than the recommendation and promoted four offer-divisions to real departments). Deleting it would lose that. **Regenerating it is a separate, deliberate piece of work**, not a side effect of a Sector pass — and a worksheet regenerated half-attentively would be worse than one honestly marked stale.
+
 **Purpose:** This is the working companion to [`OWNER_INPUT_NEEDED.md`](OWNER_INPUT_NEEDED.md) — that file is the technical tracker (what's open, why, where it lives); this file is the action surface. Every still-open tracker item is below, sorted into two kinds:
 
 - **[DECISION]** — there's nothing more to wait for. You have a real choice to make, and I've given you my actual recommendation, reasoned from what's already confirmed in this repo (`AGENCY_VISION.md`, `AGENCY_REVENUE_TARGETS.md`, the confirmed positioning/sector/offer catalog) — not a generic best-practice guess.

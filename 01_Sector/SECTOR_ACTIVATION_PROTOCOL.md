@@ -1,7 +1,7 @@
 # Sector Activation Protocol — Sector #002 onward
 
-**Department:** Sector (01) · **Status:** 🔲 **SKELETON — provisional.** Completed only at Gate 9, after Hospitality #001 is validated.
-**Version:** v0.1 (2026-08-20)
+**Department:** Sector (01) · **Status:** **Gates A–G run for Sector #001; Gate F passed three times with a stated qualification. Gates H and I are specified (§3b, §3c) and UNRUN.** §4's slot classification stays **provisional** until Gate I.
+**Version:** v0.2 (2026-09-13)
 
 **Purpose.** The repeatable procedure for activating any new sector, so that Sector #002 is authored as a **plugin** rather than re-derived as an architecture.
 **Authority.** Subordinate to [`SECTOR_ACTIVATION_CONTRACT.md`](SECTOR_ACTIVATION_CONTRACT.md) and [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md). Authoritative for activation sequencing only.
@@ -163,6 +163,60 @@ port of entry. **This is the first structural difference in the department backe
 
 ---
 
+## 3b. Gate H — the live-loop test, SPECIFIED AND UNRUN
+
+> **Entry:** Gate G passed. **State it can justify:** `Campaign-Ready`. **Status: `DESIGNED` — this has not been run.**
+
+Gate H asks the one question the earlier gates cannot: **when the world moves, does the system version the change and name what it breaks — or does it quietly overwrite and carry on?** Gates A–G can all pass on a system that silently loses history.
+
+### The smallest safe test
+
+**Pick the subject from the proximity ladder's `< 30 days` band**, so the test rides a re-verification that has to happen anyway. Never invent a date move to trigger it — *a fabricated change tests the machinery and corrupts the store.* If no signal has genuinely moved, **Gate H waits.** Waiting is a pass-condition of the design, not a delay.
+
+| Step | What must happen | What proves it |
+|---|---|---|
+| **H1** | Re-verify the signal against its **registered** DB 14 source | `Last Verified` bumped; a failed call leaves it **blank** and is noted |
+| **H2** | The date has genuinely moved | Organizer/publisher says so — not an aggregator (*the organizer wins*) |
+| **H3** | **`VERSION`, not `UPDATE`** | `Previous Signal Date` holds the old value; `Change Reason` states why |
+| **H4** | A dated line appended to the page body | *what changed · when · which source · what tier* |
+| **H5** | `Change Status` + `Refresh Status` set | Both, not one |
+| **H6** | 🔴 **Name what it invalidates** | The derived activation dates, the routes, the destination profiles, the opportunities, the campaign windows. **This is the step that makes it an operating system rather than a table edit, and the step most easily skipped** |
+| **H7** | Re-run **S09** for the affected place | The resolution *changes* — if the calendar is identical after a real date move, the engine is not reading the signal |
+| **H8** | **S10** routes the result | Content/Offer/CRM by relation; Sales/Marketing/Operations as `HANDOFF_FAILURE` |
+| **H9** | One execution record, **read** timestamp | `skill_run_gate.py` passes |
+
+**Gate H fails** if the prior value is gone, if H6 produces an empty list, or if H7's output is unchanged. **A failed Gate H is a finding about the architecture, not about the signal.**
+
+> **What Gate H does *not* test.** It cannot test event delivery — nothing publishes. The emitted event is **recorded as intended, never asserted as delivered**, and that limitation is part of the gate's stated scope rather than a defect in the run.
+
+## 3c. Gate I — the generalization test, SPECIFIED AND UNRUN
+
+> **Entry:** Gate H passed. **Status: `DESIGNED`.** This is the gate that decides whether the department's central claim is true.
+
+**The claim under test:** *SectorOS is a sector operating system, not a hospitality system with a plugin interface bolted on.*
+
+**Sector #002 = B2B SaaS**, chosen **because it is the most different** — trigger-led, no seasonality, no geography-as-demand, buyer = CRO/founder. A travel-adjacent second sector would prove nothing. Its taxonomy is already loaded (52 sub-sectors, DB 8, DB 10), so Gate I tests the *architecture*, not data availability.
+
+**Author it through the 14 slots via S11. Do not copy Hospitality.** Copying is how the one-sector system hides.
+
+### The falsifiers, written down BEFORE the run
+
+*Recorded in advance so the answer cannot be rationalised afterwards — the same discipline that requires a P2 cell to carry a falsifier before it may hold `moves`.*
+
+| # | If this happens | Then the conclusion is |
+|---|---|---|
+| **I1** | B2B SaaS cannot fill **DB 16 Destination Profile** at all | DB 16 is a **travel-family object**, not core. The interface gains a **conditional slot** — a real architectural finding, not a failure. Settles **31b** |
+| **I2** | **DB 15**'s *concept* (a directed market pair with its own clock) generalizes but its *fields* (`Air Connectivity`, `Visa Friction`, `Booking Lead Time`) do not | DB 15 is core with **plugin-declared field extensions** — or also travel-family. Settles the second half of **31b** |
+| **I3** | P13 **seasonality** has no meaning for B2B SaaS | "Seasonality" is a *configurable rule that may be null*, not a universal. The compression threshold survives; the season does not |
+| **I4** | Any slot needs a **new store, field, agent or event** | 🔴 **ESCALATE.** A Tier-1 architecture change needing owner ratification and an `AEIT_06` entry. **Never a plugin edit** |
+| **I5** | **The plugin-removal test fails** — remove Hospitality and the core does not return an empty-but-valid resolution | *It is a hospitality system.* Everything above is moot |
+
+**Exit evidence:** §4's classification updated from hypothesis to measurement, each change citing which falsifier fired; a decision-log entry; and **31b closed by evidence rather than by decision**.
+
+> **Until Gate I runs, `SECTOR_ACTIVATION_PROTOCOL.md` §4 is a hypothesis and must be read as one.** Per owner decision 31b (2026-09-13), **no repo file may describe SectorOS as sector-agnostic** on the DB 15 / DB 16 axis.
+
+---
+
 ## 4. Slot classification — PROVISIONAL
 
 Every element is **universal** (core, never re-authored), **plugin** (re-authored per sector), or **configurable rule** (core field, plugin-supplied value). **This table is a hypothesis until Gate I of Hospitality #001 confirms it.**
@@ -216,4 +270,5 @@ Choosing the *most different* sector for #002 is deliberate. Choosing another tr
 
 ## 8. Changelog
 
+- **v0.2 (2026-09-13) — Gates H and I specified; the file stopped calling itself a skeleton while carrying three run records.** 🔴 **The defect corrected first:** three Gate F run records were appended on 2026-08-28 and **the version and changelog were never touched**, so this file claimed `v0.1 SKELETON` while holding the department's most consequential measurement. **§3b Gate H** is now a nine-step runnable procedure whose subject must be **a signal that genuinely moved** — *a fabricated date move tests the machinery and corrupts the store*, so if nothing has moved, Gate H waits, and waiting is a pass-condition rather than a delay. Its sharpest step is **H6, naming what the change invalidates**, which is the one that separates an operating system from a table edit. **§3c Gate I** names **B2B SaaS** and writes down **five falsifiers in advance (I1–I5)**, so the universality answer cannot be rationalised after the run — the same discipline that forbids a P2 cell holding `moves` without a falsifier. **Recorded per owner decision 31b:** DB 15 and DB 16 are **conditional / travel-family** until Gate I rules, and no repo file may call SectorOS sector-agnostic on that axis meanwhile. — Claude Code (Opus 5)
 - **v0.1 (2026-08-20, Gate 1 — DECIDE):** Created as a **skeleton**. Establishes the one rule (extract the pattern, do not replicate the sector), the no-third-loop constraint, the nine activation gates mapped to the existing 11-state Lifecycle machine, and a **provisional** universal/plugin/configurable classification of all 14 slots — with three open architecture questions (is DB 16 universal or travel-family; is DB 15 universal; does any sector need a new store) that only Gate I can answer. Names B2B SaaS as the strongest candidate for Sector #002 precisely because it is the most different. **Completion is deferred to Gate 9 by design.** — Claude Code (Opus 5)

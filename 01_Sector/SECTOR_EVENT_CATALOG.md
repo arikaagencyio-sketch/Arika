@@ -1,6 +1,8 @@
 # Sector — Event Catalog
 
-**Department:** Sector (01) · **Version:** v0.1 (2026-08-24) · **Machine-readable twin:** [`contracts/event-catalog.json`](contracts/event-catalog.json)
+**Department:** Sector (01) · **Version:** v0.2 (2026-09-13) · **Machine-readable twin:** [`contracts/event-catalog.json`](contracts/event-catalog.json)
+
+> **Reality vocabulary:** [`AEIT_11 Runtime Truth Standard`](../00_Agency_Governance/enterprise_architecture/AEIT_11_RUNTIME_TRUTH_STANDARD.md) §2. **`LIVE` and `DEAD` are not used in this file**; `DEAD` was retired as a value because it conflated *"specified and unsubscribed"* with *"broken"*. Enforced by [`contracts/sector_truth_gate.py`](contracts/sector_truth_gate.py) check 2.
 
 > **The first event catalog in this repository.** No `*EVENT_CATALOG*` file existed anywhere before this one — it was recommended in a 2026-06-03 audit and never built. Its absence is why the two dead edges in §3 went unrecorded.
 
@@ -23,21 +25,25 @@ Documentation-only. `index.ts` never reads it. Routing happens **only** via `emi
 
 ## 1. The nine Sector events
 
-| Event | Emitter (agent) | Skill | Verified subscribers | State |
+| Event | Emitter (agent) | Skill | Verified subscribers | Reality state |
 |---|---|---|---|---|
-| `SECTOR_MAPPED` | `sector-intelligence-mapper` | S01 | `content-intelligence-hub` (04)<br>`offer-orchestrator` (02) | ✅ **live, cross-department** |
-| `ICP_CLASSIFIED` | `sector-icp-fit` | S12 | `sales-lead-qualification` (05)<br>`clientpartner-partner-sourcing` (06) | ✅ **live, cross-department** |
-| `PROSPECT_SCORED` | `sector-signal-scorer` | S12 | `sales-lead-qualification` (05)<br>`operations-opportunity-filter` (08) | ✅ **live, cross-department** |
-| `SECTOR_READINESS_SET` | `sector-readiness-analyst` | S07 | `marketing-demand-generation` (03) | ✅ **live, cross-department** |
-| `CALENDAR_UPDATED` | `sector-signal-refresher` | S04 | `sector-intelligence-mapper` (**01**) | ⚠️ **intra-department only** |
-| `REGULATORY_CHANGE` | `sector-signal-refresher` | S04 | `sector-readiness-analyst` (**01**) | ⚠️ **intra-department only** |
-| `DEMAND_SHIFT` | `sector-signal-refresher` | S04 | — | 🔴 **dead** |
-| `COMPRESSION_EVENT` | `sector-signal-refresher` | S04 | — | 🔴 **dead** |
-| `COMPETITOR_MOVE` | `sector-signal-refresher` | S04 | — | 🔴 **dead** |
+| `SECTOR_MAPPED` | `sector-intelligence-mapper` | S01 | `content-intelligence-hub` (04)<br>`offer-orchestrator` (02) | **`CONNECTED`** — cross-department |
+| `ICP_CLASSIFIED` | `sector-icp-fit` | S12 | `sales-lead-qualification` (05)<br>`clientpartner-partner-sourcing` (06) | **`CONNECTED`** — cross-department |
+| `PROSPECT_SCORED` | `sector-signal-scorer` | S12 | `sales-lead-qualification` (05)<br>`operations-opportunity-filter` (08) | **`CONNECTED`** — cross-department |
+| `SECTOR_READINESS_SET` | `sector-readiness-analyst` | S07 | `marketing-demand-generation` (03) | **`CONNECTED`** — cross-department |
+| `CALENDAR_UPDATED` | `sector-signal-refresher` | S04 | `sector-intelligence-mapper` (**01**) | **`CONNECTED`** — ⚠️ intra-department only |
+| `REGULATORY_CHANGE` | `sector-signal-refresher` | S04 | `sector-readiness-analyst` (**01**) | **`CONNECTED`** — ⚠️ intra-department only |
+| `DEMAND_SHIFT` | ~~`sector-signal-refresher`~~ | S04 | — | **`DESIGNED`** — retired from the runtime contract 2026-08-28 (31d) |
+| `COMPRESSION_EVENT` | ~~`sector-signal-refresher`~~ | S04 | — | **`DESIGNED`** — retired from the runtime contract 2026-08-28 (31d) |
+| `COMPETITOR_MOVE` | ~~`sector-signal-refresher`~~ | S04 | — | **`DESIGNED`** — retired from the runtime contract 2026-08-28 (31d) |
+
+> 🔴 **ZERO Sector events are `LIVE`, and that is the single most important line in this file.** `LIVE` requires *a dated execution record* (`AEIT_11` §2). Six events have a **verified subscriber**; none has an **observed delivery**, because `executor.ts` never publishes. **A state is never inherited** (`AEIT_11` R2) — a subscriber existing does not make the edge deliver, and an agent being built does not make its `emits` work.
+>
+> The three `DESIGNED` events keep their meaning under `archived_intent` in the JSON twin. **Retired, not deleted** (`AEIT_11` R5): *deleting the intent loses the reasoning; keeping the claim loses the truth.*
 
 ---
 
-## 2. Dead events — zero subscribers
+## 2. The three `DESIGNED` events — zero subscribers
 
 `DEMAND_SHIFT`, `COMPRESSION_EVENT` and `COMPETITOR_MOVE` appear in **zero** `on:` triggers across all 115 agent files. The repo's standing claim is **verified true**.
 
@@ -47,13 +53,17 @@ Documentation-only. `index.ts` never reads it. Routing happens **only** via `emi
 | `COMPRESSION_EVENT` | sales meetings (05), marketing campaign timing (03) |
 | `COMPETITOR_MOVE` | `marketing-market-intelligence` (03), sales (05) |
 
-**The anti-dead-event rule.** S10 MUST treat routing into any of these as `HANDOFF_FAILURE`, not as a successful handoff, and MUST NOT silently discard the packet.
+**The anti-unsubscribed-event rule.** S10 MUST treat routing into any of these as `HANDOFF_FAILURE`, not as a successful handoff, and MUST NOT silently discard the packet.
 
-**Live risk, not live failure.** Because `sector-signal-refresher` is manual/advisory and `01_Sector/_memory/` does not exist on disk, **nothing has ever been published to these topics.** There is no dead event today — only a dead-event risk at arm time.
+**Why wiring a subscriber would not have fixed them** (the verification behind owner decision 31d): `executor.ts` never publishes, so a subscriber would have been *a second false claim layered on the first*. The remedy was to strike the operational claim and archive the design.
+
+**A risk, not a failure.** `sector-signal-refresher` is manual/advisory and **nothing has ever been published to these topics.**
+
+> ⚠️ **Corrected 2026-09-13.** This section previously argued that from *"`01_Sector/_memory/` does not exist on disk."* **It does exist** — `skill_runs.jsonl` has held records since 2026-08-24 and now holds 14. The conclusion survives; the evidence for it did not. What is still absent is `runtime.jsonl`, which is the proof that no *agent* has run — a narrower and different claim. *The two were conflated, which is how a stale fact outlives its own correction.*
 
 ---
 
-## 3. Dead edges — recorded in no gap register before this file
+## 3. Asserted edges that do not exist — recorded in no gap register before this file
 
 Two events are documented as reaching a cross-department subscriber that **does not subscribe**.
 
@@ -75,7 +85,7 @@ Two events are documented as reaching a cross-department subscriber that **does 
 
 ### 3.3 What this corrects
 
-`SECTOR_OS_ARCHITECTURE.md` §1.1 states *"Six reach a live subscriber."* That is **true at the event level but misleading at the edge level**: two of the six reach only Sector's own agents, and their documented cross-department subscribers do not exist.
+`SECTOR_OS_ARCHITECTURE.md` §1.1 stated *"Six reach a live subscriber"* (corrected there 2026-08-28 to `CONNECTED`). That was **true at the event level but misleading at the edge level**: two of the six reach only Sector's own agents, and their documented cross-department subscribers do not exist.
 
 This is precisely the class of drift the architecture's own §1.3 finding 6 exists to catch — *"a changelog entry is a record of intent, not proof of state"* — and it caught neither, because nothing ever regenerated the subscriber list from ground truth. That is what this file now does.
 
@@ -99,10 +109,11 @@ Documented as an external entry trigger by design (`SECTOR_ACTIVATION_CONTRACT.m
 | | |
 |---|---|
 | Sector events | 9 |
-| Live, cross-department | 4 |
-| Live, intra-department only | 2 |
-| Dead (zero subscribers) | 3 |
-| **Dead edges previously undocumented** | **2** |
+| **`LIVE`** — an observed delivery | **0** |
+| `CONNECTED`, cross-department | 4 |
+| `CONNECTED`, intra-department only | 2 |
+| `DESIGNED` (zero subscribers, retired 31d) | 3 |
+| **Unbuilt edges previously undocumented** | **2** |
 | Inbound events with no emitter | 1 |
 
 **Before any handoff, S10 re-reads this catalog.** A subscriber list that is six weeks old is a claim, not a fact — the same standard `AUTOMATION_APPROVAL_MATRIX.md` applies to automations: *"'We turned it on' and 'it is on' are different claims."*
@@ -115,4 +126,5 @@ Documented as an external entry trigger by design (`SECTOR_ACTIVATION_CONTRACT.m
 
 ## 7. Changelog
 
+- **v0.2 (2026-09-13) — the markdown twin caught up with its own JSON.** 🔴 **The finding is the divergence itself.** `contracts/event-catalog.json` was migrated onto `AEIT_11`'s five reality states on 2026-08-28 under owner decision 31d; **this file was not**, and spent sixteen days asserting `✅ live` and `🔴 dead` for the same nine events its own machine twin had already reclassified. A reader trusting the human-readable half would have planned against four cross-department edges that deliver nothing. **`DEAD` is retired as a value** (`AEIT_11` §4) — it conflated *"specified and unsubscribed"* with *"broken"*, and reads as a defect when it is usually an honest design state. Every row now carries a reality state, and the summary leads with the number that matters: **zero events are `LIVE`.** **Also corrected:** §2 argued from *"`01_Sector/_memory/` does not exist on disk"* — it does, and has since 2026-08-24; the absent file is `runtime.jsonl`, which proves something narrower. **The divergence is now enforced rather than remembered:** [`contracts/sector_truth_gate.py`](contracts/sector_truth_gate.py) check 2 fails any Sector doc describing an event as live or dead outside a changelog, and it went red on 28 lines across 6 files before this pass. — Claude Code (Opus 5)
 - **v0.1 (2026-08-24, Gate 1):** Created — the first event catalog in the repository. Subscriber map regenerated from ground truth across 115 agent files rather than copied from documentation. **Surfaced two dead edges** (`CALENDAR_UPDATED`→Content, `REGULATORY_CHANGE`→Sales) asserted as wired in three files and one file respectively, recorded in no gap register. Confirmed the three-dead-event claim as true. Recorded that `emits` is published zero times and that `handoff_to` is inert. — Claude Code (Opus 5)
