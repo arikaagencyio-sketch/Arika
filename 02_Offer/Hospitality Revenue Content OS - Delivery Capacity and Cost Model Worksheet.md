@@ -201,7 +201,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | V2 | **Number of audit data sources** | Count per client (booking engine, PMS/CRS exports, channel manager, OTA extranets, web analytics, email/CRM) | P1, P3 | Per client, at Qualification · ✅ MVP minimum data set decided (§1.4) | ◐ **MVP minimum defined (§1.4):** MD1 and MD4 required; the actual source count still varies by client stack |
 | V3 | **Number of pages / assets / messages** | Count per build; count per retainer cycle | P2, P3 | Owner — from minimum viable scope (§6 Q5) | ❌ |
 | V4 | **Number of review rounds** | Rounds per deliverable | P1–P3 | Owner — ✅ MVP policy set (§1.3); full-offer revision policy open (`Draft 41` §9 #14) | ◐ **MVP: one included round per M1–M7 output** (§1.3); P2 beyond Phase 1 and P3 open |
-| V5 | **Tool / API cost categories** | Categories only (below) | P1–P3 | Tech Stack (13) | ◐ categories listed; no costs |
+| V5 | **Tool / API cost categories** | Categories only (below) | P1–P3 | Tech Stack (13) | ◐ MVP categories checked (§5.1): six identified, four gaps; **costs unknown** |
 | V6 | **Design / content production load** | Assets per build; assets per retainer cycle | P2, P3 | Owner + Design (19) | ❌ |
 | V7 | **Reporting cadence** | Reports per period | P3 | `Draft 41` — **monthly** [RUN]; effort per report unknown | ◐ cadence only |
 | V8 | **Compliance / legal review requirement** | Reviews per engagement; reviews per new template | P1–P3 | Legal (10) | ❌ blocked on counsel |
@@ -220,6 +220,48 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **Analytics access** — usually the client's own tools; access, not licence
 - **Landing-page hosting** — usually the client's own site; confirm per engagement
 - **Data processing / storage** — every tool above that touches client data is a sub-processor (`10_Legal/templates/DPA.md` Annex B)
+
+### 5.1 MVP tool-category check against Tech Stack (13) — 2026-09-13
+
+**Internal design only. Categories, not costs.** Checked against `13_Tech_Stack/TECHSTACK_OS.md` §3 (Capability Registry) and §9 (standing risks) **as written — no connection was re-verified in this pass.** Actual tool costs remain **unknown**, and nothing here is converted into prices, floors or test figures. No subscription or vendor commitment is made.
+
+**Can the MVP proceed on existing or manual tools?**
+
+| MVP work area | Existing / manual path | Tech Stack reality | Result |
+|---|---|---|---|
+| **Audit data collection and review** (MD1–MD3, MD5, MD6, MD8) | Client supplies exports and assets; received by agency email; reviewed with AI assistance | Agency mailboxes on Zoho — mail works, product and plan unconfirmed (§9) · Claude (§3) · **no spreadsheet or data-analysis tool registered** · **no storage for client files registered** | ◐ **Partly** — receipt and AI-assisted review exist; the working analysis tool and file storage do not |
+| **Website and booking-path review** (MD4) | Manual review of the client's public website and booking engine; screenshots and notes | No account-based tool required | ✅ **Yes — manual** |
+| **Document drafting** (M1–M5, M7) | AI-assisted drafting, owner-edited | Claude available: owner's Claude Pro plan (§3, Claude Design row, 2026-07-03) and the API key verified by use for manual runtime calls only (§3, 2026-09-13) · **no client-deliverable document tool or format registered** — no word processor (Microsoft 365 rejected on cost, §9), Canva unauthenticated, Notion registered for content briefs and last verified 2026-07-03 | ◐ **Partly** — drafting exists; the tool or format clients receive is not chosen |
+| **Reporting / measurement-plan drafting** (M6) | Same drafting path; M6 is a plan document, not a dashboard; client-system data only (QG6) | As above · no agency analytics tool needed — baseline data comes from client exports | ◐ **Partly** — drafting exists; baseline figures depend on the unregistered analysis tool |
+| **File storage / versioning** | — | **Not registered.** This repository is not a place for client data: an auto-sync job commits every change, and the folder sits in OneDrive, which §3 does not register | ❌ **Missing** |
+| **Owner QA / self-review** | Manual checklist against the reduced gate set (§3.1; `Draft 41` §8) | No tool required · advisory `operations-delivery-qa` exists and is not needed | ✅ **Yes — manual** |
+
+**Other MVP needs surfaced by the check:**
+
+| Need | Tech Stack reality | Result |
+|---|---|---|
+| **Buyer interview** (MD7) — scheduling, the call, notes | No calendar connected (Google Calendar named, not connected) · no video-call tool registered · transcription/recording gap fully open (§9). A phone or in-person interview with typed notes is possible manually | ◐ **Ambiguous** — manual path possible; channel not chosen. Any recording would touch data handling (G5) |
+| **Client correspondence** — sending outputs and data requests | Agency mailboxes on Zoho — working, plan unconfirmed (§9) | ✅ **Identified** — ordinary email, **not** nurture |
+| **Engagement tracking** | ClickUp CRM built; Engagement / Project list live-verified 2026-07-15 (§3) | ✅ **Identified** — optional at one client at a time |
+| **Client analytics** | The MVP uses client-supplied exports (§1.4); no agency analytics tool needed | ✅ **Identified** — client exports |
+
+**Not required for the MVP** — deferred with their workstreams:
+- **Email / WhatsApp nurture platform** — ⏸ **still deferred.** Nurture implementation is out of MVP scope (§1.1); ManyChat is proposed with no account created, and no email-marketing platform is registered. Ordinary client email is not nurture.
+- **Image generation** (KIE.ai / OpenArt) and **design assembly** (Canva) — design support deferred.
+- **Landing-page hosting** — no implementation.
+- **Content / brief system** (Notion) — optional, not required.
+
+**For G5, not G4:** every tool that touches client data is a sub-processor, and `10_Legal/templates/DPA.md` Annex B lists only ClickUp (§9). Zoho mail, Claude and any storage choice are not listed.
+
+**Verify before first use.** Tech Stack treats every row as a claim with a shelf life: ClickUp (2026-07-15), Notion (2026-07-03) and the Zoho mail plan need a live check before the first MVP delivery. This is not a G4 blocker — G4 identifies categories; it does not verify connections.
+
+**G4 result — ◐ PARTIAL.**
+- **Identified (six categories):** AI-assisted drafting (Claude) · website and booking-path review (manual) · owner QA (manual) · client correspondence (Zoho-hosted email) · engagement tracking (ClickUp) · client analytics via exports. The nurture platform is confirmed not required.
+- **Missing or ambiguous — exactly four** (§8 #23):
+  1. **Client-data file storage and versioning** — no tool registered.
+  2. **Spreadsheet / data-analysis working tool** for channel-mix analysis and M6 baseline figures — none registered.
+  3. **Client-deliverable document tool or format** for M1–M7 — not chosen.
+  4. **Buyer-interview channel and notes** (MD7) — manual path possible; channel not chosen; no recording tool registered.
 
 ---
 
@@ -275,7 +317,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | G1 | **Delivery scope chosen** (minimum viable P1/P2/P3 scope) | ✅ **Passed — MVP only** (§1.1–§1.2, 2026-09-13) · **not passed for the full offer** — P2 beyond Phase 1 and P3 scope not chosen | Q5 answered in writing — done for the MVP, including M4 depth (#17) and the D4 exclusion (#18) | Offer (02) |
 | G2 | **Role effort estimated** (V1 for every required role, per package) | ◐ **PARTIAL — blocked only by the legal review path / legal effort estimate** (MVP only, 2026-09-13): ✅ bands owner-approved for internal MVP planning (§10.8) · ✅ revision policy (§1.3) and minimum audit data set (§1.4) decided · ❌ legal/compliance BLOCKED, not estimated | V1 filled, labelled estimate — met for every MVP role except legal; legal effort is estimated once a review path exists (G5); one §10.7 decision remains | Offer (02) + Operations (08) |
 | G3 | **Capacity owner assigned** | ✅ **Passed — MVP only, provisional** (§6.1, 2026-09-13): the owner delivers solo with AI and holds the cap; Q1 answered as one H1/H2 MVP client at a time · **not passed for the full offer** · not proven capacity — revisit after the first real MVP delivery | A named owner for delivery capacity; Q1 answered — both met within MVP scope | Operations (08) |
-| G4 | **Tool cost categories identified** | ◐ categories listed (§5 V5); **for the MVP the nurture platform is no longer required** (nurture deferred) | Every MVP category confirmed; the nurture platform returns with nurture | Tech Stack (13) |
+| G4 | **Tool cost categories identified** | ◐ **PARTIAL — MVP check done (§5.1, 2026-09-13):** six categories identified; nurture platform not required (nurture deferred); **four missing or ambiguous** — client-data storage/versioning · spreadsheet/analysis tool · client-deliverable document tool or format · buyer-interview channel and notes. Tool costs unknown and not converted into prices | Every MVP category confirmed — close the four §5.1 gaps (§8 #23); the nurture platform returns with nurture | Tech Stack (13) |
 | G5 | **Legal / compliance review path identified** | ❌ no counsel (item 59) — **scope reduced for the MVP** (no consent sends) | A named review path for contract and audit-data terms; consent review returns with nurture | Legal (10) |
 | G6 | **Audit / build / retainer commercial shape selected** | ❌ (`Draft 41` §11.5 #2, #3) — **reframed for the MVP:** the retainer is deferred, so the MVP question is how the audit and the Phase 1 blueprint are packaged | Owner choice recorded | Offer (02) |
 | G7 | **Owner approves use of `TEST_FIXTURE` figures** | ⏸ deferred by Owner Decision 71 until cost-to-deliver and capacity exist — *capacity now exists provisionally for the MVP (G3); cost-to-deliver does not (G2 partial; no hours or costs)* | Owner decision recorded | Owner |
@@ -312,6 +354,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 | 20 | ~~Minimum audit data set for an MVP audit — what counts as basic channel-mix data, and the data-source range accepted (V2)~~ ✅ **Decided for the MVP 2026-09-13 (§1.4):** MD1–MD8 with a data-sufficiency rule; MD1 and MD4 required | Offer (02) + Audits & Diagnostics (14) | Owner | ~~G2 (analytics band), V2~~ — analytics band now set per engagement: M or L (§10.3) |
 | 21 | Desk-review handling when the buyer interview (MD7) is missing — is a desk review offered as an MVP engagement, does it count as one capacity unit (§6.1), and what does it deliver beyond M1? | Offer (02) + Audits & Diagnostics (14) | Owner | Desk-review path bands (§10.4); capacity counting |
 | 22 | M6 baseline when only the three-month audit window is supplied — request a seasonally comparable period, or state the limitation in M6? | Offer (02) | Owner | M6 measurement validity |
+| 23 | MVP tool choices for the four §5.1 gaps — client-data storage/versioning · spreadsheet/analysis tool · client-deliverable document tool or format · buyer-interview channel and notes. Choose among tools already in `TECHSTACK_OS.md` §3 or register new rows; categories only, no cost figures | Tech Stack (13) + Offer (02) | Owner | G4 |
 
 ---
 
@@ -325,6 +368,7 @@ Role-based. The only named person is the owner of record already confirmed in th
 - **2026-09-13 — MVP revision policy recorded (owner decision, internal delivery-scope policy only).** Added §1.3: one included revision round per client-facing output (M1–M7), limited to accuracy, clarity, fit and client-specific context; no new scope or deliverables, implementation, full content production, nurture execution, website/CMS/booking-tool work or retainer activity; additional rounds not approved; exceptions need owner approval before delivery; not public contract language. A4 converted from assumption to policy — **no band changes**. §8 #13 marked decided for the MVP; G2 narrowed (three blockers remain: legal review path, minimum audit data set, owner review of the bands); V4, §5's MVP note, the analytics row, §10.5 and §10.7 updated. Flagged, not decided: an M2 revision that changes the root-cause class re-enters QG1 and can switch path. **No prices, no hours, no money.** — Claude Code (Opus 5)
 - **2026-09-13 — MVP minimum audit data set recorded (owner decision, internal design only).** Added §1.4: eight data items (MD1–MD8) and a data-sufficiency rule. MD1 channel room-nights and MD4 direct-booking path are required; without MD2 revenue by channel, revenue leakage is unquantified; without the MD7 buyer interview, the work is a desk review, not a diagnosis; MD3 commission is recorded as unknown rather than invented; a dominant pricing/rate or booking-engine tech finding redirects. §8 #20 marked decided for the MVP; **G2 narrowed — now blocked only by the legal review path and owner review of the bands**. Analytics band set to **M with complete minimum data, L when data is messy or MD2 is unavailable** (A5, §10.3, §10.4). Buyer interview added to the owner row. V2, §10.5 and §10.7 updated. New open decisions: #21 desk-review handling, #22 M6 baseline from a three-month window. Flagged for confirmation: "if #1 and #4 are missing" read as both required. **No prices, no hours, no money.** — Claude Code (Opus 5)
 - **2026-09-13 — Owner review of the MVP role-effort bands recorded (internal MVP planning only).** Added §10.8: the §10.3 bands approved unchanged — owner/strategist L · offer engineer XS · content strategist M · sample-copy producer S · analytics/reporting M, or L when data is messy or revenue by channel is missing · delivery QA S as owner self-review · legal/compliance BLOCKED, not estimated · design support deferred · automation/booking-journey advisor deferred, XS only if separately triggered by a booking-journey messaging cause. H1/H2 MVP only; no H3, full offer, retainer, nurture, website/CMS/booking-tool implementation or concurrent clients. **G2 now blocked only by the legal review path / legal effort estimate; G5 unchanged, still blocked.** §4 QA row, V1, §6.1, G2, §8 #2 and §10 header, §10.3, §10.5 and §10.7 updated. **No hours, costs, prices, floors or test figures.** — Claude Code (Opus 5)
+- **2026-09-13 — MVP tool categories checked against `13_Tech_Stack/TECHSTACK_OS.md` (internal design only).** Added §5.1. **Can proceed on existing or manual tools:** website/booking-path review (manual) and owner QA (manual). **Partly:** audit data collection and review, document drafting, and measurement-plan drafting — Claude and agency email exist, but no analysis tool, file storage or client-deliverable format is registered. **Missing:** file storage/versioning. **Identified:** AI-assisted drafting, website/booking-path review, owner QA, client correspondence, engagement tracking, client analytics via exports. **Nurture platform confirmed not required** (nurture out of MVP scope). **G4 kept PARTIAL** — four gaps: client-data storage/versioning, spreadsheet/analysis tool, client-deliverable document tool or format, buyer-interview channel and notes; new §8 #23. Also noted: this repository is not a place for client data (auto-sync commits, OneDrive folder); Annex B lists only ClickUp (for G5); verify ClickUp, Notion and the Zoho mail plan before first use. Documents only — no live connection calls. **Tool costs unknown; no prices, no currency, no subscriptions, no vendor commitments.** — Claude Code (Opus 5)
 
 ---
 

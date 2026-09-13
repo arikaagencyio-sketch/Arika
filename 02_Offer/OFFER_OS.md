@@ -345,6 +345,7 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 - 2026-09-13 — **MVP revision policy recorded** (§8): one included round per M1–M7 output, internal policy only. Worksheet gate G2 narrowed, still partial. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 - 2026-09-13 — **MVP minimum audit data set recorded** (§8): eight items plus a data-sufficiency rule, internal design only. Worksheet gate G2 now blocked only by the legal review path and owner review of the effort bands. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 - 2026-09-13 — **Owner approval of the MVP role-effort bands recorded** (§8): internal MVP planning only. Worksheet gate G2 now blocked only by the legal review path; G5 still blocked. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
+- 2026-09-13 — **MVP tool categories checked against Tech Stack (13)** (Hospitality Revenue Content OS; worksheet §5.1): six categories identified; nurture platform not required; worksheet gate G4 **stays partial** — four gaps (client-data storage/versioning, spreadsheet/analysis tool, client-deliverable document tool or format, buyer-interview channel). Tool costs unknown. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 
 ## 16. Memory / Feedback Loop / Cadence
 
