@@ -1,7 +1,7 @@
 # AEIT_04 — Architectural Gap & Duplication Report (Analysis)
 
-**Version:** v0.1.1
-**Last updated:** 2026-09-14 — §C3 re-stated for the current key state; the 2026-07-22 finding is kept as dated history
+**Version:** v0.1.2
+**Last updated:** 2026-09-14 — §C3 (key state) and §C4 (memory streams) re-stated for current state; the 2026-07-22 findings are kept as dated history
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Status:** Findings register. Every finding cites a real `file:line` or `file §section`. Severity is
 **architectural** (impact on long-term coherence), annotated with current operational impact where
@@ -109,8 +109,23 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
   structure-ahead-of-reality and should be labelled as such. **Owner: Tech Stack (13).**
 
 ### C4 🟠 Phantom memory streams
-- **Evidence:** many OS files claim a `_memory/runtime.jsonl` (Automation §13/§16, Sector §16,
-  Consulting, Audits), but **only two exist on disk** — `12_Branding/_memory/runtime.jsonl` and
+- **Current state (measured 2026-09-14 from file metadata only — path and line count; contents not read):**
+  **5 `runtime.jsonl` memory logs exist**, all tracked in git:
+
+  | Log | Lines |
+  |---|---|
+  | `02_Offer/_memory/runtime.jsonl` | 5 — the Hospitality Sector → Offer control test, 2026-09-13 |
+  | `05_Sales/06_AI_OPERATIONS/06_AI_Memory_Logs/runtime.jsonl` | 3 |
+  | `12_Branding/_memory/runtime.jsonl` | 7 |
+  | `13_Tech_Stack/_memory/runtime.jsonl` | 2 |
+  | `19_Design/_memory/runtime.jsonl` | 1 |
+
+  One more store sits under a `_memory/` folder but is not a runtime log: `01_Sector/_memory/skill_runs.jsonl`
+  (15 lines). **The finding still stands:** most declared memory streams do not exist — for example,
+  all eight Presence (21) agents declare `21_Presence/_memory/runtime.jsonl`, which is absent — because those agents
+  have never run.
+- **Original evidence (2026-07-22, now historical):** many OS files claim a `_memory/runtime.jsonl` (Automation
+  §13/§16, Sector §16, Consulting, Audits), but **only two exist on disk** — `12_Branding/_memory/runtime.jsonl` and
   `19_Design/_memory/runtime.jsonl`, both from *manual* runs. Most logged streams are fictional
   because the agents have never executed.
 - **Impact:** the "Learn" meta-capability (`AEIT_03` §2) rests on streams that don't exist.
@@ -180,3 +195,4 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
 ## Changelog
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
 - **v0.1.1 (2026-09-14):** §C3 re-stated after the Hospitality Sector → Offer reconciliation audit. The key is present and verified by use for manual prompt-agent calls (five Offer (02) runs, 2026-09-13). Daemon or scheduler boot, `finos-plugin`, `bois`, every agent and unattended scheduled execution remain unverified; the scheduler is not approved; the blocker is governance approval and daemon control. The original heading and evidence are kept as dated history; severity is unchanged. ⚠️ **Not re-checked here:** §C4's "only two exist on disk" memory-stream count is also out of date (`02_Offer/_memory/runtime.jsonl` and others now exist). Also corrected, with dated notes: §D1's "Annex B lists ClickUp only" (the drafted annex has nine rows, including Zoho Books and an unnamed mailbox provider), and §D3's "reply awaited" (two letters of engagement, both unsigned). — Claude Code (Opus 5)
+- **v0.1.2 (2026-09-14):** §C4 re-stated, resolving v0.1.1's "not re-checked" note. Measured by file metadata only (path and line count, contents not read): **5 `runtime.jsonl` logs exist**, including `02_Offer/_memory/runtime.jsonl` with 5 lines from the Hospitality Sector → Offer control test. `01_Sector/_memory/skill_runs.jsonl` (15 lines) is a separate store. The finding stands, because most declared streams — including all eight Presence agents' — still do not exist. The 2026-07-22 "only two exist on disk" evidence is kept as dated history; severity is unchanged. ⚠️ **Not changed here:** `AEIT_11_ESTATE_AUDIT.md` §5's "4 of 20 exist" is stale for the same reason, as its own v0.2.2 changelog already records. — Claude Code (Opus 5)

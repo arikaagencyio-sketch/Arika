@@ -1,7 +1,7 @@
 # Presence — Department Operating System (21)
 
-**Version:** v0.1.1
-**Last updated:** 2026-09-14 — key-state claims corrected (§5, §9); the 2026-07-23 wording is kept as dated history
+**Version:** v0.1.2
+**Last updated:** 2026-09-14 — agent-roster state re-stated (§5, §12, §16): the eight Presence specs exist, none is verified live. The v0.1.1 key-state corrections stand, and 2026-07-23 wording is kept as dated history
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Mandate:** The agency's **Market Presence Infrastructure** — the outbound mirror of IntOS. Presence is how the agency projects itself into the market (`agency → world`) across every layer, so that every public interaction carries a revenue job and expresses one institutional behavior.
 **Status:** New department (2026-07-23), seeded from the owner's Parts 1–4 presence work. **Blueprint-only, reality-gated** — the agency is solo, pre-revenue, 0-client, with zero social accounts and one subdomain-only website; this OS is the design the presence gets built to, not a record of live presence. Consciously **overrides** the repo's prior "no distribution/platform department/agent" decision (`04_Content/CONTENT_OS.md` §5; `PIL_INTEGRATION_REPORT.md` §10) — owner decision, 2026-07-23, recorded not silent.
@@ -141,11 +141,17 @@ Intended shape (not yet an executable automation; reality-gated):
 
 ---
 
-## 5. Agent Roster — PROPOSED (design only)
+## 5. Agent Roster — specs written, none verified live
 
-> ⛔ **OWNER REVIEW GATE.** Per the approved sequence, these are the **proposed** roster; the actual `.claude/agents/presence-*.md` specs are **not written until the owner ratifies this OS + the doctrine + the boundaries.** Listed here as design, not implementation. All are **reality-gated** — runtime-wiring deferred until real accounts and a live publishing path exist. *Corrected 2026-09-14 — was: "until `ANTHROPIC_API_KEY` + real accounts exist (the whole agent layer is currently unrunnable)". The key now works for manual Offer (02) runtime calls, verified by use 2026-09-13; **no Presence agent is verified live**, and the scheduler is not approved (§9).* Advisory-first per Constitution §5.
+> ✅ **Specs written — not live (re-stated 2026-09-14).**
+> - **The specs exist.** All eight `.claude/agents/presence-*.md` specs below are on disk, committed on 2026-07-23 in the same commit as this OS (`4559521`). They load in `arika-runtime` with the rest of the estate (115 agents registered on 2026-09-14). Each is `execution: prompt`, risk class 2, and declares `memory_stream: 21_Presence/_memory/runtime.jsonl` — **a file that does not exist.**
+> - **No Presence agent has ever run, and none is verified live through the runtime.** Manual Anthropic runtime use is verified **only for Offer (02)**, in five manual runs on 2026-09-13 — not for Presence.
+> - **Presence stays reality-gated by missing accounts and no live publishing path**, and **the scheduler is not approved** (§9). Advisory-first per Constitution §5.
+> - ⚠️ **Not recorded:** §8 logs the department's establishment as an owner decision (2026-07-23), but not a separate owner ratification of this OS, the doctrine and the boundaries before the specs were written. Whether the review gate below was passed is not recorded here.
+>
+> *History. Was (2026-07-23): "⛔ OWNER REVIEW GATE. Per the approved sequence, these are the proposed roster; the actual `.claude/agents/presence-*.md` specs are not written until the owner ratifies this OS + the doctrine + the boundaries. Listed here as design, not implementation. All are reality-gated — runtime-wiring deferred until `ANTHROPIC_API_KEY` + real accounts exist (the whole agent layer is currently unrunnable)." The key-state part was corrected in v0.1.1 and the specs-state part in v0.1.2, both 2026-09-14.*
 
-| Proposed agent | One job | Risk class | Pattern reused |
+| Agent (spec exists) | One job | Risk class | Pattern reused |
 |---|---|---|---|
 | `presence-orchestrator` | The Decision layer: which direction/layer/sector gets attention; resolves conflict across presence agents | 2 | `sales-executive-intelligence` |
 | `presence-layer-registrar` | Gate for entering/superseding a Presence Layer Registry row; enforces one-owner + economic-job + reality-label. `PRESENCE_LAYER_PROPOSED` / `PRESENCE_LAYER_SUPERSESSION_PROPOSED` → `PRESENCE_LAYER_REGISTERED` / `_BLOCKED` / `PRESENCE_LAYER_SUPERSEDED` | 2 | `techstack-inventory-registrar` |
@@ -174,6 +180,7 @@ Deliberately **uncalibrated** — zero presence data exists, so these are target
 
 ## 8. Decision Log
 
+- **2026-09-14 — Agent-roster state re-stated; no decision taken.** §5, §12 and §16 described the eight `presence-*` agent specs as not yet written. They exist, committed 2026-07-23 (`4559521`), and load in `arika-runtime`. **None has run** — `21_Presence/_memory/runtime.jsonl` does not exist — and none is verified live. Manual Anthropic runtime use is verified only for Offer (02). The scheduler is not approved, and Presence stays gated by accounts and a live publishing path. The 2026-07-23 wording is kept as history. **Flagged, not resolved:** no separate owner ratification of this OS, the doctrine and the boundaries is recorded before the specs were written. — Claude Code (Opus 5)
 - **2026-08-07 — LinkedIn dossier created** (`LINKEDIN_PRESENCE_OS.md`), consolidating every LinkedIn decision scattered across Content (04), Marketing (03), Sector (01), TechStack (13), Governance (00) and this department. Two reconciliations were forced by the real account state: Draft 13's first-person content is **unpublishable as written** (it asserts a founder history that did not happen — see the dossier §7.7), and its 30–50 connections/week figure is superseded by a conservative ramp during warm-up. Established the blocking chain: presence → connections → Company Page → dev app → API → engine test — the agency's position-1 platform and first full engine test are gated on *connections*. — Claude Code (Opus 5)
 - **2026-08-02 — Content Distribution Engine ratified (design).** Owner confirmed the 10-platform canonical set (LinkedIn → Facebook → Instagram → Threads → TikTok → Pinterest → Website → X → Newsletter → YouTube; Tumblr dropped), **Postiz self-hosted** executor on **Hostinger KVM 2 (8GB) + Coolify** (deployed & running 2026-08-07; the owner's card that Railway/Stripe rejected succeeded at Hostinger; the M-Pesa Kenyan-VPS fallback was unneeded), and a **two-gate** model (Concept + Pre-Publish, + automated pre-flight). Full spec: `21_Presence/CONTENT_DISTRIBUTION_ENGINE.md` (§4 Workflow Index updated to point at it). Preserves one-owner discipline — Content produces, Design supplies, Marketing distributes, Automation runs, Presence coordinates. Reality-gated: no accounts, no deployment yet. Resolved PIL's open in-scope-set flag and registered Postiz/Render in TechStack (🟡 selected, not connected). — Claude Code (Opus 4.8)
 - **2026-07-23 — Presence (21) established** as a full department with its own OS and (proposed) agents. **Conscious override** of the prior "no distribution/platform department/agent" decision (`CONTENT_OS.md` §5; `PIL_INTEGRATION_REPORT.md` §10) — owner decision, recorded like the Legal drafting override. Framed as the **outbound mirror of IntOS**, not a new "distribution" layer; owns coordination + the previously-unowned hidden layers + Engagement, and consumes (never re-claims) Marketing/Content/Branding/EE. — Claude Code (Opus 4.8)
@@ -205,7 +212,7 @@ Deliberately **uncalibrated** — zero presence data exists, so these are target
 
 ## 12. Triggers / Automation Hooks
 
-None live. Proposed agents will register `triggers/execution/risk_class/output_schema/memory_stream/emits` on `arika-runtime` **only after** the review gate and activation. Any live automation needs an `AUTOMATION_APPROVAL_MATRIX.md` row *before* firing (Constitution rule).
+None live. *(Re-stated 2026-09-14.)* The eight Presence specs already declare `triggers/execution/risk_class/output_schema/memory_stream/emits` and load in `arika-runtime`, but **none has run**. No Presence event is published — the runtime publishes no agent events — no schedule is approved, and the declared memory stream does not exist. Any live automation still needs an `AUTOMATION_APPROVAL_MATRIX.md` row *before* firing (Constitution rule). *Was (2026-07-23): "Proposed agents will register `triggers/execution/risk_class/output_schema/memory_stream/emits` on `arika-runtime` only after the review gate and activation."*
 
 ## 13. Grandfathered code layer
 
@@ -219,7 +226,14 @@ No raw `Draft N.md` archive. Seeded directly from the owner's Parts 1–4 presen
 
 - **v0.1.0 (2026-07-23):** Department created. Mandate, four-directions model, Presence Layer Registry (20 visible + 22 hidden layers), DATOS engine, Engagement capability, proposed agent roster (design only, pre-gate), KPIs, standards, RACI. Blueprint-only, reality-gated. — Claude Code (Opus 4.8)
 - **v0.1.1 (2026-09-14):** Key-state claims corrected after the Hospitality Sector → Offer reconciliation audit. §5's reality-gate note and §9's standing risk no longer say the Anthropic key is unset or the agent layer unrunnable. Presence is gated by accounts and a live publishing path; manual Offer (02) runtime calls work (verified by use 2026-09-13); no Presence agent is verified live; the scheduler is not approved. The 2026-07-23 wording is kept as dated history. ⚠️ **Not changed here:** §5 still says the `presence-*` specs are not yet written, but eight exist in `.claude/agents/`. — Claude Code (Opus 5)
+- **v0.1.2 (2026-09-14):** Agent-roster state re-stated, resolving v0.1.1's open note. §5's heading and gate note, the roster's column header, §12 and §16 no longer say the Presence specs are unwritten or proposed-only. The eight specs exist (committed 2026-07-23) and load in the runtime; none has run or is verified live; the declared memory stream does not exist; manual runtime use is verified only for Offer (02); the scheduler is not approved. §16 also notes the LinkedIn profile and Company Page that now exist, with no live post through the executor recorded. All 2026-07-23 wording is kept as quoted history. New §8 entry; owner ratification before the specs were written is flagged as unrecorded. — Claude Code (Opus 5)
 
 ## 16. Honest State
 
 Presence has **produced nothing** — no account, no post, no repo, no citation. Its one real footprint is a website it does not own (built by EE, live only on a `.vercel.app` subdomain, uncommitted in git). The department is **entirely structure ahead of content**, declared so. What is real is the *design*: a single coordinating owner for a presence that was previously ownerless, a doctrine it inherits, and an honest map of every layer with nothing faked as live. The gate before the next phase (agents) is deliberate — no agent is written until the owner ratifies this.
+
+> *Re-stated 2026-09-14 — the paragraph above is the 2026-07-23 state, kept as history.* Two parts have moved:
+> - **Agents:** the eight Presence specs were written (§5), but **none has run or is verified live**.
+> - **Accounts:** a LinkedIn personal profile and Company Page now exist (`LINKEDIN_PRESENCE_OS.md` §14, 2026-08-09), but **no live post through the Postiz executor is recorded** (`13_Tech_Stack/TECHSTACK_OS.md` §3), and the other platform accounts are missing.
+>
+> **Still structure ahead of content.** Presence remains blocked by missing accounts and no live publishing path, and the scheduler is not approved.
