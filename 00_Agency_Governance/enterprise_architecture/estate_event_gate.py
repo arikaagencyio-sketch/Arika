@@ -49,9 +49,12 @@ REG  = os.path.join(os.path.dirname(__file__), "estate-event-register.json")
 DOC  = os.path.join(os.path.dirname(__file__), "AEIT_11_ESTATE_AUDIT.md")
 # Re-measured 2026-09-13: offer-pricing-floor-analyst's static OFFER_PRICED removed
 # (one emitter, no subscriber) - declarations, distinct emits, union and emit-only each -1.
+# Re-measured 2026-09-14: offer-orchestrator's intake trigger renamed OFFER_BRIEF_RECEIVED ->
+# OFFER_INTAKE_REQUESTED, a new name no agent emits - sub_distinct, union and sub-only each +1.
+# Values taken from the gate's own measured output, not predicted.
 BASELINE = {"agents": 115, "emit_declarations": 200, "emit_distinct": 194,
-            "subscriptions": 184, "sub_distinct": 145, "union_distinct": 268,
-            "both_ends": 71, "emit_no_sub": 123, "sub_no_emit": 74}
+            "subscriptions": 184, "sub_distinct": 146, "union_distinct": 269,
+            "both_ends": 71, "emit_no_sub": 123, "sub_no_emit": 75}
 
 
 def parse():

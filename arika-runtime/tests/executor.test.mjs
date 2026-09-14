@@ -151,6 +151,30 @@ test("registry: loads every agent; the legacy migration is complete", () => {
   );
 });
 
+test("registry: offer-orchestrator does not subscribe to an event it emits", () => {
+  // It listened on OFFER_BRIEF_RECEIVED, the event it emits, so the first published brief
+  // would have re-triggered it: the bus has no cycle detection (AEIT_11 §3.2). Intake is
+  // now the human-invoked OFFER_INTAKE_REQUESTED, and the brief still flows on.
+  const { agents } = loadAgents();
+  const subscriptions = (spec) =>
+    new Set(
+      (spec.triggers ?? []).flatMap((t) =>
+        t.type === "event" ? [t.on] : t.type === "join" ? (t.waits_for ?? []) : [],
+      ),
+    );
+  const orchestrator = agents.get("offer-orchestrator");
+  const heard = subscriptions(orchestrator);
+  const emitted = orchestrator.emits ?? [];
+  const reentrant = emitted.filter((e) => heard.has(e));
+  assert.deepEqual(reentrant, [], `offer-orchestrator re-enters itself on: ${reentrant.join(", ")}`);
+  assert.ok(heard.has("OFFER_INTAKE_REQUESTED"), "intake must be the human-invoked OFFER_INTAKE_REQUESTED");
+  assert.ok(emitted.includes("OFFER_BRIEF_RECEIVED"), "the orchestrator must still emit OFFER_BRIEF_RECEIVED");
+  assert.ok(
+    subscriptions(agents.get("offer-oeos-engineer")).has("OFFER_BRIEF_RECEIVED"),
+    "offer-oeos-engineer must still receive OFFER_BRIEF_RECEIVED",
+  );
+});
+
 test("schema: join trigger requires 2+ distinct events", () => {
   const base = {
     name: "x",

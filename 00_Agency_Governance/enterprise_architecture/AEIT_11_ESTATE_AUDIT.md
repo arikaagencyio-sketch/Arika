@@ -1,8 +1,8 @@
 # AEIT_11 — Estate Audit
 
-**Version:** v0.2.2
-**Measured:** 2026-08-28 (re-measured the same day, after owner item 32b); **re-measured 2026-09-13** after `offer-pricing-floor-analyst`'s static `OFFER_PRICED` emit was removed
-**Re-verified:** 2026-09-13 — gate re-run after the change, all checks pass; four counts moved by one each, as predicted (§9 v0.2.2)
+**Version:** v0.2.3
+**Measured:** 2026-08-28 (re-measured the same day, after owner item 32b); re-measured 2026-09-13 after `offer-pricing-floor-analyst`'s static `OFFER_PRICED` emit was removed; **re-measured 2026-09-14** after `offer-orchestrator`'s intake trigger was renamed to `OFFER_INTAKE_REQUESTED`
+**Re-verified:** 2026-09-14 — gate re-run after the change; three estate counts, the manual-entry count and the re-entrant edge count each moved by one, as predicted (§9 v0.2.3)
 **Owner:** Agency Governance (00)
 **Status:** Measurement. Re-runnable — `python 00_Agency_Governance/enterprise_architecture/estate_event_gate.py`
 **Standard:** [`AEIT_11_RUNTIME_TRUTH_STANDARD.md`](AEIT_11_RUNTIME_TRUTH_STANDARD.md)
@@ -19,8 +19,8 @@
 |---|---|
 | Agents | **115**, across 20 departments |
 | `emits` declarations | **200** (**194** distinct event names; 4 events have more than one emitter) |
-| Event subscriptions | **184** (**145** distinct event names) |
-| Distinct events in the estate | **268** |
+| Event subscriptions | **184** (**146** distinct event names) |
+| Distinct events in the estate | **269** |
 | Agents that have ever produced a dated execution record | **6** |
 
 **Test:** parse every `.claude/agents/*.md` frontmatter; count `emits:` (both the block form and the inline `[A, B]` form) and every `on:` under `triggers:`. Cross-reference. Count records in every declared `memory_stream`.
@@ -31,7 +31,7 @@
 |---|---|---|---|
 | **Both ends named** | **71** (16 cross-department) | `CONNECTED` | An emitter and a subscriber both name it |
 | **Emitter, no subscriber** | **123** | `DESIGNED` | Specified; nothing consumes it |
-| **Subscriber, no emitter** | **74** | see §3 | Something waits; nothing produces |
+| **Subscriber, no emitter** | **75** | see §3 | Something waits; nothing produces |
 
 **No edge in the estate is `LIVE`.** `arika-runtime/src/executor.ts` returns `emitted: spec.emits ?? []` and never imports the event bus; `publish()` has exactly one call site, `webhook-server.ts`, and it is inbound. **Re-verified 2026-08-28 by reading the file, not by citing the earlier finding** — R2: a state is never inherited.
 
@@ -41,12 +41,12 @@
 
 **This is the correction that produced this audit.** On 2026-08-28 a field was reported as having *no owner*. An audit of all 311 fields across Sector's 16 databases then found **311 of 311 owned**. The field had an owner; **the owner was unbuilt**. Those are different states, they were collapsed into one, and *the remedies are not the same* — one needs a decision about who owns a thing, the other needs a build.
 
-Generalised to the estate's 74 orphaned waits, and recorded in [`estate-event-register.json`](estate-event-register.json):
+Generalised to the estate's 75 orphaned waits, and recorded in [`estate-event-register.json`](estate-event-register.json):
 
 | Classification | Count | What it means | Remedy |
 |---|---|---|---|
 | `external_entry_point` | **4** | A system outside the estate produces it, and reaches the runtime through the webhook — the only `publish()` path that exists | **None. Correct as-is.** |
-| `manual_entry_point` | **61** | A human produces it by running the agent | **None. Correct as-is — but it must be *labelled*, or a reader reads a working design as a break.** |
+| `manual_entry_point` | **62** | A human produces it by running the agent | **None. Correct as-is — but it must be *labelled*, or a reader reads a working design as a break.** |
 | `producer_unassigned` | **9** | An agent waits on something **nobody has been given the job of producing** | **An ownership decision. Not a build.** |
 
 The 4 external ones are the financial events — `REVENUE_RECEIVED`, `EXPENSE_SUBMITTED`, `EXPENSE_APPROVED`, `PAYROLL_EXECUTED` — declared in the runtime's own typed contract `financialEventTypes`. Six agents wait on `REVENUE_RECEIVED`, the most-awaited event in the agency, and **that is the design working**: the accounting system is the right producer.
@@ -95,20 +95,23 @@ documented the supersession trigger at all** — `TECHSTACK_OS.md` lists only
 synchronously, with **no cycle detection, no depth limit and no dedupe**. A **pure** loop — sole emitter, sole
 subscriber, same agent — therefore **does not terminate**.
 
-**Eight such edges already exist**, found only because this audit went looking before building:
+**Eight such edges existed**, found only because this audit went looking before building. **Seven remain** — Offer (02)'s was broken on 2026-09-14:
 
 | | Events | Where |
 |---|---|---|
 | **Pure, non-terminating** | **3** — `CAPITAL_ALLOCATED`, `CASHFLOW_WARNING`, `GROWTH_CAPACITY_EVALUATED` | Finance (09) |
-| Shared-topic re-entry | 5 — `BUDGET_THRESHOLD_EXCEEDED`, `CLIENT_PROFITABILITY_UPDATED`, `OFFER_BRIEF_RECEIVED`, `RESERVE_TARGET_BREACHED`, `TAX_RESERVED` | Finance (09), Offer (02) |
+| Shared-topic re-entry | 4 — `BUDGET_THRESHOLD_EXCEEDED`, `CLIENT_PROFITABILITY_UPDATED`, `RESERVE_TARGET_BREACHED`, `TAX_RESERVED` | Finance (09) |
+| ✅ **Broken 2026-09-14** | `OFFER_BRIEF_RECEIVED` — `offer-orchestrator` listened on the event it emits. Its intake trigger is now the human-invoked `OFFER_INTAKE_REQUESTED`; it still emits `OFFER_BRIEF_RECEIVED` to `offer-oeos-engineer` | Offer (02) |
 
 > 🔴 **This turns §8's last paragraph from a judgement into a hard blocker.** The reason not to
 > wire `publish()` first was that 184 subscriptions have never fired. **The stronger reason is that three of them
 > would not stop.** The first Finance event published would recurse until the stack gave out.
 
-They are **recorded, not fixed** — they belong to Finance (09) and Offer (02). The gate's **check 6** fails on
+The remaining seven are **recorded, not fixed** — they belong to Finance (09). The gate's **check 6** fails on
 any re-entrant edge not already in the register, so the set cannot grow silently. **It is the check that would have
 caught this audit's own proposed remedy.**
+
+> ⚠️ **Flagged 2026-09-14, not re-classified: "shared-topic" may understate the risk.** Check 6 records an edge when **the same agent** emits and subscribes to the event. Another subscriber does not stop that agent re-triggering itself — the Offer edge re-entered `offer-orchestrator` on every emit even though `offer-oeos-engineer` also subscribed. With static emits, **"would terminate" is not established for the four remaining shared-topic edges.** Re-classifying them is Finance (09)'s decision, and so is changing the gate's "would NOT terminate" count.
 
 ## 4. Two departments already did this, before the standard existed
 
@@ -211,14 +214,23 @@ A **second** gate covers the observability store — [`01_Sector/contracts/skill
 |---|---|---|
 | 1 | **Presence (21): 5 orphaned waits** — every remaining inbound edge the department has. Assign producers, or mark the edges `INTENDED` and stop routing through them. | Owner + 21 |
 | 2 | ✅ **CLOSED 2026-08-28.** Two registrars could not supersede. Fixed by renaming the inbound trigger, not by adding an emit — §3.1. | 13, 21 |
-| 2b | 🔴 **NEW: 8 re-entrant edges, 3 of which do not terminate** (§3.2). Break the loops, or add cycle detection to the bus, **before** `executor.ts` ever publishes. | 09, 02 + runtime |
+| 2b | 🔴 **7 re-entrant edges remain, 3 recorded as non-terminating** (§3.2). Offer (02)'s was broken 2026-09-14; the four shared-topic edges may not terminate either. Break the loops, or add cycle detection to the bus, **before** `executor.ts` ever publishes. | 09 + runtime |
 | 3 | `HEALTH_SCORE_DROPPED` — a self-loop with no producer at either end. | 07 |
 | 4 | `EXPERIENCE_PROJECT_SCOPED` — the EE chain's first trigger has no producer. | 20 |
-| 5 | Whether the 59 `manual_entry_point` events should be **labelled in their department OS files**, as 15 and 11 already do. | Owner |
+| 5 | Whether the 62 `manual_entry_point` events should be **labelled in their department OS files**, as 15 and 11 already do. | Owner |
 
 **Only 2b touches the runtime, and it is the one that must come first.** Making the estate event-driven is one change to `executor.ts` — **and taking it before 2b would hang the process.** Wiring `publish()` today would fire 184 subscriptions that have never run once, into 9 waits nobody owns, through a bus with no cycle detection and 3 loops that do not terminate.
 
 ## 9. Changelog
+
+- **v0.2.3 (2026-09-14) — Offer (02)'s re-entrant edge broken; seven remain.** `offer-orchestrator` subscribed to `OFFER_BRIEF_RECEIVED`, the event it emits — recorded since v0.2 as a shared-topic re-entry. Its intake trigger is renamed to the human-invoked `OFFER_INTAKE_REQUESTED`, request-shaped like the triggers in §3.1. It still emits `OFFER_BRIEF_RECEIVED`, and `offer-oeos-engineer` still receives it. Found by the Hospitality Sector → Offer reconciliation audit, which showed this fix had been reported but was never in the repository, in any commit on any branch. **Counts predicted before the run and confirmed by it:**
+  - Distinct subscriptions 145 → **146**.
+  - Distinct events 268 → **269**.
+  - Subscriber-only edges 74 → **75**.
+  - `manual_entry_point` 61 → **62**.
+  - Re-entrant edges 8 → **7**.
+
+  Declarations (200), distinct emits (194), subscriptions (184), connected edges (71) and emitter-only edges (123) are unchanged. **The first gate run after the rename failed on exactly the three prose counts check 5 guards**, until this document was updated. Register: `OFFER_INTAKE_REQUESTED` added as `manual_entry_point`; `OFFER_BRIEF_RECEIVED` removed from `known_reentrant_edges.shared_topic`. Gate baseline taken from measured output. A registry test in `arika-runtime/tests/executor.test.mjs` now fails if the orchestrator subscribes to an event it emits. ⚠️ **Flagged, not re-classified:** a shared-topic edge still re-triggers its emitting agent (§3.2), so "3 would not terminate" may understate the remaining risk. Corrected §8's stale `59` manual entry points. **Still stale, as v0.2.2 recorded:** §1's execution-record count and §5's `LIVE` axis. — Claude Code (Opus 5)
 
 - **v0.2.2 (2026-09-13) — one unsafe static emit removed, and check 0 taught the difference between "emits nothing" and "parsed nothing".** `offer-pricing-floor-analyst` declared `emits: [OFFER_PRICED]` on every result. The Hospitality negative pricing-floor test returned `floor_check: insufficient_data` — a result that, the moment `executor.ts` publishes, would have announced a priced offer that was never priced. The spec now declares `emits: []`, and `OFFER_OS.md` §12 records the conditional rule (`OFFER_PRICED` only on `above_floor` / `at_floor`, once conditional emits exist). **Removing the emit tripped check 0 by design:** the parser-integrity check could not tell a deliberate empty declaration from a missed parse. Check 0 now accepts an explicit `emits: []`, **lists every such agent by name on each run**, and still fails an agent with no parseable `emits`. **Falsified the same day** against five fake agents in a temporary directory: `[]` and `[ ]` accepted as declared-none; a missing `emits` line still failed; inline and block forms still parsed. **Counts were predicted before the run and confirmed by it:** declarations 201 → **200**, distinct emitted 195 → **194**, distinct events 269 → **268**, emitter-only 124 → **123**. `OFFER_PRICED` had one emitter and no subscriber, so subscriptions (184), connected edges (71) and orphaned waits (74) are unchanged. Dates are the gate's own `today` line. ⚠️ **Not re-measured in this change — §1's execution-record count and §5's `LIVE` axis are now stale:** `02_Offer/_memory/runtime.jsonl` exists with 5 manual records from 3 Offer agents (2026-09-13), so "6 of 115", "4 of 20 exist" and "12 executions" understate the estate. — Claude Code (Opus 5)
 

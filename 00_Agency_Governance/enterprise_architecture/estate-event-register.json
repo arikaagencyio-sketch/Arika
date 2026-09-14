@@ -1,7 +1,7 @@
 {
  "$comment": "Register of every event an agent subscribes to that NO agent emits. Required by AEIT_11 R7. Enforced by estate_event_gate.py. baseline_measured is when the estate was read; last_verified is the most recent gate run that agreed with it (AEIT_11 R3 - CONNECTED and LIVE decay).",
  "standard": "AEIT_11 Runtime Truth Standard",
- "baseline_measured": "2026-09-13 (re-measured after offer-pricing-floor-analyst's static OFFER_PRICED emit was removed; previous baseline 2026-08-28, after owner item 32b)",
+ "baseline_measured": "2026-09-14 (re-measured after offer-orchestrator's intake trigger was renamed from OFFER_BRIEF_RECEIVED to OFFER_INTAKE_REQUESTED; previous baseline 2026-09-13, after offer-pricing-floor-analyst's static OFFER_PRICED emit was removed)",
  "classifications": {
   "external_entry_point": "A system outside the agent estate produces it. Reaches the runtime through webhook-server.ts, the only publish() call site. Correct as-is; needs no build.",
   "manual_entry_point": "A human produces it by running the agent. Correct as-is; needs no build. Must be LABELLED or a reader mistakes it for a break.",
@@ -487,6 +487,17 @@
    "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent."
   },
   {
+   "event": "OFFER_INTAKE_REQUESTED",
+   "classification": "manual_entry_point",
+   "waiting_agents": [
+    "offer-orchestrator"
+   ],
+   "waiting_departments": [
+    "02"
+   ],
+   "evidence": "Naming convention: a *_REQUESTED / *_PROPOSED / *_REVIEW event is an invocation, raised by a human running the agent. Added 2026-09-14: offer-orchestrator's intake trigger, renamed from OFFER_BRIEF_RECEIVED - the event the orchestrator emits - to break a re-entrant edge (AEIT_11 section 3.2)."
+  },
+  {
    "event": "OPPORTUNITY_PROPOSED",
    "classification": "manual_entry_point",
    "waiting_agents": [
@@ -837,7 +848,7 @@
   }
  ],
  "known_reentrant_edges": {
-  "$comment": "Agents that emit an event they also subscribe to. The bus is a bare node EventEmitter with NO cycle detection, depth limit or dedupe, so each of these RE-ENTERS the moment executor.ts starts publishing - and a PURE loop (sole emitter == sole subscriber == same agent) does not terminate. Recorded, not fixed: all are Finance (09) and Offer (02) and belong to those departments. estate_event_gate.py check 6 fails on any edge not listed here.",
+  "$comment": "Agents that emit an event they also subscribe to. The bus is a bare node EventEmitter with NO cycle detection, depth limit or dedupe, so each of these RE-ENTERS the moment executor.ts starts publishing - and a PURE loop (sole emitter == sole subscriber == same agent) does not terminate. Recorded, not fixed: every remaining edge is Finance (09) and belongs to that department. Offer (02)'s OFFER_BRIEF_RECEIVED edge was broken on 2026-09-14 by renaming offer-orchestrator's intake trigger to OFFER_INTAKE_REQUESTED; check 6 would now fail if it returned. estate_event_gate.py check 6 fails on any edge not listed here.",
   "pure_nonterminating": [
    "CAPITAL_ALLOCATED",
    "CASHFLOW_WARNING",
@@ -846,10 +857,9 @@
   "shared_topic": [
    "BUDGET_THRESHOLD_EXCEEDED",
    "CLIENT_PROFITABILITY_UPDATED",
-   "OFFER_BRIEF_RECEIVED",
    "RESERVE_TARGET_BREACHED",
    "TAX_RESERVED"
   ]
  },
- "last_verified": "2026-09-13"
+ "last_verified": "2026-09-14"
 }

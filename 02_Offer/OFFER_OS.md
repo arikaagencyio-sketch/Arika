@@ -169,11 +169,13 @@ All workflows above are templates extracted from AI-generated brainstorm content
 
 | Agent | Role | Grounded in | Triggers |
 |---|---|---|---|
-| `offer-orchestrator` | Governs intake — deconstructs an offer's strategic/commercial/execution intent, surfaces misaligned assumptions, routes to the specialists, recommends a registry action | Draft 24 (Offer Orchestration Architect) + §10 standards | manual, event `OFFER_BRIEF_RECEIVED` |
+| `offer-orchestrator` | Governs intake — deconstructs an offer's strategic/commercial/execution intent, surfaces misaligned assumptions, routes to the specialists, recommends a registry action | Draft 24 (Offer Orchestration Architect) + §10 standards | manual, event `OFFER_INTAKE_REQUESTED` (human-invoked intake), event `SECTOR_MAPPED` |
 | `offer-oeos-engineer` | Runs a Phase-1 seed brief through the full 12-phase OEOS to produce an engineered offer (positioning → backbone → journey → deliverables → QA → monetization → scalability) | Draft 29 (real OEOS methodology) + §3 | manual, event `OFFER_BRIEF_RECEIVED` |
 | `offer-pricing-floor-analyst` | Applies the segmented ARR-band pricing floor (the internal "do not quote below" line) to the engineered tiers | §10 (pricing-floor method + first provisional floor) | manual, event `OFFER_ENGINEERED`, `QUOTE_PROPOSED` |
 
-**Intended workflow chain:** `OFFER_BRIEF_RECEIVED` → orchestrator (intent + routing) + oeos-engineer (12-phase build) → `OFFER_ENGINEERED` → pricing-floor-analyst (floor check, **advisory**) → human review. **The pricing step emits no event** — see §12. Agents fire from external/published events they listen to; agent-to-agent handoff (re-publishing an agent's `emits`) is declared in each spec and lands in a later runtime pass — until then, run each stage manually or publish the event.
+**Intended workflow chain:** `OFFER_INTAKE_REQUESTED` (human-invoked intake) → orchestrator (intent + routing) → emits `OFFER_BRIEF_RECEIVED` → oeos-engineer (12-phase build) → `OFFER_ENGINEERED` → pricing-floor-analyst (floor check, **advisory**) → human review. **The pricing step emits no event** — see §12. Agents fire from external/published events they listen to; agent-to-agent handoff (re-publishing an agent's `emits`) is declared in each spec and lands in a later runtime pass — until then, run each stage manually or publish the event.
+
+**Runtime truth — re-entry loop broken (2026-09-14).** Until 2026-09-14 the orchestrator listened on `OFFER_BRIEF_RECEIVED`, **the event it emits**. The event bus has no cycle detection, depth limit or dedupe, so the first published brief would have re-triggered the orchestrator on every emit (`AEIT_11_ESTATE_AUDIT.md` §3.2). It now listens on `OFFER_INTAKE_REQUESTED`, a human-invoked event no agent emits, and still hands the brief to the oeos-engineer. **The loop was latent, never live:** `executor.ts` publishes no events today. A registry test (`arika-runtime/tests/executor.test.mjs`) fails if the orchestrator ever subscribes to an event it emits, and estate-gate check 6 fails if the edge returns. The posture is unchanged — every stage stays advisory.
 
 The subagent/skill layer beneath these 3 top-level agents remains to be built as real runs accumulate.
 
@@ -278,12 +280,14 @@ Note: "sell outcomes not activities" and "an offer is a transformation system" b
 
 | Trigger | Type | Fires |
 |---|---|---|
-| `OFFER_BRIEF_RECEIVED` | event | `offer-orchestrator`, `offer-oeos-engineer` |
+| `OFFER_INTAKE_REQUESTED` | event — manual / human-invoked intake; no agent emits it | `offer-orchestrator` |
+| `SECTOR_MAPPED` | event | `offer-orchestrator` |
+| `OFFER_BRIEF_RECEIVED` | event — emitted by `offer-orchestrator` | `offer-oeos-engineer` |
 | `OFFER_ENGINEERED` | event | `offer-pricing-floor-analyst` |
 | `QUOTE_PROPOSED` | event | `offer-pricing-floor-analyst` |
 | manual | CLI | any of the three (`arika run offer-…`) |
 
-Emitted events (for downstream chaining): `OFFER_BRIEF_RECEIVED` (orchestrator), `OFFER_ENGINEERED` (oeos-engineer). `offer-pricing-floor-analyst` declares **no emit** (`emits: []`) — see *Pricing completion emits no event* below. **No scheduled/cron trigger** — offer engineering is on-demand, not time-based. Any automation that would *act* on a recommendation (quote a price, publish an offer externally) is Class 3+ and needs a row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` + human sign-off before going live.
+Emitted events (for downstream chaining): `OFFER_BRIEF_RECEIVED` (orchestrator → oeos-engineer; the orchestrator does not subscribe to it), `OFFER_ENGINEERED` (oeos-engineer). `offer-pricing-floor-analyst` declares **no emit** (`emits: []`) — see *Pricing completion emits no event* below. **No scheduled/cron trigger** — offer engineering is on-demand, not time-based. Any automation that would *act* on a recommendation (quote a price, publish an offer externally) is Class 3+ and needs a row in `00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md` + human sign-off before going live.
 
 **Pricing completion emits no event (2026-09-13).** Pricing analysis is **advisory** — `offer-pricing-floor-analyst` returns a recommendation and writes a memory line, nothing more. It previously declared a static `emits: [OFFER_PRICED]`, so every run, *including an `insufficient_data` result*, would have announced a priced offer the moment agent-to-agent publishing was wired (found by the Hospitality negative pricing-floor test, `_memory/runtime.jsonl` line 5). **Until the runtime supports conditional emits, no event is emitted for pricing completion.** The rule for the future conditional event:
 
@@ -358,9 +362,10 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 - 2026-09-14 — **Owner-approved band-to-hours scale recorded** (§8): MVP planning hours set on both paths, excluding legal. Cost in money still not approved; G5 and G7 still blocked. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 - 2026-09-14 — **Owner-approved hours counting rules recorded** (§8): MVP planning totals now rule-defined, excluding legal; one clarification flagged (the audit readout and blueprint approval conversations). G5 and G7 still blocked. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
 - 2026-09-14 — **Meeting-time counting decided** (§8): the audit readout and blueprint approval conversations count inside the owner / strategist band; worksheet §8 #27 resolved; totals unchanged. G5 and G7 still blocked. Registry table untouched; no prices; still Not Quotable. — Claude Code (Opus 5)
+- 2026-09-14 — **Offer re-entry loop broken** (§5, §12, §16). `offer-orchestrator` now listens on the human-invoked `OFFER_INTAKE_REQUESTED` instead of `OFFER_BRIEF_RECEIVED`, the event it emits. It still emits `OFFER_BRIEF_RECEIVED`, and `offer-oeos-engineer` still receives it. The Hospitality Sector → Offer reconciliation audit found this fix reported but never in the repository, in any commit on any branch. AEIT_11 register updated: `OFFER_INTAKE_REQUESTED` is classified `manual_entry_point`, and `OFFER_BRIEF_RECEIVED` is removed from the recorded re-entrant edges. A registry test now fails if the orchestrator subscribes to anything it emits. Also recorded the orchestrator's existing `SECTOR_MAPPED` trigger, missing from §5 and §12. Advisory-only posture unchanged; no agent run, no event published; registry table untouched. — Claude Code (Opus 5)
 
 ## 16. Memory / Feedback Loop / Cadence
 
 **Memory:** the three §5 agents write append-only JSONL to `02_Offer/_memory/runtime.jsonl` (the runtime's bois-compatible memory envelope) on every run. Decision / Learning / Prompt-Evolution rollups (per the Tier 1 pattern in `05_Sales/SALES_OS.md` §16) can be distilled from that stream once real runs accumulate.
 **Feedback Loop:** when a §7 KPI misses threshold (e.g. audit→project conversion below target, or a pricing-floor override recurring on the same offer), route the miss back into the seed brief / OEOS phase that produced it and log the change. Formal recovery-agent wiring is pending, same as other departments.
-**Cadence:** offer engineering is **on-demand** (event `OFFER_BRIEF_RECEIVED`), not calendar-driven — it runs when a new offer is seeded, not against one of the 7 Cognitive Calendars (`00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4). The one exception is the pricing-floor recompute: refresh it whenever a new real OEOS offer arrives (§10).
+**Cadence:** offer engineering is **on-demand** (the human-invoked event `OFFER_INTAKE_REQUESTED`, or `SECTOR_MAPPED`), not calendar-driven — it runs when a new offer is seeded, not against one of the 7 Cognitive Calendars (`00_Agency_Governance/AGENCY_REVENUE_TARGETS.md` §4). The one exception is the pricing-floor recompute: refresh it whenever a new real OEOS offer arrives (§10).

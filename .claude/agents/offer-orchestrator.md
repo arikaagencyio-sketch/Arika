@@ -8,8 +8,11 @@ risk_class: 1
 requires_human_approval: false
 triggers:
   - type: manual
+  # Human-invoked intake. Was OFFER_BRIEF_RECEIVED - the event this agent emits - so the
+  # first published brief would have re-triggered it through a bus with no cycle
+  # detection (AEIT_11 §3.2). Renamed 2026-09-14; the brief is still emitted below.
   - type: event
-    on: OFFER_BRIEF_RECEIVED
+    on: OFFER_INTAKE_REQUESTED
   - type: event
     on: SECTOR_MAPPED
 inputs:
