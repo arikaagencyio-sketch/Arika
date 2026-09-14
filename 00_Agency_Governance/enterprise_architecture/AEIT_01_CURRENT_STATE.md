@@ -1,7 +1,7 @@
 # AEIT_01 — Enterprise Current-State Map (Discovery)
 
-**Version:** v0.1
-**Last updated:** 2026-07-22
+**Version:** v0.1.1
+**Last updated:** 2026-09-14 — key-state claims corrected (§1, §5); the 2026-07-22 wording is kept as dated history
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Status:** Discovery consolidation. Sources: `GLOBAL_OS.md`, `REGISTRY_TAXONOMY_REFERENCE.md`,
 `00_Agency_Governance/*`, all 20 `{DEPT}_OS.md`, `.claude/agents/*`, `arika-runtime/`, and the
@@ -19,8 +19,12 @@ architecture** expressed almost entirely in markdown, sitting on top of a **solo
 0-client, $0-revenue, not-yet-legally-incorporated** business. The documentation discipline is
 genuinely high (self-auditing changelogs, honest 🔴 flags, supersession chains). The **built
 *process* is far heavier than the operational *reality* warrants** — and the automation layer that
-would make the architecture "run" **has never run on a schedule and cannot run at all today**
-(no `ANTHROPIC_API_KEY` is set). This gap is the central fact Phase Zero must design around.
+would make the architecture "run" **has never run on a schedule**, and its Claude-backed path has been proven
+**only by hand** — five manual Offer (02) prompt-agent runs on 2026-09-13 (§5). This gap is the central fact
+Phase Zero must design around.
+
+> *Corrected 2026-09-14. Was (2026-07-22): "…has never run on a schedule and cannot run at all today (no
+> `ANTHROPIC_API_KEY` is set)."*
 
 ---
 
@@ -122,11 +126,18 @@ The single most important current-state fact, quantified:
 - **Business reality:** headcount 1 (solo, AI-assisted); 0 employees / 0 contractors / 0 payroll;
   0 clients; $0 revenue; target $1M/month ($35K/day). The agency **does not legally exist yet**
   (`[ARIKA LEGAL ENTITY]` is a placeholder in every contract template; counsel instructed
-  2026-07-19, reply awaited).
-- **Automation reality:** the entire agent layer is **unrunnable today** — `ANTHROPIC_API_KEY` is
-  not set, and 93 of 106 agents are `prompt` agents that depend on Claude. **28 scheduled cron
+  2026-07-19, reply awaited — *2026-09-14: counsel has since issued two unsigned letters of engagement; scope
+  not agreed; `OWNER_INPUT_NEEDED.md` item 59*).
+- **Automation reality (corrected 2026-09-14):** the Anthropic key is **no longer a total-absence
+  blocker**. Manual `arika-runtime` prompt-agent calls were **verified by use** on 2026-09-13, limited
+  to five Offer (02) control-test runs (`13_Tech_Stack/TECHSTACK_OS.md` §3). **Not verified:** a
+  persistent daemon or scheduler boot, the `finos-plugin` and `bois` wrappers, every agent, and
+  unattended scheduled execution. **The scheduler is not approved**; the safety blocker is now
+  **governance approval and daemon control**, not key absence. *Was (2026-07-22): "the entire agent
+  layer is unrunnable today — `ANTHROPIC_API_KEY` is not set, and 93 of 106 agents are `prompt`
+  agents that depend on Claude."* **28 scheduled cron
   triggers have never fired** (no daemon; crons only register while `npm start` holds a foreground
-  terminal, which has never been left running). The one automation that ever fired (2026-07-04)
+  terminal, which has never been left running; re-counted 2026-09-13 as 30 triggers across 29 specs). The one automation that ever fired (2026-07-04)
   auto-disabled 3h41m later and went **unnoticed for 11 days**.
 - **Infrastructure reality:** the one piece of real, verified infrastructure is the **ClickUp CRM**
   (free tier, built). Email/invoicing = **Zoho** (Books Premium trial expired; M365 rejected on
@@ -135,7 +146,8 @@ The single most important current-state fact, quantified:
 
 **Consequence for the plan:** IntOS cannot be *activated* on top of an automation layer that has
 never run. Therefore Phase Zero designs IntOS but the roadmap (`AEIT_10`) gates its build behind
-activation (API key + a proven scheduled run) and behind legal existence — the reconcile-first
+activation (API key + a proven scheduled run — *2026-09-14: the key half is met for manual calls only; no
+scheduled run is proven, and the scheduler is not approved*) and behind legal existence — the reconcile-first
 posture the Owner selected.
 
 ---
@@ -166,3 +178,4 @@ The audit is not a teardown. These are genuine strengths to build on, not replac
 ## 8. Changelog
 
 - **v0.1 (2026-07-22):** Current-state map created. — Claude Code (Opus 4.8)
+- **v0.1.1 (2026-09-14):** Key-state claims corrected after the Hospitality Sector → Offer reconciliation audit. §1 and §5 no longer state as current fact that the Anthropic key is unset or the agent layer unrunnable. Manual `arika-runtime` prompt-agent calls were verified by use on 2026-09-13 (five Offer (02) runs). A persistent daemon or scheduler boot, `finos-plugin`, `bois`, every agent and unattended scheduled execution remain unverified, and the scheduler is not approved. The 2026-07-22 wording is kept as dated history. Also noted the unsigned letters of engagement beside §5's "reply awaited". §5's cron count is annotated with the 2026-09-13 re-count (30 triggers across 29 specs); other 2026-07-22 figures, such as the agent count, are not re-measured here. — Claude Code (Opus 5)

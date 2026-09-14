@@ -1,7 +1,7 @@
 # Presence — Department Operating System (21)
 
-**Version:** v0.1.0
-**Last updated:** 2026-07-23
+**Version:** v0.1.1
+**Last updated:** 2026-09-14 — key-state claims corrected (§5, §9); the 2026-07-23 wording is kept as dated history
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Mandate:** The agency's **Market Presence Infrastructure** — the outbound mirror of IntOS. Presence is how the agency projects itself into the market (`agency → world`) across every layer, so that every public interaction carries a revenue job and expresses one institutional behavior.
 **Status:** New department (2026-07-23), seeded from the owner's Parts 1–4 presence work. **Blueprint-only, reality-gated** — the agency is solo, pre-revenue, 0-client, with zero social accounts and one subdomain-only website; this OS is the design the presence gets built to, not a record of live presence. Consciously **overrides** the repo's prior "no distribution/platform department/agent" decision (`04_Content/CONTENT_OS.md` §5; `PIL_INTEGRATION_REPORT.md` §10) — owner decision, 2026-07-23, recorded not silent.
@@ -143,7 +143,7 @@ Intended shape (not yet an executable automation; reality-gated):
 
 ## 5. Agent Roster — PROPOSED (design only)
 
-> ⛔ **OWNER REVIEW GATE.** Per the approved sequence, these are the **proposed** roster; the actual `.claude/agents/presence-*.md` specs are **not written until the owner ratifies this OS + the doctrine + the boundaries.** Listed here as design, not implementation. All are **reality-gated** — runtime-wiring deferred until `ANTHROPIC_API_KEY` + real accounts exist (the whole agent layer is currently unrunnable). Advisory-first per Constitution §5.
+> ⛔ **OWNER REVIEW GATE.** Per the approved sequence, these are the **proposed** roster; the actual `.claude/agents/presence-*.md` specs are **not written until the owner ratifies this OS + the doctrine + the boundaries.** Listed here as design, not implementation. All are **reality-gated** — runtime-wiring deferred until real accounts and a live publishing path exist. *Corrected 2026-09-14 — was: "until `ANTHROPIC_API_KEY` + real accounts exist (the whole agent layer is currently unrunnable)". The key now works for manual Offer (02) runtime calls, verified by use 2026-09-13; **no Presence agent is verified live**, and the scheduler is not approved (§9).* Advisory-first per Constitution §5.
 
 | Proposed agent | One job | Risk class | Pattern reused |
 |---|---|---|---|
@@ -184,7 +184,7 @@ Deliberately **uncalibrated** — zero presence data exists, so these are target
 
 - **Standing risk — structure ahead of content.** This department is a blueprint over a 0-client, $0-revenue, zero-social-account agency; a Presence Layer Registry that reads full of `live` rows when nothing is live would be the exact drift disease the repo has caught four times. Mitigation: every row carries an honest reality-state; nearly all start `planned`/`watchlist`.
 - **Standing risk — reopened decision.** Overriding the declined-distribution stance risks re-fragmenting the ownership Content/Marketing deliberately consolidated. Mitigation: §1 consume-by-contract table; `presence-layer-registrar` enforces one-owner on every new row.
-- **Standing risk — unrunnable agents.** Like all 106 agents, the proposed roster cannot run (`ANTHROPIC_API_KEY` unset). Specs are gated behind activation; §5 says so.
+- **Standing risk — agents not live (re-stated 2026-09-14).** Presence remains **reality-gated by zero or limited accounts and no live publishing path** — the Postiz executor is deployed, but no platform account is connected and nothing has been published through it (`13_Tech_Stack/TECHSTACK_OS.md` §3). It is **not** gated by a missing Anthropic key: manual `arika-runtime` prompt-agent calls work, verified by use in five Offer (02) runs on 2026-09-13. **No Presence agent is verified live**, and the scheduler is not approved. *Was (2026-07-23): "Like all 106 agents, the proposed roster cannot run (`ANTHROPIC_API_KEY` unset). Specs are gated behind activation; §5 says so."*
 
 ## 10. Standards & SOPs Index
 
@@ -218,6 +218,7 @@ No raw `Draft N.md` archive. Seeded directly from the owner's Parts 1–4 presen
 ## 15. Changelog
 
 - **v0.1.0 (2026-07-23):** Department created. Mandate, four-directions model, Presence Layer Registry (20 visible + 22 hidden layers), DATOS engine, Engagement capability, proposed agent roster (design only, pre-gate), KPIs, standards, RACI. Blueprint-only, reality-gated. — Claude Code (Opus 4.8)
+- **v0.1.1 (2026-09-14):** Key-state claims corrected after the Hospitality Sector → Offer reconciliation audit. §5's reality-gate note and §9's standing risk no longer say the Anthropic key is unset or the agent layer unrunnable. Presence is gated by accounts and a live publishing path; manual Offer (02) runtime calls work (verified by use 2026-09-13); no Presence agent is verified live; the scheduler is not approved. The 2026-07-23 wording is kept as dated history. ⚠️ **Not changed here:** §5 still says the `presence-*` specs are not yet written, but eight exist in `.claude/agents/`. — Claude Code (Opus 5)
 
 ## 16. Honest State
 

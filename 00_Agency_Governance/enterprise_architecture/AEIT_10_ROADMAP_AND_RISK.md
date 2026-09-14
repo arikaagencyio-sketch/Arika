@@ -1,7 +1,7 @@
 # AEIT_10 — Prioritized Roadmap & Enterprise Risk Register (Blueprint)
 
-**Version:** v0.1
-**Last updated:** 2026-07-22
+**Version:** v0.1.1
+**Last updated:** 2026-09-14 — gate G2 and Phase A re-stated for the current key state
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Consumes:** all of AEIT_01–09. **Sequences:** reconciliation enactment (AEIT_05), gap remediation
 (AEIT_04), and the missing-piece builds (AEIT_06–09).
@@ -19,7 +19,7 @@
 |---|---|---|
 | **G0 — Coherence** | Ratified R1–R5 enacted; dead systems cleaned | any new build on a contradictory base |
 | **G1 — Legal existence** | Entity incorporated; counsel engaged (`LEGAL_OS.md` §8) | client-facing offers, DPA, AI-Enablement Class-3 gate |
-| **G2 — Activation** | `ANTHROPIC_API_KEY` set; runtime boots persistently | every `prompt` agent, all collection |
+| **G2 — Activation** | `ANTHROPIC_API_KEY` set; runtime boots persistently. **◐ 2026-09-14: the key half is met for manual calls only** (verified by use, five Offer (02) runs, 2026-09-13). **Persistent boot has not happened and is not approved** — the scheduler stays unapproved; `finos-plugin`, `bois` and most agents are unverified | every unattended `prompt` agent, all collection *(was: every `prompt` agent)* |
 | **G3 — Proven schedule** | One unattended scheduled job lands end-to-end (`AEIT_04 §C5`) | trusting any cron cadence |
 | **G4 — Governance coverage** | Approval-Matrix row per armed automation (`AEIT_04 §C2`) | firing automations safely |
 | **G5 — First source** | ≥1 Source registered + verified (`AEIT_08`) | IntOS collection |
@@ -39,7 +39,9 @@ Enact the ratified reconciliation and clear dead weight. **Small, safe, owner-ap
   number (`AEIT_04 §C1`).
 
 ### Phase A — Activation & governance *(gate: G2, G3, G4)*
-- Set `ANTHROPIC_API_KEY`; boot `arika-runtime` persistently.
+- Set `ANTHROPIC_API_KEY`; boot `arika-runtime` persistently. — *2026-09-14: the key is set and verified by use
+  for manual calls (2026-09-13); rotation is recommended (`TECHSTACK_OS.md` §3). Persistent boot comes **only
+  after** governance approval and daemon control exist — the safety blocker is now those, not key absence.*
 - Write one Approval-Matrix row per armed automation **before** enabling schedules.
 - Prove `automation-reliability-monitor`'s daily cron survives one unattended cycle.
 - **Compliance (needs G1):** add Zoho to the DPA sub-processor register; resolve Zoho Books plan;
@@ -112,3 +114,4 @@ per the Owner's right-sized scope.
 
 ## 7. Changelog
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
+- **v0.1.1 (2026-09-14):** Gate G2 and Phase A re-stated after the Hospitality Sector → Offer reconciliation audit. The key half of G2 is met for manual prompt-agent calls (verified by use, five Offer (02) runs, 2026-09-13). Persistent boot, unattended scheduled execution, `finos-plugin`, `bois` and most agents remain unverified, and the scheduler is not approved. G2 therefore stays **open**, and the blocker is governance approval and daemon control, not key absence. Original gate and task wording kept; dated notes added. — Claude Code (Opus 5)

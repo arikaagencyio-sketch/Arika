@@ -1,14 +1,16 @@
 # AEIT_07 — Intelligence Operating System (IntOS) Blueprint
 
-**Version:** v0.1
-**Last updated:** 2026-07-22
+**Version:** v0.1.1
+**Last updated:** 2026-09-14 — activation gate 1 re-stated for the current key state
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Fills:** the genuinely-absent platform (`AEIT_01 §3`); `REGISTRY_TAXONOMY_REFERENCE.md` future-state
 registries **Intelligence / Learning / Feedback**; `GLOBAL_OS.md` §11 item 8 (unified memory protocol).
 **Depends on:** `AEIT_06` (canonical model = write target), `AEIT_05` SM4 (Knowledge lifecycle),
 `AEIT_08` (source registry), `arika-runtime` (execution substrate).
 **Status:** Blueprint — design only. **IntOS is NOT activated in Phase Zero.** Activation is gated
-in `AEIT_10` behind the API key, a proven scheduled runtime, and governance rows.
+in `AEIT_10` behind the API key, a proven scheduled runtime, and governance rows. *(2026-09-14: the API-key gate
+is met for manual calls only — verified by use in five Offer (02) runs on 2026-09-13; the scheduled runtime and
+governance rows are not. See §5.)*
 
 > **First activated slice (2026-08-16):** the **Sector Layer (01) is being stood up as the first live, sector-scoped instance of this pipeline** — its SCIC signals (Sensing/Collection), Sector Intelligence findings (Knowledge), `Source Tier`/`Confidence`/`Last Verified` (Verification/freshness), and the `arika-runtime` sector agents (Distribution/Execution) conform to `AEIT_06` and prove the pattern IntOS later generalizes agency-wide. The **Collection layer (scraping) stays gated** exactly as above (no web in cloud routines; API key + cost governance + Approval-Matrix rows required). See `01_Sector/SECTOR_ACTIVATION_CONTRACT.md` §13 + `SECTOR_NOTION_SCHEMA.md` §0.1.
 
@@ -124,7 +126,10 @@ layer and the unified memory protocol). That is the right ratio for a solo agenc
 ## 5. Activation gates (why IntOS is not built now)
 
 IntOS **cannot** be stood up until — in order (`AEIT_10`):
-1. `ANTHROPIC_API_KEY` is set (`AEIT_04 §C3`).
+1. `ANTHROPIC_API_KEY` is set (`AEIT_04 §C3`). — ◐ **Partly met (2026-09-14):** the key works for manual
+   `arika-runtime` prompt-agent calls, verified by use in five Offer (02) runs on 2026-09-13. **Not verified:**
+   daemon or scheduler boot, the `finos-plugin` and `bois` wrappers, every agent, unattended scheduled execution.
+   The scheduler is not approved, so gates 2 and 3 are now the binding ones.
 2. `arika-runtime` is proven to run **one** unattended scheduled job end-to-end (`AEIT_04 §C5`).
 3. Approval-Matrix rows exist for every collection/execution automation (`AEIT_04 §C2`).
 4. At least one real Source is registered and verified (`AEIT_08`).
@@ -146,3 +151,4 @@ source registry's full breadth.
 
 ## 8. Changelog
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
+- **v0.1.1 (2026-09-14):** Activation gate 1 (the API key) marked **partly met**: manual prompt-agent calls were verified by use on 2026-09-13 (five Offer (02) runs). Unattended execution, the daemon, `finos-plugin`, `bois` and most agents remain unverified, and the scheduler is not approved — IntOS stays unbuilt, gated as before. The gate's original wording is unchanged; the status line carries a dated note. — Claude Code (Opus 5)

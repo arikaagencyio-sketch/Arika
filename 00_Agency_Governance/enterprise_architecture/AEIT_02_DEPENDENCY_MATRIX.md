@@ -1,7 +1,7 @@
 # AEIT_02 — Enterprise Dependency Matrix (Analysis)
 
-**Version:** v0.1
-**Last updated:** 2026-07-22
+**Version:** v0.1.1
+**Last updated:** 2026-09-14 — key-state claims corrected (§3, §4); the 2026-07-22 wording is kept as dated history
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Fills:** `REGISTRY_TAXONOMY_REFERENCE.md` future-state registry **Dependency** (not previously built).
 **Sources:** `GLOBAL_OS.md` §5 (operating flow), agent frontmatter (`emits`/`handoff_to`),
@@ -45,7 +45,7 @@ Sector(01) → Offer(02) → Marketing(03)/Content(04) → Sales(05) → Client 
 | Automation (16) | arika-runtime, Approval Matrix | client automations; **agency automation governance/monitoring** | all departments | Mary Thuo |
 | AI Enablement (17) | **Legal (10) review** (blocked), readiness data | roadmap, governance framework | Automation (16), client | Mary Thuo |
 | Finance (09) plugin | Zoho Books, exchange-rate API | ledger, cashflow | Governance (00) | Mary Thuo |
-| Legal (10) | **external counsel (not engaged/awaited)** | contracts, compliance | all client-facing depts | Mary Thuo |
+| Legal (10) | **external counsel (not engaged)** — *2026-09-14: named, two letters of engagement unsigned, scope not agreed (`OWNER_INPUT_NEEDED.md` item 59); was "not engaged/awaited"* | contracts, compliance | all client-facing depts | Mary Thuo |
 | HR (11) | revenue signal | people doctrine, hiring trigger | Owner | Mary Thuo |
 | Tech Stack (13) | vendors, `ANTHROPIC_API_KEY` | tool inventory + verification | all departments | Mary Thuo |
 
@@ -54,7 +54,7 @@ Sector(01) → Offer(02) → Marketing(03)/Content(04) → Sales(05) → Client 
 | Substrate | What depends on it | State |
 |---|---|---|
 | **`arika-runtime` (OrchOS)** | all 106 agents, all triggers | Built; **never run persistently** |
-| **`ANTHROPIC_API_KEY`** | all 93 `prompt` agents | **Unset** — the whole agent layer is inert (`TECHSTACK_OS.md:173`) |
+| **`ANTHROPIC_API_KEY`** | every `prompt` agent | **Present — verified by use for manual calls only** (five Offer (02) runs, 2026-09-13; `TECHSTACK_OS.md` §3). Not verified: daemon or scheduler boot, `finos-plugin` and `bois` wrappers, every agent, unattended scheduled runs. *Corrected 2026-09-14; was (2026-07-22): "Unset — the whole agent layer is inert", covering all 93 `prompt` agents.* |
 | **ClickUp CRM** | Sales, Client Success, Operations, Finance | Live (free tier) — the one verified piece of infra |
 | **Zoho** (email + Books) | Finance, all outbound comms | Load-bearing; **Books trial expired**; missing from DPA register |
 | **Governance (Constitution + Approval Matrix)** | every automation, every Class 3+ action | Structure closed; owner-data pending |
@@ -63,10 +63,14 @@ Sector(01) → Offer(02) → Marketing(03)/Content(04) → Sales(05) → Client 
 
 ## 4. Critical / hidden / broken dependencies (the point of this document)
 
-- **🔴 The whole graph is inert on one unset key.** Every downstream capability that relies on an
-  agent depends transitively on `ANTHROPIC_API_KEY`, which is set nowhere (`TECHSTACK_OS.md:173`).
-  This is the single largest hidden dependency: the architecture *looks* connected but cannot
-  execute. → `AEIT_10` sequences activation first.
+- **🔴 The graph still cannot run unattended — but the key is no longer why (corrected 2026-09-14).**
+  The key now works for manual prompt-agent calls, verified by use in five Offer (02) runs on
+  2026-09-13. Nothing has run on a schedule, no daemon is booted, **the scheduler is not approved**, and
+  `finos-plugin`, `bois` and most agents are unverified. The largest hidden dependency is now
+  **governance approval and daemon control**, not key absence. → `AEIT_10` still sequences activation first.
+  *Was (2026-07-22): "The whole graph is inert on one unset key. Every downstream capability that relies
+  on an agent depends transitively on `ANTHROPIC_API_KEY`, which is set nowhere (`TECHSTACK_OS.md:173`).
+  This is the single largest hidden dependency: the architecture looks connected but cannot execute."*
 - **🔴 Broken dependency — AI Enablement (17) → Legal (10).** AI Enablement's Class-3 governance
   gate requires a legal-reviewed framework, but Legal has no engaged counsel and the agency does not
   legally exist. The dependency is *declared and unsatisfiable* — blocked by design
@@ -97,3 +101,4 @@ pathologies are *broken* and *hidden* dependencies, not cycles. That is a good s
 
 ## 6. Changelog
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
+- **v0.1.1 (2026-09-14):** Key-state claims corrected after the Hospitality Sector → Offer reconciliation audit. §3's `ANTHROPIC_API_KEY` row and §4's first dependency no longer say the key is unset or the graph inert on it: manual calls were verified by use on 2026-09-13 (five Offer (02) runs), and the remaining blocker is governance approval and daemon control. The 2026-07-22 wording is kept as dated history; §5's Decision Log entry is left as written. §2's Legal row also gets a dated note: counsel named, two letters unsigned, scope not agreed. — Claude Code (Opus 5)

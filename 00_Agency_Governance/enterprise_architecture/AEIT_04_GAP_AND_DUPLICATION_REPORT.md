@@ -1,7 +1,7 @@
 # AEIT_04 — Architectural Gap & Duplication Report (Analysis)
 
-**Version:** v0.1
-**Last updated:** 2026-07-22
+**Version:** v0.1.1
+**Last updated:** 2026-09-14 — §C3 re-stated for the current key state; the 2026-07-22 finding is kept as dated history
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Status:** Findings register. Every finding cites a real `file:line` or `file §section`. Severity is
 **architectural** (impact on long-term coherence), annotated with current operational impact where
@@ -94,10 +94,18 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
   (trigger/action/risk-class/rollback/human-gate) is a **hard precondition** of activation.
   **Owner: Governance (00).**
 
-### C3 🔴 `ANTHROPIC_API_KEY` unset — the entire agent layer is unrunnable
-- **Evidence:** "`ANTHROPIC_API_KEY` is not set. Every `prompt` agent in the repo — 93 of them —
-  depends on Claude, and the key exists nowhere" (`13_Tech_Stack/TECHSTACK_OS.md:173`).
-- **Proposed resolution (→ AEIT_10):** activation task #1; until then, every "live agent" claim is
+### C3 🔴 Agent activation unproven — key present for manual calls only; daemon, scheduler and governance still block *(re-stated 2026-09-14)*
+- **Current state (2026-09-14):** the Anthropic key is **no longer a total-absence blocker**. Manual
+  `arika-runtime` prompt-agent calls were **verified by use** on 2026-09-13, limited to five Offer (02)
+  control-test runs (`13_Tech_Stack/TECHSTACK_OS.md` §3). **Not verified:** a persistent daemon or
+  scheduler boot, the `finos-plugin` and `bois` wrappers, every agent, and unattended scheduled
+  execution. **The scheduler is not approved.** The safety blocker is now **governance approval and
+  daemon control** (§C2, §C5), not key absence.
+- **Original finding (2026-07-22, now historical):** heading "C3 🔴 `ANTHROPIC_API_KEY` unset — the entire
+  agent layer is unrunnable"; evidence "`ANTHROPIC_API_KEY` is not set. Every `prompt` agent in the repo —
+  93 of them — depends on Claude, and the key exists nowhere" (`13_Tech_Stack/TECHSTACK_OS.md:173`).
+- **Proposed resolution (→ AEIT_10):** activation task #1 — now narrowed to daemon control, Approval-Matrix
+  rows and one proven unattended run. Until then, every "live agent" claim beyond the verified manual runs is
   structure-ahead-of-reality and should be labelled as such. **Owner: Tech Stack (13).**
 
 ### C4 🟠 Phantom memory streams
@@ -133,6 +141,11 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
 - **Evidence:** Zoho serves email + invoicing (Zoho Books), is "the single most load-bearing
   vendor", yet is **absent from the DPA sub-processor register** (Annex B lists ClickUp only); the
   Books Premium trial has **expired** (`13_Tech_Stack/TECHSTACK_OS.md` §9 Decision Log; Legal DPA).
+- **Corrected 2026-09-14:** "Annex B lists ClickUp only" does not describe the drafted annex. Checked
+  2026-09-14, it has **nine rows**: ClickUp, **Zoho Books**, Anthropic (Claude), Notion, Canva, OpenArt, KIE.ai,
+  Vercel and an **unnamed mailbox provider**. So Zoho Books is listed, and Zoho Mail appears only as that
+  unnamed placeholder. The live gap is narrower and still real: **Zoho Mail is not named, and every row is
+  unreviewed**, with location and transfer mechanism `[TO VERIFY]` (`TECHSTACK_OS.md` §9, corrected the same day).
 - **Proposed resolution (→ AEIT_10):** add Zoho to the sub-processor register (a Legal-review item)
   and resolve the Books plan. **Owner: Legal (10) + Tech Stack (13).**
 
@@ -144,7 +157,9 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
 ### D3 🟠 Legal non-existence blocks a downstream governance gate
 - **Evidence:** AI Enablement (17)'s Class-3 governance gate requires a legal-reviewed framework;
   Legal has no engaged counsel and the agency does not legally exist (`GLOBAL_OS.md` §4, dept 17;
-  `10_Legal/LEGAL_OS.md` §8, counsel instructed 2026-07-19, reply awaited).
+  `10_Legal/LEGAL_OS.md` §8, counsel instructed 2026-07-19, reply awaited). *2026-09-14: counsel has since
+  issued two letters of engagement, both unsigned; scope is not agreed and no review has happened
+  (`OWNER_INPUT_NEEDED.md` item 59). The gate stays blocked.*
 - **Proposed resolution (→ AEIT_10):** legal existence + counsel engagement are upstream gates for
   several capabilities; sequence accordingly. **Owner: Legal (10).**
 
@@ -164,3 +179,4 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
 
 ## Changelog
 - **v0.1 (2026-07-22):** Created. — Claude Code (Opus 4.8)
+- **v0.1.1 (2026-09-14):** §C3 re-stated after the Hospitality Sector → Offer reconciliation audit. The key is present and verified by use for manual prompt-agent calls (five Offer (02) runs, 2026-09-13). Daemon or scheduler boot, `finos-plugin`, `bois`, every agent and unattended scheduled execution remain unverified; the scheduler is not approved; the blocker is governance approval and daemon control. The original heading and evidence are kept as dated history; severity is unchanged. ⚠️ **Not re-checked here:** §C4's "only two exist on disk" memory-stream count is also out of date (`02_Offer/_memory/runtime.jsonl` and others now exist). Also corrected, with dated notes: §D1's "Annex B lists ClickUp only" (the drafted annex has nine rows, including Zoho Books and an unnamed mailbox provider), and §D3's "reply awaited" (two letters of engagement, both unsigned). — Claude Code (Opus 5)

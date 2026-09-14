@@ -125,8 +125,20 @@ them against Arika's actual use.**
 7.1 API keys live in `.env` files, **gitignored, never committed** (`arika-runtime/.gitignore`,
 `19_Design/design-plugin/.env`).
 
-7.2 **`ANTHROPIC_API_KEY` is not set** — recorded across `TECHSTACK_OS.md` §9. When it is: it is
-the credential behind all 100 agents. Treat accordingly.
+7.2 **`ANTHROPIC_API_KEY` is present.** Manual `arika-runtime` prompt-agent calls were **verified by use** on
+2026-09-13 in five Offer (02) control-test runs (`TECHSTACK_OS.md` §3); the key itself was not read to check it.
+It is the credential behind every `prompt` agent. Treat accordingly — rotation is recommended
+(`TECHSTACK_OS.md` §3).
+
+**A working key is not legal clearance.** Counsel review must still cover:
+- Anthropic / Claude terms of use — commercial use, retention, training on inputs (Open item 2)
+- client data handling when client material enters a prompt (§4)
+- the sub-processor register — `DPA.md` Annex B (Open item 3)
+- the cross-border transfer basis for data processed by Anthropic (Open item 6)
+- AI-assisted drafting disclosure to clients (§1; Open item 5)
+
+*Corrected 2026-09-14. Was (2026-07-15): "`ANTHROPIC_API_KEY` is not set — recorded across `TECHSTACK_OS.md` §9.
+When it is: it is the credential behind all 100 agents. Treat accordingly."*
 
 7.3 `[TO ESTABLISH: rotation policy; who holds which credential; what happens on device loss.]`
 
@@ -163,3 +175,4 @@ before the first client. If it blocks, that is the answer.
 | 3 | Do ClickUp / Notion / Zoho / Anthropic offer DPAs? Obtain and complete **DPA Annex B** | Before the first client |
 | 4 | KIE.ai — whose terms govern the underlying models? | Before client imagery |
 | 5 | Is AI-use disclosure (§1) sufficient, or does any client jurisdiction require more? | Before the first SOW |
+| 6 | Cross-border transfer basis for client data reaching Anthropic and other foreign vendors (Kenya DPA s.48; SCCs if EU/UK personal data is involved) — *added 2026-09-14* | Before the first client's data reaches an agent |
