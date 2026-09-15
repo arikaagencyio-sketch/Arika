@@ -400,7 +400,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 
 > **`Destination` level** *(✅ added live 2026-08-20)* — sits between `City` and `Property`. It exists because **Maasai Mara is not a city**: it is a demand destination with no municipal identity, and forcing it to `City` misrepresents the hierarchy. Diani is the same case. **The level stays lean and descriptive** — all commercial meaning lives in DB 16, so Geography remains a shareable place-tree that Operations, Marketing or ClientPartner can adopt without inheriting sector semantics.
 >
-> ⚠️ **The two mis-levelled rows are NOT yet corrected.** A live read confirms **Maasai Mara** and **Diani** still carry `Level = City`. Re-levelling them is a **data** change (geography scope = plugin slot **P4**), so it belongs to the Gate 3 plugin load, not to this schema gate — it is the first Gate 3 action. Geography holds **11 rows** (the previously-documented count of 10 was low).
+> ✅ **Corrected 2026-08-28 by skill S05.** **Maasai Mara** and **Diani** now carry `Level = Destination`, and Geography holds **13 rows** (verified 2026-08-28, `contracts/sector-databases.json` DB11). *Was (2026-08-20):* both rows were mis-levelled `City`; re-levelling was a data change for plugin slot P4 and the first Gate 3 action, and Geography then held 11 rows.
 
 ### DB 12 — Sector State *(new 2026-08-15, SCIC — the "what's happening now")*
 **Primary entity:** the **current condition** of one sector (× geography). Read **first** by downstream departments. Distilled from the Sector Signals + Intelligence, dated + confidence-gated. Maps SectorOS layer 6/synthesis.
@@ -492,7 +492,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 
 **Seed set (Pass 2, Kenya-inbound):** `Germany → Kenya` · `UK → Kenya` · `US → Kenya` · `Regional Africa → Kenya`.
 
-### DB 16 — Destination Profile *(net-new, specified 2026-08-20 · Sector OS Architecture — ✅ **BUILT LIVE 2026-08-20**, 0 rows)*
+### DB 16 — Destination Profile *(net-new, specified 2026-08-20 · Sector OS Architecture — ✅ **BUILT LIVE 2026-08-20** with 0 rows · **3 profiles** verified 2026-08-28)*
 **Primary entity:** one **place read as a market** — its durable commercial character. **AEIT_06:** no existing canonical entity covers this — flag as a **`[CANDIDATE]`** alongside Geography (DB 11) and Market Routes (DB 15); **do not silently canonize.** **Backing:** [`SECTOR_OS_ARCHITECTURE.md`](SECTOR_OS_ARCHITECTURE.md) §3 slot P5, §4.1 step 3.
 
 **Why it exists.** DB 11 Geography is a **place-tree**, kept deliberately lean because it is proposed for agency-wide reuse. DB 12 Sector State is a **dated snapshot** ("what's happening now"). Neither can hold the durable answer to *"what is this place, commercially?"* — that Nairobi is a corporate/MICE market, Mombasa a beach/family market, and Maasai Mara a migration-led international-leisure market. Without it, the Resolution Engine cannot narrow a sector calendar to a **regional** one, and every destination returns the same content.
@@ -507,7 +507,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 | Destination ID | Text (unique) | ID | slug, e.g. `dest_maasai_mara` |
 | **Geography** | Relation → Geography (DB 11) | REL | **required, at most one** — the place this profiles. Level `City` / `Destination` |
 | Destination Type | Select | RET | Urban · Coastal · Wilderness/Conservancy · Highland · Island · Transit hub — *structural, not commercial* |
-| **Demand Themes** | Multi-select | EXE | **the controlled vocabulary is plugin-supplied (slot P5)** — this is the field that makes Nairobi ≠ Mombasa ≠ Maasai Mara |
+| **Demand Themes** | Multi-select | EXE | **the controlled vocabulary is plugin-supplied (slot P5)** — this is the field that makes Nairobi ≠ Maasai Mara ≠ Diani (the three profiled destinations) |
 | Primary / Secondary Audiences | Relation ×2 → Audience Roles (DB 9) | REL/EXE | who actually comes here, in priority order |
 | Travel / Purchase Motivations | Text | EXE | 🟢 cited or blank — *why* they come |
 | **Seasonal Demand** | Relation → Sector Signals (DB 7) | REL/EXE | the `Seasonality` signals that govern this place. **Not re-typed** — the season lives in DB 7 |
@@ -529,7 +529,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 
 **Cardinality:** one profile per `(Geography × Sub-Sector)`. The same city read by two industries is two rows — a hotel's Nairobi and a law firm's Nairobi are not the same market.
 
-**Seed set (Gate 4, web-verified):** `Nairobi` · `Mombasa` · `Maasai Mara` — the three validation destinations. `Diani` gets a profile when an engagement needs it.
+**Profiled set (verified 2026-08-28):** `Nairobi` · `Maasai Mara` · `Diani` — the three Gate F validation destinations, sourced to T1 destination pages (`contracts/sector-databases.json` DB16). **`Mombasa` is not profiled** — pending; `Destination Fit` blocks it (owner decision 31h) until a profile is written. *Was (2026-08-20 spec):* the seed set included Mombasa and deferred Diani until an engagement needed it.
 
 ### Worked example (depth-proof) — Hospitality *(illustrative only — see the plugin for the live rules)*
 Hospitality is the reference that sets the depth bar; the schema above must hold **all** of it. Coverage check against the owner's hospitality spec:

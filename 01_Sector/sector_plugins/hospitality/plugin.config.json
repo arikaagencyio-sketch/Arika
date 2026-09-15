@@ -4,7 +4,7 @@
   "plugin_number": "001",
   "version": "0.1",
   "generated": "2026-08-24",
-  "derived_from": "01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md v0.1",
+  "derived_from": "01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md v0.2",
   "what_this_is": "A DERIVED sidecar carrying only the plugin slots that a resolver must read MECHANICALLY. HOSPITALITY_PLUGIN.md remains the authored source of truth; this file is generated from it and must never be edited independently. If the two disagree, the markdown wins and this file is regenerated.",
   "why_it_exists": "SECTOR_OS_ARCHITECTURE.md §4.1 step 4 requires the Resolution Engine to FILTER by the plugin's property-type rule (P2), and step 6 to DERIVE activation dates from the plugin timing table (P7). Both existed only as markdown tables, so no resolver could read them. This gap was flagged nowhere in the repo before Gate 0.",
   "why_it_does_not_breach_the_plugin_rule": "SECTOR_ACTIVATION_CONTRACT.md §16 forbids a plugin from creating 'a store, a field, an agent, or an event'. This file creates none of those. It is a REPRESENTATION of values that already exist in the authored pack — the same values, in a form a procedure can read. No new value is introduced here, and every entry carries a pointer back to the markdown section it came from.",
@@ -405,6 +405,7 @@
   ],
   "proposed_assignments": {
    "_status": "OWNER HYPOTHESES, NOT VERIFIED. Recorded so Gate F has something to falsify. MUST be web-verified before they become DB16 rows.",
+   "_db16": "Each destination's `db16` mirrors the 'DB 16 state' column of HOSPITALITY_PLUGIN.md §P5: `profiled` or `not_profiled`. Source of truth: contracts/sector-databases.json DB16 (row_count_verified 3, verified 2026-08-28: Nairobi, Maasai Mara, Diani). Verified themes live in DB16 and are NOT re-typed here. Checked by sector_truth_gate.py check 6. Regenerated 2026-09-15.",
    "Nairobi": {
     "themes": [
      "Corporate",
@@ -417,7 +418,9 @@
      "Transit/Gateway"
     ],
     "shape": "short-lead, destination-side, weekday-weighted, event- and MICE-led",
-    "state": "yellow"
+    "state": "yellow",
+    "db16": "profiled",
+    "db16_note": "Only 2 of 8 proposed themes survived verification; the corporate/MICE axis has no registered source (owner item 31j). Verified themes live in DB16."
    },
    "Mombasa": {
     "themes": [
@@ -433,7 +436,9 @@
      "Corporate Retreat"
     ],
     "shape": "mixed origin/destination-side, festive-peak compression, holiday-calendar-led",
-    "state": "yellow"
+    "state": "yellow",
+    "db16": "not_profiled",
+    "db16_note": "No DB16 profile. Destination Fit blocks Mombasa (owner decision 31h) until one is written."
    },
    "Maasai Mara": {
     "themes": [
@@ -447,13 +452,16 @@
      "International Tourism"
     ],
     "shape": "long-lead, origin-side dominant, wildlife-season-led",
-    "state": "yellow"
+    "state": "yellow",
+    "db16": "profiled",
+    "db16_note": "Family and Photography were rejected on verification. Verified themes live in DB16."
    },
    "Diani": {
     "themes": null,
     "shape": null,
-    "state": "unauthored",
-    "note": "In Geography (DB11), no profile proposed."
+    "state": "green",
+    "db16": "profiled",
+    "note": "No P5 proposal was ever made. The DB16 profile was authored directly from T1 destination pages on 2026-08-28; its verified themes live in DB16 and are not re-typed here, so themes and shape are null by reference, not by absence. Read 'unauthored' until 2026-09-15."
    }
   }
  },

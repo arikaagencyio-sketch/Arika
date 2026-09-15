@@ -1,6 +1,6 @@
 # Field-Population Plan — Sector (01) + Content (04) databases
 
-**Version:** v0.1 · **Created:** 2026-08-19 · **Owner:** Mary Thuo (Sector 01)
+**Version:** v0.5 · **Created:** 2026-08-19 · **Updated:** 2026-09-15 · **Owner:** Mary Thuo (Sector 01)
 **Purpose:** The owner asked, before scraping/decision-maker/outreach work begins: *go through the whole repository and, for every field in the Sector and Content databases, say where its data comes from and whether it can be filled now — never guess a relevant-but-empty field.* This is that map. It is a **decide-then-apply** plan: it classifies every field, it does **not** fill anything on its own.
 **Companion specs (the source of truth for the schemas):** [`SECTOR_NOTION_SCHEMA.md`](SECTOR_NOTION_SCHEMA.md) · [`../04_Content/CONTENT_INTELLIGENCE_SCHEMA.md`](../04_Content/CONTENT_INTELLIGENCE_SCHEMA.md).
 
@@ -221,7 +221,7 @@ Everything else is now driven by **① the data-derived focus** (ADDENDUM 4 refr
 
 **✅ CLOSED at Gate 2 (2026-08-20) — structure built, 0 rows:** **DB 14 Signal Sources** · **DB 15 Market Routes** · **DB 16 Destination Profile** all live · DB 7 wired to DB 14/15 (`Signal Source`, `Market Routes`) · DB 3 `Geography` relation + `Demand Pattern` category · DB 11 `Destination` level. Also closed: the **`Tool-Stack Chaos` drift** (documented 2026-08-19, never actually applied to DB 3 — created this pass).
 
-**🟢/🔲 GAPS — still open after Gate 2:** every one of the 3 new DBs is **empty** — no source is `active`, no route exists, no destination is profiled · **Maasai Mara + Diani still mis-levelled `City`** (re-levelling = plugin slot P4, first Gate 3 action) · the **Hospitality source pack is entirely `candidate`, with no URLs recorded** — nothing may be promoted without a live verification call · plugin **P3 demand-pattern rows** and **P12 pillar/angle set** (unauthored — research tasks) · the **`sector-calendar-resolver`** — **superseded 2026-08-24: it is now skill S09, not a Gate-5 agent** ([`SECTOR_SKILL_MATRIX.md`](SECTOR_SKILL_MATRIX.md) §2), because the Resolution Engine is eight deterministic steps rather than reasoning; still blocked on DB 14/15/16 having rows · Content DB 5's **`Destination` relation** (**now unblocked** — add it when Content next opens) · the 4 vendor-blog-sourced Hospitality signal rows (re-source to T1, supersede on contradiction, never delete) · a **second-sector proof** (the Protocol is unvalidated until one non-hospitality sector runs through it without a core edit).
+**🟢/🔲 GAPS — still open after Gate 2:** every one of the 3 new DBs is **empty** — no source is `active`, no route exists, ~~no destination is profiled~~ **✅ superseded for DB 16 (2026-08-28): Nairobi · Maasai Mara · Diani profiled; Mombasa not profiled, so `Destination Fit` blocks it (31h)** *(DB 14/15 counts are not restated here — see `contracts/sector-databases.json`)* · ~~**Maasai Mara + Diani still mis-levelled `City`** (re-levelling = plugin slot P4, first Gate 3 action)~~ **✅ re-levelled to `Destination` by S05, 2026-08-28** · the **Hospitality source pack is entirely `candidate`, with no URLs recorded** — nothing may be promoted without a live verification call · plugin **P3 demand-pattern rows** and **P12 pillar/angle set** (unauthored — research tasks) · the **`sector-calendar-resolver`** — **superseded 2026-08-24: it is now skill S09, not a Gate-5 agent** ([`SECTOR_SKILL_MATRIX.md`](SECTOR_SKILL_MATRIX.md) §2), because the Resolution Engine is eight deterministic steps rather than reasoning; still blocked on DB 14/15/16 having rows · Content DB 5's **`Destination` relation** (**now unblocked** — add it when Content next opens) · the 4 vendor-blog-sourced Hospitality signal rows (re-source to T1, supersede on contradiction, never delete) · a **second-sector proof** (the Protocol is unvalidated until one non-hospitality sector runs through it without a core edit).
 
 **🔴 / ⚫ GAPS — gated or template (never guessed):** real decision-maker **contacts** + Company data (scraping) · **ICP + Prospect Signal scores** (need real companies) · live-booking/property numbers (⚫ template) · CRM `Related Clients` / `CRM Opportunities` (no real deals yet).
 
@@ -238,6 +238,14 @@ Everything else is now driven by **① the data-derived focus** (ADDENDUM 4 refr
 ---
 
 ## 8. Changelog
+- **v0.5 (2026-09-15, destination drift fix):** The §6.5 "still open after Gate 2" block is corrected for destinations only:
+  - DB 16 holds 3 profiles (Nairobi · Maasai Mara · Diani, verified 2026-08-28);
+  - Mombasa is not profiled;
+  - Maasai Mara and Diani are at `Destination` level.
+
+  The stale fragments are struck through, not deleted. The DB 14/15 statements in the same block were not re-measured and stay as written.
+
+  **Header moved v0.1 → v0.5:** it had not moved since v0.1. This entry is placed first so the header matches the newest entry, as `sector_truth_gate.py` check 4 expects; the older entries keep their existing order. — Claude Code (Opus 5)
 - **v0.1 (2026-08-19):** Created. Full field-by-field disposition of the 13 Sector + 8 Content databases, the critical-path unlock sequence, the campaign fast-path, and the fillable-today list. Companion to `SECTOR_NOTION_SCHEMA.md` + `CONTENT_INTELLIGENCE_SCHEMA.md`. — Claude Code (Opus 4.8)
 - **v0.2 (2026-08-19, ADDENDUM 4):** Reframed §1 step ① — focus is **data-derived** (Sector Priority Score names the P1 `Target` set), not owner-blocked; pilot = Hospitality→Accommodation. Added **§6.5 Decisions & Gaps ledger** (standing view — locked / open / 🟢 / 🔴-⚫). Updated §5 close to the depth-first-on-P1 discipline. — Claude Code (Opus 4.8)
 - **v0.4 (2026-08-20, Sector OS Architecture Gate 1):** Recorded the four locked owner decisions (DB 16 Destination Profile · Client Calendar as a resolution not a store · documentation-only Gate 1 · opportunity factors as engine gates) and added the **Sector OS Architecture gap block** — DB 16 unbuilt, the DB 3/DB 11 extensions specified-not-applied, two plugin slots unauthored, the resolver agent deliberately deferred, and the Protocol unvalidated until a second sector runs it. — Claude Code (Opus 5)

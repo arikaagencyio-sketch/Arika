@@ -5,7 +5,7 @@
 **Status:** Gate 1 (DECIDE) — **config pack only. No *rows* from this file have been written to Notion.**
 
 > ⚠️ **Precision correction (2026-08-24).** This line previously read *"Nothing in this file has been written to Notion,"* which is not accurate. **Two of this pack's vocabularies are already live Notion option sets** on DB 16 Destination Profile — `Demand Themes` (23 options, slot **P5**) and `Asset / Property Archetypes` (10 options, slot **P2**) — each stamped `PLUGIN-SUPPLIED VOCABULARY (slot Pn)` in its own Notion field description. They arrived with the Gate 2 schema apply, because a select option set *is* schema. **No rows exist**; the vocabularies do. The distinction matters: the blanket claim read as though the plugin had had no effect on the workspace.
-**Version:** v0.1 (2026-08-20)
+**Version:** v0.2 (2026-09-15)
 
 > **What this file is.** A **doctrine/config pack**, not runtime code. The word "plugin" here is deliberately *not* the repo's runtime sense (`finos-plugin`, `bois`, which are executable) — hence the directory `sector_plugins/`, not `plugins/`. This pack supplies **values** into Universal Core fields. It **MUST NOT** create a store, a field, an agent, or an event.
 
@@ -24,8 +24,8 @@
 | P1 Ontology | ✅ authored | 🟢 loaded in DB 1/2 |
 | P2 Property-type rules | ✅ authored **here** | 🟡 owner-curated — **new this pass** |
 | P3 Demand model | ◐ partial | 🟢 4 findings live · demand-pattern layer ⬜ |
-| P4 Geography scope | ✅ authored | 🟢 10 Geography rows live |
-| P5 Destination themes | ✅ vocabulary authored **here** | 🟡 assignments are hypotheses |
+| P4 Geography scope | ✅ authored | 🟢 13 Geography rows live (verified 2026-08-28) |
+| P5 Destination themes | ✅ vocabulary authored **here** | 🟡 assignments are hypotheses · 🟢 3 DB 16 profiles live (Nairobi · Maasai Mara · Diani, verified 2026-08-28) · Mombasa not profiled |
 | P6 Signal-type profile | ✅ authored **here** | 🟡 |
 | P7 Timing rules | ✅ **migrated here** | 🟢 derived from pilot booking-window research |
 | P8 Source pack | ✅ **migrated here** | 🔴 every row `candidate` — unverified |
@@ -175,13 +175,15 @@
 
 ## P4 — Geography scope
 
-**Live in DB 11** (10 rows): `Global → Africa → Kenya → {Nairobi, Mombasa, Diani, Maasai Mara}`, plus `Germany` and `UK` as origin markets.
+**Live in DB 11** (**13 rows**, verified 2026-08-28 — [`contracts/sector-databases.json`](../../contracts/sector-databases.json) DB11): `Global → Africa → Kenya → {Nairobi, Mombasa}` at `City` and `{Diani, Maasai Mara}` at `Destination`, plus Germany, UK, Italy and Uganda as origin markets and the European Union and United States nodes. *Until 2026-09-15 this line read "10 rows", with all four Kenyan places listed together.*
 
 **Scope decision (owner, 2026-08-19): Kenya-inbound.** Outbound and Gulf routes are built when a real engagement requires them — never pre-populated as a world atlas.
 
-**Requires the new `Destination` level** on DB 11 (specified in `SECTOR_NOTION_SCHEMA.md`) so Maasai Mara — a tourism destination, not a city — sits at the right level.
+✅ **The `Destination` level is applied.** Maasai Mara and Diani were re-levelled `City → Destination` by S05 on 2026-08-28 (F3 closed); `SECTOR_NOTION_SCHEMA.md` specifies the level.
 
-**Validation destinations (Gate 6):** Nairobi · Mombasa · Maasai Mara — chosen because each demonstrates a *different* destination-demand-content relationship. If they resolve to the same calendar shape, the model is wrong.
+**Validation destinations (Gate F):** Nairobi · Maasai Mara · Diani — the three places with a DB 16 Destination Profile (verified 2026-08-28). Each demonstrates a *different* destination-demand-content relationship; the runs are recorded in `SECTOR_ACTIVATION_PROTOCOL.md` §3a. If they resolve to the same calendar shape, the model is wrong.
+
+**Mombasa is not profiled** — pending. `Destination Fit` blocks it (owner decision 31h) until a profile is written. *The 2026-08-20 proposal included Mombasa in the validation set; the Gate F runs used Diani in its place.*
 
 ---
 
@@ -191,14 +193,16 @@ The controlled option set for **DB 16 Destination Profile** `Demand Themes`:
 
 `Corporate` · `Business Travel` · `Conferences/MICE` · `Diplomacy` · `Urban Leisure` · `Dining` · `Staycation` · `Transit/Gateway` · `Beach` · `Luxury` · `Family` · `School Groups` · `Weddings` · `Romance/Honeymoon` · `Cultural` · `Domestic Tourism` · `International Tourism` · `Corporate Retreat` · `Safari/Wildlife` · `Conservation` · `Photography` · `Adventure` · `Seasonal Migration`
 
-**Proposed per-destination assignments** — 🟡 **owner hypotheses, NOT verified.** They are recorded so Gate 4 has something to falsify, and **must be web-verified before they become DB 16 rows**:
+**Proposed per-destination assignments** — 🟡 **owner hypotheses, NOT verified.** They were recorded so Gate F had something to falsify, and **had to be web-verified before becoming DB 16 rows**.
 
-| Destination | Proposed primary themes | Proposed shape |
-|---|---|---|
-| **Nairobi** | Corporate · Business Travel · Conferences/MICE · Diplomacy · Urban Leisure · Dining · Staycation · Transit/Gateway | short-lead, destination-side, weekday-weighted, event- and MICE-led |
-| **Mombasa** | Beach · Luxury · Family · School Groups · Weddings · Romance/Honeymoon · Cultural · Domestic + International Tourism · Corporate Retreat | mixed origin/destination-side, festive-peak compression, holiday-calendar-led |
-| **Maasai Mara** | Safari/Wildlife · Conservation · Luxury · Family · Photography · Adventure · Seasonal Migration · International Tourism | long-lead, **origin-side dominant**, wildlife-season-led |
-| **Diani** | ⬜ unauthored — in Geography, no profile proposed | — |
+The last column records what verification found. **The verified themes live in DB 16, not here.** This file references them rather than re-typing them; read them in DB 16, or in the Gate F second-run table (`SECTOR_ACTIVATION_PROTOCOL.md` §3a).
+
+| Destination | Proposed primary themes | Proposed shape | DB 16 state (verified 2026-08-28) |
+|---|---|---|---|
+| **Nairobi** | Corporate · Business Travel · Conferences/MICE · Diplomacy · Urban Leisure · Dining · Staycation · Transit/Gateway | short-lead, destination-side, weekday-weighted, event- and MICE-led | ✅ **profiled** — only 2 of 8 proposed themes verified; the corporate/MICE axis has no registered source (31j) |
+| **Mombasa** | Beach · Luxury · Family · School Groups · Weddings · Romance/Honeymoon · Cultural · Domestic + International Tourism · Corporate Retreat | mixed origin/destination-side, festive-peak compression, holiday-calendar-led | ⏳ **not profiled** — pending; `Destination Fit` blocks it (31h) until a profile is written |
+| **Maasai Mara** | Safari/Wildlife · Conservation · Luxury · Family · Photography · Adventure · Seasonal Migration · International Tourism | long-lead, **origin-side dominant**, wildlife-season-led | ✅ **profiled** — `Family` and `Photography` rejected on verification |
+| **Diani** | — *no P5 proposal was made* | — | ✅ **profiled** — authored directly from T1 destination pages, with no proposal to test |
 
 ---
 
@@ -350,4 +354,14 @@ What DB 12 Sector State's sector-appropriate fields mean here:
 
 ## Changelog
 
+- **v0.2 (2026-09-15, destination drift fix):** P4 and P5 aligned with DB 16 as recorded in `SECTOR_OS.md` §3, `SECTOR_OS_ARCHITECTURE.md` and `contracts/sector-databases.json`: **Nairobi · Maasai Mara · Diani profiled (verified 2026-08-28); Mombasa not profiled.**
+  - **P4:** DB 11 is now given as 13 rows at two levels, the `Destination` level is recorded as applied, and the Gate F validation set is corrected.
+  - **P5:** new DB 16 state column; Diani no longer reads *unauthored*.
+  - **Status table:** P4 and P5 rows updated.
+  - **Sidecar:** `plugin.config.json` P5 regenerated to match.
+  - **New gate:** `sector_truth_gate.py` check 6 now fails if these P5 states and the sidecar drift apart, or disagree with DB 16's verified row count.
+
+  The vocabulary, proposed themes and shapes are unchanged. No Notion write.
+
+  ⚠️ **Not backfilled:** the 2026-08-28 P2 restructure (the P2 totality rule and 18 Tier-1 cells, recorded in `SECTOR_OS.md` §15) has no entry here. — Claude Code (Opus 5)
 - **v0.1 (2026-08-20, Gate 1 — DECIDE):** Created as Sector Plugin #001. **Migrated** the Hospitality timing-rule table out of `CALENDAR_INTELLIGENCE.md` §5.2 (P7) and the Kenya-inbound candidate source pack out of §12 (P8) — moved, not rewritten, with pointers left behind. **Authored new:** the property-type typology and the signal-to-archetype rule that makes the property-type calendar layer possible (P2), the destination demand-theme vocabulary for DB 16 with proposed Nairobi/Mombasa/Maasai Mara assignments marked as falsifiable hypotheses (P5), the signal-type weighting profile (P6), the seasonality/compression configuration (P13), and the KPI semantics for DB 12's sector-appropriate fields (P14). **Referenced, never re-typed:** the live pilot content in DB 3/6/9/10, DB 7's commercial rhythm, Content DB 5's 3 opportunities, and Offer (02)'s entry-offer seed. Two slots left honestly unauthored (P3 demand-pattern layer, P12 pillar/angle set). **Nothing written to Notion.** — Claude Code (Opus 5)
