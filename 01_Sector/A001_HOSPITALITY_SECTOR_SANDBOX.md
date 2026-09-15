@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.6
+**Version:** v0.7
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -30,8 +30,9 @@
 **Still open, under item 74:**
 - The Tier-1 changes in §8 — **deferred 2026-09-15 (D6)**; none is needed while no runtime is used.
 - The run mode for Phase 3. *(Phases 0–2: M0, no runtime — decided 2026-09-15, D5.)*
-- The archetype mapping in §6.
-- Geography.
+- ~~The archetype mapping in §6.~~ Decided 2026-09-15 (D13).
+- ~~Geography.~~ Decided 2026-09-15 (D14).
+- API key rotation and full A001 ratification (Phase 3 entry gate).
 - ~~The sandbox folder path.~~ Decided 2026-09-15 (D1; §5.1).
 - The AG-4 build. *(AG-1/AG-3 deferred under a manual workaround, D7; AG-16 done.)*
 
@@ -113,7 +114,7 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 - Branding (12) BOIS runs, because they write client workspaces inside this repository (AG-15);
 - reading `.env`.
 
-### 5.1 Phase 0–2 operating mode (owner decisions D1–D12, 2026-09-15)
+### 5.1 Phase 0–2 operating mode (owner decisions D1–D14, 2026-09-15)
 
 **Mode M0: no runtime.** Phases 0, 1 and 2 use none of the following: `arika run`, `npm`, skills, skill execution records, events, the scheduler, Notion, ClickUp or BOIS. Nobody reads `.env`.
 
@@ -139,6 +140,8 @@ The only tool is the local intake gate, run from the repository root:
 | D10 | Write-back | Only IDs-only verdict lines leave the sandbox, after `--scan` and the manual checks |
 | D11 | Answer source | Values derived from rules and from this sandbox record are drafted by Claude. Values that come from the simulation package are typed by the owner into the worksheet. **Claude does not read the package** |
 | D12 | Value granularity | Bands, categories, statuses and unit IDs only. No counts except the owner-decided unit count; no URLs, verbatim copy, prices, ratings, KPI values, shares or named competitors |
+| D13 | Unit archetypes (sandbox use only) | `A001-P01` `City / Conference Hotel` · `A001-P02` main `City / Conference Hotel`, secondary `Serviced Apartment` (`secondary_unruled`) · `A001-P03` `Beach Resort` · `A001-P04` `City / Conference Hotel` · `A001-P05` `City / Conference Hotel` · `A001-P06` `Safari Lodge` · `A001-P07` `Tented Camp`, inheriting `Safari Lodge` · `A001-P08` `Tented Camp`, inheriting `Safari Lodge`, linked to `A001-P07` · `A001-P09` `Safari Lodge`.<br>**Two-archetype rule:** a unit with two archetypes records one main archetype for resolution and marks the other `secondary_unruled`. Resolution uses the main archetype only. The secondary is a declared sandbox gap, **not a Sector rule** |
+| D14 | Geography policy | **Commission nothing for A001:** no new geography rows, destination profiles, place-profiling skill run or Notion writes.<br>Each unit records one status: `profiled`, `in_DB11_not_profiled` or `not_in_DB11`.<br>Only currently profiled destinations pass Destination Fit. Blocked statuses are recorded as `SIMULATED_VERDICT · destination_fit: blocked`.<br>No place names for `not_in_DB11` units outside the key file and owner source material |
 
 **Sandbox layout** (IDs only in every folder and file name):
 
@@ -171,21 +174,21 @@ The only tool is the local intake gate, run from the repository root:
 ## 6. Child register
 
 **IDs only.** How to read the columns:
-- **Archetype class** uses the `HOSPITALITY_PLUGIN.md` P1 vocabulary. It is **proposed from the package's descriptions, for the owner to confirm under item 74.**
-- **Destination status** comes from `SECTOR_OS.md` §3 (DB 16 profiled: Nairobi · Maasai Mara · Diani; Mombasa not profiled). Plugin P5 now agrees with it (AG-16, resolved 2026-09-15 and gated by `sector_truth_gate.py` check 6). Places with no DB 11 row are not named here; their names are in the key file.
+- **Archetype class** uses the `HOSPITALITY_PLUGIN.md` P1 vocabulary. It is **confirmed for sandbox use only (D13, 2026-09-15).** A unit with two archetypes resolves on its main archetype and marks the other `secondary_unruled`.
+- **Destination status** comes from `SECTOR_OS.md` §3 (DB 16 profiled: Nairobi · Maasai Mara · Diani; Mombasa not profiled). Plugin P5 now agrees with it (AG-16, resolved 2026-09-15 and gated by `sector_truth_gate.py` check 6). Places with no DB 11 row are not named here; their names are in the key file. Under D14, each unit file records one status: `profiled`, `in_DB11_not_profiled` or `not_in_DB11`.
 - **Size band** uses Owner Decision 71's H-bands **as a label only**. A band does not bring any unit into MVP scope or capacity.
 
-| Unit | Archetype class (proposed) | Destination status | Size band | Stop-rule status |
+| Unit | Archetype class (confirmed, D13) | Destination status | Size band | Stop-rule status |
 |---|---|---|---|---|
 | **`A001`** (group) | `Hospitality Group` | Multi-destination | **Above H3** on property count and on keys | 🔴 Group archetype unresolvable (union operator not built) · 🔴 anti-ICP: central brand, reservations and direct-booking team · 🔴 above every H-band |
 | `A001-P01` | `City / Conference Hotel` | ✅ Nairobi, DB 16 profiled | H3 | 🟡 H3 is outside MVP scope and capacity · group flags |
-| `A001-P02` | `City / Conference Hotel` + `Serviced Apartment` (mixed) | ✅ Nairobi, DB 16 profiled | H3 (hotel keys), plus serviced apartments | 🟡 H3 · 🔴 P1/P2 cannot express a mixed archetype, and `Serviced Apartment` is still in the older, unruled table · group flags |
+| `A001-P02` | **Main:** `City / Conference Hotel` · **secondary:** `Serviced Apartment` (`secondary_unruled`) | ✅ Nairobi, DB 16 profiled | H3 (hotel keys), plus serviced apartments | 🟡 H3 · 🟡 resolves on its main archetype only; the secondary is a declared sandbox gap, not a Sector rule (D13, AG-5) · group flags |
 | `A001-P03` | `Beach Resort` | 🔴 Mombasa: in DB 11 with **no DB 16 profile**, so Destination Fit blocks it (31h) | **Above H3** | 🔴 Destination Fit · 🔴 above every H-band · group flags |
 | `A001-P04` | `City / Conference Hotel` | 🔴 Not in DB 11 | H3 | 🔴 geography unresolvable · 🟡 H3 · group flags |
 | `A001-P05` | `City / Conference Hotel` | 🔴 Not in DB 11 | H2 | 🔴 geography unresolvable · group flags |
 | `A001-P06` | `Safari Lodge` | 🔴 Not in DB 11 | H2 | 🔴 geography unresolvable · group flags |
 | **`A001-P07`** | `Tented Camp`, inheriting `Safari Lodge` | ✅ Maasai Mara, DB 16 profiled | **H2** | ✅ **No unit-level stop rule** · 🔴 group flags still apply, so the slice runs as a **group-architecture test**, not an MVP audit |
-| `A001-P08` → P07 | `Tented Camp`, inheriting `Safari Lodge` | ✅ Maasai Mara, DB 16 profiled | **Below H1** | 🔴 below every H-band · 🔴 linked-unit meaning undefined (AG-9) · group flags |
+| `A001-P08` → P07 | `Tented Camp`, inheriting `Safari Lodge`; linked to `A001-P07` | ✅ Maasai Mara, DB 16 profiled | **Below H1** | 🔴 below every H-band · 🔴 linked-unit meaning undefined (AG-9) · group flags |
 | `A001-P09` | `Safari Lodge` | 🔴 Not in DB 11 | H2 | 🔴 geography unresolvable · group flags |
 
 **What the register shows:**
@@ -221,8 +224,8 @@ A `SIMULATED_VERDICT` shows that the gates ran. It is never a verdict about a re
 | AG-2 | No group or portfolio question rows exist: portfolio and linked units, central systems, group vs property decision rights, group channels, cross-property accounts | `CLIENT_INTAKE_PROFILE.md` §8; overlay §3 | DOC (draft rows), then item 73 ratification | Phase 1 |
 | AG-3 | The gate:<br>• reads one overlay at a time;<br>• checks only the first word of a label;<br>• has no test-fixture mode, fingerprint key or sandbox-marker check;<br>• refuses an output path only inside the current repository, not inside other git trees | `intake_gate.py:131`; the `answers` and `scan` functions | BUILD | Phases 1, 3 |
 | AG-4 | The `Hospitality Group` union operator is not built. A resolver must report a group as unresolvable | `HOSPITALITY_PLUGIN.md:157`; item 31i | BUILD (S09) | Phase 4 group resolution |
-| AG-5 | No rule covers a property that mixes archetypes. `Business Hotel` and `Serviced Apartment` are still in the older, unruled table | `HOSPITALITY_PLUGIN.md:145-150` | OWNER (sector reasoning, 31i) | Phase 2 for P02 |
-| AG-6 | Mombasa has no DB 16 profile, and four child places have no DB 11 row. The plugin says routes are built "when a real engagement requires them"; A001 is not a real engagement | `SECTOR_OS.md` §3, Destination Intelligence row; `HOSPITALITY_PLUGIN.md:180` | OWNER. **Default: commission nothing, and record "blocked by Destination Fit" as the result** | Phases 2 and 4 for five units |
+| AG-5 | No Sector rule covers a property that mixes archetypes. `Business Hotel` and `Serviced Apartment` are still in the older, unruled table.<br>✅ *Sandbox convention, 2026-09-15 (D13):* `A001-P02` resolves on its main archetype and marks the secondary `secondary_unruled`. It is a declared sandbox gap, **not a Sector rule** | `HOSPITALITY_PLUGIN.md:145-150` | OWNER (sector reasoning, 31i) for real sectors; the sandbox is covered by D13 | Nothing in the sandbox. A real mixed property still needs a Sector rule |
+| AG-6 | Mombasa has no DB 16 profile, and four units sit in places with no DB 11 row. The plugin says routes are built "when a real engagement requires them"; A001 is not a real engagement.<br>✅ *Decided 2026-09-15 (D14):* commission nothing. Each unit records `profiled`, `in_DB11_not_profiled` or `not_in_DB11`, and blocked statuses are simulated verdicts | `SECTOR_OS.md` §3, Destination Intelligence row; `HOSPITALITY_PLUGIN.md:180` | ✅ Decided (D14) | Not scaffolding. Five units record `destination_fit: blocked` as their Phase 2 result |
 | AG-7 | The Offer flow handles one property:<br>• `Draft 41` scopes a single property;<br>• the H-bands stop at H3 and exclude groups with a central team;<br>• no group or portfolio offer exists;<br>• no redirect destination is engineered | `OFFER_OS.md` §8 (Decision 71); capacity worksheet §2, P4 row | OWNER. A001 changes none of it | Phase 4 offer diagnostics. Expected result: `reject` / `needs_more_seed_data` |
 | AG-8 | The audit's diagnostic gate needs client data, and synthetic data cannot produce a verdict | `Draft 41` diagnostic gate; capacity worksheet §1.4 | DOC. Closed in this file by `SIMULATED_VERDICT` (§4 rule 4) | Phases 3, 4 |
 | AG-9 | The CRM has no `Company` object. The `AEIT_06` `Company` is not built, has no Company→Company parent/child or linked-unit edge, and has no sandbox role | `CRM_SCHEMA.md` Core Objects; `AEIT_06` lines 103-106 | **T1** | Any CRM-shaped representation of A001 (none planned) |
@@ -252,9 +255,9 @@ Each change below either needs a new store or field (`SECTOR_ACTIVATION_PROTOCOL
 **T1-1…T1-5 were deferred on 2026-09-15 (D6).** None is needed while Phases 0–2 use no runtime (§5.1). Revisit before Phase 3.
 
 **Owner decisions under item 74 that are not Tier-1:**
-- Confirm the archetype mapping in §6.
+- ~~Confirm the archetype mapping in §6.~~ Decided 2026-09-15 (D13).
 - Choose the run mode for Phase 3: no runs, the shared stream with markers, or T1-5. *(Phases 0–2: M0, decided 2026-09-15.)*
-- Decide whether to commission any geography for A001 (default: no; AG-6).
+- ~~Decide whether to commission any geography for A001.~~ Decided 2026-09-15 (D14): commission nothing.
 - ~~Supply the sandbox folder path.~~ Decided 2026-09-15 (D1).
 - Approve the AG-4 build. *(AG-1/AG-3 deferred under the manual workaround, D7; AG-16's gate-scope build was completed 2026-09-15.)*
 
@@ -267,7 +270,7 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 | Phase | Entry gate |
 |---|---|
 | 1 | Phase 0 complete: D1–D10 recorded and the key file validated. D11–D12 govern how Phase 1 answers are filled |
-| 2 | Item 74 point (3), archetype mapping, and point (4), geography, decided |
+| 2 | ✅ **Met 2026-09-15:** item 74 point (3) archetype mapping (D13) and point (4) geography (D14) decided |
 | 3 | Phase 3 run mode decided · API key rotated (AG-19) · full A001 ratification |
 | 4 | AG-4 (S09 union operator) decided under item 74 point (6) |
 
@@ -282,6 +285,18 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 
 ## 10. Changelog
 
+- **v0.7 — 2026-09-15** — **Phase 2 entry gate met: D13 and D14 recorded.**
+  - **D13:** unit archetypes confirmed for sandbox use only, with a two-archetype rule. The main archetype resolves; the secondary is marked `secondary_unruled`, a declared sandbox gap, not a Sector rule.
+  - **D14:** commission nothing for A001. Each unit records one status (`profiled`, `in_DB11_not_profiled`, `not_in_DB11`). Only currently profiled destinations pass Destination Fit, and blocked statuses are simulated verdicts.
+  - **Updated to match:**
+    - the §5.1 table and heading;
+    - the §6 register: archetype column confirmed, `A001-P02` split into main and secondary, `A001-P08`'s link shown;
+    - AG-5 and AG-6 (AG-6 now counts units rather than places);
+    - the Phase 2 entry gate in §9;
+    - the open lists in §1 and §8.
+  - **No plugin or gate change.** D13's rule stays in the sandbox (§4 rule 2), and Destination Fit is the existing rule (31h).
+
+  Documentation only; no unit file created, no answer filled. — Claude Code (Opus 5)
 - **v0.6 — 2026-09-15** — **Phase 1 group verdict written back (S1).** One IDs-only line added under a new "Phase verdicts" table at the end of §6:
   - `A001` · S1 · `SIMULATED_VERDICT`;
   - outside the current offer ICP by design, and blocked for the current H1/H2 MVP;

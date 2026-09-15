@@ -398,6 +398,8 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 - 2026-09-15 — **A001 Phase 0 complete; rulings G1, D11 and D12 recorded.** G1 re-scopes the Phase 0 exit gate: archetype mapping and geography now gate Phase 2; the Phase 3 run mode, API key rotation and full ratification gate Phase 3; AG-4 gates Phase 4. D11: Claude drafts rule- and record-derived answers, the owner types package-derived ones, and Claude does not read the package. D12: answers carry bands, categories, statuses and unit IDs only. Record: [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) v0.5 and item 74. No answer filled; no runtime, Notion or CRM write. — Claude Code (Opus 5)
 
+- 2026-09-15 — **A001 Phase 2 entry gate met: D13 and D14 recorded.** D13 confirms the unit archetypes for sandbox use only, with a two-archetype rule: resolve on the main archetype and mark the other `secondary_unruled`, a declared sandbox gap, not a Sector rule. D14 sets the geography policy: commission nothing for A001, record one status per unit (`profiled`, `in_DB11_not_profiled`, `not_in_DB11`), and let only currently profiled destinations pass Destination Fit. The plugin, its config and every gate are unchanged. Record: [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) v0.7 and item 74. No unit file created; no runtime, Notion or CRM write. — Claude Code (Opus 5)
+
 ## 16. Memory / Feedback Loop / Cadence
 
 *(Added 2026-07-14 — this file previously had no §16, since the department had no agent roster to generate memory from.)*
