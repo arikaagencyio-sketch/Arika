@@ -365,6 +365,26 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
   Nothing from the simulation package was imported. No agent run, event, Notion or ClickUp write, or memory-log write. — Claude Code (Opus 5)
 
+- 2026-09-15 — **Hospitality destination drift fixed and gated (Batch 2).** Four files still described DB 16 as it was before the 2026-08-28 profiles:
+  - plugin P4/P5;
+  - `plugin.config.json` P5;
+  - `SECTOR_NOTION_SCHEMA.md` (the DB 16 heading, the level note, the Demand Themes example and the seed set);
+  - `FIELD_POPULATION_PLAN.md` §6.5.
+
+  All four now match §3 of this file, `SECTOR_OS_ARCHITECTURE.md` and `contracts/sector-databases.json`: **Nairobi · Maasai Mara · Diani profiled; Mombasa not profiled, so `Destination Fit` blocks it (31h).**
+  - **Plugin v0.2:** P4 gives DB 11 as 13 rows at two levels and the Gate F validation set as Nairobi · Maasai Mara · Diani. P5 gains a DB 16 state column, and Diani no longer reads *unauthored*. The sidecar gains a `db16` state per destination.
+  - ⭐ **Gated, not just corrected.** The drift went unflagged because the plugin files were never in the gate's scope. [`contracts/sector_truth_gate.py`](contracts/sector_truth_gate.py) **check 6** now fails if:
+    - plugin P5 and its sidecar disagree;
+    - the profiled count differs from DB 16's verified row count;
+    - a profiled place is not named in DB 16's contract note;
+    - a P4 validation destination has no profile.
+
+    It went red on each of three drifts reintroduced in memory, and passes on the real files.
+  - **Unchanged:** proposed themes and shapes, the dated 2026-08-28 changelog entries, DB rows and Notion.
+  - ⚠️ **A source-of-truth inconsistency, not fixed here.** `sector-databases.json` records 6 of 8 proposed Maasai Mara themes as verified, while the Gate F second-run table (`SECTOR_ACTIVATION_PROTOCOL.md` §3a) keeps 5 of the proposed themes plus `Cultural`. The plugin states no count for Maasai Mara.
+
+  Closes A001 gap AG-16 and narrows item 74 point (6). No agent run, event, Notion or ClickUp write, or memory-log write. — Claude Code (Opus 5)
+
 ## 16. Memory / Feedback Loop / Cadence
 
 *(Added 2026-07-14 — this file previously had no §16, since the department had no agent roster to generate memory from.)*

@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.1
+**Version:** v0.2
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -111,7 +111,7 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 
 **IDs only.** How to read the columns:
 - **Archetype class** uses the `HOSPITALITY_PLUGIN.md` P1 vocabulary. It is **proposed from the package's descriptions, for the owner to confirm under item 74.**
-- **Destination status** comes from `SECTOR_OS.md` §3 (DB 16 profiled: Nairobi · Maasai Mara · Diani; Mombasa not profiled). It does **not** come from plugin P5, which is stale (AG-16). Places with no DB 11 row are not named here; their names are in the key file.
+- **Destination status** comes from `SECTOR_OS.md` §3 (DB 16 profiled: Nairobi · Maasai Mara · Diani; Mombasa not profiled). Plugin P5 now agrees with it (AG-16, resolved 2026-09-15 and gated by `sector_truth_gate.py` check 6). Places with no DB 11 row are not named here; their names are in the key file.
 - **Size band** uses Owner Decision 71's H-bands **as a label only**. A band does not bring any unit into MVP scope or capacity.
 
 | Unit | Archetype class (proposed) | Destination status | Size band | Stop-rule status |
@@ -158,7 +158,7 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 | AG-13 | Skill execution records forbid extra fields, so they cannot carry a sandbox marker | `skill-execution-record.schema.json` lines 16, 30 | **T1** | Any S10 hand-off record or skill record for A001 |
 | AG-14 | Audits (14) agents cannot scope a hotel audit (offer #10 enums) | `CLIENT_INTAKE_PROFILE.md` §9 G-4 | OWNER / BUILD. Outside A001 scope | Nothing planned |
 | AG-15 | Branding (12) BOIS writes client workspaces inside this repository | `CLIENT_INTAKE_PROFILE.md` §9 G-1; §10 ID2 | OWNER | Branding (12) is excluded from A001 |
-| AG-16 | **Destination drift:** these files predate the three DB 16 profiles of 2026-08-28:<br>• plugin P4/P5;<br>• `plugin.config.json` P5;<br>• `SECTOR_NOTION_SCHEMA.md` lines 403 and 532;<br>• `FIELD_POPULATION_PLAN.md` line 224.<br>`sector_truth_gate.py` does not scan the plugin files | `HOSPITALITY_PLUGIN.md:178, 201`; `plugin.config.json:452`; `sector_truth_gate.py:39-45` | DOC (a separate batch) + BUILD (gate scope) | Phase 2. Until fixed, read destination status from `SECTOR_OS.md` §3 |
+| AG-16 | ✅ **RESOLVED 2026-09-15 — destination drift corrected and gated.** Plugin P4/P5, `plugin.config.json` P5, `SECTOR_NOTION_SCHEMA.md` and `FIELD_POPULATION_PLAN.md` now match DB 16: Nairobi · Maasai Mara · Diani profiled; Mombasa not profiled. `sector_truth_gate.py` **check 6** now fails if:<br>• plugin P5 and its sidecar disagree;<br>• either drifts from DB 16's verified row count;<br>• a P4 validation destination has no profile.<br>*Was:* those files predated the 2026-08-28 profiles, and the gate did not scan the plugin files | `HOSPITALITY_PLUGIN.md` v0.2 changelog; `sector_truth_gate.py` check 6; `SECTOR_OS.md` §15, 2026-09-15 | ~~DOC + BUILD~~ done | Nothing. Destination status may be read from plugin P5 or `SECTOR_OS.md` §3 |
 | AG-17 | No Sector agent can check a hotel's company fit: `sector-icp-fit` and `sector-signal-scorer` are B2B SaaS-only, and S12 is not built | `SECTOR_OS.md` §15, 2026-09-14 entry | OWNER. Check fit by hand, as in item 72 RD4 | Phases 2, 3 (by hand only) |
 | AG-18 | Marketing (03) and Operations (08) have no route from Sector | Item 31k | OWNER | Phase 5 (notes written by hand only) |
 | AG-19 | The API key should be rotated, and the rotation is not recorded as done | Item 57 (Resolved table) | OWNER | Any Phase 3 run |
@@ -180,7 +180,7 @@ Each change below either needs a new store or field (`SECTOR_ACTIVATION_PROTOCOL
 - Choose the run mode: no runs, the shared stream with markers, or T1-5.
 - Decide whether to commission any geography for A001 (default: no; AG-6).
 - Supply the sandbox folder path.
-- Approve the builds AG-1, AG-3 and AG-4, and the gate-scope half of AG-16.
+- Approve the builds AG-1, AG-3 and AG-4. *(AG-16's gate-scope build was completed 2026-09-15.)*
 
 ## 9. Phased run plan
 
@@ -188,7 +188,7 @@ Each phase starts only after the previous phase passes its exit gate. **No phase
 
 | Phase | Scope | Work | Exit gate | Writes |
 |---|---|---|---|---|
-| **0 · Preconditions** | Repository and owner | 1. Ratify item 74.<br>2. Fix the destination drift (AG-16).<br>3. Supply the sandbox folder path and confirm it is outside every git tree.<br>4. Build the key file: names, domains, fingerprints.<br>5. Choose the run mode (AG-12).<br>6. Rotate the API key (AG-19). | Every precondition marked done in item 74 | Repository documentation only |
+| **0 · Preconditions** | Repository and owner | 1. Ratify item 74.<br>2. ~~Fix the destination drift (AG-16).~~ ✅ Done 2026-09-15.<br>3. Supply the sandbox folder path and confirm it is outside every git tree.<br>4. Build the key file: names, domains, fingerprints.<br>5. Choose the run mode (AG-12).<br>6. Rotate the API key (AG-19). | Every precondition marked done in item 74 | Repository documentation only |
 | **1 · A001 group intake** | `A001` | A group answers file in the sandbox folder, every value `[TEST_FIXTURE · A001]`. Record the group's stop rules | Gate check once AG-1, AG-2 and AG-3 exist; until then a manual checklist against §4–§5. Expected verdict: **outside the current offer ICP, by design** | Sandbox folder; one verdict line in §6 |
 | **2 · Child profiles** | `A001-P01` … `P09` | One answers file per unit with `parent_id: "A001"`. A fit record per unit: archetype, destination status, band, stop rules. Declare the P08→P07 link | Every unit has a declared verdict in §6 | Sandbox folder; §6 updates |
 | **3 · First property slice** | `A001-P07`, inside A001 | 1. Simulated S1 profile.<br>2. Sector fit checked by hand, **carrying the group flags**.<br>3. Hand-off as a text note (no S10 record; AG-13).<br>4. Seed brief with IDs and the §5 markers.<br>5. `intake_gate.py --scan` against the key file.<br>6. Owner approves the exact input text.<br>7. **Only then**, and only if the run mode allows: a manual `offer-orchestrator` run and a structural `offer-oeos-engineer` run.<br>Skip pricing. | Stop on any name, URL, fingerprint, currency amount, synthetic KPI or missing marker | Sandbox folder. Runtime memory lines only if runs are approved |
@@ -197,6 +197,7 @@ Each phase starts only after the previous phase passes its exit gate. **No phase
 
 ## 10. Changelog
 
+- **v0.2 — 2026-09-15** — **AG-16 resolved.** The Hospitality destination drift was corrected in plugin P4/P5, `plugin.config.json` P5, `SECTOR_NOTION_SCHEMA.md` and `FIELD_POPULATION_PLAN.md`, and is now gated by `sector_truth_gate.py` check 6 (record: `SECTOR_OS.md` §15). Updated with it, so the file stays consistent: the §6 destination-status note, the §8 owner-decision bullet, and Phase 0 step 2 in §9. No other gap, phase or register row changed; A001 remains unratified and not runnable. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-15** — File created when the owner approved A001 as the group-level simulated Hospitality Sector Sandbox. Contents:
   - status and decision (§1), and what A001 is and is not (§2);
   - the ID scheme (§3);
