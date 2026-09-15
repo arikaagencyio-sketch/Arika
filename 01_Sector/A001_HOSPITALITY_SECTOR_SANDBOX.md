@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.5
+**Version:** v0.6
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -194,6 +194,19 @@ The only tool is the local intake gate, run from the repository root:
 - **Every unit-level check:** only `A001-P07` passes destination, band and archetype together.
 - **Group flags:** every unit carries them. The sandbox exists to show what the system does with those flags, not to hide them.
 
+### Phase verdicts
+
+IDs only. Each line is written here only after three steps (D10):
+1. It is drafted in the sandbox's `90_scan\` folder.
+2. It passes `intake_gate.py --scan` with the A001 key.
+3. It passes a manual check.
+
+A `SIMULATED_VERDICT` shows that the gates ran. It is never a verdict about a real property (§4 rule 4).
+
+| Phase · stage | Scope | Verdict | Conditions | Recorded |
+|---|---|---|---|---|
+| 1 · S1 | `A001` | `SIMULATED_VERDICT` · `group_outside_current_offer_icp_by_design` · `blocked_for_current_H1_H2_MVP` | may_continue_to_phase_2: yes, after item 74 points (3) and (4) · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-15 |
+
 ## 7. Architecture-gap register
 
 **Class key:**
@@ -269,6 +282,15 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 
 ## 10. Changelog
 
+- **v0.6 — 2026-09-15** — **Phase 1 group verdict written back (S1).** One IDs-only line added under a new "Phase verdicts" table at the end of §6:
+  - `A001` · S1 · `SIMULATED_VERDICT`;
+  - outside the current offer ICP by design, and blocked for the current H1/H2 MVP;
+  - Phase 2 only after item 74 points (3) and (4);
+  - no offer runtime, Sector store or CRM; pricing skipped.
+
+  **Basis:** the sandbox's validated S1 answers (`--answers` PASS at S1), with stop rules SR-1 to SR-3 firing by design and SR-4 to SR-6 not firing.
+
+  **How it got here:** drafted in `90_scan\`, scanned with the A001 key and checked by hand before being written (D10). No other section changed. — Claude Code (Opus 5)
 - **v0.5 — 2026-09-15** — **Owner rulings G1, D11 and D12 recorded.**
   - **G1:** the Phase 0 exit gate is re-scoped and now met (D1–D10 plus key validation). §9 gains an entry gate per phase: item 74 points (3) archetype and (4) geography gate Phase 2; the Phase 3 run mode, API key rotation and full ratification gate Phase 3; AG-4 gates Phase 4.
   - **D11:** Claude drafts values derived from rules and this record; the owner types values that come from the package; Claude does not read the package.
