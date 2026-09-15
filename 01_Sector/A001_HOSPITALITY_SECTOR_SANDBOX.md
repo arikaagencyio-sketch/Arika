@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.7
+**Version:** v0.8
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -209,6 +209,7 @@ A `SIMULATED_VERDICT` shows that the gates ran. It is never a verdict about a re
 | Phase · stage | Scope | Verdict | Conditions | Recorded |
 |---|---|---|---|---|
 | 1 · S1 | `A001` | `SIMULATED_VERDICT` · `group_outside_current_offer_icp_by_design` · `blocked_for_current_H1_H2_MVP` | may_continue_to_phase_2: yes, after item 74 points (3) and (4) · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-15 |
+| 2 · S1 | `A001-P07` | `SIMULATED_VERDICT` · unit_check: `archetype_pass · destination_fit_pass · H_band_pass` · group_flags: `apply` · `outside_current_offer_icp_by_design` | may_continue_to_phase_3_planning: yes, after Phase 3 entry gate · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-15 |
 
 ## 7. Architecture-gap register
 
@@ -285,6 +286,16 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 
 ## 10. Changelog
 
+- **v0.8 — 2026-09-15** — **Phase 2 verdict for `A001-P07` written back (S1).** One IDs-only row added to the §6 "Phase verdicts" table:
+  - `A001-P07` · S1 · `SIMULATED_VERDICT`;
+  - unit checks pass: archetype, Destination Fit and H-band;
+  - group flags apply, so the unit stays outside the current offer ICP by design;
+  - Phase 3 planning only after the Phase 3 entry gate;
+  - no offer runtime, Sector store or CRM; pricing skipped.
+
+  **Basis:** the unit's validated S1 answers (`--answers` PASS at S1) and its fit record. In that record the no-website and no-direct-path rules don't fire, and the link from `A001-P08` is recorded without blocking this unit (AG-9).
+
+  **How it got here:** drafted in `90_scan\`, scanned with the A001 key and checked by hand before being written (D10). No other section changed. — Claude Code (Opus 5)
 - **v0.7 — 2026-09-15** — **Phase 2 entry gate met: D13 and D14 recorded.**
   - **D13:** unit archetypes confirmed for sandbox use only, with a two-archetype rule. The main archetype resolves; the secondary is marked `secondary_unruled`, a declared sandbox gap, not a Sector rule.
   - **D14:** commission nothing for A001. Each unit records one status (`profiled`, `in_DB11_not_profiled`, `not_in_DB11`). Only currently profiled destinations pass Destination Fit, and blocked statuses are simulated verdicts.
