@@ -396,6 +396,8 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 - 2026-09-15 — **A001 Phase 0 setup checks passed.** The owner's key file is now in place and validated by counts only, with no placeholders; the IDs-only scan test and intake gate lint pass. This supersedes the warning in the entry above. Phase 1 still waits on the remaining item 74 decisions or an owner ruling on Phase 0's exit gate. No key value was read into a session or written to the repository; no runtime, Notion or CRM write. — Claude Code (Opus 5)
 
+- 2026-09-15 — **A001 Phase 0 complete; rulings G1, D11 and D12 recorded.** G1 re-scopes the Phase 0 exit gate: archetype mapping and geography now gate Phase 2; the Phase 3 run mode, API key rotation and full ratification gate Phase 3; AG-4 gates Phase 4. D11: Claude drafts rule- and record-derived answers, the owner types package-derived ones, and Claude does not read the package. D12: answers carry bands, categories, statuses and unit IDs only. Record: [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) v0.5 and item 74. No answer filled; no runtime, Notion or CRM write. — Claude Code (Opus 5)
+
 ## 16. Memory / Feedback Loop / Cadence
 
 *(Added 2026-07-14 — this file previously had no §16, since the department had no agent roster to generate memory from.)*

@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.4
+**Version:** v0.5
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -113,7 +113,7 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 - Branding (12) BOIS runs, because they write client workspaces inside this repository (AG-15);
 - reading `.env`.
 
-### 5.1 Phase 0–2 operating mode (owner decisions D1–D10, 2026-09-15)
+### 5.1 Phase 0–2 operating mode (owner decisions D1–D12, 2026-09-15)
 
 **Mode M0: no runtime.** Phases 0, 1 and 2 use none of the following: `arika run`, `npm`, skills, skill execution records, events, the scheduler, Notion, ClickUp or BOIS. Nobody reads `.env`.
 
@@ -137,6 +137,8 @@ The only tool is the local intake gate, run from the repository root:
 | D8 | Answer label | `[OWNER-SUPPLIED · TEST_FIXTURE · A001 · YYYY-MM-DD]`, plus `· DERIVED` / `· ASSUMED` where applicable |
 | D9 | Stage cap | S2. S3–S5 rows are `BLOCKED` with the note "A001 sandbox — no client system". Synthetic data stays in source custody, never in answers |
 | D10 | Write-back | Only IDs-only verdict lines leave the sandbox, after `--scan` and the manual checks |
+| D11 | Answer source | Values derived from rules and from this sandbox record are drafted by Claude. Values that come from the simulation package are typed by the owner into the worksheet. **Claude does not read the package** |
+| D12 | Value granularity | Bands, categories, statuses and unit IDs only. No counts except the owner-decided unit count; no URLs, verbatim copy, prices, ratings, KPI values, shares or named competitors |
 
 **Sandbox layout** (IDs only in every folder and file name):
 
@@ -245,11 +247,20 @@ Each change below either needs a new store or field (`SECTOR_ACTIVATION_PROTOCOL
 
 ## 9. Phased run plan
 
-Each phase starts only after the previous phase passes its exit gate. **No phase writes to Notion, ClickUp, a skill record, the plugin or the Offer registry.**
+Each phase starts only after the previous phase passes its exit gate **and its own entry gate below**. **No phase writes to Notion, ClickUp, a skill record, the plugin or the Offer registry.**
+
+**Entry gates (owner ruling G1, 2026-09-15).** The Phase 0 exit gate was re-scoped. Item 74 decisions that only later phases need now gate those phases:
+
+| Phase | Entry gate |
+|---|---|
+| 1 | Phase 0 complete: D1–D10 recorded and the key file validated. D11–D12 govern how Phase 1 answers are filled |
+| 2 | Item 74 point (3), archetype mapping, and point (4), geography, decided |
+| 3 | Phase 3 run mode decided · API key rotated (AG-19) · full A001 ratification |
+| 4 | AG-4 (S09 union operator) decided under item 74 point (6) |
 
 | Phase | Scope | Work | Exit gate | Writes |
 |---|---|---|---|---|
-| **0 · Preconditions** | Repository and owner | 1. Ratify item 74 — *partly recorded 2026-09-15:* D1–D10 (§5.1). Archetype mapping, geography and the Phase 3 run mode stay open.<br>2. ~~Fix the destination drift (AG-16).~~ ✅ Done 2026-09-15.<br>3. ~~Supply the sandbox folder path and confirm it is outside every git tree.~~ ✅ Path decided 2026-09-15 (D1). The git-tree check runs at creation and is saved in `00_admin\preflight_git_check.txt`.<br>4. ~~Build the key file: names, domains, fingerprints.~~ ✅ Done 2026-09-15 — key in place and validated by counts only; IDs-only scan test PASS; intake gate lint PASS.<br>5. ~~Choose the run mode (AG-12).~~ ✅ M0 for Phases 0–2 (D5); Phase 3 still open.<br>6. Rotate the API key (AG-19) — needed before Phase 3 only. | Every precondition marked done in item 74 | Repository documentation only |
+| **0 · Preconditions** | Repository and owner | 1. ~~Ratify item 74.~~ Re-scoped by G1 (2026-09-15): D1–D10 are recorded (§5.1). Archetype mapping and geography now gate Phase 2; the Phase 3 run mode and full ratification gate Phase 3.<br>2. ~~Fix the destination drift (AG-16).~~ ✅ Done 2026-09-15.<br>3. ~~Supply the sandbox folder path and confirm it is outside every git tree.~~ ✅ Path decided 2026-09-15 (D1). The git-tree check runs at creation and is saved in `00_admin\preflight_git_check.txt`.<br>4. ~~Build the key file: names, domains, fingerprints.~~ ✅ Done 2026-09-15 — key in place and validated by counts only; IDs-only scan test PASS; intake gate lint PASS.<br>5. ~~Choose the run mode (AG-12).~~ ✅ M0 for Phases 0–2 (D5); Phase 3 still open.<br>6. Rotate the API key (AG-19) — moved to the Phase 3 entry gate (G1). | ✅ **Met 2026-09-15 (G1):** D1–D10 recorded and the key file validated. *Was: every precondition marked done in item 74 — the remaining decisions now gate later phases (entry gates above).* | Repository documentation only |
 | **1 · A001 group intake** | `A001` | A group answers file in the sandbox folder, every value `[TEST_FIXTURE · A001]`. Record the group's stop rules | Gate check once AG-1, AG-2 and AG-3 exist; until then a manual checklist against §4–§5. Expected verdict: **outside the current offer ICP, by design** | Sandbox folder; one verdict line in §6 |
 | **2 · Child profiles** | `A001-P01` … `P09` | One answers file per unit with `parent_id: "A001"`. A fit record per unit: archetype, destination status, band, stop rules. Declare the P08→P07 link | Every unit has a declared verdict in §6 | Sandbox folder; §6 updates |
 | **3 · First property slice** | `A001-P07`, inside A001 | 1. Simulated S1 profile.<br>2. Sector fit checked by hand, **carrying the group flags**.<br>3. Hand-off as a text note (no S10 record; AG-13).<br>4. Seed brief with IDs and the §5 markers.<br>5. `intake_gate.py --scan` against the key file.<br>6. Owner approves the exact input text.<br>7. **Only then**, and only if the run mode allows: a manual `offer-orchestrator` run and a structural `offer-oeos-engineer` run.<br>Skip pricing. | Stop on any name, URL, fingerprint, currency amount, synthetic KPI or missing marker | Sandbox folder. Runtime memory lines only if runs are approved |
@@ -258,6 +269,13 @@ Each phase starts only after the previous phase passes its exit gate. **No phase
 
 ## 10. Changelog
 
+- **v0.5 — 2026-09-15** — **Owner rulings G1, D11 and D12 recorded.**
+  - **G1:** the Phase 0 exit gate is re-scoped and now met (D1–D10 plus key validation). §9 gains an entry gate per phase: item 74 points (3) archetype and (4) geography gate Phase 2; the Phase 3 run mode, API key rotation and full ratification gate Phase 3; AG-4 gates Phase 4.
+  - **D11:** Claude drafts values derived from rules and this record; the owner types values that come from the package; Claude does not read the package.
+  - **D12:** values are bands, categories, statuses and unit IDs only.
+  - §5.1 table and heading and §9 Phase 0 row updated to match.
+
+  Documentation only; no answer filled, no package or key value read. — Claude Code (Opus 5)
 - **v0.4 — 2026-09-15** — **Phase 0 setup checks passed.** The owner placed `00_admin\a001_key.json`. A counts-only script, which read no key value into the session and printed none, found it well-formed:
   - every expected field present;
   - a complete `id_map`;
