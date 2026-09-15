@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.8
+**Version:** v0.9
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -210,6 +210,7 @@ A `SIMULATED_VERDICT` shows that the gates ran. It is never a verdict about a re
 |---|---|---|---|---|
 | 1 · S1 | `A001` | `SIMULATED_VERDICT` · `group_outside_current_offer_icp_by_design` · `blocked_for_current_H1_H2_MVP` | may_continue_to_phase_2: yes, after item 74 points (3) and (4) · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-15 |
 | 2 · S1 | `A001-P07` | `SIMULATED_VERDICT` · unit_check: `archetype_pass · destination_fit_pass · H_band_pass` · group_flags: `apply` · `outside_current_offer_icp_by_design` | may_continue_to_phase_3_planning: yes, after Phase 3 entry gate · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-15 |
+| 2 · S1 | `A001-P08` | `SIMULATED_VERDICT` · unit_check: `archetype_pass · destination_fit_pass · size_stop_rule_fires_below_H1` · group_flags: `apply` · link: `A001-P07 link recorded · AG-9 unresolved` · `outside_current_offer_icp_by_design` | may_continue_to_phase_3_planning: no; A001-P07 remains the Phase 3 slice · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-15 |
 
 ## 7. Architecture-gap register
 
@@ -286,6 +287,18 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 
 ## 10. Changelog
 
+- **v0.9 — 2026-09-15** — **Phase 2 verdict for `A001-P08` written back (S1).** One IDs-only row added to the §6 "Phase verdicts" table:
+  - `A001-P08` · S1 · `SIMULATED_VERDICT`;
+  - archetype and Destination Fit pass, and the size stop rule fires because the unit is below H1;
+  - group flags apply;
+  - the link to `A001-P07` is recorded, with AG-9 unresolved;
+  - outside the current offer ICP by design;
+  - no Phase 3 planning, because `A001-P07` remains the Phase 3 slice;
+  - no offer runtime, Sector store or CRM; pricing skipped.
+
+  **Basis:** the unit's validated S1 answers (`--answers` PASS at S1) and its fit record. The owner-authorised worksheet repairs (the source-class cell, the unit ID in six labels, and the optional H-A07 set to `NOT_ASKED`) were made in the sandbox before the apply.
+
+  **How it got here:** drafted in `90_scan\`, scanned with the A001 key and checked by hand before being written (D10). No other section changed. — Claude Code (Opus 5)
 - **v0.8 — 2026-09-15** — **Phase 2 verdict for `A001-P07` written back (S1).** One IDs-only row added to the §6 "Phase verdicts" table:
   - `A001-P07` · S1 · `SIMULATED_VERDICT`;
   - unit checks pass: archetype, Destination Fit and H-band;
