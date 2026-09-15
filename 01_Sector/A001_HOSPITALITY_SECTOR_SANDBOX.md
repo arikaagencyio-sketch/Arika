@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.2
+**Version:** v0.3
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -28,12 +28,12 @@
 - Item 72.
 
 **Still open, under item 74:**
-- The Tier-1 changes in §8.
-- The run mode.
+- The Tier-1 changes in §8 — **deferred 2026-09-15 (D6)**; none is needed while no runtime is used.
+- The run mode for Phase 3. *(Phases 0–2: M0, no runtime — decided 2026-09-15, D5.)*
 - The archetype mapping in §6.
 - Geography.
-- The sandbox folder path.
-- Four small builds.
+- ~~The sandbox folder path.~~ Decided 2026-09-15 (D1; §5.1).
+- The AG-4 build. *(AG-1/AG-3 deferred under a manual workaround, D7; AG-16 done.)*
 
 **Named risk: `AEIT_10` RK-2, "architecture keeps outrunning reality."** A sandbox is structure with no real run behind it. This file records gaps and gates, not capability. Writing something down here does not make it `BUILT` (`AEIT_11`).
 
@@ -89,8 +89,14 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 |---|---|---|
 | This record, the decision entries, the tracker item and the gap register | Repository: this file, `SECTOR_OS.md` §8, `OFFER_OS.md` §8, item 74 | Names, URLs, exact inventory counts, room-size or venue-capacity tables, currency amounts, synthetic KPIs or reference fingerprints |
 | Group and child answer files, the simulation package, per-unit notes, slice seed briefs | **A sandbox folder outside every git working tree.** The path is supplied under item 74 | Inside this repository, the stale `ChatGPT\Agency.Repo` clone, any other git tree, or a synced folder that commits |
-| **Key file** (`sandbox_key.json`): the ID → name map, real names and domains, reference fingerprints | Sandbox folder only | Anywhere else. Inputs are scanned **against** it, so nothing from it may be copied **into** them |
+| **Key file** (`00_admin\a001_key.json`): the ID → name map, real names and domains, reference fingerprints | Sandbox folder only | Anywhere else. Inputs are scanned **against** it, so nothing from it may be copied **into** them. Never opened in a Claude session; validated by counts only (D3) |
 | Runtime inputs for A001 (Phase 3 only, if approved) | Typed by the owner after review | Sent without the three markers and a passing scan |
+
+**Key file rules.**
+- **The current scan reads only `real_names` and `domains`.** `intake_gate.py --scan` ignores every other field. A string held only under `id_map`, `reference` or `fingerprints` is **not checked**, and the scan still prints PASS.
+- **Superset rule.** Every name, domain and distinctive string held anywhere in the key must also appear in `real_names` (web addresses in `domains`), with its variants: spaced, unspaced, hyphenated, with and without "The", possessive, abbreviated, accented and unaccented.
+- **Keep generic tokens out of `real_names`.** The match is a case-insensitive substring, so an entry under 5 characters, a bare number, or a fragment of a repository place or archetype name causes false hits. Hold those in a manual-check field and check them by eye.
+- **Numbers are manual.** The scan does not catch inventory counts, room sizes, venue capacities, synthetic KPIs or currency figures without a code. Unit-bearing strings may go in `real_names`; bare numbers may not.
 
 **Runtime marker convention.** This is documentation only; nothing enforces it yet (AG-3, AG-12). Every A001 `--input` must carry, at top level:
 
@@ -106,6 +112,59 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 - skill execution records (`01_Sector/_memory/skill_runs.jsonl`; AG-13);
 - Branding (12) BOIS runs, because they write client workspaces inside this repository (AG-15);
 - reading `.env`.
+
+### 5.1 Phase 0–2 operating mode (owner decisions D1–D10, 2026-09-15)
+
+**Mode M0: no runtime.** Phases 0, 1 and 2 use none of the following: `arika run`, `npm`, skills, skill execution records, events, the scheduler, Notion, ClickUp or BOIS. Nobody reads `.env`.
+
+The only tool is the local intake gate, run from the repository root:
+- lint;
+- `--template … --out <sandbox path>`;
+- `--answers`;
+- `--scan`.
+
+**Phase 3's run mode is undecided:** M1, the shared stream with the §5 markers, or M2, a separate stream (T1-5). The Tier-1 changes T1-1…T1-5 are deferred.
+
+| # | Decision | Rule |
+|---|---|---|
+| D1 | Sandbox root | `C:\Users\USER\Arika_Sandboxes\A001\` — local, not in OneDrive, outside every git tree |
+| D2 | Key file | `00_admin\a001_key.json`, created by the owner. **Not yet in place at the 2026-09-15 setup check**; validation by counts runs once it is |
+| D3 | Key custody | Key values never enter a Claude session. The file is validated by a script that prints counts only |
+| D4 | Package custody | The simulation package stays where the owner holds it for now; nothing is extracted |
+| D5 | Run mode | M0 for Phases 0–2 |
+| D6 | Tier-1 | T1-1…T1-5 deferred |
+| D7 | Intake tooling | Manual workaround; AG-1/AG-3 builds deferred |
+| D8 | Answer label | `[OWNER-SUPPLIED · TEST_FIXTURE · A001 · YYYY-MM-DD]`, plus `· DERIVED` / `· ASSUMED` where applicable |
+| D9 | Stage cap | S2. S3–S5 rows are `BLOCKED` with the note "A001 sandbox — no client system". Synthetic data stays in source custody, never in answers |
+| D10 | Write-back | Only IDs-only verdict lines leave the sandbox, after `--scan` and the manual checks |
+
+**Sandbox layout** (IDs only in every folder and file name):
+
+| Folder | Holds |
+|---|---|
+| `00_admin` | The key file, the decisions record and the git-check record |
+| `01_source` | Source material |
+| `02_group` | Group files |
+| `03_units\A001-P01` … `A001-P09` | One folder per unit |
+| `04_slice_P07` | The first property slice |
+| `05_diagnostics` | Group diagnostics |
+| `06_downstream_notes` | Downstream notes |
+| `90_scan` | Repo-bound drafts and scan output |
+
+**Answer conventions under the manual workaround (D7):**
+- **Generate blank files** with `--template` into the sandbox, then hand-edit `pilot_id` to `A001` or `A001-Pnn`, because the template writes `PILOT-H-001`.
+- **Unit files** add three top-level keys: `"parent_id": "A001"`, `"sandbox_id": "A001"` and `"provenance": "TEST_FIXTURE"`. The gate ignores extra top-level keys.
+- **Every `ANSWERED` value uses the D8 label.** It starts with `OWNER-SUPPLIED` because `--answers` checks only a label's first word and rejects one beginning `TEST_FIXTURE`. The label still obeys §4 rule 3. `PUBLIC`, `PUBLIC-OTA` and `CLIENT-*` labels are never used.
+- **Never add answer IDs.** The gate fails any ID outside the question bank. Group questions therefore live in `02_group\A001_group_notes.md` until AG-2: portfolio, linked units, central systems, decision rights, group channels.
+
+**Git-tree check.**
+- **Before** creating or writing into any sandbox folder, `git -C <path> rev-parse --show-toplevel` must fail for the sandbox root and its parent. The output is saved in `00_admin\preflight_git_check.txt`.
+- **After every Phase 0–2 step,** `git status --short` in this repository must show nothing but intended documentation, because the auto-sync job commits within minutes.
+
+**Write-back rule (D10).** Nothing leaves the sandbox except IDs-only verdict lines for §6 and changelog lines. Each one:
+1. is drafted in `90_scan\`;
+2. passes `intake_gate.py --scan` with `--key 00_admin\a001_key.json`;
+3. is checked by eye for what the scan cannot see: numbers, URLs, name variants and labels.
 
 ## 6. Child register
 
@@ -175,12 +234,14 @@ Each change below either needs a new store or field (`SECTOR_ACTIVATION_PROTOCOL
 | T1-4 | A sandbox marker field in `skill-execution-record.schema.json` | AG-13 | S10 hand-offs and any skill record for A001 | No skill records for A001; hand-offs by text note only |
 | T1-5 | A separate sandbox memory stream in the runtime | AG-12 | Keeping A001 runs out of department memory streams | The owner chooses under item 74: no A001 runs, or runs into the shared stream with the §5 markers |
 
+**T1-1…T1-5 were deferred on 2026-09-15 (D6).** None is needed while Phases 0–2 use no runtime (§5.1). Revisit before Phase 3.
+
 **Owner decisions under item 74 that are not Tier-1:**
 - Confirm the archetype mapping in §6.
-- Choose the run mode: no runs, the shared stream with markers, or T1-5.
+- Choose the run mode for Phase 3: no runs, the shared stream with markers, or T1-5. *(Phases 0–2: M0, decided 2026-09-15.)*
 - Decide whether to commission any geography for A001 (default: no; AG-6).
-- Supply the sandbox folder path.
-- Approve the builds AG-1, AG-3 and AG-4. *(AG-16's gate-scope build was completed 2026-09-15.)*
+- ~~Supply the sandbox folder path.~~ Decided 2026-09-15 (D1).
+- Approve the AG-4 build. *(AG-1/AG-3 deferred under the manual workaround, D7; AG-16's gate-scope build was completed 2026-09-15.)*
 
 ## 9. Phased run plan
 
@@ -188,7 +249,7 @@ Each phase starts only after the previous phase passes its exit gate. **No phase
 
 | Phase | Scope | Work | Exit gate | Writes |
 |---|---|---|---|---|
-| **0 · Preconditions** | Repository and owner | 1. Ratify item 74.<br>2. ~~Fix the destination drift (AG-16).~~ ✅ Done 2026-09-15.<br>3. Supply the sandbox folder path and confirm it is outside every git tree.<br>4. Build the key file: names, domains, fingerprints.<br>5. Choose the run mode (AG-12).<br>6. Rotate the API key (AG-19). | Every precondition marked done in item 74 | Repository documentation only |
+| **0 · Preconditions** | Repository and owner | 1. Ratify item 74 — *partly recorded 2026-09-15:* D1–D10 (§5.1). Archetype mapping, geography and the Phase 3 run mode stay open.<br>2. ~~Fix the destination drift (AG-16).~~ ✅ Done 2026-09-15.<br>3. ~~Supply the sandbox folder path and confirm it is outside every git tree.~~ ✅ Path decided 2026-09-15 (D1). The git-tree check runs at creation and is saved in `00_admin\preflight_git_check.txt`.<br>4. Build the key file: names, domains, fingerprints — ⏳ **owner**. Not in place at the 2026-09-15 check, so the counts-only validation and the scan test have not run.<br>5. ~~Choose the run mode (AG-12).~~ ✅ M0 for Phases 0–2 (D5); Phase 3 still open.<br>6. Rotate the API key (AG-19) — needed before Phase 3 only. | Every precondition marked done in item 74 | Repository documentation only |
 | **1 · A001 group intake** | `A001` | A group answers file in the sandbox folder, every value `[TEST_FIXTURE · A001]`. Record the group's stop rules | Gate check once AG-1, AG-2 and AG-3 exist; until then a manual checklist against §4–§5. Expected verdict: **outside the current offer ICP, by design** | Sandbox folder; one verdict line in §6 |
 | **2 · Child profiles** | `A001-P01` … `P09` | One answers file per unit with `parent_id: "A001"`. A fit record per unit: archetype, destination status, band, stop rules. Declare the P08→P07 link | Every unit has a declared verdict in §6 | Sandbox folder; §6 updates |
 | **3 · First property slice** | `A001-P07`, inside A001 | 1. Simulated S1 profile.<br>2. Sector fit checked by hand, **carrying the group flags**.<br>3. Hand-off as a text note (no S10 record; AG-13).<br>4. Seed brief with IDs and the §5 markers.<br>5. `intake_gate.py --scan` against the key file.<br>6. Owner approves the exact input text.<br>7. **Only then**, and only if the run mode allows: a manual `offer-orchestrator` run and a structural `offer-oeos-engineer` run.<br>Skip pricing. | Stop on any name, URL, fingerprint, currency amount, synthetic KPI or missing marker | Sandbox folder. Runtime memory lines only if runs are approved |
@@ -197,6 +258,13 @@ Each phase starts only after the previous phase passes its exit gate. **No phase
 
 ## 10. Changelog
 
+- **v0.3 — 2026-09-15** — **Phase 0 decisions D1–D10 recorded (Batch 3).**
+  - **§5:** the key file is `00_admin\a001_key.json`. New key file rules: the current scan reads only `real_names` and `domains`; the superset rule; generic tokens and bare numbers are kept for manual checks.
+  - **New §5.1:** Phase 0–2 operating mode M0 (no runtime), the D1–D10 table, the sandbox layout, answer conventions under the manual workaround, the git-tree check and the write-back rule.
+  - **§1, §8 and §9 Phase 0 updated to match:** the Tier-1 changes are deferred, and the Phases 0–2 run mode and sandbox path are decided. Archetype mapping, geography, the Phase 3 run mode and AG-4 stay open.
+  - ⚠️ **The owner-created key file was not in place at the setup check,** so its counts-only validation and the scan test are still to run.
+
+  Documentation only. No answer filled, no package content read, no runtime used. — Claude Code (Opus 5)
 - **v0.2 — 2026-09-15** — **AG-16 resolved.** The Hospitality destination drift was corrected in plugin P4/P5, `plugin.config.json` P5, `SECTOR_NOTION_SCHEMA.md` and `FIELD_POPULATION_PLAN.md`, and is now gated by `sector_truth_gate.py` check 6 (record: `SECTOR_OS.md` §15). Updated with it, so the file stays consistent: the §6 destination-status note, the §8 owner-decision bullet, and Phase 0 step 2 in §9. No other gap, phase or register row changed; A001 remains unratified and not runnable. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-15** — File created when the owner approved A001 as the group-level simulated Hospitality Sector Sandbox. Contents:
   - status and decision (§1), and what A001 is and is not (§2);

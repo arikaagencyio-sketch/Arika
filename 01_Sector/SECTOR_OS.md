@@ -385,6 +385,15 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
   Closes A001 gap AG-16 and narrows item 74 point (6). No agent run, event, Notion or ClickUp write, or memory-log write. — Claude Code (Opus 5)
 
+- 2026-09-15 — **A001 Phase 0 decisions recorded (Batch 3).** The owner decided D1–D10:
+  - Phases 0–2 run with no runtime (M0);
+  - T1-1…T1-5 are deferred;
+  - intake-gate builds are deferred under a manual workaround;
+  - answers are labelled `[OWNER-SUPPLIED · TEST_FIXTURE · A001 · date]` and capped at S2;
+  - only IDs-only verdict lines may leave the sandbox.
+
+  Recorded in [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) §5.1 (v0.3) and item 74. The key file rules now state that the current scan reads only `real_names` and `domains`. ⚠️ The owner-created key file was not in place at the setup check. No runtime, Notion, CRM or memory-log write; no intake answer filled. — Claude Code (Opus 5)
+
 ## 16. Memory / Feedback Loop / Cadence
 
 *(Added 2026-07-14 — this file previously had no §16, since the department had no agent roster to generate memory from.)*
