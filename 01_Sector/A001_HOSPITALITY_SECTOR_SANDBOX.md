@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · ✅ Ratified 2026-09-16 (D17) as an **internal simulation sandbox only** — not a prospect, not a CRM record, not offer evidence · 🔴 **Not runtime-runnable.** Phase 3 runs document-only first (D15), and any runtime-backed work stays blocked until the API key is rotated (D16 · AG-19). Phase 3 document-only execution is under way: `A001-P07` has reached S2 (§9). No runtime-backed work has started.
-**Version:** v0.14
+**Version:** v0.15
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -114,7 +114,7 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 - Branding (12) BOIS runs, because they write client workspaces inside this repository (AG-15);
 - reading `.env`.
 
-### 5.1 Operating mode (owner decisions D1–D19: D1–D14 for Phases 0–2, 2026-09-15 · D15–D19 for Phase 3 entry, 2026-09-16)
+### 5.1 Operating mode (owner decisions D1–D20: D1–D14 for Phases 0–2, 2026-09-15 · D15–D19 for Phase 3 entry, 2026-09-16 · D20 on the use of simulated evidence, 2026-09-16)
 
 **Mode M0: no runtime.** Phases 0, 1 and 2 use none of the following: `arika run`, `npm`, skills, skill execution records, events, the scheduler, Notion, ClickUp or BOIS. Nobody reads `.env`.
 
@@ -152,6 +152,12 @@ The only tool is the local intake gate, run from the repository root:
 | D17 (B3) | A001 ratification | **Ratified as an internal simulation sandbox only.** A001 is **not** a prospect, **not** a CRM record and **not** offer evidence. It may not enter the Offer runtime, the Sector store, the CRM or any shared store, and no A001 output may be cited as evidence about a market, property or buyer (§2, §4 rule 4).<br>This ratifies the sandbox's standing, **not** the §8 Tier-1 changes, which stay deferred under D6 |
 | D18 (B4) | Phase 3 slice | **`A001-P07` only.** Confirmed against the Phase 2 evidence: it is the only unit passing archetype, Destination Fit and the H-band together. The slice still runs as a group-architecture test carrying the group flags, never as an MVP audit |
 | D19 (B5) | S2 input format | **S2 switches to a block-per-question input format before any owner fill.** One field per line, so a dropped cell is not possible. Adopted because owner fill silently lost cells twice at S1 (42 rows) and S2 is 65 rows per unit. The format is not built yet; no S2 worksheet exists |
+
+**Use of simulated evidence (owner decision, 2026-09-16).** This governs what A001 output may justify anywhere in the repository, in every department, permanently — not only during the phases.
+
+| # | Decision | Rule |
+|---|---|---|
+| D20 | Use of simulated evidence | **May be used to improve mechanisms only:** schemas · gates · intake formats · validators · routing logic · documentation · safe workflow design.<br>**May not be used as** market evidence · demand evidence · pricing evidence · proof evidence · buyer evidence · capacity evidence · or any claim about real hotels.<br>**The test:** A001 output may justify changing *how the system works*. It may never describe *how the market behaves*. A finding that a rule is missing, a profile unauthored, an edge undefined or a format unsafe is a mechanism finding and may be acted on. Anything that would read as a fact about demand, guests, prices, competitors or a real property is barred, however it is phrased.<br>Applies to every A001 output, including the Phase 2 close-out, the document-only pilot close-out and every `SIMULATED_VERDICT` (§4 rule 4) |
 
 **Sandbox layout** (IDs only in every folder and file name):
 
@@ -388,6 +394,12 @@ The owner recorded all five entry decisions on 2026-09-16, as **D15–D19** in �
 
 ## 10. Changelog
 
+- **v0.15 — 2026-09-16** — **D20 recorded: how A001 simulated evidence may and may not be used.** The open decision surfaced by the document-only pilot close-out is now settled and written into §5.1.
+  - **Permitted — mechanisms only:** schemas, gates, intake formats, validators, routing logic, documentation and safe workflow design.
+  - **Barred:** market, demand, pricing, proof, buyer and capacity evidence, and any claim about real hotels.
+  - **The test:** A001 output may justify changing *how the system works*, never *how the market behaves*.
+
+  It applies to every A001 output — both close-outs and every `SIMULATED_VERDICT` — in every department, permanently, not only during the phases. Recorded because this was the pilot's most likely route to misuse: the findings are genuinely useful about mechanisms and worthless about markets, and nothing previously stated the permitted half. The §5.1 heading now spans D1–D20. No verdict, register row, gap entry or gate changed. — Claude Code (Opus 5)
 - **v0.14 — 2026-09-16** — **Phase 3 document-only progress recorded: `A001-P07` reached S2.** The Phase 3 slice (D18) completed S2 intake in the sandbox under the document-only run mode (D15). Every required S2 row is declared, `stage_reached` moved to S2, and `intake_gate.py --answers` passes at S2.
   - **Recorded as a checkpoint, not a verdict.** §6 "Phase verdicts" is defined as a table of `SIMULATED_VERDICT` lines showing that the gates ran. Reaching a stage produces no classification, so **no verdict line was added or changed**, and the note went to §9, where phase execution is tracked. The unit's Phase 2 verdict stands as written.
   - **What it is not:** not a new Offer verdict · not runtime output · not CRM or Sector-store evidence · not pricing.

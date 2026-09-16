@@ -1,8 +1,8 @@
 # A001 — Document-only pilot close-out
 
 **Department:** Sector (01) — owns this record. Offer (02) may read it, but **not as Offer evidence** (§9).
-**Status:** ✅ Document-only pilot closed 2026-09-16 · 🔴 **No runtime-backed work** — blocked by D16 until the API key is rotated (AG-19).
-**Version:** v0.1
+**Status:** ✅ Document-only pilot closed 2026-09-16 · ✅ Use of this evidence bounded by **D20** (mechanisms only) · 🔴 **No runtime-backed work** — blocked by D16 until the API key is rotated (AG-19).
+**Version:** v0.2
 
 > **IDs only.** A001 is a **fictional** hospitality group. Nothing here is evidence about any market, property or buyer. Read [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) §2 and §4 before using any A001 value anywhere.
 
@@ -91,6 +91,8 @@ Two of them define the current boundary:
 
 Simulated evidence can show that a **mechanism** behaves as documented. It cannot show what a real property would answer.
 
+**This is now binding as D20** (sandbox record §5.1, owner decision 2026-09-16): A001 output may be used to improve **mechanisms only** — schemas, gates, intake formats, validators, routing logic, documentation and safe workflow design — and may **never** be used as market, demand, pricing, proof, buyer or capacity evidence, or as any claim about real hotels. The test is whether the change is to *how the system works* or to *how the market behaves*. It applies in every department, permanently.
+
 ## 10. Before a real pilot
 
 | # | Do this first | Why |
@@ -99,7 +101,7 @@ Simulated evidence can show that a **mechanism** behaves as documented. It canno
 | 2 | **Decide the real client folder, storage and legal path** | A real engagement carries real data. The storage location, retention and the legal review path are undecided — the legal path is tracked separately as item 59 |
 | 3 | **Do not use pipe-table owner fill for larger stages** | It lost cells twice at the smaller stage. Use the block-per-question format, or something equally loss-evident |
 | 4 | **Keep public research off unless explicitly approved** | A001 ran with public research disabled throughout. For a real property this is a per-engagement permission, recorded before anyone looks at a page |
-| 5 | **Decide how simulated evidence may inform Offer and Sector changes** | Currently undecided, and the most likely place for this pilot to be misused. A defensible line: A001 may justify fixing a **mechanism** — a missing rule, an unauthored profile, an undefined edge — and may never justify a claim about demand, pricing, buyers or a market |
+| 5 | ~~Decide how simulated evidence may inform Offer and Sector changes~~ ✅ **Decided 2026-09-16 — D20** | A001 evidence may improve **mechanisms only**: schemas, gates, intake formats, validators, routing logic, documentation, safe workflow design. It may **not** serve as market, demand, pricing, proof, buyer or capacity evidence, or as any claim about real hotels. Recorded in the sandbox record §5.1 |
 
 ## 11. Cross-references
 
@@ -110,4 +112,5 @@ Simulated evidence can show that a **mechanism** behaves as documented. It canno
 
 ## 12. Changelog
 
+- **v0.2 — 2026-09-16** — **D20 recorded, closing the open decision this document raised.** "Before a real pilot" item 5 is marked decided, and §9 now states the binding rule: A001 evidence may improve **mechanisms only** — schemas, gates, intake formats, validators, routing logic, documentation, safe workflow design — and may never serve as market, demand, pricing, proof, buyer or capacity evidence, or as a claim about real hotels. The canonical wording lives in the sandbox record §5.1 as D20; this document points to it rather than restating it as a second source. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Close-out written at the end of the document-only pilot: purpose, what the group and `A001-P07` proved, the controlled failure patterns across the other units, which controls worked, what broke or nearly broke, the D1–D19 governance position, the D16 hard stop, the limits on how this may be used, and a five-point list to settle before a real pilot. IDs and stage labels only. — Claude Code (Opus 5)
