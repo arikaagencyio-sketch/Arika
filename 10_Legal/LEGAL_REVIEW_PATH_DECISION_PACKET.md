@@ -2,7 +2,7 @@
 
 **Department:** Legal (10) — owns this record.
 **Status:** 🟢 **DECIDED 2026-09-16 — a scope decision only.** The owner approved the recommended path (§6): **narrow or amend the counsel scope before engagement.** That settles what will be asked for. It **engages no one, sends nothing and changes no legal position** — no counsel has been contacted, no engagement is active, and **nothing in this repository has been reviewed by counsel.** *(Was, until 2026-09-16: "🟡 **Planning only.** This packet presents a decision. It decides nothing, engages no one, sends nothing and changes no legal position.")*
-**Version:** v0.2
+**Version:** v0.3
 
 > 🔴 **Nothing in this repository is legal advice, and nothing in it has been reviewed by counsel.** Every legal document here was drafted by a language model at the owner's direction, and each carries a standing banner saying so. This packet is written by the same non-lawyer process and is no exception: it summarises repository state so the owner can make an engagement decision. It is not advice about whether that decision is legally sound.
 
@@ -74,7 +74,7 @@ Engaging on a scope that omits these would spend fee and leave every blocking ma
 
 | | |
 |---|---|
-| **What happens** | Agree a scope keyed to the brief's **Tier 1 and Tier 2** questions — the tiers where the blocking matters sit — before anything is signed. Tier 3 and Tier 4 are deliberately deferred: Tier 3 matters arrive with the first EU/UK client, and Tier 4 is a trigger to be told about in advance, not work to commission now |
+| **What happens** | Agree a scope covering the six blocking matters **by name**, before anything is signed. Tier 4 stays deferred as a trigger to be told about in advance, and Tier 1's entity-structure question is offered **separately and conditionally** rather than inside the core six. *(Corrected 2026-09-16. This cell previously read: "Agree a scope keyed to the brief's **Tier 1 and Tier 2** questions — the tiers where the blocking matters sit — before anything is signed. Tier 3 and Tier 4 are deliberately deferred: Tier 3 matters arrive with the first EU/UK client, and Tier 4 is a trigger to be told about in advance, not work to commission now." **That mapping was wrong** — two of the six blocking matters, the sub-processor register and the transfer clauses, are **Tier 3** in the brief's numbering, so scoping to Tier 1 and Tier 2 would have dropped them. Scope is defined by matter, not by tier.)* |
 | **For** | Scope matches the blockers. The brief already supports per-tier pricing, so this is a shape counsel was invited to quote against. Smaller, clearer and cheaper than the whole question set |
 | **Against** | Requires a round of agreement before work starts. The deferred tiers will need their own decision later |
 | **Verdict** | ✅ **Recommended** |
@@ -92,7 +92,7 @@ Engaging on a scope that omits these would spend fee and leave every blocking ma
 
 **Option B — amend or narrow the scope before engagement.**
 
-The materials are ready; the scope is not. Agree a scope covering the six blocking matters, keyed to the brief's Tier 1 and Tier 2, and do not sign either letter as it stands.
+The materials are ready; the scope is not. Agree a scope covering the six blocking matters **by name** — not by tier — and do not sign either letter as it stands. *(Corrected 2026-09-16: this sentence previously said "keyed to the brief's Tier 1 and Tier 2". Two of the six are Tier 3; see §5.)*
 
 ### ✅ Owner decision — 2026-09-16
 
@@ -100,9 +100,10 @@ The materials are ready; the scope is not. Agree a scope covering the six blocki
 
 | Decided | |
 |---|---|
-| **Narrow or amend the scope before engagement** | Keyed to the Tier 1 and Tier 2 blockers — the six matters in §4 |
+| **Narrow or amend the scope before engagement** | The six matters in §4, requested **by name rather than by tier** — they span Tiers 1, 2 **and 3**, so a tier label would drop two of them |
 | **Neither unsigned letter is accepted as-is** | Option A is rejected outright, not deferred |
 | **The path is not deferred** | Option C falls away: deferral was acceptable only if the real hospitality pilot deferred with it, and the pilot is still intended |
+| **Entity structure is added, conditionally** *(2026-09-16)* | Offered as a **separate item quoted on its own**, so declining it changes nothing in the core six. It is not one of the six blocking matters, but it sits behind the costliest sequencing decision open today |
 
 **🔴 A scope decision is not an agreed scope.** It settles what Arika will ask for, and nothing more. **No counsel has been contacted, nothing has been sent or signed, no engagement is active, and no document has been reviewed** — so every template banner stays, and **Offer's gate G5 is narrowed, not passed.**
 
@@ -128,8 +129,8 @@ The materials are ready; the scope is not. Agree a scope covering the six blocki
 
 ## 9. Exact next safe owner action
 
-1. ~~**Decide the scope to send.**~~ ✅ **Done 2026-09-16** — Tier 1 plus Tier 2, covering the six blocking matters in §4, with Tier 3 and Tier 4 explicitly deferred.
-2. ◐ **Revise and approve the existing drafted reply, before any sending.** **Revised 2026-09-16 — now awaiting owner approval.** The draft asks counsel to confirm or propose a narrowed scope covering the six matters, and requests scope, deliverables, fee basis, timeline and what counsel needs from Arika. It **accepts neither letter, instructs no one, approves no fee and attaches nothing**. **Nothing has been sent, and nothing will be sent without a separate, explicit instruction.**
+1. ~~**Decide the scope to send.**~~ ✅ **Done 2026-09-16** — the six blocking matters in §4, requested **by name**, plus the entity-structure question as a separate conditional item. *(Corrected 2026-09-16: this step previously read "Tier 1 plus Tier 2 … with Tier 3 and Tier 4 explicitly deferred", which would have dropped the two blocking matters that sit in Tier 3.)*
+2. ◐ **Approve the revised reply, before any sending.** **Finalised 2026-09-16 — owner decisions applied; awaiting approval.** The draft asks counsel to confirm or propose a narrowed scope covering the six matters **by name**, offers the entity-structure question as a **separate conditional item**, and requests scope, deliverables, fee basis, timeline and what counsel needs from Arika. It **accepts neither letter, instructs no one, approves no fee and attaches nothing**. **One placeholder is left by design** — the agency address of record — which must be filled or that section deleted before sending. **Nothing has been sent, and nothing will be sent without a separate, explicit instruction.**
 
 **The revised reply is not approved and not sent, and this packet contacts no one.** *(Was, until 2026-09-16: "Neither step has been taken." The first step — deciding the scope — was taken on 2026-09-16; the reply was revised the same day and awaits approval.)*
 
@@ -145,5 +146,6 @@ The materials are ready; the scope is not. Agree a scope covering the six blocki
 
 ## 11. Changelog
 
+- **v0.3 — 2026-09-16** — **Owner decisions applied to the unsent reply, and the Tier 1/Tier 2 framing corrected.** The scope request is defined **by matter, not by tier**: two of the six blocking matters — the sub-processor register and the transfer clauses — are **Tier 3** in the brief's numbering, so the earlier framing in §5, §6 and §9 would have dropped them. Each is corrected with a dated note. **The entity-structure question is added as a separate, conditional item** (§6), quoted on its own so declining it changes nothing in the core six. §9 step 2 records the reply as **finalised and awaiting approval**, with one placeholder left by design. **Nothing sent, signed, instructed or agreed; no engagement active; nothing reviewed; G5 still narrowed, not passed.** — Claude Code (Opus 5)
 - **v0.2 — 2026-09-16** — **Owner decision recorded: Option B approved — narrow or amend the counsel scope before engagement**, keyed to the Tier 1 and Tier 2 blockers, with neither unsigned letter accepted as-is and the path not deferred while a real hospitality pilot is still intended. §6 gains the decision, §9's first step is marked done and the status line is updated, each with a dated `Was:` note. **A scope decision is not an agreed scope:** no counsel contacted, nothing sent or signed, no engagement active, nothing reviewed — so Offer's gate G5 is **narrowed, not passed**, and tracker item 59 stays open. Canonical record: `LEGAL_OS.md` §8. Still contains no counsel names, letter dates, correspondence content or template clauses. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Packet created to support the P3 decision. Records current state (counsel identified, not engaged; two unsigned letters; scope not agreed; no review performed; a draft reply unsent), what already exists, what is missing, the six matters currently blocking, three scope options, the recommendation to **amend or narrow scope before engagement**, what engagement unlocks, what stays blocked regardless, and the exact next safe owner action. Planning only — nothing decided, sent, signed or scheduled. Contains no counsel names, letter dates, correspondence content or template clauses. — Claude Code (Opus 5)
