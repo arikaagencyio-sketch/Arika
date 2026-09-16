@@ -1,8 +1,8 @@
 # A001 — Mechanism improvement queue
 
 **Department:** Sector (01) — owns this record.
-**Status:** 🟡 **Planning.** **Batch 1 is implemented** (2026-09-16) — seven items, in [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md). Everything else remains planning only: not implemented, approved or scheduled, and each item still needs its own owner decision before any file changes.
-**Version:** v0.2
+**Status:** 🟡 **Planning.** **Batches 1 and 2 are implemented** (2026-09-16) — nine items in total, all in [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md): Batch 1's seven owner-fill items, and Batch 2's two remaining owner-workflow items (W2, W4). **The owner-workflow group is now complete.** Everything else remains planning only: not implemented, approved or scheduled, and each item still needs its own owner decision before any file changes.
+**Version:** v0.3
 
 > **Governed by D20** (sandbox record §5.1). Every item below is a **mechanism** finding — a missing rule, an unauthored profile, an undefined edge, an unsafe format. Nothing here uses A001 as market, demand, pricing, proof, buyer or capacity evidence, or as a claim about any real hotel. A001 output may justify changing *how the system works*; it may never describe *how the market behaves*.
 
@@ -64,9 +64,9 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 | # | Source observation from A001 | Why D20 allows it | Files likely affected | Risk | When |
 |---|---|---|---|---|---|
 | W1 | Draft-first write-back (D10) — draft in a scan folder, scan, hand-check, then edit — caught content before it reached the repository every time it ran. | Safe workflow design, named explicitly in D20. | `INTAKE_OWNER_FILL_STANDARD.md` §6 | Low | ✅ **Implemented 2026-09-16** |
-| W2 | The key scan was proved in the negative on a planted term, not merely assumed to work. | Testing a control negatively is workflow design. | Governance workflow notes | Low | **Now** — not in Batch 1 |
+| W2 | The key scan was proved in the negative on a planted term, not merely assumed to work. | Testing a control negatively is workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §10 | Low | ✅ **Implemented 2026-09-16** (Batch 2) |
 | W3 | Staged apply — validate, dry-run, write, verify untouched rows byte-identical — refused every defective batch before any write. | Workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §7 | Low | ✅ **Implemented 2026-09-16** |
-| W4 | Stale status claims outlived their truth in several documents, each asserting work had not started after it had. | Documentation drift is a mechanism problem. A "correct the claim, keep the superseded wording marked" convention was used throughout and could be stated once. | Governance documentation conventions | Low | **Now** — not in Batch 1 |
+| W4 | Stale status claims outlived their truth in several documents, each asserting work had not started after it had. | Documentation drift is a mechanism problem. A "correct the claim, keep the superseded wording marked" convention was used throughout and could be stated once. | `INTAKE_OWNER_FILL_STANDARD.md` §11 | Low | ✅ **Implemented 2026-09-16** (Batch 2) |
 | W5 | A gate's rule was read in its source before being relied on, rather than inferred from past runs. | Workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §8 | Low | ✅ **Implemented 2026-09-16** |
 
 ## 7. Runtime blockers — do not touch until D16 is closed
@@ -108,6 +108,9 @@ This queue decides nothing. Each item needs an owner decision before any file is
 
 ## 11. Changelog
 
+- **v0.3 — 2026-09-16** — **Batch 2 implemented: the two remaining owner-workflow standards.** **W2** negative-testing the scan boundary → `INTAKE_OWNER_FILL_STANDARD.md` §10, and **W4** correcting stale claims with a dated note rather than a silent rewrite → §11. With these, **every item in §6 Owner workflow is implemented** (W1–W5).
+  - **Still open elsewhere:** F1 and O1 remain "Now" and unimplemented; V3/V4 stay policy-documented with their code half open; S1 stays unimplemented, with no destination profile authored and none permitted from simulated data (D20); everything else in §3, §4, §5 and §7 is unchanged.
+  - **Nothing implemented in code:** no validator, runtime, gate, agent or skill change. — Claude Code (Opus 5)
 - **v0.2 — 2026-09-16** — **Batch 1 implemented: owner-fill workflow standards.** Seven items moved to implemented, all in the new [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md): **F2** block-per-question format for large stages (§2) · **F3** `question_id` confirmation before typing (§3) · **F4** guidance and validator written together (§4) · **W1** draft-first write-back (§6) · **W3** staged apply (§7) · **W5** read the gate source before forcing a stage (§8) · **S2** the unprofiled-versus-absent destination distinction as a documentation note (§9).
   - **V3 and V4 are half-done by design:** the policy that relevance checks are advisory but must be read is now documented (§5); their validator-code half stays **Later**.
   - **S1 is explicitly not implemented.** No destination profile was authored, and none may be from simulated data (D20). Only the status distinction is documented.
