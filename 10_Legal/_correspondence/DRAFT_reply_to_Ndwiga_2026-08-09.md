@@ -1,7 +1,7 @@
 # DRAFT — Reply to Ndwiga Law Advocates LLP
 
 **Status:** 🔴 **DRAFT — FINAL FOR OWNER REVIEW. NOT SENT.**
-**Revised:** 2026-09-16 — Revision 3. Owner decisions applied (box below): all six blocking matters kept **by name**, the entity-structure question added at §3 as a **separate conditional item**, nothing attached, and the flagged address-of-record correction retained. **Supersedes the draft prepared 2026-08-09**, whose approach — signing one letter's scope against the other's fee table, with a monthly payment schedule — is no longer the approved one; **that payment proposal stays removed in full.** Earlier text remains in version history.
+**Revised:** 2026-09-16 — Revision 4. Owner decisions applied (box below): all six blocking matters kept **by name**, the entity-structure question added at §3 as a **separate conditional item**, nothing attached, and **the address-of-record section removed, so no placeholder remains**. **Supersedes the draft prepared 2026-08-09**, whose approach — signing one letter's scope against the other's fee table, with a monthly payment schedule — is no longer the approved one; **that payment proposal stays removed in full.** Earlier text remains in version history.
 **To:** sarah@ndwiga.law · cc: email@ndwiga.law
 **Working:** [`../COUNSEL_ENGAGEMENT_REVIEW.md`](../COUNSEL_ENGAGEMENT_REVIEW.md)
 
@@ -12,9 +12,9 @@
 > 1. **All six blocking matters stay in the scope request (§2)**, asked for **by name** rather than by tier label — so none is lost to a mismatch between the brief's tier numbering and the approved scope.
 > 2. **The entity-structure question is added at §3 as a separate, conditional item**, to be quoted and decided on its own so it cannot enlarge the core request.
 > 3. **Nothing is attached (§6).** The package goes only on a later, explicit instruction.
-> 4. **The address-of-record correction is kept (§9)**, because the draft flags it as the safer option.
+> 4. **The address-of-record section is removed** *(2026-09-16)*. The existing address of record therefore stands unchanged, and **no placeholder remains anywhere in the draft.**
 >
-> ⚠️ **One input is still outstanding before this could be sent:** the `[AGENCY EMAIL ADDRESS]` placeholder at §9. **A draft with a bracket left in it is not ready to send** — fill it or delete that section.
+> ✅ **No placeholders remain, and no input is outstanding.** The draft is complete as written. **It still requires the owner's explicit approval before it may be sent.**
 
 ---
 
@@ -97,10 +97,6 @@ I have deliberately attached nothing. The draft documents and my research note e
 I have a number of smaller queries on the Terms of Business — defined terms, an interest period, a liability-cap currency, an arbitration clause that names no institution, and a notice referred to but not supplied. **None of them is worth your time today**, because they only bite at signature and we are not there. I will raise them as a single list if and when we have an agreed scope.
 
 **One point I will flag now rather than later, because it should not be carried forward:** the fee tables in the earlier letters were **not internally consistent** — in one of them the itemised figures and the stated totals do not agree. I mention it not to make a point of it, but so that any fresh quote is reconciled against its own line items before it reaches me. I would rather raise it than have us both discover it at the first invoice.
-
-## 9. One administrative point
-
-Please use **[AGENCY EMAIL ADDRESS]** as my address of record for this matter. *(Owner: this is the one placeholder left in the draft — fill it with the agency address before sending, or delete this section to keep the existing address of record.)*
 
 ---
 
