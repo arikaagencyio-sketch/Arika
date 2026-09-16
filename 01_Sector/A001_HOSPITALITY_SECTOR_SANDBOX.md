@@ -3,7 +3,7 @@
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
 **Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.11
+**Version:** v0.12
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -219,6 +219,53 @@ A `SIMULATED_VERDICT` shows that the gates ran. It is never a verdict about a re
 | 2 · S1 | `A001-P06` | `SIMULATED_VERDICT` · unit_check: `archetype_pass · destination_fit_fires_not_in_DB11 · H_band_pass` · group_flags: `apply` · `outside_current_offer_icp_by_design` | may_continue_to_phase_3_planning: no; blocked by destination status · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-16 |
 | 2 · S1 | `A001-P09` | `SIMULATED_VERDICT` · unit_check: `archetype_pass · destination_fit_fires_not_in_DB11 · H_band_pass` · group_flags: `apply` · `outside_current_offer_icp_by_design` | may_continue_to_phase_3_planning: no; blocked by destination status · may_enter_offer_runtime: no · may_enter_sector_store_or_crm: no · pricing: skipped | 2026-09-16 |
 
+### Phase 2 close-out (2026-09-16)
+
+Phase 2 is complete: all nine units hold a declared `SIMULATED_VERDICT` above, and the §9 Phase 2 exit gate is marked met. IDs, statuses and band labels only — no place name for a `not_in_DB11` unit (D14), and no counts, sizes or capacities (D12).
+
+**Archetype — all nine resolve.**
+
+| How it resolves | Units |
+|---|---|
+| Directly, on a plugin P2 Tier 1 archetype | `A001-P01` · `A001-P03` · `A001-P04` · `A001-P05` · `A001-P06` · `A001-P09` |
+| By inheritance (`Tented Camp`, inheriting `Safari Lodge`) | `A001-P07` · `A001-P08` |
+| On the main archetype only, secondary marked `secondary_unruled` (D13; a declared sandbox gap, AG-5, not a Sector rule) | `A001-P02` |
+
+**Destination Fit.**
+
+| Result | Units | Reason, by status only |
+|---|---|---|
+| ✅ Passes | `A001-P01` · `A001-P02` · `A001-P07` · `A001-P08` | Status `profiled` |
+| 🔴 Fires | `A001-P03` | Status `in_DB11_not_profiled` — a DB 11 row exists, the DB 16 profile does not |
+| 🔴 Fires | `A001-P04` · `A001-P05` · `A001-P06` · `A001-P09` | Status `not_in_DB11` — no DB 11 row, so no profile can exist |
+
+**H-band.**
+
+| Result | Units | Reason, by band only |
+|---|---|---|
+| ✅ Passes | `A001-P05` · `A001-P06` · `A001-P07` · `A001-P09` | H2, inside the H1/H2 MVP |
+| 🔴 Fires | `A001-P01` · `A001-P04` | H3, outside the MVP |
+| 🔴 Fires | `A001-P02` | H3, plus an unbanded serviced-apartment component |
+| 🔴 Fires | `A001-P03` | Above H3 |
+| 🔴 Fires | `A001-P08` | Below H1 |
+
+**Deterministic rule checks.** The unit set was built so that units differ on one axis at a time, which is what makes these comparisons readable:
+
+| Pair | Held constant | Varied | What it showed |
+|---|---|---|---|
+| `A001-P06` · `A001-P09` | archetype, destination status, band | nothing | Identical verdicts. The rules are deterministic for identically-shaped units |
+| `A001-P04` · `A001-P05` | archetype, status `not_in_DB11` | band (H3 · H2) | Only the size outcome changed, so the size rule is independent of the geography rule |
+| `A001-P01` · `A001-P08` | archetype pass, destination pass | band (H3 · below H1) | Both fail on size from opposite sides, bounding the MVP band at both ends |
+| `A001-P03` · `A001-P04` | both fire destination and size | destination status | `in_DB11_not_profiled` is recoverable by authoring a profile; `not_in_DB11` is not, and commissioning is barred for A001 (D14) |
+| `A001-P07` · `A001-P08` | archetype, destination, the declared link | band | `A001-P07` is the only unit passing all three unit checks. P08's link is recorded, but its meaning stays undefined (AG-9) |
+
+**Why the group and every unit stay outside the current H1/H2 Offer MVP.**
+
+- **The group (`A001`) carries three stop rules.** SR-1: its archetype is unresolvable, because the `Hospitality Group` union operator is not built (AG-4). SR-2: it has a central brand, reservations and direct-booking team, which Owner Decision 71 treats as anti-ICP. SR-3: it sits above every H-band.
+- **Every unit inherits those three flags by design.** They are not suppressed at unit level, so no unit is assessed as though it were independent.
+- **Only `A001-P07` passes every unit-level check**, and it still carries the group flags. The other three in-band units — `A001-P05`, `A001-P06` and `A001-P09` — each fail Destination Fit.
+- **Recorded for all nine:** no offer runtime, no Sector store or CRM, pricing skipped. The sandbox returned the expected result, **outside the current offer ICP by design**, rather than a fit.
+
 ## 7. Architecture-gap register
 
 **Class key:**
@@ -292,8 +339,31 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 | **4 · Group diagnostics** | `A001` and all units | Resolve the Nairobi and Maasai Mara units by hand, following S09's steps, with nothing emitted. Map each unit against P11 and the `Draft 41` (a)–(d) classes as `SIMULATED_VERDICT`. Output: a **structural gap list** covering the union operator, above-H3 size, no group offer, unengineered redirects, the entity edge and cross-property opportunities | Owner reviews the gap list | Sandbox folder; §7 updates |
 | **5 · Downstream notes** | Content (04), Marketing (03), Sales (05) | Short notes labelled `[TEST_FIXTURE · A001] · not evidence · not publishable`. Each gives the angle only, never the artifact. No Content DB 5 rows, no briefs, no Design (19) generation, no CRM leads | Owner approves each note | Sandbox folder only |
 
+### Phase 3 readiness — 🔴 NOT READY (2026-09-16)
+
+Phase 2 being complete does **not** open Phase 3. The Phase 3 entry gate above is unchanged and unmet, and **no A001 run of any kind may start** until the owner closes every blocker below.
+
+| # | Blocker | State | Tracked in |
+|---|---|---|---|
+| B1 | **Phase 3 run mode** — no A001 runs · the shared memory stream with the §5 markers · or a separate sandbox stream (T1-5) | 🔴 Open | Item 74 point (2). D5 covers Phases 0–2 only |
+| B2 | **API key rotation** | 🔴 Open | AG-19 · item 57 |
+| B3 | **Full A001 ratification** | 🔴 Open | Item 74. §8 T1-1…T1-5 stay deferred under D6 |
+| B4 | **Does Phase 3 stay `A001-P07`-only after the Phase 2 evidence?** | 🔴 Open | §1 · §9 Phase 3 |
+| B5 | **Does S2 switch to a block-per-question input format before any owner fill?** | 🔴 Open | New — raised by Phase 2 evidence |
+
+**B4 — what the Phase 2 evidence says.** `A001-P07` is still the only unit passing archetype, Destination Fit and the H-band together, so nothing in Phase 2 displaces it as the slice. `A001-P05`, `A001-P06` and `A001-P09` pass archetype and band but fail Destination Fit, and D14 bars commissioning a destination for A001, so none can be substituted without reopening D14. That is evidence for keeping Phase 3 `A001-P07`-only. **The decision is the owner's; nothing here changes the scope.**
+
+**B5 — what the Phase 2 evidence says.** S1 worksheets are pipe tables of 42 rows. Cells were lost twice during owner fill: one trailing cell in `A001-P08`, and four cells across three rows in each of `A001-P01`, `A001-P02`, `A001-P06` and `A001-P09`. Both were caught by the apply script's cell-count guard before anything was written, and both needed owner-authorised repairs. S2 is 65 rows per unit, so the same format carries more exposure, and a format where each field is its own line cannot lose a cell. **No change has been made; this is an owner decision.**
+
 ## 10. Changelog
 
+- **v0.12 — 2026-09-16** — **Phase 2 closed out; Phase 3 readiness recorded as NOT READY.** Two new subsections. No verdict, register row, decision or gap entry changed.
+  - **§6 "Phase 2 close-out"** — an IDs-and-statuses-only summary: which units pass archetype (all nine, two by inheritance and one on its main archetype only), which pass Destination Fit and which fire it by status only, which pass the H-band and which fire it by band only, the five deterministic rule checks the unit set was built to produce, and why the group and every unit stay outside the current H1/H2 Offer MVP.
+  - **§9 "Phase 3 readiness"** — Phase 3 marked 🔴 NOT READY behind five named blockers: the Phase 3 run mode (B1), API key rotation (B2, AG-19), full A001 ratification (B3), whether Phase 3 stays `A001-P07`-only (B4), and whether S2 switches to a block-per-question input format before any owner fill (B5). B4 and B5 record what the Phase 2 evidence says and explicitly decide nothing.
+
+  **Why B5 exists.** Owner fill silently dropped cells twice — one trailing cell in `A001-P08`, then four cells across three rows in each of four units. The apply script's cell-count guard caught both before any write, and both needed owner-authorised repairs. S2 is 65 rows per unit against S1's 42.
+
+  **Content kept out:** no place name for a `not_in_DB11` unit (D14), and no counts, sizes, capacities, currency, ratings or KPI values (D12). — Claude Code (Opus 5)
 - **v0.11 — 2026-09-16** — **Phase 2 verdicts for `A001-P01`, `A001-P02`, `A001-P06` and `A001-P09` written back (S1), and the Phase 2 exit gate marked met.** Four IDs-only rows added to the §6 "Phase verdicts" table:
   - `A001-P01` — archetype and Destination Fit pass; the size stop rule fires because H3 is outside the MVP;
   - `A001-P02` — the main archetype passes and the secondary stays `secondary_unruled` (AG-5); Destination Fit passes; the size stop rule fires on H3 plus serviced apartments;
