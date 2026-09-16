@@ -93,7 +93,7 @@ A001 was never the real pilot. These decisions sit outside the mechanism queue a
 
 ### ↪ P3 update — 2026-09-16
 
-**The scope decision is made; the engagement is not.** The owner approved narrowing or amending the counsel scope before engagement, covering the six blocking matters — recorded in [`LEGAL_OS.md`](../10_Legal/LEGAL_OS.md) §8 and [`LEGAL_REVIEW_PATH_DECISION_PACKET.md`](../10_Legal/LEGAL_REVIEW_PATH_DECISION_PACKET.md). **No counsel has been contacted, nothing has been sent or signed, no engagement is active and no document has been reviewed**, so tracker item 59 stays open and every gate P3 would unlock stays shut — Offer's G5 is **narrowed, not passed**. **P3's remaining half — revising and approving the drafted reply before any sending — is still the highest-value unblock on this page**, and needs a separate, explicit instruction. Nothing else in this menu changed.
+**The scope decision is made; the engagement is not.** The owner approved narrowing or amending the counsel scope before engagement, covering the six blocking matters — recorded in [`LEGAL_OS.md`](../10_Legal/LEGAL_OS.md) §8 and [`LEGAL_REVIEW_PATH_DECISION_PACKET.md`](../10_Legal/LEGAL_REVIEW_PATH_DECISION_PACKET.md). **The scope request was sent on 2026-09-16**, but **nothing is signed or agreed, no engagement is active and no document has been reviewed**, so tracker item 59 stays open and every gate P3 would unlock stays shut — Offer's G5 is **narrowed, not passed**. **P3 now waits on counsel's reply rather than on you**, and neither silence nor continued correspondence should be treated as acceptance of either unsigned letter. Nothing else in this menu changed.
 
 ## 8. If you want a single recommendation
 

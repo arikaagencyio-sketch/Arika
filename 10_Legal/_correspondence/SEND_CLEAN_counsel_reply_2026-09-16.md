@@ -1,5 +1,5 @@
-**🔴 DRAFT · NOT SENT · OWNER APPROVAL REQUIRED**
-*Send-clean copy — the letter only. Copy from the Subject line down.*
+**✅ SENT 2026-09-16 · RECORD COPY · DO NOT RE-SEND**
+*This is the approved text. The owner sent the letter on 2026-09-16, outside this session; it was not sent from here and delivery is not verified. Kept as the record of what was sent — if the version actually sent differed, or anything was attached, note it here. Any reply or follow-up belongs in a new file.*
 
 ---
 

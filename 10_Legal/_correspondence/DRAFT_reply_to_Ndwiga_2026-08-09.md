@@ -1,12 +1,12 @@
 # DRAFT — Reply to Ndwiga Law Advocates LLP
 
-**Status:** 🔴 **DRAFT — FINAL FOR OWNER REVIEW. NOT SENT.**
+**Status:** ✅ **SENT 2026-09-16 — retained for owner-facing context only.**
 **Revised:** 2026-09-16 — Revision 5. Owner decisions applied (box below): all six blocking matters kept **by name**, the entity-structure question added at §3 as a **separate conditional item**, nothing attached, and **the address-of-record section removed, so no placeholder remains**. **Four owner-approved safety edits applied 2026-09-16:** the letter no longer depends on question numbers from the earlier brief; the fee-table remark is narrowed to the single letter it applies to; an ambiguous cross-reference is fixed; and the acceptance reservation is confirmed generic, naming no clause. **Supersedes the draft prepared 2026-08-09**, whose approach — signing one letter's scope against the other's fee table, with a monthly payment schedule — is no longer the approved one; **that payment proposal stays removed in full.** Earlier text remains in version history.
 **To:** sarah@ndwiga.law · cc: email@ndwiga.law
 **Working:** [`../COUNSEL_ENGAGEMENT_REVIEW.md`](../COUNSEL_ENGAGEMENT_REVIEW.md)
 
-> 🔴 **NOT SENT · NOTHING ATTACHED · NO ENGAGEMENT ACTIVE · NO FEE APPROVED.**
-> This letter **accepts neither Letter of Engagement**, **instructs no one to begin work**, **approves no fee or payment arrangement**, and **attaches no documents**. It asks counsel to confirm or propose a narrower scope. **It may not be sent without the owner's explicit approval.**
+> ✅ **SENT 2026-09-16 · NOTHING ATTACHED · NO ENGAGEMENT ACTIVE · NO FEE APPROVED.**
+> As sent, this letter **accepted neither Letter of Engagement**, **instructed no one to begin work**, **approved no fee or payment arrangement**, **attached no documents**, and **expressly reserved position against acceptance by conduct**. **The engagement is still NOT active** — no scope agreed, nothing signed, no fee approved and **no document reviewed.** The record of what was sent is `SEND_CLEAN_counsel_reply_2026-09-16.md`; edits here no longer affect it.
 
 > **Owner decisions applied 2026-09-16 — this draft is final for review.**
 > 1. **All six blocking matters stay in the scope request (§2)**, asked for **by name** rather than by tier label — so none is lost to a mismatch between the brief's tier numbering and the approved scope.
@@ -14,7 +14,7 @@
 > 3. **Nothing is attached (§6).** The package goes only on a later, explicit instruction.
 > 4. **The address-of-record section is removed** *(2026-09-16)*. The existing address of record therefore stands unchanged, and **no placeholder remains anywhere in the draft.**
 >
-> ✅ **No placeholders remain, and no input is outstanding.** The draft is complete as written. **It still requires the owner's explicit approval before it may be sent.**
+> ✅ **No placeholders remained, and the owner approved it.** **Sent 2026-09-16.** The next move is counsel's.
 >
 > 📄 **A send-clean copy of the letter exists** at `SEND_CLEAN_counsel_reply_2026-09-16.md` — the letter only, with no owner-only material. **Keep the two in step:** if this working draft changes, regenerate that copy from it rather than editing it separately.
 
