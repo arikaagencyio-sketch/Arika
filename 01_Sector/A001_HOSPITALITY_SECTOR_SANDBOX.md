@@ -2,8 +2,8 @@
 
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
-**Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · ✅ Ratified 2026-09-16 (D17) as an **internal simulation sandbox only** — not a prospect, not a CRM record, not offer evidence · 🔴 **Not runtime-runnable.** Phase 3 runs document-only first (D15), and any runtime-backed work stays blocked until the API key is rotated (D16 · AG-19). Phase 3 execution has not started.
-**Version:** v0.13
+**Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · ✅ Ratified 2026-09-16 (D17) as an **internal simulation sandbox only** — not a prospect, not a CRM record, not offer evidence · 🔴 **Not runtime-runnable.** Phase 3 runs document-only first (D15), and any runtime-backed work stays blocked until the API key is rotated (D16 · AG-19). Phase 3 document-only execution is under way: `A001-P07` has reached S2 (§9). No runtime-backed work has started.
+**Version:** v0.14
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -337,7 +337,7 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 |---|---|
 | 1 | Phase 0 complete: D1–D10 recorded and the key file validated. D11–D12 govern how Phase 1 answers are filled |
 | 2 | ✅ **Met 2026-09-15:** item 74 point (3) archetype mapping (D13) and point (4) geography (D14) decided |
-| 3 | ◐ **Partly met 2026-09-16:** run mode decided (D15, document-only first) and A001 ratified as a simulation sandbox only (D17). 🔴 **Still open:** API key rotation (AG-19 · D16), which gates **runtime-backed** Phase 3 work only. Document-only Phase 3 work may proceed; none has started |
+| 3 | ◐ **Partly met 2026-09-16:** run mode decided (D15, document-only first) and A001 ratified as a simulation sandbox only (D17). 🔴 **Still open:** API key rotation (AG-19 · D16), which gates **runtime-backed** Phase 3 work only. Document-only Phase 3 work may proceed and has begun — `A001-P07` reached S2 on 2026-09-16 (see "Phase 3 document-only progress") |
 | 4 | AG-4 (S09 union operator) decided under item 74 point (6) |
 
 | Phase | Scope | Work | Exit gate | Writes |
@@ -349,9 +349,9 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 | **4 · Group diagnostics** | `A001` and all units | Resolve the Nairobi and Maasai Mara units by hand, following S09's steps, with nothing emitted. Map each unit against P11 and the `Draft 41` (a)–(d) classes as `SIMULATED_VERDICT`. Output: a **structural gap list** covering the union operator, above-H3 size, no group offer, unengineered redirects, the entity edge and cross-property opportunities | Owner reviews the gap list | Sandbox folder; §7 updates |
 | **5 · Downstream notes** | Content (04), Marketing (03), Sales (05) | Short notes labelled `[TEST_FIXTURE · A001] · not evidence · not publishable`. Each gives the angle only, never the artifact. No Content DB 5 rows, no briefs, no Design (19) generation, no CRM leads | Owner approves each note | Sandbox folder only |
 
-### Phase 3 readiness — ◐ ENTRY DECISIONS RECORDED · EXECUTION NOT STARTED (updated 2026-09-16)
+### Phase 3 readiness — ◐ ENTRY DECISIONS RECORDED · DOCUMENT-ONLY EXECUTION UNDER WAY (updated 2026-09-16)
 
-The owner recorded all five entry decisions on 2026-09-16, as **D15–D19** in §5.1. **Phase 3 execution has not started, and no Phase 3 work of any kind has been performed.** Document-only work is permitted under D15; **anything runtime-backed stays blocked until the API key is rotated** (D16 · AG-19).
+The owner recorded all five entry decisions on 2026-09-16, as **D15–D19** in §5.1. **Document-only Phase 3 work has since begun** — `A001-P07` reached S2, recorded under "Phase 3 document-only progress" below. **Anything runtime-backed stays blocked until the API key is rotated** (D16 · AG-19), and none has been attempted. *Was: "Phase 3 execution has not started, and no Phase 3 work of any kind has been performed" — true only until the S2 work began.*
 
 | # | Entry decision | State | Recorded as |
 |---|---|---|---|
@@ -365,10 +365,35 @@ The owner recorded all five entry decisions on 2026-09-16, as **D15–D19** in �
 
 **B4 — what the Phase 2 evidence says.** `A001-P07` is still the only unit passing archetype, Destination Fit and the H-band together, so nothing in Phase 2 displaces it as the slice. `A001-P05`, `A001-P06` and `A001-P09` pass archetype and band but fail Destination Fit, and D14 bars commissioning a destination for A001, so none can be substituted without reopening D14. That is evidence for keeping Phase 3 `A001-P07`-only. ✅ **Decided 2026-09-16 (D18): the slice stays `A001-P07` only.**
 
+### Phase 3 document-only progress (2026-09-16)
+
+`A001-P07` — the Phase 3 slice under D18 — has completed **S2 intake** inside the sandbox, document-only under D15.
+
+| Item | State |
+|---|---|
+| Stage reached | `S2` · `intake_gate.py --answers` passes at S2 |
+| S2 required rows | Complete — every required row is declared |
+| S2 optional rows | Some remain `NOT_ASKED`; they do not block the stage and never did |
+| Phase 2 S1 verdict | Unchanged |
+| S3–S5 | `BLOCKED` under D9 — the sandbox has no client system |
+| Runtime-backed work | Blocked under D16 (AG-19) until the API key is rotated |
+
+**What this is not.** It is **not** a new Offer verdict · **not** runtime output · **not** CRM or Sector-store evidence · **not** pricing. No `SIMULATED_VERDICT` line changed and none was added: reaching a stage is an intake milestone, not a classification, so §6 "Phase verdicts" — which holds verdict lines only — is untouched. The unit's Phase 2 verdict there stands as written.
+
+**How the stage moved.** `intake_gate.py` fails any required row at or below `stage_reached` left `NOT_ASKED`. The stage was set only after a guard re-checked that rule, and the move was immediately followed by `--answers` at S2, with an automatic revert had it failed. It did not fail, so the stage rests on a passing gate rather than an assertion.
+
+**Where the detail lives.** The unit's sandbox fit record holds the full checkpoint. Nothing beyond this IDs-only note has left the sandbox (D10).
+
 **B5 — what the Phase 2 evidence says.** S1 worksheets are pipe tables of 42 rows. Cells were lost twice during owner fill: one trailing cell in `A001-P08`, and four cells across three rows in each of `A001-P01`, `A001-P02`, `A001-P06` and `A001-P09`. Both were caught by the apply script's cell-count guard before anything was written, and both needed owner-authorised repairs. S2 is 65 rows per unit, so the same format carries more exposure, and a format where each field is its own line cannot lose a cell. ✅ **Decided 2026-09-16 (D19): S2 switches to a block-per-question format before any owner fill.** The format itself is not built yet, and no S2 worksheet exists.
 
 ## 10. Changelog
 
+- **v0.14 — 2026-09-16** — **Phase 3 document-only progress recorded: `A001-P07` reached S2.** The Phase 3 slice (D18) completed S2 intake in the sandbox under the document-only run mode (D15). Every required S2 row is declared, `stage_reached` moved to S2, and `intake_gate.py --answers` passes at S2.
+  - **Recorded as a checkpoint, not a verdict.** §6 "Phase verdicts" is defined as a table of `SIMULATED_VERDICT` lines showing that the gates ran. Reaching a stage produces no classification, so **no verdict line was added or changed**, and the note went to §9, where phase execution is tracked. The unit's Phase 2 verdict stands as written.
+  - **What it is not:** not a new Offer verdict · not runtime output · not CRM or Sector-store evidence · not pricing.
+  - **Still closed:** S3–S5 stay `BLOCKED` under D9 (the sandbox has no client system), and runtime-backed work stays blocked under D16 (API key rotation, AG-19) — now the only remaining Phase 3 entry blocker. Remaining optional S2 rows do not block the stage.
+
+  **Two stale statements corrected.** §1 and the §9 Phase 3 entry-gate cell both said Phase 3 execution had not started, which stopped being true when S2 work began; the §9 readiness heading was renamed from "execution not started" to "document-only execution under way". No unit verdict, register row, decision or gap entry changed. No place name for a `not_in_DB11` unit (D14); no counts, sizes, capacities, currency, ratings or KPI values (D12). — Claude Code (Opus 5)
 - **v0.13 — 2026-09-16** — **Phase 3 entry decisions recorded (D15–D19). Phase 3 execution has not started.**
   - **D15 (B1) run mode:** no-runtime, **document-only first**. Supersedes D5 for Phase 3 only.
   - **D16 (B2) API key rotation:** still required before any **runtime-backed** Phase 3 work (AG-19 · item 57). It does not block document-only work, which needs no key.
