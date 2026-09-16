@@ -2,8 +2,8 @@
 
 **Department:** Sector (01) — owns this record. Offer (02) consumes it.
 **Owner:** Mary Thuo
-**Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · 🔴 **Not runnable.** No A001 run of any kind until item 74's prerequisites are ratified (§8, §9 Phase 0).
-**Version:** v0.12
+**Status:** ✅ Approved by the owner 2026-09-15 as a sandbox and architecture specimen · ✅ Ratified 2026-09-16 (D17) as an **internal simulation sandbox only** — not a prospect, not a CRM record, not offer evidence · 🔴 **Not runtime-runnable.** Phase 3 runs document-only first (D15), and any runtime-backed work stays blocked until the API key is rotated (D16 · AG-19). Phase 3 execution has not started.
+**Version:** v0.13
 
 > A001 is a **fictional** hospitality group. It exists to test the agency's architecture against a company with several properties. It is **not evidence** about any market, property or buyer. Read §2 before using an A001 value anywhere.
 
@@ -114,7 +114,7 @@ Every A001 value carries **`[TEST_FIXTURE · A001]`**. This reuses `Draft 41`'s 
 - Branding (12) BOIS runs, because they write client workspaces inside this repository (AG-15);
 - reading `.env`.
 
-### 5.1 Phase 0–2 operating mode (owner decisions D1–D14, 2026-09-15)
+### 5.1 Operating mode (owner decisions D1–D19: D1–D14 for Phases 0–2, 2026-09-15 · D15–D19 for Phase 3 entry, 2026-09-16)
 
 **Mode M0: no runtime.** Phases 0, 1 and 2 use none of the following: `arika run`, `npm`, skills, skill execution records, events, the scheduler, Notion, ClickUp or BOIS. Nobody reads `.env`.
 
@@ -142,6 +142,16 @@ The only tool is the local intake gate, run from the repository root:
 | D12 | Value granularity | Bands, categories, statuses and unit IDs only. No counts except the owner-decided unit count; no URLs, verbatim copy, prices, ratings, KPI values, shares or named competitors |
 | D13 | Unit archetypes (sandbox use only) | `A001-P01` `City / Conference Hotel` · `A001-P02` main `City / Conference Hotel`, secondary `Serviced Apartment` (`secondary_unruled`) · `A001-P03` `Beach Resort` · `A001-P04` `City / Conference Hotel` · `A001-P05` `City / Conference Hotel` · `A001-P06` `Safari Lodge` · `A001-P07` `Tented Camp`, inheriting `Safari Lodge` · `A001-P08` `Tented Camp`, inheriting `Safari Lodge`, linked to `A001-P07` · `A001-P09` `Safari Lodge`.<br>**Two-archetype rule:** a unit with two archetypes records one main archetype for resolution and marks the other `secondary_unruled`. Resolution uses the main archetype only. The secondary is a declared sandbox gap, **not a Sector rule** |
 | D14 | Geography policy | **Commission nothing for A001:** no new geography rows, destination profiles, place-profiling skill run or Notion writes.<br>Each unit records one status: `profiled`, `in_DB11_not_profiled` or `not_in_DB11`.<br>Only currently profiled destinations pass Destination Fit. Blocked statuses are recorded as `SIMULATED_VERDICT · destination_fit: blocked`.<br>No place names for `not_in_DB11` units outside the key file and owner source material |
+
+**Phase 3 entry decisions (owner, 2026-09-16).** Recorded as B1–B5 in §9 "Phase 3 readiness". **Recording these decisions does not start Phase 3.**
+
+| # | Decision | Rule |
+|---|---|---|
+| D15 (B1) | Phase 3 run mode | **No-runtime, document-only first.** Phase 3 work is written by hand in the sandbox folder. No `arika run`, agent, skill, scheduler or event activity, and no runtime memory write. This supersedes D5 for Phase 3 only; D5 still governs Phases 0–2 |
+| D16 (B2) | API key rotation | **Still required before any runtime-backed Phase 3 work** (AG-19 · item 57). It does **not** block the document-only work D15 permits, because that work needs no key. Any later move from document-only to runtime-backed re-enters this gate |
+| D17 (B3) | A001 ratification | **Ratified as an internal simulation sandbox only.** A001 is **not** a prospect, **not** a CRM record and **not** offer evidence. It may not enter the Offer runtime, the Sector store, the CRM or any shared store, and no A001 output may be cited as evidence about a market, property or buyer (§2, §4 rule 4).<br>This ratifies the sandbox's standing, **not** the §8 Tier-1 changes, which stay deferred under D6 |
+| D18 (B4) | Phase 3 slice | **`A001-P07` only.** Confirmed against the Phase 2 evidence: it is the only unit passing archetype, Destination Fit and the H-band together. The slice still runs as a group-architecture test carrying the group flags, never as an MVP audit |
+| D19 (B5) | S2 input format | **S2 switches to a block-per-question input format before any owner fill.** One field per line, so a dropped cell is not possible. Adopted because owner fill silently lost cells twice at S1 (42 rows) and S2 is 65 rows per unit. The format is not built yet; no S2 worksheet exists |
 
 **Sandbox layout** (IDs only in every folder and file name):
 
@@ -327,7 +337,7 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 |---|---|
 | 1 | Phase 0 complete: D1–D10 recorded and the key file validated. D11–D12 govern how Phase 1 answers are filled |
 | 2 | ✅ **Met 2026-09-15:** item 74 point (3) archetype mapping (D13) and point (4) geography (D14) decided |
-| 3 | Phase 3 run mode decided · API key rotated (AG-19) · full A001 ratification |
+| 3 | ◐ **Partly met 2026-09-16:** run mode decided (D15, document-only first) and A001 ratified as a simulation sandbox only (D17). 🔴 **Still open:** API key rotation (AG-19 · D16), which gates **runtime-backed** Phase 3 work only. Document-only Phase 3 work may proceed; none has started |
 | 4 | AG-4 (S09 union operator) decided under item 74 point (6) |
 
 | Phase | Scope | Work | Exit gate | Writes |
@@ -339,24 +349,36 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 | **4 · Group diagnostics** | `A001` and all units | Resolve the Nairobi and Maasai Mara units by hand, following S09's steps, with nothing emitted. Map each unit against P11 and the `Draft 41` (a)–(d) classes as `SIMULATED_VERDICT`. Output: a **structural gap list** covering the union operator, above-H3 size, no group offer, unengineered redirects, the entity edge and cross-property opportunities | Owner reviews the gap list | Sandbox folder; §7 updates |
 | **5 · Downstream notes** | Content (04), Marketing (03), Sales (05) | Short notes labelled `[TEST_FIXTURE · A001] · not evidence · not publishable`. Each gives the angle only, never the artifact. No Content DB 5 rows, no briefs, no Design (19) generation, no CRM leads | Owner approves each note | Sandbox folder only |
 
-### Phase 3 readiness — 🔴 NOT READY (2026-09-16)
+### Phase 3 readiness — ◐ ENTRY DECISIONS RECORDED · EXECUTION NOT STARTED (updated 2026-09-16)
 
-Phase 2 being complete does **not** open Phase 3. The Phase 3 entry gate above is unchanged and unmet, and **no A001 run of any kind may start** until the owner closes every blocker below.
+The owner recorded all five entry decisions on 2026-09-16, as **D15–D19** in §5.1. **Phase 3 execution has not started, and no Phase 3 work of any kind has been performed.** Document-only work is permitted under D15; **anything runtime-backed stays blocked until the API key is rotated** (D16 · AG-19).
 
-| # | Blocker | State | Tracked in |
+| # | Entry decision | State | Recorded as |
 |---|---|---|---|
-| B1 | **Phase 3 run mode** — no A001 runs · the shared memory stream with the §5 markers · or a separate sandbox stream (T1-5) | 🔴 Open | Item 74 point (2). D5 covers Phases 0–2 only |
-| B2 | **API key rotation** | 🔴 Open | AG-19 · item 57 |
-| B3 | **Full A001 ratification** | 🔴 Open | Item 74. §8 T1-1…T1-5 stay deferred under D6 |
-| B4 | **Does Phase 3 stay `A001-P07`-only after the Phase 2 evidence?** | 🔴 Open | §1 · §9 Phase 3 |
-| B5 | **Does S2 switch to a block-per-question input format before any owner fill?** | 🔴 Open | New — raised by Phase 2 evidence |
+| B1 | **Phase 3 run mode** | ✅ Decided 2026-09-16 — **no-runtime, document-only first** | D15 |
+| B2 | **API key rotation** | 🔴 **Still required** before any runtime-backed Phase 3 work | D16 · AG-19 · item 57 |
+| B3 | **A001 ratification** | ✅ Decided 2026-09-16 — **internal simulation sandbox only**: not a prospect, not a CRM record, not offer evidence | D17 |
+| B4 | **Phase 3 slice** | ✅ Decided 2026-09-16 — stays **`A001-P07` only** | D18 |
+| B5 | **S2 input format** | ✅ Decided 2026-09-16 — **switch to block-per-question before any owner fill** | D19 |
 
-**B4 — what the Phase 2 evidence says.** `A001-P07` is still the only unit passing archetype, Destination Fit and the H-band together, so nothing in Phase 2 displaces it as the slice. `A001-P05`, `A001-P06` and `A001-P09` pass archetype and band but fail Destination Fit, and D14 bars commissioning a destination for A001, so none can be substituted without reopening D14. That is evidence for keeping Phase 3 `A001-P07`-only. **The decision is the owner's; nothing here changes the scope.**
+**What this opens, and what it does not.** Under D15, document-only Phase 3 work is permitted: hand-written simulated profiles, hand checks that carry the group flags, and hand-offs as text notes. **Still not permitted:** any `arika run`, agent, skill, scheduler or event activity · any runtime memory write · anything needing the API key, all of which wait on D16. §8 T1-1…T1-5 stay deferred under D6, and D17 ratifies the sandbox's standing, not those Tier-1 changes.
 
-**B5 — what the Phase 2 evidence says.** S1 worksheets are pipe tables of 42 rows. Cells were lost twice during owner fill: one trailing cell in `A001-P08`, and four cells across three rows in each of `A001-P01`, `A001-P02`, `A001-P06` and `A001-P09`. Both were caught by the apply script's cell-count guard before anything was written, and both needed owner-authorised repairs. S2 is 65 rows per unit, so the same format carries more exposure, and a format where each field is its own line cannot lose a cell. **No change has been made; this is an owner decision.**
+**B4 — what the Phase 2 evidence says.** `A001-P07` is still the only unit passing archetype, Destination Fit and the H-band together, so nothing in Phase 2 displaces it as the slice. `A001-P05`, `A001-P06` and `A001-P09` pass archetype and band but fail Destination Fit, and D14 bars commissioning a destination for A001, so none can be substituted without reopening D14. That is evidence for keeping Phase 3 `A001-P07`-only. ✅ **Decided 2026-09-16 (D18): the slice stays `A001-P07` only.**
+
+**B5 — what the Phase 2 evidence says.** S1 worksheets are pipe tables of 42 rows. Cells were lost twice during owner fill: one trailing cell in `A001-P08`, and four cells across three rows in each of `A001-P01`, `A001-P02`, `A001-P06` and `A001-P09`. Both were caught by the apply script's cell-count guard before anything was written, and both needed owner-authorised repairs. S2 is 65 rows per unit, so the same format carries more exposure, and a format where each field is its own line cannot lose a cell. ✅ **Decided 2026-09-16 (D19): S2 switches to a block-per-question format before any owner fill.** The format itself is not built yet, and no S2 worksheet exists.
 
 ## 10. Changelog
 
+- **v0.13 — 2026-09-16** — **Phase 3 entry decisions recorded (D15–D19). Phase 3 execution has not started.**
+  - **D15 (B1) run mode:** no-runtime, **document-only first**. Supersedes D5 for Phase 3 only.
+  - **D16 (B2) API key rotation:** still required before any **runtime-backed** Phase 3 work (AG-19 · item 57). It does not block document-only work, which needs no key.
+  - **D17 (B3) ratification:** A001 is ratified as an **internal simulation sandbox only** — not a prospect, not a CRM record, not offer evidence. It ratifies the sandbox's standing, **not** the §8 Tier-1 changes, which stay deferred under D6.
+  - **D18 (B4) slice:** Phase 3 stays **`A001-P07` only**, confirmed against the Phase 2 evidence.
+  - **D19 (B5) S2 input format:** S2 switches to **block-per-question** before any owner fill. The format is not built yet and no S2 worksheet exists.
+
+  **Sections updated:** §1 status (no longer "not runnable" without qualification — now ratified, document-only, runtime-blocked) · §5.1 (the five decisions, and its heading now covers D1–D19) · §9 Phase 3 entry gate (◐ partly met) and "Phase 3 readiness" (renamed from 🔴 NOT READY to ◐ entry decisions recorded · execution not started), including the B4 and B5 paragraphs that previously said the decision was outstanding.
+
+  **Unchanged:** every unit verdict, the child register, the gap register and §8. No place name for a `not_in_DB11` unit (D14); no counts, sizes, capacities, currency, ratings or KPI values (D12). — Claude Code (Opus 5)
 - **v0.12 — 2026-09-16** — **Phase 2 closed out; Phase 3 readiness recorded as NOT READY.** Two new subsections. No verdict, register row, decision or gap entry changed.
   - **§6 "Phase 2 close-out"** — an IDs-and-statuses-only summary: which units pass archetype (all nine, two by inheritance and one on its main archetype only), which pass Destination Fit and which fire it by status only, which pass the H-band and which fire it by band only, the five deterministic rule checks the unit set was built to produce, and why the group and every unit stay outside the current H1/H2 Offer MVP.
   - **§9 "Phase 3 readiness"** — Phase 3 marked 🔴 NOT READY behind five named blockers: the Phase 3 run mode (B1), API key rotation (B2, AG-19), full A001 ratification (B3), whether Phase 3 stays `A001-P07`-only (B4), and whether S2 switches to a block-per-question input format before any owner fill (B5). B4 and B5 record what the Phase 2 evidence says and explicitly decide nothing.
