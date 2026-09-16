@@ -1,197 +1,95 @@
 # DRAFT — Reply to Ndwiga Law Advocates LLP
 
-**Status:** 🔴 **DRAFT FOR OWNER APPROVAL. Not sent.** Prepared 2026-08-09.
+**Status:** 🔴 **DRAFT — REVISION 2. FOR OWNER APPROVAL. NOT SENT.**
+**Revised:** 2026-09-16 — rewritten to reflect the recorded owner decision: seek a **narrowed or amended scope before engagement**, and accept neither existing letter as drafted. **This supersedes the draft prepared 2026-08-09**, which sought to sign one letter's scope against the other's fee table and proposed a monthly payment schedule. **That approach is no longer the approved one, and the payment proposal has been removed in full** — the earlier text remains in version history.
 **To:** sarah@ndwiga.law · cc: email@ndwiga.law
 **Working:** [`../COUNSEL_ENGAGEMENT_REVIEW.md`](../COUNSEL_ENGAGEMENT_REVIEW.md)
 
-> **Before sending, decide three things:**
-> 1. **Which email address is the address of record.** The 6 August letter has `mary.monicah1@gmail.com`. §7 below asks to change it — delete that paragraph if you would rather keep the Gmail.
-> 2. **Whether to send the ODPC question (C7).** It invites counsel to tell you a KES 33,500 item may be premature. Worth asking; your call.
-> 3. **Whether 12 months is the schedule you want.** The maths is at §4 — a different monthly figure only changes the number of rows.
+> 🔴 **NOT SENT · NOTHING ATTACHED · NO ENGAGEMENT ACTIVE · NO FEE APPROVED.**
+> This letter **accepts neither Letter of Engagement**, **instructs no one to begin work**, **approves no fee or payment arrangement**, and **attaches no documents**. It asks counsel to confirm or propose a narrower scope. It may not be sent without the owner's explicit approval.
+
+> **Owner — four things to settle before this is sent:**
+> 1. **The tier label does not match the six matters.** The approved scope is described as "Tier 1 + Tier 2", but in the instruction brief's own numbering the **sub-processor register (Q6) and the transfer clauses / SCCs (Q7) sit in Tier 3**. §2 below asks for all six matters by name rather than by tier, so nothing is dropped by the label. **Confirm that is what you want.**
+> 2. **Tier 1's entity-structure question (Q2) is deliberately NOT in §2.** It is not one of the six approved matters — but it is the question behind the most expensive decision in the file, and the earlier draft was largely about it. **§6 keeps only the protective half** (file nothing while it is open), which asks for no work and commits no fee. **Decide whether to add it to the scope request or leave it out.**
+> 3. **§5 states that nothing is attached.** Materials go only on your later, explicit instruction.
+> 4. **§8's address-of-record point** — keep or delete.
 
 ---
 
-**Subject:** Letters of Engagement of 29 July and 6 August 2026 — response, proposed payment schedule, and points to settle before signature
+**Subject:** Engagement scope — request for a revised, narrower proposal (position reserved; no instruction given)
 
 Dear Sarah,
 
 Thank you for both letters, and please pass on my thanks to Collins.
 
-Before anything else, and for good order: **notwithstanding clause 2.2, I have not accepted either Letter of Engagement, and this correspondence is not to be treated as acceptance.** I will confirm acceptance by signing and returning the letter once the points below are settled.
-
-I want to be clear about the spirit of this letter. **I would like to instruct you, and I am not looking to renegotiate your fee.** Most of what follows is confirmation rather than negotiation, and one item corrects an arithmetic point **in your favour**. The purpose is simply to arrive at a document I can sign without leaving anything important unsaid.
+For good order, and **notwithstanding the clause in your Terms under which continued correspondence may be taken as acceptance: I have not accepted either Letter of Engagement, and this letter is not to be treated as acceptance of either.** I am not instructing you at this stage. Nothing here should be read as an instruction to begin work, as approval of any fee, or as a request for any filing or registration to be made on my behalf. If we reach an agreed position, I will confirm it only by signing and returning an agreed letter.
 
 ---
 
-## 1. The letter I would like to sign
+## 1. What has changed at my end
 
-I have both letters side by side. The position I would like to reach is straightforward: **the scope of the 29 July letter, with the fee table of the 6 August letter.**
+Having read both letters closely, I have decided **not to proceed on either as drafted**. I want to be clear that this is **not about the fee**, and it is not a negotiating position. It is that the scope of each letter leaves open the particular matters that are actually holding my business up — and I would rather agree one smaller engagement that covers them from the outset than sign a broader one and commission the blocking matters separately afterwards.
 
-The 6 August letter is a real improvement in one respect — it puts figures on the government charges the July letter deferred, and I am grateful for that certainty. But it also drops five things the July letter contained, each of which I had specifically asked for:
+**So I am asking for something different in shape, not for a discount.** If an engagement of this kind is not one you would wish to take on, or if parts of it fall outside your practice, I would genuinely rather know that now than have you research around it.
 
-| | 29 July | 6 August |
+## 2. The scope I would like you to consider
+
+Six matters. They are the ones that currently block me from signing a client contract or from delivering part of my service line at all.
+
+| # | Matter | What I need from it |
 |---|---|---|
-| **Two-phase structure** — incorporate and trade first, with IP and ODPC running in parallel rather than gating launch | §1.2, §2.1 | Absent |
-| **The holding company** — expressly out of scope, with a commitment to advise on it and on the correct sequencing between the two entities under a separate letter or addendum | §1.3 | Not mentioned at all |
-| **The eight operational matters** — named, scoped out, and a separate written estimate promised | §1.4, §2.3 | Not mentioned |
-| **Pre-incorporation marketing advice** — what I may lawfully publish, and in what name, before incorporation completes | §2.1.4 | Service removed |
-| **The instalment schedule** | §5 | No payment terms at all |
+| 1 | **Review of my draft contract suite** | Which of the drafts are usable with correction, which should be rewritten, and what must change before any of them is put in front of a client |
+| 2 | **Cross-border transfers of personal data** | Whether my ordinary use of foreign software already involves transfers that need a documented basis, what that basis must be, and how urgently |
+| 3 | **Transfer clauses and safeguards** | The contractual mechanism to put in place where such transfers are permitted, and what I must actually execute |
+| 4 | **Currency and payment terms** | I expect to quote in one currency and invoice in another; which rate applies, fixed at what point, and how that should be expressed so it is enforceable and not a dispute later |
+| 5 | **Sub-processor register** | Whether my register is complete and correctly drafted, and whether my understanding of my own liability for those providers is right |
+| 6 | **A named reviewer for AI-governance matters** | My own internal rules require a named legal reviewer before certain work goes live, and I have no one in that role. **Whether you can act in it, or whether I should retain a specialist — and what such an engagement would look like** |
 
-And it changes two things materially:
+These correspond to **questions 1, 3, 4, 5, 6 and 7 of the instruction brief** I sent you. I am not asking, in this engagement, for the entity, copyright, trademark or registration work described in the earlier letters.
 
-- **Copyright.** The July letter undertook to advise on *what copyright subsists in AI-assisted work, who is treated as the author, and what records evidence sufficient human authorship*, having regard to *Aryeh Movement Limited v. Cynthia Beldina Akoth Okello* — and then to file **only if, following that advice, I instructed you to**. The August letter offers advice on the registration process, and files unconditionally. **The July formulation is the one I need.** The question I cannot answer myself is whether anything subsists at all; how to file is not my difficulty.
-- **The registrant.** The July letter registered *"the **Company's** trademark(s)"*. The August letter registers both the trademark and the copyright *"**in your favour**"* — that is, to me personally. **Please see §3 below; this is the one point I would ask you not to move past.**
+## 3. What I would like to receive
 
-**Was the removal of these items deliberate, or an artefact of the revision?** If deliberate, I would genuinely like to understand the reasoning, because I may be missing something. If not, I would ask that the 29 July scope be restored and the 6 August fee table carried across.
+Rather than propose terms myself, I would value your proposal on five points:
 
----
+| | |
+|---|---|
+| **1. Scope** | Which of the six you would take on, and any you would decline or refer |
+| **2. Deliverables** | What I would actually receive for each — a written opinion, marked-up documents, a short advice note — and in what form |
+| **3. Fee basis** | Fixed, capped or hourly, and **per matter if that suits you better than the whole scope**. I am asking for the basis and the estimate; I am not proposing a figure or a payment arrangement |
+| **4. Timeline** | An indication I can plan around — not a contractual deadline |
+| **5. What you need from me** | Documents, information or decisions you would want before starting. **I would rather be the bottleneck than the reason something was done prematurely** |
 
-## 2. An addition error — and it runs in your favour
+## 4. What "reviewed" has to mean at my end
 
-I think there may be a slip in the 29 July fee table, and I would rather raise it than quietly benefit from it.
+One point of housekeeping, so we are not at cross purposes about deliverable 2. For my internal records a document only stops being a draft when I can record **who reviewed it** (a named advocate or firm), **when**, **what changed**, and **which jurisdictions it was cleared for.** Until I have all four for a given document, I keep treating it as unreviewed, whatever it looks like. **That is my own record-keeping rule, not a requirement I am placing on you** — I mention it only so the form of your output is useful to me.
 
-The four line items at §4.2 — 55,000, 35,000, 70,000 and 25,000 — **sum to Kshs. 185,000**, but the total is stated as Kshs. 180,000. The same 5,000 appears at §5, where Phase 2 is headed *"Kshs. 125,000"* but its three sub-items (35,000 + 70,000 + 25,000) **sum to 130,000**.
+## 5. Nothing is attached to this letter
 
-The 6 August letter uses 185,000 throughout, and its total of 259,250 adds up exactly. **I have proceeded on the basis that 185,000 is the correct legal fee and that 180,000 was simply an addition error rather than a discount now withdrawn** — but please confirm, since it is your fee and not mine to assume.
+I have deliberately attached nothing. The draft documents and my research note exist and are ready, but I would rather you tell me what you want to see, and in what order, than send a bundle you have not asked for. **Say the word and I will send whatever is useful.**
 
----
+**One thing I should repeat, because it matters to how the drafts are read: they were prepared with AI assistance and no lawyer has seen them.** They are deliberately written to look usable, which is exactly the risk. They are a starting point for correction, not work product, and if starting fresh on any of them is faster for you, please say so and bill accordingly.
 
-## 3. 🔴 The registrant — the one point I would ask you not to move past
+## 6. One thing I would ask you to hold, whatever we agree
 
-The 6 August letter would register the copyright and the trademark **in my personal name**.
+**Please make no filing or registration of any kind on my behalf** — and treat nothing in our correspondence to date as instruction to do so. My intended ownership structure is not yet settled, and my concern is one of **sequencing rather than of law**: my understanding is that placing assets in one name now and moving them later can be materially more expensive than placing them correctly at the outset.
 
-My intention, as set out in my earlier instructions, is that **all intellectual property — software, methodologies, frameworks, prompt systems, brand systems and know-how, not only trademark and copyright — should ultimately sit at holding-company level**, with the operating company beneath it.
+**This is a request not to act, so it commits nothing and costs nothing.** I raise it here only so it cannot be overtaken by events while scope is being discussed. I recognise that resolving it properly is substantially a tax question, and that your Terms exclude tax advice unless expressly agreed — so I am **not** asking you to answer it under this letter. I will come back to it separately, with an accountant if that is the better route.
 
-My concern is one of sequencing rather than of law, and I raise it as a question rather than a submission. My understanding is that moving intellectual property between entities after registration can attract **capital gains tax where value has accrued, stamp duty on a deed of assignment, and withholding tax on royalties** once the operating company licenses back from the holder. If that is right, then registering to me personally puts the assets **two transfers** away from where I want them, rather than one — and converts what is currently a free decision into a taxable one.
+## 7. Points I am deliberately holding back
 
-**I am not asking you to delay incorporation.** Being able to trade is my priority and I would like Phase 1 to proceed as quickly as you can manage. **What I am asking is that we decouple the two: incorporate the operating company now, and file nothing at KIPI or KECOBO until the holding-company question is settled.** The July letter's structure already permits exactly this, since each Phase 2 stream was to be commenced on my written instruction.
+I have a number of smaller queries on the Terms of Business — defined terms, an interest period, a liability-cap currency, an arbitration clause that names no institution, and a notice referred to but not supplied. **None of them is worth your time today**, because they only bite at signature and we are not there. I will raise them as a single list if and when we have an agreed scope.
 
-**Two related points:**
+**One point I will flag now rather than later, because it should not be carried forward:** the fee tables in the earlier letters were **not internally consistent** — in one of them the itemised figures and the stated totals do not agree. I mention it not to make a point of it, but so that any fresh quote is reconciled against its own line items before it reaches me. I would rather raise it than have us both discover it at the first invoice.
 
-- **Clause 1.3 of the July letter** put the ball in my court — you would advise on the holdco and the sequencing between the two entities once I had assembled the information. **Please tell me precisely what information you need and I will get it to you.** I would rather be the bottleneck than the reason something was filed early.
-- **Clause 4.4 of your Terms excludes tax advice unless expressly agreed** — but the question above is substantially a tax question. **Can it be expressly brought into scope, or would you prefer I instruct an accountant to work alongside you?** I am content either way; I would just rather not discover afterwards that neither of you was contracted to answer it.
+## 8. One administrative point
 
----
-
-## 4. Proposed payment schedule
-
-You noted at §5.1 of the July letter that the business is pre-revenue, that I am funding this personally, and that predictability of cash flow matters more to me than speed. That is exactly right, and I would like to propose a structure that reflects it.
-
-**I propose a standing order of Kshs. 20,000 per month, beginning on signature**, held on account under clause 8.2 of your Terms and drawn down against each work-stream as it is instructed and delivered.
-
-**I want to be clear that I am not asking you to wait for your money in any way that leaves you out of pocket.** The proposal is built on three principles:
-
-1. **You are never carrying my government charges.** No filing is made until the accumulated balance covers that stream's disbursements in full.
-2. **Streams are commenced only on my written instruction**, as the July letter already provided — so nothing is worked on before it is funded, and you are never carrying work I have not asked for.
-3. **I may accelerate at any time.** If revenue arrives sooner than expected, I will clear the balance early rather than hold to the schedule.
-
-I would also note that this is not really a departure from your own terms. **Clause 8.1 already contemplates payments on account of fees and disbursements.** I am proposing to make those payments on a fixed, guaranteed schedule rather than wait to be asked for them — which I hope is a stronger position for you than the alternative, not a weaker one.
-
-### The schedule
-
-Against the 6 August total of **Kshs. 259,250**:
-
-| Payment | Timing | Amount | Cumulative | What it clears |
-|---|---|---|---|---|
-| 1 | On signature | 20,000 | 20,000 | **Incorporation disbursements (10,750) covered — Phase 1 may commence immediately** |
-| 2 | Month 1 | 20,000 | 40,000 | |
-| 3 | Month 2 | 20,000 | 60,000 | |
-| 4 | Month 3 | 20,000 | 80,000 | **Phase 1 settled in full (65,750)** |
-| 5 | Month 4 | 20,000 | 100,000 | |
-| 6 | Month 5 | 20,000 | 120,000 | **Trademark disbursements covered (115,750) — IPOK filing may proceed** |
-| 7 | Month 6 | 20,000 | 140,000 | |
-| 8 | Month 7 | 20,000 | 160,000 | |
-| 9 | Month 8 | 20,000 | 180,000 | |
-| 10 | Month 9 | 20,000 | 200,000 | **Trademark stream settled in full (185,750)** |
-| 11 | Month 10 | 20,000 | 220,000 | |
-| 12 | Month 11 | 20,000 | 240,000 | **Copyright stream settled (225,750)** |
-| 13 | Month 12 | **19,250** | **259,250** | **ODPC stream settled — engagement paid in full** |
-
-**Thirteen payments over twelve months: twelve of Kshs. 20,000 and a final payment of Kshs. 19,250.**
-
-The stream order above is indicative and I am open to changing it. I have put **incorporation first** because it unblocks trading, and **trademark second** because its clock is the longest — my understanding is that registration runs eight to eighteen months regardless, so filing early matters more than paying early does. **Copyright and ODPC sit later because both depend on advice I have not yet received** (§3 above, and question C7 below).
-
-**On the total.** I recognise the 259,250 is not the final figure — VAT, stamp duty on nominal capital, and any additional trademark class all sit outside it. **Where the total rises, I would propose extending the schedule at the same monthly rate rather than increasing the monthly amount**, since the monthly figure is the part I can actually commit to. If that is unacceptable I would rather know now than discover it at the first invoice.
+Please use **[AGENCY EMAIL ADDRESS]** as my address of record. *(Owner: replace with the agency address, or delete this section to keep the existing one.)*
 
 ---
 
-## 5. Timeline
+I am conscious that this letter asks you to re-quote work you have already scoped twice, and I am grateful for your patience with it. **I would rather ask for the right engagement now than sign the wrong one and unpick it later.**
 
-I have no fixed deadline, but I would find it helpful to work to something. Below is what I am assuming; **please correct anything that is unrealistic** rather than let me plan against it.
-
-| Milestone | My assumption | Depends on |
-|---|---|---|
-| Letter signed and first payment made | Within 2 weeks of your reply | The points in this letter |
-| **Certificate of Incorporation + KRA PIN** | **2–4 weeks from signature** | You |
-| Bank account opened | Following the above | Me |
-| County business permit, if required | Following the above | Question D1 below |
-| **Holding-company question answered** | As soon as I have supplied what you need | **Me — please tell me what you need** |
-| Trademark filed at KIPI | Once the registrant is settled and month 5 is reached | §3 above |
-| Trademark registered | 8–18 months from filing | KIPI |
-| Copyright advice delivered | Once instructed | You |
-| Copyright filed | **Only if your advice says it is worthwhile** | My instruction |
-| ODPC registration | Once question C7 is answered | Your view on timing |
-
-Clause 6 of both letters runs open-ended, which I understand. **I am not asking for a contractual deadline — only an indication I can plan around.**
-
----
-
-## 6. Questions
-
-Grouped by what they hold up. Several are minor and I have said so; please do not spend time proportionate to their number.
-
-### A. Before anything is filed
-
-1. Is the commitment at **clause 1.3 of the July letter** — to advise on the holding company and on the correct sequencing of incorporation between the two entities — **still live?** What information do you need from me?
-2. **Which entity should register the IP**, and does registering to me personally now create a cost later that registering correctly at the outset would avoid?
-3. Both letters incorporate the operating company first while that sequencing advice is outstanding. **Is that safe, or should Phase 2 be held until the question closes?**
-4. **Can tax be expressly brought into scope** notwithstanding Terms clause 4.4, or should I instruct an accountant alongside you?
-
-### B. Scope
-
-5. Please confirm the **29 July scope can be restored** with the 6 August fee table — specifically clauses 1.2, 1.3, 1.4, 2.1.4, 2.1.6, 2.1.7 and 5.
-6. Please provide the **separate written estimate promised at July §2.3** for the eight operational matters. **The two I most need priced are review of my seven contract templates and the appointment of a named AI-governance reviewer** — both currently block client work, and the second blocks my largest service line entirely.
-
-### C. Fees
-
-7. **Given that I appear to fall below the ODPC registration threshold** — under Kshs. 5 million turnover and fewer than ten employees — **is registration required now, or is it a choice?** A single large engagement would take me over the threshold, so I expect to need it; I would like to understand whether I need it *yet*. **If it can sensibly wait, I would rather sequence it later than pay for it now.**
-8. Please confirm **Kshs. 185,000** is the correct legal fee (§2 above).
-9. The 6 August letter calls Kshs. 259,250 *"all-inclusive"*, but §4.5 reserves further disbursements, expenses and VAT. **What is genuinely fixed, and is the firm VAT-registered?**
-10. The trademark disbursements are headed **"Costs per class"**. **How many classes does the Kshs. 50,000 cover, which classes and marks do you propose, and what does each additional class cost?**
-11. What does the **Kshs. 12,450 "registry disbursements & costs & fast tracking"** line comprise, and **what does fast-tracking achieve** against an 8–18 month timeline?
-12. **Stamp duty on nominal share capital does not appear in the 6 August table.** Is it chargeable, at what rate, and can it be estimated once the capital is fixed?
-13. Clauses 4.3 / 5.4 **gross up any withholding tax**, making it my cost rather than a credit to you. **Does WHT apply to a payment made by an individual pre-incorporation?**
-14. Is the **KECOBO charge Kshs. 5,000 or Kshs. 1,000 per work?** My own reading suggested 1,000; I expect you are right and would like to correct my note.
-
-### D. Being able to trade
-
-15. **Does the company need a county Single Business Permit**, given it is an online B2B services business with no shopfront — and if so, who obtains it and what does it cost? It appears in neither letter, and my understanding is that trading without one is unlawful.
-16. **Is anything beyond incorporation and the KRA PIN needed to open a bank account?**
-17. **Roughly how long should I expect Phase 1 to take** from signature to Certificate of Incorporation?
-
-### E. Terms of Business — minor, but worth closing
-
-18. **"Association Entity" and "Association Person" are not defined at clause 1.1**, but carry the liability architecture at clauses 13, 17, 19, 20, 21, 24 and 26. Please supply the definitions or replace the terms.
-19. **Clause 9.3 charges interest at "2%" with no period stated** — per month or per annum?
-20. **Clause 17.1 caps liability at "$8000"** — which currency?
-21. Please supply the **"Information Notice"** referred to four times at clause 22.6, which I am asked to agree to but have not seen.
-22. **Clause 33.2 provides for arbitration** without naming an institution, rules, seat or appointing authority. Please complete it.
-23. **Clause 27** vests work-product IP in the firm. Please confirm expressly that this **does not extend to the trademark, copyright or any other Arika intellectual property** you register or draft on my behalf.
-24. **I would like to opt out of clause 28 (publicity).** Please confirm no details of this matter will be supplied to journals or used in marketing.
-
-**Two typographical points**, mentioned only because they sit in operative clauses: the registry is **KIPI**, not "IPOK", in both fee tables; and the fee in words at 6 August §4.1 reads *"Fify"*. Clause 1.1 of the August Terms also reads *"Territory mnm eans"*, where the July version is correct.
-
----
-
-## 7. One administrative point
-
-Please use **[AGENCY EMAIL ADDRESS]** as my address of record rather than the Gmail address on the 6 August letter. *(Owner: replace or delete this section.)*
-
----
-
-I appreciate that this is a long letter for an engagement of this size. **Almost all of it is confirmation, and I expect the substantive discussion is really only §3.** I have set it out in full because I would rather ask now than raise it after a filing.
-
-I look forward to your reply, and to getting started.
+I look forward to hearing whether this is something you would like to take on.
 
 Kind regards,
 

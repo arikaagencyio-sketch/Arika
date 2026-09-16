@@ -129,9 +129,9 @@ The materials are ready; the scope is not. Agree a scope covering the six blocki
 ## 9. Exact next safe owner action
 
 1. ~~**Decide the scope to send.**~~ ✅ **Done 2026-09-16** — Tier 1 plus Tier 2, covering the six blocking matters in §4, with Tier 3 and Tier 4 explicitly deferred.
-2. **Revise and approve the existing drafted reply, before any sending.** It exists and is marked awaiting approval. **Nothing has been sent, and nothing will be sent without a separate, explicit instruction.**
+2. ◐ **Revise and approve the existing drafted reply, before any sending.** **Revised 2026-09-16 — now awaiting owner approval.** The draft asks counsel to confirm or propose a narrowed scope covering the six matters, and requests scope, deliverables, fee basis, timeline and what counsel needs from Arika. It **accepts neither letter, instructs no one, approves no fee and attaches nothing**. **Nothing has been sent, and nothing will be sent without a separate, explicit instruction.**
 
-**Step 2 has not been taken, and this packet contacts no one.** *(Was, until 2026-09-16: "Neither step has been taken.")*
+**The revised reply is not approved and not sent, and this packet contacts no one.** *(Was, until 2026-09-16: "Neither step has been taken." The first step — deciding the scope — was taken on 2026-09-16; the reply was revised the same day and awaits approval.)*
 
 ## 10. Cross-references
 
