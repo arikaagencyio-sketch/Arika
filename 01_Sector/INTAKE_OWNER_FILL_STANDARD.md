@@ -1,8 +1,8 @@
 # Intake owner-fill standard
 
 **Department:** Sector (01) — owns this record. Applies to any intake work where an owner types answers into a worksheet.
-**Status:** ✅ Working standard, adopted 2026-09-16.
-**Version:** v0.1
+**Status:** ✅ **The current Sector working standard for owner fill**, adopted 2026-09-16. It stands as written **pending any later intake-profile ratification** — Governance (00) owns the universal intake profile (item 73), and if that ratification absorbs or supersedes these rules, this record defers to it.
+**Version:** v0.2
 
 > **Origin and limits.** Every rule here comes from the A001 document-only pilot and is adopted under **D20** (sandbox record §5.1): simulated evidence may improve **mechanisms only** — schemas, gates, intake formats, validators, routing logic, documentation and safe workflow design. Nothing here rests on a claim about demand, guests, prices, competitors or any real property, and nothing here changes the H-bands, the ICP, pricing, capacity or any destination profile.
 
@@ -12,7 +12,7 @@
 
 Owner fill is the point where a human types free text into a structured file that a gate will later parse. The A001 pilot ran that loop repeatedly and found that the failures cluster in two kinds: **structural** (a field is lost or displaced) and **semantic** (a well-formed answer answers the wrong question). Different mechanisms catch each, and one will never catch the other. These rules are the cheapest form of each.
 
-Governance (00) owns the universal intake profile. This is a Sector working standard and is ready to fold into that profile's ratification if the owner wants it there.
+Governance (00) owns the universal intake profile. This is **the current Sector working standard** for owner fill and applies now; it is ready to fold into that profile's ratification (item 73), and defers to it if that ratification absorbs or supersedes these rules.
 
 ## 2. Use the block-per-question format for large owner-fill stages
 
@@ -47,6 +47,14 @@ Governance (00) owns the universal intake profile. This is a Sector working stan
 **Why.** These checks are heuristics. They under-score answers that *demonstrate* rather than *restate* — an answer giving a decision chain in order without echoing the words "steps" or "decide" scores badly and is correct. Treating that as a hard failure would train people to pad answers with the question's vocabulary.
 
 **Evidence.** Across the pilot the relevance heuristic produced more false positives than genuine catches. It also produced the only two catches that mattered: a whole tranche that answered the wrong questions, and the wrong-block paste. Both had passed every structural check. **Advisory but mandatory reading** is what makes it worth keeping.
+
+**Standing policy (queue items V3 and V4, recorded 2026-09-16).**
+
+1. **Relevance checks stay advisory.** They must be read; they must **not hard-fail** an apply.
+2. **This does not change without a separate owner decision.** Until one is taken, a relevance flag is information for a person, never a stop.
+3. **Code enforcement, if any, is a later decision.** No validator code has been written or changed for this, and none is proposed here. The rule today is procedural: nothing in the repository enforces it, and that is deliberate.
+
+If enforcement is ever built, it must preserve the advisory default. A flag that stops work is a different instrument with different failure modes, and the pilot's evidence — more false positives than catches — does not support one.
 
 ## 6. Draft repo-bound lines first, then scan, then write
 
@@ -102,4 +110,5 @@ Two different states block a destination-fit check, and they are not interchange
 
 ## 12. Changelog
 
+- **v0.2 — 2026-09-16** — **Adoption status and the V3/V4 standing policy recorded.** The status line now states that this is **the current Sector working standard for owner fill**, standing as written pending any later intake-profile ratification (Governance item 73), to which it defers. §5 gains the standing policy in three clauses: relevance checks stay **advisory and must not hard-fail**; that does not change without a **separate owner decision**; and **code enforcement, if any, is a later decision** — none is written, changed or proposed, and the rule is deliberately procedural. Documentation only: no validator code, no runtime code, no gate, agent or skill touched, and no H-band, ICP, pricing, capacity, proof, buyer, market claim or destination profile affected. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Adopted from the A001 document-only pilot under D20, implementing queue Batch 1: the block-per-question format for large stages (F2), the `question_id` confirmation rule (F3), guidance and validator written together (F4), relevance checks advisory but mandatory reading (documentation half of V3/V4), draft-first write-back (W1), staged apply (W3), and reading the gate source before forcing a stage (W5). Adds the unprofiled-versus-absent destination distinction as a documentation note only (S2). No runtime change, no destination profile, no Offer or ICP change. — Claude Code (Opus 5)
