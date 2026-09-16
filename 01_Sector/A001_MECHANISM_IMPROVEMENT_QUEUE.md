@@ -1,8 +1,8 @@
 # A001 — Mechanism improvement queue
 
 **Department:** Sector (01) — owns this record.
-**Status:** 🟡 **Planning.** **Batches 1 and 2 are implemented** (2026-09-16) — nine items in total, all in [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md): Batch 1's seven owner-fill items, and Batch 2's two remaining owner-workflow items (W2, W4). **The owner-workflow group is now complete.** Everything else remains planning only: not implemented, approved or scheduled, and each item still needs its own owner decision before any file changes.
-**Version:** v0.3
+**Status:** 🟡 **Planning.** **Batches 1, 2 and 3 are implemented** (2026-09-16). Batch 1's seven owner-fill items and Batch 2's two owner-workflow items (W2, W4) are in [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md); Batch 3 closed **F1 as superseded by F2** and recorded **O1** as an evaluation-order rule in the pilot close-out §2. **No "Now" items remain.** Everything still open is a genuine owner decision, a later build, or blocked by D16 — none of it implemented, approved or scheduled, and each needs its own owner decision before any file changes.
+**Version:** v0.4
 
 > **Governed by D20** (sandbox record §5.1). Every item below is a **mechanism** finding — a missing rule, an unauthored profile, an undefined edge, an unsafe format. Nothing here uses A001 as market, demand, pricing, proof, buyer or capacity evidence, or as a claim about any real hotel. A001 output may justify changing *how the system works*; it may never describe *how the market behaves*.
 
@@ -24,7 +24,7 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 
 | # | Source observation from A001 | Why D20 allows it | Files likely affected | Risk | When |
 |---|---|---|---|---|---|
-| F1 | Pipe-table owner fill silently dropped cells twice — one trailing cell, then four cells across three rows in each of four units. Both were caught only by a cell-count guard. | An unsafe input format is a mechanism finding. It says nothing about hospitality. | The intake overlay and worksheet-generation convention; D19 already records the replacement | Low | **Now** |
+| F1 | Pipe-table owner fill silently dropped cells twice — one trailing cell, then four cells across three rows in each of four units. Both were caught only by a cell-count guard. | An unsafe input format is a mechanism finding. It says nothing about hospitality. | None — the remedy already exists in D19 and `INTAKE_OWNER_FILL_STANDARD.md` §2 | Low | ✅ **Superseded 2026-09-16 by F2** — the format decision is recorded in D19 and implemented as standard §2. Closed with no file change; restating it elsewhere would only duplicate §2 |
 | F2 | The block-per-question format (D19) held: one field per line, so a lost field is visible rather than silent. It exists only as a generated sandbox artifact, not as a documented repo standard. | Promoting a proven-safe format to a documented standard is workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §2 | Low | ✅ **Implemented 2026-09-16** |
 | F3 | An answer was pasted into the wrong block, destroying the original. The format could not catch it — the result was structurally perfect. | A format that cannot detect misplacement is a format gap. A per-block `question_id` confirmation step is a mechanism fix. | `INTAKE_OWNER_FILL_STANDARD.md` §3 | Low | ✅ **Implemented 2026-09-16** |
 | F4 | Owner guidance and the validator contradicted each other once: the guidance said "use the list in the question", and the validator then flagged a term that list offered. | An internally inconsistent instruction set is a mechanism defect. | `INTAKE_OWNER_FILL_STANDARD.md` §4 | Low | ✅ **Implemented 2026-09-16** |
@@ -54,7 +54,7 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 
 | # | Source observation from A001 | Why D20 allows it | Files likely affected | Risk | When |
 |---|---|---|---|---|---|
-| O1 | Group flags are inherited by every unit and are never suppressed, so a unit that passes every unit-level check can still be correctly ineligible. | This is routing logic behaving as designed. Recording that it holds is documentation. | Offer routing notes | Low | **Now** — documentation only |
+| O1 | Group flags are inherited by every unit and are never suppressed, so a unit that passes every unit-level check can still be correctly ineligible. | This is routing logic behaving as designed. Recording that it holds is documentation. | `A001_DOCUMENT_ONLY_PILOT_CLOSEOUT.md` §2 (Sector-owned); `OFFER_OS.md` §15 pointer only | Low | ✅ **Implemented 2026-09-16** — recorded as an **evaluation-order rule only**, with an explicit bar on extending it into an ICP, demand, buyer, pricing or capacity claim. No Offer decision, doctrine or ICP change |
 | O2 | An `A001` group run would be expected to return `reject` or `needs_more_seed_data` (AG-7), which is the correct outcome, not a defect. | Confirms a gate's intended behaviour. | None | — | **Never (as an A001 consequence)** — and explicitly not a reason to widen any band |
 | O3 | A mixed-archetype unit reached a verdict without its unruled secondary ever being resolved, because another rule fired first. A real property could hide the same gap. | Order-of-evaluation masking a gap is a routing-logic finding. | Offer/Sector gate ordering notes | Medium | **Later** |
 | O4 | Anything touching the H-bands, the MVP scope, the anti-ICP definition, pricing gates, floors or capacity. | **Barred by D20.** These need market, demand, pricing or capacity evidence, which A001 cannot supply. | None | — | **Never (as an A001 consequence)** |
@@ -108,6 +108,11 @@ This queue decides nothing. Each item needs an owner decision before any file is
 
 ## 11. Changelog
 
+- **v0.4 — 2026-09-16** — **Batch 3 implemented: the last two "Now" items closed.**
+  - **F1 → superseded by F2**, with **no file change**. Its remedy already exists in D19 and `INTAKE_OWNER_FILL_STANDARD.md` §2; implementing it separately would have duplicated §2 or edited the Governance-owned intake profile (under review as item 73) and the Offer-owned overlay to restate it.
+  - **O1 → implemented** as a single evaluation-order sentence in `A001_DOCUMENT_ONLY_PILOT_CLOSEOUT.md` §2, where the finding was already recorded: *inherited group flags are not suppressed at unit level, so unit-level passes do not imply eligibility.* It carries an explicit bar on extension into an ICP, demand, buyer, pricing or capacity claim. `OFFER_OS.md` received a §15 changelog pointer only — **no Offer decision, doctrine, band, gate or ICP changed**, because Offer has no routing-notes home and a new section would have overstated an A001-derived note's standing.
+  - **No "Now" items remain.** Still open: V1, V2, V5 and V6 in §3; V3/V4's code half; S1, S3, S4 and S5; O2, O3 and O4; and R1–R6 behind D16.
+  - **Nothing implemented in code:** no validator, runtime, gate, agent or skill change; no destination profile authored. — Claude Code (Opus 5)
 - **v0.3 — 2026-09-16** — **Batch 2 implemented: the two remaining owner-workflow standards.** **W2** negative-testing the scan boundary → `INTAKE_OWNER_FILL_STANDARD.md` §10, and **W4** correcting stale claims with a dated note rather than a silent rewrite → §11. With these, **every item in §6 Owner workflow is implemented** (W1–W5).
   - **Still open elsewhere:** F1 and O1 remain "Now" and unimplemented; V3/V4 stay policy-documented with their code half open; S1 stays unimplemented, with no destination profile authored and none permitted from simulated data (D20); everything else in §3, §4, §5 and §7 is unchanged.
   - **Nothing implemented in code:** no validator, runtime, gate, agent or skill change. — Claude Code (Opus 5)

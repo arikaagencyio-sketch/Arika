@@ -2,7 +2,7 @@
 
 **Department:** Sector (01) — owns this record. Offer (02) may read it, but **not as Offer evidence** (§9).
 **Status:** ✅ Document-only pilot closed 2026-09-16 · ✅ Use of this evidence bounded by **D20** (mechanisms only) · 🔴 **No runtime-backed work** — blocked by D16 until the API key is rotated (AG-19).
-**Version:** v0.2
+**Version:** v0.3
 
 > **IDs only.** A001 is a **fictional** hospitality group. Nothing here is evidence about any market, property or buyer. Read [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) §2 and §4 before using any A001 value anywhere.
 
@@ -22,6 +22,7 @@ Running the group (`A001`) through S1 produced the result the architecture shoul
 - **A central brand and direct-booking team is an anti-ICP marker**, not a neutral fact. Owner Decision 71 treats it as disqualifying, and the group carries it.
 - **The group sits above every size band.** No band in the current model describes it.
 - **Those three flags are inherited by every unit and are never suppressed.** That is the single most important structural finding: no unit can be assessed as though it were independent, however clean its own checks are.
+  - **Evaluation-order rule (queue item O1, recorded 2026-09-16).** *Inherited group flags are not suppressed at unit level, so unit-level passes do not imply eligibility.* This is a statement about **the order in which checks are evaluated** and nothing else. It does not say which companies are good clients, and it may not be extended into a claim about the ICP, demand, buyers, pricing or capacity — such an extension would be barred by D20 however it were phrased.
 
 The group verdict was recorded as `SIMULATED_VERDICT` — outside the current offer ICP, by design.
 
@@ -112,5 +113,6 @@ Simulated evidence can show that a **mechanism** behaves as documented. It canno
 
 ## 12. Changelog
 
+- **v0.3 — 2026-09-16** — **Queue item O1 implemented: the inherited-group-flags evaluation-order rule recorded** in §2, where the finding already sat. One sentence — *inherited group flags are not suppressed at unit level, so unit-level passes do not imply eligibility* — plus an explicit limit: it describes evaluation order only, and may not be extended into an ICP, demand, buyer, pricing or capacity claim (D20). Recorded here rather than in a new document or in `OFFER_OS.md`, because the finding was already stated in this section and Offer has no routing-notes home; a new Offer section would have overstated an A001-derived note's standing. **No Offer decision, doctrine, band, gate or ICP changed**, and no destination profile was authored. — Claude Code (Opus 5)
 - **v0.2 — 2026-09-16** — **D20 recorded, closing the open decision this document raised.** "Before a real pilot" item 5 is marked decided, and §9 now states the binding rule: A001 evidence may improve **mechanisms only** — schemas, gates, intake formats, validators, routing logic, documentation, safe workflow design — and may never serve as market, demand, pricing, proof, buyer or capacity evidence, or as a claim about real hotels. The canonical wording lives in the sandbox record §5.1 as D20; this document points to it rather than restating it as a second source. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Close-out written at the end of the document-only pilot: purpose, what the group and `A001-P07` proved, the controlled failure patterns across the other units, which controls worked, what broke or nearly broke, the D1–D19 governance position, the D16 hard stop, the limits on how this may be used, and a five-point list to settle before a real pilot. IDs and stage labels only. — Claude Code (Opus 5)
