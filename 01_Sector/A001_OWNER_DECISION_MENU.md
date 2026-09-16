@@ -2,7 +2,7 @@
 
 **Department:** Sector (01) — owns this record.
 **Status:** 🟡 **Planning only.** This menu presents choices. It decides nothing, approves nothing and schedules nothing.
-**Version:** v0.1
+**Version:** v0.2
 
 > **Governed by D20** (sandbox record §5.1). For every decision below, the "D20 permits A001 evidence?" column answers one narrow question: may the A001 pilot be *cited as support* for this change? A "no" never means the change is forbidden — it means A001 is not a valid reason for it, and the justification must come from somewhere else.
 
@@ -91,6 +91,10 @@ A001 was never the real pilot. These decisions sit outside the mechanism queue a
 | **P3** | The legal review path (tracked as item 59) | Removes the standing blocker on client-data handling and on several Offer gates | Counsel is named but not engaged, and letters are unsigned. Until that closes, a real engagement carries undecided legal exposure | ⛔ **No.** Nothing in A001 bears on this | **Highest-value unblock on this page.** It gates more than A001 does |
 | **P4** | Whether public research is permitted per engagement, recorded before anyone looks at a page | Public-source intake for a real property | Research permission granted loosely is how a "quick look" becomes an unrecorded data source | ✅ **Yes**, as workflow design. A001 ran with research disabled throughout and showed the discipline holds | **Default to off**, and record the permission explicitly per engagement |
 
+### ↪ P3 update — 2026-09-16
+
+**The scope decision is made; the engagement is not.** The owner approved narrowing or amending the counsel scope before engagement, covering the six blocking matters — recorded in [`LEGAL_OS.md`](../10_Legal/LEGAL_OS.md) §8 and [`LEGAL_REVIEW_PATH_DECISION_PACKET.md`](../10_Legal/LEGAL_REVIEW_PATH_DECISION_PACKET.md). **No counsel has been contacted, nothing has been sent or signed, no engagement is active and no document has been reviewed**, so tracker item 59 stays open and every gate P3 would unlock stays shut — Offer's G5 is **narrowed, not passed**. **P3's remaining half — revising and approving the drafted reply before any sending — is still the highest-value unblock on this page**, and needs a separate, explicit instruction. Nothing else in this menu changed.
+
 ## 8. If you want a single recommendation
 
 **Take P3, the legal review path.** It is the only item on this page that blocks work beyond A001, it needs no code, no runtime and no key, and it is not waiting on anything else. D16 can wait until you actually intend a run; the mechanism queue is at a natural resting point; and the simulation has taught what simulation can teach.
@@ -109,4 +113,5 @@ It decides nothing and changes no queue row, no decision record and no tracker i
 
 ## 11. Changelog
 
+- **v0.2 — 2026-09-16** — **P3's scope decision recorded** (§7): the counsel scope is to be narrowed or amended before engagement, neither unsigned letter accepted as-is, and the path not deferred while a real hospitality pilot is still intended. **The engagement is still not active** — nothing contacted, sent, signed or reviewed — so item 59 stays open and P3's second half remains the top unblock. Canonical record: `10_Legal/LEGAL_OS.md` §8. No other menu row, queue row, decision record or tracker item changed here. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Menu created after Batch 3 closed the last "Now" queue items. Groups every remaining decision into D16/runtime, validator code, schema and routing, later-only builds, never-from-A001, and the real pilot path; gives each what it unlocks, what it risks, whether D20 permits A001 evidence to support it, a recommended default and a first safe next prompt. Planning only — nothing decided, implemented or scheduled, and no other file changed. — Claude Code (Opus 5)

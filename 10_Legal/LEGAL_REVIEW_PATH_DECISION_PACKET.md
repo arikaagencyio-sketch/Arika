@@ -1,8 +1,8 @@
 # Legal review path — owner decision packet
 
 **Department:** Legal (10) — owns this record.
-**Status:** 🟡 **Planning only.** This packet presents a decision. It decides nothing, engages no one, sends nothing and changes no legal position.
-**Version:** v0.1
+**Status:** 🟢 **DECIDED 2026-09-16 — a scope decision only.** The owner approved the recommended path (§6): **narrow or amend the counsel scope before engagement.** That settles what will be asked for. It **engages no one, sends nothing and changes no legal position** — no counsel has been contacted, no engagement is active, and **nothing in this repository has been reviewed by counsel.** *(Was, until 2026-09-16: "🟡 **Planning only.** This packet presents a decision. It decides nothing, engages no one, sends nothing and changes no legal position.")*
+**Version:** v0.2
 
 > 🔴 **Nothing in this repository is legal advice, and nothing in it has been reviewed by counsel.** Every legal document here was drafted by a language model at the owner's direction, and each carries a standing banner saying so. This packet is written by the same non-lawyer process and is no exception: it summarises repository state so the owner can make an engagement decision. It is not advice about whether that decision is legally sound.
 
@@ -94,6 +94,18 @@ Engaging on a scope that omits these would spend fee and leave every blocking ma
 
 The materials are ready; the scope is not. Agree a scope covering the six blocking matters, keyed to the brief's Tier 1 and Tier 2, and do not sign either letter as it stands.
 
+### ✅ Owner decision — 2026-09-16
+
+**Option B is approved.** Recorded in [`LEGAL_OS.md`](LEGAL_OS.md) §8.
+
+| Decided | |
+|---|---|
+| **Narrow or amend the scope before engagement** | Keyed to the Tier 1 and Tier 2 blockers — the six matters in §4 |
+| **Neither unsigned letter is accepted as-is** | Option A is rejected outright, not deferred |
+| **The path is not deferred** | Option C falls away: deferral was acceptable only if the real hospitality pilot deferred with it, and the pilot is still intended |
+
+**🔴 A scope decision is not an agreed scope.** It settles what Arika will ask for, and nothing more. **No counsel has been contacted, nothing has been sent or signed, no engagement is active, and no document has been reviewed** — so every template banner stays, and **Offer's gate G5 is narrowed, not passed.**
+
 ## 7. What engagement unlocks
 
 | Unlocked | How |
@@ -116,10 +128,10 @@ The materials are ready; the scope is not. Agree a scope covering the six blocki
 
 ## 9. Exact next safe owner action
 
-1. **Decide the scope to send.** The recommendation is Tier 1 plus Tier 2, covering the six blocking matters, with Tier 3 and Tier 4 explicitly deferred.
-2. **Then, and only on explicit instruction, update and send the existing draft reply.** It exists and is marked awaiting approval. **Nothing has been sent, and nothing will be sent without a separate, explicit instruction.**
+1. ~~**Decide the scope to send.**~~ ✅ **Done 2026-09-16** — Tier 1 plus Tier 2, covering the six blocking matters in §4, with Tier 3 and Tier 4 explicitly deferred.
+2. **Revise and approve the existing drafted reply, before any sending.** It exists and is marked awaiting approval. **Nothing has been sent, and nothing will be sent without a separate, explicit instruction.**
 
-Neither step has been taken. This packet does not contact anyone.
+**Step 2 has not been taken, and this packet contacts no one.** *(Was, until 2026-09-16: "Neither step has been taken.")*
 
 ## 10. Cross-references
 
@@ -133,4 +145,5 @@ Neither step has been taken. This packet does not contact anyone.
 
 ## 11. Changelog
 
+- **v0.2 — 2026-09-16** — **Owner decision recorded: Option B approved — narrow or amend the counsel scope before engagement**, keyed to the Tier 1 and Tier 2 blockers, with neither unsigned letter accepted as-is and the path not deferred while a real hospitality pilot is still intended. §6 gains the decision, §9's first step is marked done and the status line is updated, each with a dated `Was:` note. **A scope decision is not an agreed scope:** no counsel contacted, nothing sent or signed, no engagement active, nothing reviewed — so Offer's gate G5 is **narrowed, not passed**, and tracker item 59 stays open. Canonical record: `LEGAL_OS.md` §8. Still contains no counsel names, letter dates, correspondence content or template clauses. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Packet created to support the P3 decision. Records current state (counsel identified, not engaged; two unsigned letters; scope not agreed; no review performed; a draft reply unsent), what already exists, what is missing, the six matters currently blocking, three scope options, the recommendation to **amend or narrow scope before engagement**, what engagement unlocks, what stays blocked regardless, and the exact next safe owner action. Planning only — nothing decided, sent, signed or scheduled. Contains no counsel names, letter dates, correspondence content or template clauses. — Claude Code (Opus 5)
