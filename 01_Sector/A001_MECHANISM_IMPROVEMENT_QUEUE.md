@@ -1,8 +1,8 @@
 # A001 — Mechanism improvement queue
 
 **Department:** Sector (01) — owns this record.
-**Status:** 🟡 **Planning only.** Nothing here is implemented, approved or scheduled. Each item needs its own owner decision before any file changes.
-**Version:** v0.1
+**Status:** 🟡 **Planning.** **Batch 1 is implemented** (2026-09-16) — seven items, in [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md). Everything else remains planning only: not implemented, approved or scheduled, and each item still needs its own owner decision before any file changes.
+**Version:** v0.2
 
 > **Governed by D20** (sandbox record §5.1). Every item below is a **mechanism** finding — a missing rule, an unauthored profile, an undefined edge, an unsafe format. Nothing here uses A001 as market, demand, pricing, proof, buyer or capacity evidence, or as a claim about any real hotel. A001 output may justify changing *how the system works*; it may never describe *how the market behaves*.
 
@@ -25,9 +25,9 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 | # | Source observation from A001 | Why D20 allows it | Files likely affected | Risk | When |
 |---|---|---|---|---|---|
 | F1 | Pipe-table owner fill silently dropped cells twice — one trailing cell, then four cells across three rows in each of four units. Both were caught only by a cell-count guard. | An unsafe input format is a mechanism finding. It says nothing about hospitality. | The intake overlay and worksheet-generation convention; D19 already records the replacement | Low | **Now** |
-| F2 | The block-per-question format (D19) held: one field per line, so a lost field is visible rather than silent. It exists only as a generated sandbox artifact, not as a documented repo standard. | Promoting a proven-safe format to a documented standard is workflow design. | A format note in the intake profile or overlay | Low | **Now** |
-| F3 | An answer was pasted into the wrong block, destroying the original. The format could not catch it — the result was structurally perfect. | A format that cannot detect misplacement is a format gap. A per-block `question_id` confirmation step is a mechanism fix. | Worksheet template and its fill instructions | Low | **Now** |
-| F4 | Owner guidance and the validator contradicted each other once: the guidance said "use the list in the question", and the validator then flagged a term that list offered. | An internally inconsistent instruction set is a mechanism defect. | Worksheet guidance text and validator rules, together | Low | **Now** |
+| F2 | The block-per-question format (D19) held: one field per line, so a lost field is visible rather than silent. It exists only as a generated sandbox artifact, not as a documented repo standard. | Promoting a proven-safe format to a documented standard is workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §2 | Low | ✅ **Implemented 2026-09-16** |
+| F3 | An answer was pasted into the wrong block, destroying the original. The format could not catch it — the result was structurally perfect. | A format that cannot detect misplacement is a format gap. A per-block `question_id` confirmation step is a mechanism fix. | `INTAKE_OWNER_FILL_STANDARD.md` §3 | Low | ✅ **Implemented 2026-09-16** |
+| F4 | Owner guidance and the validator contradicted each other once: the guidance said "use the list in the question", and the validator then flagged a term that list offered. | An internally inconsistent instruction set is a mechanism defect. | `INTAKE_OWNER_FILL_STANDARD.md` §4 | Low | ✅ **Implemented 2026-09-16** |
 
 ## 3. Validator and gate improvements
 
@@ -35,8 +35,8 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 |---|---|---|---|---|---|
 | V1 | Substring matching produced false positives: a vendor name matched inside an ordinary word, and a decision reference was read as a bare number. Fixed in the sandbox validator only. | Validator precision is a mechanism concern. | A repo-side validator, if one is ever adopted; the sandbox script is not repo-tracked | Low | **Later** — only if the validator is promoted into the repo |
 | V2 | Word-boundary matching, a governance-token exemption for digits, and an exemption for terms quoted by the question itself each removed a class of false positive. | Rule-level fixes to a checker are mechanism fixes. | Same as V1 | Low | **Later** |
-| V3 | Structural checks passed a whole tranche that answered the wrong questions, and passed a wrong-block paste. Only a relevance read caught either. | The finding is about what a class of check can and cannot detect. | Validator design notes; the review workflow | Medium — a relevance heuristic over-flags and must stay advisory | **Later** |
-| V4 | The relevance heuristic produced more false positives than genuine catches, and under-scored answers that demonstrate rather than restate. It earned its place only as an advisory flag a human reads. | Calibration of a check is a mechanism concern. | Validator design notes | Medium | **Later** |
+| V3 | Structural checks passed a whole tranche that answered the wrong questions, and passed a wrong-block paste. Only a relevance read caught either. | The finding is about what a class of check can and cannot detect. | `INTAKE_OWNER_FILL_STANDARD.md` §5 (policy); validator code unchanged | Medium — a relevance heuristic over-flags and must stay advisory | ◐ **Policy documented 2026-09-16**; code half still **Later** |
+| V4 | The relevance heuristic produced more false positives than genuine catches, and under-scored answers that demonstrate rather than restate. It earned its place only as an advisory flag a human reads. | Calibration of a check is a mechanism concern. | `INTAKE_OWNER_FILL_STANDARD.md` §5 (policy); validator code unchanged | Medium | ◐ **Policy documented 2026-09-16**; code half still **Later** |
 | V5 | `intake_gate.py --answers` behaved exactly as documented at every stage, and its stage rule was readable in source. No change proposed. | Recorded as a negative finding so it is not "improved" without cause. | None | — | **Never (as an A001 consequence)** |
 | V6 | `sector_truth_gate.py` check 6 was added mid-pilot after real drift between the plugin and the database, and has held since. | Already implemented; recorded for completeness. | None — done | — | Done |
 
@@ -44,8 +44,8 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 
 | # | Source observation from A001 | Why D20 allows it | Files likely affected | Risk | When |
 |---|---|---|---|---|---|
-| S1 | A destination present in the geography database but with no profile blocks Destination Fit. The sandbox recorded the status rather than authoring a profile (D14). | A missing profile is a mechanism gap. **Authoring one is a separate Sector decision requiring real sources — A001 supplies none.** | Sector destination schema and profile set | Medium — must not be filled from simulated data | **Later**, and only from real sources |
-| S2 | Destinations absent from the geography database cannot be profiled at all without first commissioning the destination. | The distinction between "unprofiled" and "absent" is a structural one the pilot made visible. | Geography schema documentation | Low | **Now** — documenting the distinction only |
+| S1 | A destination present in the geography database but with no profile blocks Destination Fit. The sandbox recorded the status rather than authoring a profile (D14). | A missing profile is a mechanism gap. **Authoring one is a separate Sector decision requiring real sources — A001 supplies none.** | Sector destination schema and profile set | Medium — must not be filled from simulated data | **Later**, and only from real sources. *Not implemented: no profile has been authored. Only the status distinction is documented, under S2.* |
+| S2 | Destinations absent from the geography database cannot be profiled at all without first commissioning the destination. | The distinction between "unprofiled" and "absent" is a structural one the pilot made visible. | `INTAKE_OWNER_FILL_STANDARD.md` §9 | Low | ✅ **Implemented 2026-09-16** — documentation note only; no profile authored, no geography commissioned |
 | S3 | No Sector rule covers a property mixing two archetypes (AG-5). The sandbox used a convention — resolve on the main archetype, mark the secondary unruled — explicitly **not** a Sector rule. | An unruled case is a mechanism gap. The sandbox convention is not evidence that any rule is correct. | Hospitality plugin archetype rules | Medium — the rule must come from Sector reasoning, not from A001 | **Later** |
 | S4 | A group has no resolvable archetype while the union operator is unbuilt (AG-4). | A missing resolver is a mechanism gap, and the pilot showed the system correctly refusing to guess. | S09 / union-operator build | High — a build, and it gates Phase 4 | **Later** |
 | S5 | No Sector agent can check a hotel's company fit; the existing classifiers are B2B SaaS-only (AG-17). Fit was checked by hand throughout. | A missing capability is a mechanism gap. | Sector agent roster | High | **Later** |
@@ -63,11 +63,11 @@ Every item traces to the pilot close-out or the sandbox record. Nothing is inven
 
 | # | Source observation from A001 | Why D20 allows it | Files likely affected | Risk | When |
 |---|---|---|---|---|---|
-| W1 | Draft-first write-back (D10) — draft in a scan folder, scan, hand-check, then edit — caught content before it reached the repository every time it ran. | Safe workflow design, named explicitly in D20. | Governance workflow notes | Low | **Now** |
-| W2 | The key scan was proved in the negative on a planted term, not merely assumed to work. | Testing a control negatively is workflow design. | Governance workflow notes | Low | **Now** |
-| W3 | Staged apply — validate, dry-run, write, verify untouched rows byte-identical — refused every defective batch before any write. | Workflow design. | Apply-workflow notes | Low | **Now** |
-| W4 | Stale status claims outlived their truth in several documents, each asserting work had not started after it had. | Documentation drift is a mechanism problem. A "correct the claim, keep the superseded wording marked" convention was used throughout and could be stated once. | Governance documentation conventions | Low | **Now** |
-| W5 | A gate's rule was read in its source before being relied on, rather than inferred from past runs. | Workflow design. | Governance workflow notes | Low | **Now** |
+| W1 | Draft-first write-back (D10) — draft in a scan folder, scan, hand-check, then edit — caught content before it reached the repository every time it ran. | Safe workflow design, named explicitly in D20. | `INTAKE_OWNER_FILL_STANDARD.md` §6 | Low | ✅ **Implemented 2026-09-16** |
+| W2 | The key scan was proved in the negative on a planted term, not merely assumed to work. | Testing a control negatively is workflow design. | Governance workflow notes | Low | **Now** — not in Batch 1 |
+| W3 | Staged apply — validate, dry-run, write, verify untouched rows byte-identical — refused every defective batch before any write. | Workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §7 | Low | ✅ **Implemented 2026-09-16** |
+| W4 | Stale status claims outlived their truth in several documents, each asserting work had not started after it had. | Documentation drift is a mechanism problem. A "correct the claim, keep the superseded wording marked" convention was used throughout and could be stated once. | Governance documentation conventions | Low | **Now** — not in Batch 1 |
+| W5 | A gate's rule was read in its source before being relied on, rather than inferred from past runs. | Workflow design. | `INTAKE_OWNER_FILL_STANDARD.md` §8 | Low | ✅ **Implemented 2026-09-16** |
 
 ## 7. Runtime blockers — do not touch until D16 is closed
 
@@ -108,4 +108,9 @@ This queue decides nothing. Each item needs an owner decision before any file is
 
 ## 11. Changelog
 
+- **v0.2 — 2026-09-16** — **Batch 1 implemented: owner-fill workflow standards.** Seven items moved to implemented, all in the new [`INTAKE_OWNER_FILL_STANDARD.md`](INTAKE_OWNER_FILL_STANDARD.md): **F2** block-per-question format for large stages (§2) · **F3** `question_id` confirmation before typing (§3) · **F4** guidance and validator written together (§4) · **W1** draft-first write-back (§6) · **W3** staged apply (§7) · **W5** read the gate source before forcing a stage (§8) · **S2** the unprofiled-versus-absent destination distinction as a documentation note (§9).
+  - **V3 and V4 are half-done by design:** the policy that relevance checks are advisory but must be read is now documented (§5); their validator-code half stays **Later**.
+  - **S1 is explicitly not implemented.** No destination profile was authored, and none may be from simulated data (D20). Only the status distinction is documented.
+  - **W2 and W4 stay open.** Both are "Now" items and were simply not in this batch.
+  - **Nothing runtime changed**, and no H-band, ICP, pricing, capacity, proof, buyer or market claim was touched. — Claude Code (Opus 5)
 - **v0.1 — 2026-09-16** — Queue created from the document-only pilot, under D20. Thirty items — intake formats (F1–F4), validators and gates (V1–V6), Sector schema and profile gaps (S1–S5), Offer routing implications (O1–O4), owner workflow (W1–W5) and runtime blockers (R1–R6) — plus an explicit exclusion list. Planning only: nothing implemented, approved or scheduled. — Claude Code (Opus 5)
