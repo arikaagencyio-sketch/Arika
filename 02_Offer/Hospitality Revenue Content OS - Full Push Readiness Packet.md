@@ -9,7 +9,7 @@
 |---|---|
 | **Type** | Readiness packet — Offer (02), crossing Sector (01) → Offer (02) → Content (04) · Marketing (03) · Sales (05) |
 | **Date** | 2026-09-14 |
-| **Readiness** | ❌ **NOT READY TO EXECUTE** — waiting on owner inputs OI1–OI9 (§4) and pre-run decisions RD1–RD7 (§9.1) |
+| **Readiness** | ❌ **NOT READY TO EXECUTE** — waiting on owner inputs OI1–OI9 (§4) and pre-run decisions **RD2–RD7** (§9.1). *RD1 decided 2026-09-20; PG0 is still not met.* |
 | **Offer** | Hospitality Revenue Content OS · "Direct Booking Engine" (gateway: OTA Leakage & Direct-Booking Audit) — Working Hypothesis / Not Quotable, not registered |
 | **Parent documents** | `Draft 41` (structural OEOS, §12 control test) · `Hospitality Revenue Content OS - Delivery Capacity and Cost Model Worksheet.md` · `OFFER_OS.md` §3, §5, §12 · `01_Sector/SECTOR_OS.md` §5–§6 · `01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md` · `.claude/skills/sector-handoff-packet/SKILL.md` (S10) |
 | **Tracker** | `00_Agency_Governance/OWNER_INPUT_NEEDED.md` item 72 (this packet's owner inputs); items 59, 71, 57, 58 (blockers, §7) |
@@ -20,7 +20,7 @@
 
 | Step | Ready? | What blocks it |
 |---|---|---|
-| **PG0 · Session preconditions** | ❌ | RD1 pilot identity · RD2 client folder · RD3 key rotation |
+| **PG0 · Session preconditions** | ❌ | ~~RD1 pilot identity~~ ✅ *decided 2026-09-20* · **RD2 client folder · RD3 key rotation — both still open** |
 | **PG1 · Before Sector** | ❌ | OI1–OI8 · RD4 Sector fit method |
 | **PG2 · Before `offer-orchestrator`** | ❌ | Sector fit record and S10 packet, owner-reviewed |
 | **PG3 · Before `offer-oeos-engineer`** | ❌ | Orchestrator output, owner-reviewed · RD7 |
@@ -94,7 +94,14 @@
 >
 > **So anything placed in `--input` becomes permanent repository history** — including the property's name, if it is typed there. The input is also sent to the model provider (Anthropic) as part of the prompt.
 
-**Default rule (pending RD1):** `--input` carries a **pilot ID** (`PILOT-H-001`), public-derived descriptors at the level the step needs (archetype, H-band, destination, labelled observations) and nothing personal. **The name ↔ pilot ID key and every full note live in the client folder.**
+**Identity rule — ✅ decided 2026-09-20 (RD1).** `--input` carries a **pilot ID only**, plus public-derived descriptors at the level the step needs (archetype, H-band, destination, labelled observations) and nothing personal. **Use only the pilot ID in repository logs and runtime inputs.** The real **name ↔ pilot ID mapping** and every full note live in the **client folder, outside every git working tree** — never in this repository, and never in a runtime input.
+
+| Identity | Rule |
+|---|---|
+| **`A001`, and `A001-P01`…`A001-P09`** | The internal **simulation** group and its existing simulated units. **Preserve these IDs.** They are not part of the `PILOT-H-*` series, and they **do not satisfy item 72's real-property requirement** |
+| **`PILOT-H-001`** | **Reserved** for the **first real, owner-supplied property** |
+| **`PILOT-H-002`, `-003`, …** | Sequential IDs for **additional real properties only**, and only **as each one is separately approved** |
+| **A real group ID** | ⏳ **Not assigned, deliberately.** Document the group structure first; decide its ID as a **separate** decision (RD1a, §9.1) |
 
 | Where | Holds |
 |---|---|
@@ -170,7 +177,7 @@
 | **Scheduler not approved** | Never boot the runtime; `arika run` only | ◐ Constrains the method | Item 58; `GLOBAL_OS.md` v0.28.3 |
 | **Stale clone exists** | Must not be used; its name collides with the client-folder decision | ◐ RD2 before PG0 | §1 |
 | **No Sector agent fits a hotel company** *(surfaced here)* | Sector fit is manual; S12 is unbuilt | ◐ RD4 | §5 note |
-| **Runs write inputs to git-tracked, auto-synced logs** *(surfaced here)* | A real name in `--input` becomes permanent history | ◐ RD1 | §3.3 |
+| **Runs write inputs to git-tracked, auto-synced logs** *(surfaced here)* | A real name in `--input` becomes permanent history | ✅ **RD1 decided 2026-09-20** — pilot ID only; the mapping stays in the client folder. **The log behaviour itself is unchanged** | §3.3 |
 | **Downstream routes** | Marketing (03) has **no route** from Sector (item 31k); Sales (05) is event-only with **no delivery**; Content (04)'s relation route works but is held at PG5 | ◐ Hand-offs are carried by hand | S10 Step 0; item 31k |
 | **Public data cannot pass the diagnostic gate** | Offer output is a pre-audit hypothesis, never a verdict | ◐ Shapes the outputs | `Draft 41` §3.2 |
 
@@ -202,7 +209,8 @@
 
 | # | Decision | Recommended | Blocks |
 |---|---|---|---|
-| **RD1** | **Pilot identity in repository-logged inputs:** pseudonymous pilot ID, or the real name? | **Pilot ID** — the name ↔ ID key stays in the client folder (§3.3) | PG0 |
+| ~~**RD1**~~ | ✅ **DECIDED 2026-09-20 — pseudonymous pilot IDs in repository-logged inputs.** Full rule in §3.3 | **Pilot ID only.** `PILOT-H-001` reserved for the first real property; sequential `PILOT-H` IDs for further real properties as each is approved; `A001`/`A001-P0n` preserved as simulation IDs that do **not** satisfy item 72; the name ↔ ID mapping stays in the client folder | ~~PG0~~ — **RD1 no longer blocks PG0; RD2 and RD3 still do** |
+| **RD1a** *(new 2026-09-20)* | **The real group ID** — what identifies a real multi-property group, if one is ever pushed | ⏳ **Undecided by design.** Document the group structure first, then decide the ID separately. Not required for a single-property push | Nothing today |
 | **RD2** | **Client folder location** — a dedicated folder outside every git working tree, **explicitly not `ChatGPT\Agency.Repo`**; and whether a OneDrive location is acceptable while the storage platform is unreviewed (worksheet §5.2) | A new folder, outside any clone; note the OneDrive question as open | PG0 |
 | **RD3** | **Rotate the API key before the push**, or run on the current key? | **Rotate first** (item 57) | PG0 |
 | **RD4** | **Sector fit method:** manual check against the plugin plus the S10 packet, or extend `sector-icp-fit` / build S12 first? | **Manual** — the extension is a build, not a push prerequisite | PG1 |
@@ -258,4 +266,5 @@ Written on 2026-09-14 from repository documents only: `AGENTS.md`, `GLOBAL_OS.md
 
 ## 12. Changelog
 
+- **2026-09-20 — RD1 decided: pseudonymous pilot IDs in repository-logged inputs.** §3.3's "default rule (pending RD1)" becomes the **identity rule**: pilot ID only in repository logs and runtime inputs; the real **name ↔ ID mapping lives in the client folder outside every git working tree**, never in this repository. `PILOT-H-001` stays **reserved for the first real, owner-supplied property**; further real properties take **sequential `PILOT-H` IDs only as each is approved**; and `A001` with `A001-P01`…`A001-P09` are **preserved** as simulation IDs which **still do not satisfy item 72**. **A real group ID is deliberately not assigned** — recorded as new open decision **RD1a**: document the group structure first, decide the ID separately. §0, §7 and §9.1 updated. **🔴 Nothing else moves:** **PG0 is still not met** (RD2 and RD3 open), the packet is **still NOT READY TO EXECUTE**, RD2–RD7 and OI1–OI9 are untouched, no property was chosen or researched, no client folder was created, no key was read or rotated, and no agent or skill was run. — Claude Code (Opus 5)
 - **2026-09-14 — Created (preparation only).** Readiness packet for the first full manual Hospitality push — Sector (01) → Offer (02) → Content (04) · Marketing (03) · Sales (05) — on one real, owner-supplied property, public data only. Defines the source of truth and the out-of-scope stale clone; the push objective and what it cannot produce (no audit verdict — public data cannot pass the diagnostic gate); allowed and forbidden data; nine owner inputs with stop rules; the department sequence; six gates (PG0–PG5) and global stop rules; known blockers; an eleven-step manual run sequence with outputs, save locations and stop conditions; and seven pre-run decisions separated from the launch-level ones. **Surfaced while preparing it:** (1) every `arika run` writes its full input to a git-tracked, auto-synced memory log, so a property name in `--input` becomes permanent history — RD1; (2) no Sector agent can check a hotel's company fit — `sector-icp-fit` and `sector-signal-scorer` are B2B SaaS-only and S12 is unbuilt — RD4; (3) worksheet §5.2 names the client folder "Agency.Repo", the same name as the stale git clone — RD2. **Not ready to execute.** No agent run, no event published, no scheduler, no `.env`, no memory-log write; no prices; registry table unchanged; still **Working Hypothesis / Not Quotable**. — Claude Code (Opus 5)

@@ -79,7 +79,7 @@ Same format as the core (`| ID | Question | Stage | Req | Label | Feeds | If mis
 |---|---|---|---|---|---|---|
 | H-Z01 | OI7 — may OTA pages be inspected manually? | S1 | R | OWNER-SUPPLIED | Packet §3.1 · H-B04 | Treated as **No** |
 | H-Z02 | OI8 — public screenshots, or text notes only? | S1 | R | OWNER-SUPPLIED | Packet §3.1 · client folder | Treated as **text notes only** |
-| H-Z03 | RD1 — pilot identity in repo-logged inputs: pilot ID or real name? | S1 | R | OWNER-SUPPLIED | Packet §3.3 · `intake_gate.py --scan --key` | **Pilot ID `PILOT-H-001`** |
+| H-Z03 | ~~RD1 — pilot identity in repo-logged inputs: pilot ID or real name?~~ ✅ **Decided 2026-09-20: pilot ID only** (packet §3.3) | S1 | R | OWNER-SUPPLIED | Packet §3.3 · `intake_gate.py --scan --key` | **Pilot ID `PILOT-H-001`** — no longer an open question |
 | H-Z04 | RD2 — client folder path, outside every git working tree and **not** `ChatGPT\Agency.Repo` | S1 | R | OWNER-SUPPLIED | Packet PG0 · core §5 | **Stop — nowhere to store answers** |
 
 ### H-A — Property profile
