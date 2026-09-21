@@ -2,14 +2,16 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { existsSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 import { requiresHumanApproval, classToLevel, levelToClass } from "../dist/governance.js";
 import { frontmatterSchema, MAX_NONSTREAMING_TOKENS } from "../dist/spec-schema.js";
-import { DEFAULT_MAX_TOKENS, finalizeRun, parseStructuredOutput } from "../dist/executor.js";
+import { DEFAULT_MAX_TOKENS, finalizeRun, parseStructuredOutput, runAgent } from "../dist/executor.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
 import {
+  assertApprovedFixtureStream,
+  assertFixturePreconditions,
   assertStreamMatchesMode,
   buildFixtureOptions,
   FIXTURE_CLASSIFICATION,
@@ -460,8 +462,10 @@ test("fixture: CLI option mapping is fail-closed", () => {
   assert.throws(() => buildFixtureOptions({ memoryStream: sandboxPath() }), /requires --fixture/);
   // With the lane enabled, --fixture still demands an explicit destination.
   assert.throws(() => buildFixtureOptions({ fixture: true }, true), /requires --memory-stream/);
-  const opts = buildFixtureOptions({ fixture: true, memoryStream: "x/sandbox.jsonl" }, true);
-  assert.deepEqual(opts, { fixture: true, memoryStreamOverride: "x/sandbox.jsonl" });
+  // Only the one approved destination is accepted (see the exact-path test below).
+  const approved = "02_Offer/_memory/sandbox.jsonl";
+  const opts = buildFixtureOptions({ fixture: true, memoryStream: approved }, true);
+  assert.deepEqual(opts, { fixture: true, memoryStreamOverride: approved });
 });
 
 test("fixture: sandbox streams are identified by filename, on both separators", () => {
@@ -470,4 +474,101 @@ test("fixture: sandbox streams are identified by filename, on both separators", 
   assert.equal(isSandboxStream("02_Offer/_memory/runtime.jsonl"), false);
   assert.throws(() => assertStreamMatchesMode("a/runtime.jsonl", true), /fixture run refused/);
   assert.throws(() => assertStreamMatchesMode("a/sandbox.jsonl", false), /ordinary run refused/);
+});
+
+// ---------------------------------------------------------------------------
+// Pre-approval hardening: exact destination, entry-point gate, input pins.
+// ---------------------------------------------------------------------------
+
+const APPROVED = "02_Offer/_memory/sandbox.jsonl";
+const goodBrief = [
+  "TEST_FIXTURE - simulated sandbox unit.",
+  "Unit: A001-P07. Group: A001.",
+  "SR-1 unresolvable archetype. SR-2 anti-ICP. SR-3 above every H-band.",
+].join("\n");
+const neverResolve = () => join(tmpdir(), `arika-absent-${Math.random().toString(36).slice(2)}`);
+
+test("fixture: the approved destination is the exact path, not just the basename", () => {
+  assertApprovedFixtureStream(APPROVED); // the one allowed value
+  // Another department's sandbox passes a basename check and must still be refused.
+  assert.throws(() => assertApprovedFixtureStream("01_Sector/_memory/sandbox.jsonl"), /not the approved destination/);
+  assert.throws(() => assertApprovedFixtureStream("04_Content/_memory/sandbox.jsonl"), /not the approved destination/);
+});
+
+test("fixture: absolute paths and traversals are refused", () => {
+  assert.throws(() => assertApprovedFixtureStream("C:/tmp/sandbox.jsonl"), /absolute path/);
+  assert.throws(() => assertApprovedFixtureStream("/tmp/sandbox.jsonl"), /absolute path/);
+  assert.throws(() => assertApprovedFixtureStream(String.raw`C:\tmp\sandbox.jsonl`), /absolute path/);
+  assert.throws(() => assertApprovedFixtureStream("02_Offer/_memory/../../sandbox.jsonl"), /traversal/);
+  assert.throws(() => assertApprovedFixtureStream("../02_Offer/_memory/sandbox.jsonl"), /traversal/);
+});
+
+test("fixture: the entry gate refuses a disabled lane BEFORE any model call", async () => {
+  // A prompt agent would need ANTHROPIC_API_KEY to reach the model. The gate must
+  // fire first, so the failure is the closed lane - never a key error.
+  const spec = { name: "offer-orchestrator", department: "02", execution: "prompt", risk_class: 1,
+                 requires_human_approval: false, memory_stream: APPROVED, emits: [] };
+  await assert.rejects(
+    () => runAgent(spec, { trigger: "manual", input: { seed_brief: goodBrief },
+                           fixture: true, memoryStreamOverride: APPROVED }),
+    (e) => /prepared but NOT enabled/.test(e.message) && !/ANTHROPIC_API_KEY/.test(e.message),
+  );
+});
+
+test("fixture: an ordinary run is untouched by the gate", () => {
+  assertFixturePreconditions("any-agent", { trigger: "manual" });
+  assertFixturePreconditions("any-agent", { input: { a: 1 } });
+  // An override without the flag is a mistake, not a silent promotion.
+  assert.throws(() => assertFixturePreconditions("any-agent", { memoryStreamOverride: APPROVED }),
+    /requires fixture mode/);
+});
+
+test("fixture: the gate pins the agent and the destination", () => {
+  const ok = { fixture: true, memoryStreamOverride: APPROVED, input: { seed_brief: goodBrief } };
+  const opts = { enabled: true, resolve: neverResolve };
+  assertFixturePreconditions("offer-orchestrator", ok, opts); // passes
+  assert.throws(() => assertFixturePreconditions("sector-icp-fit", ok, opts), /not the approved agent/);
+  assert.throws(
+    () => assertFixturePreconditions("offer-orchestrator",
+      { ...ok, memoryStreamOverride: "01_Sector/_memory/sandbox.jsonl" }, opts),
+    /not the approved destination/,
+  );
+  assert.throws(() => assertFixturePreconditions("offer-orchestrator", { fixture: true, input: {} }, opts),
+    /a destination is required/);
+});
+
+test("fixture: the brief must declare the marker and exactly one sandbox unit", () => {
+  const opts = { enabled: true, resolve: neverResolve };
+  const run = (seed_brief) =>
+    assertFixturePreconditions("offer-orchestrator",
+      { fixture: true, memoryStreamOverride: APPROVED, input: { seed_brief } }, opts);
+  assert.throws(() => run(""), /non-empty string/);
+  assert.throws(() => run("A001-P07 only, no marker"), /does not declare TEST_FIXTURE/);
+  assert.throws(() => run("TEST_FIXTURE but no unit named"), /does not name A001-P07/);
+  assert.throws(() => run(`${goodBrief} and A001-P08 linked`), /names other sandbox units \(A001-P08\)/);
+  assert.throws(() => run(`${goodBrief} see PILOT-H-001`), /names a real pilot ID/);
+  assert.throws(
+    () => assertFixturePreconditions("offer-orchestrator",
+      { fixture: true, memoryStreamOverride: APPROVED, input: {} }, opts),
+    /non-empty string/,
+  );
+});
+
+test("fixture: the lane is single-use - a destination that exists is refused", () => {
+  const used = join(tmpdir(), `arika-used-${process.pid}-${Math.random().toString(36).slice(2)}.jsonl`);
+  writeFileSync(used, "{}\n");
+  assert.throws(
+    () => assertFixturePreconditions("offer-orchestrator",
+      { fixture: true, memoryStreamOverride: APPROVED, input: { seed_brief: goodBrief } },
+      { enabled: true, resolve: () => used }),
+    /one-run lane is spent/,
+  );
+  rmSync(used, { force: true });
+});
+
+test("fixture: CLI mapping validates the destination too", () => {
+  assert.throws(() => buildFixtureOptions({ fixture: true, memoryStream: "/tmp/sandbox.jsonl" }, true), /absolute path/);
+  assert.throws(() => buildFixtureOptions({ fixture: true, memoryStream: "01_Sector/_memory/sandbox.jsonl" }, true), /not the approved destination/);
+  assert.deepEqual(buildFixtureOptions({ fixture: true, memoryStream: APPROVED }, true),
+    { fixture: true, memoryStreamOverride: APPROVED });
 });

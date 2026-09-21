@@ -3,6 +3,7 @@ import type { AgentSpec } from "./spec-schema.js";
 import { baseOutputSchema, MAX_NONSTREAMING_TOKENS } from "./spec-schema.js";
 import { agentRequestsApproval, requiresHumanApproval } from "./governance.js";
 import { writeMemory } from "./memory-writer.js";
+import { assertFixturePreconditions } from "./fixture.js";
 import { runFinosAgent } from "./wrappers/finos.js";
 import { runBoisAgent } from "./wrappers/bois.js";
 
@@ -51,6 +52,11 @@ function getClient(): Anthropic {
  * recommendation and writes memory; it never performs a state-changing action.
  */
 export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunResult> {
+  // The fixture gate runs FIRST, before any model or API call, so a disabled
+  // lane or a misdirected destination costs nothing to discover. An ordinary
+  // run returns from this immediately and is unaffected.
+  assertFixturePreconditions(spec.name, ctx);
+
   let recommendation: Record<string, unknown>;
   switch (spec.execution) {
     case "prompt":
