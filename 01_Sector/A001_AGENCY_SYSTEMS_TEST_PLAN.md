@@ -2,7 +2,7 @@
 
 **Department:** Sector (01) — owns this record.
 **Status:** 🟡 **Planning only.** This plan approves, schedules and runs nothing. Every test needs its own owner decision.
-**Version:** v0.5 *(v0.1–v0.4 corrected 2026-09-21 — see §9)*
+**Version:** v1.0 *(D21 enacted and the single attempt made 2026-09-21 — see §6.8)*
 **Date:** 2026-09-21
 **Scope bound:** **D20 — mechanism findings only.** Nothing here may produce a market, demand, buyer, pricing, capacity or proof claim.
 
@@ -372,6 +372,66 @@ needed — it has not been given.**
 
 Until then: lane **disabled**, D21 **DRAFT**, no agent run, no API call.
 
+### 6.8 Attempt record — the one authorised invocation, MADE
+
+**Status: ✅ the single attempt was made, and the authorisation is now SPENT.** No retry is
+authorised; a further run needs a fresh owner decision.
+
+| | |
+|---|---|
+| **Decision** | **D21 — ENACTED 2026-09-21** (owner approval in writing), recorded in the sandbox record §5.1 |
+| **Attempt** | ONE manual invocation, started **2026-09-21T16:38:26Z**, log line written **16:38:54Z** |
+| **Command** | `arika run offer-orchestrator --fixture --memory-stream 02_Offer/_memory/sandbox.jsonl --input <the §6.4 JSON>` |
+| **Input** | The exact §6.4 JSON, extracted **from this document** and verified byte-identical to the reviewed brief before the call |
+| **Result** | Exit code **0**, empty stderr |
+
+**✅ Replacement API key — VERIFIED BY USE.** The call reached the model and returned a
+valid structured response, which is the first live proof the rotated key works. It closes the last
+open item from the RD3 rotation, which until now was owner-attested only.
+
+**Mechanism outcome — TEST_FIXTURE evidence under D20, nothing more:**
+
+| Field | Value |
+|---|---|
+| `registry_action` | **`reject`** |
+| `riskLevel` | `low` |
+| Top-level `requiresHumanApproval` | `false` |
+| Agent's own `requiresHumanApproval` | `false`, with 1 `approvalReason` explaining why none is needed |
+| `misaligned_assumptions` | 4 |
+| `control_questions` | 5 |
+
+**✅ SR-1, SR-2 and SR-3 all survived — named verbatim in the output.** The orchestrator
+reproduced each rule with its own reasoning (unresolvable archetype / AG-4 · central
+brand-reservations-direct-booking as anti-ICP per Decision 71 · above every H-band), and
+**applied the evaluation-order rule correctly**: it recorded that the unit-level descriptors passed
+and that this does **not** override the inherited group stop rules. **No eligibility was asserted.**
+
+**✅ D20 boundary held.** A scan for barred content found **no** demand, seasonality, guest-mix,
+competitor, capacity, staffing or performance claim, and **no claim about a real hotel**. The words
+*price*, *rate* and *commission* appear only where the output **restates the non-pricing
+constraint**; the only digits present are list and decision references (Decision 71, OEOS phases).
+**No figure of any kind was produced.**
+
+**✅ Isolation held — verified, not assumed:**
+
+| Check | Result |
+|---|---|
+| `02_Offer/_memory/runtime.jsonl` | **Byte-unchanged.** sha256 `0295b173…` before and after; **5 lines** before and after |
+| `02_Offer/_memory/sandbox.jsonl` | Created, **exactly 1 line** |
+| Envelope marker | `classification: TEST_FIXTURE`, `stream: sandbox`, `source: arika-runtime` |
+| Any other memory log created | **None** |
+| Events | `emitted` declares `OFFER_BRIEF_RECEIVED`, but **the manual CLI path has no event bus and published nothing** |
+
+**What this is evidence of, and what it is not.** It is evidence that **the mechanism carries
+inherited group stop rules into Offer routing and refuses on them**. It is **not** an ICP finding,
+**not** a market, demand, pricing or capacity statement, and **not** a claim about any real
+property. `reject` here is **the gate working on a simulated unit**, not a verdict about anything
+real. **No registry change is authorised or implied** — D21 §6.
+
+**Not done, deliberately:** no retry, no second invocation, no scheduler, no event publication, no
+other agent, skill or connector, no registry action, no CRM write, and no `.env` or key value
+opened or printed. **`PILOT-H-001` and every real-push PG gate are unchanged.**
+
 ---
 
 ## 7. Safeguards that remain in force
@@ -400,6 +460,7 @@ Until then: lane **disabled**, D21 **DRAFT**, no agent run, no API call.
 
 ## 9. Changelog
 
+- 2026-09-21 — **v1.0. D21 ENACTED, the lane enabled, and the ONE authorised attempt made. The authorisation is now SPENT.** Recorded in full in §6.8. **Preflight passed before the call:** both gates green · 36/36 tests · build clean · `sandbox.jsonl` absent · `runtime.jsonl` baseline captured (sha256 `0295b173…`, 5 lines) · no concurrent arika invocation · the §6.4 JSON verified byte-identical to the reviewed brief and parsed through Node's own `JSON.parse`. **Two tests were corrected first, and this mattered:** with the lane enabled, the old *“refuses a disabled lane”* test would have **passed the gate and made a real API call of its own**; it now uses a non-approved agent so it can never reach the model. **Outcome:** exit 0 · **the replacement API key is VERIFIED BY USE**, closing the last open piece of the RD3 rotation · `registry_action` **`reject`** · approval flag `false` with a reason given · **SR-1, SR-2 and SR-3 all survived verbatim** and the evaluation-order rule was applied correctly, with **no eligibility asserted** · **no D20-barred content** (pricing words appear only as negations; no figures). **Isolation held:** `runtime.jsonl` **byte-unchanged**, `sandbox.jsonl` exactly **one line** carrying `classification: TEST_FIXTURE`, no other log created, nothing published. **Treated solely as mechanism evidence under D20** — `reject` is the gate working on a simulated unit, not an ICP, market or real-property finding, and authorises **no registry change**. No retry, no second invocation, no `.env` or key value read. `PILOT-H-001` and every PG gate unchanged. **The v0.1–v0.5 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.5. D21's storage claim corrected, and the authorisation redefined as ONE invocation attempt. Still DRAFT; lane still disabled.** **(1) The storage claim was false.** v0.3/v0.4's D21 said A001 *“enters no shared store”* while directing a write to `02_Offer/_memory/sandbox.jsonl` — which is **inside the git-tracked, auto-synced repository**. Verified: the path is **not gitignored**, **no `.gitignore` pattern** excludes `_memory` or `.jsonl`, a **`post-commit` auto-sync hook** exists, and history shows it committing that directory. The amendment now **explicitly permits exactly ONE shared fixture log entry**, committed and synced, and **withdraws the no-shared-store claim**. A separate, marked stream is **isolation, not absence from the repo** — the two were conflated. **Still barred:** the real runtime stream, the Sector store, the CRM, any registry change, and use as Offer evidence. **(2) The unit of authorisation is now an *attempt*, not a run** — one manual invocation attempt, authorised whether it succeeds or fails, with **no automatic retry** (a failure before the write spends the authorisation; retrying needs a fresh decision) and **no concurrent invocation**. **(3) The one-run safeguard is described honestly:** the destination-existence check guards against a **second completed write** and is **not proof that only one API attempt occurred** — a call failing before the write leaves no file, so the check would pass again. §6.6 also now records that **concurrency is not enforced** (`existsSync` and `appendFileSync` are separate steps — a TOCTOU race), making both **owner discipline** rather than code. **(4) Added §6.7:** the exact approval wording, marked as **not given**. **D20 and every PG gate are unchanged**, `PILOT-H-001` untouched, memory logs unchanged, no API call, no secret read, no agent run. **The v0.1–v0.4 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.4. Five pre-approval defects fixed in the prepared lane. Still disabled; D21 still DRAFT.** **(1) The brief now carries SR-1, SR-2 and SR-3 by name** — unresolvable group archetype (AG-4), central brand/reservations/direct-booking anti-ICP (Decision 71), and above every H-band — with the **group verdict kept in its own block** so `SIMULATED_VERDICT` cannot be misread as a fourth inherited rule. **(2) The command was wrong.** `cli.ts` runs `JSON.parse` on the raw `--input` argument and has **no `@file` support**, so v0.3's `--input @brief.json` would have failed outright. §6.4 now carries valid single-line JSON, a bash and a PowerShell form, and the JSON was verified through Python, through **Node's own `JSON.parse`**, and through the **compiled** guard — **without invoking the agent**. **(3) Destination validation was basename-only**, so `01_Sector/_memory/sandbox.jsonl`, an absolute path or a traversal would all have passed. The gate now demands the **exact** `02_Offer/_memory/sandbox.jsonl` and refuses absolute paths and `..` segments. **(4) The guard sat in `writeMemory`, which runs AFTER the model call** — so a disabled lane or a misdirected write would have cost a real API call to discover. `assertFixturePreconditions` now runs at the **top of `runAgent`, before any model call**, and covers direct executor callers; a test asserts the failure is the closed lane and **never** an `ANTHROPIC_API_KEY` error. Ordinary runs return from the gate immediately and are unchanged. **(5) Enforcement honesty (§6.6):** *offer-orchestrator only* and *exactly one run* were **procedure only** and are now **code-enforced** (agent pin; single-use via destination existence). *A001-P07 only* is code-enforced but by a **text check on a free-text string** — recorded as **weaker**, since it catches mistakes rather than a determined rewrite. *Output is not evidence* remains **procedure only**, and no code can change that. **36 tests, 36 pass.** One pre-existing lane test was updated because the stricter destination rule correctly rejected its throwaway path. Lane **disabled**, D21 **DRAFT**, memory logs **unchanged**, no API call, no agent run. **The v0.1–v0.3 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.3. The D17 omission corrected, D21 drafted, the first input rebuilt against the real contract, and the fixture lane implemented but left disabled.** **(1) D17 was missing from v0.2's bar list** — it forbids A001 from *“the Offer runtime … or any shared store”* by name, and `offer-orchestrator` **is** the Offer runtime. **R2/T1-5 and any change to D6 or D15 cannot override a ratification**; only a narrow amendment to D17 can. It now heads §3 as bar 0. **(2) The proposed input was wrong twice.** The spec declares `seed_brief` as a **single string**, so v0.2's *“archetype, destination and H-band”* fields would never have reached the agent — §6.4 now carries the flags and provenance **inside the string**. And v0.2 asserted the result would be `needs_more_seed_data`/`reject`; **the contract constrains no such thing**, so the expected outcome is now *not predicted* and all four enum values are treated as possible. **(3) A correction to my own v0.2 claim:** v0.2 said the queue's O1 row *“still reads as open”*. **It does not** — its final column has said **“Implemented 2026-09-16”** all along. I had truncated the row when reading it and never saw that column; the queue was accurate and needs no correction. **(4) Added §6.1:** the fail-closed fixture lane, written and tested — guard in both directions, filename-carried isolation, `FIXTURE_LANE_ENABLED = false`, tested on the **direct executor path and the CLI mapping**, with a test proving ordinary lines keep their exact key order. **28 tests, 28 pass.** **(5) Added §6.3:** **D21 drafted — NOT APPROVED**, and deliberately not written into the sandbox §5.1 decision table. Nothing enabled, nothing run; no API call, no memory log, no Drive or CRM record, no secret read; `PILOT-H-001` and every PG gate untouched. **The v0.1 and v0.2 entries below stand as written.** — Claude Code (Opus 5)

@@ -447,10 +447,12 @@ test("fixture: a direct executor call cannot smuggle a fixture into a real strea
   assert.equal(existsSync(file), false);
 });
 
-test("fixture: the lane is prepared but NOT enabled", () => {
-  assert.equal(FIXTURE_LANE_ENABLED, false);
+test("fixture: the lane switch gates the CLI mapping", () => {
+  // A001 D21 was enacted 2026-09-21, so the global switch is now on. The disabled
+  // path still exists and is exercised explicitly rather than via the global.
+  assert.equal(FIXTURE_LANE_ENABLED, true);
   assert.throws(
-    () => buildFixtureOptions({ fixture: true, memoryStream: sandboxPath() }),
+    () => buildFixtureOptions({ fixture: true, memoryStream: "02_Offer/_memory/sandbox.jsonl" }, false),
     /prepared but NOT enabled/,
   );
 });
@@ -503,15 +505,20 @@ test("fixture: absolute paths and traversals are refused", () => {
   assert.throws(() => assertApprovedFixtureStream("../02_Offer/_memory/sandbox.jsonl"), /traversal/);
 });
 
-test("fixture: the entry gate refuses a disabled lane BEFORE any model call", async () => {
-  // A prompt agent would need ANTHROPIC_API_KEY to reach the model. The gate must
-  // fire first, so the failure is the closed lane - never a key error.
-  const spec = { name: "offer-orchestrator", department: "02", execution: "prompt", risk_class: 1,
+test("fixture: the entry gate fires BEFORE any model call", async () => {
+  // A prompt agent needs ANTHROPIC_API_KEY to reach the model, so if the gate ran
+  // late the failure here would be a key error. It is not - it is the refused
+  // config, proving the gate runs first and costs no API call.
+  //
+  // A NON-approved agent is used deliberately: with the lane now enabled, an
+  // approved-agent spec would pass the gate and call the model for real. This
+  // test must never be able to do that.
+  const spec = { name: "sector-icp-fit", department: "01", execution: "prompt", risk_class: 1,
                  requires_human_approval: false, memory_stream: APPROVED, emits: [] };
   await assert.rejects(
     () => runAgent(spec, { trigger: "manual", input: { seed_brief: goodBrief },
                            fixture: true, memoryStreamOverride: APPROVED }),
-    (e) => /prepared but NOT enabled/.test(e.message) && !/ANTHROPIC_API_KEY/.test(e.message),
+    (e) => /not the approved agent/.test(e.message) && !/ANTHROPIC_API_KEY/.test(e.message),
   );
 });
 
