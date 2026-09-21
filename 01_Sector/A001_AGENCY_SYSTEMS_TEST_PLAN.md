@@ -2,7 +2,7 @@
 
 **Department:** Sector (01) — owns this record.
 **Status:** 🟡 **Planning only.** This plan approves, schedules and runs nothing. Every test needs its own owner decision.
-**Version:** v0.4 *(v0.1–v0.3 corrected 2026-09-21 — see §9)*
+**Version:** v0.5 *(v0.1–v0.4 corrected 2026-09-21 — see §9)*
 **Date:** 2026-09-21
 **Scope bound:** **D20 — mechanism findings only.** Nothing here may produce a market, demand, buyer, pricing, capacity or proof claim.
 
@@ -198,30 +198,63 @@ compiles clean. **No agent ran, no API was called, no memory log was written.**
 
 ### 6.3 Proposed decision — **D21, DRAFT. NOT APPROVED.**
 
-> 🔴 **This is a draft for the owner to accept, amend or reject. It is recorded here as a
-> proposal only and is deliberately *not* written into the sandbox record's §5.1 decision
-> table, because doing so would read as enacted.**
+> 🔴 **A draft for the owner to accept, amend or reject. Deliberately *not* written into
+> the sandbox record's §5.1 decision table, because that would read as enacted.**
 
-**D21 — A001 `TEST_FIXTURE` mechanism lane: one run.**
+**D21 — A001 `TEST_FIXTURE` mechanism lane: one invocation attempt.**
 
-1. **Permits exactly ONE run** of `offer-orchestrator` carrying `A001-P07`, through the
-   `TEST_FIXTURE` lane, writing **one marked line** to `02_Offer/_memory/sandbox.jsonl`.
-2. **Amends D17 narrowly.** A001 may enter the **Offer runtime** *only* through the
-   `TEST_FIXTURE` lane. Its output is **not offer evidence**, **not a prospect or CRM record**,
-   and **enters no shared store, Sector store or CRM**. Every other part of D17 stands, including
-   A001's non-prospect status.
-3. **Supersedes D15 for this one run only.** Document-only remains the default for all other A001
-   work.
-4. **Amends D6 to un-defer T1-5 only** (the sandbox stream). **T1-4 stays deferred**, so **no
-   skill run** is permitted.
-5. **D18 and D20 are unchanged and still bind:** the slice stays `A001-P07` only, and the output
-   may improve mechanisms only — never market, demand, buyer, pricing, capacity or proof.
-6. **Confers nothing else.** No Offer eligibility, **no registry change whatever `registry_action`
-   returns**, no group ID, no change to `PILOT-H-001` or any PG gate.
-7. **Expires on completion of that single run.** A second run needs a new decision.
+**1. What is authorised.** **ONE manual invocation attempt** of `offer-orchestrator`, carrying the
+exact approved `seed_brief` in §6.4, through the `TEST_FIXTURE` lane, writing **at most one
+line** to `02_Offer/_memory/sandbox.jsonl`.
 
-**Also required, separately:** approval to **verify the replacement API key by use** — itself
-a runtime call — and approval of the exact input in §6.4.
+- **No automatic retry.** If the API call fails **before a log line is written**, the
+  authorisation is **spent**. A retry needs a **fresh owner decision**.
+- **No concurrent invocation.** One attempt, by hand, at a time.
+- The attempt is authorised whether it **succeeds or fails**. Expiry is by attempt, not by outcome.
+
+**2. Narrow D17 amendment — storage, stated accurately.**
+
+> ⚠️ **Corrected in v0.5.** v0.3/v0.4 claimed A001 *"enters no shared store"*. **That was
+> false.** `02_Offer/_memory/sandbox.jsonl` is a **separate, marked fixture stream**, but it sits
+> **inside the git-tracked, auto-synced repository** — it is not gitignored, no `.gitignore`
+> pattern excludes `_memory` or `.jsonl`, and a `post-commit` auto-sync hook has committed that
+> directory before. **The line will be committed to `master` and synced.**
+
+This amendment therefore **explicitly permits exactly ONE shared fixture log entry**: one marked
+line, in one named file, created and committed. It makes **no claim** that A001 stays out of
+shared storage — it does not.
+
+**Still barred, unchanged:**
+
+- the **real runtime stream** — `02_Offer/_memory/runtime.jsonl` and every other department's;
+- the **Sector store**;
+- the **CRM**;
+- **any registry change**, whatever `registry_action` returns;
+- **use as Offer evidence**, or as evidence about any market, property or buyer.
+
+**3.** Supersedes **D15** for this one attempt only. Document-only remains the default for all
+other A001 work.
+
+**4.** Amends **D6** to un-defer **T1-5 only** (the sandbox stream). **T1-4 stays deferred**, so
+**no skill run** is permitted.
+
+**5.** **D18 and D20 are unchanged and still bind:** the slice stays `A001-P07` only, and the
+output may improve **mechanisms only** — never market, demand, buyer, pricing, capacity or
+proof.
+
+**6. Confers nothing else.** No Offer eligibility, no registry change, no group ID, no change to
+`PILOT-H-001` or any PG gate.
+
+**7. Expires on that single attempt**, completed or failed.
+
+> ⚠️ **On the one-run safeguard, stated honestly.** The code refuses to run when
+> `02_Offer/_memory/sandbox.jsonl` already exists. That is a safeguard against a **second
+> completed write**. It is **not proof that only one API attempt occurred** — an attempt that
+> fails before the write leaves no file behind, so the check would pass again. **Counting
+> attempts is the owner's discipline, not the code's.**
+
+**Also required, separately:** approval to **verify the replacement API key by use** — which
+this same single attempt would do.
 
 ### 6.4 First runtime test — input verified against the actual contract
 
@@ -312,7 +345,10 @@ No decision needed beyond a nod; none writes anything:
 | **Only `02_Offer/_memory/sandbox.jsonl`** | ✅ **Code** — exact-path match; absolute paths, traversals and other departments' `sandbox.jsonl` all refused | Strong |
 | **Ordinary runs never touch the lane** | ✅ **Code** — an ordinary run writing to any `sandbox.jsonl` throws | Strong |
 | **`offer-orchestrator` only** | ✅ **Code** — agent-name pin at the gate *(was procedure-only before v0.4)* | Strong |
-| **Exactly one run** | ✅ **Code** — single-use: the lane refuses if the destination already exists *(was procedure-only before v0.4)* | Good. **Deleting the file re-arms it** — deliberate, and visible in git history |
+| **Exactly one completed write** | ✅ **Code** — the lane refuses if the destination already exists | Good. **Deleting the file re-arms it** — deliberate, and visible in git history |
+| **Exactly one API attempt** | ❌ **Not enforced** — a call that fails before the write leaves **no file**, so the existence check passes again | **Owner discipline.** File-existence proves at most one *completed write*, **never how many attempts were made** |
+| **No concurrent invocation** | ❌ **Not enforced** — `existsSync` and `appendFileSync` are separate steps, so two parallel invocations could both pass the check (a TOCTOU race) | **Owner discipline.** Run it by hand, once |
+| **A001 enters no shared store** | ❌ **Claim withdrawn (v0.5)** — the sandbox stream is inside the **git-tracked, auto-synced** repo | D21 §2 permits **exactly one** such entry and says so plainly |
 | **`A001-P07` only** | ⚠️ **Code, but a text check** — requires the `TEST_FIXTURE` marker and the unit ID; rejects any other `A001-Pnn` and any real `PILOT-H-` ID | **Weaker.** `seed_brief` is free text, so this catches mistakes, **not** a determined rewrite, and cannot verify the descriptors are truthful |
 | **Output is not evidence (D20)** | ❌ **Procedure only** | No code can stop a human citing a line as market evidence. This stays a reading discipline |
 | **Master switch on direct `finalizeRun` calls** | ⚠️ **Partial** | The switch sits at `runAgent`. A caller reaching `finalizeRun` directly bypasses it — but makes **no API call** and still cannot escape the sandbox guard |
@@ -321,6 +357,20 @@ No decision needed beyond a nod; none writes anything:
 approved destination already exists. It needs no counter, no state file and cannot drift. **Pair
 it with committing that file immediately after the run**, so the auto-sync hook puts re-arming on
 the record rather than leaving it silent.
+
+### 6.7 The exact approval statement required
+
+Nothing runs until the owner gives this, in writing. **It is reproduced here as the wording
+needed — it has not been given.**
+
+> I approve A001 decision **D21** as drafted in `A001_AGENCY_SYSTEMS_TEST_PLAN.md` §6.3:
+> enact D21, enable the `TEST_FIXTURE` lane, and authorise **ONE manual invocation attempt** of
+> `offer-orchestrator` with the exact approved `A001-P07` `seed_brief` in §6.4, writing at
+> most one marked line to `02_Offer/_memory/sandbox.jsonl` — **which I accept will be
+> committed to the repository**. I also approve **verifying the replacement API key by use** as
+> part of that same single attempt. **No retry without a fresh decision.**
+
+Until then: lane **disabled**, D21 **DRAFT**, no agent run, no API call.
 
 ---
 
@@ -350,6 +400,7 @@ the record rather than leaving it silent.
 
 ## 9. Changelog
 
+- 2026-09-21 — **v0.5. D21's storage claim corrected, and the authorisation redefined as ONE invocation attempt. Still DRAFT; lane still disabled.** **(1) The storage claim was false.** v0.3/v0.4's D21 said A001 *“enters no shared store”* while directing a write to `02_Offer/_memory/sandbox.jsonl` — which is **inside the git-tracked, auto-synced repository**. Verified: the path is **not gitignored**, **no `.gitignore` pattern** excludes `_memory` or `.jsonl`, a **`post-commit` auto-sync hook** exists, and history shows it committing that directory. The amendment now **explicitly permits exactly ONE shared fixture log entry**, committed and synced, and **withdraws the no-shared-store claim**. A separate, marked stream is **isolation, not absence from the repo** — the two were conflated. **Still barred:** the real runtime stream, the Sector store, the CRM, any registry change, and use as Offer evidence. **(2) The unit of authorisation is now an *attempt*, not a run** — one manual invocation attempt, authorised whether it succeeds or fails, with **no automatic retry** (a failure before the write spends the authorisation; retrying needs a fresh decision) and **no concurrent invocation**. **(3) The one-run safeguard is described honestly:** the destination-existence check guards against a **second completed write** and is **not proof that only one API attempt occurred** — a call failing before the write leaves no file, so the check would pass again. §6.6 also now records that **concurrency is not enforced** (`existsSync` and `appendFileSync` are separate steps — a TOCTOU race), making both **owner discipline** rather than code. **(4) Added §6.7:** the exact approval wording, marked as **not given**. **D20 and every PG gate are unchanged**, `PILOT-H-001` untouched, memory logs unchanged, no API call, no secret read, no agent run. **The v0.1–v0.4 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.4. Five pre-approval defects fixed in the prepared lane. Still disabled; D21 still DRAFT.** **(1) The brief now carries SR-1, SR-2 and SR-3 by name** — unresolvable group archetype (AG-4), central brand/reservations/direct-booking anti-ICP (Decision 71), and above every H-band — with the **group verdict kept in its own block** so `SIMULATED_VERDICT` cannot be misread as a fourth inherited rule. **(2) The command was wrong.** `cli.ts` runs `JSON.parse` on the raw `--input` argument and has **no `@file` support**, so v0.3's `--input @brief.json` would have failed outright. §6.4 now carries valid single-line JSON, a bash and a PowerShell form, and the JSON was verified through Python, through **Node's own `JSON.parse`**, and through the **compiled** guard — **without invoking the agent**. **(3) Destination validation was basename-only**, so `01_Sector/_memory/sandbox.jsonl`, an absolute path or a traversal would all have passed. The gate now demands the **exact** `02_Offer/_memory/sandbox.jsonl` and refuses absolute paths and `..` segments. **(4) The guard sat in `writeMemory`, which runs AFTER the model call** — so a disabled lane or a misdirected write would have cost a real API call to discover. `assertFixturePreconditions` now runs at the **top of `runAgent`, before any model call**, and covers direct executor callers; a test asserts the failure is the closed lane and **never** an `ANTHROPIC_API_KEY` error. Ordinary runs return from the gate immediately and are unchanged. **(5) Enforcement honesty (§6.6):** *offer-orchestrator only* and *exactly one run* were **procedure only** and are now **code-enforced** (agent pin; single-use via destination existence). *A001-P07 only* is code-enforced but by a **text check on a free-text string** — recorded as **weaker**, since it catches mistakes rather than a determined rewrite. *Output is not evidence* remains **procedure only**, and no code can change that. **36 tests, 36 pass.** One pre-existing lane test was updated because the stricter destination rule correctly rejected its throwaway path. Lane **disabled**, D21 **DRAFT**, memory logs **unchanged**, no API call, no agent run. **The v0.1–v0.3 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.3. The D17 omission corrected, D21 drafted, the first input rebuilt against the real contract, and the fixture lane implemented but left disabled.** **(1) D17 was missing from v0.2's bar list** — it forbids A001 from *“the Offer runtime … or any shared store”* by name, and `offer-orchestrator` **is** the Offer runtime. **R2/T1-5 and any change to D6 or D15 cannot override a ratification**; only a narrow amendment to D17 can. It now heads §3 as bar 0. **(2) The proposed input was wrong twice.** The spec declares `seed_brief` as a **single string**, so v0.2's *“archetype, destination and H-band”* fields would never have reached the agent — §6.4 now carries the flags and provenance **inside the string**. And v0.2 asserted the result would be `needs_more_seed_data`/`reject`; **the contract constrains no such thing**, so the expected outcome is now *not predicted* and all four enum values are treated as possible. **(3) A correction to my own v0.2 claim:** v0.2 said the queue's O1 row *“still reads as open”*. **It does not** — its final column has said **“Implemented 2026-09-16”** all along. I had truncated the row when reading it and never saw that column; the queue was accurate and needs no correction. **(4) Added §6.1:** the fail-closed fixture lane, written and tested — guard in both directions, filename-carried isolation, `FIXTURE_LANE_ENABLED = false`, tested on the **direct executor path and the CLI mapping**, with a test proving ordinary lines keep their exact key order. **28 tests, 28 pass.** **(5) Added §6.3:** **D21 drafted — NOT APPROVED**, and deliberately not written into the sandbox §5.1 decision table. Nothing enabled, nothing run; no API call, no memory log, no Drive or CRM record, no secret read; `PILOT-H-001` and every PG gate untouched. **The v0.1 and v0.2 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.2. Audited against D6, D15, D17, D18 and D20; three factual errors in v0.1 corrected.** **(1) S-1 duplicated work already done** — queue item **O1 was implemented 2026-09-16**, as the evaluation-order rule in `A001_DOCUMENT_ONLY_PILOT_CLOSEOUT.md` §2 with the `OFFER_OS.md` §15 pointer. The queue row was never marked done, which is what v0.1 misread; the implementation was there all along. S-1 is **withdrawn** and replaced by **S-1a**, a read-only verification that the rule is present and still bounded to evaluation order. **(2) S-1 contradicted its own “zero writes” column** — it was filed document-only with *writes: none* while proposing to record a sentence in a git-tracked file. §5 now states plainly that a recorded sentence **is** a write and needs its own approval. **(3) The blockers were mis-attributed.** v0.1 named R2/R3 as what blocks runtime testing. The governing bar is **D15**, which forbids *“`arika run`, agent, skill, scheduler or event activity”* for A001 Phase 3 in those exact terms, and **D6**, which keeps the R2 build itself deferred. **R2 alone could never authorise an A001 agent or skill run** — it is a precondition that matters only after the owner changes D15 and D6. §3 and §5 are rewritten accordingly. **Added §6:** the smallest path to a live `TEST_FIXTURE` lane — feasible, four code touches, fail-closed, with a distinct `sandbox.jsonl` filename so isolation survives a careless read; plus the record changes, the five owner decisions, one concrete first runtime test, and the non-runtime checks available now. **The v0.1 entry below stands as written.** Nothing was implemented or run; no agent, skill, API or connector called; no memory log, Drive file or CRM record created; no secret read; the Full Push Readiness Packet and its PG gates untouched. — Claude Code (Opus 5)
