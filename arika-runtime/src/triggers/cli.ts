@@ -5,6 +5,7 @@ import { Command } from "commander";
 import { config as loadEnv } from "dotenv";
 import { loadAgents } from "../agent-registry.js";
 import { runAgent } from "../executor.js";
+import { buildFixtureOptions } from "../fixture.js";
 import { packageRoot, repoRoot } from "../paths.js";
 
 loadEnv({ path: join(packageRoot, ".env") });
@@ -35,7 +36,9 @@ program
   .command("run <name>")
   .description("Run one agent once with JSON input")
   .option("--input <json>", "JSON input for the agent", "{}")
-  .action(async (name: string, opts: { input: string }) => {
+  .option("--fixture", "TEST_FIXTURE lane — simulation only; refused until the owner enables it")
+  .option("--memory-stream <path>", "sandbox.jsonl destination; requires --fixture")
+  .action(async (name: string, opts: { input: string; fixture?: boolean; memoryStream?: string }) => {
     const { agents } = loadAgents();
     const spec = agents.get(name);
     if (!spec) {
@@ -51,7 +54,11 @@ program
       return;
     }
     try {
-      const result = await runAgent(spec, { trigger: "manual", input });
+      const fixtureOpts = buildFixtureOptions({
+        fixture: opts.fixture,
+        memoryStream: opts.memoryStream,
+      });
+      const result = await runAgent(spec, { trigger: "manual", input, ...fixtureOpts });
       console.log(JSON.stringify(result, null, 2));
     } catch (err) {
       console.error(`Run failed: ${(err as Error).message}`);

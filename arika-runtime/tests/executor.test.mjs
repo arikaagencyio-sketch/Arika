@@ -2,13 +2,20 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { readFileSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, rmSync } from "node:fs";
 
 import { requiresHumanApproval, classToLevel, levelToClass } from "../dist/governance.js";
 import { frontmatterSchema, MAX_NONSTREAMING_TOKENS } from "../dist/spec-schema.js";
 import { DEFAULT_MAX_TOKENS, finalizeRun, parseStructuredOutput } from "../dist/executor.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
+import {
+  assertStreamMatchesMode,
+  buildFixtureOptions,
+  FIXTURE_CLASSIFICATION,
+  FIXTURE_LANE_ENABLED,
+  isSandboxStream,
+} from "../dist/fixture.js";
 import { EventBus } from "../dist/triggers/event-bus.js";
 import { JoinGate } from "../dist/triggers/join-gate.js";
 
@@ -329,4 +336,138 @@ test("approval: risk class 3+ forces sign-off even when the agent says false", (
     assert.equal(result.requiresHumanApproval, true, `class ${riskClass} must force approval`);
     assert.equal(logged.payload.requiresHumanApproval, true);
   }
+});
+
+// ---------------------------------------------------------------------------
+// TEST_FIXTURE lane (fixture.ts). Prepared, not enabled — these tests exercise
+// the guard and the CLI mapping without running an agent or calling an API.
+// ---------------------------------------------------------------------------
+
+const sandboxPath = () =>
+  join(tmpdir(), `arika-fx-${process.pid}-${Math.random().toString(36).slice(2)}`, "sandbox.jsonl");
+const realPath = () =>
+  join(tmpdir(), `arika-real-${process.pid}-${Math.random().toString(36).slice(2)}`, "runtime.jsonl");
+
+const fxEntry = {
+  trigger: "manual",
+  input: { seed_brief: "TEST_FIXTURE" },
+  recommendation: { summary: "ok" },
+  requiresHumanApproval: false,
+  riskClass: 1,
+};
+
+test("fixture: an ordinary line is unchanged — no classification key, same key order", () => {
+  const file = realPath();
+  const spec = { name: "t-agent", department: "02", memory_stream: file };
+  writeMemory(spec, fxEntry);
+  const line = JSON.parse(readFileSync(file, "utf8").trim());
+  assert.equal(line.classification, undefined);
+  assert.deepEqual(Object.keys(line), [
+    "timestamp",
+    "agent",
+    "department",
+    "stream",
+    "event_type",
+    "source",
+    "payload",
+  ]);
+  rmSync(file, { force: true });
+});
+
+test("fixture: a fixture run writes to the sandbox stream and is marked TEST_FIXTURE", () => {
+  const file = sandboxPath();
+  const spec = { name: "t-agent", department: "02", memory_stream: realPath() };
+  const path = writeMemory(spec, fxEntry, { fixture: true, memoryStreamOverride: file });
+  assert.equal(path, file);
+  const line = JSON.parse(readFileSync(file, "utf8").trim());
+  assert.equal(line.classification, FIXTURE_CLASSIFICATION);
+  assert.equal(line.stream, "sandbox");
+  rmSync(file, { force: true });
+});
+
+test("fixture: a fixture run aimed at a real stream throws and writes nothing", () => {
+  const file = realPath();
+  const spec = { name: "t-agent", department: "02", memory_stream: file };
+  assert.throws(
+    () => writeMemory(spec, fxEntry, { fixture: true }),
+    (e) => /fixture run refused/.test(e.message) && /Nothing was written/.test(e.message),
+  );
+  assert.equal(existsSync(file), false);
+});
+
+test("fixture: an ordinary run aimed at a sandbox stream throws and writes nothing", () => {
+  const file = sandboxPath();
+  const spec = { name: "t-agent", department: "02", memory_stream: file };
+  assert.throws(
+    () => writeMemory(spec, fxEntry),
+    (e) => /ordinary run refused/.test(e.message) && /Nothing was written/.test(e.message),
+  );
+  assert.equal(existsSync(file), false);
+});
+
+test("fixture: the direct executor path honours the lane, not just the CLI", () => {
+  const file = sandboxPath();
+  const spec = {
+    name: "t-offer",
+    department: "02",
+    execution: "prompt",
+    risk_class: 1,
+    requires_human_approval: false,
+    memory_stream: realPath(),
+    emits: [],
+  };
+  const result = finalizeRun(
+    spec,
+    { trigger: "manual", input: {}, fixture: true, memoryStreamOverride: file },
+    { summary: "structural only" },
+  );
+  assert.equal(result.memoryPath, file);
+  const line = JSON.parse(readFileSync(file, "utf8").trim());
+  assert.equal(line.classification, FIXTURE_CLASSIFICATION);
+  rmSync(file, { force: true });
+});
+
+test("fixture: a direct executor call cannot smuggle a fixture into a real stream", () => {
+  const file = realPath();
+  const spec = {
+    name: "t-offer",
+    department: "02",
+    execution: "prompt",
+    risk_class: 1,
+    requires_human_approval: false,
+    memory_stream: file,
+    emits: [],
+  };
+  assert.throws(
+    () => finalizeRun(spec, { trigger: "manual", input: {}, fixture: true }, { summary: "x" }),
+    /fixture run refused/,
+  );
+  assert.equal(existsSync(file), false);
+});
+
+test("fixture: the lane is prepared but NOT enabled", () => {
+  assert.equal(FIXTURE_LANE_ENABLED, false);
+  assert.throws(
+    () => buildFixtureOptions({ fixture: true, memoryStream: sandboxPath() }),
+    /prepared but NOT enabled/,
+  );
+});
+
+test("fixture: CLI option mapping is fail-closed", () => {
+  // Ordinary invocation stays empty, so nothing reaches the run context.
+  assert.deepEqual(buildFixtureOptions({}), {});
+  // A stream without the flag is refused rather than silently honoured.
+  assert.throws(() => buildFixtureOptions({ memoryStream: sandboxPath() }), /requires --fixture/);
+  // With the lane enabled, --fixture still demands an explicit destination.
+  assert.throws(() => buildFixtureOptions({ fixture: true }, true), /requires --memory-stream/);
+  const opts = buildFixtureOptions({ fixture: true, memoryStream: "x/sandbox.jsonl" }, true);
+  assert.deepEqual(opts, { fixture: true, memoryStreamOverride: "x/sandbox.jsonl" });
+});
+
+test("fixture: sandbox streams are identified by filename, on both separators", () => {
+  assert.equal(isSandboxStream("02_Offer/_memory/sandbox.jsonl"), true);
+  assert.equal(isSandboxStream(String.raw`02_Offer\_memory\sandbox.jsonl`), true);
+  assert.equal(isSandboxStream("02_Offer/_memory/runtime.jsonl"), false);
+  assert.throws(() => assertStreamMatchesMode("a/runtime.jsonl", true), /fixture run refused/);
+  assert.throws(() => assertStreamMatchesMode("a/sandbox.jsonl", false), /ordinary run refused/);
 });

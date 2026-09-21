@@ -12,6 +12,13 @@ export interface RunContext {
   input?: Record<string, unknown>;
   eventType?: string;
   recentContext?: string[];
+  /**
+   * TEST_FIXTURE lane (fixture.ts). Absent on every ordinary run, which keeps
+   * the memory line byte-identical to its pre-lane shape. Set only by an
+   * explicitly enabled `--fixture` invocation.
+   */
+  fixture?: boolean;
+  memoryStreamOverride?: string;
 }
 
 export interface RunResult {
@@ -79,13 +86,17 @@ export function finalizeRun(
     agentRequestsApproval(recommendation),
   );
 
-  const memoryPath = writeMemory(spec, {
-    trigger: ctx.trigger,
-    input: ctx.input ?? null,
-    recommendation,
-    requiresHumanApproval: humanGate,
-    riskClass: spec.risk_class,
-  });
+  const memoryPath = writeMemory(
+    spec,
+    {
+      trigger: ctx.trigger,
+      input: ctx.input ?? null,
+      recommendation,
+      requiresHumanApproval: humanGate,
+      riskClass: spec.risk_class,
+    },
+    { fixture: ctx.fixture, memoryStreamOverride: ctx.memoryStreamOverride },
+  );
 
   return {
     agent: spec.name,

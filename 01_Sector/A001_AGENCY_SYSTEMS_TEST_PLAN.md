@@ -2,7 +2,7 @@
 
 **Department:** Sector (01) — owns this record.
 **Status:** 🟡 **Planning only.** This plan approves, schedules and runs nothing. Every test needs its own owner decision.
-**Version:** v0.2 *(v0.1 corrected 2026-09-21 — see §9)*
+**Version:** v0.3 *(v0.1 and v0.2 corrected 2026-09-21 — see §9)*
 **Date:** 2026-09-21
 **Scope bound:** **D20 — mechanism findings only.** Nothing here may produce a market, demand, buyer, pricing, capacity or proof claim.
 
@@ -48,15 +48,18 @@ Read from source on 2026-09-21. These facts constrain the whole matrix.
 
 | # | Bar | What it says | Can a build lift it? |
 |---|---|---|---|
+| **0** | **D17 — A001 ratification** | *"It may not enter the **Offer runtime**, the Sector store, the CRM or any shared store"* — and `offer-orchestrator` **is** the Offer runtime | ❌ **No.** R2/T1-5, and any change to D6 or D15, **cannot override D17** — only an explicit, narrow amendment to D17 itself |
 | **1** | **D15 (B1) — Phase 3 run mode** | *"No-runtime, document-only first … **No `arika run`, agent, skill, scheduler or event activity, and no runtime memory write**."* | ❌ **No.** Only a new owner decision superseding D15 |
 | **2** | **D6 — Tier-1 deferred** | T1-1…T1-5 are deferred, and **R2 *is* T1-5** | ❌ **No.** Building R2 requires amending D6 first |
 | **3** | **R2 (AG-12 / T1-5)** | No sandbox memory stream or marker exists | Necessary, **not sufficient** |
 | **4** | **R3 (AG-13 / T1-4)** | No sandbox marker in skill execution records | Necessary for **skill** runs, not sufficient |
 | **5** | **Replacement API key unverified by use** | Rotation is owner-attested; validity is not proven | Necessary, **not sufficient** |
 
-> 🔴 **R2 alone could never authorise an A001 agent or skill run.** D15 bars run-mode
-> activity outright and says so in those exact terms; D6 keeps the build itself deferred. R2 and
-> R3 are **preconditions that become relevant only after** D15 and D6 are changed by the owner.
+> 🔴 **R2 alone could never authorise an A001 agent or skill run** — and neither could D6
+> and D15 together. **D17 is the binding one**: it bars A001 from **the Offer runtime** by name,
+> and a run through `offer-orchestrator` is exactly that. A build cannot lift a ratification.
+>
+> ⚠️ **v0.2 omitted D17 entirely.** Corrected here.
 
 **Why isolation still matters.** Once D15 and D6 are lifted, the write behaviour in §2 takes
 over: a run would put an **unmarked** line into the **shared** department stream,
@@ -146,21 +149,42 @@ S-1a · S-2 · S-3 · O-1 · O-2 · C-1 · M-1 · SA-1 · G-1
 **A separate `TEST_FIXTURE` runtime lane is feasible.** It is a small, contained change —
 the obstacle is decision-order, not engineering.
 
-### 6.1 Minimum code changes
+### 6.1 Fixture isolation — PREPARED, NOT ENABLED
+
+Written and tested 2026-09-21. **`FIXTURE_LANE_ENABLED = false`**, so `--fixture` is refused and
+the lane cannot run until the owner enacts a decision.
 
 | File | Change |
 |---|---|
-| `arika-runtime/src/executor.ts` | Add `fixture?: boolean` and `memoryStreamOverride?: string` to `RunContext`; pass both into `finalizeRun()` |
-| `arika-runtime/src/memory-writer.ts` | Honour the override; stamp `classification: "TEST_FIXTURE"` into the envelope; **fail closed** — if `fixture` is set and the resolved path is not a sandbox stream, **throw and write nothing** |
-| `arika-runtime/src/triggers/cli.ts` | Add `--fixture` to `arika run` |
-| `arika-runtime/tests/*.test.mjs` | Four assertions: a fixture run writes **only** to the sandbox path · the envelope carries the marker · a fixture run aimed at a real stream **throws** · a normal run is byte-identical to today |
+| `arika-runtime/src/fixture.ts` | **New.** The master switch, `SANDBOX_BASENAME`, the `TEST_FIXTURE` marker, the fail-closed guard, and the CLI mapping |
+| `arika-runtime/src/memory-writer.ts` | Optional `FixtureOptions`; guard runs **before** any `mkdir` or write; stamps `classification` only in fixture mode |
+| `arika-runtime/src/executor.ts` | `RunContext` gains `fixture?` / `memoryStreamOverride?`, passed through `finalizeRun()` |
+| `arika-runtime/src/triggers/cli.ts` | `--fixture` and `--memory-stream`, mapped through `buildFixtureOptions()` |
+| `arika-runtime/tests/executor.test.mjs` | **9 new tests** |
 
-**Stream naming:** `<dept>/_memory/sandbox.jsonl` — never `runtime.jsonl`. A distinct
-filename means isolation survives a careless `cat`, a grep, or a future reader who does not know
-the marker exists.
+**Fail-closed in both directions** — this is the property that matters:
 
-**Skill runs (R3) are a separate, later change** to the `skill_runs.jsonl` payload. Keeping skills
-out of the first lane makes the first decision smaller.
+- a **fixture** run may write **only** to a `sandbox.jsonl` stream; anything else **throws before
+  writing**;
+- an **ordinary** run may **never** write to a `sandbox.jsonl` stream; it throws too.
+
+So a real run cannot pollute the fixture lane, and a fixture cannot leak into a real one.
+Isolation is carried by the **filename**, not a flag inside the line, so it survives a plain
+`cat`, a `grep`, or a reader who has never heard of the marker.
+
+**Proof ordinary runs are unchanged:** a test asserts an ordinary line still has **no
+`classification` key** and the **exact previous key order**
+(`timestamp, agent, department, stream, event_type, source, payload`). The fixture key is spread
+in conditionally, so with no options the serialized line is byte-identical to its pre-lane shape.
+
+**Tested on both entry paths**, as required: `finalizeRun()` **directly** (including that a direct
+call cannot smuggle a fixture into a real stream) and the **CLI mapping** via `buildFixtureOptions`
+— tested as a separate module because `cli.ts` parses argv on import.
+
+**Result: 28 tests, 28 pass, 0 fail** (19 pre-existing, unchanged, plus 9 new). `npm run build`
+compiles clean. **No agent ran, no API was called, no memory log was written.**
+
+**Skill runs (R3 / T1-4) are deliberately out of scope**, which keeps the first decision smaller.
 
 ### 6.2 Minimum record changes
 
@@ -172,29 +196,81 @@ out of the first lane makes the first decision smaller.
 - **`TECHSTACK_OS.md` §3** — register the lane once verified live.
 - **This plan** — re-audit the matrix against the new decisions.
 
-### 6.3 Owner decisions required before the first run
+### 6.3 Proposed decision — **D21, DRAFT. NOT APPROVED.**
 
-1. **Supersede D15** for a bounded `TEST_FIXTURE` lane — A001 only.
-2. **Amend D6** to un-defer **T1-5** (the memory stream). T1-4 stays deferred unless skills are in scope.
-3. **Approve verifying the replacement API key by use** — itself a runtime call.
-4. **Approve the fail-closed rule**: a fixture run may never write to a real-pilot stream.
-5. **Approve the specific first test and its exact input** (§6.4).
+> 🔴 **This is a draft for the owner to accept, amend or reject. It is recorded here as a
+> proposal only and is deliberately *not* written into the sandbox record's §5.1 decision
+> table, because doing so would read as enacted.**
 
-**None of these is granted by D16's closure.** The credential condition being met authorised no
-A001 runtime work, and still does not.
+**D21 — A001 `TEST_FIXTURE` mechanism lane: one run.**
 
-### 6.4 One concrete first runtime test — for approval **after** isolation exists
+1. **Permits exactly ONE run** of `offer-orchestrator` carrying `A001-P07`, through the
+   `TEST_FIXTURE` lane, writing **one marked line** to `02_Offer/_memory/sandbox.jsonl`.
+2. **Amends D17 narrowly.** A001 may enter the **Offer runtime** *only* through the
+   `TEST_FIXTURE` lane. Its output is **not offer evidence**, **not a prospect or CRM record**,
+   and **enters no shared store, Sector store or CRM**. Every other part of D17 stands, including
+   A001's non-prospect status.
+3. **Supersedes D15 for this one run only.** Document-only remains the default for all other A001
+   work.
+4. **Amends D6 to un-defer T1-5 only** (the sandbox stream). **T1-4 stays deferred**, so **no
+   skill run** is permitted.
+5. **D18 and D20 are unchanged and still bind:** the slice stays `A001-P07` only, and the output
+   may improve mechanisms only — never market, demand, buyer, pricing, capacity or proof.
+6. **Confers nothing else.** No Offer eligibility, **no registry change whatever `registry_action`
+   returns**, no group ID, no change to `PILOT-H-001` or any PG gate.
+7. **Expires on completion of that single run.** A second run needs a new decision.
+
+**Also required, separately:** approval to **verify the replacement API key by use** — itself
+a runtime call — and approval of the exact input in §6.4.
+
+### 6.4 First runtime test — input verified against the actual contract
+
+> ⚠️ **Corrected in v0.3.** v0.2 proposed *"pilot ID, archetype, destination and
+> H-band"* as if they were structured fields, and asserted the result would be
+> `needs_more_seed_data` / `reject`. **Both were wrong.** The spec declares
+> **`inputs: seed_brief: { type: string }`** — a **single string**, no other field — so
+> the group flags and provenance must be carried **inside that string** or they do not reach the
+> agent at all. And **nothing in the contract constrains the outcome**: `registry_action` is an
+> enum of four values chosen by the model, so predicting one would be inventing evidence.
+
+**Verified from the spec:** `execution: prompt` · `risk_class: 1` ·
+`requires_human_approval: false` · `memory_stream: 02_Offer/_memory/runtime.jsonl` (the lane
+overrides this) · `emits: [OFFER_BRIEF_RECEIVED]`. **The manual CLI path never publishes** —
+`cli.ts` calls `runAgent` directly with no event bus, so `emitted` is returned and nothing is
+announced. Verified in source, not assumed.
+
+**Exact proposed input** — no secrets, no real property name, no price, no private data:
+
+```json
+{
+  "seed_brief": "TEST_FIXTURE — SIMULATED SANDBOX UNIT. Not a prospect, not a client, not a CRM record, not market evidence (A001 D17, D20).
+Unit: A001-P07. Group: A001 (internal simulation group).
+PROVENANCE: every value below is SIMULATED and was authored to exercise mechanisms. None is sourced from a market, a real property or a buyer. No volume of it becomes evidence.
+INHERITED GROUP FLAGS — carried from A001, never suppressed at unit level:
+  1. Central brand and direct-booking team — an anti-ICP marker (Decision 71), treated as disqualifying.
+  2. The group sits above every size band — no band in the current model describes it.
+  3. The group verdict is recorded as SIMULATED_VERDICT: outside the current offer ICP, by design.
+EVALUATION-ORDER RULE: inherited group flags are not suppressed at unit level, so unit-level passes do not imply eligibility.
+UNIT-LEVEL SIMULATED DESCRIPTORS: archetype Tented Camp, inheriting Safari Lodge; destination Maasai Mara (DB 16, profiled); size band H2; no unit-level stop rule fired.
+SCOPE: structural and mechanism test only. NON-PRICING — no price, rate, floor, band, commission or cost figure is supplied, implied or requested.
+REGISTRY: this run authorises no registry change, whatever registry_action is returned."
+}
+```
+
+**Command (after approval and enabling only):**
+`arika run offer-orchestrator --fixture --memory-stream 02_Offer/_memory/sandbox.jsonl --input @brief.json`
 
 | | |
 |---|---|
-| **Component** | `offer-orchestrator` · `arika run offer-orchestrator --fixture` |
-| **Input** | `A001-P07` **pilot ID only**, plus the archetype, destination profile and H-band already recorded in the sandbox record. **Explicitly non-pricing.** No real property name — A001-P07 *is* a simulated unit |
-| **Mechanism** | Seed-sufficiency routing, and that the **group flags reach the orchestrator** |
-| **Expected** | **`needs_more_seed_data`** or **`reject`** — a **stop is the pass**. Phase 11 **BLOCKED**; `add_new_offer` / `update_existing_offer` authorise **no** registry change |
-| **Writes** | Exactly one line to `02_Offer/_memory/sandbox.jsonl`, carrying `classification: TEST_FIXTURE` — and **nothing** in `runtime.jsonl` |
-| **Refutes** | That the lane leaks. If any byte lands in a real stream, the lane has failed and the run is void |
+| **Mechanism tested** | Whether the **inherited group flags survive into the orchestrator's reasoning**, and whether seed-sufficiency routing reflects them |
+| **Expected output** | **Not predicted.** `registry_action` may return **any** of `add_new_offer`, `update_existing_offer`, `needs_more_seed_data`, `reject`. The test **records which**, and compares `misaligned_assumptions` and `control_questions` against the flags supplied |
+| **What would be a finding** | The output **ignoring or suppressing** a group flag — a mechanism defect worth acting on |
+| **What is NOT a finding** | Any statement the output makes about demand, guests, prices, competitors, capacity or a real property. **Barred by D20 however phrased** |
+| **Registry** | `add_new_offer` / `update_existing_offer` **authorise nothing**. D21 §6 says so explicitly |
+| **Writes** | Exactly one line to `02_Offer/_memory/sandbox.jsonl` carrying `classification: TEST_FIXTURE`, and **nothing** in `runtime.jsonl` |
+| **Lane failure** | If any byte reaches a real stream, the lane has failed and the run is void |
 
-**Not approved and not run.**
+**Not approved, not enabled, not run.**
 
 ### 6.5 Non-runtime checks available immediately
 
@@ -235,5 +311,6 @@ No decision needed beyond a nod; none writes anything:
 
 ## 9. Changelog
 
+- 2026-09-21 — **v0.3. The D17 omission corrected, D21 drafted, the first input rebuilt against the real contract, and the fixture lane implemented but left disabled.** **(1) D17 was missing from v0.2's bar list** — it forbids A001 from *“the Offer runtime … or any shared store”* by name, and `offer-orchestrator` **is** the Offer runtime. **R2/T1-5 and any change to D6 or D15 cannot override a ratification**; only a narrow amendment to D17 can. It now heads §3 as bar 0. **(2) The proposed input was wrong twice.** The spec declares `seed_brief` as a **single string**, so v0.2's *“archetype, destination and H-band”* fields would never have reached the agent — §6.4 now carries the flags and provenance **inside the string**. And v0.2 asserted the result would be `needs_more_seed_data`/`reject`; **the contract constrains no such thing**, so the expected outcome is now *not predicted* and all four enum values are treated as possible. **(3) A correction to my own v0.2 claim:** v0.2 said the queue's O1 row *“still reads as open”*. **It does not** — its final column has said **“Implemented 2026-09-16”** all along. I had truncated the row when reading it and never saw that column; the queue was accurate and needs no correction. **(4) Added §6.1:** the fail-closed fixture lane, written and tested — guard in both directions, filename-carried isolation, `FIXTURE_LANE_ENABLED = false`, tested on the **direct executor path and the CLI mapping**, with a test proving ordinary lines keep their exact key order. **28 tests, 28 pass.** **(5) Added §6.3:** **D21 drafted — NOT APPROVED**, and deliberately not written into the sandbox §5.1 decision table. Nothing enabled, nothing run; no API call, no memory log, no Drive or CRM record, no secret read; `PILOT-H-001` and every PG gate untouched. **The v0.1 and v0.2 entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-21 — **v0.2. Audited against D6, D15, D17, D18 and D20; three factual errors in v0.1 corrected.** **(1) S-1 duplicated work already done** — queue item **O1 was implemented 2026-09-16**, as the evaluation-order rule in `A001_DOCUMENT_ONLY_PILOT_CLOSEOUT.md` §2 with the `OFFER_OS.md` §15 pointer. The queue row was never marked done, which is what v0.1 misread; the implementation was there all along. S-1 is **withdrawn** and replaced by **S-1a**, a read-only verification that the rule is present and still bounded to evaluation order. **(2) S-1 contradicted its own “zero writes” column** — it was filed document-only with *writes: none* while proposing to record a sentence in a git-tracked file. §5 now states plainly that a recorded sentence **is** a write and needs its own approval. **(3) The blockers were mis-attributed.** v0.1 named R2/R3 as what blocks runtime testing. The governing bar is **D15**, which forbids *“`arika run`, agent, skill, scheduler or event activity”* for A001 Phase 3 in those exact terms, and **D6**, which keeps the R2 build itself deferred. **R2 alone could never authorise an A001 agent or skill run** — it is a precondition that matters only after the owner changes D15 and D6. §3 and §5 are rewritten accordingly. **Added §6:** the smallest path to a live `TEST_FIXTURE` lane — feasible, four code touches, fail-closed, with a distinct `sandbox.jsonl` filename so isolation survives a careless read; plus the record changes, the five owner decisions, one concrete first runtime test, and the non-runtime checks available now. **The v0.1 entry below stands as written.** Nothing was implemented or run; no agent, skill, API or connector called; no memory log, Drive file or CRM record created; no secret read; the Full Push Readiness Packet and its PG gates untouched. — Claude Code (Opus 5)
 - 2026-09-21 — **v0.1 created.** A bounded agency-systems test plan over the existing A001 group and units — **planning only, nothing approved or run**. Built after reading the runtime's actual write behaviour rather than assuming it: `finalizeRun()` writes memory **unconditionally**, the line carries the **full input**, every relevant agent declares a `memory_stream`, and three department logs would be **created** by a first run. **Central finding: the isolation the owner requires does not exist yet** — R2/R3/R5 (sandbox stream, skill marker, test-fixture trust) are all deferred under D6, so a runtime A001 run would write an **unmarked** line into a shared department stream. That, not the API key, is what blocks every runtime test. **11 document-only or non-runtime tests are safe now; every runtime-backed test is blocked.** First test recommended: **S-1**, the group-flag inheritance rule (queue O1) — zero-write, zero-runtime, and directly protective of the rule that P07's unit passes are **not** Offer eligibility. No agent, skill, API or connector was called; no memory-log entry, Drive file or CRM record was created; no `.env` or key value was read; the Full Push Readiness Packet's readiness and PG gates were not changed. — Claude Code (Opus 5)
