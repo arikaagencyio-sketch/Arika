@@ -148,7 +148,7 @@ The only tool is the local intake gate, run from the repository root:
 | # | Decision | Rule |
 |---|---|---|
 | D15 (B1) | Phase 3 run mode | **No-runtime, document-only first.** Phase 3 work is written by hand in the sandbox folder. No `arika run`, agent, skill, scheduler or event activity, and no runtime memory write. This supersedes D5 for Phase 3 only; D5 still governs Phases 0–2 |
-| D16 (B2) | API key rotation | ✅ **Credential condition met 2026-09-21** — rotation and revocation **owner-attested 2026-09-21** — the replacement key was installed in the intended secret location and the exposed old key was **revoked in the Anthropic Console** (AG-19 recorded done). ⚠️ **Replacement not yet verified by use**, and runtime-backed Phase 3 work still needs its own authorisation (AG-19 · item 57). It does **not** block the document-only work D15 permits, because that work needs no key. Any later move from document-only to runtime-backed re-enters this gate |
+| D16 (B2) | API key rotation | ✅ **Credential condition met 2026-09-21** — rotation and revocation **owner-attested 2026-09-21** — the replacement key was installed in the intended secret location and the exposed old key was **revoked in the Anthropic Console** (AG-19 recorded done). ⚠️ **Replacement verified by use 2026-09-21** (D21 attempt), and runtime-backed Phase 3 work still needs its own authorisation (AG-19 · item 57). It does **not** block the document-only work D15 permits, because that work needs no key. Any later move from document-only to runtime-backed re-enters this gate |
 | D17 (B3) | A001 ratification | **Ratified as an internal simulation sandbox only.** A001 is **not** a prospect, **not** a CRM record and **not** offer evidence. It may not enter the Offer runtime, the Sector store, the CRM or any shared store, and no A001 output may be cited as evidence about a market, property or buyer (§2, §4 rule 4).<br>This ratifies the sandbox's standing, **not** the §8 Tier-1 changes, which stay deferred under D6 |
 | D18 (B4) | Phase 3 slice | **`A001-P07` only.** Confirmed against the Phase 2 evidence: it is the only unit passing archetype, Destination Fit and the H-band together. The slice still runs as a group-architecture test carrying the group flags, never as an MVP audit |
 | D19 (B5) | S2 input format | **S2 switches to a block-per-question input format before any owner fill.** One field per line, so a dropped cell is not possible. Adopted because owner fill silently lost cells twice at S1 (42 rows) and S2 is 65 rows per unit. The format is not built yet; no S2 worksheet exists |
@@ -311,7 +311,7 @@ Phase 2 is complete: all nine units hold a declared `SIMULATED_VERDICT` above, a
 | AG-16 | ✅ **RESOLVED 2026-09-15 — destination drift corrected and gated.** Plugin P4/P5, `plugin.config.json` P5, `SECTOR_NOTION_SCHEMA.md` and `FIELD_POPULATION_PLAN.md` now match DB 16: Nairobi · Maasai Mara · Diani profiled; Mombasa not profiled. `sector_truth_gate.py` **check 6** now fails if:<br>• plugin P5 and its sidecar disagree;<br>• either drifts from DB 16's verified row count;<br>• a P4 validation destination has no profile.<br>*Was:* those files predated the 2026-08-28 profiles, and the gate did not scan the plugin files | `HOSPITALITY_PLUGIN.md` v0.2 changelog; `sector_truth_gate.py` check 6; `SECTOR_OS.md` §15, 2026-09-15 | ~~DOC + BUILD~~ done | Nothing. Destination status may be read from plugin P5 or `SECTOR_OS.md` §3 |
 | AG-17 | No Sector agent can check a hotel's company fit: `sector-icp-fit` and `sector-signal-scorer` are B2B SaaS-only, and S12 is not built | `SECTOR_OS.md` §15, 2026-09-14 entry | OWNER. Check fit by hand, as in item 72 RD4 | Phases 2, 3 (by hand only) |
 | AG-18 | Marketing (03) and Operations (08) have no route from Sector | Item 31k | OWNER | Phase 5 (notes written by hand only) |
-| AG-19 | ~~The API key should be rotated, and the rotation is not recorded as done~~ ✅ **Closed 2026-09-21 — rotation and revocation owner-attested and recorded done.** ⚠️ Replacement **not yet verified by use** | Item 57 (Resolved table) | OWNER | Any Phase 3 run — **still needs its own authorisation** |
+| AG-19 | ~~The API key should be rotated, and the rotation is not recorded as done~~ ✅ **Closed 2026-09-21 — rotation and revocation owner-attested and recorded done.** ⚠️ Replacement **verified by use 2026-09-21** | Item 57 (Resolved table) | OWNER | Any Phase 3 run — **still needs its own authorisation** |
 
 ## 8. Tier-1 changes needing ratification
 
@@ -344,7 +344,7 @@ Each phase starts only after the previous phase passes its exit gate **and its o
 |---|---|
 | 1 | Phase 0 complete: D1–D10 recorded and the key file validated. D11–D12 govern how Phase 1 answers are filled |
 | 2 | ✅ **Met 2026-09-15:** item 74 point (3) archetype mapping (D13) and point (4) geography (D14) decided |
-| 3 | ◐ **Partly met 2026-09-16:** run mode decided (D15, document-only first) and A001 ratified as a simulation sandbox only (D17). ✅ **API key rotation (AG-19 · D16) — owner-attested done 2026-09-21**, so the credential no longer gates runtime-backed Phase 3 work. ⚠️ The replacement is **not yet verified by use**, and runtime-backed work still needs its own authorisation. Document-only Phase 3 work may proceed and has begun — `A001-P07` reached S2 on 2026-09-16 (see "Phase 3 document-only progress") |
+| 3 | ◐ **Partly met 2026-09-16:** run mode decided (D15, document-only first) and A001 ratified as a simulation sandbox only (D17). ✅ **API key rotation (AG-19 · D16) — owner-attested done 2026-09-21**, so the credential no longer gates runtime-backed Phase 3 work. ⚠️ The replacement is **verified by use 2026-09-21**, and runtime-backed work still needs its own authorisation. Document-only Phase 3 work may proceed and has begun — `A001-P07` reached S2 on 2026-09-16 (see "Phase 3 document-only progress") |
 | 4 | AG-4 (S09 union operator) decided under item 74 point (6) |
 
 | Phase | Scope | Work | Exit gate | Writes |
@@ -363,7 +363,7 @@ The owner recorded all five entry decisions on 2026-09-16, as **D15–D19** in �
 | # | Entry decision | State | Recorded as |
 |---|---|---|---|
 | B1 | **Phase 3 run mode** | ✅ Decided 2026-09-16 — **no-runtime, document-only first** | D15 |
-| B2 | **API key rotation** | ✅ **Owner-attested done 2026-09-21** — recorded as done. ⚠️ Replacement **not verified by use**; runtime-backed Phase 3 work still needs its own authorisation | D16 · AG-19 · item 57 |
+| B2 | **API key rotation** | ✅ **Owner-attested done 2026-09-21** — recorded as done. ⚠️ Replacement **verified by use 2026-09-21**; runtime-backed Phase 3 work still needs its own authorisation | D16 · AG-19 · item 57 |
 | B3 | **A001 ratification** | ✅ Decided 2026-09-16 — **internal simulation sandbox only**: not a prospect, not a CRM record, not offer evidence | D17 |
 | B4 | **Phase 3 slice** | ✅ Decided 2026-09-16 — stays **`A001-P07` only** | D18 |
 | B5 | **S2 input format** | ✅ Decided 2026-09-16 — **switch to block-per-question before any owner fill** | D19 |

@@ -29,7 +29,10 @@ import { repoRoot } from "./paths.js";
  * Master switch. While `false`, a fixture run is refused before anything else
  * is checked. Flipping this is part of enacting the owner decision.
  */
-export const FIXTURE_LANE_ENABLED = true; // Enabled 2026-09-21 by owner-enacted A001 D21.
+// A001 D21 authorised ONE attempt. It was made on 2026-09-21 and the authorisation
+// is SPENT, so the lane is closed again. Re-opening needs a fresh owner decision.
+// (The existing sandbox.jsonl independently blocks a second run via assertLaneUnused.)
+export const FIXTURE_LANE_ENABLED = false;
 
 /** A memory stream is a sandbox stream if, and only if, it is named this. */
 export const SANDBOX_BASENAME = "sandbox.jsonl";

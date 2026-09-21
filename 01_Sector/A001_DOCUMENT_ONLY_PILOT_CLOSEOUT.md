@@ -1,7 +1,7 @@
 # A001 — Document-only pilot close-out
 
 **Department:** Sector (01) — owns this record. Offer (02) may read it, but **not as Offer evidence** (§9).
-**Status:** ✅ Document-only pilot closed 2026-09-16 · ✅ Use of this evidence bounded by **D20** (mechanisms only) · ✅ **D16's credential condition met 2026-09-21 (owner-attested rotation and revocation)** · 🔴 **runtime-backed work is still NOT authorised** — the replacement key is **not yet verified by use**, and clearing the credential alone authorises no A001 runtime work.
+**Status:** ✅ Document-only pilot closed 2026-09-16 · ✅ Use of this evidence bounded by **D20** (mechanisms only) · ✅ **D16's credential condition met 2026-09-21 (owner-attested rotation and revocation)** · 🔴 **runtime-backed work is still NOT authorised** — the replacement key is **verified by use 2026-09-21**, and clearing the credential alone authorises no A001 runtime work.
 **Version:** v0.3
 
 > **IDs only.** A001 is a **fictional** hospitality group. Nothing here is evidence about any market, property or buyer. Read [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md) §2 and §4 before using any A001 value anywhere.
@@ -77,7 +77,7 @@ Nineteen owner decisions, D1–D19, are recorded in the sandbox record §5.1 —
 Two of them define the current boundary:
 
 - **D9 — S3–S5 stay `BLOCKED`.** The sandbox has no client system. S2 is the end of the intake road for A001 as scoped; going further means revisiting D9, not filling more rows.
-- **D16 — the credential condition is met 2026-09-21**: rotation and revocation are **owner-attested 2026-09-21** — the replacement key was installed in the intended secret location and the exposed old key was **revoked in the Anthropic Console** (AG-19 satisfied as **recorded done**). ⚠️ **The replacement's validity is NOT verified by use** — that needs a runtime call and **none was made**. Nothing was read, printed or tested: no `.env`, no key, no key fragment, no secret log. 🔴 **Runtime-backed work is still not authorised on this basis alone** — it needs the replacement verified and its own decision. Document-only work never needed the key.
+- **D16 — the credential condition is met 2026-09-21**: rotation and revocation are **owner-attested 2026-09-21** — the replacement key was installed in the intended secret location and the exposed old key was **revoked in the Anthropic Console** (AG-19 satisfied as **recorded done**). ✅ **The replacement key is VERIFIED BY USE 2026-09-21** — the D21-authorised fixture attempt reached the model and returned a valid structured response. ⚠️ **Rotation and revocation stay OWNER-ATTESTED:** that call proves the replacement works; it does **not** independently prove the old key was revoked. 🔴 **Runtime-backed work is still not authorised on this basis alone** — it needs the replacement verified and its own decision. Document-only work never needed the key.
 
 ## 8. Current hard stop
 
@@ -98,7 +98,7 @@ Simulated evidence can show that a **mechanism** behaves as documented. It canno
 
 | # | Do this first | Why |
 |---|---|---|
-| 1 | ~~**Rotate the API key**~~ ✅ **Done — owner-attested 2026-09-21** (AG-19 · D16) | Recorded as done. ⚠️ The replacement is **not yet verified by use**, and runtime-backed work still needs its own authorisation |
+| 1 | ~~**Rotate the API key**~~ ✅ **Done — owner-attested 2026-09-21** (AG-19 · D16) | Recorded as done. ⚠️ The replacement is **verified by use 2026-09-21** (D21), and runtime-backed work still needs its own authorisation |
 | 2 | **Decide the real client folder, storage and legal path** | A real engagement carries real data. The storage location, retention and the legal review path are undecided — the legal path is tracked separately as item 59 |
 | 3 | **Do not use pipe-table owner fill for larger stages** | It lost cells twice at the smaller stage. Use the block-per-question format, or something equally loss-evident |
 | 4 | **Keep public research off unless explicitly approved** | A001 ran with public research disabled throughout. For a real property this is a per-engagement permission, recorded before anyone looks at a page |
