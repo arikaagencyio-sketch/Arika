@@ -1,0 +1,63 @@
+{
+  "classification": "TEST_FIXTURE",
+  "record_type": "synthetic_sector_fit_record",
+  "unit_id": "SYN-S10-01",
+  "synthetic": true,
+  "label": "SYNTHETIC. Not a real property, client, prospect or CRM record, and not market evidence. Its verdict is a SIMULATED_VERDICT, never a real fit verdict.",
+  "provenance": "Constructed 2026-09-22 by Claude Code as the input for draft Sector decision SECTOR-SF1. No attribute was observed. It is not derived from any Offer seed brief, from OFFER-F3, or from any model output. It names no sandbox group, no pilot identifier and no real property.",
+  "authorisation": "SECTOR-SF1",
+  "sector": "Hospitality",
+  "sub_sector": "Accommodation",
+  "attributes": {
+    "archetype": { "value": "City / Conference Hotel", "status": "SYNTHETIC" },
+    "destination": { "value": "Nairobi", "status": "SYNTHETIC assignment to a real destination; no property there is named" },
+    "size_band": { "value": "H2", "status": "SYNTHETIC", "note": "Band label only. No room count is given." },
+    "website": { "value": "present", "status": "SYNTHETIC" },
+    "direct_booking_path": { "value": "present", "status": "SYNTHETIC" },
+    "group_or_chain": { "value": "none", "status": "SYNTHETIC", "note": "Independent: no central brand.com or direct-booking team." }
+  },
+  "rule_checks": [
+    {
+      "id": "R-ARCHETYPE",
+      "rule": "The archetype is ruled in live geography.",
+      "source": "01_Sector/sector_plugins/hospitality/plugin.config.json: P2.property_type_rule.tier1_scope.archetypes",
+      "result": "pass"
+    },
+    {
+      "id": "R-DESTINATION",
+      "rule": "The destination has a DB 16 Destination Profile.",
+      "source": "01_Sector/sector_plugins/hospitality/plugin.config.json: P5.proposed_assignments.<destination>.db16",
+      "result": "pass"
+    },
+    {
+      "id": "R-SIZE-BAND",
+      "rule": "The size band is inside the H1/H2 MVP scope.",
+      "source": "Owner Decision 71; readiness packet OI6 (the H1/H2 MVP scope row)",
+      "result": "pass"
+    },
+    {
+      "id": "R-ANTI-ICP-WEB",
+      "rule": "Anti-ICP: a property with no website or no direct booking path.",
+      "source": "02_Offer/OFFER_OS.md section 3 seed (ICP row)",
+      "result": "not_fired"
+    },
+    {
+      "id": "R-ANTI-ICP-GROUP",
+      "rule": "Anti-ICP: a Hospitality Group, or a chain with a central brand.com / direct-booking team.",
+      "source": "02_Offer/OFFER_OS.md section 3 seed (ICP row); Owner Decision 71; plugin P2 archetype vocabulary",
+      "result": "not_fired"
+    }
+  ],
+  "stop_rules_fired": [],
+  "simulated_verdict": "in_scope",
+  "verdict_label": "SIMULATED_VERDICT: a mechanism fixture result, not a fit verdict. It says nothing about whether any real property fits.",
+  "verifiable_from_rules": [
+    "Each rule cited above exists in the named source.",
+    "Each 'pass' or 'not_fired' result follows from applying that rule to the stated attribute value. The offline test test_skill_fixture.py recomputes every result from the sources and fails on any mismatch."
+  ],
+  "remains_synthetic": [
+    "The unit itself: it does not exist.",
+    "Every attribute value: archetype, destination assignment, size band, website, direct booking path and independence. None was observed.",
+    "Therefore the verdict: it shows the rules can be applied to these values, not that anything real is in scope."
+  ]
+}

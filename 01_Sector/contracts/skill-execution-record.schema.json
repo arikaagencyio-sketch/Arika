@@ -17,6 +17,7 @@
   "required": ["timestamp", "skill", "department", "stream", "event_type", "source", "payload"],
 
   "properties": {
+    "classification": { "type": "string", "const": "TEST_FIXTURE", "description": "Present ONLY on a TEST_FIXTURE skill run, which is written to 01_Sector/_memory/skill_runs-sandbox.jsonl and never to skill_runs.jsonl. Absent on every ordinary run. Added 2026-09-22, prepared for draft decision SECTOR-SF1; skill_run_gate.py enforces the split." },
     "timestamp": { "type": "string", "format": "date-time" },
     "skill": { "type": "string", "pattern": "^sector-[a-z-]+$", "description": "e.g. sector-finding-writer" },
     "skill_id": { "type": "string", "pattern": "^S(0[1-9]|1[0-2])$", "description": "S01-S12, per SECTOR_SKILL_MATRIX.md" },
@@ -145,10 +146,70 @@
         "approval_reasons": { "type": "array", "items": { "type": "string" } },
         "escalation": { "type": ["string", "null"], "description": "What was escalated and to whom. Tier-1 architecture questions land here." },
         "errors": { "type": "array", "items": { "type": "string" } },
+        "fixture": {
+          "type": "object",
+          "description": "TEST_FIXTURE runs only. Names the authorisation and the synthetic input, and lists the fields a fixture deliberately did not read from any live store.",
+          "required": ["authorisation_id", "synthetic_record", "packet"],
+          "additionalProperties": false,
+          "properties": {
+            "authorisation_id": { "type": "string", "pattern": "^SECTOR-SF[0-9]+$" },
+            "synthetic_record": { "type": "string" },
+            "packet": { "type": "string" },
+            "not_read_fixture": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "destinations": {
+          "type": "array",
+          "description": "Per-destination hand-off outcome (S10 Step 5: each destination, its mechanism, and whether it delivered). Optional on ordinary runs; required on TEST_FIXTURE runs. not_attempted_fixture is valid only on a TEST_FIXTURE run, and delivered is never valid on one.",
+          "items": {
+            "type": "object",
+            "required": ["destination", "mechanism", "outcome"],
+            "additionalProperties": false,
+            "properties": {
+              "destination": { "type": "string" },
+              "mechanism": { "type": "string" },
+              "outcome": { "type": "string", "enum": ["delivered", "held", "HANDOFF_FAILURE", "not_attempted_fixture"] },
+              "detail": { "type": "string" }
+            }
+          }
+        },
         "loops_registered": { "type": "array", "items": { "type": "string", "enum": ["activation", "refresh", "signal_change", "calendar_recomputation", "feedback", "failure_recovery"] } }
       }
     }
   },
+
+  "allOf": [
+    {
+      "description": "A TEST_FIXTURE record: marked, isolated, and unable to claim a write, an emitted event or a delivery.",
+      "if": { "required": ["classification"] },
+      "then": {
+        "properties": {
+          "payload": {
+            "required": ["fixture", "destinations"],
+            "properties": {
+              "writes": { "maxItems": 0 },
+              "events": { "maxItems": 0 },
+              "destinations": { "minItems": 1, "items": { "properties": { "outcome": { "enum": ["held", "HANDOFF_FAILURE", "not_attempted_fixture"] } } } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "description": "An ordinary record: it may carry neither fixture fields nor a fixture-only outcome.",
+      "if": { "not": { "required": ["classification"] } },
+      "then": {
+        "properties": {
+          "payload": {
+            "not": { "required": ["fixture"] },
+            "properties": {
+              "destinations": { "items": { "properties": { "outcome": { "not": { "const": "not_attempted_fixture" } } } } }
+            }
+          }
+        }
+      }
+    }
+  ],
 
   "$defs": {
     "gateResult": {

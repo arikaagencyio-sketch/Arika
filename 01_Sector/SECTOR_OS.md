@@ -168,6 +168,119 @@ This is a real scoring mechanism the agency designed for itself, not a fabricate
 
 - **2026-09-15 — A001 approved as a Sector-owned, group-level simulated Hospitality Sector Sandbox.** Owner decision: A001 is a fictional hospitality group used as the pilot-company architecture specimen. It is **not** a real client, prospect, lead, CRM company or the item 72 real-property pilot, and `PILOT-H-001` stays reserved for a real single property. Child units are `A001-P01`…`A001-P09`; `A001-P08` is linked to `A001-P07`; `A001-P07` may be the first property test slice, only inside group context. **Sector owns the record** because A001 tests this layer's plugin, geography and fit rules against a group. Offer (02) consumes it (`02_Offer/OFFER_OS.md` §8). **Boundaries:** every A001 value is `[TEST_FIXTURE · A001]`. Nothing from A001 enters a Sector database, the plugin, `plugin.config.json` or a skill record, and no P2 cell may move toward `observed` on A001 data. Repository files carry IDs, archetype class, destination status and size band only. **Not decided (item 74):** five Tier-1 changes (`AEIT_06` `Company` with a parent edge and property-unit meaning, a sandbox role, an `AEIT_05` test-fixture trust value, a skill-record marker, a sandbox memory stream), run mode, archetype mapping and geography. **No A001 run of any kind until then.** Plugin truth and destination rows are unchanged by this entry. Record: [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md). — Claude Code (Opus 5)
 
+### Draft decision — awaiting owner approval · **SECTOR-SF1 · NOT ENACTED**
+
+> 🔴 **A draft for the owner to accept, amend or reject. It authorises nothing until the
+> owner gives the approval wording at the end of this section.** It sits apart from the dated list
+> above so it cannot be read as enacted. The registry holds it as **`draft`**
+> (`contracts/skill-fixture-authorisations.json`), and `skill_run_gate.py` fails on any fixture
+> record written under a draft.
+
+**SECTOR-SF1 — a non-A001 `TEST_FIXTURE` mode for S10, and ONE fixture run of it.**
+
+**Why.** A positive Sector-to-Offer hand-off could not be tested truthfully, because S10 could not
+run as a fixture at all. Every identifying field of the skill-run record was a constant; the
+schema admitted no extra field; S10 had no mode that delivers nothing; and there was no structured
+place to record *"not attempted"*. The mechanism to fix all four is now **prepared and disabled**.
+This decision would adopt it and authorise one use.
+
+**What it adopts** (prepared 2026-09-22; ordinary S10 behaviour and all 15 existing records are
+unchanged):
+
+- **Schema** (`contracts/skill-execution-record.schema.json`, additive): an optional top-level
+  `classification: TEST_FIXTURE`, and optional `payload.fixture` and `payload.destinations`. The
+  last carries a per-destination `outcome` of `delivered` / `held` / `HANDOFF_FAILURE` /
+  `not_attempted_fixture`. A marked record cannot claim a write, an emitted event or a delivery. An
+  ordinary record may carry neither fixture fields nor `not_attempted_fixture`.
+- **Gate** (`contracts/skill_run_gate.py`, checks 6–8). It fails on a marked record in
+  `skill_runs.jsonl`, on an unmarked record in `skill_runs-sandbox.jsonl`, and on a fixture record
+  under a draft authorisation. It also checks each record against its authorisation (skill,
+  synthetic input, packet, record limit), refuses any fixture record naming A001 or a pilot ID, and
+  verifies that the synthetic input still matches its pin.
+- **S10 fixture mode** (`.claude/skills/sector-handoff-packet/SKILL.md`, one delimited block). It
+  reads no live store and writes nothing across a boundary. Working routes are recorded as
+  `not_attempted_fixture`, and broken routes as `HANDOFF_FAILURE`, as they would be in any mode.
+
+**What it authorises.** **ONE** S10 run in fixture mode under authorisation `SECTOR-SF1`:
+
+- **Input:** the synthetic Sector record `01_Sector/fixtures/SYN-S10-01.sector-record.json`,
+  sha256 `8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f`. It is independently
+  labelled and is **not** derived from any Offer seed.
+- **Permitted writes, and nothing else:** exactly **one** marked record in
+  `01_Sector/_memory/skill_runs-sandbox.jsonl`, and **one** marked packet at
+  `01_Sector/fixtures/SYN-S10-01.s10-packet.json`. Both are **git-tracked and auto-synced**. This
+  decision permits those two shared fixture entries and makes no claim that the fixture stays out
+  of the repository.
+- **One attempt, no retry.** It is authorised whether the run succeeds or fails, and **expires on
+  that attempt**. The authorisation is then set to `spent`.
+
+**What it does not authorise.** Any read or write of Notion, ClickUp or any connector · any
+event · any write to `skill_runs.jsonl` · any other skill · **any A001 skill record:
+A001 D6 is unchanged**, T1-4 stays deferred for A001, and A001 hand-offs stay by text note only
+· anything touching `PILOT-H-001` · a fit verdict, a finding or Sector evidence · any
+change to Hospitality's lifecycle state · **any Offer use.** The packet does not feed OFFER-F3
+or any Offer run without a decision of its own.
+
+**What can be verified from rules, and what stays synthetic.**
+
+| Verified from repository rules, and re-checked by `test_skill_fixture.py` | Synthetic, asserted, never observed |
+|---|---|
+| The archetype is in the plugin's live-geography list (`plugin.config.json` P2 tier-1) | The unit itself: `SYN-S10-01` does not exist |
+| The destination has a DB 16 profile (`plugin.config.json` P5) | Its archetype, destination assignment and size band |
+| H2 is inside the H1/H2 MVP scope (readiness packet OI6; Decision 71) | That it has a website and a direct booking path |
+| Neither anti-ICP rule fires on these values (`OFFER_OS.md` §3 ICP row) | That it is independent |
+| The route outcomes each destination should get, from `event-catalog.json` and S10's table | **Therefore the verdict:** the rules apply cleanly to these values; nothing real is shown to be in scope |
+
+**Expected mechanism behaviour.** Unlike an agent's output, these follow from the contracts, so a
+deviation is a finding:
+
+- **Offer (02), Content (04), CRM** → `not_attempted_fixture`.
+- **Sales (05), Marketing (03), Operations (08)** → `HANDOFF_FAILURE`.
+- **Nothing** → `delivered`.
+- The packet carries all eleven AEIT_09 §1 fields, marks itself synthetic in
+  `confidence_threshold`, and lists DB 3, 6, 7, 9 and 10 as `not_read_fixture`.
+- `writes` and `events` are empty, and `decision` is `NO_OP`.
+- **Isolation:** one record in the sandbox log, `skill_runs.jsonl` byte-unchanged, and the gate
+  passes.
+
+**Stop conditions before the run** (the skill must refuse): the authorisation is not `approved`
+· the synthetic record fails its pin · the sandbox log already holds a `SECTOR-SF1` record
+· the gate fails beforehand · A001 or a pilot ID appears · any step would need a live
+store.
+
+**What it cannot prove:**
+
+- **Enforcement is detective**, not preventive: no code can stop a skill run, and the gate catches
+  breaches afterwards.
+- **A live-store call** such as a Notion write leaves no repository trace, so the gate cannot see
+  it. Only F0 and F3's refusals cover it.
+- **It is one sample.**
+- **It tests mechanism, not content:** live intelligence is deliberately not read.
+
+**Owner procedure — the one run:**
+
+1. The owner gives the wording below.
+2. Set `SECTOR-SF1` to `approved` in the registry.
+3. Preflight: the gate passes, `skill_runs-sandbox.jsonl` is absent, the synthetic record's pin
+   matches, and `skill_runs.jsonl`'s sha256 is captured.
+4. Run S10 **once**, in fixture mode.
+5. Whatever happens, set `SECTOR-SF1` to `spent`.
+6. Rerun the gate and the offline tests. Verify the real log is byte-unchanged and that at most
+   one marked record exists.
+7. Record the outcome here as a mechanism result only.
+
+**Approval wording the owner would give (not given):**
+
+> I approve draft Sector decision **SECTOR-SF1** as written in `SECTOR_OS.md` §8: adopt the
+> prepared S10 `TEST_FIXTURE` mode, schema extension and gate checks, and authorise **ONE** S10
+> fixture run under `SECTOR-SF1` using the pinned synthetic record `SYN-S10-01` (sha256
+> `8247eefd…`). It may write at most one marked record to
+> `01_Sector/_memory/skill_runs-sandbox.jsonl` and one marked packet to
+> `01_Sector/fixtures/SYN-S10-01.s10-packet.json` — **which I accept will be committed to the
+> repository** — with **no Notion, CRM, connector or event read or write**. It produces no fit
+> verdict and no Sector or Offer evidence, and **A001 D6 is unchanged**. **No retry without a
+> fresh decision.**
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -236,6 +349,7 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 ## 15. Changelog
 
+- 2026-09-22 — **Draft Sector decision SECTOR-SF1 prepared in §8 — NOT enacted:** a non-A001 `TEST_FIXTURE` mode for S10. Prepared and **disabled**: an additive schema extension (all 15 existing records still validate), `skill_run_gate.py` checks 6–8 (real log clean, fixture log marked and authorised, registry pins), and one delimited fixture-mode block in S10's `SKILL.md`, which strips back to the original byte-for-byte. The input is a new, independently labelled synthetic record, `SYN-S10-01`; its rule checks are recomputed from `plugin.config.json`, the packet and `OFFER_OS.md` by an offline test. The registry holds SECTOR-SF1 as `draft`, and the gate fails on any fixture record under a draft. **A001 D6 is unchanged.** No skill was run and no log was written. — Claude Code (Opus 5)
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "The Sector Drafts").
 - 2026-06-30 — Content migration: all 14 raw drafts read in full. Capability Registry, Workflow Index, Standards & SOPs Index populated. Confirmed no real sector has ever been chosen — flagged as the single highest-leverage open item in the repo per this department's own "weak sector layer degrades everything downstream" principle, and added to `00_Agency_Governance/OWNER_INPUT_NEEDED.md`. KPI Dictionary confirmed as genuine absence.
 - 2026-06-30 — **Resolved the #0 priority gap.** Owner provided a real sector decision (B2B SaaS, 3-tier ICP) via `Other Source Reference/Arika_B2B_SaaS_Intelligence_Database.xlsx` (13 sheets, real owner-curated data) plus a partial chat transcript (`Draft 15`-`17`). Confirmed the agency's real name: **Arika Agency**. Rewrote §1-§2 to reflect the resolved sector; added the 22-sector taxonomy, signal framework, 90-point scorecard, agency maturity arc, and 7-stage engagement model to §3-§4 and §7; added §13 pointing to the xlsx as this department's real-data sub-layer; flagged 3 unreconciled "intelligence layer" model variants (§10) and the partial/truncated state of `Draft 16`-`17` (§14) rather than silently treating either as complete. Removed item #0 from `00_Agency_Governance/OWNER_INPUT_NEEDED.md`. — Claude Code (Sonnet 4.6)

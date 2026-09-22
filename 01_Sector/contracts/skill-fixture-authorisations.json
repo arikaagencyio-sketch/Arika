@@ -1,0 +1,22 @@
+{
+  "_meta": {
+    "artifact": "Sector skill TEST_FIXTURE authorisations",
+    "decision_home": "01_Sector/SECTOR_OS.md section 8",
+    "rule": "A TEST_FIXTURE skill record is valid only if it names an authorisation here whose status is approved or spent. A draft authorisation admits nothing. Entries are never deleted: a spent one stays so its records remain explained.",
+    "enforcement": "Detective, not preventive. A skill is executed by Claude Code following SKILL.md, so no code can stop a run. skill_run_gate.py fails on any fixture record that breaks these rules, and on any marked record in the real log.",
+    "scope": "Non-A001 fixtures only. A001 skill records stay deferred under A001 D6 (T1-4), and the gate refuses any fixture record naming A001."
+  },
+  "authorisations": [
+    {
+      "id": "SECTOR-SF1",
+      "status": "draft",
+      "skill": "sector-handoff-packet",
+      "skill_id": "S10",
+      "record": "01_Sector/SECTOR_OS.md section 8: draft decision SECTOR-SF1 (NOT enacted)",
+      "synthetic_record": "01_Sector/fixtures/SYN-S10-01.sector-record.json",
+      "synthetic_record_sha256": "8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f",
+      "packet": "01_Sector/fixtures/SYN-S10-01.s10-packet.json",
+      "max_records": 1
+    }
+  ]
+}

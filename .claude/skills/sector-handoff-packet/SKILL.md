@@ -80,6 +80,67 @@ Loops: `activation`, `feedback`.
 - Claiming delivery from assembly. **Assembled is not delivered.**
 - Running before the sector's write skills have completed for that sector.
 
+<!-- FIXTURE-MODE:BEGIN -->
+## Fixture mode — `TEST_FIXTURE` · prepared, **DISABLED**
+
+> 🔴 **Disabled.** This mode runs only under a Sector fixture authorisation whose status is
+> **`approved`** in [`contracts/skill-fixture-authorisations.json`](../../../01_Sector/contracts/skill-fixture-authorisations.json).
+> The only one today, **SECTOR-SF1, is `draft`, so refuse.** Ordinary use of this skill never enters
+> this mode. **A001 is excluded:** its skill records stay deferred under A001 D6 (T1-4).
+
+**What it is for.** Exercising this skill's *mechanism* on an independently labelled synthetic
+Sector record, without delivering anything anywhere: the route check, the per-destination
+recording, the packet shape, the boundary law and the confidence cap.
+
+**Refuse unless every one of these holds:**
+
+1. The authorisation named is `approved`, for `sector-handoff-packet` / `S10`.
+2. The synthetic record at the authorisation's path matches its pinned sha256, and is marked
+   `TEST_FIXTURE` and `synthetic: true`.
+3. `01_Sector/_memory/skill_runs-sandbox.jsonl` holds no record for that authorisation, since its
+   limit is one.
+4. `python 01_Sector/contracts/skill_run_gate.py` passes **before** the run.
+5. Nothing in the input names A001 or a pilot ID.
+
+**Steps.** Each replaces its ordinary counterpart **only inside this mode**:
+
+- **F0 · Inputs.** Read only the synthetic record and repository files. **Read no Notion
+  database, no ClickUp and no connector.** Fields the ordinary packet would take from live
+  databases (DB 3, DB 6, DB 7, DB 9, DB 10) are left out and listed in
+  `payload.fixture.not_read_fixture`.
+- **F1 · Route check.** As in Step 0: re-measure the routes from `contracts/event-catalog.json`,
+  a repository file.
+- **F2 · Outcomes.** For every destination, record `{destination, mechanism, outcome}` in
+  `payload.destinations`:
+  - a route that **would** deliver → **`not_attempted_fixture`**;
+  - a route that does **not** deliver → **`HANDOFF_FAILURE`**, exactly as in Step 1. That is true
+    in any mode;
+  - **never `delivered`.**
+- **F3 · No cross-boundary write of any kind:** no Notion relation, no CRM tag, no event.
+  `payload.writes` and `payload.events` are empty, and `decision` is `NO_OP`.
+- **F4 · Packet.** Write the assembled packet as JSON at the authorisation's `packet` path,
+  marked `classification: TEST_FIXTURE`, carrying every AEIT_09 §1 field: `handoff_id`,
+  `producer`, `consumer`, `trigger`, `payload`, `validation_rules`, `confidence_threshold`,
+  `freshness_requirement`, `owner`, `sla_cadence`, `failure_modes`. Its `confidence_threshold`
+  states that the packet is synthetic, which caps everything in it (Step 4). The boundary law
+  (Step 3) is unchanged: an **angle**, never an artifact.
+- **F5 · Log.** Append **one** record to `01_Sector/_memory/skill_runs-sandbox.jsonl` —
+  **never** to `skill_runs.jsonl`. It carries top-level `classification: TEST_FIXTURE` and
+  `payload.fixture` = `{authorisation_id, synthetic_record, packet, not_read_fixture}`. **Read the
+  timestamp from the clock.**
+- **F6 · Close.** Run the gate again; it must pass. Then set the authorisation to `spent`.
+
+**What a fixture run proves, and what it does not.** It can show that the route check, the
+per-destination classification, the packet shape and the isolation work. It delivers nothing,
+reads no live intelligence, and its payload content is synthetic. **It never produces a fit
+verdict, a finding or Sector evidence.**
+
+**Enforcement is detective.** This mode is instructions plus a gate that fails **afterwards** on
+any breach. No code prevents a run; the gate makes a violation visible. A write that never reaches
+a repository file, such as a Notion call, would not be caught by the gate at all. That is why F0 and
+F3 are refusals, not options.
+<!-- FIXTURE-MODE:END -->
+
 ## Appendix · A dated snapshot — re-measure it, do not trust it
 
 **Measured 2026-08-28.** Hospitality reached **`Offer-Ready`** the same day, so this skill's primary trigger is live for the first time.

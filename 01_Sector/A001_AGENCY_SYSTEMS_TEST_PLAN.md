@@ -2,7 +2,7 @@
 
 **Department:** Sector (01) — owns this record.
 **Status:** 🟡 **Planning only.** This plan approves, schedules and runs nothing. Every test needs its own owner decision.
-**Version:** v1.3 *(OFFER-F2 recorded as completed, and the positive Sector-to-Offer route audited with OFFER-F3 proposed, 2026-09-22 — see §6.9)*
+**Version:** v1.4 *(OFFER-F3's overclaim corrected, and the S10 fixture path prepared and disabled, 2026-09-22 — see §6.9)*
 **Date:** 2026-09-21
 **Scope bound:** **D20 — mechanism findings only.** Nothing here may produce a market, demand, buyer, pricing, capacity or proof claim.
 
@@ -84,7 +84,7 @@ unmarked control-test lines — the defect R2 exists to fix, not a pattern to ex
 | **S-4** | `sector-offer-router` skill · A001-P07 fixture | Routing decision + hand-off emission | **STOP** — group flag stands | Skill (Claude Code) | **tracked log** | Owner + **R3 marker** | ⛔ **Blocked — R3** |
 | **S-5** | `sector-icp-fit` agent · A001-P07 fixture | Company-fit classification | **UNRESOLVED** — AG-17: no Sector agent fits a hotel | Runtime | **new tracked file** | Owner + **R2** | ⛔ **Blocked — R2, AG-17** |
 | **S-6** | `sector-place-profiler` · destination profile (queue S1) | Profile authoring | — | Doc-only | none | Owner decision | ⛔ **Blocked** — content must come from real sources; A001 cannot supply (D20) |
-| **S-7** | **S10 `sector-handoff-packet` as a fixture** · a synthetic unit | Sector's only exit: packet assembly and per-destination outcomes | — | Skill (Claude Code) | would need `01_Sector/_memory/skill_runs.jsonl` | A Sector (01) decision **plus** the §6.9 mechanism change | ⛔ **Blocked — the skill record cannot be marked or isolated, and S10 has no fixture mode** (§6.9). S-4 is blocked by the same root cause |
+| **S-7** | **S10 `sector-handoff-packet` as a fixture** · a synthetic unit | Sector's only exit: packet assembly and per-destination outcomes | — | Skill (Claude Code) | **one marked record** in `01_Sector/_memory/skill_runs-sandbox.jsonl` and **one marked packet** in `01_Sector/fixtures/` — never `skill_runs.jsonl` | Sector decision **SECTOR-SF1** (draft, `SECTOR_OS.md` §8) | 🟡 **Prepared, DISABLED 2026-09-22.** The mechanism exists: schema marker and per-destination outcomes, gate checks 6–8, a delimited S10 fixture mode, and the independently labelled synthetic record `SYN-S10-01`. **Only the owner's decision is missing.** *(Was blocked: the skill record could not be marked, and S10 had no fixture mode.)* **S-4 stays blocked**: the fixture mode is S10-only |
 
 ### 4.2 Offer (02)
 
@@ -96,7 +96,7 @@ unmarked control-test lines — the defect R2 exists to fix, not a pattern to ex
 | **O-4** | `offer-oeos-engineer` · orchestrator output | Structural continuation under RD7 — **only on `needs_more_seed_data`** | — | Runtime | **tracked log** | — | ⛔ **STOPPED for the A001-P07 sequence (2026-09-22).** The only orchestrator output that exists is D21's, and it returned **`reject`**. **`reject` stops the sequence** — packet PG3 (stop if `registry_action: reject`), R5 (stop on `reject`) and RD7 (*“a `reject` result stops the sequence”*). RD7's structural-only continuation exists **only for `needs_more_seed_data`**. **O-4 may not be fed by that output as a continuation**, whatever isolation or decision exists |
 | **O-5** | `offer-pricing-floor-analyst` | — | — | — | — | — | ⛔ **Excluded** — RD5 skips pricing; **D20 bars pricing from A001** |
 | **O-6** | `offer-oeos-engineer` · the OFFER-F2 synthetic RD7-shaped brief *(Offer-owned, independent of A001; `OFFER_OS.md` §8)* | Whether RD7's constraints hold against OEOS's standing instructions: questions stay unresolved, output stays structural and non-pricing, Phase 11 BLOCKED | **Observed, not predicted:** Q1–Q5 unresolved · Phase 11 blocked · **zero generated figures** · no outcome claim · the agent's own approval flag reached the top level · `emitted: []` | Runtime — `TEST_FIXTURE` lane | **one line** in `02_Offer/_memory/sandbox-offer-f2.jsonl` | OFFER-F2 | ✅ **COMPLETED 2026-09-22 — one attempt, SPENT.** **One sample:** it shows only that this brief held on this run; *“unresolved”* was judged from free text, because the schema has no field for it; the orchestrator→OEOS handover was not tested. **Not source evidence:** its model-generated phases, components and tiers must **never** be cited as the offer's structure, which stays `OFFER_OS.md` §3/§8 and `Draft 41` |
-| **O-7** | `offer-orchestrator` · the OFFER-F3 synthetic, flag-free, R4-shaped brief (§6.9) | The **Offer half** of a positive hand-off: a flag-free, in-scope **simulated** unit is routed without a spurious stop, and every constraint survives | **Not predicted** — any of the four `registry_action` values | Runtime — `TEST_FIXTURE` lane | **one line** in `02_Offer/_memory/sandbox-offer-f3.jsonl` | A new Offer decision, OFFER-F3 | 🟡 **PROPOSED for owner review — not approved, not registered in code** |
+| **O-7** | `offer-orchestrator` · the OFFER-F3 synthetic, flag-free, R4-shaped brief (§6.9) | An **Offer intake test of an asserted synthetic brief** — **not** a demonstrated positive hand-off. Its in-scope result is *asserted inside the Offer seed*, not produced by an independent Sector record or an S10 packet. It tests only whether the intake routes that brief without a spurious stop, with every constraint intact *(corrected 2026-09-22)* | **Not predicted** — any of the four `registry_action` values | Runtime — `TEST_FIXTURE` lane | **one line** in `02_Offer/_memory/sandbox-offer-f3.jsonl` | A new Offer decision, OFFER-F3 | 🟡 **PROPOSED for owner review — not approved, not registered in code** |
 
 ### 4.3 Content (04) · Marketing (03) · Sales (05)
 
@@ -143,7 +143,7 @@ S-1a · S-2 · S-3 · O-1 · O-2 · C-1 · M-1 · SA-1 · G-1
 | **R2 / R3** — no sandbox stream or skill marker | the same tests, *after* D15/D6 | The build in §6.1 |
 | **RD6** — no downstream agent runs | C-2, M-2, SA-2 | A separate RD6 decision |
 | **D20** — barred content classes | S-6, O-5 | ⛔ Never, from A001 |
-| **The skill-run record cannot carry a fixture** — every identifying field is a constant, `additionalProperties: false` at both levels, one shared file, and S10 has no fixture mode | S-7 (and S-4) | The §6.9 mechanism change **and** a Sector (01) decision |
+| **The skill-run record cannot carry a fixture** — *mechanism now prepared and disabled (2026-09-22)* | S-7 (and S-4) | **S-7:** draft decision SECTOR-SF1 only · **S-4:** still needs a fixture mode of its own |
 | **Key unverified by use** | every runtime test | An approved verification run |
 
 ---
@@ -440,7 +440,7 @@ real. **No registry change is authorised or implied** — D21 §6.
 other agent, skill or connector, no registry action, no CRM write, and no `.env` or key value
 opened or printed. **`PILOT-H-001` and every real-push PG gate are unchanged.**
 
-### 6.9 A positive Sector-to-Offer hand-off — route audit, and the proposed next test (OFFER-F3)
+### 6.9 A positive Sector-to-Offer hand-off — route audit, the prepared S10 fixture path, and OFFER-F3
 
 > Recorded here because this is the agency-systems matrix. OFFER-F2 and OFFER-F3 are **Offer-owned
 > and independent of A001**: they carry no A001 unit, and their decisions belong in `OFFER_OS.md`
@@ -454,14 +454,14 @@ orchestrator contract. It is **not** an automated channel:
 | Step | What it is | Can a fixture test it truthfully today? | Record and isolation |
 |---|---|---|---|
 | **R2** Sector fit | **Manual, no agent** (RD4): a cited basis for archetype, destination, size band, website, booking path and anti-ICP | ✅ **Document-only.** A001 already exercised it; a synthetic unit's record is labelled `SIMULATED_VERDICT` | None — a document |
-| **R3** S10 packet | A **skill** run by Claude Code; in the push, Offer is *"delivered by text reference"* | ❌ **No** — three blockers, below | Would write `01_Sector/_memory/skill_runs.jsonl`, which **cannot be marked or isolated** |
+| **R3** S10 packet | A **skill** run by Claude Code; in the push, Offer is *"delivered by text reference"* | 🟡 **Prepared, disabled** — the three blockers below are addressed, pending SECTOR-SF1 | A fixture run writes one marked record to `01_Sector/_memory/skill_runs-sandbox.jsonl` and one marked packet, and **never** `skill_runs.jsonl` |
 | **R4** Seed brief | **Human-drafted and owner-approved** text (PG2) | ✅ **Document-only.** The fixture input *is* an R4-shaped brief | None |
 | **R5** Orchestrator | A **runtime** call | ✅ Through the runtime fixture lane, under a new authorisation | One line in `02_Offer/_memory/sandbox-offer-f3.jsonl`: `classification: TEST_FIXTURE`, `emitted: []` |
 
 The orchestrator does subscribe to `SECTOR_MAPPED`, but **that subscription never fires**, because
 nothing sends agent emits. The only real bridge is the R4 text.
 
-**Why S10 cannot run as a fixture — three independent blockers:**
+**Why S10 could not run as a fixture — three independent blockers.** ✅ *All three are addressed by a mechanism prepared and **disabled** on 2026-09-22, pending draft decision SECTOR-SF1. The analysis is kept because it is why that mechanism looks as it does.*
 
 1. **The skill record cannot be marked.** `skill-execution-record.schema.json` is
    `additionalProperties: false` at the top level **and** in `payload`. Every field that could
@@ -476,7 +476,7 @@ nothing sends agent emits. The only real bridge is the R4 text.
    mechanism, and whether it delivered"*, but the schema has **no structured field** for
    per-destination outcomes. This is a contract gap for real runs too.
 
-**Smallest mechanism change for the S10 half** — proposed, **not made**:
+**Smallest mechanism change for the S10 half** — ✅ **now prepared, disabled (2026-09-22)**, as specified below. See the 2026-09-22 changelog entry and `SECTOR_OS.md` §8, SECTOR-SF1:
 
 - **Schema:** an optional top-level `classification` restricted to `TEST_FIXTURE`, and an
   optional `payload.destinations[]` of `{destination, mechanism, outcome}`, whose `outcome` enum
@@ -495,17 +495,25 @@ nothing sends agent emits. The only real bridge is the R4 text.
   **for A001**. The decision must say whether it is Sector-general for non-A001 fixtures only, or
   also amends D6.
 
-#### The proposed next test — **OFFER-F3** · 🟡 for owner review; not approved, not registered
+#### The ONE next test prepared — an S10 fixture run under SECTOR-SF1 · 🟡 draft; not approved, not run
 
-**Purpose.** Exercise the **Offer half** of a positive hand-off — R4 into R5 — with a unit
-on which **no stop rule fires**. It is D21's complement: D21 showed that the orchestrator
-refuses on inherited group flags; F3 asks whether it routes a flag-free, in-scope simulated unit
-**without a spurious stop**, and with every constraint intact.
+The full decision, with its input pin, permitted writes, expected outcomes, stop conditions, limits and approval wording, is in `SECTOR_OS.md` §8, draft **SECTOR-SF1**. In short:
 
-**It does not exercise S10**, which cannot run as a fixture, and **it produces no fit verdict.**
+- **One** S10 run in fixture mode on `01_Sector/fixtures/SYN-S10-01.sector-record.json` (sha256 `8247eefd…`).
+- It reads **no live store** and makes **no** cross-boundary write.
+- It writes **one** marked record to `skill_runs-sandbox.jsonl` and **one** marked packet.
+- **Expected, and derivable from the contracts:** Offer, Content and CRM `not_attempted_fixture`; Sales, Marketing and Operations `HANDOFF_FAILURE`; nothing `delivered`.
+- **Verified from rules:** the five rule results, recomputed by `test_skill_fixture.py`. **Synthetic:** the unit and every attribute value.
 
-**Why this is not a manufactured pass.** Every documented rule is applied, and passes only
-because the synthetic attributes were **chosen** to be in scope. No rule is skipped, suppressed
+#### OFFER-F3 — an Offer intake test of an **asserted** synthetic brief · 🟡 proposed; not approved, not registered
+
+> ⚠️ **Corrected 2026-09-22.** v1.3 called this *"the Offer half of a positive hand-off."* **It is not.** Without an S10 fixture packet and an independent Sector fit record, F3 is **only an Offer intake test of an asserted synthetic brief**. Its in-scope result is written *into the Offer seed itself*; no Sector step produced it, and no test recomputes it. **Its declared fit must not be called a demonstrated positive hand-off.**
+
+**Purpose.** Test the Offer **intake**, R5, on a brief that **asserts** a flag-free, in-scope simulated unit: does the orchestrator route it **without a spurious stop**, with every constraint intact? It is D21's complement only at the intake: D21 showed the orchestrator refusing on inherited group flags.
+
+**It does not exercise S10** and **it produces no fit verdict.** S10's fixture mode is now prepared but **disabled**, pending SECTOR-SF1. A stronger F3 would take its brief from that run's packet, replacing assertion with a Sector-produced input. That would be a new decision, not this one.
+
+**Why this is not a manufactured pass — and how far that goes.** The brief *asserts* that every documented rule passes, because the synthetic attributes were **chosen** to be in scope. Unlike `SYN-S10-01`'s record, those assertions are **not recomputed** by any test. No rule is skipped, suppressed
 or overridden: an independent unit with no group flags is simply a unit on which the anti-ICP
 rule does not fire. A manufactured pass would be something like taking a group unit and deleting
 its flags — which this is not. **The consequence is stated as a limit:** a good result shows
@@ -537,8 +545,8 @@ of its four values. Each has a correct reading:
 | If it returns | The mechanism reading |
 |---|---|
 | `add_new_offer` / `update_existing_offer` | The intake did not stop a flag-free unit. **It authorises nothing** — in the real push, reading either as permission is itself a PG3 stop condition |
-| `needs_more_seed_data` | A valid response to synthetic, unobserved data. It would produce the **first real orchestrator output** a later, separately authorised fixture could carry into OEOS under RD7, testing the handover OFFER-F2 could not |
-| `reject` | **Not automatically a defect.** It is one if the cited reason is **not** traceable to the input or the contract (a spurious stop), and valid if it cites a documented constraint such as Working Hypothesis or Not Quotable |
+| `needs_more_seed_data` | A valid response to synthetic, unobserved data. It would produce the **first real orchestrator output** a later, separately authorised fixture could carry into OEOS under RD7, testing the handover OFFER-F2 could not — **though that output would still rest on an asserted brief**, not on a Sector-produced packet |
+| `reject` | **Not automatically a defect.** A reject is a legitimate outcome for an asserted synthetic brief. It is a defect **only** if the cited reason is **not** traceable to the input or the contract (a spurious stop); it is valid if it cites a documented constraint such as Working Hypothesis or Not Quotable, or the brief's unobserved data |
 
 **A defect is any of:** a figure of any kind · an outcome, result or performance claim · any
 statement about a market, demand, guests, competitors or destination performance · treating
@@ -603,6 +611,7 @@ in between.
 
 ## 9. Changelog
 
+- 2026-09-22 — **v1.4. OFFER-F3's overclaim corrected; the S10 fixture path prepared and disabled.** **Correction:** v1.3 called OFFER-F3 *"the Offer half of a positive hand-off."* Without an S10 fixture packet and an independent Sector fit record, it is **only an Offer intake test of an asserted synthetic brief**. Its in-scope result is written into the Offer seed, no Sector step produced it, and no test recomputes it. O-7 and §6.9 now say so; the declared fit is no longer called a demonstrated hand-off; `reject` is restated as a legitimate outcome, a defect only when its reason is untraceable. F3 stays **proposed and unregistered**. **Prepared, disabled:** a non-A001 `TEST_FIXTURE` mode for S10. It comprises an additive schema extension (all 15 existing records still validate), `skill_run_gate.py` checks 6–8, one delimited S10 fixture block that strips back byte-for-byte, and an independently labelled synthetic Sector record `SYN-S10-01`, whose five rule results an offline test recomputes from `plugin.config.json`, the readiness packet and `OFFER_OS.md`. **S-7** moves from blocked to prepared-and-disabled, pending draft decision **SECTOR-SF1** (`SECTOR_OS.md` §8). **S-4** stays blocked. A001 D6 is unchanged. No skill, agent, API or connector call; no log written. **Dated entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-22 — **v1.3. OFFER-F2 recorded as completed; the positive Sector-to-Offer route audited; OFFER-F3 proposed.** **O-6:** OFFER-F2 is complete, one attempt and spent, with its one-sample limits. **Its model-generated structure is marked as never to be cited as source evidence.** **Route audit (§6.9):** the Sector-to-Offer hand-off is R2 (a manual fit document) → R3 (the S10 skill) → R4 (a human-drafted brief) → R5 (the orchestrator). It is not an automated channel, since `SECTOR_MAPPED` never fires. **S10 cannot run as a fixture (S-7),** for three reasons: the skill-run schema is `additionalProperties: false` with every identifying field constant, so a fixture record cannot be marked, and it goes to one shared file; S10 has no fixture mode, and its only real run wrote to Notion; and the schema has no structured per-destination outcome field, a gap for real runs too. The smallest mechanism change and the Sector (01) decision it needs are specified, **not made**, including its overlap with A001's T1-4 under D6. **O-7 / OFFER-F3 proposed:** the Offer half only (R4 → R5), with a synthetic, flag-free unit `SYN-F3`, exact input pinned by sha256 `633b2a72…`, a result that is observed and never predicted, a defect list, a log destination and stop conditions. It is **not registered in code and not approved**. Every fixture lane stays off, every existing log is unchanged, and the real-push PG gates are untouched. No agent, skill, API or connector call. **Dated entries below stand as written.** — Claude Code (Opus 5)
 - 2026-09-22 — **v1.2. The stale O-3 row corrected, and §6.8's reject-emit finding marked as fixed.** **O-3** still read *“Blocked — R2”* with a predicted outcome of `needs_more_seed_data` or `reject`. **It is not an unrun test:** D21 ran it once on 2026-09-21 and it **returned `reject`**. The row now records the observed result, the one fixture line it wrote, that it is a stop-rule result rather than eligibility, and that it cannot be re-run without a fresh decision. **§6.8's mechanism finding is now acted on** — a rejected brief no longer advertises `OFFER_BRIEF_RECEIVED` (details in `OFFER_OS.md` §12). **The fixture log is unchanged** and dated entries below stand as written. — Claude Code (Opus 5)
 - 2026-09-22 — **v1.1. D21's `reject` recorded as a successful stop-rule test; no OEOS continuation of the A001-P07 sequence.** Audited against the readiness packet: **`reject` stops the sequence** — packet PG3 (stop if `registry_action: reject`), R5 (stop on `reject`) and RD7 (*“a `reject` result stops the sequence”*). RD7's structural-only continuation exists **only for `needs_more_seed_data`**. **Corrected live text:** §4.2's O-4 row described OEOS consuming *“orchestrator output”* under RD7 and read as blocked only by R2 — the only such output is D21's `reject`, so O-4 is now marked **stopped for this sequence**, and §5's D15 row no longer implies a decision could reopen it. **Withdrawn:** the session suggestion of a “D22” feeding D21's output into `offer-oeos-engineer`; it was never written into this plan. **Added to §6.8:** the stop-rule framing, and a D20-permitted mechanism finding — the runtime never reads `registry_action`, the orchestrator emitted `OFFER_BRIEF_RECEIVED` even on `reject`, OEOS subscribes to it, and nothing chained **only** because no path publishes agent emits. The stop is procedural. **Not changed:** the one-line fixture log, the lane (closed), D21 (spent), every PG gate, and `PILOT-H-001`. No agent, skill or API call. **Dated entries below stand as written.** — Claude Code (Opus 5)
