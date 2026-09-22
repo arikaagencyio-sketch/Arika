@@ -6,7 +6,13 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 import { requiresHumanApproval, classToLevel, levelToClass } from "../dist/governance.js";
 import { frontmatterSchema, MAX_NONSTREAMING_TOKENS } from "../dist/spec-schema.js";
-import { DEFAULT_MAX_TOKENS, finalizeRun, parseStructuredOutput, runAgent } from "../dist/executor.js";
+import {
+  advertisedEmits,
+  DEFAULT_MAX_TOKENS,
+  finalizeRun,
+  parseStructuredOutput,
+  runAgent,
+} from "../dist/executor.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
 import {
@@ -602,4 +608,76 @@ test("fixture: CLI mapping validates the destination too", () => {
   assert.throws(() => buildFixtureOptions({ fixture: true, memoryStream: "01_Sector/_memory/sandbox.jsonl" }, true), /not the approved destination/);
   assert.deepEqual(buildFixtureOptions({ fixture: true, memoryStream: APPROVED }, true),
     { fixture: true, memoryStreamOverride: APPROVED });
+});
+
+// ---------------------------------------------------------------------------
+// A rejected brief must not advertise the event that would advance it.
+// Found by the A001 D21 fixture run (OFFER_OS.md §12). No model is called: every
+// case below drives finalizeRun with a canned recommendation.
+// ---------------------------------------------------------------------------
+
+const tmpStream = () =>
+  join(tmpdir(), `arika-emit-${process.pid}-${Math.random().toString(36).slice(2)}.jsonl`);
+
+// The real orchestrator spec, re-pointed at a temp file so no real log is touched.
+function orchestratorWith(file) {
+  const { agents } = loadAgents();
+  const spec = agents.get("offer-orchestrator");
+  return { ...spec, memory_stream: file };
+}
+
+const rec = (registry_action) => ({
+  summary: "canned",
+  recommendedActions: [],
+  requiresHumanApproval: false,
+  approvalReasons: [],
+  riskLevel: "low",
+  registry_action,
+});
+
+test("emits: a reject withholds OFFER_BRIEF_RECEIVED and nothing else", () => {
+  assert.deepEqual(advertisedEmits(["OFFER_BRIEF_RECEIVED"], { registry_action: "reject" }), []);
+  // Only the named event is withheld; an unrelated emit survives a reject.
+  assert.deepEqual(advertisedEmits(["OFFER_ENGINEERED"], { registry_action: "reject" }), ["OFFER_ENGINEERED"]);
+  // No registry_action at all: nothing is withheld.
+  assert.deepEqual(advertisedEmits(["OFFER_BRIEF_RECEIVED"], {}), ["OFFER_BRIEF_RECEIVED"]);
+  assert.deepEqual(advertisedEmits(undefined, { registry_action: "reject" }), []);
+});
+
+test("emits: reject through the normal finalize path, with the real orchestrator spec", () => {
+  const file = tmpStream();
+  const spec = orchestratorWith(file);
+  // The contract itself is unchanged: the spec still declares the emit.
+  assert.deepEqual(spec.emits, ["OFFER_BRIEF_RECEIVED"]);
+  const recommendation = rec("reject");
+  try {
+    const result = finalizeRun(spec, { trigger: "manual", input: { seed_brief: "x" } }, recommendation);
+    assert.deepEqual(result.emitted, [], "a rejected brief must not advertise OFFER_BRIEF_RECEIVED");
+    // The recommendation is preserved, unmutated.
+    assert.equal(result.recommendation, recommendation);
+    assert.equal(result.recommendation.registry_action, "reject");
+    // And the memory record is still written, with the reject intact.
+    const logged = JSON.parse(readFileSync(file, "utf8").trim());
+    assert.equal(logged.agent, "offer-orchestrator");
+    assert.equal(logged.payload.recommendation.registry_action, "reject");
+  } finally {
+    rmSync(file, { force: true });
+  }
+});
+
+test("emits: other registry actions still advertise - no broadening, no automatic approval", () => {
+  // Each has a human-reviewed path forward (PG3; RD7 for needs_more_seed_data), so
+  // the event stays advertised. Advertising is not approval: nothing publishes it,
+  // and the approval gate is decided independently of it.
+  for (const action of ["add_new_offer", "update_existing_offer", "needs_more_seed_data"]) {
+    const file = tmpStream();
+    try {
+      const result = finalizeRun(orchestratorWith(file), { trigger: "manual", input: {} }, rec(action));
+      assert.deepEqual(result.emitted, ["OFFER_BRIEF_RECEIVED"], `${action} should be unchanged`);
+      assert.equal(result.recommendation.registry_action, action);
+      assert.equal(result.requiresHumanApproval, false, `${action}: no approval was invented`);
+    } finally {
+      rmSync(file, { force: true });
+    }
+  }
 });

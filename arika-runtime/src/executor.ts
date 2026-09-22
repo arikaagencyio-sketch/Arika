@@ -76,6 +76,37 @@ export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunRes
 }
 
 /**
+ * Events a result may withhold, keyed by event -> the recommendation field and
+ * the values that withhold it. An event is advertised only while the result
+ * still allows its sequence to continue.
+ *
+ * `reject` stops the Offer sequence outright (readiness packet PG3 / R5 / RD7),
+ * so it must not advertise `OFFER_BRIEF_RECEIVED` - the event that hands a brief
+ * to `offer-oeos-engineer`, which subscribes to it. Found by the A001 D21
+ * fixture run, whose `reject` still reported the event (OFFER_OS.md §12).
+ *
+ * Deliberately NOT withheld: `needs_more_seed_data`, `add_new_offer` and
+ * `update_existing_offer`. Each has a human-reviewed path forward (PG3; RD7 for
+ * a structural continuation), so the right control for them is that review, not
+ * suppression - withholding would wrongly signal a stop. Nothing here sends an
+ * event anywhere: this only narrows what a result reports.
+ */
+const WITHHELD_EMITS: Record<string, { field: string; values: readonly string[] }> = {
+  OFFER_BRIEF_RECEIVED: { field: "registry_action", values: ["reject"] },
+};
+
+/** The declared emits, minus any the recommendation withholds. */
+export function advertisedEmits(
+  emits: readonly string[] | undefined,
+  recommendation: Record<string, unknown>,
+): string[] {
+  return (emits ?? []).filter((event) => {
+    const rule = WITHHELD_EMITS[event];
+    return !(rule && rule.values.includes(String(recommendation[rule.field])));
+  });
+}
+
+/**
  * Governs and records a finished run. The approval gate is decided here, after
  * the agent has answered, so its own `requiresHumanApproval: true` raises the
  * gate — the top-level result and the memory line must never report "no
@@ -111,7 +142,9 @@ export function finalizeRun(
     riskClass: spec.risk_class,
     recommendation,
     memoryPath,
-    emitted: spec.emits ?? [],
+    // The recommendation and the memory line above are untouched; only the
+    // advertised events are narrowed.
+    emitted: advertisedEmits(spec.emits, recommendation),
   };
 }
 

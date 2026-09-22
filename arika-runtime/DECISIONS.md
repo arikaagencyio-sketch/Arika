@@ -3,6 +3,40 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-09-22 — A rejected brief withholds `OFFER_BRIEF_RECEIVED`
+
+**Found by:** the A001 D21 `TEST_FIXTURE` run (one `offer-orchestrator` attempt,
+2026-09-21). It returned `registry_action: reject`, yet the result reported
+`emitted: ["OFFER_BRIEF_RECEIVED"]` — the event `offer-oeos-engineer` subscribes to.
+`emitted` was `spec.emits` verbatim, so a stopped brief advertised the event that would
+advance it. Nothing chained only because no path sends agent emits: the CLI has no bus,
+and the booted runtime's event handler discards `result.emitted`.
+
+**Decision:** `finalizeRun` returns `advertisedEmits(spec.emits, recommendation)`. A small
+table, `WITHHELD_EMITS`, withholds `OFFER_BRIEF_RECEIVED` when `registry_action` is
+`reject`. Nothing else is filtered.
+
+- **Only `reject`.** It is the one value with no path forward (readiness packet
+  PG3 / R5 / RD7). `needs_more_seed_data`, `add_new_offer` and `update_existing_offer`
+  each have a human-reviewed path, so the control for them is review, not suppression.
+- **Recommendation and memory line untouched.** `emitted` was never in the memory
+  payload, so the log format is unchanged.
+- **Kept inside `executor.ts`**, where the estate gate's runtime-reality check watches.
+  The change adds no event sending, so that check still passes.
+
+**Not changed:** the spec still declares `emits: [OFFER_BRIEF_RECEIVED]`; no registry
+behaviour; no approval logic. The one line in `02_Offer/_memory/sandbox.jsonl` is
+append-only history and stays as written.
+
+**Residual, recorded rather than fixed:** if emits are ever sent, the three non-reject
+values would reach OEOS without PG3's human review — the orchestrator's top-level
+approval flag can be `false` at class 1. See `02_Offer/OFFER_OS.md` §12.
+
+**Verified:** `npm test` → 40/40. Three new cases: the table withholds only the named
+event on `reject`; the **real** orchestrator spec through `finalizeRun` returns no
+`OFFER_BRIEF_RECEIVED` on `reject` while its memory line keeps the reject; and the other
+three actions are unchanged, with no approval invented.
+
 ## 2026-09-13 — The agent's own approval flag raises the gate
 
 **Found by:** three consecutive Sector → Offer test runs (`offer-orchestrator` ×2,
