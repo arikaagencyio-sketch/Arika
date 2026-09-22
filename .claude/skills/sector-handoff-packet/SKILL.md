@@ -21,13 +21,15 @@ You are performing the **apply** step of Sector's write layer, at its boundary.
 |---|---|---|---|
 | **Content (04)** | native relation — 9 available | `CONNECTED` | ✅ |
 | **Offer (02)** | relation + text reference | `CONNECTED` | ✅ |
-| **ClickUp CRM** | free-text ID tags on `Lead`: `sector`, `sub_sector`, `icp_tier`, `offer_id` | `CONNECTED` | ✅ |
+| **ClickUp CRM** | free-text ID tags on `Lead`: `sector`, `sub_sector`, `icp_tier`, `offer_id` | **`DESIGNED`** — **none of the four tag fields exists on the live `Lead` list** (owner-authorised schema read, 2026-09-22) *(was `CONNECTED` ✅, measured 2026-08-28)* | ❌ |
 | **Sales (05)** | **event only** | `CONNECTED` subscriber, **no observed delivery** | ❌ |
 | **Marketing (03)** · **Operations (08)** | **event only**, and that event is `DEMAND_SHIFT` | **`DESIGNED`** — archived 2026-08-28 (31d) | ❌ |
 
 > 🔴 **An event route does not deliver, however well subscribed.** `executor.ts` returns `emitted` and **never publishes**; the bus's only `publish()` call site is an inbound external webhook. So a `CONNECTED` event has a verified listener and **no observed delivery** — `AEIT_11` R2: *a state is never inherited.*
 >
 > **Consequence: Marketing (03) and Operations (08) have no working route from Sector at all**, because their only route was an event now archived. **Sales (05) is reachable in principle and not in fact.** Say this in the run report; do not let a packet look delivered because it was assembled.
+>
+> **Added 2026-09-22:** the **ClickUp CRM route has no target** — none of the four `Lead` tag fields exists live. Report the CRM destination as `HANDOFF_FAILURE` until they are created, which is a write and needs its own decision. `ICP Fit Score` does exist on that list, but `CRM_SCHEMA.md` assigns it to Sales; it is not Sector's `icp_tier`.
 
 ## Step 1 · `HANDOFF_FAILURE` is a result, not an error
 
@@ -148,3 +150,5 @@ F3 are refusals, not options.
 **Routes: 3 of 6 destinations deliver.** Content (04), Offer (02) and the ClickUp CRM work by relation and text. **Sales (05) is `CONNECTED` but has no observed delivery. Marketing (03) and Operations (08) have no route at all** — their only one was `DEMAND_SHIFT`, retired to `DESIGNED` on 2026-08-28 under owner decision 31d.
 
 That ratio is the thing to weigh before promising a downstream department anything: **the department can now produce a packet for six consumers and hand it to three.**
+
+**Re-measured 2026-09-22 — owner-authorised connector schema read, one call per connector (target/schema existence only; delivery not tested).** DB 2's five Content relations and its Offer relation exist live and point at their declared targets, so those two mechanisms have real targets. **The CRM row does not:** none of `sector`, `sub_sector`, `icp_tier` or `offer_id` exists on the live `Lead` list. The 2026-08-28 snapshot above is left exactly as measured; on today's evidence the ratio is **two of six destinations with a verified target, and still none with an observed delivery.**

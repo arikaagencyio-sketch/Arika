@@ -1,7 +1,7 @@
 # CRM Schema (Marketing/Content → Sales → Client Success → Finance)
 
-**Status:** v0.1-draft — structural schema, not yet implemented in any real CRM tool.
-**Last updated:** 2026-06-30
+**Status:** v0.1-draft (structure) — **implemented in ClickUp since 2026-07-01**; `Lead`'s live fields re-verified 2026-09-22 (see the live check under `Lead`).
+**Last updated:** 2026-09-22
 
 > Referenced from [`GLOBAL_OS.md`](../GLOBAL_OS.md) §11 (closes "Required Agency-Wide Closure Systems" item 4). This is the canonical object model every department's tooling should converge toward — it does not assume any specific CRM platform (that selection belongs to Tech Stack, `13_Tech_Stack/TECHSTACK_OS.md`).
 
@@ -23,6 +23,8 @@ Marketing/Content, Sales, Client Success, and Finance all touch the same underly
 | ICP_fit_score | number | Sales (05) | Qualification scoring, see Constitution §5 for any automation risk-class implications |
 | stage | enum | Sales (05) | new → contacted → qualified → opportunity → closed-won / closed-lost |
 | created_at, last_touch_at | datetime | System | |
+
+> **Live check — `Lead` list, 2026-09-22.** Owner-authorised, read-only schema metadata; target/schema existence only; delivery not tested. Six custom fields exist: `Source` (dropdown), `Source Campaign`, `Contact name`, `Contact Email`, `Company`, `ICP Fit Score`. **`lead_id` and `last_touch_at` are not custom fields** — ClickUp's native task id and update timestamp stand in, a distinction the 2026-07-01 note below (*“every custom field in the Core Objects tables above is now live”*) did not draw. `stage` is a status pipeline, as designed, and `created_at` is native. **The live `Source` options omit `inreach`**, which this table lists: inbound, outbound, referral, partner, event. No task, member, comment or activity was read; nothing was written.
 
 ### Opportunity
 | Field | Type | Set by | Notes |
@@ -127,6 +129,8 @@ Sector's commercial-activation loop (`01_Sector/SECTOR_ACTIVATION_CONTRACT.md` �
 - **On `Opportunity`:** `offer_id` is the Industry-Offer-Matrix entry offer for that sub-sector (the land-and-expand ladder's first rung).
 - **Per-sector Ideal Target Profile** (firmographics + trigger + entry-offer + outreach angle) is assembled by Sector as the "who we'd approach and with what" spec that seeds outreach — the actual script/proposal is owned by **Sales (05) + Content (04)**, not Sector.
 
+> 🔴 **Verified absent 2026-09-22 (owner-authorised schema read).** None of `sector`, `sub_sector`, `icp_tier` or `offer_id` exists as a field on the live `Lead` list, so this bridge is still a **mapping only** and Sector's S10 hand-off into the CRM has **no target field to write**. S10's route table is corrected to match (`DESIGNED`, not `CONNECTED`). Creating the four fields is a write and needs its own decision. `ICP Fit Score` exists but is Sales-set, and is not Sector's `icp_tier`. Target/schema existence only; delivery not tested.
+
 **Honesty gate:** real `Lead` rows (contact_name/email/company) are **gated on scraping** (paid people-data MCP + Legal + cost governance + Approval-Matrix row — `AEIT_08` §3.1/§5). Until then the bridge is a **field mapping + template**; no contact is ever fabricated.
 
 ## What this schema deliberately does not specify
@@ -136,6 +140,7 @@ Sector's commercial-activation loop (`01_Sector/SECTOR_ACTIVATION_CONTRACT.md` �
 
 ## Changelog
 
+- 2026-09-22 — **`Lead`'s live custom fields read and recorded (owner-authorised, one read-only schema call).** Six exist: Source, Source Campaign, Contact name, Contact Email, Company, ICP Fit Score. **Corrections:** `lead_id` and `last_touch_at` are **not** custom fields (native ClickUp id and timestamp), so the 2026-07-01 claim that every Core-Objects field is live on its List is too broad for `Lead`; the live `Source` dropdown **omits `inreach`**; and **none of the four Sector bridge tag fields exists**, so that bridge stays a mapping and S10's CRM route has no target. Target/schema existence only; delivery not tested. Only `Lead` was read — the other four Lists are unverified. — Claude Code (Opus 5)
 - 2026-07-01 — **Zoho Books confirmed real and connected** — pre-existing org (created 2026-06-26), ID `929138528`, Kenya, KES base currency, Premium Trial. Real decision: USD offer pricing, KES invoicing via conversion calculator. — Claude Code (Sonnet 5)
 - 2026-07-01 — **QuickBooks reverted to Zoho Books.** Real QuickBooks connection attempt confirmed a paid subscription/business registration is required before authentication is even possible — no free tier. Owner reverted to Zoho Books, re-superseding the same-day QuickBooks decision. — Claude Code (Sonnet 5)
 - 2026-07-01 — **All 5 status pipelines built and verified**, via a ClickUp OAuth App token (personal token could not do this — confirmed). Field rename/delete confirmed blocked under both token types — hard platform limitation. — Claude Code (Sonnet 5)

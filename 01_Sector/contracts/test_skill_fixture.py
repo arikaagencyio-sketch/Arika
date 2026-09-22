@@ -28,7 +28,12 @@ SKILL_MD = os.path.join(ROOT, ".claude", "skills", "sector-handoff-packet", "SKI
 
 # Baselines captured 2026-09-22, before the fixture path was prepared.
 REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29f58169652"
-S10_ORDINARY_SHA = "1261834be05d5160c1263c47748a931bde7bdeb1699baddc7fb3dd8817878f84"
+# Re-baselined 2026-09-22, deliberately: an owner-authorised read-only schema call found that
+# none of the four `Lead` tag fields exists live, so S10's Step 0 table now records the ClickUp
+# CRM route as DESIGNED / no target instead of CONNECTED, with the dated note and appendix
+# re-measurement that go with it. SECTOR_OS.md section 8 and section 15 carry the record.
+# Was 1261834be05d5160c1263c47748a931bde7bdeb1699baddc7fb3dd8817878f84 (2026-09-22, pre-correction).
+S10_ORDINARY_SHA = "4b854d4c633b5f5b27e3d300dc47fe009eeb5dfa782fd444184320393159b69f"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)
