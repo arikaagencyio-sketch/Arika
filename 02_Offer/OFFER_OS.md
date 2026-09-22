@@ -289,7 +289,8 @@ spends it, and a retry needs a fresh decision. **No concurrent invocation.**
 
 **What it does not authorise.** No registry change. The output is **not Offer evidence** and
 supports no market, demand, buyer, pricing, capacity or proof claim. No pricing step: the
-`offer-pricing-floor-analyst` hand-off is **not** run. No other agent, skill, connector, CRM
+`offer-pricing-floor-analyst` hand-off is **not** run, and the result advertises **no**
+events (the fixture isolation rule — `emitted: []`). No other agent, skill, connector, CRM
 write or event. No effect on `PILOT-H-001`, the Full Push Readiness Packet or any PG gate.
 
 **Stop conditions — before the call (each refuses the run and costs no API call):**
@@ -324,9 +325,14 @@ stream other than `sandbox-offer-f2.jsonl`.
   not prove the real R6 input will behave the same, and it supports no rate or reliability claim.
 - **It cannot test the orchestrator-to-OEOS handover**, because no `needs_more_seed_data` output
   exists.
-- **The result will still advertise `OFFER_ENGINEERED`**, the event the pricing analyst subscribes
-  to. Nothing sends agent emits, so it is inert, but fixture runs do not yet suppress their emits.
-  That is a separate change, not made here.
+- **Emits — safeguard added 2026-09-22.** A `TEST_FIXTURE` run now returns **`emitted: []`**,
+  so this attempt will **not** advertise `OFFER_ENGINEERED`, the event the pricing analyst
+  subscribes to. The rule applies to every fixture run and is enforced in `finalizeRun`. The
+  agent's spec still **declares** `OFFER_ENGINEERED`, and the recommendation and memory payload
+  are unchanged (`emitted` was never in the payload). **What it does not prove:** nothing sent
+  agent emits before this rule either, so it closes an advertised **signal**, not a live
+  channel. It also sits in `finalizeRun`, **after** the model call, so it governs what a
+  completed run reports, not whether the call happens.
 - **File-existence proves at most one *completed write*, not one API attempt**, and there is no
   concurrency lock. Both are owner procedure.
 - **The input's structure is a reduction** of documented records made by Claude Code, so it
@@ -344,8 +350,8 @@ stream other than `sandbox-offer-f2.jsonl`.
    --memory-stream 02_Offer/_memory/sandbox-offer-f2.jsonl --input "<the JSON above>"`
 6. **Whatever happens**, set `OFFER-F2` to `spent` and the switch to `false`, rebuild, and rerun
    the tests and gates. **No retry.**
-7. Verify: at most one `TEST_FIXTURE` line in `sandbox-offer-f2.jsonl`; `runtime.jsonl` and
-   `sandbox.jsonl` **byte-unchanged**.
+7. Verify: at most one `TEST_FIXTURE` line in `sandbox-offer-f2.jsonl`; the result's `emitted`
+   is **`[]`**; `runtime.jsonl` and `sandbox.jsonl` **byte-unchanged**.
 8. Record the observations against the findings list, as a mechanism result only.
 
 **Approval wording the owner would give (not given):**
@@ -451,6 +457,8 @@ Even a conditional `OFFER_PRICED` is an advisory signal, not approval to quote; 
 
 **Why the change stops at `reject`:** withholding means *no path forward*, which is true only of `reject`. Withholding the other three would falsely signal a stop and would contradict RD7's permitted continuation. **Advertising is neither sending nor approval.** ⚠️ **Residual, not fixed here:** if agent emits are ever sent, the three *Yes* rows would reach OEOS **without** PG3's review, because the orchestrator's top-level approval flag can be `false` at class 1 (it was on D21). Sending must not be added without a human-review gate for those values — and, per the rule above, not without the estate gate.
 
+**A `TEST_FIXTURE` run advertises no events at all (2026-09-22).** Whatever the spec declares or the recommendation says, a fixture run returns `emitted: []`, so no fixture can signal a hand-off. That covers `OFFER_BRIEF_RECEIVED` above and OEOS's `OFFER_ENGINEERED`. This is an **isolation rule for fixtures only**. Specs, ordinary runs, RD5 and the real Offer workflow are unchanged, and the table above still governs every ordinary run.
+
 ## 13. Existing OS Sub-Layer
 
 Offer's execution layer lives as three runtime agent specs (`.claude/agents/offer-*.md`), run by the unified **Arika Runtime** (`arika-runtime/`). There is no department-local plugin/code (unlike Finance's `finos-plugin` or Branding's `bois`) — the agents are `execution: prompt`, driven directly by the runtime executor. See §5.
@@ -477,6 +485,7 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 
 ## 15. Changelog
 
+- 2026-09-22 — **Fixture isolation: a `TEST_FIXTURE` run now advertises no emits** (§12, and the OFFER-F2 draft in §8). `finalizeRun` returns `emitted: []` in fixture mode, so the draft OFFER-F2 attempt would not advertise `OFFER_ENGINEERED` to the pricing analyst. The draft's limits list, which yesterday said fixture runs *“do not yet suppress their emits”*, is corrected to describe the safeguard and its limits. It closes a signal, not a live channel, and applies after the model call. **Unchanged:** every spec's declared emits, recommendations, the memory payload, ordinary-run emits, RD5 and the real Offer workflow. OFFER-F2 stays **DRAFT** and the lane stays **closed**. The D21 fixture log is byte-unchanged. Tests: 3 new, 54/54 pass. — Claude Code (Opus 5)
 - 2026-09-22 — **Draft decision OFFER-F2 prepared in §8 — NOT enacted.** An independent `TEST_FIXTURE` attempt of `offer-oeos-engineer` to test RD7's unresolved-question, non-pricing and Phase 11 BLOCKED constraints against the agent's own standing instructions. It comes from no orchestrator run, carries no A001 unit or real property, and cannot satisfy or bypass PG3. **The exact input is pinned by sha256**, and its five questions come only from the packet's §9.2 current open list. **Two items `Draft 41` still called missing — delivery capacity and commercial shape — are decided and were left out.** The runtime fixture lane now uses an authorisation registry, which holds A001 D21 `spent` and OFFER-F2 `draft`. The lane stays **closed**, nothing ran, and the existing fixture and runtime logs are unchanged. The draft records what the test **cannot** prove. — Claude Code (Opus 5)
 - 2026-09-22 — **A rejected brief no longer advertises `OFFER_BRIEF_RECEIVED`** (§12, §5). A D20-permitted mechanism finding from the A001 D21 fixture run: the orchestrator's static emit reported the event that hands a brief to `offer-oeos-engineer` even on `registry_action: reject`. `finalizeRun()` now withholds it for `reject` only; the recommendation, the memory line and the spec's declared emit are unchanged, and **no event sending was added and no registry behaviour changed**. The other three registry actions keep advertising it under PG3 human review — recorded in §12 with the residual risk if sending is ever wired. **No Offer decision, doctrine, band, gate or ICP rule changed**, the registry table is untouched, and nothing here is market evidence. Regression tests: 3 new, 40/40 pass. — Claude Code (Opus 5)
 - 2026-07-15 — **Registered offer #12, the CPAROS acquisition ladder (AFS/AGE/ADN) — structure only, pricing rejected** (§3, §8). Surfaced by ClientPartner Acquisition (06)'s mandate correction, which found a productized 3-tier service line in its `Draft 2` that the 2026-06-30 narrowing had written off as a Marketing duplicate. The ladder is real; its numbers ($2K–$250K+ setup, 2–10% rev share) and outcome projections are Claude-generated and **not adopted** — recorded as provenance only, never quotable. Owner-confirmed among 3 options. **Flagged a real open conflict:** offers #8 (Strategic Partnership Infrastructure) and #12 are two competing ClientPartner Acquisition ladders — #8's own long-standing "needs reconciliation against the organizational 06 department" note is now actionable and remains open. Neither is OEOS-engineered. — Claude Code (Opus 4.8)

@@ -217,3 +217,69 @@ test("f2: the OEOS output-schema limits the draft records still hold", () => {
   const phaseFields = Object.keys(out.properties.phases.items.properties);
   assert.equal(phaseFields.some((f) => /status|block/i.test(f)), false, "no phase carries a status field");
 });
+
+// ---------------------------------------------------------------------------
+// Isolation rule: a TEST_FIXTURE run advertises no emits. Driven through the
+// normal finalizeRun path with canned recommendations - no model is called, and
+// every line goes to a temp directory.
+// ---------------------------------------------------------------------------
+
+const PAYLOAD_KEYS = ["trigger", "input", "recommendation", "requiresHumanApproval", "riskClass"];
+
+function realSpec(name, streamFile) {
+  const { agents } = loadAgents();
+  return { ...agents.get(name), memory_stream: streamFile };
+}
+
+test("f2: an OFFER-F2 fixture run returns emitted: [] - OFFER_ENGINEERED included", () => {
+  const dir = tmpDir();
+  const fixtureStream = join(dir, "sandbox-offer-f2.jsonl");
+  const spec = realSpec("offer-oeos-engineer", join(dir, "runtime.jsonl"));
+  // The agent's declared contract is unchanged: it still declares the emit.
+  assert.deepEqual(spec.emits, ["OFFER_ENGINEERED"]);
+  const input = recordedF2Input();
+  const recommendation = { summary: "structural only", requiresHumanApproval: false };
+  const result = finalizeRun(
+    spec,
+    { trigger: "manual", input, fixture: true, memoryStreamOverride: fixtureStream },
+    recommendation,
+  );
+  assert.deepEqual(result.emitted, [], "a fixture must not advertise OFFER_ENGINEERED");
+  assert.equal(result.recommendation, recommendation, "recommendation returned unmutated");
+  // The memory payload is exactly what it was before this rule existed.
+  const line = JSON.parse(readFileSync(fixtureStream, "utf8").trim());
+  assert.equal(line.classification, "TEST_FIXTURE");
+  assert.deepEqual(Object.keys(line.payload), PAYLOAD_KEYS);
+  assert.deepEqual(line.payload.input, input);
+  assert.equal(existsSync(join(dir, "runtime.jsonl")), false, "nothing reached the spec's own stream");
+  rmSync(dir, { recursive: true, force: true });
+});
+
+test("f2: ordinary OEOS output keeps its advertised emits", () => {
+  const dir = tmpDir();
+  const stream = join(dir, "runtime.jsonl");
+  const result = finalizeRun(
+    realSpec("offer-oeos-engineer", stream),
+    { trigger: "manual", input: { seed_brief: "x" } },
+    { summary: "ordinary" },
+  );
+  assert.deepEqual(result.emitted, ["OFFER_ENGINEERED"], "ordinary behaviour is unchanged");
+  const line = JSON.parse(readFileSync(stream, "utf8").trim());
+  assert.equal(line.classification, undefined);
+  assert.deepEqual(Object.keys(line.payload), PAYLOAD_KEYS);
+  rmSync(dir, { recursive: true, force: true });
+});
+
+test("f2: the rule covers every fixture run, not only OEOS", () => {
+  // The orchestrator's add_new_offer advertises OFFER_BRIEF_RECEIVED when ordinary,
+  // and nothing when it is a fixture.
+  const dir = tmpDir();
+  const rec = { summary: "x", requiresHumanApproval: false, registry_action: "add_new_offer" };
+  const ordinary = finalizeRun(realSpec("offer-orchestrator", join(dir, "runtime.jsonl")),
+    { trigger: "manual", input: {} }, rec);
+  assert.deepEqual(ordinary.emitted, ["OFFER_BRIEF_RECEIVED"]);
+  const fixture = finalizeRun(realSpec("offer-orchestrator", join(dir, "runtime.jsonl")),
+    { trigger: "manual", input: {}, fixture: true, memoryStreamOverride: join(dir, "sandbox.jsonl") }, rec);
+  assert.deepEqual(fixture.emitted, []);
+  rmSync(dir, { recursive: true, force: true });
+});

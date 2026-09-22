@@ -144,7 +144,13 @@ export function finalizeRun(
     memoryPath,
     // The recommendation and the memory line above are untouched; only the
     // advertised events are narrowed.
-    emitted: advertisedEmits(spec.emits, recommendation),
+    //
+    // Isolation rule: a TEST_FIXTURE run advertises NO events at all, whatever
+    // the spec declares or the recommendation says. A fixture is terminal by
+    // design - it must never signal a hand-off (e.g. OEOS's OFFER_ENGINEERED,
+    // which the pricing analyst subscribes to). This is about fixtures only: it
+    // changes no spec, no ordinary run, RD5 or the real Offer workflow.
+    emitted: ctx.fixture ? [] : advertisedEmits(spec.emits, recommendation),
   };
 }
 

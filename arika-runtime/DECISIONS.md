@@ -3,6 +3,29 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-09-22 — A fixture run advertises no emits
+
+**Why:** a `TEST_FIXTURE` run is terminal by design, yet it reported its spec's emits like any
+other run. The draft OFFER-F2 attempt of `offer-oeos-engineer` would have advertised
+`OFFER_ENGINEERED`, which `offer-pricing-floor-analyst` subscribes to — a hand-off signal
+from a simulation, toward a step RD5 skips. The entry below recorded this as out of scope;
+it is now fixed.
+
+**Decision:** `finalizeRun` returns `emitted: ctx.fixture ? [] : advertisedEmits(...)`. The
+reject rule still governs ordinary runs unchanged.
+
+**Not changed:** spec `emits` declarations; the recommendation; the memory payload (`emitted`
+was never in it); ordinary-run behaviour. No event sending was added, and `executor.ts`
+still carries none of the literals the estate gate watches for.
+
+**Limit:** the rule sits after the model call, so it shapes what a finished run reports; the
+pre-model gate in `runAgent` is still what decides whether a fixture runs at all.
+
+**Verified:** `npm test` → 54/54. An OFFER-F2-shaped fixture through `finalizeRun` with the
+real OEOS spec returns `[]` while the spec still declares `OFFER_ENGINEERED` and the payload
+keys are unchanged; ordinary OEOS still returns `["OFFER_ENGINEERED"]`; an orchestrator fixture
+returns `[]` where the ordinary run returns `["OFFER_BRIEF_RECEIVED"]`.
+
 ## 2026-09-22 — The fixture lane becomes an authorisation registry (prepared, closed)
 
 **Why:** the lane was hard-wired to one authorisation — A001 D21's agent, stream and
