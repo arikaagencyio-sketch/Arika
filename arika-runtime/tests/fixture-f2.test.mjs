@@ -51,10 +51,12 @@ const entry = {
   riskClass: 1,
 };
 
-test("f2: the registry holds D21 SPENT and OFFER-F2 DRAFT, and the lane is closed", () => {
+test("f2: the registry holds D21 and OFFER-F2 both SPENT, and the lane is closed", () => {
+  // State history: OFFER-F2 was `draft`, the owner approved it 2026-09-22, its one
+  // attempt was made the same day, and it is now `spent` (OFFER_OS.md §8).
   assert.equal(FIXTURE_LANE_ENABLED, false);
   assert.equal(D21.status, "spent");
-  assert.equal(F2.status, "draft");
+  assert.equal(F2.status, "spent");
   assert.equal(F2.agent, "offer-oeos-engineer");
   assert.equal(F2.stream, "02_Offer/_memory/sandbox-offer-f2.jsonl");
   assert.notEqual(F2.stream, D21.stream, "each authorisation has its own stream");
@@ -66,7 +68,7 @@ test("f2: even with the switch on, neither real authorisation can run", () => {
   assert.throws(
     () => assertFixturePreconditions("offer-oeos-engineer",
       { fixture: true, memoryStreamOverride: F2.stream, input }, { enabled: true, resolve: neverResolve }),
-    /OFFER-F2 is a DRAFT authorisation/,
+    /OFFER-F2 is SPENT/,
   );
   assert.throws(
     () => assertFixturePreconditions("offer-orchestrator",

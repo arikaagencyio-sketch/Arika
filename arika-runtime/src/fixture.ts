@@ -32,7 +32,7 @@ import { repoRoot } from "./paths.js";
  * else is checked. A001 D21 used and SPENT its one attempt on 2026-09-21; the
  * lane has been closed since.
  */
-export const FIXTURE_LANE_ENABLED = false;
+export const FIXTURE_LANE_ENABLED = false; // closed again 2026-09-22 after OFFER-F2's one attempt
 
 /** Stamped at the top level of a fixture line, beside `source`. */
 export const FIXTURE_CLASSIFICATION = "TEST_FIXTURE";
@@ -80,8 +80,8 @@ export const FIXTURE_AUTHORISATIONS: readonly FixtureAuthorisation[] = [
   },
   {
     id: "OFFER-F2",
-    record: "02_Offer/OFFER_OS.md §8 — draft decision OFFER-F2 (NOT approved)",
-    status: "draft",
+    record: "02_Offer/OFFER_OS.md §8 — decision OFFER-F2 (enacted and SPENT 2026-09-22)",
+    status: "spent", // one attempt made 2026-09-22; see OFFER_OS §8 attempt record
     agent: "offer-oeos-engineer",
     stream: "02_Offer/_memory/sandbox-offer-f2.jsonl",
     requiredMarkers: ["TEST_FIXTURE", "OFFER-F2", "UNRESOLVED", "PHASE 11: BLOCKED", "NON-PRICING"],

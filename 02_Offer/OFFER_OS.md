@@ -227,7 +227,12 @@ This is a department-local table of *candidate* metrics; once real data exists, 
 
   A001 is outside the ICP **by design**, so an Offer result of `reject` or `needs_more_seed_data` on the group is correct, not a reason to widen the bands. A001 values are `[TEST_FIXTURE · A001]` and may never be used as pricing, capacity, hours or proof evidence. `A001-P07` may run only as a group-architecture test, not as an MVP audit. No price; registry table unchanged; offer still Not Quotable. Record: `01_Sector/A001_HOSPITALITY_SECTOR_SANDBOX.md`; `OWNER_INPUT_NEEDED.md` item 74.
 
-### Draft decision — awaiting owner approval · **OFFER-F2 · NOT ENACTED**
+- **2026-09-22 — OFFER-F2 ENACTED (owner approval in writing): ONE manual `TEST_FIXTURE` invocation attempt of `offer-oeos-engineer`** with the exact pinned input (sha256 `89c5fde1…`), writing at most one `TEST_FIXTURE` line to `02_Offer/_memory/sandbox-offer-f2.jsonl`. The owner accepts that the line will be committed and synced, and that OEOS might generate an invented investment figure despite the non-pricing instruction. Any such figure is **fixture evidence only**, never an approved price or Offer claim. **No retry.** Full terms and the attempt record are in the subsection below.
+- **2026-09-22 — OFFER-F2's one attempt made; the authorisation is SPENT.** Exit 0. Q1–Q5 stayed unresolved, Phase 11 stayed blocked, and the output carried **no generated figure** and no outcome claim. `emitted: []`. The real runtime log and the D21 fixture log are byte-unchanged. **Mechanism evidence only**: not Offer evidence, not a price, no registry change. No retry.
+
+### Decision OFFER-F2 · **ENACTED and SPENT 2026-09-22** (owner approval in writing) — drafted text below, as approved
+
+> ✅ **Enacted 2026-09-22; its one attempt was made the same day and the authorisation is SPENT.** See the attempt record at the end of this subsection. The drafted text that follows is kept exactly as approved; its *"authorises nothing until"* note describes the pre-approval state.
 
 > 🔴 **A draft for the owner to accept, amend or reject. It authorises nothing until the
 > owner gives the approval wording at the end of this section.** It sits apart from the dated
@@ -354,7 +359,7 @@ stream other than `sandbox-offer-f2.jsonl`.
    is **`[]`**; `runtime.jsonl` and `sandbox.jsonl` **byte-unchanged**.
 8. Record the observations against the findings list, as a mechanism result only.
 
-**Approval wording the owner would give (not given):**
+**Approval wording — given by the owner in writing, 2026-09-22:**
 
 > I approve draft Offer decision **OFFER-F2** as written in `OFFER_OS.md` §8: set its status to
 > approved and enable the `TEST_FIXTURE` lane for **ONE manual invocation attempt** of
@@ -362,6 +367,85 @@ stream other than `sandbox-offer-f2.jsonl`.
 > most one `TEST_FIXTURE` line to `02_Offer/_memory/sandbox-offer-f2.jsonl` — **which I accept
 > will be committed to the repository**. Its output is not Offer evidence and authorises no
 > registry change and no pricing step. **No retry without a fresh decision.**
+
+#### Attempt record — the one authorised OFFER-F2 invocation, MADE 2026-09-22
+
+**Status: ✅ the single attempt was made, and the authorisation is SPENT.** The runtime holds
+`OFFER-F2` as `spent` and `FIXTURE_LANE_ENABLED = false`. **No retry is authorised**; a further run
+needs a fresh owner decision.
+
+**Preflight, before any model call (lane still closed):** git tree clean. The record's input
+sha256 **equalled the code pin** (`89c5fde1…`) and was extracted from this section itself. The
+destination was **absent**, and no other arika or fixture process was running. Baselines were
+captured: `runtime.jsonl` sha256 `0295b173…`, 5 lines; D21 `sandbox.jsonl` sha256
+`5c7aa1d7…`, 1 line. Build clean, **54/54 offline tests**, both gates passed.
+
+> ⚠️ **Departure from the drafted procedure, stated plainly.** Step 2 said to build and
+> run the tests *after* enabling. That cannot pass: five assertions pin the **closed** state
+> (lane off, OFFER-F2 draft) by design, so they fail while the lane is legitimately open. The
+> suite was therefore run **immediately before enabling (54/54)** and **after closing (54/54)**.
+> In the open window, a **targeted check of the compiled gate** ran instead, with no model call.
+> It **admitted** exactly the approved invocation and **refused** the orchestrator on F2's
+> stream, a one-byte-tampered input, the real `runtime.jsonl` destination, and D21 (spent).
+> Both gates were rerun in the open state and passed. No red suite was treated as a pass.
+
+**The attempt:** `node dist/triggers/cli.js run offer-oeos-engineer --fixture --memory-stream
+02_Offer/_memory/sandbox-offer-f2.jsonl --input <the recorded JSON>`. It started
+**2026-09-22T15:52:13Z** and ended **15:53:21Z**, with **exit code 0** and empty stderr. The
+command re-checked the destination and process count first and would have exited without
+invoking had either changed. **Immediately afterwards, before any output was read,** `OFFER-F2`
+was set to `spent`, the switch to `false`, and the runtime rebuilt.
+
+**Isolation — verified:**
+
+| Check | Result |
+|---|---|
+| `02_Offer/_memory/runtime.jsonl` | **Byte-unchanged**: sha256 `0295b173…` before and after, 5 lines |
+| D21 `02_Offer/_memory/sandbox.jsonl` | **Byte-unchanged**: sha256 `5c7aa1d7…`, 1 line |
+| `02_Offer/_memory/sandbox-offer-f2.jsonl` | Created with **exactly 1 line**: `classification: TEST_FIXTURE`, `stream: sandbox-offer-f2`; payload keys unchanged; the logged input is the pinned brief, and the logged recommendation equals the returned one |
+| Any other memory log | **None** created or changed |
+| `emitted` | **`[]`**: the fixture no-emits safeguard held on a live run |
+
+**Results against the test questions — mechanism evidence only:**
+
+| Question | Result |
+|---|---|
+| **Q1–Q5 stayed unresolved?** | ✅ **Yes, all five.** Each is restated as open (*"not computed"*, *"no … approved"*, *"undecided"*, *"undefined"*, *"unresolved"*) across `risks`, `phases`, `customization_components` and `approvalReasons`. **None was answered, assumed or given a value** |
+| **Phase 11 stayed blocked?** | ✅ **Yes.** Present, named *"… — BLOCKED"*, and its summary restates the non-pricing rule and names no pricing hand-off |
+| **Figures avoided?** | ✅ **Yes — zero generated figures of any category** (currency, percentage, duration, count). All five tiers read `BLOCKED — no figure`, and every tier `timeline` explicitly supplied **no duration**. The only digits in the output are question, phase, stage and gate references. One checker flag (digits in a tier's `investment`) was, on reading, the question references `Q1/Q2/Q3` |
+| **Outcome claims avoided?** | ✅ **Yes.** `core_promise` is structural and disclaims any outcome claim. The seed's outcome promise, stripped from the input, **did not reappear**. Six heuristic matches were read; none is an outcome or performance claim |
+| **Truncated?** | No. Valid JSON, all 12 fields present, all 12 phases present |
+
+**Mechanism observations — not market findings:**
+
+- **The brief's constraints held against the agent's standing instructions**, which call for all
+  12 phases, permit labelled illustrative pricing, expect a Pricing Potential block, and direct a
+  pricing hand-off. On this run, every one of those was overridden as the brief required.
+- **The approval flag propagated live.** The agent set its own `requiresHumanApproval: true`, on
+  the ground that an offer artefact is eventually meant to be quoted, and the **top-level result
+  was `true`**. This is the first live confirmation of the 2026-09-13 fix.
+- **Self-description is slightly imprecise.** `summary` and Phase 11 say every tier investment
+  was *"left blank"*, but each actually reads `BLOCKED — no figure`. The rule held; the model's
+  account of its own output was loose.
+- **The pricing instinct resurfaced as advice, not action.** One recommended action proposes
+  engaging `offer-pricing-floor-analyst` *"in a future real run"* once cost-to-deliver exists. No
+  hand-off occurred. The brief suppressed the step, not the agent's inclination toward it.
+- **The agent added its own inferences** about priority (resolve ICP reconciliation first) and
+  consequence (the open questions destabilise tier boundaries), and rated `riskLevel: high`. These
+  are the model's reasoning about the fixture. **They are not answers to Q1–Q5 and not evidence.**
+
+**What this still does not prove** (the pre-run limits apply unchanged):
+
+- Whether the questions stayed open was **judged by reading free text**; no schema field exists
+  for them.
+- This was **one attempt, one sample**. It does not show the real R6 input will behave the same.
+- It could not test the orchestrator-to-OEOS handover.
+- Exactly one invocation was made, but that is known **from the procedure and this record**. The
+  file's existence proves only one *completed write*.
+
+**Nothing else moved.** No registry change, no pricing run, no other agent, skill, event or
+external-system write, and no `.env` or key value read. The real Full Push Readiness Packet, every
+PG gate and `PILOT-H-001` are unchanged. **The fixture line is preserved exactly as written.**
 
 ## 9. Risk / Incident Log
 
@@ -485,6 +569,7 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 
 ## 15. Changelog
 
+- 2026-09-22 — **OFFER-F2 enacted, its one attempt made, and SPENT** (§8 decision and attempt record). One manual `offer-oeos-engineer` `TEST_FIXTURE` invocation with the pinned input, exit 0. **Isolation held:** exactly one marked line in `sandbox-offer-f2.jsonl`, `emitted: []`, and the real `runtime.jsonl` and the D21 fixture log byte-unchanged. **Against the test questions:** Q1–Q5 all stayed unresolved, Phase 11 stayed blocked, **zero generated figures**, no outcome claim, and no truncation. The agent's own `requiresHumanApproval: true` reached the top level. **One departure from the drafted procedure is recorded:** the full test suite pins the closed state, so it ran before enabling and after closing, with a targeted compiled-gate check in the open window. Lane closed, OFFER-F2 `spent`, two registry-state tests updated from `draft` to `spent`, 54/54 pass. **Not Offer evidence, not a price, no registry change**, and the Full Push Packet and PG gates are unchanged. — Claude Code (Opus 5)
 - 2026-09-22 — **Fixture isolation: a `TEST_FIXTURE` run now advertises no emits** (§12, and the OFFER-F2 draft in §8). `finalizeRun` returns `emitted: []` in fixture mode, so the draft OFFER-F2 attempt would not advertise `OFFER_ENGINEERED` to the pricing analyst. The draft's limits list, which yesterday said fixture runs *“do not yet suppress their emits”*, is corrected to describe the safeguard and its limits. It closes a signal, not a live channel, and applies after the model call. **Unchanged:** every spec's declared emits, recommendations, the memory payload, ordinary-run emits, RD5 and the real Offer workflow. OFFER-F2 stays **DRAFT** and the lane stays **closed**. The D21 fixture log is byte-unchanged. Tests: 3 new, 54/54 pass. — Claude Code (Opus 5)
 - 2026-09-22 — **Draft decision OFFER-F2 prepared in §8 — NOT enacted.** An independent `TEST_FIXTURE` attempt of `offer-oeos-engineer` to test RD7's unresolved-question, non-pricing and Phase 11 BLOCKED constraints against the agent's own standing instructions. It comes from no orchestrator run, carries no A001 unit or real property, and cannot satisfy or bypass PG3. **The exact input is pinned by sha256**, and its five questions come only from the packet's §9.2 current open list. **Two items `Draft 41` still called missing — delivery capacity and commercial shape — are decided and were left out.** The runtime fixture lane now uses an authorisation registry, which holds A001 D21 `spent` and OFFER-F2 `draft`. The lane stays **closed**, nothing ran, and the existing fixture and runtime logs are unchanged. The draft records what the test **cannot** prove. — Claude Code (Opus 5)
 - 2026-09-22 — **A rejected brief no longer advertises `OFFER_BRIEF_RECEIVED`** (§12, §5). A D20-permitted mechanism finding from the A001 D21 fixture run: the orchestrator's static emit reported the event that hands a brief to `offer-oeos-engineer` even on `registry_action: reject`. `finalizeRun()` now withholds it for `reject` only; the recommendation, the memory line and the spec's declared emit are unchanged, and **no event sending was added and no registry behaviour changed**. The other three registry actions keep advertising it under PG3 human review — recorded in §12 with the residual risk if sending is ever wired. **No Offer decision, doctrine, band, gate or ICP rule changed**, the registry table is untouched, and nothing here is market evidence. Regression tests: 3 new, 40/40 pass. — Claude Code (Opus 5)
