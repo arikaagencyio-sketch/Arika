@@ -168,7 +168,12 @@ This is a real scoring mechanism the agency designed for itself, not a fabricate
 
 - **2026-09-15 — A001 approved as a Sector-owned, group-level simulated Hospitality Sector Sandbox.** Owner decision: A001 is a fictional hospitality group used as the pilot-company architecture specimen. It is **not** a real client, prospect, lead, CRM company or the item 72 real-property pilot, and `PILOT-H-001` stays reserved for a real single property. Child units are `A001-P01`…`A001-P09`; `A001-P08` is linked to `A001-P07`; `A001-P07` may be the first property test slice, only inside group context. **Sector owns the record** because A001 tests this layer's plugin, geography and fit rules against a group. Offer (02) consumes it (`02_Offer/OFFER_OS.md` §8). **Boundaries:** every A001 value is `[TEST_FIXTURE · A001]`. Nothing from A001 enters a Sector database, the plugin, `plugin.config.json` or a skill record, and no P2 cell may move toward `observed` on A001 data. Repository files carry IDs, archetype class, destination status and size band only. **Not decided (item 74):** five Tier-1 changes (`AEIT_06` `Company` with a parent edge and property-unit meaning, a sandbox role, an `AEIT_05` test-fixture trust value, a skill-record marker, a sandbox memory stream), run mode, archetype mapping and geography. **No A001 run of any kind until then.** Plugin truth and destination rows are unchanged by this entry. Record: [`A001_HOSPITALITY_SECTOR_SANDBOX.md`](A001_HOSPITALITY_SECTOR_SANDBOX.md). — Claude Code (Opus 5)
 
-### Draft decision — awaiting owner approval · **SECTOR-SF1 · NOT ENACTED**
+- **2026-09-22 — SECTOR-SF1 ENACTED (owner approval in writing): ONE S10 `TEST_FIXTURE` execution** of `sector-handoff-packet` on the pinned synthetic record `SYN-S10-01` (sha256 `8247eefd…`). It adopts the prepared S10 fixture mode, the schema extension and gate checks 6–8. It may write at most one marked record to `01_Sector/_memory/skill_runs-sandbox.jsonl` and one marked packet to `01_Sector/fixtures/SYN-S10-01.s10-packet.json`; the owner accepts that both are committed and synced. **No Notion, CRM, connector or event read or write**, no fit verdict, no Sector or Offer evidence, and **A001 D6 unchanged**. **No retry.** Preflight passed before enactment: decision text verbatim, pin matched, both outputs absent, 26 Sector and 54 runtime offline tests and all three gates passed with network access blocked. Full terms in the subsection below. — Claude Code (Opus 5)
+
+- **2026-09-22 — SECTOR-SF1's one attempt made; the authorisation is SPENT.** Offer, Content and CRM `not_attempted_fixture`; Sales, Marketing and Operations `HANDOFF_FAILURE`; nothing `delivered`; `writes` and `events` empty. Exactly one marked record and one marked packet were written; `skill_runs.jsonl` and every other log are byte-unchanged, and the network block logged zero attempts. **Mechanism evidence only**: no fit verdict, no Sector or Offer evidence. A001 D6 unchanged. No retry. — Claude Code (Opus 5)
+### Decision SECTOR-SF1 · **ENACTED and SPENT 2026-09-22** (owner approval in writing) — drafted text below, as approved
+
+> ✅ **Enacted 2026-09-22 by the owner's written approval; its one attempt was made the same day and the authorisation is SPENT.** See the attempt record at the end of this subsection. The drafted text that follows is kept exactly as approved; its *"authorises nothing until"* note and the *"(not given)"* label on the approval wording describe the pre-approval state. The owner's separate statement that Notion and CRM are generally approved for later testing is **not** part of this decision and authorises nothing inside it.
 
 > 🔴 **A draft for the owner to accept, amend or reject. It authorises nothing until the
 > owner gives the approval wording at the end of this section.** It sits apart from the dated list
@@ -281,6 +286,113 @@ store.
 > verdict and no Sector or Offer evidence, and **A001 D6 is unchanged**. **No retry without a
 > fresh decision.**
 
+#### Attempt record — the one authorised SECTOR-SF1 execution, MADE 2026-09-22
+
+> **Mechanism evidence only.** Not a fit verdict, an eligibility claim, a finding, a market claim, a
+> price, Sector evidence or Offer evidence. The unit `SYN-S10-01` does not exist. **No retry is
+> authorised**; a further run needs a fresh decision.
+
+**Owner approval, as given (2026-09-22):**
+
+> I approve Sector decision SECTOR-SF1 exactly as drafted in SECTOR_OS.md §8. Adopt the prepared S10
+> TEST_FIXTURE mode, schema extension and gate checks, and authorize ONE S10 fixture execution using
+> the pinned synthetic record SYN-S10-01 (sha256 8247eefd…). It may write at most: 1. one marked
+> record to 01_Sector/_memory/skill_runs-sandbox.jsonl; and 2. one marked packet to
+> 01_Sector/fixtures/SYN-S10-01.s10-packet.json. I accept that both files will be committed and
+> synced. No retry is authorized.
+
+The owner also stated that Notion and CRM are generally approved for later testing. That statement
+was **not** used here: the fixture stayed no-connector and no-external-write, as this decision
+requires.
+
+**Preflight — all passed before enactment:**
+
+- The decision text was verbatim in §8 and equal to the committed copy.
+- The pin matched (`8247eefd…`), and neither output existed.
+- SECTOR-SF1 was `draft` and the only entry. The runtime lane was closed, and both runtime
+  authorisations were `spent`.
+- Baseline hashes were taken of all 12 tracked logs and 9 protected files at commit `7e56879`.
+- S10's ordinary text was byte-identical after stripping the fixture block.
+- 26 Sector and 54 runtime offline tests and all three gates passed **under a network block** that
+  refuses and logs any socket, DNS, HTTP, TLS or fetch attempt, with `ANTHROPIC_API_KEY` unset in
+  the test environment. **Zero attempts were logged.** The tests import only compiled runtime
+  modules; none spawns a process or loads `.env`; the one model call site (`executor.ts`) sits
+  behind the closed lane.
+- **No conflicting live rule was found.** The Full Push Packet's stop rules, D17 and the write
+  contract's prepared exception all agree with a no-connector fixture.
+
+**Execution.** The registry moved `draft` → `approved`, and S10's fixture block F0–F6 was then
+performed **once** by Claude Code, as a script under the same network block. The five refusal
+preconditions held. It read only the pinned record and repository files: `event-catalog.json`,
+`sector-databases.json`, `CRM_SCHEMA.md`, `executor.ts`, `plugin.config.json` and S10's own route
+table. **No Notion, ClickUp or other connector tool was called during SECTOR-SF1**, and no agent,
+skill runtime, model API or event bus was invoked. The clock read `2026-09-22T17:48:43Z`; the
+execution id is `s10-2026-09-22-sector-sf1-syn-s10-01-fixture-1`. A `finally` block set SECTOR-SF1
+to `spent` straight after the in-skill gate run.
+
+**Observed destination outcomes**, each re-measured from repository files rather than copied from
+the dated table:
+
+| Destination | Mechanism | Outcome | Measured basis |
+|---|---|---|---|
+| Offer (02) | relation + text reference | `not_attempted_fixture` | 1 relation (DB 2 → `Offers`) plus a text reference; state `CONNECTED` |
+| Content (04) | native relation | `not_attempted_fixture` | 13 relation fields into 6 Content-owned stores, all with `writer_skill` S10 |
+| ClickUp CRM | free-text ID tags on `Lead` | `not_attempted_fixture` | Lead tags documented in `CRM_SCHEMA.md`; `icp_tier` and `offer_id` would also need DB 4 and DB 8 |
+| Sales (05) | event only | `HANDOFF_FAILURE` | `CONNECTED` subscribers only; no event is `LIVE`; `executor.ts` does not publish |
+| Marketing (03) | event only (`DEMAND_SHIFT`) | `HANDOFF_FAILURE` | `DEMAND_SHIFT` is `DESIGNED` with 0 subscribers, retired under 31d; no Sector-readable store (item 31k) |
+| Operations (08) | event only (`DEMAND_SHIFT`) | `HANDOFF_FAILURE` | As Marketing |
+
+**Nothing `delivered`.** All six match the expected mechanism behaviour above. `writes` and
+`events` are empty and `decision` is `NO_OP`. The packet carries all 11 AEIT_09 §1 fields, marks
+itself `TEST_FIXTURE` and synthetic, and caps its confidence at SYNTHETIC. It carries **no fit
+verdict and no angle**, and restates the five rule checks, each equal to its value recomputed at
+run time.
+
+**Isolation held:**
+
+- Exactly two files were created, one record each: `skill_runs-sandbox.jsonl` (sha256
+  `46701096…`) and the packet (`7554729f…`).
+- `skill_runs.jsonl` and every other tracked log are byte-unchanged in sha256, size and mtime.
+- The Full Push Packet, `A001_HOSPITALITY_SECTOR_SANDBOX.md` (D6), `OFFER_OS.md`,
+  `OWNER_INPUT_NEEDED.md`, the event catalog, the schema and the pinned record are unchanged. The
+  runtime lane is still closed.
+- The gate passed under `approved` (in the run) and under `spent` (at close-out). The network block
+  logged zero attempts.
+
+**Findings — mechanism only; the artifacts are kept as written:**
+
+1. **The fixture block's `not_read_fixture` list was incomplete.** It named DB 3, 6, 7, 9 and 10.
+   S10 Step 2 also takes the offer match from DB 8 and the destination profile and route from
+   DB 16 and DB 15, and the CRM tag `icp_tier` comes from DB 4. The run listed all nine; nothing
+   extra was read. The block is corrected.
+2. **One packet cap overstates.** It says the P2 archetype scope *"rests on basis
+   `owner_reasoning`"*. In `plugin.config.json`, `tier1_scope` is defined from live DB 11
+   geography and carries no basis; the `owner_reasoning` caveat belongs to P2's cells, which this
+   run did not use. The error is conservative, and the packet is not rewritten.
+3. **The S10 table's Content count is stale.** It reads *"9 available"*; `sector-databases.json`
+   declares 13 relation fields into 6 Content-owned stores. The mechanism exists either way, and
+   the dated table was not changed.
+4. **"No route at all" for Marketing and Operations is true of S10's packet route only.** The
+   catalog also lists `CONNECTED` edges into 03 (`SECTOR_READINESS_SET`, from S07) and 08
+   (`PROSPECT_SCORED`, from S12). These are other skills' events, and none delivers, since nothing
+   publishes. Item 31k stands.
+5. **The payload shape exposed a canonical-model gap.** AEIT_06 `Company` has no `archetype`
+   field, and `Geography` is an unratified candidate. Both were flagged as non-canonical attributes
+   rather than invented (S10 Step 2).
+
+**What it shows, and what it does not.** It shows that S10's route check, per-destination
+classification, packet shape, confidence cap and isolation work on one synthetic record. It is
+**one sample**. It delivered nothing and read no live intelligence. Enforcement stayed
+**detective**: the gate proves what reached the repository, while the absence of connector calls
+rests on the session's tool record and the network block, not on the gate. **A001 D6 is
+unchanged, and nothing touched `PILOT-H-001` or any PG gate.** The packet does not feed OFFER-F3 or
+any Offer run without a decision of its own.
+
+**Tests.** The two tests that pinned the pre-run state (SF1 `draft`, no artifacts) failed after
+the run, as designed. They were replaced by `SpentState`, which pins both artifacts' sha256, the
+one record, the observed outcomes and SF1 `spent`, and by a test that a spent authorisation admits
+no second record.
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -349,6 +461,7 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 ## 15. Changelog
 
+- 2026-09-22 — **SECTOR-SF1 enacted, its one attempt made, and SPENT** (§8 decision and attempt record). One S10 `TEST_FIXTURE` execution on `SYN-S10-01`: Offer, Content and CRM `not_attempted_fixture`; Sales, Marketing and Operations `HANDOFF_FAILURE`; nothing delivered; `writes` and `events` empty. **Isolation held**: exactly one marked record in `_memory/skill_runs-sandbox.jsonl` and one marked packet in `fixtures/`; `skill_runs.jsonl` and every other log byte-unchanged; zero network attempts. Five mechanism findings recorded. The fixture block's `not_read_fixture` list is corrected (DB 4, 8, 15 and 16 added), the write-contract exception and S10's fixture-mode status line are updated, and the pre-run state tests are replaced by `SpentState` pins. **Mechanism evidence only.** A001 D6, the Full Push Packet, `PILOT-H-001` and every PG gate are unchanged. No retry. — Claude Code (Opus 5)
 - 2026-09-22 — **Draft Sector decision SECTOR-SF1 prepared in §8 — NOT enacted:** a non-A001 `TEST_FIXTURE` mode for S10. Prepared and **disabled**: an additive schema extension (all 15 existing records still validate), `skill_run_gate.py` checks 6–8 (real log clean, fixture log marked and authorised, registry pins), and one delimited fixture-mode block in S10's `SKILL.md`, which strips back to the original byte-for-byte. The input is a new, independently labelled synthetic record, `SYN-S10-01`; its rule checks are recomputed from `plugin.config.json`, the packet and `OFFER_OS.md` by an offline test. The registry holds SECTOR-SF1 as `draft`, and the gate fails on any fixture record under a draft. **A001 D6 is unchanged.** No skill was run and no log was written. — Claude Code (Opus 5)
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "The Sector Drafts").
 - 2026-06-30 — Content migration: all 14 raw drafts read in full. Capability Registry, Workflow Index, Standards & SOPs Index populated. Confirmed no real sector has ever been chosen — flagged as the single highest-leverage open item in the repo per this department's own "weak sector layer degrades everything downstream" principle, and added to `00_Agency_Governance/OWNER_INPUT_NEEDED.md`. KPI Dictionary confirmed as genuine absence.

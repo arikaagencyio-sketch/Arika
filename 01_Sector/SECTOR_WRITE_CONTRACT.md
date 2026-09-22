@@ -298,7 +298,7 @@ A rejection is a **record**, not a silence. It carries which gate failed, and wh
 
 ### 7.1 The execution record
 
-Every skill run appends one line to `01_Sector/_memory/skill_runs.jsonl`, conforming to [`contracts/skill-execution-record.schema.json`](contracts/skill-execution-record.schema.json). *(Exception, prepared 2026-09-22 and **disabled**: a `TEST_FIXTURE` run under an **approved** Sector fixture authorisation appends instead to `01_Sector/_memory/skill_runs-sandbox.jsonl`, never to `skill_runs.jsonl`. The only authorisation, SECTOR-SF1, is a draft (`SECTOR_OS.md` §8). `contracts/skill_run_gate.py` checks 6–8 enforce the split.)*
+Every skill run appends one line to `01_Sector/_memory/skill_runs.jsonl`, conforming to [`contracts/skill-execution-record.schema.json`](contracts/skill-execution-record.schema.json). *(Exception, prepared 2026-09-22; **disabled** unless an authorisation is `approved`: a `TEST_FIXTURE` run under an **approved** Sector fixture authorisation appends instead to `01_Sector/_memory/skill_runs-sandbox.jsonl`, never to `skill_runs.jsonl`. The only authorisation, SECTOR-SF1, was enacted and **spent** on 2026-09-22, and its one record is in that file (`SECTOR_OS.md` §8). `contracts/skill_run_gate.py` checks 6–8 enforce the split.)*
 
 The envelope **deliberately mirrors** `arika-runtime/src/memory-writer.ts` (`{timestamp, agent, department, stream, event_type, source, payload}`) so a future code runtime reads one format. Divergences: `agent`→`skill`, `event_type: "skill_run"`, `source: "claude-code"`.
 

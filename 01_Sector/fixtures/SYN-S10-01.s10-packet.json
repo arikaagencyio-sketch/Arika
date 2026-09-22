@@ -1,0 +1,149 @@
+{
+ "classification": "TEST_FIXTURE",
+ "synthetic": true,
+ "label": "SYNTHETIC S10 hand-off packet, assembled in fixture mode under SECTOR-SF1. Delivered to NO destination. Not a fit verdict, an eligibility claim, a finding, a market claim, a price, Sector evidence or Offer evidence. Its input unit does not exist.",
+ "authorisation_id": "SECTOR-SF1",
+ "execution_id": "s10-2026-09-22-sector-sf1-syn-s10-01-fixture-1",
+ "assembled_at": "2026-09-22T17:48:43Z",
+ "handoff_id": "sector->{offer,content,crm,sales,marketing,operations}:Company[SYN-S10-01, TEST_FIXTURE]",
+ "producer": "Sector (01) - S10 sector-handoff-packet, fixture mode",
+ "consumer": [
+  {
+   "destination": "Offer (02)",
+   "outcome": "not_attempted_fixture"
+  },
+  {
+   "destination": "Content (04)",
+   "outcome": "not_attempted_fixture"
+  },
+  {
+   "destination": "ClickUp CRM",
+   "outcome": "not_attempted_fixture"
+  },
+  {
+   "destination": "Sales (05)",
+   "outcome": "HANDOFF_FAILURE"
+  },
+  {
+   "destination": "Marketing (03)",
+   "outcome": "HANDOFF_FAILURE"
+  },
+  {
+   "destination": "Operations (08)",
+   "outcome": "HANDOFF_FAILURE"
+  }
+ ],
+ "trigger": {
+  "kind": "manual",
+  "detail": "Owner-approved SECTOR-SF1 fixture execution. Not a sector reaching Offer-Ready, not activation Gate G, not a resolver run."
+ },
+ "payload": {
+  "canonical_entity": "Company",
+  "entity_check": "Company is canonical (AEIT_06 Party domain; Sector owns its market data). Only sector_id and size map to Company key fields. 'archetype' is not a listed Company key field, and Geography is an unratified AEIT_06 CANDIDATE, so both are carried below as flagged attributes, not as canonical fields (S10 Step 2: a non-canonical shape is a signal to extend the model, not to invent one).",
+  "fields": {
+   "company_ref": "SYN-S10-01 (synthetic; no legal_name, no domain - the unit does not exist)",
+   "sector_id": "Hospitality / Accommodation (from the synthetic record; DB 1 and DB 2 were not read)",
+   "size": "H2 (band label only)",
+   "roles": []
+  },
+  "flagged_non_canonical_attributes": {
+   "archetype": "City / Conference Hotel",
+   "geography": "Nairobi"
+  },
+  "rule_checks": [
+   {
+    "id": "R-ARCHETYPE",
+    "stated": "pass",
+    "recomputed_now": "pass"
+   },
+   {
+    "id": "R-DESTINATION",
+    "stated": "pass",
+    "recomputed_now": "pass"
+   },
+   {
+    "id": "R-SIZE-BAND",
+    "stated": "pass",
+    "recomputed_now": "pass"
+   },
+   {
+    "id": "R-ANTI-ICP-WEB",
+    "stated": "not_fired",
+    "recomputed_now": "not_fired"
+   },
+   {
+    "id": "R-ANTI-ICP-GROUP",
+    "stated": "not_fired",
+    "recomputed_now": "not_fired"
+   }
+  ],
+  "fit_verdict": null,
+  "fit_verdict_note": "S10 produces no fit verdict. The input's SIMULATED_VERDICT is not carried forward.",
+  "left_out_not_read_fixture": {
+   "finding (pain)": "DB3",
+   "ICP tier (CRM tag icp_tier)": "DB4",
+   "language": "DB6",
+   "signal (timing)": "DB7",
+   "offer match or GAP - needs OEOS (and CRM tag offer_id)": "DB8",
+   "audience": "DB9",
+   "decision-maker and title": "DB10",
+   "market route": "DB15",
+   "destination profile": "DB16"
+  },
+  "outreach_angle": null,
+  "boundary_law": "Angle, never artifact. No angle was assembled - it needs timing, pain and language, and none was read - and no email, proposal or script was written."
+ },
+ "validation_rules": [
+  "Reject for any real use: classification TEST_FIXTURE and synthetic true.",
+  "Carries no Needs verification or Superseded/Delayed signal: no signal was read or carried.",
+  "Payload is limited to the canonical Company entity; archetype and geography are flagged, not canonical.",
+  "Every rule_checks entry must equal its recomputed_now value.",
+  "A basis: owner_reasoning P2 rule may filter; it may not be quoted to a client."
+ ],
+ "confidence_threshold": {
+  "packet_confidence": "SYNTHETIC - caps everything in this packet (S10 Step 4: the weakest element sets it).",
+  "act_on": "Nothing. This packet tests mechanism only.",
+  "caps": [
+   "The input is a synthetic record; no attribute was observed.",
+   "P2 archetype scope rests on basis owner_reasoning - a planning default that may filter a calendar and may not be cited in a client-facing claim.",
+   "The P5 Nairobi assignment is proposed (state yellow); Only 2 of 8 proposed themes survived verification; the corporate/MICE axis has no registered source (owner item 31j). Verified themes live in DB16."
+  ]
+ },
+ "freshness_requirement": {
+  "last_verified": {
+   "synthetic_record": "constructed 2026-09-22; not an observation",
+   "event_catalog_routes": [
+    "2026-08-28"
+   ]
+  },
+  "rule": "A consumer may reject on age. This packet carries no observed data to age; the route states carry the catalog's last_verified dates."
+ },
+ "owner": "Sector (01), the producer, owns this contract.",
+ "sla_cadence": "One-off, owner-authorised fixture (SECTOR-SF1: one attempt, no retry). No SLA; not scheduled.",
+ "failure_modes": [
+  {
+   "destination": "Sales (05)",
+   "mode": "HANDOFF_FAILURE",
+   "detail": "Does not deliver: CONNECTED subscribers only (ICP_CLASSIFIED (CONNECTED, from S12), PROSPECT_SCORED (CONNECTED, from S12)); LIVE events 0; executor.ts publishes: False. Reachable in principle, not in fact.",
+   "fallback": "Packet kept; destination named; no substitute route used (S10 Step 1)."
+  },
+  {
+   "destination": "Marketing (03)",
+   "mode": "HANDOFF_FAILURE",
+   "detail": "Does not deliver: S10's route is DEMAND_SHIFT, DESIGNED with 0 subscribers, retired 2026-08-28 (owner decision 31d); no Sector-readable store exists (owner item 31k). The catalog also lists CONNECTED edges into 03 from other skills - SECTOR_READINESS_SET (CONNECTED, from S07) - which are not S10 packet routes and deliver nothing, since nothing publishes.",
+   "fallback": "Packet kept; destination named; no substitute route used (S10 Step 1)."
+  },
+  {
+   "destination": "Operations (08)",
+   "mode": "HANDOFF_FAILURE",
+   "detail": "Does not deliver: S10's route is DEMAND_SHIFT, DESIGNED with 0 subscribers, retired 2026-08-28 (owner decision 31d); no Sector-readable store exists (owner item 31k). The catalog also lists CONNECTED edges into 08 from other skills - PROSPECT_SCORED (CONNECTED, from S12) - which are not S10 packet routes and deliver nothing, since nothing publishes.",
+   "fallback": "Packet kept; destination named; no substitute route used (S10 Step 1)."
+  },
+  {
+   "destination": "all",
+   "mode": "feedback loop cannot close",
+   "detail": "No performance store exists; a packet can be delivered but not scored.",
+   "fallback": "None - recorded, not worked around."
+  }
+ ]
+}

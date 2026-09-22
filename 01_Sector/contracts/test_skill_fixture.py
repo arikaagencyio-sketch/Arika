@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Offline tests for the Sector S10 TEST_FIXTURE path (draft decision SECTOR-SF1).
+"""Offline tests for the Sector S10 TEST_FIXTURE path (decision SECTOR-SF1, enacted and spent 2026-09-22).
 
     python -m unittest discover -s 01_Sector/contracts -p "test_*.py"
 
@@ -233,16 +233,49 @@ class GateIsolation(unittest.TestCase):
         self.assertEqual(rc, 1); self.assertIn("FUTURE-DATED", out)
 
 
-# ------------------------------------------------------- the real prepared state --
-class PreparedStateIsDisabled(unittest.TestCase):
-    def test_sf1_is_draft_and_nothing_is_approved(self):
-        reg = json.loads(rd(REGISTRY))["authorisations"]
-        self.assertEqual([(a["id"], a["status"]) for a in reg], [("SECTOR-SF1", "draft")])
-        self.assertFalse(any(a["status"] == "approved" for a in reg))
+    def test_a_spent_authorisation_admits_no_second_record(self):
+        self.set_status("spent")
+        self.write(self.fxlog, [fixture_record("a"), fixture_record("b", "2026-01-01T00:00:01Z")])
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 1); self.assertIn("exceeds SECTOR-SF1's limit", out)
 
-    def test_no_fixture_run_has_happened(self):
-        self.assertFalse(os.path.exists(SANDBOX_LOG))
-        self.assertFalse(os.path.exists(os.path.join(ROOT, PACKET_REL)))
+
+# ------------------------------------------------------- the real spent state --
+# Until 2026-09-22 this class was PreparedStateIsDisabled and asserted the pre-run state
+# (SF1 draft, no artifacts). SECTOR-SF1 was then enacted, its ONE attempt made and the
+# authorisation SPENT (SECTOR_OS.md section 8). These tests pin what that attempt left.
+SANDBOX_LOG_SHA = "4670109698ba328ade36489b251e0394eaf012b6e9711d5123f2e0f0e09ad9f5"
+PACKET_SHA = "7554729f114d737dc4f365847dd336c0606e9fbc776d5e339a94671acb2f1798"
+SF1_EXECUTION_ID = "s10-2026-09-22-sector-sf1-syn-s10-01-fixture-1"
+
+
+class SpentState(unittest.TestCase):
+    def test_sf1_is_spent_and_nothing_is_approved(self):
+        reg = json.loads(rd(REGISTRY))["authorisations"]
+        self.assertEqual([(a["id"], a["status"]) for a in reg], [("SECTOR-SF1", "spent")])
+        self.assertFalse(any(a["status"] == "approved" for a in reg))
+        self.assertIn(SF1_EXECUTION_ID, reg[0]["spent"])
+
+    def test_the_one_attempt_left_exactly_its_two_artifacts_unaltered(self):
+        self.assertEqual(hashlib.sha256(rd(SANDBOX_LOG, "rb")).hexdigest(), SANDBOX_LOG_SHA,
+                         "the fixture log changed - it is append-only and SF1 admits one record")
+        self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, PACKET_REL), "rb")).hexdigest(), PACKET_SHA)
+        self.assertEqual(len([l for l in rd(SANDBOX_LOG).splitlines() if l.strip()]), 1)
+
+    def test_the_fixture_record_is_marked_isolated_and_delivers_nothing(self):
+        r = json.loads(rd(SANDBOX_LOG))
+        V.validate(r)
+        self.assertEqual(r["classification"], "TEST_FIXTURE")
+        self.assertEqual(r["payload"]["execution_id"], SF1_EXECUTION_ID)
+        self.assertEqual((r["payload"]["writes"], r["payload"]["events"], r["payload"]["decision"]), ([], [], "NO_OP"))
+        self.assertEqual([(d["destination"], d["outcome"]) for d in r["payload"]["destinations"]],
+                         [(d, o) for d, _, o in DESTS])
+
+    def test_the_real_log_holds_no_fixture_record(self):
+        for line in rd(REAL_LOG).splitlines():
+            if line.strip():
+                self.assertNotIn("classification", json.loads(line))
+                self.assertNotEqual(json.loads(line)["payload"]["execution_id"], SF1_EXECUTION_ID)
 
     def test_the_real_gate_passes(self):
         self.assertEqual(gate.main(out=lambda *_: None), 0)

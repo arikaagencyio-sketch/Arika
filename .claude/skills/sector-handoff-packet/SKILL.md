@@ -85,7 +85,7 @@ Loops: `activation`, `feedback`.
 
 > 🔴 **Disabled.** This mode runs only under a Sector fixture authorisation whose status is
 > **`approved`** in [`contracts/skill-fixture-authorisations.json`](../../../01_Sector/contracts/skill-fixture-authorisations.json).
-> The only one today, **SECTOR-SF1, is `draft`, so refuse.** Ordinary use of this skill never enters
+> The only one, **SECTOR-SF1, was spent on 2026-09-22** after its one attempt; none is `approved`, **so refuse.** Ordinary use of this skill never enters
 > this mode. **A001 is excluded:** its skill records stay deferred under A001 D6 (T1-4).
 
 **What it is for.** Exercising this skill's *mechanism* on an independently labelled synthetic
@@ -106,7 +106,7 @@ recording, the packet shape, the boundary law and the confidence cap.
 
 - **F0 · Inputs.** Read only the synthetic record and repository files. **Read no Notion
   database, no ClickUp and no connector.** Fields the ordinary packet would take from live
-  databases (DB 3, DB 6, DB 7, DB 9, DB 10) are left out and listed in
+  databases (DB 3, DB 4, DB 6, DB 7, DB 8, DB 9, DB 10, DB 15, DB 16 — *corrected 2026-09-22: SECTOR-SF1's run found the first list omitted DB 4, 8, 15 and 16*) are left out and listed in
   `payload.fixture.not_read_fixture`.
 - **F1 · Route check.** As in Step 0: re-measure the routes from `contracts/event-catalog.json`,
   a repository file.
