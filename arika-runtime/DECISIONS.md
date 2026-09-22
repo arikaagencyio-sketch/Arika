@@ -3,6 +3,36 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-09-22 — The fixture lane becomes an authorisation registry (prepared, closed)
+
+**Why:** the lane was hard-wired to one authorisation — A001 D21's agent, stream and
+unit as single constants. A second, separately authorised fixture (draft Offer decision
+OFFER-F2) could not be expressed without either overwriting D21's pins or loosening them.
+
+**Decision:** `FIXTURE_AUTHORISATIONS` in `src/fixture.ts` lists every fixture authorisation
+ever made; entries are never deleted. Each pins one `agent`, one repo-relative `stream`,
+required markers, forbidden patterns, optionally an exact `inputSha256`, and a `status` of
+`draft` / `approved` / `spent`.
+
+- **Two locks to run:** the master switch **and** an `approved` authorisation. D21 is
+  `spent`; OFFER-F2 is `draft`; the switch is `false`.
+- **Destination resolves to exactly one authorisation.** Absolute paths, traversals and
+  unregistered `sandbox*.jsonl` names are refused, and each authorisation is pinned to its
+  own agent, so neither can run on the other's stream.
+- **Exact input where pinned.** OFFER-F2 carries a sha256 of its `seed_brief`, which turns
+  D21's documented weakness (a text check on free text) into an exact match for this one.
+- **Reserved names widened, deliberately:** any `sandbox.jsonl` or `sandbox-<id>.jsonl` is a
+  fixture stream, so an ordinary run is refused from all of them.
+- **The registry is validated at load** (repo-relative, sandbox-named, unique ids and
+  streams, global regexes), so a malformed entry fails closed.
+
+**Not changed:** the pre-model gate still runs first in `runAgent`; `writeMemory`'s coarse
+guard is unchanged in shape; ordinary runs are unaffected; D21's `sandbox.jsonl` and
+`runtime.jsonl` are untouched. **Fixture runs still advertise their spec's emits** — not in
+scope here, and recorded as a limit in the OFFER-F2 draft.
+
+**Verified:** see the OFFER-F2 entry in `02_Offer/OFFER_OS.md` §15 and `npm test`.
+
 ## 2026-09-22 — A rejected brief withholds `OFFER_BRIEF_RECEIVED`
 
 **Found by:** the A001 D21 `TEST_FIXTURE` run (one `offer-orchestrator` attempt,

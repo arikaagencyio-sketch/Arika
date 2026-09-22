@@ -20,6 +20,7 @@ import {
   assertFixturePreconditions,
   assertStreamMatchesMode,
   buildFixtureOptions,
+  FIXTURE_AUTHORISATIONS,
   FIXTURE_CLASSIFICATION,
   FIXTURE_LANE_ENABLED,
   isSandboxStream,
@@ -497,6 +498,12 @@ const goodBrief = [
 ].join("\n");
 const neverResolve = () => join(tmpdir(), `arika-absent-${Math.random().toString(36).slice(2)}`);
 
+// D21 is SPENT in the real registry, so it cannot pass the gate. Tests that
+// exercise its rules pass an explicitly approved COPY - proving the rules without
+// re-opening it. (OFFER-F2's tests live in fixture-f2.test.mjs.)
+const D21 = FIXTURE_AUTHORISATIONS.find((a) => a.id === "A001-D21");
+const approved = (...auths) => auths.map((a) => ({ ...a, status: "approved" }));
+
 test("fixture: the approved destination is the exact path, not just the basename", () => {
   assertApprovedFixtureStream(APPROVED); // the one allowed value
   // Another department's sandbox passes a basename check and must still be refused.
@@ -562,7 +569,7 @@ test("fixture: an ordinary run is untouched by the gate", () => {
 
 test("fixture: the gate pins the agent and the destination", () => {
   const ok = { fixture: true, memoryStreamOverride: APPROVED, input: { seed_brief: goodBrief } };
-  const opts = { enabled: true, resolve: neverResolve };
+  const opts = { enabled: true, resolve: neverResolve, authorisations: approved(D21) };
   assertFixturePreconditions("offer-orchestrator", ok, opts); // passes
   assert.throws(() => assertFixturePreconditions("sector-icp-fit", ok, opts), /not the approved agent/);
   assert.throws(
@@ -575,13 +582,13 @@ test("fixture: the gate pins the agent and the destination", () => {
 });
 
 test("fixture: the brief must declare the marker and exactly one sandbox unit", () => {
-  const opts = { enabled: true, resolve: neverResolve };
+  const opts = { enabled: true, resolve: neverResolve, authorisations: approved(D21) };
   const run = (seed_brief) =>
     assertFixturePreconditions("offer-orchestrator",
       { fixture: true, memoryStreamOverride: APPROVED, input: { seed_brief } }, opts);
   assert.throws(() => run(""), /non-empty string/);
   assert.throws(() => run("A001-P07 only, no marker"), /does not declare TEST_FIXTURE/);
-  assert.throws(() => run("TEST_FIXTURE but no unit named"), /does not name A001-P07/);
+  assert.throws(() => run("TEST_FIXTURE but no unit named"), /does not declare A001-P07/);
   assert.throws(() => run(`${goodBrief} and A001-P08 linked`), /names other sandbox units \(A001-P08\)/);
   assert.throws(() => run(`${goodBrief} see PILOT-H-001`), /names a real pilot ID/);
   assert.throws(
@@ -597,7 +604,7 @@ test("fixture: the lane is single-use - a destination that exists is refused", (
   assert.throws(
     () => assertFixturePreconditions("offer-orchestrator",
       { fixture: true, memoryStreamOverride: APPROVED, input: { seed_brief: goodBrief } },
-      { enabled: true, resolve: () => used }),
+      { enabled: true, resolve: () => used, authorisations: approved(D21) }),
     /one-run lane is spent/,
   );
   rmSync(used, { force: true });

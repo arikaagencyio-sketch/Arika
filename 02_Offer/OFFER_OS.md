@@ -227,6 +227,136 @@ This is a department-local table of *candidate* metrics; once real data exists, 
 
   A001 is outside the ICP **by design**, so an Offer result of `reject` or `needs_more_seed_data` on the group is correct, not a reason to widen the bands. A001 values are `[TEST_FIXTURE · A001]` and may never be used as pricing, capacity, hours or proof evidence. `A001-P07` may run only as a group-architecture test, not as an MVP audit. No price; registry table unchanged; offer still Not Quotable. Record: `01_Sector/A001_HOSPITALITY_SECTOR_SANDBOX.md`; `OWNER_INPUT_NEEDED.md` item 74.
 
+### Draft decision — awaiting owner approval · **OFFER-F2 · NOT ENACTED**
+
+> 🔴 **A draft for the owner to accept, amend or reject. It authorises nothing until the
+> owner gives the approval wording at the end of this section.** It sits apart from the dated
+> list above so it cannot be read as an enacted decision. The runtime holds it as authorisation
+> `OFFER-F2`, **status `draft`**, and the fixture lane is **closed** (`FIXTURE_LANE_ENABLED =
+> false`).
+
+**OFFER-F2 — one independent `TEST_FIXTURE` attempt of `offer-oeos-engineer`.**
+
+**Purpose.** Test one mechanism the real push relies on that has never run: RD7's requirement
+that an OEOS input's open questions stay **unresolved, never answered by assumption**, with the
+output kept **structural and non-pricing** and **Phase 11 BLOCKED**. The 2026-09-13 control test
+ran OEOS before RD7 existed, on an input built from *"control-question answers"*, the defect RD7
+corrected.
+
+**Why a brief alone is worth testing.** `offer-oeos-engineer`'s standing instructions point the
+other way. They say **run all 12 phases** (Phase 11 is Revenue & Monetization), that
+**illustrative pricing is fine when labelled**, that the seed carries a **"Pricing Potential"**
+block, and that output **hands off to `offer-pricing-floor-analyst`**. The test is whether the
+brief's explicit constraints hold against those instructions.
+
+**Independence, stated so it cannot be read otherwise.** The input comes from **no orchestrator
+run** and continues **no sequence**: in particular it is **not** a continuation of A001 D21, whose
+`reject` stopped that sequence. It carries **no A001 unit and no real property**. It **cannot
+satisfy or bypass PG3** for any real run: PG3 gates a real orchestrator output, and this input is
+not one.
+
+**Source of every input item.** `OFFER_OS.md` §3 seed and §8 decisions, and `Draft 41`. **All
+figures, benchmarks, ICP numbers and outcome statements were removed.** The five questions are
+taken **only** from the readiness packet's §9.2, the owner's *current* list of open decisions.
+Two items `Draft 41` §5.1/§2.3 still list as missing, **delivery capacity** (provisionally
+approved 2026-09-13) and **commercial shape** (approved 2026-09-14), are **decided** and are
+therefore **not** posed as open.
+
+**Exact input** — the only input this decision authorises. Single-line JSON, ASCII only. `seed_brief` sha256
+`89c5fde1af9c23cbfad3a81ab53554258aa9530d74e7e21aa211288f561da5b0`:
+
+```json
+{"seed_brief": "TEST_FIXTURE - OFFER-F2 - OEOS CONTRACT TEST. Not a client, not a prospect, not a property and not market evidence. Its output is not Offer evidence.\nPROVENANCE: this brief comes from NO orchestrator run and continues NO sequence. It names no sandbox unit and no real property. It cannot satisfy or bypass readiness gate PG3 for any real run. Every item below is taken from Arika's documented offer records (OFFER_OS.md section 3 seed and section 8 decisions; OEOS Draft 41), with all figures, benchmarks, ICP numbers and outcome statements removed.\n\nCATEGORY / DETAILS\nOffer: Hospitality Revenue Content OS - \"Direct Booking Engine\", the Accommodation entry offer. Status: Working Hypothesis - Not Quotable - not registered.\nDocumented positioning: an outsourced hospitality revenue-content department.\nGateway: a diagnostic, the OTA Leakage & Direct-Booking Audit.\nBackbone deliverables: (a) a revenue-year content calendar (peak, shoulder, low); (b) direct-booking content production (need-date campaigns, offers, guest-story and authority pieces); (c) booking-conversion and book-direct landing content; (d) periodic reporting - its metrics are not supplied here.\nCommercial shape, decided for INTERNAL MVP DESIGN ONLY: diagnostic-first, two-stage, audit-gated. Stage 1, the Gateway Audit, always comes first. Stage 2, a blueprint, opens only on a confirmed content or journey-messaging root cause.\nCapability families: INT (audit), CNT (content), MKT (marketing).\nScalability: productized and templatized - the calendar and the content system repeat.\n\nMONETIZABLE COMPONENTS - STRUCTURE ONLY: Gateway (OTA Leakage & Direct-Booking Audit) -> Entry (Direct Booking Engine) -> Governance / optimization retainer -> Scaling / Embedded Partnership -> Enterprise Transformation. The investment for EVERY tier is BLOCKED.\n\nPRICING POTENTIAL: NOT SUPPLIED.\nPHASE 11: BLOCKED. No price, price band, floor, margin, discount, credit value, cost figure or capacity figure exists or may be created. NON-PRICING.\n\nUNRESOLVED CONTROL QUESTIONS - the owner's documented open decisions (readiness packet section 9.2). Carry each one forward as UNRESOLVED. Do not answer it, assume an answer, or supply a value for it.\nQ1. Cost-to-deliver in money: not computed.\nQ2. Price band: none approved.\nQ3. Audit-fee credit policy: none approved.\nQ4. Proof-generation method - how findings and outcomes would become approved, consented case evidence: not defined.\nQ5. Launch ICP reconciliation: the seed, the Hospitality plugin and the size-band model describe the target property differently. Not reconciled.\n\nRULES FOR THIS RUN: describe structure only. Put no figure in any tier's investment. Make no outcome, result or performance claim. Do not hand off to pricing - the pricing step is skipped. Restate Q1 to Q5 as open."}
+```
+
+**Verified against the actual contract, without a model call.** `offer-oeos-engineer` declares
+exactly one input, `seed_brief: { type: string }`, and this object has exactly that key with a
+string value. It parses through Node's `JSON.parse`, the call `cli.ts` makes. It passes the
+compiled `OFFER-F2` input check: the five required markers, no A001 reference, no real pilot ID,
+no currency, and an **exact sha256 match**. A test re-derives the hash **from this block** and
+fails if the record and the code pin ever disagree.
+
+**Permitted log write — and nothing else.** Exactly **one** line to
+`02_Offer/_memory/sandbox-offer-f2.jsonl`, carrying `classification: TEST_FIXTURE`. That file is
+**inside the git-tracked, auto-synced repository**, so the line **will be committed and synced**:
+this decision **permits that one shared fixture entry** and makes no claim that the fixture stays
+out of shared storage. **Not permitted:** any write to `02_Offer/_memory/runtime.jsonl`, to A001
+D21's `02_Offer/_memory/sandbox.jsonl`, or to any other department's stream.
+
+**What it authorises.** **ONE manual invocation attempt**, authorised whether it succeeds or
+fails, and it **expires on that attempt**. **No automatic retry:** a failure before the write
+spends it, and a retry needs a fresh decision. **No concurrent invocation.**
+
+**What it does not authorise.** No registry change. The output is **not Offer evidence** and
+supports no market, demand, buyer, pricing, capacity or proof claim. No pricing step: the
+`offer-pricing-floor-analyst` hand-off is **not** run. No other agent, skill, connector, CRM
+write or event. No effect on `PILOT-H-001`, the Full Push Readiness Packet or any PG gate.
+
+**Stop conditions — before the call (each refuses the run and costs no API call):**
+
+| Stop | Enforced by |
+|---|---|
+| Lane switch off | **Code** — checked first at the `runAgent` gate |
+| `OFFER-F2` not `approved` (`draft` or `spent`) | **Code** |
+| Destination is anything but `02_Offer/_memory/sandbox-offer-f2.jsonl` (absolute, traversal, other stream) | **Code** |
+| Agent is anything but `offer-oeos-engineer` | **Code** |
+| Input differs from the recorded brief by one byte, lacks a marker, names A001 or a pilot ID, or carries currency | **Code** — sha256 pin plus checks |
+| The destination file already exists | **Code** — refuses a second completed write |
+| Gates or tests failing, baselines not captured, another arika process running | **Procedure** |
+
+**Findings — observed after the call, never predicted.** The outcome is **not predicted**. A
+**defect** would be any of: a **figure in a tier's `investment`** · an **outcome, result or
+performance claim** · any of **Q1–Q5 answered, assumed or given a value** · **Phase 11 not shown
+as blocked** · **truncation**. **Lane failure**, which voids the run, is any byte reaching any
+stream other than `sandbox-offer-f2.jsonl`.
+
+**What this test cannot prove — recorded before it runs:**
+
+- **No field exists for unresolved questions.** The output schema is `additionalProperties:
+  false` with no questions field, so whether Q1–Q5 *stay open* can be judged only from free text
+  (`summary`, `risks`, `recommendedActions`, `phases[].output_summary`). **That is a human
+  reading, not a structural check.**
+- **The schema demands an `investment` string on every tier.** The test can check that no value
+  is a figure, but the contract itself invites one. `tiers` may also be empty.
+- **`phases` has no status field and no minimum length.** Phase 11 can be omitted, and absence is
+  **not** proof it was blocked; it would be recorded as *not shown*.
+- **One attempt is one sample.** A good result shows that this brief held on this run. It does
+  not prove the real R6 input will behave the same, and it supports no rate or reliability claim.
+- **It cannot test the orchestrator-to-OEOS handover**, because no `needs_more_seed_data` output
+  exists.
+- **The result will still advertise `OFFER_ENGINEERED`**, the event the pricing analyst subscribes
+  to. Nothing sends agent emits, so it is inert, but fixture runs do not yet suppress their emits.
+  That is a separate change, not made here.
+- **File-existence proves at most one *completed write*, not one API attempt**, and there is no
+  concurrency lock. Both are owner procedure.
+- **The input's structure is a reduction** of documented records made by Claude Code, so it
+  should be read at approval, not taken on trust.
+
+**Owner procedure — the one attempt:**
+
+1. The owner gives the approval wording below, in writing.
+2. Set `OFFER-F2` to `approved` **and** `FIXTURE_LANE_ENABLED` to `true` (two edits). Then build,
+   run the tests and run both non-runtime gates.
+3. Preflight: `sandbox-offer-f2.jsonl` **absent**; sha256 baselines of `runtime.jsonl` and
+   `sandbox.jsonl` recorded; no other arika process running. If any check fails, **stop**.
+4. Take the input from **this record** and confirm its sha256.
+5. **One** invocation: `node dist/triggers/cli.js run offer-oeos-engineer --fixture
+   --memory-stream 02_Offer/_memory/sandbox-offer-f2.jsonl --input "<the JSON above>"`
+6. **Whatever happens**, set `OFFER-F2` to `spent` and the switch to `false`, rebuild, and rerun
+   the tests and gates. **No retry.**
+7. Verify: at most one `TEST_FIXTURE` line in `sandbox-offer-f2.jsonl`; `runtime.jsonl` and
+   `sandbox.jsonl` **byte-unchanged**.
+8. Record the observations against the findings list, as a mechanism result only.
+
+**Approval wording the owner would give (not given):**
+
+> I approve draft Offer decision **OFFER-F2** as written in `OFFER_OS.md` §8: set its status to
+> approved and enable the `TEST_FIXTURE` lane for **ONE manual invocation attempt** of
+> `offer-oeos-engineer` with the exact recorded OFFER-F2 input (sha256 `89c5fde1…`), writing at
+> most one `TEST_FIXTURE` line to `02_Offer/_memory/sandbox-offer-f2.jsonl` — **which I accept
+> will be committed to the repository**. Its output is not Offer evidence and authorises no
+> registry change and no pricing step. **No retry without a fresh decision.**
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -347,6 +477,7 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 
 ## 15. Changelog
 
+- 2026-09-22 — **Draft decision OFFER-F2 prepared in §8 — NOT enacted.** An independent `TEST_FIXTURE` attempt of `offer-oeos-engineer` to test RD7's unresolved-question, non-pricing and Phase 11 BLOCKED constraints against the agent's own standing instructions. It comes from no orchestrator run, carries no A001 unit or real property, and cannot satisfy or bypass PG3. **The exact input is pinned by sha256**, and its five questions come only from the packet's §9.2 current open list. **Two items `Draft 41` still called missing — delivery capacity and commercial shape — are decided and were left out.** The runtime fixture lane now uses an authorisation registry, which holds A001 D21 `spent` and OFFER-F2 `draft`. The lane stays **closed**, nothing ran, and the existing fixture and runtime logs are unchanged. The draft records what the test **cannot** prove. — Claude Code (Opus 5)
 - 2026-09-22 — **A rejected brief no longer advertises `OFFER_BRIEF_RECEIVED`** (§12, §5). A D20-permitted mechanism finding from the A001 D21 fixture run: the orchestrator's static emit reported the event that hands a brief to `offer-oeos-engineer` even on `registry_action: reject`. `finalizeRun()` now withholds it for `reject` only; the recommendation, the memory line and the spec's declared emit are unchanged, and **no event sending was added and no registry behaviour changed**. The other three registry actions keep advertising it under PG3 human review — recorded in §12 with the residual risk if sending is ever wired. **No Offer decision, doctrine, band, gate or ICP rule changed**, the registry table is untouched, and nothing here is market evidence. Regression tests: 3 new, 40/40 pass. — Claude Code (Opus 5)
 - 2026-07-15 — **Registered offer #12, the CPAROS acquisition ladder (AFS/AGE/ADN) — structure only, pricing rejected** (§3, §8). Surfaced by ClientPartner Acquisition (06)'s mandate correction, which found a productized 3-tier service line in its `Draft 2` that the 2026-06-30 narrowing had written off as a Marketing duplicate. The ladder is real; its numbers ($2K–$250K+ setup, 2–10% rev share) and outcome projections are Claude-generated and **not adopted** — recorded as provenance only, never quotable. Owner-confirmed among 3 options. **Flagged a real open conflict:** offers #8 (Strategic Partnership Infrastructure) and #12 are two competing ClientPartner Acquisition ladders — #8's own long-standing "needs reconciliation against the organizational 06 department" note is now actionable and remains open. Neither is OEOS-engineered. — Claude Code (Opus 4.8)
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring (folder renamed from "Offer Drafts").
