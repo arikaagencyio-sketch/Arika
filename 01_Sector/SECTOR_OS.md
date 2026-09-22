@@ -174,6 +174,8 @@ This is a real scoring mechanism the agency designed for itself, not a fabricate
 - **2026-09-22 — Owner-authorised connector schema test: DB 2's six cross-department relations confirmed live; the ClickUp CRM hand-off has NO target fields.** Two read-only schema-metadata calls, one per connector, under a one-attempt authorisation; both are now consumed. **Notion (DB 2 Sub-Sectors):** all 37 properties and 18 relations match `contracts/sector-databases.json` exactly, and the six cross-department relations — five into Content (04) stores and one into Offer (02)'s — exist and point at their declared targets. **ClickUp (the canonical `Lead` list):** six custom fields exist and **none of `sector`, `sub_sector`, `icp_tier` or `offer_id` does**, so S10's CRM mechanism (“free-text ID tags on `Lead`”) has nothing to write to. S10's route table and `SECTOR_SKILL_MATRIX.md` are corrected, and `CRM_SCHEMA.md` now records the live `Lead` fields. **Consequence:** a future S10 run must report the CRM destination as `HANDOFF_FAILURE` until those four fields are created — a write, needing its own decision. This revises the *basis* of the SECTOR-SF1 attempt record's CRM row (`not_attempted_fixture`, “would deliver”), which stays as written: the run did not attempt it, and on this evidence it would not have delivered. **Limitation: target/schema existence only; delivery not tested** — a property that exists is not a hand-off that has been observed arriving. No row, task, page, member, comment or activity was read, and nothing was written. — Claude Code (Opus 5)
 - **2026-09-22 — The authorised disposable CRM mechanism test was NOT run: the ClickUp connector can neither create a custom field nor delete a list.** Preflight stopped **before any external call**, on the owner's own stop conditions (*“cannot delete the list”* and *“any required operation unavailable”*). The connector reads field definitions and sets values on **existing** fields; it exposes no field-creation operation, and it can delete only tasks and comments, not lists, folders or spaces. Deleting the whole temporary list was the only clean way to remove fixture fields, because `CRM_SCHEMA.md` records that ClickUp blocks custom-field rename and delete under both token types — so a “disposable” list would have been permanent, which is what the design existed to avoid. **Nothing was created: no list, folder, field or task**, and the canonical `Lead` list and CRM folder were not touched or read in this pass. **Unchanged by this stop:** the CRM destination stays `HANDOFF_FAILURE`, because the four tag fields still do not exist (verified earlier today). **What the connector can still do:** once those fields exist, it can set their values on a task, so the tag mechanism would be operable through it — only creation is missing. The next step is therefore an owner decision about **permanent** field creation on the canonical `Lead` list, or a deliberate choice not to create them; it is not another fixture. — Claude Code (Opus 5)
 
+- **2026-09-22 — The disposable CRM mechanism authorisation is CANCELLED UNCONSUMED; the permanence claim is corrected; the canonical field decision is drafted below (NOT enacted).** **Cancelled, not failed and not spent:** no external call was made and nothing was created, so the one attempt was never used. It is closed because the connector cannot carry it out — it exposes no custom-field creation and no list deletion, and its generic operator interface reports none enabled. **Correction to this morning's records:** they said a field created by any path “should be treated as permanent”. That is verified only of the **API** — rename and delete returned *“Access denied for updating field api”* under both a personal and an OAuth-app token (2026-07-01) — and of this connector, which exposes neither. **What the ClickUp UI permits is NOT verified**, and `GO_LIVE_CHECKLIST.md` item 3 itself says two redundant fields *“must be manually deleted or ignored in the ClickUp UI”*, which implies UI deletion exists. No claim of UI irreversibility is made or relied on. **Unchanged:** the CRM destination stays `HANDOFF_FAILURE`; no field exists; CRM readiness is not altered. — Claude Code (Opus 5)
+
 ### Decision SECTOR-SF1 · **ENACTED and SPENT 2026-09-22** (owner approval in writing) — drafted text below, as approved
 
 > ✅ **Enacted 2026-09-22 by the owner's written approval; its one attempt was made the same day and the authorisation is SPENT.** See the attempt record at the end of this subsection. The drafted text that follows is kept exactly as approved; its *"authorises nothing until"* note and the *"(not given)"* label on the approval wording describe the pre-approval state. The owner's separate statement that Notion and CRM are generally approved for later testing is **not** part of this decision and authorises nothing inside it.
@@ -396,6 +398,86 @@ the run, as designed. They were replaced by `SpentState`, which pins both artifa
 one record, the observed outcomes and SF1 `spent`, and by a test that a spent authorisation admits
 no second record.
 
+### Draft decision — awaiting owner review · **SECTOR-CRM1 · NOT ENACTED**
+
+> 🔴 **A proposal, not a decision. It creates nothing.** No field exists on the canonical
+> `Lead` list, the CRM destination stays `HANDOFF_FAILURE`, and CRM readiness is unchanged. The
+> creation itself cannot be done from here in any case: this connector has no field-creation
+> operation, so enacting it is an owner action in the ClickUp UI (or a direct API call with the
+> owner's own token).
+
+**SECTOR-CRM1 — create the four Sector hand-off tag fields on the canonical ClickUp `Lead` list.**
+
+**Why.** S10's CRM route has no target: an owner-authorised schema read on 2026-09-22 found none of
+`sector`, `sub_sector`, `icp_tier` or `offer_id` on that list. Until they exist, every S10 run must
+report the CRM destination as `HANDOFF_FAILURE`.
+
+**The four fields, as the repository already defines them** (nothing here is invented):
+
+| Field | Type | Controlled? | Permitted values | Source of truth | Blank allowed |
+|---|---|---|---|---|---|
+| `sector` | Text | Free text, an **ID slug** | No option set — an open, growing set (DB 1, 25 rows). The value is the `Sector ID` slug, the documented cross-platform join key | DB 1 Sectors Master, writer **S07** | **Yes** |
+| `sub_sector` | Text | Free text, an **ID slug** | No option set — open and growing (DB 2, 321 rows). The value is the `Sub-Sector ID` slug | DB 2 Sub-Sectors, writer **S07** | **Yes** |
+| `icp_tier` | **Dropdown** | **Controlled — the set already exists** | Exactly five, from DB 4 `Tier`'s `allowed_values`: **Tier 1 · Tier 2 · Tier 3 · Anti-ICP · Out-of-scope** | DB 4 ICP Classification, writer **S12** (`sector-icp-fit`) | **Yes** |
+| `offer_id` | Text | Free text | **None defined — unresolved.** The Offer Engineering Registry indexes offers by row number and name, with no ID format, and DB 8 carries offer references as free text | Offer (02) owns offers; Sector routes via DB 8, writer **S08** | **Yes** |
+
+**Who may write them in the CRM.** **S10 only.** It is the department's one sanctioned exit, and
+`SECTOR_WRITE_CONTRACT.md` §3 requires Sector to link **by ID** rather than retype upstream truth.
+The *values* originate upstream — S07 for the two IDs, S12 for the tier, S08/DB 8 for the offer
+reference — and S10 carries them across the boundary. Blank is legitimate on every one: a `Lead`
+may exist before Sector has classified anything, so none of the four may be marked required.
+
+**How S10 would use them.** One tag write per destination field, as free-text IDs, on an existing
+`Lead`; it never creates a contact, and it never fabricates one. A tag write is still **not** a
+delivery: `AEIT_11` keeps `CONNECTED` and `LIVE` apart, and nothing here has been observed arriving.
+
+**No existing field can serve instead.** `Company`, `Source`, `Source Campaign`, `Contact name` and
+`Contact Email` carry unrelated data. **`ICP Fit Score` is specifically NOT a substitute for
+`icp_tier`:** it is a *number* (the 90-point prospect score, DB 5), while `icp_tier` is a
+*classification* (DB 4 `Tier`, which requires a written rationale whenever it is set). A score
+cannot express `Anti-ICP` or `Out-of-scope`, and `SECTOR_NOTION_SCHEMA.md` §3 maps `ICP_fit_score`
+to *DB 5 Total Score / DB 4 Tier* — a mirror of the score, not the tier label.
+
+**Three things this decision does NOT settle — name them before enacting:**
+
+1. **Which object.** `SECTOR_NOTION_SCHEMA.md` §3 puts `sector` and `sub_sector` on
+   `Company`/`Client` and `icp_tier` on `Company`/`Lead`; `CRM_SCHEMA.md`'s Sector→CRM bridge and
+   S10's route table put all four on **`Lead`**. The live CRM folder has **no `Company` list** at
+   all (Lead · Opportunity · Client · Engagement/Project · Partner), so the `Company` target
+   cannot be built as written. **Recommended: `Lead`**, matching the bridge and S10 — and then
+   correct §3 in a dated entry rather than leaving two answers standing.
+2. **What `offer_id` contains.** Offer (02) has never defined an ID format. Creating the field as
+   text is safe; what belongs in it is an Offer decision, not a Sector one.
+3. **`ICP_fit_score` ownership.** `CRM_SCHEMA.md:23` still says Sales sets it, while **R1 was
+   ratified on 2026-07-22: Sector sets it, Sales consumes**. That fix is queued under `AEIT_10`
+   Phase Zero. This decision does not depend on it and does not resolve it.
+
+**Reversibility, stated honestly.** Verified: the ClickUp **API** refuses custom-field rename and
+delete under both token types, and this connector offers no create, rename or delete for fields.
+**Not verified: what the UI permits.** `GO_LIVE_CHECKLIST.md` item 3 tells the owner to delete two
+redundant fields *in the UI*, which implies it is possible. Treat creation as **hard to reverse
+through code, probably reversible by hand** — and confirm while creating them.
+
+**Owner procedure — the minimum.**
+
+1. On the canonical `Lead` list, add four fields with these exact lowercase names: `sector`,
+   `sub_sector`, `icp_tier`, `offer_id`.
+2. Types: Text, Text, Dropdown (the five values above, or Text if option management is not wanted),
+   Text.
+3. Leave every one optional and empty. Change no existing field, and no other list.
+4. Note whether the UI offers **Delete** on a field — that settles the open reversibility question.
+5. Say so here, and one metadata-only connector call verifies the result.
+
+**Approval wording the owner would give (not given):**
+
+> I approve SECTOR-CRM1: create `sector`, `sub_sector`, `icp_tier` and `offer_id` on the canonical
+> ClickUp `Lead` list, with the types and the five `icp_tier` values as specified in `SECTOR_OS.md`
+> §8, all optional and blank. I accept that they cannot be renamed or deleted through the API or
+> this connector. Creating them does **not** make the CRM route deliverable: it stays
+> `HANDOFF_FAILURE` until a round-trip test passes, and `offer_id`'s content stays unresolved until
+> Offer (02) defines it.
+
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -464,6 +546,7 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 ## 15. Changelog
 
+- 2026-09-22 — **Disposable CRM authorisation CANCELLED UNCONSUMED; SECTOR-CRM1 drafted in §8 (not enacted).** The fixture was never run and nothing was created, so the attempt was not used up. Drafted instead: the four canonical `Lead` tag fields, each specified from existing contracts — `sector` and `sub_sector` as text ID slugs (DB 1/DB 2, open sets), `icp_tier` as a dropdown carrying DB 4 `Tier`'s five defined values, `offer_id` as text with **no defined format** (an Offer (02) decision). All optional and blank; S10 is the only writer; **`ICP Fit Score` is not a substitute for `icp_tier`**. Three open points are named rather than assumed: which object holds the fields, `offer_id`'s content, and the stale `ICP_fit_score` ownership line. The permanence claim is corrected — API and connector refusal is verified, UI behaviour is not. No field was created; the CRM route stays `HANDOFF_FAILURE`. — Claude Code (Opus 5)
 - 2026-09-22 — **Disposable CRM mechanism test stopped at preflight — not run, nothing created.** The ClickUp connector exposes no custom-field creation and no list deletion, so the authorised fixture could neither be built nor disposed of; per the owner's stop conditions, no external call was made. The CRM destination stays `HANDOFF_FAILURE`. §8 carries the record and the decision this now needs. — Claude Code (Opus 5)
 - 2026-09-22 — **Connector schema test (owner-authorised, one call each): DB 2 confirmed, the CRM hand-off target missing.** Notion DB 2's 37 properties, 18 relations and all six cross-department relation targets match the contract exactly. The canonical ClickUp `Lead` list has six custom fields and **none of the four Sector tag fields**, so S10's CRM route has no target: its table now reads `DESIGNED` / ❌ instead of `CONNECTED` / ✅, `SECTOR_SKILL_MATRIX.md` carries the same correction, and `CRM_SCHEMA.md` records the live `Lead` fields (including two Core-Object fields that are native rather than custom, and one missing `Source` option). Target/schema existence only; delivery not tested. Both one-attempt authorisations are spent. — Claude Code (Opus 5)
 - 2026-09-22 — **SECTOR-SF1 enacted, its one attempt made, and SPENT** (§8 decision and attempt record). One S10 `TEST_FIXTURE` execution on `SYN-S10-01`: Offer, Content and CRM `not_attempted_fixture`; Sales, Marketing and Operations `HANDOFF_FAILURE`; nothing delivered; `writes` and `events` empty. **Isolation held**: exactly one marked record in `_memory/skill_runs-sandbox.jsonl` and one marked packet in `fixtures/`; `skill_runs.jsonl` and every other log byte-unchanged; zero network attempts. Five mechanism findings recorded. The fixture block's `not_read_fixture` list is corrected (DB 4, 8, 15 and 16 added), the write-contract exception and S10's fixture-mode status line are updated, and the pre-run state tests are replaced by `SpentState` pins. **Mechanism evidence only.** A001 D6, the Full Push Packet, `PILOT-H-001` and every PG gate are unchanged. No retry. — Claude Code (Opus 5)

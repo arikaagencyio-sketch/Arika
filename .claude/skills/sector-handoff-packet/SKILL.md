@@ -29,7 +29,7 @@ You are performing the **apply** step of Sector's write layer, at its boundary.
 >
 > **Consequence: Marketing (03) and Operations (08) have no working route from Sector at all**, because their only route was an event now archived. **Sales (05) is reachable in principle and not in fact.** Say this in the run report; do not let a packet look delivered because it was assembled.
 >
-> **Added 2026-09-22:** the **ClickUp CRM route has no target** — none of the four `Lead` tag fields exists live. Report the CRM destination as `HANDOFF_FAILURE` until they are created, which is a write and needs its own decision. `ICP Fit Score` does exist on that list, but `CRM_SCHEMA.md` assigns it to Sales; it is not Sector's `icp_tier`.
+> **Added 2026-09-22:** the **ClickUp CRM route has no target** — none of the four `Lead` tag fields exists live. Report the CRM destination as `HANDOFF_FAILURE` until they are created, which is a write and needs its own decision. `ICP Fit Score` does exist on that list, but it is a score, not a tier, and is **not** a substitute for `icp_tier` *(corrected 2026-09-22: an earlier note called it Sales-set; `AEIT_05` R1, ratified 2026-07-22, makes Sector the setter and Sales the consumer)*.
 
 ## Step 1 · `HANDOFF_FAILURE` is a result, not an error
 
