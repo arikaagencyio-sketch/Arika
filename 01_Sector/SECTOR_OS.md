@@ -176,6 +176,8 @@ This is a real scoring mechanism the agency designed for itself, not a fabricate
 
 - **2026-09-22 — The disposable CRM mechanism authorisation is CANCELLED UNCONSUMED; the permanence claim is corrected; the canonical field decision is drafted below (NOT enacted).** **Cancelled, not failed and not spent:** no external call was made and nothing was created, so the one attempt was never used. It is closed because the connector cannot carry it out — it exposes no custom-field creation and no list deletion, and its generic operator interface reports none enabled. **Correction to this morning's records:** they said a field created by any path “should be treated as permanent”. That is verified only of the **API** — rename and delete returned *“Access denied for updating field api”* under both a personal and an OAuth-app token (2026-07-01) — and of this connector, which exposes neither. **What the ClickUp UI permits is NOT verified**, and `GO_LIVE_CHECKLIST.md` item 3 itself says two redundant fields *“must be manually deleted or ignored in the ClickUp UI”*, which implies UI deletion exists. No claim of UI irreversibility is made or relied on. **Unchanged:** the CRM destination stays `HANDOFF_FAILURE`; no field exists; CRM readiness is not altered. — Claude Code (Opus 5)
 
+- **2026-09-22 — SECTOR-CRM1 APPROVED by the owner, who created the four fields by hand; one metadata-only call could NOT see them on the canonical `Lead` list, so the decision is NOT recorded as implemented.** **Checks that pass:** the six pre-existing fields are unchanged in name and type — identical to the morning's read — and there are no duplicates. **Checks that cannot pass:** `sector`, `sub_sector`, `icp_tier` and `offer_id` were absent from the response, so their types and the five `icp_tier` options could not be verified. **Two explanations remain open and this call cannot separate them:** (a) the fields exist at **folder, space or workspace scope** rather than on the list — the call asked only for list-scope definitions, a limit of how the one call was spent, not evidence of absence elsewhere; or (b) they were created on a **different list** — the same space also holds ClickUp's unused default template lists (`Leads`, `Deals`, `Accounts`, `Contacts`, `Contracts`), and the plural `Leads` is easily taken for the canonical `Lead`. **The next single call should query list, folder, space and workspace scopes together**, which the connector supports, and which separates (a) from (b) in one go. **Unchanged:** the CRM destination stays `HANDOFF_FAILURE`; field existence would in any case prove only that a target exists, never a delivery; `offer_id`'s meaning stays unresolved; CRM readiness is not altered. **No UI reversibility is inferred:** the owner has not reported whether the ClickUp UI offers a Delete option on a field, so that question stays open. — Claude Code (Opus 5)
+
 ### Decision SECTOR-SF1 · **ENACTED and SPENT 2026-09-22** (owner approval in writing) — drafted text below, as approved
 
 > ✅ **Enacted 2026-09-22 by the owner's written approval; its one attempt was made the same day and the authorisation is SPENT.** See the attempt record at the end of this subsection. The drafted text that follows is kept exactly as approved; its *"authorises nothing until"* note and the *"(not given)"* label on the approval wording describe the pre-approval state. The owner's separate statement that Notion and CRM are generally approved for later testing is **not** part of this decision and authorises nothing inside it.
@@ -398,7 +400,9 @@ the run, as designed. They were replaced by `SpentState`, which pins both artifa
 one record, the observed outcomes and SF1 `spent`, and by a test that a spent authorisation admits
 no second record.
 
-### Draft decision — awaiting owner review · **SECTOR-CRM1 · NOT ENACTED**
+### Decision SECTOR-CRM1 · **APPROVED 2026-09-22 · implementation NOT YET VERIFIED** — drafted text below, as approved
+
+> ⚠️ **Approved by the owner on 2026-09-22, who reports creating the four fields by hand. A metadata-only call the same day did NOT find them on the canonical `Lead` list** — see the dated entry above for the two open explanations and the next single check. **Nothing is recorded as implemented, and the CRM route stays `HANDOFF_FAILURE`.** The drafted text that follows is kept exactly as approved; its *“a proposal, not a decision”* note describes the pre-approval state.
 
 > 🔴 **A proposal, not a decision. It creates nothing.** No field exists on the canonical
 > `Lead` list, the CRM destination stays `HANDOFF_FAILURE`, and CRM readiness is unchanged. The
@@ -478,6 +482,46 @@ through code, probably reversible by hand** — and confirm while creating them.
 > Offer (02) defines it.
 
 
+#### Next test — drafted for owner approval, **NOT approved and NOT run** · SECTOR-CW2
+
+> 🔴 **Blocked until the four fields are verified.** It cannot run while they are invisible to
+> the connector: setting `icp_tier` needs the dropdown's option id, which only the field definitions
+> supply. Verify first, then approve this.
+
+**SECTOR-CW2 — one synthetic value round-trip on the canonical `Lead` list.** Disposable, because
+task deletion is supported by the connector even though field deletion is not.
+
+**Exact input** (neutral fixture values; no person, company, place, email, URL, price, market claim
+or real offer reference):
+
+| Field | Value |
+|---|---|
+| task name | `TEST_FIXTURE CRM TAG CHECK` |
+| description | `TEST_FIXTURE - synthetic mechanism check under SECTOR-CW2. Not a lead, prospect, client, contact or opportunity. Deleted immediately after read-back.` |
+| `sector` | `sec-test-fixture` |
+| `sub_sector` | `sub-test-fixture` |
+| `icp_tier` | `Out-of-scope` — the honest fixture choice from the five approved options |
+| `offer_id` | `none-test-fixture` — a placeholder, because `offer_id`'s meaning is still unresolved |
+
+**One sequence, no retry:** create the one task on the canonical `Lead` list → set the four values
+→ read back **only that task** and those four fields → compare against the values above → delete
+the task → one metadata-only call confirming the list's field schema is unchanged.
+
+**Stops:** any real, personal or client data anywhere in the sequence · any step failing (report,
+do not retry) · anything that would touch another list, another task, a contact or a member. **If
+the delete fails, stop at once and report the task name** — do not overwrite or conceal it.
+
+**What it would prove:** that a value written to these four fields survives a round trip. **What it
+would not prove:** that S10 delivers anything. The CRM destination stays `HANDOFF_FAILURE` until a
+real hand-off is observed arriving, and `offer_id`'s content stays an Offer (02) question.
+
+**Approval wording the owner would give (not given):**
+
+> I approve SECTOR-CW2: one synthetic `TEST_FIXTURE CRM TAG CHECK` task on the canonical `Lead`
+> list with the four fixture values above, read back once, then deleted. No retry, no other task,
+> no contact or personal data, and no claim that the CRM route delivers.
+
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -546,6 +590,7 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 ## 15. Changelog
 
+- 2026-09-22 — **SECTOR-CRM1 approved; verification could not find the four fields at list scope, so it is NOT implemented.** One metadata-only call: the six pre-existing `Lead` fields are unchanged and undeduplicated, and the four new ones were absent. Either they sit at folder, space or workspace scope — the call asked only for list scope — or they were created on a different list, the space's unused `Leads` template being the likely confusion. The next single call should ask all four scopes at once. The CRM route stays `HANDOFF_FAILURE`, `offer_id` stays unresolved, and no UI reversibility is inferred. **SECTOR-CW2**, the synthetic round-trip, is drafted in §8 and **not approved**. — Claude Code (Opus 5)
 - 2026-09-22 — **Disposable CRM authorisation CANCELLED UNCONSUMED; SECTOR-CRM1 drafted in §8 (not enacted).** The fixture was never run and nothing was created, so the attempt was not used up. Drafted instead: the four canonical `Lead` tag fields, each specified from existing contracts — `sector` and `sub_sector` as text ID slugs (DB 1/DB 2, open sets), `icp_tier` as a dropdown carrying DB 4 `Tier`'s five defined values, `offer_id` as text with **no defined format** (an Offer (02) decision). All optional and blank; S10 is the only writer; **`ICP Fit Score` is not a substitute for `icp_tier`**. Three open points are named rather than assumed: which object holds the fields, `offer_id`'s content, and the stale `ICP_fit_score` ownership line. The permanence claim is corrected — API and connector refusal is verified, UI behaviour is not. No field was created; the CRM route stays `HANDOFF_FAILURE`. — Claude Code (Opus 5)
 - 2026-09-22 — **Disposable CRM mechanism test stopped at preflight — not run, nothing created.** The ClickUp connector exposes no custom-field creation and no list deletion, so the authorised fixture could neither be built nor disposed of; per the owner's stop conditions, no external call was made. The CRM destination stays `HANDOFF_FAILURE`. §8 carries the record and the decision this now needs. — Claude Code (Opus 5)
 - 2026-09-22 — **Connector schema test (owner-authorised, one call each): DB 2 confirmed, the CRM hand-off target missing.** Notion DB 2's 37 properties, 18 relations and all six cross-department relation targets match the contract exactly. The canonical ClickUp `Lead` list has six custom fields and **none of the four Sector tag fields**, so S10's CRM route has no target: its table now reads `DESIGNED` / ❌ instead of `CONNECTED` / ✅, `SECTOR_SKILL_MATRIX.md` carries the same correction, and `CRM_SCHEMA.md` records the live `Lead` fields (including two Core-Object fields that are native rather than custom, and one missing `Source` option). Target/schema existence only; delivery not tested. Both one-attempt authorisations are spent. — Claude Code (Opus 5)
