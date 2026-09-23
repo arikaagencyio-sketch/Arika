@@ -1,0 +1,25 @@
+{
+  "_meta": {
+    "artifact": "ClickUp CRM provisioning authorisations",
+    "rule": "provision_clickup_fields.py --apply runs only under an entry here whose status is approved. The entry is set to spent by the run itself, whatever the outcome. A draft or spent entry admits nothing, and entries are never deleted, so every field created stays explained.",
+    "enforcement": "Preventive for the script (it refuses to apply without an approved entry) and detective for everything else: a field created by hand in the ClickUp UI leaves no trace here, which is why the audit record names what the script itself created.",
+    "human_gate": "Risk Class 3 (Constitution section 5). Owner sign-off is required per entry and is quoted in it.",
+    "secrets": "None here, ever. The token is read from the CLICKUP_TOKEN environment variable at run time."
+  },
+  "authorisations": [
+    {
+      "id": "CRM-PROV-1",
+      "status": "approved",
+      "approved": "2026-09-23, owner instruction in writing: create the four Sector bridge fields by direct REST call rather than by hand, as a permanent change to real CRM structure.",
+      "decision_record": "01_Sector/SECTOR_OS.md section 8: decision SECTOR-CRM1 (approved 2026-09-22)",
+      "target": "crm.lead",
+      "fields": ["sector", "sub_sector", "icp_tier", "offer_id"],
+      "max_creates": 4,
+      "risk_class": 3,
+      "permits": "Creating ONLY the four named fields on the allowlisted target, only if absent. Nothing else.",
+      "forbids": "Any rename, delete, reorder or value write; any other list, folder or space; any task, contact, member, comment or activity read; any retry after a failed create.",
+      "blocked_until": "CLICKUP_TOKEN is present in the environment. Until then --apply refuses and nothing is created.",
+      "spent": null
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "_meta": {
+    "artifact": "ClickUp CRM custom-field provisioning spec",
+    "purpose": "The declarative list of custom fields the agency's CRM is supposed to carry, per list. A field exists here ONLY if a repository contract or a recorded owner decision already defines it. This file is the input to provision_clickup_fields.py, which creates missing fields and never renames, deletes, reorders or sets a value.",
+    "authority": "00_Agency_Governance/CRM_SCHEMA.md is canonical for the CRM object model. Cross-department additions must also cite their own department's contract. Nothing may be added here without that citation.",
+    "why_a_script": "The ClickUp MCP connector can read field definitions and set values on existing fields, but exposes no field-creation operation (verified 2026-09-22/23, including a capability query returning no enabled operators). The 2026-07-01 build created every custom field by direct REST call with an owner-supplied personal token. This spec plus its script make that path repeatable and governed instead of ad hoc.",
+    "rules": [
+      "CREATE-ONLY. The script never renames, deletes, reorders or hides a field, and never writes a value.",
+      "IDEMPOTENT. A field whose exact name already exists on the target is skipped, never duplicated.",
+      "ALLOWLISTED. Only a target named in this file may be touched, and its live list name must match list_name_expected before anything is created.",
+      "AUTHORISED. Every apply run names an approved entry in provisioning-authorisations.json, which is spent on use.",
+      "NO SECRETS. The token is read from the CLICKUP_TOKEN environment variable, never from this repository, never printed, never written to the audit record.",
+      "Blank is legitimate on every field below; none may be marked required."
+    ],
+    "risk_class": "3 (Constitution section 5) - hard to reverse: ClickUp's API refuses custom-field rename and delete under both token types (2026-07-01). Owner sign-off is therefore required per run, and is recorded in the authorisation registry.",
+    "other_departments": "Sales (05), ClientPartner (06), Client Success (07), Operations (08) and Finance all consume this CRM. Their fields belong in this same file, under their own target, each with its own contract citation and its own owner decision. None is defined yet, and none is invented here."
+  },
+  "targets": [
+    {
+      "ref": "crm.lead",
+      "list_name_expected": "Lead",
+      "list_id_from": {
+        "file": "00_Agency_Governance/GO_LIVE_CHECKLIST.md",
+        "pattern": "Lead \\(`(\\d+)`\\)",
+        "note": "The canonical Lead list id is recorded there (Phase 1 item 3, 2026-07-01) and is not duplicated here. Verified 2026-09-23: that id resolves to a list named Lead in the Sales CRM space, carrying the CRM_SCHEMA description and the documented stage pipeline."
+      },
+      "authority": "01_Sector/SECTOR_OS.md section 8, decision SECTOR-CRM1 (approved 2026-09-22); 00_Agency_Governance/CRM_SCHEMA.md 'Sector (01) -> CRM bridge'; 01_Sector/SECTOR_NOTION_SCHEMA.md section 3.",
+      "fields": [
+        {
+          "name": "sector",
+          "type": "short_text",
+          "required": false,
+          "carries": "The Sector ID slug from DB 1 Sectors Master - a join key, never a display name.",
+          "controlled": false,
+          "why_not_controlled": "An open, growing set (25 rows). No option set is defined anywhere, and none is invented.",
+          "source_of_truth": "DB 1 Sectors Master, writer skill S07",
+          "written_in_crm_by": "S10 sector-handoff-packet, the department's only sanctioned exit"
+        },
+        {
+          "name": "sub_sector",
+          "type": "short_text",
+          "required": false,
+          "carries": "The Sub-Sector ID slug from DB 2 Sub-Sectors.",
+          "controlled": false,
+          "why_not_controlled": "An open, growing set (321 rows). No option set is defined anywhere.",
+          "source_of_truth": "DB 2 Sub-Sectors, writer skill S07",
+          "written_in_crm_by": "S10 sector-handoff-packet"
+        },
+        {
+          "name": "icp_tier",
+          "type": "drop_down",
+          "required": false,
+          "carries": "The ICP classification, mirroring DB 4 ICP Classification 'Tier'.",
+          "controlled": true,
+          "type_config": {
+            "options": [
+              { "name": "Tier 1" },
+              { "name": "Tier 2" },
+              { "name": "Tier 3" },
+              { "name": "Anti-ICP" },
+              { "name": "Out-of-scope" }
+            ]
+          },
+          "options_authority": "01_Sector/contracts/sector-databases.json, DB 4 field 'Tier', allowed_values - the exact five, in order. Not invented.",
+          "source_of_truth": "DB 4 ICP Classification, writer skill S12 (sector-icp-fit)",
+          "written_in_crm_by": "S10 sector-handoff-packet",
+          "not_to_be_confused_with": "The existing 'ICP Fit Score' number field. That is the DB 5 prospect score; it cannot express Anti-ICP or Out-of-scope and is not a substitute."
+        },
+        {
+          "name": "offer_id",
+          "type": "short_text",
+          "required": false,
+          "carries": "The matched entry-offer reference.",
+          "controlled": false,
+          "why_not_controlled": "UNRESOLVED: the Offer Engineering Registry indexes offers by row number and name, and defines no id format. Offer (02) owns that decision. Text is created so the field exists; what belongs in it stays open.",
+          "source_of_truth": "Offer (02); routed via DB 8 Agency Opportunity Map, writer skill S08",
+          "written_in_crm_by": "S10 sector-handoff-packet"
+        }
+      ]
+    }
+  ]
+}

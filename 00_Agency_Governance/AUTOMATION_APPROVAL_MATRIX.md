@@ -33,6 +33,18 @@ When any department builds a real automation (a Triggers/Automation Hooks entry 
 
 ---
 
+**Real row (specified 2026-09-23, not yet run — blocked on the owner supplying a token):**
+
+| Trigger | Action | Risk Class (Constitution §5) | Rollback | Fallback | Log destination | Human gate |
+|---|---|---|---|---|---|---|
+| Manual, owner-authorised run of `00_Agency_Governance/crm_provisioning/provision_clickup_fields.py --apply` | Creates the **missing** CRM custom fields declared in `clickup-field-spec.json`, by direct ClickUp REST call, on an allowlisted list only. Create-only: never renames, deletes, reorders or writes a value, and never reads a task, contact or member | **3** — hard to reverse: ClickUp's API refuses custom-field rename and delete under both token types (2026-07-01). What the **UI** permits is untested, so no claim of irreversibility is made either | **Not available through the API.** A field created in error must be removed by hand in the ClickUp UI, if that is possible there | Create the fields manually in the ClickUp UI, which is what this replaces | `crm_provisioning/_audit/<utc>-<authorisation>.json` (what was created, skipped, failed and verified — never the token), plus a dated entry in `01_Sector/SECTOR_OS.md` §8 | **Per run.** `--apply` refuses unless `provisioning-authorisations.json` holds an `approved` entry naming the target and the exact fields; the run spends it. Owner sign-off is quoted in the entry |
+
+**How anyone would know it stopped:** it is not a scheduled automation — it runs once, by hand, and its own audit record states what it created and verified. A silent partial run is impossible: the first failure stops it, and the record names the field it stopped on. Nothing re-runs without a fresh authorisation.
+
+**Secrets:** the token is read from the `CLICKUP_TOKEN` environment variable at run time. It is never stored in this repository, never printed, and never written to the audit record.
+
+---
+
 ### 🔴 Standing gap: 30 runtime schedule triggers, 1 matrix row
 
 `arika-runtime` declares **30 `type: schedule` triggers across 29 agent specs** — re-counted from `.claude/agents/*.md` on 2026-09-13 (this section read 21). This matrix has **one** real row — the one above.
