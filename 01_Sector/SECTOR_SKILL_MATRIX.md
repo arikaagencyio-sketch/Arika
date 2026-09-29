@@ -244,7 +244,7 @@ The only sanctioned exit from the department. Assembles the packet — findings,
 |---|---|
 | Content (04) | native relation — 9 available |
 | Offer (02) | relation + text reference |
-| ClickUp CRM | free-text ID tags on `Lead`: `sector`, `sub_sector`, `icp_tier`, `offer_id` — 🟡 **all four exist on the live `Lead` list** as of 2026-09-29 (created and verified under `CRM-PROV-1`); the route has a target, but report `HANDOFF_FAILURE` until the SECTOR-CW2 round-trip passes |
+| ClickUp CRM | free-text ID tags on `Lead`: `sector`, `sub_sector`, `icp_tier`, `offer_id` — 🟡 **all four exist on the live `Lead` list** as of 2026-09-29, and a direct connector write round-tripped (SECTOR-CW2). **S10 has never written a tag**, so delivery is unproven: read a tag back on the task before recording anything but `HANDOFF_FAILURE` |
 | Sales · Marketing · Operations | **event only** |
 
 **Must check before routing.** `DEMAND_SHIFT`, `COMPRESSION_EVENT` and `COMPETITOR_MOVE` have **zero subscribers**; `CALENDAR_UPDATED` and `REGULATORY_CHANGE` reach only Sector's own agents. S10 reports a handoff into any of these as `HANDOFF_FAILURE` — it does not perform it silently, and does not discard the packet.

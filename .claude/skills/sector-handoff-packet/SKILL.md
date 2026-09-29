@@ -21,7 +21,7 @@ You are performing the **apply** step of Sector's write layer, at its boundary.
 |---|---|---|---|
 | **Content (04)** | native relation — 9 available | `CONNECTED` | ✅ |
 | **Offer (02)** | relation + text reference | `CONNECTED` | ✅ |
-| **ClickUp CRM** | free-text ID tags on `Lead`: `sector`, `sub_sector`, `icp_tier`, `offer_id` | **`CONNECTED`** — the four tag fields **exist** as of 2026-09-29 (created under `CRM-PROV-1`, verified); **nothing has been observed arriving** *(was `DESIGNED`, no target, 2026-09-22)* | ⚠️ |
+| **ClickUp CRM** | free-text ID tags on `Lead`: `sector`, `sub_sector`, `icp_tier`, `offer_id` | **`CONNECTED`** — the four tag fields exist, and a **direct connector write round-tripped on 2026-09-29** (SECTOR-CW2, not an S10 run); **S10 has never written a tag, so no hand-off has been observed arriving** *(was `DESIGNED`, no target, 2026-09-22)* | ⚠️ |
 | **Sales (05)** | **event only** | `CONNECTED` subscriber, **no observed delivery** | ❌ |
 | **Marketing (03)** · **Operations (08)** | **event only**, and that event is `DEMAND_SHIFT` | **`DESIGNED`** — archived 2026-08-28 (31d) | ❌ |
 
@@ -29,7 +29,7 @@ You are performing the **apply** step of Sector's write layer, at its boundary.
 >
 > **Consequence: Marketing (03) and Operations (08) have no working route from Sector at all**, because their only route was an event now archived. **Sales (05) is reachable in principle and not in fact.** Say this in the run report; do not let a packet look delivered because it was assembled.
 >
-> **Updated 2026-09-29:** the four `Lead` tag fields now **exist**, so the CRM route finally has a target. **Keep reporting the CRM destination as `HANDOFF_FAILURE` until the SECTOR-CW2 round-trip passes** — a field that exists is not a value that survived a write, and nothing has been observed arriving. *(Before 2026-09-29 the route had no target at all.)* `ICP Fit Score` does exist on that list, but it is a score, not a tier, and is **not** a substitute for `icp_tier` *(corrected 2026-09-22: an earlier note called it Sales-set; `AEIT_05` R1, ratified 2026-07-22, makes Sector the setter and Sales the consumer)*.
+> **Updated 2026-09-29:** the four `Lead` tag fields exist, and SECTOR-CW2 proved a value written to them **survives a write and read-back** through the connector. That was a direct call, **not an S10 run**: this skill has never written a CRM tag, and no hand-off has been observed arriving. So the mechanism is available, and **delivery is still unproven**. If a run writes the tags, **read them back on that task before recording anything other than `HANDOFF_FAILURE`** — assembled is not delivered, and neither is written-without-reading. *(Before 2026-09-29 the route had no target at all.)* `ICP Fit Score` does exist on that list, but it is a score, not a tier, and is **not** a substitute for `icp_tier` *(corrected 2026-09-22: an earlier note called it Sales-set; `AEIT_05` R1, ratified 2026-07-22, makes Sector the setter and Sales the consumer)*.
 
 ## Step 1 · `HANDOFF_FAILURE` is a result, not an error
 

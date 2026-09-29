@@ -40,7 +40,11 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # Re-baselined 2026-09-29: the four Lead tag fields were created and verified, so the CRM row moves
 # from "no target" to CONNECTED - while still reporting HANDOFF_FAILURE until SECTOR-CW2 passes.
 # Was 9a25200ab4fb2c8f0b2416cdb9134c86fde365c9c50e9989646209ba82ee1ed2 (2026-09-22, evening).
-S10_ORDINARY_SHA = "55d6d868c2a8bc51b430db395e4ff18a7999f5772071754126407e68afa927f2"
+# Re-baselined 2026-09-29 after SECTOR-CW2: the CRM row now records that a direct connector write
+# round-tripped, while S10 itself has still never written a tag - so a run must read its own write
+# back before recording anything but HANDOFF_FAILURE.
+# Was 55d6d868c2a8bc51b430db395e4ff18a7999f5772071754126407e68afa927f2 (2026-09-29, earlier).
+S10_ORDINARY_SHA = "a30d91d57428d7bcbddaad8b47fba071fd3387d329fd45e6efd63083247f7c4d"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)
