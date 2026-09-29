@@ -1,0 +1,130 @@
+{
+ "classification": "TEST_FIXTURE",
+ "synthetic": true,
+ "label": "SYNTHETIC S10 hand-off packet, assembled in fixture mode under SECTOR-SF2. The CRM tags were written to a DISPOSABLE task that was deleted; no real Lead was tagged. Not a hand-off, a fit verdict, an eligibility claim, a market finding, a price, Sector evidence or Offer evidence.",
+ "authorisation_id": "SECTOR-SF2",
+ "execution_id": "s10-2026-09-29-sector-sf2-syn-s10-01-crm-tag-1",
+ "assembled_at": "2026-09-29T07:29:50Z",
+ "handoff_id": "sector->{crm,offer,content,sales,marketing,operations}:Company[SYN-S10-01, TEST_FIXTURE]",
+ "producer": "Sector (01) - S10 sector-handoff-packet, fixture mode",
+ "consumer": [
+  {
+   "destination": "ClickUp CRM",
+   "outcome": "delivered_fixture_verified"
+  },
+  {
+   "destination": "Offer (02)",
+   "outcome": "not_attempted_fixture"
+  },
+  {
+   "destination": "Content (04)",
+   "outcome": "not_attempted_fixture"
+  },
+  {
+   "destination": "Sales (05)",
+   "outcome": "HANDOFF_FAILURE"
+  },
+  {
+   "destination": "Marketing (03)",
+   "outcome": "HANDOFF_FAILURE"
+  },
+  {
+   "destination": "Operations (08)",
+   "outcome": "HANDOFF_FAILURE"
+  }
+ ],
+ "trigger": {
+  "kind": "manual",
+  "detail": "Owner-approved SECTOR-SF2 fixture execution. Not a sector reaching Offer-Ready, not activation Gate G, not a resolver run."
+ },
+ "payload": {
+  "canonical_entity": "Company",
+  "entity_check": "Company is canonical (AEIT_06 Party domain). Only sector_id and size map to its key fields; archetype is not a Company field and Geography is an unratified candidate, so both stay flagged rather than invented.",
+  "crm_tags_written": {
+   "sector": "TEST_FIXTURE-sector-hospitality-name-only",
+   "sub_sector": "TEST_FIXTURE-sub-sector-accommodation-name-only",
+   "icp_tier": "Out-of-scope",
+   "offer_id": "TEST_FIXTURE-no-offer-id"
+  },
+  "crm_tags_read_back": {
+   "sector": "TEST_FIXTURE-sector-hospitality-name-only",
+   "sub_sector": "TEST_FIXTURE-sub-sector-accommodation-name-only",
+   "icp_tier": "Out-of-scope",
+   "offer_id": "TEST_FIXTURE-no-offer-id"
+  },
+  "crm_tags_match": true,
+  "tag_provenance": {
+   "sector": "SYN-S10-01 supplies the sector NAME 'Hospitality', not a DB 1 Sector ID. A fixture may not read DB 1, and the repo's only slug-shaped strings are marked illustrative, so an explicit TEST_FIXTURE placeholder was written instead of an invented id.",
+   "sub_sector": "Same against DB 2: the record supplies the name 'Accommodation', never an id.",
+   "icp_tier": "From DB 4 Tier's five approved options. SYN-S10-01 carries NO ICP classification - its five checks are scope and anti-ICP screens - so Out-of-scope is the only option that asserts nothing about a real company.",
+   "offer_id": "Offer (02) has never defined an id format. This string defines no production format."
+  },
+  "fit_verdict": null,
+  "fit_verdict_note": "S10 produces no fit verdict. The input's SIMULATED_VERDICT is not carried forward.",
+  "left_out_not_read_fixture": [
+   "DB3",
+   "DB4",
+   "DB6",
+   "DB7",
+   "DB8",
+   "DB9",
+   "DB10",
+   "DB15",
+   "DB16"
+  ],
+  "outreach_angle": null,
+  "boundary_law": "Angle, never artifact. No angle was assembled - it needs timing, pain and language, none of which was read - and no email, proposal or script was written."
+ },
+ "validation_rules": [
+  "Reject for any real use: classification TEST_FIXTURE and synthetic true.",
+  "The CRM values were written to a disposable task that no longer exists; they tag no real Lead.",
+  "delivered_fixture_verified means written AND read back. It is not `delivered` and not a hand-off.",
+  "offer_id's production format remains undefined; the fixture string does not define it."
+ ],
+ "confidence_threshold": {
+  "packet_confidence": "SYNTHETIC - caps everything in this packet (S10 Step 4).",
+  "act_on": "Nothing. This packet tests mechanism only.",
+  "caps": [
+   "The input is a synthetic record; no attribute was observed.",
+   "Three of the four tag values are explicit TEST_FIXTURE placeholders, because the pinned record cannot truthfully supply real Sector/Sub-Sector ids or an ICP tier."
+  ]
+ },
+ "freshness_requirement": {
+  "last_verified": {
+   "synthetic_record": "constructed 2026-09-22; not an observation",
+   "event_catalog_routes": [
+    "2026-08-28"
+   ],
+   "crm_tag_write": "2026-09-29T07:29:50Z"
+  },
+  "rule": "A consumer may reject on age. This packet carries no observed market data to age."
+ },
+ "owner": "Sector (01), the producer, owns this contract.",
+ "sla_cadence": "One-off, owner-authorised fixture (SECTOR-SF2: one attempt, no retry). No SLA.",
+ "failure_modes": [
+  {
+   "destination": "Sales (05)",
+   "mode": "HANDOFF_FAILURE",
+   "detail": "Does not deliver: LIVE events 0; executor.ts publishes: False. Reachable in principle, not in fact.",
+   "fallback": "Packet kept; destination named; no substitute route used (S10 Step 1)."
+  },
+  {
+   "destination": "Marketing (03)",
+   "mode": "HANDOFF_FAILURE",
+   "detail": "Does not deliver: DEMAND_SHIFT is DESIGNED with 0 subscribers, retired 2026-08-28; no Sector-readable store exists (owner item 31k).",
+   "fallback": "Packet kept; destination named; no substitute route used (S10 Step 1)."
+  },
+  {
+   "destination": "Operations (08)",
+   "mode": "HANDOFF_FAILURE",
+   "detail": "As Marketing: the only S10 route is an archived event, and nothing publishes.",
+   "fallback": "Packet kept; destination named; no substitute route used (S10 Step 1)."
+  },
+  {
+   "destination": "all",
+   "mode": "feedback loop cannot close",
+   "detail": "No performance store exists; a packet can be delivered but not scored.",
+   "fallback": "None - recorded, not worked around."
+  }
+ ]
+}

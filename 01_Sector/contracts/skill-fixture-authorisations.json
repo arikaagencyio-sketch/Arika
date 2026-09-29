@@ -22,7 +22,9 @@
     },
     {
       "id": "SECTOR-SF2",
-      "status": "draft",
+      "status": "spent",
+      "spent": "2026-09-29T072952Z - its one attempt made (s10-2026-09-29-sector-sf2-syn-s10-01-crm-tag-1)",
+      "approved": "2026-09-29, owner approval in writing (SECTOR_OS.md section 8).",
       "skill": "sector-handoff-packet",
       "skill_id": "S10",
       "record": "01_Sector/SECTOR_OS.md section 8: draft decision SECTOR-SF2 (NOT enacted)",

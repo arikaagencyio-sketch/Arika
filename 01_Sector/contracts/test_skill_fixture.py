@@ -44,7 +44,10 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # round-tripped, while S10 itself has still never written a tag - so a run must read its own write
 # back before recording anything but HANDOFF_FAILURE.
 # Was 55d6d868c2a8bc51b430db395e4ff18a7999f5772071754126407e68afa927f2 (2026-09-29, earlier).
-S10_ORDINARY_SHA = "a30d91d57428d7bcbddaad8b47fba071fd3387d329fd45e6efd63083247f7c4d"
+# Re-baselined 2026-09-29 after SECTOR-SF2: the CRM row now records that S10 itself wrote, read
+# back and deleted one disposable fixture task - while no real Lead has ever been tagged.
+# Was a30d91d57428d7bcbddaad8b47fba071fd3387d329fd45e6efd63083247f7c4d (2026-09-29, post-CW2).
+S10_ORDINARY_SHA = "337a0ba7d9acfdb790ef01059e896c1a84d135df785f77258c57b51ef49ee07a"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)
@@ -260,27 +263,34 @@ class GateIsolation(unittest.TestCase):
 # Until 2026-09-22 this class was PreparedStateIsDisabled and asserted the pre-run state
 # (SF1 draft, no artifacts). SECTOR-SF1 was then enacted, its ONE attempt made and the
 # authorisation SPENT (SECTOR_OS.md section 8). These tests pin what that attempt left.
-SANDBOX_LOG_SHA = "4670109698ba328ade36489b251e0394eaf012b6e9711d5123f2e0f0e09ad9f5"
+# One line per spent authorisation, pinned individually so a later fixture can append without
+# breaking the pins - and so a rewrite of an earlier line is caught.
+SF1_LINE_SHA = "4670109698ba328ade36489b251e0394eaf012b6e9711d5123f2e0f0e09ad9f5"
+SF2_LINE_SHA = "5a3f639de2ea211c727da65c2602f011999bb23fbf987403469611223976d565"
 PACKET_SHA = "7554729f114d737dc4f365847dd336c0606e9fbc776d5e339a94671acb2f1798"
+SF2_PACKET_SHA = "a4e0ff7ce334dcf4fc4c834821ce1e4322be484e313628aa741e2f179c6bb673"
 SF1_EXECUTION_ID = "s10-2026-09-22-sector-sf1-syn-s10-01-fixture-1"
+SF2_EXECUTION_ID = "s10-2026-09-29-sector-sf2-syn-s10-01-crm-tag-1"
 
 
 class SpentState(unittest.TestCase):
-    def test_sf1_is_spent_sf2_is_draft_and_nothing_is_approved(self):
+    def test_both_authorisations_are_spent_and_nothing_is_approved(self):
         reg = json.loads(rd(REGISTRY))["authorisations"]
         self.assertEqual([(a["id"], a["status"]) for a in reg],
-                         [("SECTOR-SF1", "spent"), ("SECTOR-SF2", "draft")])
+                         [("SECTOR-SF1", "spent"), ("SECTOR-SF2", "spent")])
         self.assertFalse(any(a["status"] == "approved" for a in reg), "nothing may sit approved")
         self.assertIn(SF1_EXECUTION_ID, reg[0]["spent"])
 
-    def test_the_one_attempt_left_exactly_its_two_artifacts_unaltered(self):
-        self.assertEqual(hashlib.sha256(rd(SANDBOX_LOG, "rb")).hexdigest(), SANDBOX_LOG_SHA,
-                         "the fixture log changed - it is append-only and SF1 admits one record")
-        self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, PACKET_REL), "rb")).hexdigest(), PACKET_SHA)
-        self.assertEqual(len([l for l in rd(SANDBOX_LOG).splitlines() if l.strip()]), 1)
+    def test_sf1s_own_artifacts_are_unaltered_by_the_later_run(self):
+        self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, PACKET_REL), "rb")).hexdigest(), PACKET_SHA,
+                         "SF1's packet must survive every later fixture untouched")
+        lines = [l for l in rd(SANDBOX_LOG, "rb").splitlines(keepends=True) if l.strip()]
+        self.assertEqual(len(lines), 2, "one record per spent authorisation, appended in order")
+        self.assertEqual(hashlib.sha256(lines[0]).hexdigest(), SF1_LINE_SHA,
+                         "SF1's record changed - the fixture log is append-only")
 
     def test_the_fixture_record_is_marked_isolated_and_delivers_nothing(self):
-        r = json.loads(rd(SANDBOX_LOG))
+        r = json.loads(rd(SANDBOX_LOG, "rb").splitlines(keepends=True)[0])  # SF1's own line
         V.validate(r)
         self.assertEqual(r["classification"], "TEST_FIXTURE")
         self.assertEqual(r["payload"]["execution_id"], SF1_EXECUTION_ID)
@@ -386,16 +396,17 @@ def sf2_record(eid="s10-sf2-test-1", ts="2026-01-01T00:00:00Z", verified=True, c
     return r
 
 
-class SF2Prepared(unittest.TestCase):
-    def test_the_authorisation_is_drafted_distinct_and_fails_closed(self):
+class SF2Spent(unittest.TestCase):
+    """SF2 ran once on 2026-09-29: S10 wrote the CRM tags itself, read them back and cleaned up."""
+
+    def test_the_authorisation_is_spent_distinct_and_admits_nothing_further(self):
         reg = {a["id"]: a for a in json.loads(rd(REGISTRY))["authorisations"]}
-        self.assertIn("SECTOR-SF2", reg)
         a = reg["SECTOR-SF2"]
-        self.assertEqual(a["status"], "draft", "SF2 must sit draft until the owner approves it")
+        self.assertEqual(a["status"], "spent", "SF2 was one attempt; it must not sit re-usable")
+        self.assertIn(SF2_EXECUTION_ID, a["spent"])
         self.assertEqual(a["max_records"], 1)
         self.assertEqual((a["skill"], a["skill_id"]), ("sector-handoff-packet", "S10"))
-        self.assertEqual(a["packet"], SF2_PACKET_REL)
-        self.assertNotEqual(a["packet"], reg["SECTOR-SF1"]["packet"], "SF2 needs its own packet path")
+        self.assertNotEqual(a["packet"], reg["SECTOR-SF1"]["packet"], "SF2 has its own packet path")
         self.assertEqual(a["synthetic_record_sha256"], reg["SECTOR-SF1"]["synthetic_record_sha256"],
                          "both authorisations pin the same reviewed input")
 
@@ -403,11 +414,36 @@ class SF2Prepared(unittest.TestCase):
         self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, RECORD_REL), "rb")).hexdigest(),
                          "8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f")
 
-    def test_no_sf2_artifact_exists_yet(self):
-        self.assertFalse(os.path.exists(os.path.join(ROOT, SF2_PACKET_REL)))
-        for line in rd(SANDBOX_LOG).splitlines():
-            if line.strip():
-                self.assertNotEqual(json.loads(line)["payload"]["fixture"]["authorisation_id"], "SECTOR-SF2")
+    def test_the_run_left_exactly_its_two_artifacts(self):
+        self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, SF2_PACKET_REL), "rb")).hexdigest(),
+                         SF2_PACKET_SHA)
+        line = rd(SANDBOX_LOG, "rb").splitlines(keepends=True)[1]
+        self.assertEqual(hashlib.sha256(line).hexdigest(), SF2_LINE_SHA)
+
+    def test_the_record_claims_a_verified_write_and_earns_it(self):
+        r = json.loads(rd(SANDBOX_LOG, "rb").splitlines(keepends=True)[1])
+        V.validate(r)
+        self.assertEqual(r["classification"], "TEST_FIXTURE")
+        self.assertEqual(r["payload"]["execution_id"], SF2_EXECUTION_ID)
+        self.assertEqual((r["payload"]["writes"], r["payload"]["events"], r["payload"]["decision"]),
+                         ([], [], "NO_OP"), "a fixture writes no Notion database and emits no event")
+        crm = [d for d in r["payload"]["destinations"] if d["destination"] == "ClickUp CRM"][0]
+        self.assertEqual(crm["outcome"], "delivered_fixture_verified")
+        self.assertIs(r["payload"]["fixture"]["readback_verified"], True)
+        self.assertTrue(r["payload"]["fixture"]["external_writes"])
+        self.assertNotIn("delivered", [d["outcome"] for d in r["payload"]["destinations"]],
+                         "a fixture may never claim a real delivery")
+
+    def test_the_tag_values_written_were_explicit_fixtures(self):
+        p = json.loads(rd(os.path.join(ROOT, SF2_PACKET_REL)))
+        tags = p["payload"]["crm_tags_written"]
+        self.assertEqual(tags, p["payload"]["crm_tags_read_back"], "written and read-back must match")
+        self.assertTrue(tags["sector"].startswith("TEST_FIXTURE"))
+        self.assertTrue(tags["sub_sector"].startswith("TEST_FIXTURE"))
+        self.assertTrue(tags["offer_id"].startswith("TEST_FIXTURE"))
+        self.assertEqual(tags["icp_tier"], "Out-of-scope",
+                         "the only approved option that asserts nothing about a real company")
+        self.assertIsNone(p["payload"]["fit_verdict"])
 
     # ---- schema: the new outcome is fixture-only, and `delivered` stays impossible ----
     def test_the_verified_outcome_is_valid_on_a_fixture_record(self):
