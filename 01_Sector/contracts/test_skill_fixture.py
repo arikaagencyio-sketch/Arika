@@ -37,7 +37,10 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # that AEIT_05 R1 (ratified 2026-07-22) supersedes - Sector sets it, Sales consumes. The note now
 # says it is a score, not a tier, and no substitute for icp_tier.
 # Was 4b854d4c633b5f5b27e3d300dc47fe009eeb5dfa782fd444184320393159b69f (2026-09-22, mid-day).
-S10_ORDINARY_SHA = "9a25200ab4fb2c8f0b2416cdb9134c86fde365c9c50e9989646209ba82ee1ed2"
+# Re-baselined 2026-09-29: the four Lead tag fields were created and verified, so the CRM row moves
+# from "no target" to CONNECTED - while still reporting HANDOFF_FAILURE until SECTOR-CW2 passes.
+# Was 9a25200ab4fb2c8f0b2416cdb9134c86fde365c9c50e9989646209ba82ee1ed2 (2026-09-22, evening).
+S10_ORDINARY_SHA = "55d6d868c2a8bc51b430db395e4ff18a7999f5772071754126407e68afa927f2"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)

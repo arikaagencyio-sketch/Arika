@@ -1,0 +1,39 @@
+{
+  "authorisation": "CRM-PROV-1",
+  "target": "crm.lead",
+  "list_name": "Lead",
+  "utc": "2026-09-29T045210Z",
+  "created": [
+    "sector",
+    "sub_sector",
+    "icp_tier",
+    "offer_id"
+  ],
+  "skipped_already_present": [],
+  "failed": null,
+  "verified_after": {
+    "sector": [
+      "short_text",
+      []
+    ],
+    "sub_sector": [
+      "short_text",
+      []
+    ],
+    "icp_tier": [
+      "drop_down",
+      [
+        "Tier 1",
+        "Tier 2",
+        "Tier 3",
+        "Anti-ICP",
+        "Out-of-scope"
+      ]
+    ],
+    "offer_id": [
+      "short_text",
+      []
+    ]
+  },
+  "limitation": "Field existence only. No value was written and no hand-off was delivered; the CRM route stays HANDOFF_FAILURE until a round-trip test passes."
+}
