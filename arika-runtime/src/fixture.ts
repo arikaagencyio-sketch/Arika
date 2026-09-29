@@ -92,6 +92,35 @@ export const FIXTURE_AUTHORISATIONS: readonly FixtureAuthorisation[] = [
     ],
     inputSha256: "89c5fde1af9c23cbfad3a81ab53554258aa9530d74e7e21aa211288f561da5b0",
   },
+  {
+    id: "OFFER-F3",
+    record: "02_Offer/OFFER_OS.md §8 — draft decision OFFER-F3 (NOT enacted)",
+    status: "draft", // awaits the owner; the gate refuses a draft before any model call
+    agent: "offer-orchestrator",
+    stream: "02_Offer/_memory/sandbox-offer-f3.jsonl",
+    // The three artefact hashes are markers on purpose: the brief names the exact Sector record,
+    // S10 fixture packet and fixture skill-run record it was built from, so it cannot drift from
+    // them silently. The input hash below pins the whole brief anyway.
+    requiredMarkers: [
+      "TEST_FIXTURE",
+      "OFFER-F3",
+      "SIMULATED_VERDICT",
+      "FIXTURE EVIDENCE",
+      "NON-PRICING",
+      "PHASE 11: BLOCKED",
+      "8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f",
+      "a4e0ff7ce334dcf4fc4c834821ce1e4322be484e313628aa741e2f179c6bb673",
+      "5a3f639de2ea211c727da65c2602f011999bb23fbf987403469611223976d565",
+    ],
+    forbidden: [
+      { pattern: /\bA001\b/g, reason: "names an A001 sandbox record — this fixture carries none" },
+      { pattern: /PILOT-H-\d+/g, reason: "names a real pilot ID" },
+      { pattern: /[$€£]|\b(?:USD|KES|KSh|EUR|GBP)\b/g, reason: "contains a currency figure" },
+      { pattern: /\d+(?:\.\d+)?\s*%/g, reason: "contains a percentage" },
+      { pattern: /https?:\/\//g, reason: "contains a URL" },
+    ],
+    inputSha256: "a41257972d53309078d3e9c5f46b0b12ff254fcb88efdd813f86c5f3a034c100",
+  },
 ];
 
 export interface FixtureOptions {

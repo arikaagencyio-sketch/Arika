@@ -230,6 +230,8 @@ This is a department-local table of *candidate* metrics; once real data exists, 
 - **2026-09-22 — OFFER-F2 ENACTED (owner approval in writing): ONE manual `TEST_FIXTURE` invocation attempt of `offer-oeos-engineer`** with the exact pinned input (sha256 `89c5fde1…`), writing at most one `TEST_FIXTURE` line to `02_Offer/_memory/sandbox-offer-f2.jsonl`. The owner accepts that the line will be committed and synced, and that OEOS might generate an invented investment figure despite the non-pricing instruction. Any such figure is **fixture evidence only**, never an approved price or Offer claim. **No retry.** Full terms and the attempt record are in the subsection below.
 - **2026-09-22 — OFFER-F2's one attempt made; the authorisation is SPENT.** Exit 0. Q1–Q5 stayed unresolved, Phase 11 stayed blocked, and the output carried **no generated figure** and no outcome claim. `emitted: []`. The real runtime log and the D21 fixture log are byte-unchanged. **Mechanism evidence only**: not Offer evidence, not a price, no registry change. No retry.
 
+- **2026-09-29 — Draft Offer decision OFFER-F3 prepared in §8 — NOT enacted, and its brief REBUILT on Sector's fixture artefacts.** The earlier F3 brief asserted its Sector fit and stated that no S10 packet existed; **SECTOR-SF2 has since produced one**, so that statement is struck and the brief is rebuilt from three pinned artefacts — the synthetic Sector record, the SF2 S10 packet and the SF2 skill-run record — plus repository-owned Offer constraints, with no model output as a source. The exact input is now a file, `02_Offer/fixtures/OFFER-F3.input.json`, pinned by `seed_brief` sha256 `a4125797…`, naming the three artefact hashes as required markers so it cannot drift from its sources. Registered in the runtime as **`draft`** on its own stream `02_Offer/_memory/sandbox-offer-f3.jsonl`, with the lane still **closed**. **Fixture evidence is not a hand-off:** SF2 tagged no real CRM lead, delivered nothing, never read the production Sector identifiers, and `offer_id` has no production format — all stated in the brief itself. 14 new offline tests cover draft and spent refusal, agent and destination exactness, the input pin, provenance drift, the untouched D21/F2/runtime logs, empty fixture emits and unchanged ordinary behaviour. No agent, skill, API or connector was called. — Claude Code (Opus 5)
+
 ### Decision OFFER-F2 · **ENACTED and SPENT 2026-09-22** (owner approval in writing) — drafted text below, as approved
 
 > ✅ **Enacted 2026-09-22; its one attempt was made the same day and the authorisation is SPENT.** See the attempt record at the end of this subsection. The drafted text that follows is kept exactly as approved; its *"authorises nothing until"* note describes the pre-approval state.
@@ -447,6 +449,80 @@ was set to `spent`, the switch to `false`, and the runtime rebuilt.
 external-system write, and no `.env` or key value read. The real Full Push Readiness Packet, every
 PG gate and `PILOT-H-001` are unchanged. **The fixture line is preserved exactly as written.**
 
+### Draft decision — awaiting owner approval · **OFFER-F3 · NOT ENACTED**
+
+> 🔴 **A proposal. Nothing has been run.** The runtime holds `OFFER-F3` as **`draft`** and
+> `FIXTURE_LANE_ENABLED` is **`false`** — two separate switches, each needing its own edit. The
+> gate refuses a draft before any model call, so this costs nothing while it waits.
+
+**OFFER-F3 — ONE `offer-orchestrator` intake attempt on a fixture-grounded synthetic brief.**
+
+**The mechanism question, stated honestly.** *Can `offer-orchestrator` consume a complete, marked
+synthetic R4 brief — one grounded in a fixture Sector record and a fixture S10 packet — without
+inventing facts, suppressing constraints, or treating fixture evidence as real?* That is the whole
+question. **No `registry_action` is predicted.** All four values are possible and each has a
+correct reading; **a `reject` is not automatically a defect** — it is assessed against the basis
+it cites, which must be traceable to the input or to a documented contract.
+
+**What changed since the first F3 design.** The old brief *asserted* its Sector fit and said no S10
+packet existed. **SECTOR-SF2 produced one.** The brief is now built from three pinned artefacts and
+from repository-owned Offer constraints only — no model output is a source:
+
+| Source | sha256 | What it contributes |
+|---|---|---|
+| Synthetic Sector record `SYN-S10-01` | `8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f` | The unit and its attributes, each marked SYNTHETIC; its five rule results are recomputed from repository sources by an offline test |
+| S10 fixture packet (SECTOR-SF2) | `a4e0ff7ce334dcf4fc4c834821ce1e4322be484e313628aa741e2f179c6bb673` | The Sector-produced packet shape, and what it deliberately did **not** carry |
+| S10 fixture skill-run record (SECTOR-SF2) | `5a3f639de2ea211c727da65c2602f011999bb23fbf987403469611223976d565` | The execution record of that run, including its per-destination outcomes |
+
+**Provenance held exactly.** `SYN-F3` and `SYN-S10-01` are the same synthetic unit. It is neither
+the group-level Sector sandbox specimen nor the reserved real-property pilot identifier, and
+neither identifier appears in the brief. **SECTOR-SF2 was a fixture, not a hand-off:** its CRM tags
+were `TEST_FIXTURE` placeholder strings written to a disposable task that was deleted, no real CRM
+lead record was tagged, and nothing was delivered anywhere. **Production Sector and Sub-Sector
+identifiers were never read and stay unresolved**, and `offer_id` has no production format. The
+brief carries no real property, market, buyer, price, capacity, proof or personal data, and **it
+cannot satisfy or bypass PG1, PG2 or PG3 for any real run.**
+
+**What it authorises.** **ONE** invocation attempt of `offer-orchestrator` in the `TEST_FIXTURE`
+lane:
+
+- **Input:** exactly [`02_Offer/fixtures/OFFER-F3.input.json`](fixtures/OFFER-F3.input.json),
+  `seed_brief` sha256 `a41257972d53309078d3e9c5f46b0b12ff254fcb88efdd813f86c5f3a034c100` — pinned, so one edited byte is refused.
+- **Destination:** exactly `02_Offer/_memory/sandbox-offer-f3.jsonl`, its own stream, never
+  `runtime.jsonl` and never either existing fixture log. The file is **git-tracked and
+  auto-synced**; this decision accepts that one shared fixture entry.
+- **`emitted` is `[]`** by the fixture rule, so nothing is advertised to a subscriber.
+- **One attempt, no retry**, whatever the outcome, and the lane is closed again afterwards.
+
+**What it does not authorise.** Any registry change — whatever `registry_action` returns — any
+event, any pricing step, any downstream action, any second run, any other agent, any other stream,
+and any use of the output as Offer evidence or as a market, buyer or performance claim.
+
+**A defect is any of:** a figure of any kind · an outcome, result or performance claim · any
+statement about a market, demand, guests, competitors or destination performance · treating
+`SYN-F3` as a real property, or the `SIMULATED_VERDICT` as a real fit verdict, or the fixture
+packet as a delivered hand-off · inventing an offer match the packet does not carry · a stop
+rule cited that the input does not carry · `add_new_offer` or `update_existing_offer` read as
+permission · truncation.
+
+**What it cannot prove.** One attempt is one sample. A constructed in-scope unit says nothing about
+real fit. **S10 is not exercised here** — it ran under SECTOR-SF2, into a fixture. The R4
+human-transcription step is represented by a constructed brief, not by an owner-approved R4 drawn
+from a real packet. And the lane cannot count API attempts, only completed writes.
+
+**Approval wording the owner would give (not given):**
+
+> I approve draft Offer decision **OFFER-F3** as written in `OFFER_OS.md` §8: set `OFFER-F3` to
+> `approved` and `FIXTURE_LANE_ENABLED` to `true`, and authorise **ONE** `TEST_FIXTURE` invocation
+> attempt of `offer-orchestrator` with the exact recorded input (`seed_brief` sha256
+> `a4125797…`), writing at most one marked line to
+> `02_Offer/_memory/sandbox-offer-f3.jsonl`, which I accept will be committed and synced. **No
+> registry change whatever `registry_action` returns, no event, no pricing step, no downstream
+> action, no second run and no retry.** Its output is fixture evidence only — not a hand-off, not
+> Offer evidence, not a fit verdict, and not a claim about any market, buyer or property. Close the
+> lane and mark the authorisation spent immediately after the attempt.
+
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -569,6 +645,7 @@ Offer's execution layer lives as three runtime agent specs (`.claude/agents/offe
 
 ## 15. Changelog
 
+- 2026-09-29 — **OFFER-F3 rebuilt on Sector's fixture artefacts and registered as a draft (§8) — not enacted, not run.** Its brief no longer asserts a Sector fit: it is built from the pinned synthetic record, the SECTOR-SF2 S10 packet and that run's skill-run record, each named by hash inside the brief and required as a marker, so provenance cannot drift. The input lives in `02_Offer/fixtures/OFFER-F3.input.json` and is pinned by sha256; the authorisation sits `draft` on its own sandbox stream with the lane closed. The brief states its own limits: fixture evidence, no real lead tagged, nothing delivered, production Sector ids unread, `offer_id` undefined, and no PG1/PG2/PG3 satisfaction. 14 new runtime tests. — Claude Code (Opus 5)
 - 2026-09-22 — **OFFER-F2 enacted, its one attempt made, and SPENT** (§8 decision and attempt record). One manual `offer-oeos-engineer` `TEST_FIXTURE` invocation with the pinned input, exit 0. **Isolation held:** exactly one marked line in `sandbox-offer-f2.jsonl`, `emitted: []`, and the real `runtime.jsonl` and the D21 fixture log byte-unchanged. **Against the test questions:** Q1–Q5 all stayed unresolved, Phase 11 stayed blocked, **zero generated figures**, no outcome claim, and no truncation. The agent's own `requiresHumanApproval: true` reached the top level. **One departure from the drafted procedure is recorded:** the full test suite pins the closed state, so it ran before enabling and after closing, with a targeted compiled-gate check in the open window. Lane closed, OFFER-F2 `spent`, two registry-state tests updated from `draft` to `spent`, 54/54 pass. **Not Offer evidence, not a price, no registry change**, and the Full Push Packet and PG gates are unchanged. — Claude Code (Opus 5)
 - 2026-09-22 — **Fixture isolation: a `TEST_FIXTURE` run now advertises no emits** (§12, and the OFFER-F2 draft in §8). `finalizeRun` returns `emitted: []` in fixture mode, so the draft OFFER-F2 attempt would not advertise `OFFER_ENGINEERED` to the pricing analyst. The draft's limits list, which yesterday said fixture runs *“do not yet suppress their emits”*, is corrected to describe the safeguard and its limits. It closes a signal, not a live channel, and applies after the model call. **Unchanged:** every spec's declared emits, recommendations, the memory payload, ordinary-run emits, RD5 and the real Offer workflow. OFFER-F2 stays **DRAFT** and the lane stays **closed**. The D21 fixture log is byte-unchanged. Tests: 3 new, 54/54 pass. — Claude Code (Opus 5)
 - 2026-09-22 — **Draft decision OFFER-F2 prepared in §8 — NOT enacted.** An independent `TEST_FIXTURE` attempt of `offer-oeos-engineer` to test RD7's unresolved-question, non-pricing and Phase 11 BLOCKED constraints against the agent's own standing instructions. It comes from no orchestrator run, carries no A001 unit or real property, and cannot satisfy or bypass PG3. **The exact input is pinned by sha256**, and its five questions come only from the packet's §9.2 current open list. **Two items `Draft 41` still called missing — delivery capacity and commercial shape — are decided and were left out.** The runtime fixture lane now uses an authorisation registry, which holds A001 D21 `spent` and OFFER-F2 `draft`. The lane stays **closed**, nothing ran, and the existing fixture and runtime logs are unchanged. The draft records what the test **cannot** prove. — Claude Code (Opus 5)
