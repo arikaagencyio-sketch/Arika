@@ -9,7 +9,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import {
@@ -32,13 +32,17 @@ const approved = (auth, status) => [{ ...auth, status }];
 const run = (agent, ctx, auths, enabled = true) =>
   assertFixturePreconditions(agent, ctx, { enabled, authorisations: auths, resolve: (s) => join(repoRoot, s) });
 
-// ---------------------------------------------------------------- the prepared state --
-test("f3: the authorisation is registered as a DRAFT and the lane is closed", () => {
+// ---------------------------------------------------------------- the spent state --
+// Until 2026-09-29 these two asserted the pre-run state (draft, no destination file). The owner
+// approved F3, its ONE attempt was made, and the lane was closed again in the same turn.
+const F3_LOG_SHA = "da0b7fe4368d1ef5f96a627ca41b75a9c354075acaa1f4b787daaadfd133ef46";
+
+test("f3: the authorisation is SPENT and the lane is closed again", () => {
   assert.ok(F3, "OFFER-F3 must exist in the registry");
-  assert.equal(F3.status, "draft", "F3 must await the owner");
+  assert.equal(F3.status, "spent", "its one attempt has been used");
   assert.equal(F3.agent, "offer-orchestrator");
   assert.equal(F3.stream, STREAM);
-  assert.equal(FIXTURE_LANE_ENABLED, false, "the master switch stays off");
+  assert.equal(FIXTURE_LANE_ENABLED, false, "the master switch is off again");
   assert.equal(
     FIXTURE_AUTHORISATIONS.filter((a) => a.status === "approved").length,
     0,
@@ -47,14 +51,24 @@ test("f3: the authorisation is registered as a DRAFT and the lane is closed", ()
   validateAuthorisations(FIXTURE_AUTHORISATIONS); // ids and streams stay unique
 });
 
-test("f3: nothing has been run — the destination does not exist", () => {
-  assert.equal(existsSync(join(repoRoot, STREAM)), false);
+test("f3: the one attempt left exactly one marked line, unaltered", () => {
+  const raw = readRepo(STREAM);
+  assert.equal(sha(raw), F3_LOG_SHA, "the fixture log changed after the attempt");
+  const lines = raw.toString("utf8").split("\n").filter(Boolean);
+  assert.equal(lines.length, 1, "one attempt, one line");
+  const rec = JSON.parse(lines[0]);
+  assert.equal(rec.classification, "TEST_FIXTURE");
+  assert.equal(rec.agent, "offer-orchestrator");
+  assert.equal(rec.payload.recommendation.registry_action, "needs_more_seed_data");
+  assert.equal(rec.payload.input.seed_brief, input.seed_brief, "the recorded input is the pinned one");
 });
 
 // ---------------------------------------------------------------- fails closed --
 test("f3: a draft authorisation is refused before any model call", () => {
+  // F3 itself is spent now, so the draft case is exercised on an explicitly drafted copy -
+  // the guard must hold for any future authorisation, not just this one.
   assert.throws(
-    () => run("offer-orchestrator", { fixture: true, memoryStreamOverride: STREAM, input }, [F3]),
+    () => run("offer-orchestrator", { fixture: true, memoryStreamOverride: STREAM, input }, approved(F3, "draft")),
     /DRAFT authorisation/,
   );
 });

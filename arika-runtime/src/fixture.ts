@@ -32,7 +32,7 @@ import { repoRoot } from "./paths.js";
  * else is checked. A001 D21 used and SPENT its one attempt on 2026-09-21; the
  * lane has been closed since.
  */
-export const FIXTURE_LANE_ENABLED = false; // closed again 2026-09-22 after OFFER-F2's one attempt
+export const FIXTURE_LANE_ENABLED = false; // closed again 2026-09-29 after OFFER-F3's one attempt
 
 /** Stamped at the top level of a fixture line, beside `source`. */
 export const FIXTURE_CLASSIFICATION = "TEST_FIXTURE";
@@ -95,7 +95,7 @@ export const FIXTURE_AUTHORISATIONS: readonly FixtureAuthorisation[] = [
   {
     id: "OFFER-F3",
     record: "02_Offer/OFFER_OS.md §8 — draft decision OFFER-F3 (NOT enacted)",
-    status: "draft", // awaits the owner; the gate refuses a draft before any model call
+    status: "spent", // one attempt made 2026-09-29; see OFFER_OS section 8 attempt record
     agent: "offer-orchestrator",
     stream: "02_Offer/_memory/sandbox-offer-f3.jsonl",
     // The three artefact hashes are markers on purpose: the brief names the exact Sector record,
