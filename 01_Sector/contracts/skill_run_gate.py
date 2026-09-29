@@ -35,7 +35,9 @@ TEST_FIXTURE isolation (added 2026-09-22, prepared for draft decision SECTOR-SF1
                      nothing), must match that authorisation's skill, synthetic input
                      and packet, must stay within its record limit, and must not name
                      A001 (deferred under A001 D6) or a real pilot ID. Checks 1-5 apply
-                     to it too, and execution ids must be unique across BOTH logs.
+                     to it too, and execution ids must be unique across BOTH logs. A
+                     destination may claim `delivered_fixture_verified` only if the record
+                     also records the authorised external write and its read-back.
   8  REGISTRY        skill-fixture-authorisations.json is well-formed, and every
                      authorisation's synthetic record exists, is marked SYNTHETIC and
                      matches its pinned sha256 - so the input the owner reviewed is the
@@ -234,6 +236,14 @@ def check_fixture_log(recs, auths, root, fail):
                     fail.append("%s: packet lacks AEIT_09 section 1 field(s): %s." % (where, ", ".join(missing)))
             except ValueError:
                 fail.append("%s: packet is not JSON." % where)
+        claims = [d for d in r.get("payload", {}).get("destinations", [])
+                  if d.get("outcome") == "delivered_fixture_verified"]
+        if claims and not (fx.get("readback_verified") is True and fx.get("external_writes")):
+            fail.append("%s: claims delivered_fixture_verified for %s without a recorded "
+                        "read-back. Set payload.fixture.readback_verified true and name the "
+                        "authorised write in payload.fixture.external_writes - a value that was "
+                        "not read back from the destination is not verified."
+                        % (where, ", ".join(d.get("destination", "?") for d in claims)))
         for pat, why in FORBIDDEN:
             if pat.search(text):
                 fail.append("%s: record or packet %s." % (where, why))

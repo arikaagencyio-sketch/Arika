@@ -114,12 +114,13 @@ recording, the packet shape, the boundary law and the confidence cap.
   a repository file.
 - **F2 · Outcomes.** For every destination, record `{destination, mechanism, outcome}` in
   `payload.destinations`:
-  - a route that **would** deliver → **`not_attempted_fixture`**;
+  - a route the authorisation **explicitly permits this fixture to exercise** → **`delivered_fixture_verified`**, and only after the written value has been **read back from the destination** and matched. It is a different token from `delivered` on purpose: a fixture never performs a hand-off;
+  - any other route that **would** deliver → **`not_attempted_fixture`**;
   - a route that does **not** deliver → **`HANDOFF_FAILURE`**, exactly as in Step 1. That is true
     in any mode;
   - **never `delivered`.**
-- **F3 · No cross-boundary write of any kind:** no Notion relation, no CRM tag, no event.
-  `payload.writes` and `payload.events` are empty, and `decision` is `NO_OP`.
+- **F3 · No cross-boundary write — unless the authorisation names one.** By default: no Notion relation, no CRM tag, no event. An authorisation may permit **one named, disposable** external write and nothing else; `SECTOR-SF2`, if approved, permits exactly one ClickUp fixture task (create → tag → read back → delete → confirm absence). **Notion, Offer, Content and every event stay forbidden in every fixture.** `payload.writes` and `payload.events` stay empty — they record Notion database writes and emitted events, neither of which a fixture may make — and the permitted write is named in `payload.fixture.external_writes` instead. `decision` stays `NO_OP`.
+- **F3a · Clean up once, even after a partial failure.** If an authorised external write created anything, delete it **once** and confirm its absence, whether or not the rest of the run succeeded. **Never retry** a failed step. If cleanup fails, stop and report what remains, by name; never conceal or overwrite it.
 - **F4 · Packet.** Write the assembled packet as JSON at the authorisation's `packet` path,
   marked `classification: TEST_FIXTURE`, carrying every AEIT_09 §1 field: `handoff_id`,
   `producer`, `consumer`, `trigger`, `payload`, `validation_rules`, `confidence_threshold`,
@@ -127,9 +128,7 @@ recording, the packet shape, the boundary law and the confidence cap.
   states that the packet is synthetic, which caps everything in it (Step 4). The boundary law
   (Step 3) is unchanged: an **angle**, never an artifact.
 - **F5 · Log.** Append **one** record to `01_Sector/_memory/skill_runs-sandbox.jsonl` —
-  **never** to `skill_runs.jsonl`. It carries top-level `classification: TEST_FIXTURE` and
-  `payload.fixture` = `{authorisation_id, synthetic_record, packet, not_read_fixture}`. **Read the
-  timestamp from the clock.**
+  **never** to `skill_runs.jsonl`, and never touching a record already there. It carries top-level `classification: TEST_FIXTURE` and `payload.fixture` = `{authorisation_id, synthetic_record, packet, not_read_fixture}`, plus `external_writes` and `readback_verified` whenever an authorised external write happened. **The gate refuses any `delivered_fixture_verified` outcome without both.** **Read the timestamp from the clock.**
 - **F6 · Close.** Run the gate again; it must pass. Then set the authorisation to `spent`.
 
 **What a fixture run proves, and what it does not.** It can show that the route check, the

@@ -188,6 +188,8 @@ This is a real scoring mechanism the agency designed for itself, not a fabricate
 
 - **2026-09-29 — SECTOR-CW2 made and SPENT: the CRM tag mechanism is round-trip verified by direct connector call. S10 still has not delivered anything.** One sequence, no retry: one synthetic task created on the canonical `Lead` list, the four approved values set, read back, and the task deleted. **All four matched exactly** — `sector` `sec-test-fixture`, `sub_sector` `sub-test-fixture`, `offer_id` `none-test-fixture`, and `icp_tier` resolving to **Out-of-scope**, the approved option. **Cleanup succeeded:** the task was deleted and a direct id lookup now returns *Resource not found*, checked without enumerating anything. **The canonical schema is unchanged:** the same ten fields at list scope, same types, `icp_tier`'s five options intact, none required. **What this proves:** a value written to these four fields survives a write and read-back through the connector. **What it does not prove: S10 was not run and has never written a CRM tag**, so no hand-off has been observed arriving. An S10 run may now attempt the write, and must read it back before claiming any delivery. **`offer_id` stays unresolved** — `none-test-fixture` is a fixture string, not a production format, which is still Offer (02)'s decision. **Finding:** the task view returned an **eleventh** custom field, an `Opportunity` `list_relationship`, which the list-scope field endpoint does not return — so earlier counts of six and ten were the metadata endpoint's view, not the whole schema. That relationship field is the cross-object FK `CRM_SCHEMA.md` records from 2026-07-01; nothing was created or altered here. **Credential:** rotation and revocation of the exposed token remain **owner-attested only** — never tested or inspected here — and the local token file was verified absent before the first call. No skill or runtime log was written, no Notion call, no agent, model API or event. — Claude Code (Opus 5)
 
+- **2026-09-29 — Draft Sector decision SECTOR-SF2 prepared in §8 — NOT enacted:** ONE S10 `TEST_FIXTURE` run in which **S10 itself** writes the four CRM tags to one disposable ClickUp task, reads them back, deletes it and confirms its absence. CW2 proved the mechanism, but a direct connector call performed it; S10 has still never written a tag. **Prepared and inert:** an additive schema outcome `delivered_fixture_verified` (fixture-only, distinct from `delivered`, with ordinary records unchanged), one gate rule refusing that outcome without a recorded read-back, an S10 fixture-mode amendment allowing **only** an authorisation-named external write plus mandatory single cleanup, and a `SECTOR-SF2` registry entry held at `draft`. **The pinned input cannot truthfully supply three of the four tags** — it carries sector and sub-sector *names*, not DB 1/DB 2 ids, and no ICP classification at all — so the proposed values are explicit `TEST_FIXTURE` placeholders, with `icp_tier` as `Out-of-scope`, the only approved option that asserts nothing about a real company. **25 new offline tests** cover the authorisation, the outcome's fixture-only scope, one-record isolation, SF1's line surviving byte-for-byte, draft and spent refusal, the read-back rule and ordinary-record compatibility. **Unchanged:** the CRM route still reads *target exists · direct connector round-trip verified · S10 delivery unobserved*, and stays `HANDOFF_FAILURE`. Nothing was run and no connector was called. — Claude Code (Opus 5)
+
 ### Decision SECTOR-SF1 · **ENACTED and SPENT 2026-09-22** (owner approval in writing) — drafted text below, as approved
 
 > ✅ **Enacted 2026-09-22 by the owner's written approval; its one attempt was made the same day and the authorisation is SPENT.** See the attempt record at the end of this subsection. The drafted text that follows is kept exactly as approved; its *"authorises nothing until"* note and the *"(not given)"* label on the approval wording describe the pre-approval state. The owner's separate statement that Notion and CRM are generally approved for later testing is **not** part of this decision and authorises nothing inside it.
@@ -536,6 +538,111 @@ real hand-off is observed arriving, and `offer_id`'s content stays an Offer (02)
 > no contact or personal data, and no claim that the CRM route delivers.
 
 
+### Draft decision — awaiting owner approval · **SECTOR-SF2 · NOT ENACTED**
+
+> 🔴 **A proposal. It authorises nothing and nothing has been run.** The registry holds
+> `SECTOR-SF2` as **`draft`**, and `skill_run_gate.py` fails on any record written under a draft.
+> The CRM route wording is **unchanged** by this preparation: the target exists, a direct connector
+> round-trip is verified, and **S10 delivery remains unobserved**. Nothing here moves it off
+> `HANDOFF_FAILURE`.
+
+**SECTOR-SF2 — ONE S10 `TEST_FIXTURE` execution that exercises the CRM tag write itself.**
+
+**Why.** SECTOR-CW2 proved the *mechanism* works, but a direct connector call performed it. **S10
+has still never written a CRM tag.** SF2 is the first test where the skill does its own write,
+reads it back, cleans up, and records the result under the fixture rules.
+
+**What it adopts** (prepared and inert while the authorisation is a draft; ordinary records and
+ordinary S10 text are unchanged, both proven by test):
+
+- **Schema**, additively: the per-destination outcome `delivered_fixture_verified`, valid **only**
+  on a `TEST_FIXTURE` record and deliberately a different token from `delivered`, so no reader
+  mistakes a fixture for a hand-off. An ordinary record may use neither fixture-only value, and a
+  fixture record still may not claim `delivered`. `payload.fixture` gains optional
+  `external_writes` and `readback_verified`.
+- **Gate**, one rule: a destination may claim `delivered_fixture_verified` only when the record sets
+  `readback_verified: true` **and** names the authorised write in `external_writes`. *A value that
+  was not read back from the destination is not verified.*
+- **S10 fixture mode:** F3 changes from *no cross-boundary write of any kind* to *no cross-boundary
+  write **unless the authorisation names one***, plus **F3a**, which requires cleanup once even
+  after a partial failure and forbids retrying. Notion, Offer, Content and every event stay
+  forbidden in every fixture, always.
+
+**What it authorises.** **ONE** S10 fixture run under `SECTOR-SF2`, and these external operations
+only: create one task → set the four tags → read back **that task** → delete it → confirm its
+absence. No second task, no other list, no contact, no member, no enumeration.
+
+**The exact material.**
+
+| Item | Value |
+|---|---|
+| Task name | `TEST_FIXTURE SECTOR-SF2 S10 CRM TAG` |
+| Description | `TEST_FIXTURE - S10 fixture under SECTOR-SF2. Not a lead, prospect, client, contact, company or opportunity. No real identifier. Deleted immediately after read-back.` |
+| Packet | `01_Sector/fixtures/SYN-S10-01.s10-packet-sf2.json` (new; SF1's packet is never touched) |
+| Log | one record appended to `01_Sector/_memory/skill_runs-sandbox.jsonl`; **never** `skill_runs.jsonl`, and never altering SF1's line |
+| Execution id | `s10-<run date>-sector-sf2-syn-s10-01-crm-tag-1` |
+
+**The four tag values, and why each is what it is.** The pinned record `SYN-S10-01` was examined
+first, as required. **It cannot truthfully supply three of the four**, and saying so is the point:
+
+| Tag | Proposed value | Provenance, and what was rejected |
+|---|---|---|
+| `sector` | `TEST_FIXTURE-sector-hospitality-name-only` | `SYN-S10-01` supplies the sector **name** *Hospitality*, not an id. The field carries a `Sector ID` slug from DB 1, which a fixture may not read. The repo's only slug-shaped strings (`sec-hospitality`) sit in `contracts/intelligence-object.schema.json`, whose own comment reads *"Shape only. Values are illustrative"* — so using one as a join key would assert an id nobody verified. |
+| `sub_sector` | `TEST_FIXTURE-sub-sector-accommodation-name-only` | Same reasoning against DB 2: the record supplies the name *Accommodation*, never an id. |
+| `icp_tier` | `Out-of-scope` | From DB 4 `Tier`'s five approved options. **`SYN-S10-01` contains no ICP classification at all** — its five rule checks are scope and anti-ICP screens, not a tier. `Tier 1/2/3` would fabricate a positive classification and `Anti-ICP` a negative finding; `Out-of-scope` is the only option that asserts nothing about any real company. |
+| `offer_id` | `TEST_FIXTURE-no-offer-id` | Offer (02) has never defined an id format, and DB 8 carries offer references as free text. **This string defines no production format** and must not be read as one. |
+
+**Expected per-destination outcomes**, from the measured contracts:
+
+| Destination | Outcome |
+|---|---|
+| ClickUp CRM | `delivered_fixture_verified` — **only** if the read-back matches; otherwise `HANDOFF_FAILURE`, with the task still deleted |
+| Offer (02) · Content (04) | `not_attempted_fixture` — no Notion write is permitted |
+| Sales (05) · Marketing (03) · Operations (08) | `HANDOFF_FAILURE` — event routes still publish nothing |
+
+`writes` and `events` stay empty: they record Notion database writes and emitted events, neither of
+which any fixture may make. The permitted ClickUp write is named in `fixture.external_writes`.
+
+**Stop before running if any of these holds:** the authorisation is not `approved` · the pinned
+record fails its sha · the sandbox log already holds an `SECTOR-SF2` record · the gate fails
+beforehand · anything names A001 or a pilot id · any real, personal or client data appears · any
+step fails (report it; **never retry**) · anything would touch a second task, another list, a
+contact, a member, a Notion store or an event.
+
+**Cleanup is not optional.** If the task was created, delete it **once** and confirm its absence,
+even after a partial failure. If cleanup fails, stop and report the task by name, never concealing
+or overwriting it.
+
+**What it would prove.** That S10 itself can write the four governed tags, read them back, clean up
+after itself, and record the outcome under the fixture rules — the first time the skill exercises
+the route rather than a direct call standing in for it.
+
+**What it would not prove.** Not a hand-off: the input is synthetic, the task is disposable and
+deleted, and **no real `Lead` is ever tagged**. Not that the route works for real records, not the
+tags' production meaning (`offer_id` stays unresolved), and nothing at all about the Notion routes.
+A passing SF2 still leaves S10 delivery to a real destination **unobserved**.
+
+**An honest limit on the boundary claims.** Claude Code performs this skill, so *"no Notion, Offer,
+Content or event write happened"* is **partly procedural**: it rests on the instructions, on the
+absence of any repository trace, and on the session's own tool record — not on a preventive
+control. The gate is detective and sees only what reaches the repository; a call that leaves no
+repository trace is invisible to it. The one thing SF2 adds on top is the ClickUp side, where the
+read-back and the deletion confirmation are evidence rather than assertion.
+
+**Approval wording the owner would give (not given):**
+
+> I approve draft Sector decision **SECTOR-SF2** as written in `SECTOR_OS.md` §8: adopt the
+> prepared `delivered_fixture_verified` outcome, its gate read-back rule and the S10 fixture-mode
+> amendment, and authorise **ONE** S10 `TEST_FIXTURE` run under `SECTOR-SF2` on the pinned record
+> `SYN-S10-01` (sha256 `8247eefd…`). It may create exactly one disposable ClickUp task named
+> `TEST_FIXTURE SECTOR-SF2 S10 CRM TAG`, set the four values recorded in §8, read back only that
+> task, delete it and confirm its absence — and may write one marked record to
+> `skill_runs-sandbox.jsonl` and one marked packet to `SYN-S10-01.s10-packet-sf2.json`, which I
+> accept will be committed. **No Notion, Offer, Content or event write; no second task; no retry.**
+> A passing run proves the fixture mechanism only — **not** a hand-off, not CRM readiness, and not
+> `offer_id`'s production format.
+
+
 ## 9. Risk / Incident Log
 
 *(placeholder — empty)*
@@ -604,6 +711,7 @@ Emitted downstream — **`CONNECTED` subscribers, verified 2026-08-28** *(this l
 
 ## 15. Changelog
 
+- 2026-09-29 — **Draft decision SECTOR-SF2 prepared in §8 — NOT enacted.** One S10 fixture run in which S10 writes the four CRM tags itself to a disposable task, reads them back and deletes it. Prepared and inert: the fixture-only outcome `delivered_fixture_verified`, a gate rule that refuses it without a recorded read-back, an F3 amendment permitting only an authorisation-named external write with mandatory cleanup, and a draft registry entry. The pinned record supplies names rather than ids and no ICP tier, so the tag values are explicit `TEST_FIXTURE` placeholders. 25 new offline tests; ordinary records and SF1's record untouched. The CRM route wording and `HANDOFF_FAILURE` are unchanged. — Claude Code (Opus 5)
 - 2026-09-29 — **SECTOR-CW2 spent: CRM tag round-trip verified, S10 delivery still unobserved.** One synthetic task on the canonical `Lead` list carried all four approved values through write and read-back unchanged, then was deleted and its absence confirmed by direct id lookup; the ten-field list schema is untouched. The mechanism works when exercised directly; **S10 was not run**, so no hand-off has been observed and `offer_id`'s production format stays an Offer (02) question. Recorded finding: the list-scope field endpoint omits `list_relationship` fields, so it under-reports the schema by one. Token rotation stays owner-attested only. — Claude Code (Opus 5)
 - 2026-09-29 — **SECTOR-CRM1 implemented and verified: the four `Lead` tag fields exist.** Created under `CRM-PROV-1` (now spent, audit record kept) and confirmed by a separate connector call — three text fields plus `icp_tier` as a dropdown with DB 4's exact five values, the six original fields untouched, none required, no duplicates. S10's CRM route moves from *no target* to `CONNECTED`, but **stays reported as `HANDOFF_FAILURE`** until the SECTOR-CW2 round-trip passes; `offer_id` stays unresolved. SECTOR-CW2 is unblocked and awaiting approval. — Claude Code (Opus 5)
 - 2026-09-23 — **CRM field creation moved onto a governed direct-REST path; still nothing created.** The connector has no field-creation verb, and the 2026-07-01 build used a personal token supplied for that session and never stored — that missing token, not a fault, is why this stalled. `00_Agency_Governance/crm_provisioning/` now holds the field spec, an authorisation registry, and a create-only idempotent script with an audit record, an Approval Matrix row (Risk Class 3) and a Tech Stack registration. Offline validation passes and `--apply` refuses without the token. SECTOR-CRM1 unimplemented, SECTOR-CW2 blocked, route `HANDOFF_FAILURE`. — Claude Code (Opus 5)

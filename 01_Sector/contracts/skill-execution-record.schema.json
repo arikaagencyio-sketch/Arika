@@ -155,12 +155,14 @@
             "authorisation_id": { "type": "string", "pattern": "^SECTOR-SF[0-9]+$" },
             "synthetic_record": { "type": "string" },
             "packet": { "type": "string" },
-            "not_read_fixture": { "type": "array", "items": { "type": "string" } }
+            "not_read_fixture": { "type": "array", "items": { "type": "string" } },
+            "external_writes": { "type": "array", "items": { "type": "string" }, "description": "Cross-boundary writes the AUTHORISATION explicitly permitted, each disposable and named. Empty or absent on a fixture that wrote nothing outside the repository." },
+            "readback_verified": { "type": "boolean", "description": "True only when every value written outside the repository was read back from the destination and matched. Required by skill_run_gate.py before any destination may claim delivered_fixture_verified." }
           }
         },
         "destinations": {
           "type": "array",
-          "description": "Per-destination hand-off outcome (S10 Step 5: each destination, its mechanism, and whether it delivered). Optional on ordinary runs; required on TEST_FIXTURE runs. not_attempted_fixture is valid only on a TEST_FIXTURE run, and delivered is never valid on one.",
+          "description": "Per-destination hand-off outcome (S10 Step 5: each destination, its mechanism, and whether it delivered). Optional on ordinary runs; required on TEST_FIXTURE runs. not_attempted_fixture and delivered_fixture_verified are valid only on a TEST_FIXTURE run, and delivered is never valid on one. delivered_fixture_verified means a fixture wrote an authorised, disposable value and READ IT BACK - it is not a hand-off, and it is deliberately a different token from delivered so no ordinary reader mistakes one for the other.",
           "items": {
             "type": "object",
             "required": ["destination", "mechanism", "outcome"],
@@ -168,7 +170,7 @@
             "properties": {
               "destination": { "type": "string" },
               "mechanism": { "type": "string" },
-              "outcome": { "type": "string", "enum": ["delivered", "held", "HANDOFF_FAILURE", "not_attempted_fixture"] },
+              "outcome": { "type": "string", "enum": ["delivered", "held", "HANDOFF_FAILURE", "not_attempted_fixture", "delivered_fixture_verified"] },
               "detail": { "type": "string" }
             }
           }
@@ -189,7 +191,7 @@
             "properties": {
               "writes": { "maxItems": 0 },
               "events": { "maxItems": 0 },
-              "destinations": { "minItems": 1, "items": { "properties": { "outcome": { "enum": ["held", "HANDOFF_FAILURE", "not_attempted_fixture"] } } } }
+              "destinations": { "minItems": 1, "items": { "properties": { "outcome": { "enum": ["held", "HANDOFF_FAILURE", "not_attempted_fixture", "delivered_fixture_verified"] } } } }
             }
           }
         }
@@ -203,7 +205,7 @@
           "payload": {
             "not": { "required": ["fixture"] },
             "properties": {
-              "destinations": { "items": { "properties": { "outcome": { "not": { "const": "not_attempted_fixture" } } } } }
+              "destinations": { "items": { "properties": { "outcome": { "not": { "enum": ["not_attempted_fixture", "delivered_fixture_verified"] } } } } }
             }
           }
         }

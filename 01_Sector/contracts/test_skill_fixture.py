@@ -266,10 +266,11 @@ SF1_EXECUTION_ID = "s10-2026-09-22-sector-sf1-syn-s10-01-fixture-1"
 
 
 class SpentState(unittest.TestCase):
-    def test_sf1_is_spent_and_nothing_is_approved(self):
+    def test_sf1_is_spent_sf2_is_draft_and_nothing_is_approved(self):
         reg = json.loads(rd(REGISTRY))["authorisations"]
-        self.assertEqual([(a["id"], a["status"]) for a in reg], [("SECTOR-SF1", "spent")])
-        self.assertFalse(any(a["status"] == "approved" for a in reg))
+        self.assertEqual([(a["id"], a["status"]) for a in reg],
+                         [("SECTOR-SF1", "spent"), ("SECTOR-SF2", "draft")])
+        self.assertFalse(any(a["status"] == "approved" for a in reg), "nothing may sit approved")
         self.assertIn(SF1_EXECUTION_ID, reg[0]["spent"])
 
     def test_the_one_attempt_left_exactly_its_two_artifacts_unaltered(self):
@@ -359,6 +360,134 @@ class SyntheticRecord(unittest.TestCase):
     def test_it_matches_the_pin_the_owner_would_approve(self):
         reg = json.loads(rd(REGISTRY))["authorisations"][0]
         self.assertEqual(hashlib.sha256(self.raw).hexdigest(), reg["synthetic_record_sha256"])
+
+
+# --------------------------------------------------- SECTOR-SF2: prepared, NOT enacted --
+# SF2 would have S10 exercise the CRM tag write itself: one disposable ClickUp task, tagged,
+# read back, deleted. These tests pin the prepared mechanism while it is still a draft.
+SF2_PACKET_REL = "01_Sector/fixtures/SYN-S10-01.s10-packet-sf2.json"
+
+
+def sf2_record(eid="s10-sf2-test-1", ts="2026-01-01T00:00:00Z", verified=True, crm="delivered_fixture_verified"):
+    r = fixture_record(eid, ts)
+    r["payload"]["fixture"] = {
+        "authorisation_id": "SECTOR-SF2", "synthetic_record": RECORD_REL, "packet": SF2_PACKET_REL,
+        "not_read_fixture": ["DB3", "DB4", "DB6", "DB7", "DB8", "DB9", "DB10", "DB15", "DB16"],
+    }
+    if verified:
+        r["payload"]["fixture"]["external_writes"] = [
+            "ClickUp: one disposable task 'TEST_FIXTURE SECTOR-SF2 S10 CRM TAG' created, tagged, "
+            "read back, deleted, absence confirmed"]
+        r["payload"]["fixture"]["readback_verified"] = True
+    r["payload"]["destinations"] = [dict(d) for d in r["payload"]["destinations"]]
+    for d in r["payload"]["destinations"]:
+        if d["destination"] == "ClickUp CRM":
+            d["outcome"] = crm
+    return r
+
+
+class SF2Prepared(unittest.TestCase):
+    def test_the_authorisation_is_drafted_distinct_and_fails_closed(self):
+        reg = {a["id"]: a for a in json.loads(rd(REGISTRY))["authorisations"]}
+        self.assertIn("SECTOR-SF2", reg)
+        a = reg["SECTOR-SF2"]
+        self.assertEqual(a["status"], "draft", "SF2 must sit draft until the owner approves it")
+        self.assertEqual(a["max_records"], 1)
+        self.assertEqual((a["skill"], a["skill_id"]), ("sector-handoff-packet", "S10"))
+        self.assertEqual(a["packet"], SF2_PACKET_REL)
+        self.assertNotEqual(a["packet"], reg["SECTOR-SF1"]["packet"], "SF2 needs its own packet path")
+        self.assertEqual(a["synthetic_record_sha256"], reg["SECTOR-SF1"]["synthetic_record_sha256"],
+                         "both authorisations pin the same reviewed input")
+
+    def test_the_pinned_input_is_the_one_the_owner_reviewed(self):
+        self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, RECORD_REL), "rb")).hexdigest(),
+                         "8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f")
+
+    def test_no_sf2_artifact_exists_yet(self):
+        self.assertFalse(os.path.exists(os.path.join(ROOT, SF2_PACKET_REL)))
+        for line in rd(SANDBOX_LOG).splitlines():
+            if line.strip():
+                self.assertNotEqual(json.loads(line)["payload"]["fixture"]["authorisation_id"], "SECTOR-SF2")
+
+    # ---- schema: the new outcome is fixture-only, and `delivered` stays impossible ----
+    def test_the_verified_outcome_is_valid_on_a_fixture_record(self):
+        self.assertTrue(valid(sf2_record()))
+
+    def test_a_fixture_record_still_cannot_claim_plain_delivered(self):
+        self.assertFalse(valid(sf2_record(crm="delivered")))
+
+    def test_an_ordinary_record_cannot_claim_the_verified_outcome(self):
+        r = ordinary_record()
+        r["payload"]["destinations"] = [{"destination": "ClickUp CRM", "mechanism": "tags",
+                                         "outcome": "delivered_fixture_verified"}]
+        self.assertFalse(valid(r), "delivered_fixture_verified is fixture-only")
+
+    def test_ordinary_records_are_unaffected_by_the_extension(self):
+        n = 0
+        for line in rd(REAL_LOG).splitlines():
+            if line.strip():
+                V.validate(json.loads(line)); n += 1
+        self.assertGreaterEqual(n, 15)
+        r = ordinary_record()
+        r["payload"]["destinations"] = [{"destination": "Offer (02)", "mechanism": "text", "outcome": "delivered"}]
+        self.assertTrue(valid(r), "an ordinary run may still record a real delivery")
+
+
+class SF2GateRules(GateIsolation):
+    """Same temp-repo harness; the registry copy is re-pointed at SF2."""
+
+    def use_sf2(self, status):
+        reg = json.loads(rd(REGISTRY))
+        for a in reg["authorisations"]:
+            if a["id"] == "SECTOR-SF2":
+                a["status"] = status
+        reg["authorisations"] = [a for a in reg["authorisations"] if a["id"] == "SECTOR-SF2"]
+        self.reg = os.path.join(self.root, "reg-sf2.json")
+        with io.open(self.reg, "w", encoding="utf-8") as fh:
+            json.dump(reg, fh)
+        shutil.copy(os.path.join(self.root, PACKET_REL), os.path.join(self.root, SF2_PACKET_REL))
+
+    def test_a_draft_sf2_admits_nothing(self):
+        self.use_sf2("draft")
+        self.write(self.fxlog, [sf2_record()])
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 1); self.assertIn("DRAFT authorisation", out)
+
+    def test_an_approved_sf2_run_passes(self):
+        self.use_sf2("approved")
+        self.write(self.fxlog, [sf2_record()])
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 0, out)
+
+    def test_a_spent_sf2_admits_no_second_record(self):
+        self.use_sf2("spent")
+        self.write(self.fxlog, [sf2_record("a"), sf2_record("b", "2026-01-01T00:00:01Z")])
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 1); self.assertIn("exceeds SECTOR-SF2's limit", out)
+
+    def test_the_verified_outcome_requires_a_recorded_readback(self):
+        self.use_sf2("approved")
+        self.write(self.fxlog, [sf2_record(verified=False)])
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 1); self.assertIn("without a recorded read-back", out)
+
+    def test_an_unverified_run_may_still_report_a_failure_honestly(self):
+        self.use_sf2("approved")
+        self.write(self.fxlog, [sf2_record(verified=False, crm="HANDOFF_FAILURE")])
+        rc, out = self.run_gate()
+        self.assertEqual(rc, 0, out)
+
+
+class SF1RecordIsPreserved(unittest.TestCase):
+    """SF1's line must survive SF2 byte-for-byte - the fixture log is append-only too."""
+    # The whole-file pin above holds only until SF2 appends; this one holds afterwards too.
+    SF1_LINE_SHA = "4670109698ba328ade36489b251e0394eaf012b6e9711d5123f2e0f0e09ad9f5"
+
+    def test_the_first_line_is_sf1_and_is_byte_identical(self):
+        first = rd(SANDBOX_LOG, "rb").splitlines(keepends=True)[0]
+        self.assertEqual(hashlib.sha256(first).hexdigest(), self.SF1_LINE_SHA,
+                         "SF1's record changed - the fixture log is append-only")
+        self.assertEqual(json.loads(first)["payload"]["fixture"]["authorisation_id"], "SECTOR-SF1")
 
 
 if __name__ == "__main__":
