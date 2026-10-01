@@ -3,6 +3,29 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-10-01 — OFFLINE-FIXTURE-GUARD-1: offline fixture tests can fail closed on network use
+
+**Why:** the only network blocks in existence were temporary files in a session scratchpad, and the
+Python half had already vanished — so an offline fixture test carrying URL-shaped identifiers would
+have had no mechanical backstop. Found as decision **D8** of the SYNCO-02 proposal.
+
+**Decision:** a governance-owned guard in `00_Agency_Governance/offline_guard/` — one Python guard,
+one Node `--import` preload, one wrapper (`run_offline.py`), 46 tests. Activation travels by
+environment (`ARIKA_OFFLINE_FIXTURE=1` plus `PYTHONPATH` / `NODE_OPTIONS`), so it reaches children
+and grandchildren, including `npm test` → `node --test`. Blocked calls raise
+`OFFLINE_FIXTURE_NETWORK_BLOCKED: <category>` carrying the API category and nothing else — no host,
+URL, token or body. Canonical record and the full coverage and exclusion lists:
+[`00_Agency_Governance/offline_guard/OFFLINE_FIXTURE_GUARD.md`](../00_Agency_Governance/offline_guard/OFFLINE_FIXTURE_GUARD.md).
+
+**Not changed:** `package.json`, the `test` script, `tests/`, any agent or skill spec, any event-bus
+or publishing behaviour, and every dependency — nothing was added. The guard patches nothing on
+import and both halves require the explicit flag, so ordinary runtime execution is behaviourally
+unchanged; `npm test` and the four non-runtime gates run exactly as before. **It guards a Python or
+Node process it is activated in, and nothing else** — not Claude Code tools, MCP servers, browsers,
+connectors, desktop applications or commands launched outside the wrapper, which stay procedurally
+prohibited per fixture decision. **It is a prerequisite, not authorization to create or run any
+fixture.**
+
 ## 2026-09-22 — A fixture run advertises no emits
 
 **Why:** a `TEST_FIXTURE` run is terminal by design, yet it reported its spec's emits like any
