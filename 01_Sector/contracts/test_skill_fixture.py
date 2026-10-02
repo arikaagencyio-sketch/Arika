@@ -80,7 +80,23 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # cleared (OD1 open). Closing the schema gap closed nothing about the rows - which is exactly why
 # this wording change is a tightening and not a relaxation.
 # Was f4ac696f182e3762621bcd1b01bf4daf768eb6f48550209feb2654c51a23e3c9 (2026-10-02, post-Step 1).
-S10_ORDINARY_SHA = "e741c19e6d580dc4f8c91693ac2835047ee67de555a3617f275746201ab348b8"
+# Re-baselined 2026-10-02 by DB6-OD1-OD2-1 (owner-approved; the approval names this re-baseline
+# and elected to fix the S10 gap in the same task). This change TIGHTENS the freshness floor:
+# `freshness_requirement` now returns UNRESOLVED if any contributing record has EITHER a null
+# `Last Verified` OR a null `Next Review`, naming each unresolved element, and only computes the
+# earliest/oldest pair when every record has BOTH dates. Before this, the rule failed closed on a
+# missing `Last Verified` but said nothing about a missing `Next Review` - so a row without one
+# would have silently inherited the EARLIEST non-null date from its siblings, which is the exact
+# substitution the rule exists to prevent. It became reachable the moment DB 6's dates were partly
+# populated. Also updated, all three factual rather than behavioural: the contributing-element
+# table now carries a `Next Review` column and DB 6's post-backfill state; bullet 1 records that
+# three DB 6 rows are sourced and the Buyer row alone is EXCEPTED (and that an excepted row must
+# never be reported as a sourced one); bullet 3 records the DB6-LOCAL multi-source convention with
+# its boundary - not ratified for DB 9 or DB 10, and barred from DB 9 whose V4 still requires a
+# tier whenever a source is set. The computed floors, the Low < Medium < High ordering, the
+# null-is-weaker-than-Low rule and the assembly-date ban are UNCHANGED.
+# Was e741c19e6d580dc4f8c91693ac2835047ee67de555a3617f275746201ab348b8 (2026-10-02, post-Step 2).
+S10_ORDINARY_SHA = "8397e683ab1390c6c32c085a9fbf9f1fb1b1fe9c43f1b200ce2d7dbae6355c89"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)

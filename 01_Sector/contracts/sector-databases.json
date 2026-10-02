@@ -1379,7 +1379,8 @@
       "Medium",
       "High"
      ],
-     "open_decision_2026_10_02": "OD1. All FOUR rows carry a populated Confidence of `Medium` while `Source` is EMPTY and `Evidence` does not exist live. DB9's rule V3 (a non-null Confidence requires a non-null Source AND Evidence) is deliberately NOT extended to DB6 here. The four values are NOT cleared or downgraded: each has a recorded basis - three in the S02 run record's `confidence_matches_evidence` gate and in their own page bodies, one in its page body. Governed resolution requires a separate owner decision. See `_open_decisions` OD1."
+     "open_decision_2026_10_02": "OD1 CLOSED 2026-10-02 by DB6-OD1-OD2-1, with ONE named exception. `Confidence` stays `required: true` on DB6. Validation rule V3 (a non-null Confidence requires a non-null Source AND Evidence) is NOT extended to DB6 as an enforced validator - it is a DOCUMENTED EXPECTATION, met by the Operator, Amplifier and Enabler rows and formally excepted for the Buyer row. See `od1_exception`. The four Medium values were not cleared or downgraded.",
+     "row_values": "Medium on all four rows. NOT WRITTEN, cleared or altered by DB6-OD1-OD2-1 and verified unchanged after every row update."
     },
     {
      "name": "Platform Overlays",
@@ -1408,7 +1409,8 @@
      "writer_skill": "S02",
      "validation": "The authority the claim comes from - re-followable. Cited or blank; never a guess.",
      "provenance_of_record": "DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
-     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now"
+     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now",
+     "row_values": "Populated on Operator, Amplifier and Enabler. NULL on Buyer: its body names four bare vendor/publication names with no titles and no locators, which does not meet this field's re-followable requirement. Those names remain in the page body."
     },
     {
      "name": "Source Tier",
@@ -1425,7 +1427,8 @@
      ],
      "validation": "The EXACT four-value enum already live on DB7, DB9, DB14 and DB16 - not a fifth vocabulary. NOTE: this is a SINGLE select. Rows citing several sources at mixed tiers cannot be represented without a collapse convention, which the repository does NOT define. See `_open_decisions` OD2.",
      "provenance_of_record": "DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
-     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now"
+     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now",
+     "row_values": "NULL on all four rows. DB6-LOCAL MULTI-SOURCE CONVENTION, adopted 2026-10-02 by DB6-OD1-OD2-1 (proposal section 6.2). NULL whenever a row cites more than one source, because this property is single-valued and the row is not. The null means NOT REPRESENTABLE IN A SINGLE-VALUED FIELD, not UNKNOWN. Per-source tiers are carried inline in the `Source` text instead. A row citing exactly ONE source may populate this normally. LOCAL TO DB6: this is NOT ratified for DB9, DB10 or Sector-wide, and it MUST NOT be applied to DB9, whose rule V4 requires a tier whenever a source is set. Cost accepted knowingly: source tier and locator are no longer queryable for DB6."
     },
     {
      "name": "Source URL",
@@ -1436,7 +1439,8 @@
      "writer_skill": "S02",
      "validation": "Cited or blank. SINGLE url property - see OD2 for the multi-source problem.",
      "provenance_of_record": "DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
-     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now"
+     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now",
+     "row_values": "NULL on all four rows. DB6-LOCAL MULTI-SOURCE CONVENTION, adopted 2026-10-02 by DB6-OD1-OD2-1 (proposal section 6.2). NULL whenever a row cites more than one source, because this property is single-valued and the row is not. The null means NOT REPRESENTABLE IN A SINGLE-VALUED FIELD, not UNKNOWN. Per-source tiers are carried inline in the `Source` text instead. A row citing exactly ONE source may populate this normally. LOCAL TO DB6: this is NOT ratified for DB9, DB10 or Sector-wide, and it MUST NOT be applied to DB9, whose rule V4 requires a tier whenever a source is set. Cost accepted knowingly: source tier and locator are no longer queryable for DB6."
     },
     {
      "name": "Last Verified",
@@ -1447,7 +1451,8 @@
      "writer_skill": "S02",
      "validation": "The date a qualifying verification actually occurred. NEVER the write date, a file modification time, a page edit time, or today's date absent a real verification.",
      "provenance_of_record": "DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
-     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now"
+     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now",
+     "row_values": "Populated on all four rows from the explicit verification date each page body states (Buyer 2026-08-19; the other three 2026-08-24). No date was derived, defaulted or inferred."
     },
     {
      "name": "Next Review",
@@ -1458,7 +1463,8 @@
      "writer_skill": "S02",
      "validation": "Required whenever Last Verified is set, and strictly later. NOTE the live field name is `Next Review` (the DB1/DB2/DB9/DB16 convention), not DB7's and DB14's `Next Verification`.",
      "provenance_of_record": "DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
-     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now"
+     "schema_history": "added live 2026-09-13 under owner item 31e (divergence F14); never recorded here until now",
+     "row_values": "Populated on Operator, Amplifier and Enabler (2026-11-24, explicit in each body). NULL on Buyer: no review date is asserted anywhere for that row, and inheriting another row's date is explicitly forbidden - see the S10 fail-closed clause."
     },
     {
      "name": "Evidence",
@@ -1470,12 +1476,12 @@
      "validation": "The specific substance within the Source that supports the row. Cited or blank; never a guess.",
      "provenance_of_record": "DB6-DB10-PROV-1 Step 2 (two additive live schema writes, verified, 2026-10-02)",
      "schema_history": "THE ONLY field this task added. Added live 2026-10-02 by Step 2, one additive write per database, verified by a post-write field-definition read. The other six provenance fields were added 2026-09-13 under owner item 31e (divergence F14) - NOT by this task.",
-     "row_values": "NULL on every existing row. Verified post-write. No backfill is authorised."
+     "row_values": "Populated on Operator, Amplifier and Enabler, each carrying its read-depth or inference caveat verbatim from the page body. NULL on Buyer - nothing there isolates evidence."
     }
    ],
    "MISSING_FIELD": {
     "name": "provenance",
-    "status": "SCHEMA GAP CLOSED 2026-10-02; ROW-LEVEL PROVENANCE STILL INCOMPLETE",
+    "status": "SCHEMA GAP CLOSED 2026-10-02; ROW-LEVEL PROVENANCE SUBSTANTIALLY RESOLVED WITH ONE NAMED EXCEPTION",
     "note": "SUPERSEDED IN PART by Step 2. The `superseded_claim` below is unchanged and still records the original false statement and the date it stopped being true. What changed 2026-10-02: `Evidence` - previously the ONLY provenance property genuinely absent from this database - now EXISTS live as nullable text, added by Step 2. All SEVEN provenance properties are therefore present, and DB6 can answer Intelligence-Object questions 2 (source), 3 (when-observed) and 4 (reliability) IN-SCHEMA. THE SCHEMA GAP IS CLOSED. ROW-LEVEL PROVENANCE IS NOT: see `row_level_status`. Field existence is not evidence - no confidence or freshness value may be inferred from the fact that a column exists.",
     "superseded_claim": {
      "text": "DB6 carries Confidence but NO Source, Evidence, Last Verified or Next Review field. It cannot satisfy Intelligence-Object questions 2 (source) or 3 (when-observed) in-schema. Provenance must live in the page body until a schema change is ratified.",
@@ -1484,18 +1490,34 @@
      "detected": "2026-10-02 by DB6-DB10-PROV-AUDIT-1",
      "why_it_survived": "No offline gate covered DB6's schema, and the live schema is unreadable offline. F14 recorded the change; nothing propagated it here."
     },
-    "severity": "schema complete and recorded; row-level provenance incomplete and partly unsupported",
+    "severity": "schema complete and recorded; row-level provenance resolved on three of four rows, with the fourth carrying a named expiring exception",
     "row_level_status": {
      "rows": 4,
      "provenance_fields_live": 7,
      "cells": 28,
-     "non_null_cells": 4,
-     "non_null_detail": "`Confidence` = Medium on all four rows - unchanged by Step 2 and verified unchanged after it. `Evidence` and every other provenance cell are empty.",
+     "non_null_cells": 17,
+     "non_null_detail": "17 of 28 populated after the DB6-OD1-OD2-1 backfill. `Confidence` = Medium on all four rows (UNCHANGED - never rewritten). `Last Verified` on all four. `Source`, `Evidence` and `Next Review` on the Operator, Amplifier and Enabler rows. The remaining 11 cells are NULL BY DESIGN: all four `Source Tier`, all four `Source URL` (the multi-source convention), and the Buyer row's `Source`, `Evidence` and `Next Review`.",
      "backfill_authorised": false,
      "detail": "No DB6 row-value backfill is authorised. Step 2 covered two additive SCHEMA writes and this synchronisation only - no row value was written, and none changed.",
      "open_conflict": "OD1 - see the `Confidence` field's open_decision_2026_10_02.",
      "page_body_provenance": "The three S02-written rows carry a structured `## Provenance` + `## Sources` block with per-source tier labels, an explicit verification date and an explicit next-review date. The fourth (Buyer) carries a one-line note naming four sources without locators or tiers. Body assertions are NOT promoted into governed properties by this synchronisation.",
-     "evidence_row_values": "NULL on every existing row, verified by Step 2's post-write read. Adding the column changed no row value."
+     "evidence_row_values": "POPULATED on Operator, Amplifier and Enabler by DB6-OD1-OD2-1. NULL on the Buyer row, where no body statement isolates evidence - see the od1_exception record.",
+     "null_cells": 11,
+     "backfill_authorised_note": "FALSE means no FURTHER backfill is authorised. It is deliberately not flipped to true by the one backfill that did occur - the fail-closed default must survive its own exercise.",
+     "backfill_performed": {
+      "task": "DB6-OD1-OD2-1 (bounded live row backfill, verified, 2026-10-02)",
+      "cells_written": 13,
+      "rows_written": 4,
+      "breakdown": {
+       "Last Verified": "4 rows",
+       "Source": "Operator, Amplifier, Enabler",
+       "Evidence": "Operator, Amplifier, Enabler",
+       "Next Review": "Operator, Amplifier, Enabler"
+      },
+      "values_source": "DB6_OD1_OD2_RESOLUTION_PROPOSAL.md section 3, verbatim. The owner pinned that file's sha256 and the values were parsed out of the pinned file rather than retyped; each live value's character length was re-read after the write and matched the parsed length exactly.",
+      "not_written": "any Confidence value; any Source Tier; any Source URL; the Buyer row's Source, Evidence or Next Review; any schema property; anything in DB3, DB9 or DB10",
+      "verification": "One update attempt per row, each followed by a single-row read. A post-write field-definition read confirmed 19 properties with every select option ID and relation target unchanged."
+     }
     },
     "drift_warning": "This entry is a 2026-10-02 post-write snapshot. No offline gate can detect later live Notion drift in DB6."
    },
@@ -1504,7 +1526,22 @@
     "S08 outreach angle"
    ],
    "field_count_verified": 19,
-   "field_count_note": "CORRECTED to 19 by DB6-DB10-PROV-1 Step 2 (two additive live schema writes, verified, 2026-10-02). HISTORY IN TWO PARTS, kept distinct on purpose: (1) owner item 31e added SIX provenance properties on 2026-09-13 - Confidence (DB10 only; DB6 already had it), Source, Source Tier, Source URL, Last Verified and Next Review - recorded in divergence F14 and propagated into this entry by Step 1; (2) THIS TASK (Step 2) added `Evidence` and NOTHING ELSE, one additive live write, verified. Arithmetic: 12 (pre-31e) + 6 (31e, 2026-09-13) + 1 (Evidence, Step 2) = 19 live. The seven-field provenance shape is now complete AT SCHEMA LEVEL. Schema snapshot source: DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02), re-verified by Step 2's post-write read. Future live drift is NOT detected by any offline gate and requires another separately authorised audit."
+   "field_count_note": "CORRECTED to 19 by DB6-DB10-PROV-1 Step 2 (two additive live schema writes, verified, 2026-10-02). HISTORY IN TWO PARTS, kept distinct on purpose: (1) owner item 31e added SIX provenance properties on 2026-09-13 - Confidence (DB10 only; DB6 already had it), Source, Source Tier, Source URL, Last Verified and Next Review - recorded in divergence F14 and propagated into this entry by Step 1; (2) THIS TASK (Step 2) added `Evidence` and NOTHING ELSE, one additive live write, verified. Arithmetic: 12 (pre-31e) + 6 (31e, 2026-09-13) + 1 (Evidence, Step 2) = 19 live. The seven-field provenance shape is now complete AT SCHEMA LEVEL. Schema snapshot source: DB6-DB10-PROV-AUDIT-1 (bounded live read, 2026-10-02), re-verified by Step 2's post-write read. Future live drift is NOT detected by any offline gate and requires another separately authorised audit.",
+   "od1_exception": {
+    "database": "DB6",
+    "row_alias": "Buyer",
+    "issue": "Confidence populated while governed Source and Evidence remain absent",
+    "scope": "this row only",
+    "expiry": "2026-11-24",
+    "reason": "existing author judgement retained while re-sourcing remains incomplete",
+    "consequence": "S10 confidence/freshness floors remain UNRESOLVED",
+    "expiry_action": "separate owner review to re-source or clear Confidence and revisit required status",
+    "automatic_waiver_renewal": false,
+    "no_automatic_action_on_expiry": "Nothing happens by itself on 2026-11-24. On or after that date a separate owner-reviewed task must either re-source the Buyer row or clear its Confidence and reconsider `required: true`. This record does not authorise either action.",
+    "does_not_apply_to": "Any other row, present or future, in DB6 or any other database. This is NOT an exception for historical rows generally - the other three rows of the same vintage were resolved properly rather than excepted.",
+    "re_sourcing_lead": "A DB3 Sector Intelligence record names a ProStay 2026 revenue-manager guide, and ProStay is one of the Buyer row's four bare vendor names. That is a LEAD for re-sourcing, NOT evidence for this row - it evidences buyer structure rather than language patterns, and it belongs to another database. See open item OD6.",
+    "authorised_by": "DB6-OD1-OD2-1 (bounded live row backfill, verified, 2026-10-02)"
+   }
   },
   {
    "db_id": "DB7",
@@ -4223,7 +4260,7 @@
   }
  ],
  "_open_decisions": {
-  "_note": "Recorded by DB6-DB10-PROV-1 Step 1 (2026-10-02); OD3 closed by Step 2 the same day. The other four are RECORDED, NOT RESOLVED, and none may be resolved without a separate owner decision.",
+  "_note": "Recorded by DB6-DB10-PROV-1 Step 1 (2026-10-02). OD3 closed by Step 2. OD1 closed with one named exception and OD2 closed LOCALLY by DB6-OD1-OD2-1, both 2026-10-02. OD4, OD5 and OD6 are RECORDED, NOT RESOLVED, and none may be resolved without a separate owner decision.",
   "OD1": {
    "db": "DB6",
    "question": "May DB6's four populated `Confidence` values remain populated without governed `Source` and `Evidence` fields?",
@@ -4234,7 +4271,10 @@
     "Page-body support exists: three rows cite four tier-labelled sources each, the fourth names four sources without locators.",
     "The S02 run record's `confidence_matches_evidence` gate states the basis for Medium on the three rows it wrote."
    ],
-   "status": "OPEN. Rule V3 is NOT extended to DB6. The values are NOT cleared or downgraded."
+   "status": "CLOSED 2026-10-02 by DB6-OD1-OD2-1, WITH ONE NAMED EXCEPTION. Source, Evidence, Last Verified and Next Review populated on Operator, Amplifier and Enabler; Last Verified on Buyer. `Confidence.required: true` kept. V3 recorded as a documented expectation, not an enforced validator. The Buyer row carries the single named exception expiring 2026-11-24.",
+   "closed_by": "DB6-OD1-OD2-1 (bounded live row backfill, verified, 2026-10-02)",
+   "exception": "DB6 `od1_exception` - Buyer row only, expiry 2026-11-24.",
+   "what_it_did_not_close": "Three of four rows satisfy the documented expectation; the Buyer row does NOT and is excepted rather than fixed. OD2 is closed only LOCALLY for DB6. OD4, OD5 and the new OD6 remain OPEN. The S10 provenance floors still resolve UNRESOLVED."
   },
   "OD2": {
    "db": "DB6, DB10",
@@ -4244,7 +4284,9 @@
     "No repository rule defines a collapse convention.",
     "A weakest-tier reading would be consistent with S10 Step 4's weakest-item rule; a primary-source reading is equally defensible."
    ],
-   "status": "OPEN. No convention is defined by this synchronisation."
+   "status": "CLOSED LOCALLY FOR DB6 ONLY, 2026-10-02 by DB6-OD1-OD2-1. `Source Tier` and `Source URL` are NULL whenever a row cites more than one source; per-source tiers travel inline in `Source`. THIS IS NOT A SECTOR-WIDE RATIFICATION and must not be applied to DB9 or DB10.",
+   "closed_by": "DB6-OD1-OD2-1 (bounded live row backfill, verified, 2026-10-02)",
+   "scope_warning": "Local closure only. DB9's rule V4 still requires a tier whenever a source is set, and is unchanged. Applying this convention to DB9 would weaken V4. OD4 remains the place where any Sector-wide question is decided."
   },
   "OD3": {
    "db": "DB6, DB10",
@@ -4272,6 +4314,18 @@
     "Their page bodies were not read and are not characterised anywhere."
    ],
    "status": "OPEN."
+  },
+  "OD6": {
+   "db": "DB3",
+   "question": "DB3 Sector Intelligence holds a populated `Confidence` of Medium against a `Source` of the bare word `research`. Is that the same unsupported-provenance defect OD1 addressed, and how widely does it run in DB3?",
+   "facts": [
+    "Found incidentally while resolving the DB9 Buyer row's DB3 pointer under DB6-OD1-OD2-1 - one record read, not a survey.",
+    "The pointer chain therefore terminates in an unsourced claim, which is why it could not supply a governed Source to DB9's Buyer row either.",
+    "That record's `Evidence` property does carry real substance and names a specific document inline.",
+    "DB3 was NOT mutated, and the rest of DB3 is unaudited."
+   ],
+   "status": "OPEN. Recorded, not acted on. No DB3 read or write beyond the single record is authorised.",
+   "recorded_by": "DB6-OD1-OD2-1 (bounded live row backfill, verified, 2026-10-02)"
   }
  }
 }

@@ -1,5 +1,33 @@
 # DB6 — OD1 / OD2 Resolution Proposal
 
+> 🟢 **IMPLEMENTED and VERIFIED · 2026-10-02 · owner-approved as `DB6-OD1-OD2-1`**
+>
+> | Claim | Status |
+> |---|---|
+> | **13-cell DB 6 provenance backfill** | **DONE / VERIFIED** |
+> | **OD1** — populated `Confidence` without governed `Source`/`Evidence` | **CLOSED, with ONE named exception** (Buyer row, expiry 2026-11-24) |
+> | **OD2** — multi-source into single-valued fields | **CLOSED LOCALLY FOR DB 6 ONLY — not ratified Sector-wide** |
+> | **S10 null-`Next Review` fail-closed gap** | **FIXED** |
+> | **DB 6 S10 freshness contribution** | **still `UNRESOLVED`**, naming the Buyer row |
+> | **OD4, OD5, new OD6 (DB 3)** | **OPEN** |
+>
+> **Live writes:** 4 row updates, 13 cells. **No schema change, no `Confidence` write, no
+> `Source Tier`, no `Source URL`, nothing in DB 3 / DB 9 / DB 10.** Values taken verbatim from §3
+> of this file at its owner-pinned sha256, parsed from the pinned file rather than retyped, and
+> re-read after each write.
+>
+> **This is the schema and data record. It does not make the Buyer row sourced, and it does not
+> unblock S10** — see §0.1.
+
+**Version:** 2.0 · implementation record added 2026-10-02
+
+---
+
+## 📜 HISTORICAL STATUS — NOT LIVE
+
+The banner below is the original pre-implementation status, preserved verbatim. **It no longer
+describes the current state.**
+
 > 🔴 **PROPOSAL · NOT IMPLEMENTED · NO LIVE VALUE CHANGED · OD1 OPEN · OD2 OPEN**
 >
 > Nothing in this document has been enacted. No live Notion value was written, cleared or
@@ -10,7 +38,105 @@
 > **Prepared:** 2026-10-02 · **Author:** Claude Code (Opus 5) · **Live calls made:** 2, both
 > read-only, both against DB 3 · **Writes performed:** 0
 
-**Version:** 1.0
+---
+
+## 0.1 Implementation record — `DB6-OD1-OD2-1`
+
+**Enacted 2026-10-02.** Owner approval pinned this file's sha256
+`db63a7b2276b0e19222137f2a1053fce2f14cb89d9694e2a34a321ad6f293596`; it matched in both the
+working tree and git HEAD before anything was written.
+
+### What was written — 13 cells, 4 rows, 1 database
+
+| Row | Cells | Values |
+|---|---|---|
+| **Buyer** | 1 | `Last Verified` = 2026-08-19 |
+| **Operator** | 4 | `Source`, `Evidence`, `Last Verified` = 2026-08-24, `Next Review` = 2026-11-24 |
+| **Amplifier** | 4 | same four fields |
+| **Enabler** | 4 | same four fields |
+
+Rows were processed in §9's order, **one update attempt each, no retry**, each followed by a
+single-row read before moving on.
+
+**Verification that the values are the approved ones:** the §3 texts were *parsed out of the
+hash-pinned file*, not retyped, and after the writes each live value's character length was
+re-read and matched the parsed length exactly — `Source` 400 / 417 / 295 and `Evidence`
+623 / 573 / 733 for Operator / Amplifier / Enabler. A transcription slip could not have survived
+that check.
+
+### What was deliberately NOT written — 11 cells left null
+
+| Cells | Why |
+|---|---|
+| `Source Tier` ×4 · `Source URL` ×4 | The §6.2 convention. Single-valued properties, multi-valued rows. The null means **not representable**, not *unknown*. |
+| Buyer `Source` | Four bare vendor names, no titles, no locators — fails this field's re-followable requirement. |
+| Buyer `Evidence` | Nothing in that body isolates evidence. |
+| Buyer `Next Review` | No review date is asserted. **Inheriting a sibling's was explicitly forbidden** — and the S10 fix now enforces that. |
+
+**`Confidence` was never written, cleared or altered**, and was verified `Medium` on all four rows
+after every row update. 17 of 28 provenance cells are now populated.
+
+### 0.2 The Buyer exception
+
+Recorded in `contracts/sector-databases.json` as `DB6.od1_exception`: database DB 6 · row alias
+**Buyer** · issue *Confidence populated while governed Source and Evidence remain absent* · scope
+**this row only** · expiry **2026-11-24** · reason *existing author judgement retained while
+re-sourcing remains incomplete* · consequence *S10 confidence/freshness floors remain UNRESOLVED*
+· expiry action *separate owner review to re-source or clear Confidence and revisit required
+status* · **no automatic waiver renewal**.
+
+🔴 **Nothing happens by itself on 2026-11-24.** On or after that date a separate owner-reviewed
+task must either re-source the row or clear its `Confidence` and reconsider `required: true`. This
+record authorises neither.
+
+**It is not an exception for historical rows.** The other three rows are the same vintage and were
+**resolved properly rather than excepted** — which is exactly why the exception could be narrowed
+to one named row.
+
+### 0.3 The S10 fix
+
+`freshness_requirement` now returns `UNRESOLVED` if any contributing record has **either** a null
+`Last Verified` **or** a null `Next Review`, naming each unresolved element. Only when every
+record has **both** dates may S10 compute the earliest `Next Review` and the oldest
+`Last Verified`.
+
+**Before:** the rule failed closed on a missing `Last Verified` but said nothing about a missing
+`Next Review`, so a row without one would have silently taken the **earliest non-null** date from
+its siblings.
+
+**After, for DB 6:** Operator, Amplifier and Enabler have both dates; **Buyer's `Next Review` is
+null**, so the DB 6 freshness contribution is **`UNRESOLVED`, naming the Buyer row** — with a
+`2026-11-24` sitting one row away, untouched.
+
+### 0.4 What this does NOT do
+
+- **It does not make the Buyer row sourced.** That row is *excepted*, not compliant, and a packet
+  must never report the two the same way.
+- **It does not unblock S10.** DB 9 contributes nulls on both floors and DB 10 does across all 57
+  rows. The packet floor was `UNRESOLVED` before and is `UNRESOLVED` after. **DB 6 is now the
+  best-provenanced of the three elements and still fails the freshness floor on one missing date.**
+- **It does not ratify anything Sector-wide.** OD2 closed **locally**; DB 9's V4 is unchanged and
+  the convention must not be applied to it. **OD4 remains OPEN.**
+- **It does not extend V3.** V3 is a **documented expectation** for DB 6, not an enforced
+  validator.
+- **It touched no other database.** DB 3, DB 9 and DB 10 are unchanged.
+- **It did not re-source the Buyer row**, read any further DB 3 record, or begin OD4 / OD5 / OD6.
+
+### 0.5 New open item — OD6
+
+Recorded, not acted on: **a DB 3 record holds a populated `Confidence` of `Medium` against a
+`Source` of the bare word `research`** — the same unsupported-provenance defect OD1 addressed,
+found incidentally in the one authorised DB 3 record read. DB 3 was not mutated and the rest of it
+is unaudited. It sharpens the existing caution on **OD4**: do not ratify a Sector-wide standard
+over records that already breach it.
+
+### 0.6 Standing of §1–§13
+
+All sections below are **preserved as written**. §1–§8 are the analysis the decision rested on and
+remain accurate. §9's write ledger was executed exactly. §10's rollback plan was not needed. §11's
+tests are implemented in `contracts/test_db9_provenance.py` and enforced by truth-gate check 7b.
+§13's approval wording was the wording approved, with the owner supplying expiry **2026-11-24** and
+electing to **fix the S10 gap in the same task**.
 
 ---
 

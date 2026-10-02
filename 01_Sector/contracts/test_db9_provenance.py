@@ -335,7 +335,11 @@ OBSERVED_SEVEN = ["Confidence", "Source", "Source Tier", "Source URL", "Last Ver
 ADDED_BY_31E = ["Source", "Source Tier", "Source URL", "Last Verified", "Next Review"]
 ADDED_BY_STEP2 = "Evidence"
 EXPECTED_COUNT = {"DB6": 19, "DB10": 16}
-EXPECTED_CELLS = {"DB6": (4, 28, 4), "DB10": (57, 399, 0)}   # rows, cells, non_null
+# DB6 went 4 -> 17 populated on 2026-10-02 when DB6-OD1-OD2-1 wrote 13 cells.
+EXPECTED_CELLS = {"DB6": (4, 28, 17), "DB10": (57, 399, 0)}  # rows, cells, non_null
+OD1 = "DB6-OD1-OD2-1"
+BACKFILL_CELLS = 13
+EXCEPTION_EXPIRY = "2026-11-24"
 STEP2 = "DB6-DB10-PROV-1 Step 2"
 
 
@@ -525,12 +529,18 @@ class DB6DB10SupersededClaims(unittest.TestCase):
                           "%s must name the schema gap as the thing that closed" % db_id)
             self.assertIn("ROW-LEVEL PROVENANCE", mf["status"] + mf["note"],
                           "%s must name row-level provenance separately" % db_id)
-            self.assertTrue(re.search(r"(?i)row-level provenance (is not|still incomplete)", blob),
-                            "%s must state row-level provenance is NOT complete" % db_id)
+            # DB6's wording changed when DB6-OD1-OD2-1 resolved three of its four rows. The
+            # invariant is that row-level status is stated and never claimed complete - not that
+            # it uses one fixed phrase.
+            self.assertTrue(
+                re.search(r"(?i)row-level provenance (is not|still incomplete"
+                          r"|substantially resolved)", blob),
+                "%s must state its row-level provenance state explicitly" % db_id)
             self.assertTrue(re.search(r"(?i)field existence|column exists", blob),
                             "%s must warn that field existence is not evidence" % db_id)
-            self.assertIn("incomplete", mf["severity"],
-                          "%s severity must still record row-level incompleteness" % db_id)
+            self.assertTrue(
+                "incomplete" in mf["severity"] or "exception" in mf["severity"],
+                "%s severity must record incompleteness or the named exception" % db_id)
 
 
 class DB6DB10RowLevelStatus(unittest.TestCase):
@@ -567,10 +577,13 @@ class DB6UnsupportedConfidenceStaysOpen(unittest.TestCase):
     def test_the_conflict_is_recorded_on_the_confidence_field(self):
         by = {f["name"]: f for f in dbrow("DB6")["fields"]}
         note = by["Confidence"].get("open_decision_2026_10_02", "")
-        self.assertTrue(note, "DB6's Confidence must carry the open conflict")
+        self.assertTrue(note, "DB6's Confidence must carry the OD1 record")
         self.assertIn("OD1", note)
-        for must in ("V3", "NOT extended", "separate owner decision"):
+        # Updated 2026-10-02: OD1 is now CLOSED with one named exception. V3 must still be
+        # recorded as NOT enforced, and the four values must still be recorded as not cleared.
+        for must in ("V3", "NOT extended", "required: true", "not cleared"):
             self.assertIn(must, note, "DB6 Confidence note must state %r" % must)
+        self.assertIn("CLOSED", note, "OD1 is closed with an exception, not still open")
 
     def test_rule_v3_is_not_extended_to_db6(self):
         by = {f["name"]: f for f in dbrow("DB6")["fields"]}
@@ -580,33 +593,50 @@ class DB6UnsupportedConfidenceStaysOpen(unittest.TestCase):
     def test_the_four_values_are_not_cleared_or_downgraded(self):
         st = dbrow("DB6")["MISSING_FIELD"]["row_level_status"]
         self.assertIn("Medium", st["non_null_detail"],
-                      "the four populated Medium values must still be recorded as populated")
-        self.assertEqual(st["non_null_cells"], 4)
+                      "the four Medium values must still be recorded as populated")
+        self.assertIn("UNCHANGED", st["non_null_detail"],
+                      "and recorded as never rewritten by the backfill")
+        self.assertEqual(st["non_null_cells"], 17,
+                         "4 Confidence + 13 backfilled = 17 populated")
 
 
 class StepOneOpenDecisions(unittest.TestCase):
 
-    def test_od3_is_closed_and_the_other_four_remain_open(self):
+    def test_od1_od2_od3_closed_and_od4_od5_od6_open(self):
         od = json.loads(read(DBJSON))["_open_decisions"]
-        for k in ("OD1", "OD2", "OD3", "OD4", "OD5"):
+        for k in ("OD1", "OD2", "OD3", "OD4", "OD5", "OD6"):
             self.assertIn(k, od, "%s must be recorded" % k)
-        self.assertIn("CLOSED", od["OD3"]["status"], "OD3 was closed by Step 2")
+        self.assertIn("CLOSED", od["OD3"]["status"], "OD3 closed by Step 2")
         self.assertIn(STEP2, od["OD3"]["closed_by"])
-        self.assertIn("remain OPEN", od["OD3"]["what_it_did_not_close"],
-                      "closing OD3 must state what it did NOT close")
-        for k in ("OD1", "OD2", "OD4", "OD5"):
+        self.assertIn("CLOSED", od["OD1"]["status"], "OD1 closed by DB6-OD1-OD2-1")
+        self.assertIn("EXCEPTION", od["OD1"]["status"].upper(), "with a named exception")
+        self.assertIn("CLOSED", od["OD2"]["status"], "OD2 closed locally")
+        # Every closure must say what it did NOT close. OD1 and OD3 use
+        # `what_it_did_not_close`; OD2 uses `scope_warning` because its limit is one of scope.
+        for k in ("OD1", "OD3"):
+            self.assertIn("what_it_did_not_close", od[k],
+                          "%s must state what closing it did NOT close" % k)
+        self.assertIn("scope_warning", od["OD2"],
+                      "OD2 must state the boundary of its local closure")
+        for k in ("OD4", "OD5", "OD6"):
             self.assertIn("OPEN", od[k]["status"], "%s must remain OPEN" % k)
             self.assertNotIn("CLOSED", od[k]["status"], "%s must not be closed" % k)
         self.assertIn("NOT RESOLVED", od["_note"])
 
-    def test_no_multi_source_convention_is_defined(self):
+    def test_the_multi_source_convention_is_local_to_db6_only(self):
         od = json.loads(read(DBJSON))["_open_decisions"]["OD2"]
-        self.assertIn("OPEN", od["status"])
-        self.assertIn("No convention is defined", od["status"])
-        for db_id in EXPECTED_COUNT:
-            by = {f["name"]: f for f in dbrow(db_id)["fields"]}
-            self.assertIn("OD2", by["Source Tier"]["validation"],
-                          "%s Source Tier must point at the undefined mapping" % db_id)
+        self.assertIn("CLOSED LOCALLY FOR DB6 ONLY", od["status"])
+        self.assertIn("NOT A SECTOR-WIDE RATIFICATION", od["status"])
+        self.assertIn("V4", od["scope_warning"], "must warn that DB9's V4 is unchanged")
+        d6 = {f["name"]: f for f in dbrow("DB6")["fields"]}
+        for p in ("Source Tier", "Source URL"):
+            self.assertIn("LOCAL TO DB6", d6[p]["row_values"],
+                          "DB6 %s must record the convention as local" % p)
+            self.assertIn("MUST NOT be applied to DB9", d6[p]["row_values"])
+        # DB10 must NOT have acquired the convention
+        d10 = {f["name"]: f for f in dbrow("DB10")["fields"]}
+        self.assertNotIn("LOCAL TO DB6", d10["Source Tier"].get("row_values", ""),
+                         "DB10 must not have inherited DB6's local convention")
 
     def test_no_repository_wide_standard_is_ratified(self):
         od = json.loads(read(DBJSON))["_open_decisions"]["OD4"]
@@ -670,20 +700,31 @@ class S10StepFourNamesEveryCause(unittest.TestCase):
         self.assertTrue(re.search(r"DB 10.{0,120}null on all 57", self.txt),
                         "Step 4 must state DB10's provenance is empty")
 
-    def test_evidence_absence_is_stated_for_both(self):
-        self.assertIn("`Evidence` now exists structurally in DB 6, DB 9 and DB 10", self.txt)
-        self.assertIn("every one of its row values is null", self.txt)
+    def test_evidence_state_is_stated_for_all_three(self):
+        # Updated 2026-10-02: Evidence is no longer null everywhere - DB6-OD1-OD2-1 populated it
+        # on three DB6 rows. The rule about nulls is unchanged and must survive verbatim.
+        self.assertIn("`Evidence` exists structurally in DB 6, DB 9 and DB 10", self.txt)
+        self.assertIn("populated on three DB 6 rows and null everywhere else", self.txt)
         self.assertIn("null `Evidence` continues to force an UNRESOLVED provenance floor",
                       self.txt)
         self.assertIn("No confidence or freshness value may be inferred from the fact that a "
                       "field exists", self.txt)
+        self.assertIn("A column is a place to put evidence, not evidence", self.txt)
 
-    def test_the_undefined_multi_source_mapping_is_stated(self):
-        self.assertIn("no convention", self.txt.lower())
-        self.assertIn("OD2", self.txt)
+    def test_the_local_multi_source_convention_is_stated_and_scoped(self):
+        # OD2 closed LOCALLY 2026-10-02. S10 must describe the convention AND its boundary, so a
+        # packet never reads DB6's null tier as a gap or applies the convention to DB9.
+        self.assertIn("OD2 closed LOCALLY FOR DB 6 ONLY", self.txt)
+        self.assertIn("not representable in a single-valued field", self.txt)
+        self.assertIn("NOT ratified for DB 9, DB 10 or Sector-wide", self.txt)
+        self.assertIn("do not read DB 6's null tier as a missing value to be filled", self.txt)
+        self.assertIn("OD4", self.txt)
 
-    def test_rule_v3_is_not_extended_to_db6_in_the_skill(self):
-        self.assertIn("rule V3 is deliberately NOT extended to DB 6", self.txt)
+    def test_rule_v3_is_not_enforced_on_db6_in_the_skill(self):
+        self.assertIn("Rule V3 is a DOCUMENTED EXPECTATION for DB 6, not an enforced validator",
+                      self.txt)
+        self.assertIn("A sourced row and an excepted row must never be reported the same way",
+                      self.txt)
 
     def test_null_and_unsupported_both_fail_closed(self):
         self.assertIn("Null and unsupported both fail closed", self.txt)
@@ -735,6 +776,206 @@ class SchemaMarkdownSynchronised(unittest.TestCase):
         self.assertEqual(
             len(re.findall(r"(?i)no confidence or freshness value may be inferred", self.txt)), 2,
             "and both must say no value may be inferred from field existence")
+
+
+# --------------------------------------------------------------------------------------------
+# DB6-OD1-OD2-1 (2026-10-02) - the bounded 13-cell backfill, the DB6-local multi-source
+# convention, OD1 closed with ONE named exception, and the S10 null-Next-Review fail-closed fix.
+# Offline and deterministic. Checks what the REPOSITORY RECORDS, never the live store.
+# --------------------------------------------------------------------------------------------
+
+
+class OD1BackfillRecorded(unittest.TestCase):
+
+    def test_thirteen_cells_recorded_as_written(self):
+        bp = dbrow("DB6")["MISSING_FIELD"]["row_level_status"]["backfill_performed"]
+        self.assertEqual(bp["cells_written"], BACKFILL_CELLS)
+        self.assertEqual(bp["rows_written"], 4)
+        self.assertIn(OD1, bp["task"])
+
+    def test_populated_and_null_counts_reconcile_to_28(self):
+        st = dbrow("DB6")["MISSING_FIELD"]["row_level_status"]
+        self.assertEqual(st["non_null_cells"] + st["null_cells"], st["cells"])
+        self.assertEqual(st["cells"], 28)
+        self.assertEqual(st["non_null_cells"], 17)
+        self.assertEqual(st["null_cells"], 11)
+        # 4 pre-existing Confidence + 13 written = 17
+        self.assertEqual(4 + BACKFILL_CELLS, st["non_null_cells"])
+
+    def test_three_rows_satisfy_the_documented_source_evidence_expectation(self):
+        by = {f["name"]: f for f in dbrow("DB6")["fields"]}
+        for field in ("Source", "Evidence"):
+            rv = by[field]["row_values"]
+            for lens in ("Operator", "Amplifier", "Enabler"):
+                self.assertIn(lens, rv, "%s must record %s as populated" % (field, lens))
+            self.assertIn("NULL on Buyer", rv, "%s must record Buyer as null" % field)
+
+    def test_evidence_values_carry_their_caveats(self):
+        by = {f["name"]: f for f in dbrow("DB6")["fields"]}
+        self.assertIn("caveat", by["Evidence"]["row_values"].lower(),
+                      "the read-depth/inference caveats must be recorded as carried")
+
+    def test_dates_are_from_the_bodies_not_derived(self):
+        by = {f["name"]: f for f in dbrow("DB6")["fields"]}
+        lv = by["Last Verified"]["row_values"]
+        self.assertIn("2026-08-19", lv)
+        self.assertIn("2026-08-24", lv)
+        self.assertIn("No date was derived, defaulted or inferred", lv)
+
+    def test_no_further_backfill_is_authorised(self):
+        st = dbrow("DB6")["MISSING_FIELD"]["row_level_status"]
+        self.assertIs(st["backfill_authorised"], False,
+                      "the fail-closed default must survive its own exercise")
+        self.assertIn("no FURTHER backfill", st["backfill_authorised_note"])
+
+
+class OD1NoTierNoUrlNoConfidenceWrite(unittest.TestCase):
+
+    def test_no_source_tier_or_source_url_populated(self):
+        by = {f["name"]: f for f in dbrow("DB6")["fields"]}
+        for p in ("Source Tier", "Source URL"):
+            self.assertIn("NULL on all four rows", by[p]["row_values"],
+                          "%s must be recorded null on every row" % p)
+            self.assertIn("not representable", by[p]["row_values"].lower(),
+                          "%s null must mean not-representable, not unknown" % p)
+
+    def test_confidence_unchanged_and_still_required(self):
+        by = {f["name"]: f for f in dbrow("DB6")["fields"]}
+        c = by["Confidence"]
+        self.assertIs(c.get("required"), True, "required: true must survive")
+        self.assertNotIn("validation", c, "V3 must not have been legislated as a validator")
+        self.assertIn("NOT WRITTEN", c["row_values"],
+                      "Confidence must be recorded as never written by the backfill")
+        self.assertIn("Medium on all four rows", c["row_values"])
+
+    def test_the_backfill_records_what_it_did_not_write(self):
+        bp = dbrow("DB6")["MISSING_FIELD"]["row_level_status"]["backfill_performed"]
+        nw = bp["not_written"]
+        for must in ("Confidence", "Source Tier", "Source URL", "Buyer", "schema", "DB3",
+                     "DB9", "DB10"):
+            self.assertIn(must, nw, "not_written must name %s" % must)
+
+
+class OD1BuyerExceptionIsSingularAndExpiring(unittest.TestCase):
+
+    def setUp(self):
+        self.ex = dbrow("DB6")["od1_exception"]
+
+    def test_the_exception_fields_are_exactly_as_approved(self):
+        self.assertEqual(self.ex["database"], "DB6")
+        self.assertEqual(self.ex["row_alias"], "Buyer")
+        self.assertEqual(self.ex["scope"], "this row only")
+        self.assertEqual(self.ex["expiry"], EXCEPTION_EXPIRY)
+        self.assertEqual(
+            self.ex["issue"],
+            "Confidence populated while governed Source and Evidence remain absent")
+        self.assertEqual(
+            self.ex["reason"],
+            "existing author judgement retained while re-sourcing remains incomplete")
+        self.assertEqual(self.ex["consequence"],
+                         "S10 confidence/freshness floors remain UNRESOLVED")
+
+    def test_expiry_is_exact(self):
+        self.assertEqual(self.ex["expiry"], "2026-11-24")
+
+    def test_no_automatic_waiver_renewal_and_no_automatic_action(self):
+        self.assertIs(self.ex["automatic_waiver_renewal"], False)
+        self.assertIn("Nothing happens by itself", self.ex["no_automatic_action_on_expiry"])
+        self.assertIn("separate owner-reviewed task", self.ex["no_automatic_action_on_expiry"])
+
+    def test_buyer_alone_carries_it(self):
+        self.assertEqual(self.ex["row_alias"], "Buyer")
+        for other in ("DB9", "DB10"):
+            self.assertNotIn("od1_exception", dbrow(other),
+                             "%s must carry no exception" % other)
+
+    def test_it_does_not_apply_to_other_or_future_rows(self):
+        dna = self.ex["does_not_apply_to"]
+        self.assertIn("future", dna, "must exclude future rows")
+        self.assertIn("NOT an exception for historical rows generally", dna,
+                      "must not be phrased as a class of rows")
+
+    def test_the_resourcing_lead_is_a_lead_not_evidence(self):
+        lead = self.ex["re_sourcing_lead"]
+        self.assertIn("LEAD for", lead)
+        self.assertIn("NOT evidence", lead)
+        self.assertIn("another database", lead)
+
+
+class OD1S10FreshnessFailsClosedOnEitherDate(unittest.TestCase):
+
+    def setUp(self):
+        self.txt = flat(read(S10))
+        self.rawt = read(S10)
+
+    def test_null_next_review_forces_unresolved(self):
+        self.assertTrue(re.search(r"null Last Verified\s*OR a null Next Review\s*->\s*UNRESOLVED",
+                                  self.txt),
+                        "the rule must fail closed on EITHER missing date")
+        self.assertIn("Both dates are required from every contributing record", self.txt)
+
+    def test_the_unresolved_result_names_the_element(self):
+        self.assertIn("UNRESOLVED, naming each such element", self.txt)
+        self.assertIn("name the record or audience element", self.txt)
+
+    def test_another_rows_date_cannot_fill_a_null(self):
+        self.assertIn("may NEVER be filled from another row's", self.txt)
+        for forbidden in ("Not from the earliest", "not from the latest",
+                          "not from a sibling", "not from a department default"):
+            self.assertIn(forbidden, self.txt,
+                          "the inheritance ban must be explicit: %s" % forbidden)
+
+    def test_no_substitute_dates(self):
+        self.assertIn("No assembly date, no current date and no global decay threshold", self.txt)
+        self.assertIn("a borrowed date is a fabricated one", self.txt)
+
+    def test_db6_is_the_worked_example_and_still_unresolved(self):
+        self.assertIn("the DB 6 freshness contribution is `UNRESOLVED`, naming the", self.txt)
+        self.assertIn("That is the rule working, not the rule failing", self.txt)
+        self.assertIn("One null is enough", self.txt)
+
+    def test_the_backfill_did_not_change_the_verdict(self):
+        self.assertIn("the backfill improved the data, not the verdict", self.txt)
+
+
+class OD1ScopeBoundaries(unittest.TestCase):
+
+    def test_od2_local_closure_is_not_sector_wide_ratification(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]
+        self.assertIn("LOCALLY", od["OD2"]["status"])
+        self.assertIn("NOT A SECTOR-WIDE RATIFICATION", od["OD2"]["status"])
+        self.assertIn("NOT ratified", od["OD4"]["status"], "OD4 is where that is decided")
+
+    def test_od4_and_od5_stay_open(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]
+        for k in ("OD4", "OD5"):
+            self.assertIn("OPEN", od[k]["status"])
+            self.assertNotIn("CLOSED", od[k]["status"])
+
+    def test_db3_finding_is_open_and_caused_no_db3_mutation(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]["OD6"]
+        self.assertEqual(od["db"], "DB3")
+        self.assertIn("OPEN", od["status"])
+        self.assertIn("not acted on", od["status"])
+        self.assertTrue(any("NOT mutated" in f for f in od["facts"]),
+                        "OD6 must record that DB3 was not mutated")
+        self.assertTrue(any("terminates in an unsourced claim" in f for f in od["facts"]),
+                        "OD6 must record why the pointer chain failed")
+        # DB3's own contract entry must be untouched by this task
+        d3 = dbrow("DB3")
+        self.assertNotIn("od1_exception", d3)
+        self.assertNotIn("backfill_performed", json.dumps(d3))
+
+    def test_db9_and_db10_row_state_untouched(self):
+        self.assertEqual(
+            dbrow("DB9")["MISSING_FIELD"]["row_level_status"]["non_null_cells"], 0)
+        self.assertEqual(
+            dbrow("DB10")["MISSING_FIELD"]["row_level_status"]["non_null_cells"], 0)
+
+    def test_v3_is_a_documented_expectation_not_a_validator(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]["OD1"]
+        self.assertIn("documented expectation", od["status"].lower())
+        self.assertIn("not an enforced validator", od["status"].lower())
 
 
 if __name__ == "__main__":

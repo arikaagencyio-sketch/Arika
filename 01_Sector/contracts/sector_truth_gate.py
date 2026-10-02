@@ -46,6 +46,14 @@ Checks:
                        legislating rule V3, the Q2/Q3/Q4 mappings, and S10 Step 4 naming every
                        contributing element rather than DB 9 alone
                        (DB6-DB10-PROV-1 Step 1 + Step 2, 2026-10-02)
+  7b DB6 OD1/OD2       the 13-cell DB6 backfill (17 of 28 populated), Confidence untouched and
+                       still required with no V3 validator, Source Tier and Source URL null by
+                       the DB6-LOCAL multi-source convention, the ONE named Buyer exception
+                       (scope, expiry 2026-11-24, no auto-renewal, not a class of rows), OD1
+                       closed-with-exception, OD2 closed LOCALLY only, OD4/OD5/OD6 open, the DB3
+                       finding recorded unmutated, and S10's freshness floor failing closed on
+                       EITHER a null Last Verified or a null Next Review
+                       (DB6-OD1-OD2-1, 2026-10-02)
 
 Checks 7 and 7b are REPOSITORY-INTERNAL BY DESIGN. This gate NEVER CALLS NOTION, so that offline
 validation stays deterministic - which means IT CANNOT DETECT LATER LIVE NOTION DRIFT in DB 6,
@@ -589,7 +597,27 @@ def main():
                 fail.append("CHECK 7b OD3 must name Step 2 as what closed it.")
             if "remain OPEN" not in (od["OD3"].get("what_it_did_not_close") or ""):
                 fail.append("CHECK 7b OD3 must record what closing it did NOT close.")
-        for k in ("OD1", "OD2", "OD4", "OD5"):
+        # OD1 and OD2 were CLOSED 2026-10-02 by DB6-OD1-OD2-1 - OD1 with ONE named exception,
+        # OD2 LOCALLY for DB6 only. OD4, OD5 and the new OD6 must stay OPEN.
+        if od.get("OD1") is not None:
+            st1 = od["OD1"].get("status") or ""
+            if "CLOSED" not in st1:
+                fail.append("CHECK 7b OD1 must be recorded CLOSED by DB6-OD1-OD2-1; found %r."
+                            % st1)
+            if "EXCEPTION" not in st1.upper():
+                fail.append("CHECK 7b OD1's closure must name its exception.")
+            if "what_it_did_not_close" not in od["OD1"]:
+                fail.append("CHECK 7b OD1 must record what closing it did NOT close.")
+        if od.get("OD2") is not None:
+            st2 = od["OD2"].get("status") or ""
+            if "CLOSED LOCALLY" not in st2:
+                fail.append("CHECK 7b OD2 must be recorded CLOSED LOCALLY for DB6; found %r."
+                            % st2)
+            if "NOT A SECTOR-WIDE RATIFICATION" not in st2:
+                fail.append("CHECK 7b OD2's local closure must deny Sector-wide ratification.")
+            if "V4" not in (od["OD2"].get("scope_warning") or ""):
+                fail.append("CHECK 7b OD2 must warn that DB9's rule V4 is unchanged.")
+        for k in ("OD4", "OD5", "OD6"):
             if k in od:
                 st_k = od[k].get("status") or ""
                 if "OPEN" not in st_k:
@@ -597,6 +625,89 @@ def main():
                                 % (k, st_k))
                 if "CLOSED" in st_k:
                     fail.append("CHECK 7b open decision %s must not be closed." % k)
+            else:
+                fail.append("CHECK 7b open decision %s is not recorded." % k)
+        # OD6 - the DB3 finding - must stay recorded and must have caused no DB3 mutation
+        od6 = od.get("OD6") or {}
+        if od6.get("db") != "DB3":
+            fail.append("CHECK 7b OD6 must record the DB3 unsupported-provenance finding.")
+        if not any("NOT mutated" in f for f in (od6.get("facts") or [])):
+            fail.append("CHECK 7b OD6 must record that DB3 was NOT mutated.")
+        d3row = next((r for r in rows7b if r.get("db_id") == "DB3"), None)
+        if d3row is not None and "od1_exception" in d3row:
+            fail.append("CHECK 7b DB3 must carry no OD1 exception - it was not in scope.")
+
+        # ---- the 13-cell backfill and the DB6-local convention
+        d6b = next((r for r in rows7b if r.get("db_id") == "DB6"), None)
+        if d6b is not None:
+            mf6 = d6b.get("MISSING_FIELD") or {}
+            rl6 = mf6.get("row_level_status") or {}
+            by6 = {f.get("name"): f for f in (d6b.get("fields") or [])}
+            if rl6.get("non_null_cells") != 17:
+                fail.append("CHECK 7b DB6 must record 17 populated provenance cells "
+                            "(4 Confidence + 13 backfilled); found %r."
+                            % rl6.get("non_null_cells"))
+            if (isinstance(rl6.get("non_null_cells"), int)
+                    and isinstance(rl6.get("null_cells"), int)
+                    and rl6["non_null_cells"] + rl6["null_cells"] != rl6.get("cells")):
+                fail.append("CHECK 7b DB6 populated + null must equal %r cells."
+                            % rl6.get("cells"))
+            bp = rl6.get("backfill_performed") or {}
+            if bp.get("cells_written") != 13:
+                fail.append("CHECK 7b DB6 must record 13 cells written; found %r."
+                            % bp.get("cells_written"))
+            if rl6.get("backfill_authorised") is not False:
+                fail.append("CHECK 7b DB6 backfill_authorised must stay false - the fail-closed "
+                            "default must survive its own exercise.")
+            for must in ("Confidence", "Source Tier", "Source URL", "Buyer"):
+                if must not in (bp.get("not_written") or ""):
+                    fail.append("CHECK 7b DB6 backfill record must state %s was NOT written."
+                                % must)
+            # Confidence untouched and still required
+            c6b = by6.get("Confidence") or {}
+            if c6b.get("required") is not True:
+                fail.append("CHECK 7b DB6 Confidence must remain required: true.")
+            if "validation" in c6b:
+                fail.append("CHECK 7b DB6 Confidence must NOT carry a V3 validator: V3 is a "
+                            "documented expectation, not an enforced rule.")
+            if "NOT WRITTEN" not in (c6b.get("row_values") or ""):
+                fail.append("CHECK 7b DB6 Confidence must be recorded as never written by the "
+                            "backfill.")
+            # tier/URL null by convention, and the convention is local
+            for p in ("Source Tier", "Source URL"):
+                rv = (by6.get(p) or {}).get("row_values") or ""
+                if "NULL on all four rows" not in rv:
+                    fail.append("CHECK 7b DB6 %s must be recorded null on all four rows." % p)
+                if "LOCAL TO DB6" not in rv or "MUST NOT be applied to DB9" not in rv:
+                    fail.append("CHECK 7b DB6 %s must record the convention as LOCAL to DB6 and "
+                                "barred from DB9." % p)
+            # the exception: singular, named, expiring, non-renewing
+            ex = d6b.get("od1_exception") or {}
+            if not ex:
+                fail.append("CHECK 7b DB6 must carry the od1_exception record.")
+            else:
+                if ex.get("row_alias") != "Buyer":
+                    fail.append("CHECK 7b the OD1 exception must name the Buyer row; found %r."
+                                % ex.get("row_alias"))
+                if ex.get("scope") != "this row only":
+                    fail.append("CHECK 7b the OD1 exception scope must be 'this row only'.")
+                if ex.get("expiry") != "2026-11-24":
+                    fail.append("CHECK 7b the OD1 exception expiry must be 2026-11-24; found %r."
+                                % ex.get("expiry"))
+                if ex.get("automatic_waiver_renewal") is not False:
+                    fail.append("CHECK 7b the OD1 exception must not auto-renew.")
+                if "Nothing happens by itself" not in (ex.get("no_automatic_action_on_expiry")
+                                                       or ""):
+                    fail.append("CHECK 7b the OD1 exception must record that no automatic action "
+                                "occurs on expiry.")
+                dna = ex.get("does_not_apply_to") or ""
+                if "future" not in dna or "historical rows generally" not in dna:
+                    fail.append("CHECK 7b the OD1 exception must exclude future rows and must "
+                                "NOT be phrased as applying to historical rows generally.")
+            for other in ("DB9", "DB10"):
+                orow = next((r for r in rows7b if r.get("db_id") == other), None)
+                if orow is not None and "od1_exception" in orow:
+                    fail.append("CHECK 7b %s must carry no OD1 exception." % other)
         # the shared shape is OBSERVED, never ratified
         od4 = od.get("OD4") or {}
         if "NOT ratified" not in (od4.get("status") or ""):
@@ -648,12 +759,26 @@ def main():
                 ("DB 10", "DB 10 as a contributing element"),
                 ("populated `Confidence` with an EMPTY `Source`",
                  "DB 6's populated-but-unsupported Confidence"),
-                ("rule V3 is deliberately NOT extended to DB 6",
-                 "that rule V3 is not extended to DB 6"),
-                ("`Evidence` now exists structurally in DB 6, DB 9 and DB 10",
+                ("`Evidence` exists structurally in DB 6, DB 9 and DB 10",
                  "that Evidence now exists in all three"),
-                ("every one of its row values is null",
-                 "that every Evidence row value is null"),
+                ("populated on three DB 6 rows and null everywhere else",
+                 "which Evidence cells are populated and which are not"),
+                ("null Last Verified", "the Last Verified half of the freshness floor"),
+                ("null Next Review", "the Next Review half of the freshness floor"),
+                ("Both dates are required from every contributing record",
+                 "that BOTH dates are required before either floor is computed"),
+                ("may NEVER be filled from another row's",
+                 "the ban on inheriting another row's Next Review"),
+                ("no current date and no global decay threshold",
+                 "the ban on substitute dates"),
+                ("OD2 closed LOCALLY FOR DB 6 ONLY",
+                 "that OD2 closed locally only"),
+                ("NOT ratified for DB 9, DB 10 or Sector-wide",
+                 "that the convention is not ratified beyond DB 6"),
+                ("Rule V3 is a DOCUMENTED EXPECTATION for DB 6, not an enforced validator",
+                 "that V3 is documented, not enforced, on DB 6"),
+                ("A sourced row and an excepted row must never be reported the same way",
+                 "that an excepted row is not a sourced row"),
                 ("null `Evidence` continues to force an UNRESOLVED provenance floor",
                  "that a null Evidence still forces an UNRESOLVED floor"),
                 ("No confidence or freshness value may be inferred from the fact that a field "
@@ -669,10 +794,10 @@ def main():
         r6 = ((n6.get("MISSING_FIELD") or {}).get("row_level_status") or {})
         r10 = ((n10.get("MISSING_FIELD") or {}).get("row_level_status") or {})
         notes.append("DB6/DB10 provenance: %s/%s fields recorded | 7 provenance fields each | "
-                     "Evidence live in both, NULL on every row | row-level %s/%s and %s/%s "
-                     "populated | OD3 closed, OD1/OD2/OD4/OD5 open | shape OBSERVED not ratified "
-                     "| snapshot from a bounded live audit + Step 2 post-write read, drift "
-                     "undetectable offline"
+                     "row-level %s/%s and %s/%s populated | DB6 backfill 13 cells, 1 named "
+                     "exception (Buyer, expires 2026-11-24) | OD1 closed-with-exception, OD2 "
+                     "closed LOCALLY, OD3 closed | OD4/OD5/OD6 open | shape OBSERVED not "
+                     "ratified | drift undetectable offline"
                      % (n6.get("field_count_verified"), n10.get("field_count_verified"),
                         r6.get("non_null_cells"), r6.get("cells"),
                         r10.get("non_null_cells"), r10.get("cells")))

@@ -76,28 +76,56 @@ else                                            ->  the weakest value on ORDER
 **`freshness_requirement`**
 
 ```
-if ANY contributing item has a null Last Verified  ->  UNRESOLVED, naming each such element
-else  ->  the EARLIEST non-null `Next Review` is the consumer's rejection date,
-          stated alongside the OLDEST non-null `Last Verified`
+if ANY contributing item has a null Last Verified
+   OR a null Next Review                          ->  UNRESOLVED, naming each such element
+else  ->  the EARLIEST Next Review is the consumer's rejection date,
+          stated alongside the OLDEST Last Verified
 ```
 
-**No assembly date may ever substitute for `Last Verified`.** **Absent dates stay UNRESOLVED** — they are not filled, defaulted or inferred, and no global decay threshold is applied, because the repository defines none.
+*The `Next Review` half of that condition was added 2026-10-02 by `DB6-OD1-OD2-1`. Before it, the
+rule failed closed on a missing `Last Verified` but said nothing about a missing `Next Review` —
+so a row with no review date of its own would have silently taken the **earliest non-null** one
+from its siblings. That is the exact substitution this rule exists to prevent, and it became
+reachable the moment DB 6's dates were partly populated.*
+
+**Both dates are required from every contributing record before either floor may be computed.**
+`UNRESOLVED` is not a failure state to be worked around — it is the answer, and it must **name the
+record or audience element** that is unresolved so the consumer knows which one to chase.
+
+🔴 **A row's null `Next Review` may NEVER be filled from another row's.** Not from the earliest,
+not from the latest, not from a sibling in the same database, not from a department default.
+**No assembly date, no current date and no global decay threshold may substitute for either
+date.** **Absent dates stay UNRESOLVED** — they are not filled, defaulted or inferred, because the
+repository defines no decay threshold and a borrowed date is a fabricated one.
+
+**DB 6 after the `DB6-OD1-OD2-1` backfill, as a worked example:** the Operator, Amplifier and
+Enabler rows each carry an explicit `Last Verified` (2026-08-24) and `Next Review` (2026-11-24).
+The **Buyer** row carries an explicit `Last Verified` (2026-08-19) but **its `Next Review` is
+null**, and no body asserts one. **So the DB 6 freshness contribution is `UNRESOLVED`, naming the
+Buyer row** — even though three of its four rows are now fully dated, and even though a
+`2026-11-24` sits one row away. That is the rule working, not the rule failing.
 
 > **The live field name is `Next Review`**, not `Next Verification`. DB 7 and DB 14 use the latter; DB 1, DB 2, DB 9 and DB 16 use the former. Read the name the store actually carries.
 
 **What this means in practice today:** an Accommodation packet's **both floors resolve to `UNRESOLVED`**. *Corrected 2026-10-02 by `DB6-DB10-PROV-1` Step 1 — the previous wording named DB 9 as the only cause, which under-stated it. There are **three** contributing elements, and naming only one would let a reader think fixing DB 9 clears the floor.*
 
-| Element | `Confidence` | `Last Verified` | What it contributes |
-|---|---|---|---|
-| **DB 9** audience | null on all 4 rows | null on all 4 | `UNRESOLVED` on **both** floors |
-| **DB 6** linguistics | **`Medium` on all 4 rows** | **null on all 4** | **confidence floor `Medium`; freshness floor `UNRESOLVED`** |
-| **DB 10** decision-makers | null on all 57 | null on all 57 | `UNRESOLVED` on **both** floors |
+| Element | `Confidence` | `Last Verified` | `Next Review` | What it contributes |
+|---|---|---|---|---|
+| **DB 9** audience | null on all 4 rows | null on all 4 | null on all 4 | `UNRESOLVED` on **both** floors |
+| **DB 6** linguistics | **`Medium` on all 4** | **all 4 populated** | **3 of 4 — Buyer null** | **confidence floor `Medium`; freshness floor `UNRESOLVED`, naming the Buyer row** |
+| **DB 10** decision-makers | null on all 57 | null on all 57 | null on all 57 | `UNRESOLVED` on **both** floors |
+
+*DB 6's row updated 2026-10-02 by `DB6-OD1-OD2-1`, which populated 13 cells. Note what did and did
+not change: DB 6 is now the **best-provenanced** of the three elements and it **still** contributes
+an `UNRESOLVED` freshness floor, on the strength of **one** missing `Next Review`. One null is
+enough. The packet floor was `UNRESOLVED` before the backfill and is `UNRESOLVED` after it — the
+backfill improved the data, not the verdict.*
 
 **Name every contributing element, not just the first.** Four more facts belong in the packet's own words:
 
-1. **DB 6 carries a populated `Confidence` with an EMPTY `Source`.** The value is real and is **not** to be cleared or downgraded — it has a recorded basis in the S02 run record and in each page body. But a confidence with no governed source is **not** the same as a sourced one, and a packet must not present it as though it were. This is **open decision OD1**, and **rule V3 is deliberately NOT extended to DB 6** — do not apply it, and do not report DB 6 as non-compliant with a rule that does not govern it.
-2. **`Evidence` now exists structurally in DB 6, DB 9 and DB 10 — and every one of its row values is null.** *(Corrected 2026-10-02 by `DB6-DB10-PROV-1` Step 2, which added the field to DB 6 and DB 10; DB 9 already had it from `DB9-PROV-1`. Open decision OD3 is CLOSED.)* **A null `Evidence` continues to force an UNRESOLVED provenance floor** exactly as before — closing the schema gap closed nothing about the rows. **No confidence or freshness value may be inferred from the fact that a field exists.** A column is a place to put evidence, not evidence; treat a present-but-empty `Evidence` as the absence it is, and never report an element as sourced because the store now has somewhere to record a source.
-3. **Multi-source rows have no defined tier mapping.** `Source Tier` and `Source URL` are each **single-valued**, while DB 6's S02-written rows cite four sources at mixed tiers. There is **no convention** for collapsing them — **open decision OD2**. Do not invent one inside a packet, and do not report a single tier as if it covered every source.
+1. **Three of DB 6's four rows are now properly sourced; the Buyer row alone is not.** *(Updated 2026-10-02 by `DB6-OD1-OD2-1`. The previous wording — "DB 6 carries a populated `Confidence` with an EMPTY `Source`" — was true of all four rows and is now true of one.)* The Operator, Amplifier and Enabler rows carry a `Source`, an `Evidence` and both dates, each `Evidence` keeping its read-depth or inference caveat verbatim. The **Buyer** row still carries `Medium` against an empty `Source` and `Evidence`: its body names four bare vendor names with no titles or locators, and nothing in it isolates evidence. **OD1 is CLOSED with one named exception covering that row only, expiring 2026-11-24.** The value is **not** to be cleared or downgraded. **Rule V3 is a DOCUMENTED EXPECTATION for DB 6, not an enforced validator** — do not apply it as a hard rule, and when reporting the Buyer element say it is *excepted*, not *compliant*. **A sourced row and an excepted row must never be reported the same way.**
+2. **`Evidence` exists structurally in DB 6, DB 9 and DB 10. It is populated on three DB 6 rows and null everywhere else.** *(Field added 2026-10-02 by `DB6-DB10-PROV-1` Step 2 — OD3 CLOSED. Values written to DB 6's Operator, Amplifier and Enabler rows 2026-10-02 by `DB6-OD1-OD2-1`.)* **DB 9's four rows and all 57 DB 10 rows still carry a null `Evidence`.** **A null `Evidence` continues to force an UNRESOLVED provenance floor** — closing the schema gap closed nothing about the rows that are still empty. **No confidence or freshness value may be inferred from the fact that a field exists.** A column is a place to put evidence, not evidence; treat a present-but-empty `Evidence` as the absence it is, and never report an element as sourced because the store now has somewhere to record a source.
+3. **DB 6's multi-source rows deliberately carry a NULL `Source Tier` and `Source URL`.** *(Convention adopted 2026-10-02 by `DB6-OD1-OD2-1` — **OD2 closed LOCALLY FOR DB 6 ONLY**.)* Both properties are **single-valued** while each S02-written row cites four sources at mixed tiers, so the null means **not representable in a single-valued field**, not *unknown*. Per-source tiers travel **inline in the `Source` text** — read them there. 🔴 **This convention is NOT ratified for DB 9, DB 10 or Sector-wide, and must NOT be applied to DB 9**, whose rule V4 requires a tier whenever a source is set. Any Sector-wide question stays **open decision OD4**. Do not invent a tier inside a packet, do not report a single tier as if it covered every source, and **do not read DB 6's null tier as a missing value to be filled**.
 4. **Null and unsupported both fail closed.** A null is `UNASSESSED` and is weaker than `Low`. A populated value whose supporting provenance is absent does **not** earn the floor its value suggests. **When in doubt, `UNRESOLVED`** — and **no assembly date may ever substitute for `Last Verified`**, for any element.
 
 **Do not fall back to the `Medium` that DB 6 and the other elements would have set.** A packet may be assembled and must declare an unresolved floor; it may **not** be reported as a complete hand-off, and no consumer may act on one.
