@@ -81,7 +81,7 @@ The activation layer that turns the loaded model into **outreach**, one `Target`
 |---|---|---|---|
 | ① **WHEN** | Commercial Rhythm — seasonality + buying window | **DB 7 Sector Signals** (+ DB 12 Sector State, DB 13 Forecast) | 🟢 web-verified (built-in tools) |
 | ② **WHY** | pain · economics · tool-chaos | **DB 3 Sector Intelligence** | 🟢 web research per target |
-| ③ **HOW** | words to use / avoid · proof-language | **DB 11 Sector Linguistics** (EMPTY) | 🟢 web research per target |
+| ③ **HOW** | words to use / avoid · proof-language | **DB 6 Sector Linguistics** *(mis-numbered "DB 11" here until 2026-10-02 — DB 11 is Geography; and no longer EMPTY: **4 rows live**, all four Accommodation role lenses)* | 🟢 web research per target |
 | ④ **WHO** | 4 audience roles + decision-maker titles | **DB 9 Audience Roles** (EMPTY) + **DB 10 DM Registry** | 🟢 titles/roles · 🔴 named people |
 | ⑤ **WHICH** | land-and-expand ladder + offer-match / GAP | **DB 8 Industry Offer Matrix** (loaded) | ✅ exists |
 | ⑥ **WHAT** | outreach angle + audit/proposal logic | **DB 8** `Outreach Angle` → routes to Sales (05) / Content (04) | ✅ exists → routed |
@@ -250,6 +250,8 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 ### DB 6 — Sector Linguistics
 **Primary entity:** one sub-sector's language map. **AEIT_06:** `Knowledge Object`. **Backing:** Drafts 9/13/14 (the crown-jewel IP, `SECTOR_OS.md` §14). Feeds Content (04) + Branding (12).
 
+**18 properties, verified live 2026-10-02** by `DB6-DB10-PROV-AUDIT-1`. *(This table previously listed 11 rows, omitted both S10 relations, merged `Confidence / Source` into one row, and listed a `Decision-language patterns` field that does not exist live. The five provenance properties below were added live **2026-09-13 under owner item 31e** (divergence `F14`) and were never recorded here.)*
+
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
 | Language Map | Title | ID | e.g. "HealthTech — RevOps buyer" |
@@ -260,9 +262,21 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Cognitive (how they think) | Text | ID | layer 3 |
 | Incentive (what they optimize) | Text | EXE | layer 4 |
 | Cultural (tone/identity) | Text | ID | layer 5 |
-| Words to use / avoid | Text ×2 | EXE | |
-| Decision-language patterns | Text | EXE | "patterns > words" (Draft 9) |
-| Confidence / Source | Select/Text | GOV | |
+| Words to use / avoid | Text ×2 | EXE | two separate properties, not one |
+| **Platform Overlays** | **Relation → Platform Overlays** | **REL** | written by S10 · Content (04) |
+| **Narrative Positions** | **Relation → Narrative Positions** | **REL** | written by S10 · Content (04) |
+| **Confidence** | **Select** | **GOV** | **Low · Medium · High.** DB 6 has always had this field — 31e did not add it. 🔴 **POPULATED `Medium` on all four rows while `Source` is empty** — open decision **OD1** |
+| **Source** | **Text** | **GOV** | the re-followable authority; cited or blank. **Null on all four rows** |
+| **Source Tier** | **Select** | **GOV** | T1 Primary · T2 Institutional · T3 Commercial-intel · T4 Secondary — the same four as DB 7 / DB 9 / DB 14 / DB 16. **Single select**, so a row citing several sources at mixed tiers has no defined mapping — open decision **OD2** |
+| **Source URL** | **URL** | **GOV** | cited or blank. **Single** URL property — see **OD2** |
+| **Last Verified** | **Date** | **GOV** | the date a real verification happened. **Never** a write date, page edit time or today's date |
+| **Next Review** | **Date** | **GOV** | required when `Last Verified` is set, and later. **The live name is `Next Review`**, the DB 1 / DB 2 / DB 9 / DB 16 convention — not DB 7 / DB 14's `Next Verification` |
+
+> ❌ **`Decision-language patterns` does NOT exist in the live schema.** It was listed here from Draft 9's *"patterns > words"* principle and was never created. Recorded as absent by `DB6-DB10-PROV-AUDIT-1`; the principle still lives in Drafts 9/13/14.
+>
+> ⚠️ **`Evidence` is absent from DB 6.** It is the only provenance property DB 9 has that DB 6 does not. Adding it is open decision **OD3** — **not** authorised by the Step 1 synchronisation.
+>
+> 🟡 **Row-level provenance is PARTIAL, and partly unsupported.** 4 of 24 provenance cells are populated — `Confidence` = Medium on every row, everything else null. The three S02-written rows carry a structured `## Provenance` + `## Sources` page body with per-source tier labels, a verification date and a next-review date; the fourth names four sources without locators or tiers. **Body assertions were not promoted into governed properties**, and **no row-value backfill is authorised.** The schema snapshot above is one bounded live read; **future live drift is detected by no offline gate and needs another authorised audit.**
 
 ### DB 7 — Sector Signals (Commercial Intelligence Calendar) — *evolved 2026-08-15 (SCIC)*
 **Primary entity:** one **market signal** — an event, deadline, demand shift, competitor move, regulation, aviation/tech change, etc. — carrying its **commercial interpretation over time**. **AEIT_06:** conforms to the canonical **`Signal / Event`** entity (`type, entity_ref, timestamp → triggers refresh/action`). **Backing:** Draft 8 + xlsx Sheet 10 + web-verified sources. **Live DB:** `collection://c14fedb3-6048-4bc5-8a40-6558cc985f57` — **evolved in place** from "Sector Calendar (Market Events)"; the 24 event/regulatory entries become the first signals.
@@ -389,14 +403,29 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 ### DB 10 — Decision-Maker Registry
 **Primary entity:** one buyer title profile per sub-sector. **Backing:** xlsx Sheet 09. Sector-level titles/triggers — **references** CRM `Person`, does not replace it (AEIT_06 "roles not types").
 
+**15 properties, verified live 2026-10-02** by `DB6-DB10-PROV-AUDIT-1`. *(This table previously listed 6 rows and omitted `Platform Overlays` plus all six provenance properties. The six were added live **2026-09-13 under owner item 31e** (divergence `F14`) and were never recorded here.)*
+
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
-| Buyer Title | Title | ID | e.g. "VP RevOps" |
+| Buyer Title | Title | ID | e.g. "VP RevOps". **A title — never a person's name** |
 | Sub-Sector | Relation → Sub-Sectors | REL | required |
 | Buying-Trigger Signals | Text | EXE | xlsx Sheet 09 |
 | Outreach Intelligence | Text | EXE | LinkedIn/channel (xlsx Sheet 09) |
 | Incentives / Fears / KPIs | Text ×3 | ID | Draft 16 stakeholder-map fields |
-| CRM Person | Text (ID) | REL | ClickUp reference |
+| CRM Person | Text (ID) | REL | ClickUp reference. 🔒 GATED — **empty on all 57 rows** |
+| **Platform Overlays** | **Relation → Platform Overlays** | **REL** | written by S10 · Content (04) |
+| **Confidence** | **Select** | **GOV** | **High · Medium · Low.** Null means **UNASSESSED, never Low.** Added by 31e — DB 10 did not have it before |
+| **Source** | **Text** | **GOV** | the re-followable authority; cited or blank |
+| **Source Tier** | **Select** | **GOV** | T1 Primary · T2 Institutional · T3 Commercial-intel · T4 Secondary — the same four as DB 6 / DB 7 / DB 9 / DB 14 / DB 16. **Single select** — see **OD2** |
+| **Source URL** | **URL** | **GOV** | cited or blank. **Single** URL property — see **OD2** |
+| **Last Verified** | **Date** | **GOV** | the date a real verification happened. **Never** a write date, page edit time or today's date |
+| **Next Review** | **Date** | **GOV** | required when `Last Verified` is set, and later. **The live name is `Next Review`**, not DB 7 / DB 14's `Next Verification` |
+
+> ⚠️ **`Evidence` is absent from DB 10**, as from DB 6. Adding it is open decision **OD3** — **not** authorised by the Step 1 synchronisation.
+>
+> 🔴 **Every provenance value on all 57 rows is NULL** — 342 cells, 0 populated — and **no backfill is authorised.** **No logged skill run has ever written DB 10:** the one S02 run recorded it as `NO_OP` in its own `decision_reason`, so **S02's `evidence_refs` must not be attached to any DB 10 row.** Of the four rows audited at body level (those the repository names for the Accommodation sub-sector), one names a source — two bare vendor names, no locator, no tier — and all four state a verification date. **None asserts a confidence value.** Body provenance here is weaker than DB 6's and weaker than DB 9's.
+>
+> ⚪ **53 of the 57 rows were not body-read** (the SaaS branch). Their property values are verified empty by one aggregate query; their page bodies are **unexamined**, so their provenance is **UNRESOLVED, not verified-absent**, and is deliberately **not characterised** here. Whether they need a separate bounded audit is open decision **OD5**.
 
 ### DB 11 — Geography *(new 2026-08-15, SCIC — lean, agency-reused)*
 **Primary entity:** one place at one level. **AEIT_06:** proposed **candidate canonical entity** (do not silently canonize — flag for owner/architecture review). Reused by any department that needs a shared geo model; the Sector Signals DB relates to it.
@@ -613,6 +642,10 @@ Workspace **Arika Agency's Space** (`dac21e15-eb93-8125-ba65-0003e8debaf5`). Par
 - ✅ **Sector Intelligence — Sheets 04–06 loaded (2026-08-19):** **156 findings** (52 per sheet, all 52 SaaS sub-sectors matched 52/52) — Sheet 04 *Internal Struggles* → `Category=Risk/Fragility` (root cause + downstream effect + category-wide pattern; Routed To Automation/Offer/Sales), Sheet 05 *Revenue Intelligence* → `Economics` (bottleneck + conversion leakage + churn risk + expansion opportunity; Sales/Offer/Marketing), Sheet 06 *Strategic Nodes* → `Strategic Node` (hidden insight + buyer-psychology signal + market pattern; Marketing/Offer/Content). All `Source=xlsx`, `Confidence=Medium`, `Freshness=Fresh`, transcribed — no fabrication. Loaders: `scratchpad/emit.py`+`join.py`+`saas_map.json`. Sector Intelligence total now **211**. **Sheet 07** (Relationship Map — ~15 cross-sector patterns, not per-sub-sector) is the only intelligence sheet still pending — different structure, load separately.
 - ⏳ **Still to load:** **Sector Linguistics**; **Audience Roles**. Calendar: the **secondary** Sheet-10 events (each sub-sector lists 2–3; only the anchor is loaded) + the 5 non-Event layers — deliberately not dumped undated (no-fabrication + signal); add via the manual refresh sweep as dates verify.
 - **Intentionally empty:** `ICP Classification` + `Prospect Signal Scores` — written by the `sector-icp-fit` / `sector-signal-scorer` agents at runtime, not seeded.
+
+> 📌 **SUPERSEDING NOTE — 2026-10-02, `DB6-DB10-PROV-1` Step 1.** The block above is the **dated 2026-08-11 load status and is left as written**. Two of its lines no longer describe the current state:
+> - **"Decision-Maker Registry — all 52"** was the 2026-08-11 load. **DB 10 now holds 57 rows** (53 SaaS-branch + 4 Hospitality), verified by live `SELECT COUNT(*)` on 2026-08-24 and re-confirmed 2026-10-02. The Gate 0 figure of 52 was low by five. *(The two other "all 52" lines above — Sub-Sectors and Agency Opportunity Map — are **not** in this correction's scope and were not re-verified.)*
+> - **"Still to load: Sector Linguistics; Audience Roles"** is **no longer true for the one Target sub-sector.** **DB 6 holds 4 rows** (all four Accommodation role lenses; three created by S02 on 2026-08-24) and **DB 9 holds 4**. Both remain empty for the 88 established non-SaaS industries, none of which is `Target`.
 - **`Status` field added (2026-08-11)** to Sectors Master + Sub-Sectors — engagement lifecycle (`Active`/`Target`/`Reference`/`Dormant`). All current rows are **`Reference`** (empty reads as Reference) until the owner marks the exact real sectors/clients. See §7 for the convention. Not back-filled row-by-row (write-light; the owner is about to curate the real set).
 - Extraction: `scratchpad/xlsx_to_csv.py` (pure-stdlib) → per-sheet CSVs; loaders `gen_subsectors.py` + `gen_loads.py`.
 - 🟢 **SCIC evolution — Phase A + Phase B COMPLETE (2026-08-15):** DB 7 evolved in place into **Sector Signals (Commercial Intelligence Calendar)** (`collection://c14fedb3-…`, renamed) — full signal-object schema live (Signal Type ×16, Geography + Sector Intelligence relations, the 6 lead-time activation dates + Announcement/Next-Verification/Review, Source Tier, the 8 impact fields, Commercial Priority, Confidence, Audience/Market Segment, Recommended Action, Action Deadline, Departments Affected, Status, Recurrence, Change Status). New DBs created: **Geography** `collection://e095c661-86cd-4f45-9149-eca1c7195e71` (self-parent hierarchy) · **Sector State** `collection://4a9b8ca5-f042-4938-85af-e0706ee9e1ff` (→ Sectors Master + Geography + Signals) · **Sector Forecast** `collection://920781ae-fabd-4c9f-8045-42b40abf3cda` (→ Sectors Master + Geography + Signals). Doctrine + honesty gate in `SECTOR_ACTIVATION_CONTRACT.md` §12.

@@ -85,7 +85,22 @@ else  ->  the EARLIEST non-null `Next Review` is the consumer's rejection date,
 
 > **The live field name is `Next Review`**, not `Next Verification`. DB 7 and DB 14 use the latter; DB 1, DB 2, DB 9 and DB 16 use the former. Read the name the store actually carries.
 
-**What this means in practice today:** all four DB 9 audience rows carry a null `Confidence` and a null `Last Verified`, so an Accommodation packet's **both floors resolve to `UNRESOLVED`**, naming the audience element. **State that. Do not fall back to the `Medium` the other elements would have set.** A packet may be assembled and must declare an unresolved floor; it may **not** be reported as a complete hand-off, and no consumer may act on one.
+**What this means in practice today:** an Accommodation packet's **both floors resolve to `UNRESOLVED`**. *Corrected 2026-10-02 by `DB6-DB10-PROV-1` Step 1 — the previous wording named DB 9 as the only cause, which under-stated it. There are **three** contributing elements, and naming only one would let a reader think fixing DB 9 clears the floor.*
+
+| Element | `Confidence` | `Last Verified` | What it contributes |
+|---|---|---|---|
+| **DB 9** audience | null on all 4 rows | null on all 4 | `UNRESOLVED` on **both** floors |
+| **DB 6** linguistics | **`Medium` on all 4 rows** | **null on all 4** | **confidence floor `Medium`; freshness floor `UNRESOLVED`** |
+| **DB 10** decision-makers | null on all 57 | null on all 57 | `UNRESOLVED` on **both** floors |
+
+**Name every contributing element, not just the first.** Four more facts belong in the packet's own words:
+
+1. **DB 6 carries a populated `Confidence` with an EMPTY `Source`.** The value is real and is **not** to be cleared or downgraded — it has a recorded basis in the S02 run record and in each page body. But a confidence with no governed source is **not** the same as a sourced one, and a packet must not present it as though it were. This is **open decision OD1**, and **rule V3 is deliberately NOT extended to DB 6** — do not apply it, and do not report DB 6 as non-compliant with a rule that does not govern it.
+2. **`Evidence` does not exist in DB 6's or DB 10's live schema.** Only DB 9 has it. So for those two elements the *substance within the source* cannot be carried in-schema at all, whatever any row holds. Adding it is **open decision OD3**.
+3. **Multi-source rows have no defined tier mapping.** `Source Tier` and `Source URL` are each **single-valued**, while DB 6's S02-written rows cite four sources at mixed tiers. There is **no convention** for collapsing them — **open decision OD2**. Do not invent one inside a packet, and do not report a single tier as if it covered every source.
+4. **Null and unsupported both fail closed.** A null is `UNASSESSED` and is weaker than `Low`. A populated value whose supporting provenance is absent does **not** earn the floor its value suggests. **When in doubt, `UNRESOLVED`** — and **no assembly date may ever substitute for `Last Verified`**, for any element.
+
+**Do not fall back to the `Medium` that DB 6 and the other elements would have set.** A packet may be assembled and must declare an unresolved floor; it may **not** be reported as a complete hand-off, and no consumer may act on one.
 
 > **A `basis: owner_reasoning` P2 rule may filter a calendar; it may not be quoted to a client.** If the packet's reasoning rests on unratified plugin rules, mark it — the consumer is often the department that would quote it.
 

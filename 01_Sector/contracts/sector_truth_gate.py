@@ -35,11 +35,28 @@ Checks:
                        intelligence-object.schema.json, SECTOR_NOTION_SCHEMA.md and S10's
                        fail-closed rules, and the explicit row-level UNRESOLVED status
                        (DB9-PROV-1, 2026-10-02)
+  7b DB6/DB10 PROV     DB 6's recorded 18-field and DB 10's 15-field structures, the six
+                       provenance field names, types and option sets in each, `Evidence`
+                       recorded ABSENT from both, the superseded MISSING_FIELD claims with the
+                       date each stopped being true, row-level status and backfill_authorised
+                       false, divergence F14 recorded as propagated, open decisions OD1-OD5 all
+                       still OPEN, DB 6's unsupported-Confidence conflict recorded without
+                       legislating rule V3, the Q2/Q3/Q4 mappings, and S10 Step 4 naming every
+                       contributing element rather than DB 9 alone
+                       (DB6-DB10-PROV-1 Step 1, 2026-10-02)
 
-Check 7 is REPOSITORY-INTERNAL BY DESIGN. This gate never calls Notion, so that offline
-validation stays deterministic - which means it CANNOT detect live schema drift. The 21-field
-structure it enforces came from one bounded live audit (DB9-PROV-AUDIT-1); re-verifying the live
-schema requires another separately authorised audit.
+Checks 7 and 7b are REPOSITORY-INTERNAL BY DESIGN. This gate NEVER CALLS NOTION, so that offline
+validation stays deterministic - which means IT CANNOT DETECT LATER LIVE NOTION DRIFT in DB 6,
+DB 9 or DB 10. The 21-, 18- and 15-field structures it enforces are SNAPSHOTS from two bounded
+live audits (DB9-PROV-AUDIT-1 and DB6-DB10-PROV-AUDIT-1, both 2026-10-02); re-verifying any live
+schema requires another separately authorised audit. A passing gate means the REPOSITORY IS
+SELF-CONSISTENT, not that it still matches Notion.
+
+Check 7b exists because of a specific, repeated failure mode: owner item 31e added provenance
+fields to DB 6/9/10 on 2026-09-13 and recorded it in `_divergences` F14, but never carried it
+into the three per-database entries - so one file contradicted itself for nineteen days and no
+gate noticed. What 7b really enforces is PROPAGATION: that a divergence closed in one place
+reached every per-database entry it touches.
 """
 import io, os, re, sys, glob, json, datetime
 
@@ -360,6 +377,226 @@ def main():
             notes.append("DB9 provenance: 21 fields recorded | 7 provenance fields | "
                          "row-level 0/%d populated | snapshot from a bounded live audit, "
                          "drift undetectable offline" % (rl.get("cells") or 28))
+
+    # ---------------------------------------------------------------- 7b  DB 6 / DB 10 PROVENANCE
+    # Added by DB6-DB10-PROV-1 Step 1 (2026-10-02). SAME BOUNDARY AS CHECK 7 ABOVE: offline,
+    # deterministic, repository-internal. It CANNOT DETECT LIVE NOTION DRIFT. The 18- and 15-field
+    # snapshots come from one bounded live audit (DB6-DB10-PROV-AUDIT-1); re-verifying the live
+    # schema needs another separately authorised audit.
+    #
+    # This check exists because of a specific failure: owner item 31e added provenance fields to
+    # DB6/DB9/DB10 on 2026-09-13 and recorded it in _divergences F14, but never propagated it to
+    # the per-database entries. One file then contradicted itself for nineteen days and nothing
+    # noticed. What is enforced here is PROPAGATION - that a closed divergence reached every
+    # per-database entry it touches.
+    SIX = {
+        "Confidence":    ("select", ["High", "Medium", "Low"]),
+        "Source":        ("text",   None),
+        "Source Tier":   ("select", ["T1 Primary", "T2 Institutional", "T3 Commercial-intel",
+                                     "T4 Secondary"]),
+        "Source URL":    ("url",    None),
+        "Last Verified": ("date",   None),
+        "Next Review":   ("date",   None),
+    }
+    COUNTS = {"DB6": 18, "DB10": 15}
+    AUDIT = "DB6-DB10-PROV-AUDIT-1"
+    if dbjson:
+        dbj7b = json.loads(dbjson)          # read() returns raw text, as check 7 above assumes
+        rows7b = dbj7b.get("databases") or []
+        ns7b = read(os.path.join(SECTOR, "SECTOR_NOTION_SCHEMA.md")) or ""
+        flat7b = re.sub(r"\s+", " ", ns7b)
+        for db_id, want_n in sorted(COUNTS.items()):
+            row = next((r for r in rows7b if r.get("db_id") == db_id), None)
+            if not row:
+                fail.append("CHECK 7b %s has no entry in sector-databases.json." % db_id)
+                continue
+            flds = row.get("fields") or []
+            names = [f.get("name") for f in flds]
+
+            # exact recorded field count, and the mechanical count key
+            if len(flds) != want_n:
+                fail.append("CHECK 7b %s must record %d fields (the audited live schema); "
+                            "found %d." % (db_id, want_n, len(flds)))
+            if row.get("field_count_verified") != want_n:
+                fail.append("CHECK 7b %s field_count_verified must be %d; found %r."
+                            % (db_id, want_n, row.get("field_count_verified")))
+            dupes = sorted({n for n in names if names.count(n) > 1})
+            if dupes:
+                fail.append("CHECK 7b %s has duplicate field names: %s"
+                            % (db_id, ", ".join(dupes)))
+
+            # provenance field names and types
+            by = {f.get("name"): f for f in flds}
+            for pname, (ptype, opts) in sorted(SIX.items()):
+                f = by.get(pname)
+                if not f:
+                    fail.append("CHECK 7b %s does not record provenance field %r."
+                                % (db_id, pname))
+                    continue
+                if f.get("notion_type") != ptype:
+                    fail.append("CHECK 7b %s %s must be %s; recorded as %r."
+                                % (db_id, pname, ptype, f.get("notion_type")))
+                if opts and sorted(f.get("allowed_values") or []) != sorted(opts):
+                    fail.append("CHECK 7b %s %s option set must be %s; recorded as %r."
+                                % (db_id, pname, opts, f.get("allowed_values")))
+
+            # Evidence recorded ABSENT - not silently added, and not silently forgotten
+            if "Evidence" in names:
+                fail.append("CHECK 7b %s must NOT record an Evidence field: it is absent from the "
+                            "live schema and no live write is authorised (open decision OD3)."
+                            % db_id)
+            if "Evidence" not in re.sub(r"\s+", " ", json.dumps(row)):
+                fail.append("CHECK 7b %s must state that Evidence is absent, not merely omit it."
+                            % db_id)
+
+            # snapshot attribution + the drift warning
+            if AUDIT not in (row.get("field_count_note") or ""):
+                fail.append("CHECK 7b %s field_count_note must attribute the snapshot to %s."
+                            % (db_id, AUDIT))
+            mf = row.get("MISSING_FIELD") or {}
+            if not re.search(r"(?i)drift", re.sub(r"\s+", " ", json.dumps(row))):
+                fail.append("CHECK 7b %s must warn that live drift is undetectable offline."
+                            % db_id)
+
+            # the superseded claim must be preserved, dated, and not re-asserted
+            sc = mf.get("superseded_claim") or {}
+            if not sc.get("text"):
+                fail.append("CHECK 7b %s MISSING_FIELD must preserve the claim it supersedes "
+                            "under `superseded_claim`." % db_id)
+            if "2026-09-13" not in (sc.get("became_false_on") or ""):
+                fail.append("CHECK 7b %s must record 2026-09-13 as the date its prior claim "
+                            "stopped being true (owner item 31e)." % db_id)
+            if "SUPERSEDES" not in (mf.get("note") or ""):
+                fail.append("CHECK 7b %s MISSING_FIELD must say it SUPERSEDES the prior claim."
+                            % db_id)
+            if "flagged, not fixed" in (mf.get("severity") or ""):
+                fail.append("CHECK 7b %s severity still repeats the superseded framing."
+                            % db_id)
+
+            # row-level status must be present and must not claim completeness
+            rl7b = mf.get("row_level_status") or {}
+            for key in ("rows", "cells", "non_null_cells"):
+                if not isinstance(rl7b.get(key), int):
+                    fail.append("CHECK 7b %s row_level_status must record an integer %r."
+                                % (db_id, key))
+            if rl7b.get("backfill_authorised") is not False:
+                fail.append("CHECK 7b %s must record backfill_authorised false." % db_id)
+            for m in re.finditer(r"provenance-complete", re.sub(r"\s+", " ", json.dumps(row))):
+                window = re.sub(r"\s+", " ", json.dumps(row))[max(0, m.start() - 45):m.start()]
+                if "NOT" not in window:
+                    fail.append("CHECK 7b %s describes itself as provenance-complete." % db_id)
+
+            # the human-readable schema doc must agree
+            nxt = {"DB6": "### DB 7", "DB10": "### DB 11"}[db_id]
+            hdr = {"DB6": "### DB 6", "DB10": "### DB 10"}[db_id]
+            if hdr in ns7b:
+                seg = re.sub(r"\s+", " ", ns7b.split(hdr, 1)[1].split(nxt, 1)[0])
+                for pname in SIX:
+                    if pname not in seg:
+                        fail.append("CHECK 7b SECTOR_NOTION_SCHEMA.md %s omits %r."
+                                    % (db_id, pname))
+                if "%d properties" % want_n not in seg:
+                    fail.append("CHECK 7b SECTOR_NOTION_SCHEMA.md %s does not state %d "
+                                "properties." % (db_id, want_n))
+                if "Evidence` is absent" not in seg:
+                    fail.append("CHECK 7b SECTOR_NOTION_SCHEMA.md %s does not state that "
+                                "Evidence is absent." % db_id)
+            else:
+                fail.append("CHECK 7b SECTOR_NOTION_SCHEMA.md has no %s section." % hdr)
+
+        # the phantom DB6 field must stay recorded as absent, not quietly re-listed as real
+        if "`Decision-language patterns` does NOT exist in the live schema" not in flat7b:
+            fail.append("CHECK 7b SECTOR_NOTION_SCHEMA.md must record that DB 6's "
+                        "`Decision-language patterns` field does not exist live.")
+        if "DB 11 Sector Linguistics" in flat7b:
+            fail.append("CHECK 7b SECTOR_NOTION_SCHEMA.md still mis-numbers Sector Linguistics "
+                        "as DB 11; it is DB 6 and DB 11 is Geography.")
+
+        # F14's closure must be recorded as propagated, not just closed
+        f14 = next((e for e in (dbj7b.get("_divergences") or [])
+                    if e.get("id") == "F14"), None)
+        if not f14:
+            fail.append("CHECK 7b divergence F14 is missing.")
+        else:
+            if "resolution_update_2026_09_13" not in f14:
+                fail.append("CHECK 7b F14 must keep its original 2026-09-13 closure.")
+            if "resolution_update_2026_10_02" not in f14:
+                fail.append("CHECK 7b F14 must record that its 2026-09-13 closure was never "
+                            "propagated to the per-database entries.")
+
+        # the five open decisions must be recorded and must all still be OPEN
+        od = dbj7b.get("_open_decisions") or {}
+        for k in ("OD1", "OD2", "OD3", "OD4", "OD5"):
+            if k not in od:
+                fail.append("CHECK 7b open decision %s is not recorded." % k)
+            elif "OPEN" not in (od[k].get("status") or ""):
+                fail.append("CHECK 7b open decision %s must remain OPEN; found %r."
+                            % (k, od[k].get("status")))
+        # DB6's unsupported-Confidence conflict must stay recorded and must not be legislated
+        c6 = next((f for f in ((next((r for r in rows7b if r.get("db_id") == "DB6"), {})
+                                .get("fields")) or []) if f.get("name") == "Confidence"), None)
+        if c6 is None:
+            fail.append("CHECK 7b DB6 records no Confidence field.")
+        else:
+            if "OD1" not in (c6.get("open_decision_2026_10_02") or ""):
+                fail.append("CHECK 7b DB6's Confidence must carry the OD1 open conflict "
+                            "(populated value, empty Source).")
+            if "validation" in c6:
+                fail.append("CHECK 7b DB6's Confidence must NOT carry a V3-style validation: "
+                            "rule V3 is deliberately not extended to DB6 (OD1 is open).")
+
+        # intelligence mappings
+        _io_raw = read(os.path.join(os.path.dirname(DBJSON),
+                                   "intelligence-object.schema.json"))
+        iprops = (json.loads(_io_raw).get("properties") or {}) if _io_raw else {}
+        for q, needs in (("source", ["Source", "Source Tier", "Source URL"]),
+                         ("when_observed", ["Last Verified", "Next Review"]),
+                         ("reliability", ["Confidence"])):
+            nf = ((iprops.get(q) or {}).get("notion_field") or {})
+            for db_id in ("DB6", "DB10"):
+                if db_id not in nf:
+                    fail.append("CHECK 7b intelligence-object.schema.json does not map %s "
+                                "under %s." % (db_id, q))
+                    continue
+                for need in needs:
+                    if need not in nf[db_id]:
+                        fail.append("CHECK 7b %s %s mapping omits %r." % (db_id, q, need))
+                if q == "source" and "Evidence" in nf[db_id]:
+                    fail.append("CHECK 7b %s must NOT map Evidence under source: the field does "
+                                "not exist live." % db_id)
+                if q == "when_observed" and "Next Verification" in nf[db_id]:
+                    fail.append("CHECK 7b %s uses `Next Review`, not `Next Verification`."
+                                % db_id)
+
+        # S10 Step 4 must name every contributing element, not DB9 alone
+        s10b = re.sub(r"\s+", " ", read(os.path.join(
+            ROOT, ".claude", "skills", "sector-handoff-packet", "SKILL.md")) or "")
+        for needle, what in [
+                ("DB 6", "DB 6 as a contributing element"),
+                ("DB 10", "DB 10 as a contributing element"),
+                ("populated `Confidence` with an EMPTY `Source`",
+                 "DB 6's populated-but-unsupported Confidence"),
+                ("rule V3 is deliberately NOT extended to DB 6",
+                 "that rule V3 is not extended to DB 6"),
+                ("`Evidence` does not exist in DB 6's or DB 10's live schema",
+                 "that Evidence is absent from both"),
+                ("Null and unsupported both fail closed",
+                 "that null AND unsupported both fail closed"),
+                ("OD2", "the undefined multi-source tier mapping")]:
+            if needle not in s10b:
+                fail.append("CHECK 7b S10 SKILL.md Step 4 does not state %s." % what)
+
+        n6 = next((r for r in rows7b if r.get("db_id") == "DB6"), {})
+        n10 = next((r for r in rows7b if r.get("db_id") == "DB10"), {})
+        r6 = ((n6.get("MISSING_FIELD") or {}).get("row_level_status") or {})
+        r10 = ((n10.get("MISSING_FIELD") or {}).get("row_level_status") or {})
+        notes.append("DB6/DB10 provenance: %s/%s fields recorded | 6 provenance fields each | "
+                     "Evidence absent from both | row-level %s/%s and %s/%s populated | "
+                     "OD1-OD5 open | snapshot from a bounded live audit, drift undetectable "
+                     "offline"
+                     % (n6.get("field_count_verified"), n10.get("field_count_verified"),
+                        r6.get("non_null_cells"), r6.get("cells"),
+                        r10.get("non_null_cells"), r10.get("cells")))
 
     print("SECTOR DOCUMENTATION-TRUTH GATE")
     print("=" * 66)

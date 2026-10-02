@@ -57,7 +57,19 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # all, because DB 9 carried no provenance in-schema - so S10 now reports UNRESOLVED on an
 # Accommodation packet where it previously expressed nothing. That is stricter, not a regression.
 # Was 337a0ba7d9acfdb790ef01059e896c1a84d135df785f77258c57b51ef49ee07a (2026-09-29, post-SF2).
-S10_ORDINARY_SHA = "7acd495e29fbd73c9aaf32db75b838402349d55388123a2de0903ebd9942d581"
+# Re-baselined 2026-10-02 by DB6-DB10-PROV-1 Step 1 (owner-approved): Step 4's EXPLANATION of why
+# the floors resolve to UNRESOLVED was corrected. The rules themselves are UNCHANGED - the computed
+# floors, the ordering, the null-is-weaker-than-Low rule and the assembly-date ban all stand exactly
+# as DB9-PROV-1 wrote them. What changed is that the text had blamed the UNRESOLVED result on DB 9
+# alone, when THREE elements contribute: DB 9 (null on both), DB 10 (null on both, all 57 rows), and
+# DB 6 - which carries a POPULATED `Confidence` of Medium beside an EMPTY `Source`. Step 4 now names
+# all three, states that `Evidence` is absent from DB 6 and DB 10, records that the multi-source
+# `Source Tier`/`Source URL` mapping is undefined (OD2), and says plainly that null AND unsupported
+# both fail closed. Rule V3 is deliberately NOT extended to DB 6 and its four values are NOT
+# cleared (OD1). Naming one cause of three would have let a reader think fixing DB 9 clears the
+# floor. Stricter and more honest, not a behaviour change.
+# Was 7acd495e29fbd73c9aaf32db75b838402349d55388123a2de0903ebd9942d581 (2026-10-02, post-DB9-PROV-1).
+S10_ORDINARY_SHA = "f4ac696f182e3762621bcd1b01bf4daf768eb6f48550209feb2654c51a23e3c9"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)
