@@ -111,7 +111,7 @@ Buyer row** — even though three of its four rows are now fully dated, and even
 
 | Element | `Confidence` | `Last Verified` | `Next Review` | What it contributes |
 |---|---|---|---|---|
-| **DB 3** findings | **`Medium` on all 6 Target rows** | **FIELD DOES NOT EXIST** | **FIELD DOES NOT EXIST** | **confidence floor `Medium`; freshness floor `UNRESOLVED` — structurally, not emptily** |
+| **DB 3** findings | **`Medium` on all 6 Target rows** | **PRESENT, null on all 217** | **PRESENT, null on all 217** | **confidence floor `Medium`; freshness floor `UNRESOLVED` — now *emptily*, no longer *structurally*** |
 | **DB 9** audience | null on all 4 rows | null on all 4 | null on all 4 | `UNRESOLVED` on **both** floors |
 | **DB 6** linguistics | **`Medium` on all 4** | **all 4 populated** | **3 of 4 — Buyer null** | **confidence floor `Medium`; freshness floor `UNRESOLVED`, naming the Buyer row** |
 | **DB 10** decision-makers | null on all 57 | null on all 57 | null on all 57 | `UNRESOLVED` on **both** floors |
@@ -123,17 +123,20 @@ Buyer row** — even though three of its four rows are now fully dated, and even
 - **Confidence contributes normally.** All 217 rows carry a governed `Confidence`, and all six Accommodation rows are `Medium`. DB 3 never triggers a null-driven `UNRESOLVED` on the confidence floor.
 - **`Evidence` is REQUIRED and populated on 217 of 217 rows.** Five of the six Target rows name re-followable sources inline; one does not.
 - 🔴 **`Source` is a process-kind dimension, not an authority.** Its four values — `xlsx` · `chat` · `agent run` · `research` — record **how** a finding was obtained, never **who** published it. **Never read `Source` as the authority and never report a row as unsourced because `Source` looks generic** — the locator lives in `Evidence`.
-- 🔴 **Freshness contributes `UNRESOLVED`, and no backfill can change that.** DB 3 has **no `Last Verified` and no `Next Review` field at all**. **An absent field is a different fact from a present-but-null cell. Both fail closed, but only the second could ever be filled.** Say which one you are reporting.
+- 🔴 **Freshness contributes `UNRESOLVED`.** DB 3's `Last Verified` and `Next Review` **exist** as nullable dates — added live 2026-10-02 by `DB3-OD10-OD12-1` — and are **null on all 217 rows**. So the floor is `UNRESOLVED` **because the cells are empty**, not because the fields are missing. **No backfill is authorised, so nothing in DB 3 can supply a freshness floor today.**
+- 🔴 **Three states, not two. Report which one you mean.** A field may be **absent** (no such property exists), **present but null** (the property exists and the cell is empty), or **present and populated**. **An absent field is a different fact from a present-but-null cell. Both fail closed, but only the second could ever be filled.** DB 3's dates moved from the first state to the second on 2026-10-02; **that changed the kind of failure, not the verdict.** *Superseded: this bullet previously read that DB 3 had "no `Last Verified` and no `Next Review` field at all", which was true when written.*
+- 🔴 **`Freshness` is NON-GOVERNING and MUST NOT be read as a temporal signal.** As of 2026-10-02 (OD10 Option D) `Freshness` is retained for display only. **`Last Verified` and `Next Review` are the governing temporal fields.** A row past a **non-null** `Next Review` is **stale**; a **null** one is **UNRESOLVED** and fails closed. **No Fresh/Aging/Stale threshold exists and none is needed.**
 - 🔴 **No assembly date, current date, or `Freshness` label may substitute for a missing verification date.** DB 3's `Freshness` is `Fresh` on all 217 rows with **no threshold defined anywhere**, so it cannot age and carries no temporal information. It is a declaration, not a measurement.
 - ⚠️ **Restrictions recorded only in page bodies can be lost.** Two Target rows state limits on how the finding may be used — one that it may not drive a downstream execution without stronger confirmation, one that a particular reading would be overclaiming. **No field carries either.** A packet assembled from properties alone silently drops both, so **read the body before relying on a DB 3 finding**, and do not treat property-completeness as permission.
-- ⚪ **Three DB 3 rows carry `Confidence = High`, none of them Target rows. Their bodies were outside the authorised audit, so make no claim about them** — neither that they are sound nor that they are not.
+- 🔴 **Three DB 3 rows carry `Confidence = High`, none of them Target rows, and all three bodies are blank.** Read under authorisation 2026-10-02: **H1 is `HIGH_OVERSTATED`** — its `Evidence` cites **Arika's own internal draft** as the basis for a market claim, and it is routed to Sales and Marketing with an agent-triggering action, so it is **not inert**. **H2 and H3 are `HIGH_UNRESOLVED`** — each names a primary authority but supplies **no locator and no date**. **None is in a Target S10 path.** *Superseded: this bullet previously said to make no claim about them, which was correct while their bodies were unread.*
 
 *DB 6's row updated 2026-10-02 by `DB6-OD1-OD2-1`, which populated 13 cells. Note what did and did
 not change: DB 6 is the **best-provenanced** of the four elements on the fields it has, and it
 **still** contributes an `UNRESOLVED` freshness floor, on the strength of **one** missing
-`Next Review`. One null is enough. **DB 3 is the harder case: it cannot be fixed by any backfill,
-because the fields do not exist** — so as DB 9 and DB 10 are remediated, **DB 3 becomes the binding
-constraint on the freshness floor.** The packet floor was `UNRESOLVED` before the backfill and is
+`Next Review`. One null is enough. **DB 3 was the harder case until 2026-10-02: it could not be
+fixed by any backfill, because the fields did not exist.** `DB3-OD10-OD12-1` added both dates, so **DB 3 is now an ordinary empty-cell case like DB 9 and DB 10** — still `UNRESOLVED`,
+still unbackfilled, but **fixable in principle**. *That sentence is superseded, not deleted: it was
+true when written, and it is the reason the fields were added.* The packet floor was `UNRESOLVED` before the backfill and is
 `UNRESOLVED` after it — the
 backfill improved the data, not the verdict.*
 

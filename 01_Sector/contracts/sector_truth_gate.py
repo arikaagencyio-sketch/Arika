@@ -54,15 +54,18 @@ Checks:
                        finding recorded unmutated, and S10's freshness floor failing closed on
                        EITHER a null Last Verified or a null Next Review
                        (DB6-OD1-OD2-1, 2026-10-02)
-  7c DB3 PROVENANCE    DB 3's recorded 15-field count, `Source` as a four-value PROCESS-KIND
-                       select, `Evidence` required and recorded populated 217/217, the four
-                       temporal/tier fields recorded STRUCTURALLY ABSENT, `Freshness` recorded as
-                       a declaration with no defined threshold, OD6 superseded-and-re-scoped with
-                       its disproven claim preserved, OD7-OD12 open, no seven-field-shape
-                       ratification, no claim about the three unaudited High-confidence rows, the
-                       intelligence-object mapping left as `Evidence + Source`, and S10 Step 4
-                       naming ALL FOUR contributing elements with DB 3's freshness failing closed
-                       (DB3-PROV-1 Step A, 2026-10-02)
+  7c DB3 PROVENANCE    DB 3's recorded 17-field count with the superseded 15 preserved,
+                       `Source` as a four-value PROCESS-KIND select, `Evidence` required and
+                       recorded populated 217/217, `Last Verified` and `Next Review` recorded
+                       PRESENT-BUT-NULL 0/217 with `Next Verification` still absent and
+                       `Source Tier`/`Source URL` still STRUCTURALLY ABSENT, `Freshness` recorded
+                       NON-GOVERNING and not derived, OD6 superseded-and-re-scoped with its
+                       disproven claim preserved, OD10 CLOSED BY DISSOLUTION with its original
+                       question preserved, OD7-OD9/OD11-OD13 open, OD12's three High rows
+                       classified, no seven-field-shape ratification, the intelligence-object Q2
+                       mapping left as `Evidence + Source`, and S10 Step 4 naming ALL FOUR
+                       contributing elements with DB 3's freshness failing closed EMPTILY
+                       (DB3-PROV-1 Step A + DB3-OD10-OD12-1, 2026-10-02)
 
 Checks 7, 7b and 7c are REPOSITORY-INTERNAL BY DESIGN. This gate NEVER CALLS NOTION, so that offline
 validation stays deterministic - which means IT CANNOT DETECT LATER LIVE NOTION DRIFT in DB 6,
@@ -76,13 +79,25 @@ A further limit worth stating because Step 2 invites the mistake: `Evidence` EXI
 and DB 10. A column is a place to put evidence, not evidence. This gate checks that the repository
 records that distinction; it cannot check that anyone honours it.
 
-CHECK 7c ADDS A SHARPER LIMIT. DB 3 has NO `Last Verified`, NO `Next Review` and NO `Source Tier`
-FIELD AT ALL - an ABSENT FIELD, not an empty cell. Both fail closed, but only an empty cell can
-ever be filled, so a reader must be told which one they are looking at. This gate enforces that
-the repository states the difference. It CANNOT verify DB 3's live schema, and DB 3's 217 rows are
-recorded from ONE bounded audit (DB3-PROV-AUDIT-1); 211 of them were never body-read and three
-High-confidence rows were deliberately not characterised. The gate must never be read as
-confirming anything about those.
+CHECK 7c ADDS A SHARPER LIMIT, AND ITS SUBJECT CHANGED ON 2026-10-02. It used to read:
+"DB 3 has NO `Last Verified`, NO `Next Review` and NO `Source Tier` FIELD AT ALL - an ABSENT
+FIELD, not an empty cell." THAT WAS TRUE WHEN WRITTEN AND IS NOW TRUE OF `Source Tier` AND
+`Source URL` ONLY. DB3-OD10-OD12-1 added `Last Verified` and `Next Review` as nullable live date
+properties under OD10 Option D, so DB 3's temporal fields moved from ABSENT to PRESENT-BUT-NULL.
+
+THREE STATES MUST BE DISTINGUISHED, NOT TWO: absent, present-but-null, and present-and-populated.
+Absent and present-but-null BOTH fail closed, but only the second can ever be filled, so a reader
+must be told which one they are looking at. This gate enforces that the repository states the
+difference - and it enforces that the OLD claim is PRESERVED AND SUPERSEDED rather than silently
+corrected, because a dated claim that stops being true is the exact failure class check 7b exists
+for.
+
+The limits are otherwise unchanged. This gate CANNOT verify DB 3's live schema: the 17-field count
+and the two null date columns are a SNAPSHOT from the verified post-write reads of
+DB3-OD10-OD12-1, and DB 3's 217 rows are recorded from ONE bounded audit (DB3-PROV-AUDIT-1), of
+which 211 were never body-read. The three High-confidence rows WERE body-read under separate owner
+authorisation and are now classified; the gate enforces that those classifications are recorded
+as read-and-blank, and must never be read as confirming anything about the other 211.
 
 Check 7b exists because of a specific, repeated failure mode: owner item 31e added provenance
 fields to DB 6/9/10 on 2026-09-13 and recorded it in `_divergences` F14, but never carried it
@@ -826,8 +841,9 @@ def main():
                         r10.get("non_null_cells"), r10.get("cells")))
 
     # ---------------------------------------------------------------- 7c  DB 3 PROVENANCE
-    # Added by DB3-PROV-1 Step A (2026-10-02). SAME BOUNDARY as checks 7 and 7b: offline,
-    # deterministic, repository-internal, and BLIND TO LIVE DRIFT.
+    # Added by DB3-PROV-1 Step A (2026-10-02); extended by DB3-OD10-OD12-1 the same day,
+    # which added two nullable date properties to live DB3 under OD10 Option D. SAME BOUNDARY as
+    # checks 7 and 7b: offline, deterministic, repository-internal, and BLIND TO LIVE DRIFT.
     #
     # DB 3 is the reason this check exists at all. It does NOT use the seven-field shape - it
     # answers all three provenance questions with its own four-field model - so a gate written
@@ -835,8 +851,15 @@ def main():
     # repository describes DB 3 AS IT IS: a database whose row-level provenance is complete and
     # whose SCHEMA cannot express a tier or a verification date.
     DB3_SOURCE_OPTS = ["xlsx", "chat", "agent run", "research"]
-    DB3_ABSENT = ["Source Tier", "Source URL", "Last Verified", "Next Review",
-                  "Next Verification"]
+    # REWRITTEN 2026-10-02, not loosened. This list used to be
+    #   ["Source Tier", "Source URL", "Last Verified", "Next Review", "Next Verification"]
+    # and it banned every one of them from DB3's recorded `fields`. DB3-OD10-OD12-1 added two of
+    # them live, so the ban would now fire on a TRUE record. The ban is kept for the three that
+    # are still absent and REPLACED BY A POSITIVE REQUIREMENT for the two that now exist - which
+    # is strictly stronger than deleting the rule, because an undated schema regression would
+    # still fail.
+    DB3_STILL_ABSENT = ["Source Tier", "Source URL", "Next Verification"]
+    DB3_NOW_PRESENT = ["Last Verified", "Next Review"]
     if dbjson:
         d3 = next((r for r in rows7b if r.get("db_id") == "DB3"), None)
         if d3 is None:
@@ -846,12 +869,25 @@ def main():
             by3 = {f.get("name"): f for f in f3}
             blob3 = re.sub(r"\s+", " ", json.dumps(d3))
 
-            if len(f3) != 15:
-                fail.append("CHECK 7c DB3 must record 15 fields (the audited live schema); "
-                            "found %d." % len(f3))
-            if d3.get("field_count_verified") != 15:
-                fail.append("CHECK 7c DB3 field_count_verified must be 15; found %r."
+            # 15 -> 17 on 2026-10-02 (DB3-OD10-OD12-1). The prior count is not deleted:
+            # it must survive in `field_count_superseded`, or this file would be rewriting its
+            # own dated history.
+            if len(f3) != 17:
+                fail.append("CHECK 7c DB3 must record 17 fields (15 audited + the two dates "
+                            "added live by DB3-OD10-OD12-1); found %d." % len(f3))
+            if d3.get("field_count_verified") != 17:
+                fail.append("CHECK 7c DB3 field_count_verified must be 17; found %r."
                             % d3.get("field_count_verified"))
+            fcs = d3.get("field_count_superseded") or {}
+            if fcs.get("was") != 15:
+                fail.append("CHECK 7c DB3 must PRESERVE the superseded 15-field count in "
+                            "`field_count_superseded`, not silently replace it.")
+            elif not all(k in fcs for k in ("was_true_when_written", "became_false_on")):
+                fail.append("CHECK 7c DB3's superseded field count must record BOTH when it was "
+                            "true and when it became false.")
+            elif fcs.get("preserved_not_rewritten") is not True:
+                fail.append("CHECK 7c DB3's superseded field count must be marked preserved, "
+                            "not rewritten.")
             names3 = [f.get("name") for f in f3]
             dup3 = sorted({n for n in names3 if names3.count(n) > 1})
             if dup3:
@@ -888,25 +924,109 @@ def main():
                             "framing.")
             if rl3.get("backfill_authorised") is not False:
                 fail.append("CHECK 7c DB3 must record backfill_authorised false.")
+            # added 2026-10-02: present-but-null is a CLAIM about row state and needs a gate of
+            # its own, or "we added the fields" could silently become "we filled them".
+            for fld in DB3_NOW_PRESENT:
+                cell = rl3.get(fld) or {}
+                if not cell:
+                    fail.append("CHECK 7c DB3 must record row-level state for %s." % fld)
+                    continue
+                if cell.get("non_null") != 0 or cell.get("of") != 217:
+                    fail.append("CHECK 7c DB3 %s must be recorded null on 0 of 217 rows; found "
+                                "%r. No backfill was authorised." % (fld, cell))
+                if "PRESENT BUT NULL" not in str(cell.get("state", "")).upper():
+                    fail.append("CHECK 7c DB3 %s must be recorded PRESENT BUT NULL, which is "
+                                "not the same fact as absent." % fld)
+                if cell.get("backfill_authorised") is not False:
+                    fail.append("CHECK 7c DB3 %s must record backfill_authorised false." % fld)
+            zp = rl3.get("zero_row_writes_proof") or {}
+            if zp.get("row_value_writes") != 0 or zp.get("schema_writes") != 2:
+                fail.append("CHECK 7c DB3 must record exactly 2 schema writes and 0 row-value "
+                            "writes for DB3-OD10-OD12-1; found %r." % zp)
+            if "identical" not in str(zp.get("method", "")):
+                fail.append("CHECK 7c DB3's zero-write proof must record the before/after "
+                            "method, not just the conclusion.")
 
             # temporal and tier fields: recorded STRUCTURALLY ABSENT, not merely omitted
             pm3 = d3.get("provenance_model") or {}
             absent3 = pm3.get("fields_absent") or {}
-            for a in DB3_ABSENT:
+            for a in DB3_STILL_ABSENT:
                 if a in by3:
                     fail.append("CHECK 7c DB3 must NOT record a %r field: it is structurally "
-                                "absent from the live schema." % a)
+                                "absent from the live schema. `Next Verification` in particular "
+                                "was NOT created - DB3 uses `Next Review`." % a)
+            # the positive half: both dates must now be recorded, as NULLABLE dates, and must be
+            # recorded PRESENT-BUT-NULL rather than populated. A gate that only banned fields
+            # could not catch a false claim that they had been backfilled.
+            for a in DB3_NOW_PRESENT:
+                fd = by3.get(a)
+                if not fd:
+                    fail.append("CHECK 7c DB3 must record a %r field: DB3-OD10-OD12-1 added it "
+                                "live on 2026-10-02." % a)
+                    continue
+                if fd.get("notion_type") != "date":
+                    fail.append("CHECK 7c DB3 %s must be recorded as a date; found %r."
+                                % (a, fd.get("notion_type")))
+                if fd.get("required") is not False:
+                    fail.append("CHECK 7c DB3 %s must be recorded NULLABLE (required false): "
+                                "the authorisation added it nullable and forbade any "
+                                "backfill." % a)
+                if "GOVERN" not in (fd.get("semantics") or "").upper():
+                    fail.append("CHECK 7c DB3 %s must be recorded as a GOVERNING temporal "
+                                "field - that is what OD10 Option D decided." % a)
+                if not re.search(r"(?i)null on all 217|present but null",
+                                 str(fd.get("semantics")) + str(fd.get("validation"))):
+                    fail.append("CHECK 7c DB3 %s must be recorded null on all 217 rows." % a)
+                if not re.search(r"(?i)fails? closed", str(fd.get("validation"))):
+                    fail.append("CHECK 7c DB3 %s must record that a null FAILS CLOSED." % a)
+            nr3 = by3.get("Next Review") or {}
+            if "Next Verification" not in (nr3.get("semantics") or ""):
+                fail.append("CHECK 7c DB3 Next Review must record that it is NOT "
+                            "`Next Verification` - the owner was explicit about the name.")
+            if not re.search(r"(?i)past a NON-NULL `Next Review` is STALE|non-null .{0,20}stale",
+                             str(nr3.get("validation"))):
+                fail.append("CHECK 7c DB3 Next Review must record the governed stale rule: a row "
+                            "past a NON-NULL Next Review is stale.")
             if not absent3:
                 fail.append("CHECK 7c DB3 must STATE which provenance fields are absent, not "
                             "merely omit them.")
-            for a in ("Source Tier", "Last Verified", "Source URL"):
+            # REWRITTEN 2026-10-02. This used to require "Last Verified" and a next-review
+            # key inside `fields_absent`; both are now PRESENT, so requiring them there would
+            # force a false record. The requirement MOVES rather than disappears: the two keys
+            # must now appear in `fields_formerly_absent_now_present` WITH their original wording
+            # preserved verbatim.
+            for a in ("Source Tier", "Source URL"):
                 if a not in absent3:
-                    fail.append("CHECK 7c DB3 must state that %s is absent." % a)
-            if not any("Next Review" in k for k in absent3):
-                fail.append("CHECK 7c DB3 must state that a next-review field is absent.")
+                    fail.append("CHECK 7c DB3 must state that %s is absent - the tier half of "
+                                "the limitation is NOT closed." % a)
+            if "Last Verified" in absent3 or any("Next Review" in k for k in absent3):
+                fail.append("CHECK 7c DB3 must NOT still list its date fields as absent: "
+                            "DB3-OD10-OD12-1 added both on 2026-10-02.")
             for k3, v3 in absent3.items():
                 if "ABSENT" not in str(v3).upper():
                     fail.append("CHECK 7c DB3 %s must be described as absent." % k3)
+            fmr = pm3.get("fields_formerly_absent_now_present") or {}
+            if not fmr:
+                fail.append("CHECK 7c DB3 must record `fields_formerly_absent_now_present`: the "
+                            "two dates were recorded STRUCTURALLY ABSENT until 2026-10-02 and "
+                            "that dated claim must be superseded, not erased.")
+            else:
+                verb = fmr.get("superseded_claims_verbatim") or {}
+                if len(verb) != 2:
+                    fail.append("CHECK 7c DB3 must preserve BOTH superseded absence claims "
+                                "verbatim; found %d." % len(verb))
+                if not any("ABSENT" in str(v).upper() for v in verb.values()):
+                    fail.append("CHECK 7c DB3's preserved absence claims must still read as "
+                                "absence claims - preserved means verbatim, not paraphrased.")
+                if fmr.get("preserved_not_rewritten") is not True:
+                    fail.append("CHECK 7c DB3's formerly-absent record must be marked "
+                                "preserved, not rewritten.")
+                for k3 in DB3_NOW_PRESENT:
+                    if "NULL" not in str(fmr.get(k3, "")).upper():
+                        fail.append("CHECK 7c DB3's %s must be recorded PRESENT BUT NULL." % k3)
+                if "different fact" not in str(fmr.get("why_this_distinction_matters", "")):
+                    fail.append("CHECK 7c DB3 must record WHY absent and present-but-null are "
+                                "different facts.")
 
             # Freshness: a declaration, with no defined threshold
             fr3 = by3.get("Freshness") or {}
@@ -919,6 +1039,57 @@ def main():
             if not re.search(r"(?i)never substitute", frsem):
                 fail.append("CHECK 7c DB3 Freshness must forbid substituting it for a "
                             "verification date.")
+            # added 2026-10-02: the OD10 Option D decisions must be recorded, not just implied
+            frd = (pm3.get("freshness_is_a_declaration_not_a_measurement") or {})
+            sd = frd.get("superseding_decision") or {}
+            if not sd:
+                fail.append("CHECK 7c DB3's Freshness record must carry the OD10 Option D "
+                            "superseding decision.")
+            else:
+                if sd.get("freshness_is_non_governing") is not True:
+                    fail.append("CHECK 7c DB3 Freshness must be recorded NON-GOVERNING - that "
+                                "is decision 2 of OD10 Option D.")
+                if "DISSOLVED" not in str(sd.get("no_threshold_is_defined_or_needed", "")).upper():
+                    fail.append("CHECK 7c DB3 must record that OD10 was DISSOLVED, not answered, "
+                                "and that no threshold is needed.")
+                if "notAvailableInQuerySql" not in str(sd.get("do_not_derive", "")):
+                    fail.append("CHECK 7c DB3 must record WHY Freshness is not derived - the "
+                                "DB5 `Total Score` formula precedent, not a bare prohibition.")
+                if "not being called" not in str(
+                        sd.get("historical_values_are_non_governing_not_false", "")):
+                    fail.append("CHECK 7c DB3 must record that the 217 historical `Fresh` values "
+                                "are NON-GOVERNING, not false.")
+            odr = pm3.get("od10_decision_record") or {}
+            if len(odr.get("decisions") or []) != 9:
+                fail.append("CHECK 7c DB3 must record all NINE OD10 Option D decisions; found "
+                            "%d." % len(odr.get("decisions") or []))
+            if "UNIMPLEMENTABLE" not in str((odr.get("options_rejected") or {}).get(
+                    "A - define a threshold", "")).upper():
+                fail.append("CHECK 7c DB3 must record that Option A was UNIMPLEMENTABLE - no "
+                            "date to measure from - not merely unattractive.")
+            if "EXCLUDED BY CONTRACT" not in str((odr.get("options_rejected") or {}).get(
+                    "C - retire `Freshness`", "")).upper():
+                fail.append("CHECK 7c DB3 must record that Option C was EXCLUDED BY CONTRACT: "
+                            "`freshness` is a REQUIRED property of the Intelligence Object.")
+            thr = odr.get("thresholds_examined_and_rejected_as_not_reusable") or {}
+            if "NOT REUSABLE" not in str(thr.get("verdict", "")).upper():
+                fail.append("CHECK 7c DB3 must record that the 30- and 90-day horizons were "
+                            "examined and are NOT REUSABLE.")
+            if "never run" not in str(odr.get("stale_rule_now_has_a_trigger", "")):
+                fail.append("CHECK 7c DB3 must record that the `Stale` rule was a consequence "
+                            "with no trigger, and that the M4 stale sweep has never run.")
+            cnc = odr.get("contract_non_compliances_this_addresses") or {}
+            if "SECTOR_ACTIVATION_CONTRACT.md" not in cnc:
+                fail.append("CHECK 7c DB3 must record the two GOVERNED CONTRACT "
+                            "non-compliances that motivated Option D.")
+            if "never the reason" not in str(cnc.get("why_this_matters", "")):
+                fail.append("CHECK 7c DB3 must record that S10 computability was a CONSEQUENCE "
+                            "and never the reason - defining a threshold to make S10 computable "
+                            "was expressly forbidden.")
+            if "DOES NOT MAKE THE FRESHNESS FLOOR COMPUTABLE TODAY" not in str(
+                    odr.get("what_this_does_NOT_do", "")).upper():
+                fail.append("CHECK 7c DB3 must state that Option D does NOT make the freshness "
+                            "floor computable today.")
 
             # the limitation must be named as expressiveness, not missing provenance
             lim3 = (pm3.get("the_actual_limitation") or "").upper()
@@ -935,9 +1106,56 @@ def main():
             if hc3.get("count") != 3 or hc3.get("in_target_set") != 0:
                 fail.append("CHECK 7c DB3 must record 3 High-confidence rows, none in the "
                             "Target set.")
-            if hc3.get("no_claim_is_made_about_them") is not True:
-                fail.append("CHECK 7c DB3 must record that NO claim is made about the three "
-                            "unaudited High-confidence rows.")
+            # REWRITTEN 2026-10-02, not loosened. This used to require
+            # no_claim_is_made_about_them is True. The bodies were then read under explicit owner
+            # authorisation and all three are blank, so the refusal would now be a FALSE record.
+            # The old flag must survive inside `superseded_claim`, and the replacement is
+            # STRICTER: three specific classifications are now required by name.
+            if hc3.get("no_claim_is_made_about_them") is not False:
+                fail.append("CHECK 7c DB3's three High-confidence rows were body-read under "
+                            "authorisation on 2026-10-02 and are now CLASSIFIED; the "
+                            "no-claim flag must be False.")
+            sc3 = hc3.get("superseded_claim") or {}
+            if sc3.get("prior_no_claim_flag") is not True:
+                fail.append("CHECK 7c DB3 must PRESERVE the earlier no-claim position in "
+                            "`superseded_claim` - it was correct while the bodies were unread.")
+            elif "NOT WRONG" not in str(sc3.get("verdict", "")).upper():
+                fail.append("CHECK 7c DB3's earlier no-claim position must be marked superseded "
+                            "but NOT WRONG.")
+            if hc3.get("all_three_bodies_blank") is not True or hc3.get("bodies_read") != 3:
+                fail.append("CHECK 7c DB3 must record that all THREE High-confidence bodies "
+                            "were read and all three are BLANK.")
+            cls = hc3.get("classifications") or {}
+            want = {"HIGH_OVERSTATED": 1, "HIGH_UNRESOLVED": 2}
+            got = {}
+            for k3, v3 in cls.items():
+                if isinstance(v3, dict) and v3.get("verdict"):
+                    got[v3["verdict"]] = got.get(v3["verdict"], 0) + 1
+            if got != want:
+                fail.append("CHECK 7c DB3 must classify the three High rows as exactly one "
+                            "HIGH_OVERSTATED and two HIGH_UNRESOLVED; found %r." % got)
+            h1 = next((v3 for k3, v3 in cls.items()
+                       if isinstance(v3, dict) and v3.get("verdict") == "HIGH_OVERSTATED"), {})
+            if h1.get("correction_required") is not True:
+                fail.append("CHECK 7c DB3's HIGH_OVERSTATED row must be recorded as REQUIRING a "
+                            "correction.")
+            if "NOT AUTHORISED" not in str(h1.get("correction_is_a_separate_decision", "")).upper():
+                fail.append("CHECK 7c DB3's HIGH_OVERSTATED correction must be recorded as a "
+                            "SEPARATE, unauthorised decision - DB3-OD10-OD12-1 did not make it.")
+            if "Draft 15" not in str(h1.get("why", "")):
+                fail.append("CHECK 7c DB3's HIGH_OVERSTATED row must record the actual basis: "
+                            "its Evidence cites Arika's own internal draft.")
+            for k3, v3 in cls.items():
+                if isinstance(v3, dict) and v3.get("verdict") == "HIGH_UNRESOLVED":
+                    if v3.get("correction_required") is not False:
+                        fail.append("CHECK 7c DB3's HIGH_UNRESOLVED rows must NOT be recorded as "
+                                    "requiring a correction - they need RE-SOURCING.")
+                    if "RE-SOURCING" not in str(v3.get("needs", "")).upper():
+                        fail.append("CHECK 7c DB3's HIGH_UNRESOLVED rows must record that they "
+                                    "need re-sourcing, not re-rating.")
+            if "NO Confidence value was written" not in str(
+                    cls.get("_confidence_values_unchanged", "")):
+                fail.append("CHECK 7c DB3 must record that NO Confidence value was changed.")
             nt3 = rl3.get("non_target_rows") or {}
             if nt3.get("count") != 211:
                 fail.append("CHECK 7c DB3 must record 211 non-Target rows.")
@@ -963,26 +1181,105 @@ def main():
                 fail.append("CHECK 7c OD6 must record the zero-of-217 fact that disproved it.")
         if len(od6b.get("rescoped_to") or []) != 4:
             fail.append("CHECK 7c OD6 must be re-scoped to exactly its four specific items.")
-        for k3 in ("OD7", "OD8", "OD9", "OD10", "OD11", "OD12"):
+        # OD10 LEFT THIS LOOP on 2026-10-02 - it is the only one of the twelve that closed.
+        # It is not simply dropped: it gets its own stricter block below, which requires the
+        # dissolution verdict AND the preserved original question. OD13 joins the loop.
+        for k3 in ("OD7", "OD8", "OD9", "OD11", "OD12", "OD13"):
             if k3 not in od:
                 fail.append("CHECK 7c open item %s is not recorded." % k3)
             elif "OPEN" not in (od[k3].get("status") or ""):
                 fail.append("CHECK 7c open item %s must remain OPEN." % k3)
 
-        # intelligence-object mapping must be LEFT ALONE
+        od10 = od.get("OD10") or {}
+        if "CLOSED BY DISSOLUTION" not in (od10.get("status") or ""):
+            fail.append("CHECK 7c OD10 must be recorded CLOSED BY DISSOLUTION by "
+                        "DB3-OD10-OD12-1 - not 'resolved', and not still open.")
+        sq10 = od10.get("superseded_question") or {}
+        if not sq10.get("verbatim"):
+            fail.append("CHECK 7c OD10 must PRESERVE its original question verbatim.")
+        elif "threshold" not in sq10["verbatim"].lower():
+            fail.append("CHECK 7c OD10's preserved question must be the original "
+                        "threshold-definition question, verbatim.")
+        if "DISSOLVED, NOT ANSWERED" not in str(sq10.get("verdict", "")).upper():
+            fail.append("CHECK 7c OD10 must record that it was DISSOLVED, NOT ANSWERED - the "
+                        "question presupposed a threshold that turned out to be "
+                        "unimplementable.")
+        if sq10.get("preserved_not_rewritten") is not True:
+            fail.append("CHECK 7c OD10's original question must be marked preserved, not "
+                        "rewritten.")
+        if "not authorised" not in str(od10.get("what_remains_open", "")).lower() and \
+                "NOT authorised" not in str(od10.get("what_remains_open", "")):
+            fail.append("CHECK 7c OD10 must record that both columns are null and backfill is "
+                        "NOT authorised - closing OD10 did not make anything computable.")
+
+        od12 = od.get("OD12") or {}
+        if "HIGH_OVERSTATED" not in (od12.get("status") or ""):
+            fail.append("CHECK 7c OD12 must record the H1 HIGH_OVERSTATED classification in "
+                        "its status.")
+        if "SEPARATE DECISION" not in (od12.get("status") or "").upper():
+            fail.append("CHECK 7c OD12 must record that H1's correction is a SEPARATE decision, "
+                        "not authorised by DB3-OD10-OD12-1.")
+        if not (od12.get("superseded_question") or {}).get("preserved_not_rewritten"):
+            fail.append("CHECK 7c OD12 must preserve its original question.")
+
+        od13 = od.get("OD13") or {}
+        if "UNMEASURED" not in (od13.get("status") or "").upper():
+            fail.append("CHECK 7c OD13 must record the estate-wide Sub-Sector null count as "
+                        "UNMEASURED.")
+        if od13.get("bounded_measurement_requires_its_own_authorisation") is not True:
+            fail.append("CHECK 7c OD13 must record that a bounded measurement needs its own "
+                        "authorisation.")
+        if "gap" not in str(od13.get("disclosed_gap_in_the_prior_audit", "")).lower():
+            fail.append("CHECK 7c OD13 must disclose that DB3-PROV-AUDIT-1 did not check "
+                        "Sub-Sector population - the gap is in my own prior audit's scope.")
+
+        # intelligence-object: the Q2 mapping must still be LEFT ALONE - it was already
+        # correct and every authorisation since has said so. The Q3 mapping is a different
+        # matter: it read `Freshness` ALONE, which could not satisfy this block's own `required`
+        # list of [last_verified, freshness]. That was one of the two governed non-compliances
+        # that motivated Option D, so after 2026-10-02 it must name the two dates.
         if _io_raw:
             _iop = (json.loads(_io_raw).get("properties") or {})
             m3 = ((_iop.get("source") or {}).get("notion_field") or {}).get("DB3")
             if m3 != "Evidence + Source":
                 fail.append("CHECK 7c DB3's Q2 mapping must stay 'Evidence + Source'; found %r."
                             % m3)
+            _wo = (_iop.get("when_observed") or {})
+            w3 = (_wo.get("notion_field") or {}).get("DB3")
+            if w3 != "Last Verified + Next Review":
+                fail.append("CHECK 7c DB3's Q3 mapping must be 'Last Verified + Next Review' "
+                            "now that both exist; found %r." % w3)
+            if sorted(_wo.get("required") or []) != ["freshness", "last_verified"]:
+                fail.append("CHECK 7c when_observed.required must still be BOTH last_verified "
+                            "and freshness - DB3-OD10-OD12-1 did not relax the canonical "
+                            "object, it made DB3 able to satisfy it.")
+            if "NON-GOVERNING" not in (_wo.get("notion_field_notes") or ""):
+                fail.append("CHECK 7c the when_observed notes must record that DB3's "
+                            "`Freshness` is NON-GOVERNING and is not the Q3 answer.")
 
         # S10 must name all four contributing elements and state DB3's behaviour
         for needle, what in [
                 ("| **DB 3** findings |", "DB 3 as the fourth contributing element"),
-                ("FIELD DOES NOT EXIST", "that DB 3's date fields do not exist"),
-                ("| **FIELD DOES NOT EXIST** | **FIELD DOES NOT EXIST** |",
-                 "that BOTH of DB 3's date fields are marked non-existent - one is not enough"),
+                # REWRITTEN 2026-10-02. These two needles were "FIELD DOES NOT EXIST", once bare
+                # and once as the paired table cells. Both fields now EXIST and are null, so the
+                # old needles would force S10 to state something false. The replacements are the
+                # same shape - paired cells, so one is not enough - with the new truth.
+                ("| **PRESENT, null on all 217** | **PRESENT, null on all 217** |",
+                 "that BOTH of DB 3's date fields are present-but-null - one is not enough"),
+                ("now *emptily*, no longer *structurally*",
+                 "that DB 3's freshness floor now fails EMPTILY rather than STRUCTURALLY"),
+                ("Three states, not two",
+                 "the three-state distinction: absent, present-but-null, present-and-populated"),
+                ("present and populated", "the third state by name"),
+                ("`Freshness` is NON-GOVERNING and MUST NOT be read as a temporal signal",
+                 "that DB 3's Freshness is non-governing as of OD10 Option D"),
+                ("A row past a **non-null** `Next Review` is **stale**",
+                 "the governed stale rule that `Next Review` finally gives a trigger"),
+                ("No backfill is authorised, so nothing in DB 3 can supply a freshness floor "
+                 "today",
+                 "that adding the fields did NOT make the floor computable"),
+                ("HIGH_OVERSTATED", "H1's classification"),
+                ("HIGH_UNRESOLVED", "H2 and H3's classification"),
                 ("There are **four** contributing elements",
                  "the explicit four-element count (the looser phrase also occurs in the prose "
                  "describing the omission, so it cannot be the test)"),
@@ -993,8 +1290,14 @@ def main():
                 ("may substitute", "the ban on substituting a date or a Freshness label"),
                 ("Restrictions recorded only in page bodies can be lost",
                  "that body-only restrictions can be lost"),
-                ("make no claim about them",
-                 "that no claim is made about the High-confidence rows")]:
+                # REWRITTEN 2026-10-02: the bodies were read under authorisation and all
+                # three are blank, so "make no claim about them" is no longer the honest
+                # statement. What must now be stated is that the earlier refusal is SUPERSEDED
+                # rather than quietly dropped.
+                ("*Superseded: this bullet previously said to make no claim about them",
+                 "that the earlier no-claim position is superseded, not silently deleted"),
+                ("all three bodies are blank",
+                 "that all three High-confidence bodies were read and are blank")]:
             if needle not in s10b:
                 fail.append("CHECK 7c S10 SKILL.md Step 4 does not state %s." % what)
 
@@ -1015,8 +1318,28 @@ def main():
             if "PROCESS LABELS" not in seg3:
                 fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must state that all four "
                             "Source options are process labels, not authorities.")
+            # 15 -> 17 on 2026-10-02. The superseded sentence must remain quoted in the
+            # doc, so the old phrase is still required - as PRESERVED HISTORY, not as the
+            # current count.
+            if "17 properties, verified live" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must state 17 properties.")
             if "15 properties, verified live" not in seg3:
-                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must state 15 properties.")
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must still quote the "
+                            "superseded 15-property sentence - dated history is superseded, "
+                            "not deleted.")
+            if "SUPERSEDED, NOT REWRITTEN" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must mark the property-count "
+                            "change as superseded rather than rewritten.")
+            if "NON-GOVERNING" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must record `Freshness` as "
+                            "NON-GOVERNING as of OD10 Option D.")
+            if "HALF CLOSED" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must record the "
+                            "cannot-hold limitation as HALF CLOSED - tier still absent, "
+                            "temporal now expressible.")
+            if "not reusable" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must record that the 30- and "
+                            "90-day horizons are not reusable.")
             if "STRUCTURALLY ABSENT" not in seg3:
                 fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must record the tier and "
                             "temporal fields as structurally absent.")
@@ -1031,8 +1354,9 @@ def main():
 
         d3n = next((r for r in rows7b if r.get("db_id") == "DB3"), {}) or {}
         rl3n = d3n.get("row_level_provenance") or {}
-        notes.append("DB3 provenance: %s fields recorded | own 4-field model, NOT the 7-field "
-                     "shape | Evidence required %s/%s | 0 rows with Confidence and no Evidence | "
+        notes.append("DB3 provenance: %s fields recorded (was 15, +2 dates 2026-10-02) | own "
+                     "4-field model + 2 governing dates, NOT the 7-field shape | Evidence "
+                     "required %s/%s | 0 rows with Confidence and no Evidence | "
                      "tier + both dates STRUCTURALLY ABSENT | Freshness declared, no threshold | "
                      "OD6 re-scoped, OD7-OD12 open | 211 bodies unread, 3 High rows "
                      "uncharacterised | drift undetectable offline"

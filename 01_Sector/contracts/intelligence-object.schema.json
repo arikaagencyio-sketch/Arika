@@ -121,13 +121,13 @@
         }
       },
       "notion_field": {
-        "DB3": "Freshness",
+        "DB3": "Last Verified + Next Review",
         "DB6": "Last Verified + Next Review",
         "DB7": "Last Verified + Next Verification",
         "DB9": "Last Verified + Next Review",
         "DB10": "Last Verified + Next Review"
       },
-      "notion_field_notes": "DB6 and DB10 both use `Next Review`, the DB1/DB2/DB9/DB16 convention, not DB7's `Next Verification`. Verified live 2026-10-02. Every DB6 and DB10 `Last Verified` cell is currently NULL, so neither can supply a freshness floor today."
+      "notion_field_notes": "DB3, DB6, DB9 and DB10 all use `Next Review`, the DB1/DB2/DB16 convention, not DB7's `Next Verification`. Verified live 2026-10-02. DB3 gained both dates on 2026-10-02 (DB3-OD10-OD12-1, OD10 Option D); before that it mapped `Freshness` ALONE and therefore could not satisfy this block's `required` list, which names last_verified AND freshness. DB3's `Freshness` is now NON-GOVERNING and is retained for display only - it is NOT the Q3 answer. Every DB3, DB6 and DB10 `Last Verified` cell is currently NULL, so none of them can supply a freshness floor today."
     },
     "reliability": {
       "type": "object",
