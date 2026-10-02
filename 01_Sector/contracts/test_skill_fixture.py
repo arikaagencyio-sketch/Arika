@@ -69,7 +69,18 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # cleared (OD1). Naming one cause of three would have let a reader think fixing DB 9 clears the
 # floor. Stricter and more honest, not a behaviour change.
 # Was 7acd495e29fbd73c9aaf32db75b838402349d55388123a2de0903ebd9942d581 (2026-10-02, post-DB9-PROV-1).
-S10_ORDINARY_SHA = "f4ac696f182e3762621bcd1b01bf4daf768eb6f48550209feb2654c51a23e3c9"
+# Re-baselined 2026-10-02 by DB6-DB10-PROV-1 Step 2 (owner-approved, and the approval names this
+# re-baseline explicitly). Step 2 added `Evidence` live to DB 6 and DB 10, so Step 4's bullet 2 had
+# to stop saying the field is absent. It now states: Evidence exists STRUCTURALLY in DB 6, DB 9 and
+# DB 10; every one of its row values is NULL; a null Evidence STILL forces an UNRESOLVED provenance
+# floor; and no confidence or freshness value may be inferred from the fact that a field exists.
+# A column is a place to put evidence, not evidence. The computed floors, the Low < Medium < High
+# ordering, the null-is-weaker-than-Low rule, the assembly-date ban and the three-element table are
+# all UNCHANGED. Rule V3 is still NOT extended to DB 6 and its four Confidence values are still not
+# cleared (OD1 open). Closing the schema gap closed nothing about the rows - which is exactly why
+# this wording change is a tightening and not a relaxation.
+# Was f4ac696f182e3762621bcd1b01bf4daf768eb6f48550209feb2654c51a23e3c9 (2026-10-02, post-Step 1).
+S10_ORDINARY_SHA = "e741c19e6d580dc4f8c91693ac2835047ee67de555a3617f275746201ab348b8"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)

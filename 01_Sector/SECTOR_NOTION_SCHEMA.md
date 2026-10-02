@@ -250,7 +250,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 ### DB 6 — Sector Linguistics
 **Primary entity:** one sub-sector's language map. **AEIT_06:** `Knowledge Object`. **Backing:** Drafts 9/13/14 (the crown-jewel IP, `SECTOR_OS.md` §14). Feeds Content (04) + Branding (12).
 
-**18 properties, verified live 2026-10-02** by `DB6-DB10-PROV-AUDIT-1`. *(This table previously listed 11 rows, omitted both S10 relations, merged `Confidence / Source` into one row, and listed a `Decision-language patterns` field that does not exist live. The five provenance properties below were added live **2026-09-13 under owner item 31e** (divergence `F14`) and were never recorded here.)*
+**19 properties, verified live 2026-10-02** by `DB6-DB10-PROV-AUDIT-1` and `DB6-DB10-PROV-1` Step 2. *(This table previously listed 11 rows, omitted both S10 relations, merged `Confidence / Source` into one row, and listed a `Decision-language patterns` field that does not exist live. Five of the provenance properties below were added live **2026-09-13 under owner item 31e** (divergence `F14`) and were never recorded here; **`Evidence` was added live 2026-10-02 by Step 2** and is the only field that task created.)*
 
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
@@ -271,12 +271,13 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | **Source URL** | **URL** | **GOV** | cited or blank. **Single** URL property — see **OD2** |
 | **Last Verified** | **Date** | **GOV** | the date a real verification happened. **Never** a write date, page edit time or today's date |
 | **Next Review** | **Date** | **GOV** | required when `Last Verified` is set, and later. **The live name is `Next Review`**, the DB 1 / DB 2 / DB 9 / DB 16 convention — not DB 7 / DB 14's `Next Verification` |
+| **Evidence** | **Text** | **GOV** | the substance *within* the Source. **The only field `DB6-DB10-PROV-1` Step 2 added live (2026-10-02)** — nullable, **null on all 4 rows** |
 
 > ❌ **`Decision-language patterns` does NOT exist in the live schema.** It was listed here from Draft 9's *"patterns > words"* principle and was never created. Recorded as absent by `DB6-DB10-PROV-AUDIT-1`; the principle still lives in Drafts 9/13/14.
 >
-> ⚠️ **`Evidence` is absent from DB 6.** It is the only provenance property DB 9 has that DB 6 does not. Adding it is open decision **OD3** — **not** authorised by the Step 1 synchronisation.
+> ✅ **`Evidence` now EXISTS in DB 6** — added live 2026-10-02 by `DB6-DB10-PROV-1` Step 2, one additive write, verified by a post-write read. It was the only provenance property DB 9 had that DB 6 lacked, so **the schema gap is closed and open decision OD3 is CLOSED.** All seven provenance properties are present. **Its row values are NULL on every row, and no backfill is authorised** — a column existing is not evidence, and **no confidence or freshness value may be inferred from field existence.**
 >
-> 🟡 **Row-level provenance is PARTIAL, and partly unsupported.** 4 of 24 provenance cells are populated — `Confidence` = Medium on every row, everything else null. The three S02-written rows carry a structured `## Provenance` + `## Sources` page body with per-source tier labels, a verification date and a next-review date; the fourth names four sources without locators or tiers. **Body assertions were not promoted into governed properties**, and **no row-value backfill is authorised.** The schema snapshot above is one bounded live read; **future live drift is detected by no offline gate and needs another authorised audit.**
+> 🟡 **Row-level provenance is PARTIAL, and partly unsupported.** **4 of 28** provenance cells are populated — `Confidence` = Medium on every row, everything else (now including `Evidence`) null. **Step 2 changed no row value**, and all four `Confidence` values were verified unchanged after the write. The three S02-written rows carry a structured `## Provenance` + `## Sources` page body with per-source tier labels, a verification date and a next-review date; the fourth names four sources without locators or tiers. **Body assertions were not promoted into governed properties**, and **no row-value backfill is authorised.** The schema snapshot above is one bounded live read; **future live drift is detected by no offline gate and needs another authorised audit.**
 
 ### DB 7 — Sector Signals (Commercial Intelligence Calendar) — *evolved 2026-08-15 (SCIC)*
 **Primary entity:** one **market signal** — an event, deadline, demand shift, competitor move, regulation, aviation/tech change, etc. — carrying its **commercial interpretation over time**. **AEIT_06:** conforms to the canonical **`Signal / Event`** entity (`type, entity_ref, timestamp → triggers refresh/action`). **Backing:** Draft 8 + xlsx Sheet 10 + web-verified sources. **Live DB:** `collection://c14fedb3-6048-4bc5-8a40-6558cc985f57` — **evolved in place** from "Sector Calendar (Market Events)"; the 24 event/regulatory entries become the first signals.
@@ -403,7 +404,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 ### DB 10 — Decision-Maker Registry
 **Primary entity:** one buyer title profile per sub-sector. **Backing:** xlsx Sheet 09. Sector-level titles/triggers — **references** CRM `Person`, does not replace it (AEIT_06 "roles not types").
 
-**15 properties, verified live 2026-10-02** by `DB6-DB10-PROV-AUDIT-1`. *(This table previously listed 6 rows and omitted `Platform Overlays` plus all six provenance properties. The six were added live **2026-09-13 under owner item 31e** (divergence `F14`) and were never recorded here.)*
+**16 properties, verified live 2026-10-02** by `DB6-DB10-PROV-AUDIT-1` and `DB6-DB10-PROV-1` Step 2. *(This table previously listed 6 rows and omitted `Platform Overlays` plus all six provenance properties. Those six were added live **2026-09-13 under owner item 31e** (divergence `F14`) and were never recorded here; **`Evidence` was added live 2026-10-02 by Step 2** and is the only field that task created.)*
 
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
@@ -420,10 +421,11 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 | **Source URL** | **URL** | **GOV** | cited or blank. **Single** URL property — see **OD2** |
 | **Last Verified** | **Date** | **GOV** | the date a real verification happened. **Never** a write date, page edit time or today's date |
 | **Next Review** | **Date** | **GOV** | required when `Last Verified` is set, and later. **The live name is `Next Review`**, not DB 7 / DB 14's `Next Verification` |
+| **Evidence** | **Text** | **GOV** | the substance *within* the Source. **The only field `DB6-DB10-PROV-1` Step 2 added live (2026-10-02)** — nullable, **null on all 57 rows** |
 
-> ⚠️ **`Evidence` is absent from DB 10**, as from DB 6. Adding it is open decision **OD3** — **not** authorised by the Step 1 synchronisation.
+> ✅ **`Evidence` now EXISTS in DB 10**, as in DB 6 — added live 2026-10-02 by `DB6-DB10-PROV-1` Step 2, one additive write, verified by a post-write read. **The schema gap is closed and open decision OD3 is CLOSED.** All seven provenance properties are present. **A column existing is not evidence:** no confidence or freshness value may be inferred from field existence, and DB 10's row-level provenance is still entirely empty.
 >
-> 🔴 **Every provenance value on all 57 rows is NULL** — 342 cells, 0 populated — and **no backfill is authorised.** **No logged skill run has ever written DB 10:** the one S02 run recorded it as `NO_OP` in its own `decision_reason`, so **S02's `evidence_refs` must not be attached to any DB 10 row.** Of the four rows audited at body level (those the repository names for the Accommodation sub-sector), one names a source — two bare vendor names, no locator, no tier — and all four state a verification date. **None asserts a confidence value.** Body provenance here is weaker than DB 6's and weaker than DB 9's.
+> 🔴 **Every provenance value on all 57 rows is NULL** — **399 cells, 0 populated**, `Evidence` included — and **no backfill is authorised.** **Step 2 changed no row value.** **No logged skill run has ever written DB 10:** the one S02 run recorded it as `NO_OP` in its own `decision_reason`, so **S02's `evidence_refs` must not be attached to any DB 10 row.** Of the four rows audited at body level (those the repository names for the Accommodation sub-sector), one names a source — two bare vendor names, no locator, no tier — and all four state a verification date. **None asserts a confidence value.** Body provenance here is weaker than DB 6's and weaker than DB 9's.
 >
 > ⚪ **53 of the 57 rows were not body-read** (the SaaS branch). Their property values are verified empty by one aggregate query; their page bodies are **unexamined**, so their provenance is **UNRESOLVED, not verified-absent**, and is deliberately **not characterised** here. Whether they need a separate bounded audit is open decision **OD5**.
 
