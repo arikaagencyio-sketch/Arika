@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "artifact": "Sector delivery authorisations (SECTOR-DELIVERY-P10)",
+    "decision_home": "01_Sector/SECTOR_DELIVERY_P10_PROPOSAL.md; owner decisions recorded in 01_Sector/SECTOR_OS.md section 8",
+    "created": "2026-10-02",
+    "rule": "offer_inbox_receiver.py refuses unless a row here names the exact authorization id AND its status is `approved` AND its fixture_id, delivery_id, packet_path and packet_sha256 all match the packet reference exactly. A `draft` row admits nothing. A `spent` row admits nothing. Entries are never deleted: a spent one stays so its acknowledgement remains explained.",
+    "one_attempt": "A row authorises ONE delivery. The receiver marks it `spent` once an acknowledgement exists. There are no retries: a refused or failed attempt stays failed and a further attempt needs a NEW owner decision and a NEW row.",
+    "enforcement": "PREVENTIVE for this mechanism, unlike the skill registries. The receiver reads this file itself and checks every condition BEFORE creating a directory, opening an acknowledgement, changing registry state, running receiver logic or recording a delivered outcome. It deliberately does NOT consult the runtime approval flag, which is reported but never enforced.",
+    "scope": "The Sector (01) -> Offer (02) packet-reference route only, to the offline fake Offer-side receiver. No event is published, no event bus is used, the runtime is never booted, and no external destination is reachable."
+  },
+  "_mechanism_record": {
+    "id": "SECTOR-DELIVERY-P10-MECHANISM",
+    "status": "implemented",
+    "approved": "2026-10-02, owner approval in writing: implement the smallest Sector delivery mechanism per the proposal, adopting decisions D1-D6. MECHANISM AND OFFLINE TESTS ONLY.",
+    "route": "Sector (01) -> Offer (02)",
+    "transport": "packet reference passed directly to an offline receiver",
+    "proves": "A transport implemented, B receiver invoked, C acknowledgement recorded",
+    "keeps_false": "D external destination changed",
+    "files": [
+      "01_Sector/delivery/offer_inbox_receiver.py",
+      "01_Sector/delivery/delivery-authorisations.json",
+      "01_Sector/delivery/test_offer_inbox_receiver.py"
+    ],
+    "does_not_authorise": [
+      "any delivery attempt",
+      "packet assembly",
+      "S10 execution",
+      "a Sector skill fixture authorisation",
+      "an acknowledgement in the real SYNCO-01 or SYNCO-02 sandbox",
+      "publishing any event or using the event bus",
+      "booting the runtime, the scheduler or the webhook server",
+      "any agent, model call, connector, CRM, Notion, registry or pricing write"
+    ],
+    "unchanged_by_this_mechanism": [
+      "every file under arika-runtime/src - executor.ts still contains no `publish(` and no `event-bus`, so the estate event gate's check 4 passes unaltered",
+      "01_Sector/contracts/event-catalog.json",
+      "00_Agency_Governance/enterprise_architecture/estate-event-register.json and estate_event_gate.py",
+      "01_Sector/contracts/skill-fixture-authorisations.json and both Sector fixture logs",
+      "the S10 skill, the Full Push Packet and every PG gate",
+      "fixture emits suppression, the runtime publication prohibition, PG1, PG2, PG5, RD6 and the D20 evidence boundaries"
+    ]
+  },
+  "delivery_authorisations": [
+    {
+      "id": "TEMPLATE-DO-NOT-APPROVE",
+      "status": "draft",
+      "_warning": "TEMPLATE ONLY. This row CANNOT pass receiver validation and is not meant to: its status is `draft`, which the receiver refuses with AUTHORISATION_NOT_APPROVED before touching anything, and its paths are placeholders that resolve nowhere. It exists to show the required shape. NEVER edit this row to `approved` - add a NEW row by its own owner decision.",
+      "destination": "Offer (02)",
+      "fixture_id": "<fixture id - deliberately NOT naming any real fixture, so a scan for an authorised fixture row cannot match this template>",
+      "delivery_id": "<one id per delivery attempt, used as the acknowledgement filename>",
+      "packet_path": "<absolute path to the packet, which must resolve INSIDE sandbox_root>",
+      "packet_sha256": "<sha256 of the packet file, pinned at authorisation time>",
+      "sandbox_root": "<absolute path to the ONLY directory an acknowledgement may be written to; must be outside every git working tree, outside OneDrive, and must not name a runtime memory stream or a repository fixture log>",
+      "max_deliveries": 1,
+      "_field_notes": {
+        "status": "draft | approved | spent. Only `approved` admits a delivery.",
+        "sandbox_root": "The receiver independently re-validates this: absolute, resolves to itself, no symlink or junction on its chain, not inside a git working tree, no `onedrive` component, and not a production or runtime-log location. A failure here refuses before any side effect.",
+        "packet_path": "Re-validated to resolve INSIDE sandbox_root, with no `..` traversal and no link escape.",
+        "packet_sha256": "Re-computed from the file at delivery time. A changed packet is refused with PACKET_HASH_MISMATCH."
+      }
+    }
+  ],
+  "_no_approved_delivery": "DELIBERATE AND LOAD-BEARING: there is no `approved` delivery row in this file, and no SYNCO-02 row of any status. The mechanism is implemented and tested; no delivery is authorised. Adding an approved row is a separate owner decision."
+}
