@@ -1,13 +1,131 @@
 # Sector Delivery — `SECTOR-DELIVERY-P10` Assessment and Proposal
 
-> ## 🔴 PROPOSAL · NOT IMPLEMENTED · NO EVENT PUBLISHED · NO RECEIVER INVOKED · NO EXTERNAL WRITE · NO ROUTE APPROVED
+> ## ✅ IMPLEMENTED AND VERIFIED 2026-10-02 — see §0 before reading further
 >
-> Read-only architecture assessment. No runtime code, event catalog, agent, skill, gate, subscriber,
-> fixture or authorization registry was modified. No bus was instantiated, no event published, no
-> receiver invoked and no delivery attempted or tested.
+> | | |
+> |---|---|
+> | **P10 internal acknowledgement mechanism** | **CLOSED / VERIFIED** |
+> | **P10 real-packet delivery to a real destination** | **OPEN** |
+> | **Event-route delivery for Sales (05), Marketing (03), Operations (08)** | **UNCHANGED** |
+> | **S10 packet assembly** | **BLOCKED by P4, P5, P7 and P8** |
+>
+> **"P10 closed" on its own is wrong.** Only the internal acknowledgement mechanism is closed.
+
+> ## 📜 HISTORICAL STATUS — NOT LIVE
+>
+> *The banner below was accurate when this document was written, on 2026-10-02 before
+> implementation. It is retained as history and no longer describes the current state: the mechanism
+> was subsequently implemented, amended and exercised once. Read §0 for what is true now.*
+>
+> > 🔴 PROPOSAL · NOT IMPLEMENTED · NO EVENT PUBLISHED · NO RECEIVER INVOKED · NO EXTERNAL WRITE ·
+> > NO ROUTE APPROVED
+> >
+> > Read-only architecture assessment. No runtime code, event catalog, agent, skill, gate,
+> > subscriber, fixture or authorization registry was modified. No bus was instantiated, no event
+> > published, no receiver invoked and no delivery attempted or tested.
 
 **Raised by:** `SECTOR-PK2` prerequisite **P10** — no Sector destination has been observed actually
 receiving a governed handoff.
+
+---
+
+## 0. Completion record — what was implemented, amended and verified
+
+### 0.1 Status, stated with its qualification
+
+| Claim | Status |
+|---|---|
+| **P10 internal acknowledgement mechanism** | **CLOSED / VERIFIED** |
+| **P10 real-packet delivery to a real destination** | **OPEN** |
+| **Event-route delivery for Sales (05), Marketing (03), Operations (08)** | **UNCHANGED** |
+| **S10 packet assembly** | **BLOCKED by P4, P5, P7 and P8** |
+
+### 0.2 Implemented — the mechanism
+
+The internal **Sector (01) → Offer (02) packet-reference** mechanism was implemented as §4
+recommended: a packet reference handed **directly** to an offline receiver, with **no event, no event
+bus and no runtime boot**. Three new files under `01_Sector/delivery/` — the receiver, a
+one-attempt delivery-authorisation registry, and its focused tests. **No file under
+`arika-runtime/src/` was touched**, so `executor.ts` still contains neither `publish(` nor
+`event-bus` and the estate event gate's check 4 passes unaltered.
+
+### 0.3 Amended — read root separated from write root
+
+A first attempt was **not** made, because a read-only dry run of the receiver's pure path predicates
+showed the approved row could not succeed: the receiver required the packet to sit inside
+`sandbox_root`, which bounded both the read and the write, while the approved row named **sibling**
+directories. That was an over-restriction in the implementation, not a gap in the authorisation —
+the receiver contract required only that the *acknowledgement destination* be inside the authorised
+sandbox.
+
+The owner approved an additive amendment: an optional **`packet_root`** separates the authorised
+read root from the authorised write root. Absent, behaviour is unchanged. Present, both roots pass
+every safe-root check independently, and the two must be the named sibling directories
+(`04_fixture_inputs`, `05_outputs`) of one authorised fixture root whose directory **name** is the
+authorisation's fixture id — the normalization rule established there, which is what refuses a
+cross-fixture read or write even when both paths are independently safe.
+
+### 0.4 Verified — the one delivery
+
+| Fact | Value |
+|---|---|
+| Authorization id | `SECTOR-DELIVERY-P10-D1` |
+| Authorization status | **`spent`** (was `approved`), transitioned by the receiver's success path |
+| Delivery id | `SYNCO-02-D1` |
+| Packet sha256 | `09bfd65f7c00c1798bf47b3494be7c0f8b5588550ff0cf2550530a9e3ded6ee7` |
+| Acknowledgement sha256 | `a41eab8da1691e58aa570cb2c1c166ed9c5668e3c746a0d0f82c1b11900b310f` |
+| Receiver invocations | **exactly 1** |
+| Durable acknowledgements | **exactly 1** |
+| Outcome | `ACKNOWLEDGED` |
+
+**Exactly one receiver invocation occurred and exactly one durable acknowledgement was created.**
+**One `TEST_FIXTURE` control reference carrying an EMPTY payload** was delivered to the **offline
+fake Offer-side receiver**. The packet and the acknowledgement live in the **private SYNCO-02
+sandbox**, outside this repository; no absolute path to it is recorded here.
+
+**Acknowledgement and authorization state agree:** the row and the acknowledgement carry the same
+packet hash, the row's `spent_by_delivery_id` is the acknowledged delivery id, and its `spent_at`
+equals the acknowledgement's `received_at`. The hash the receiver returned equals the file on disk,
+so the write completed rather than merely starting.
+
+**Idempotency and concurrency are covered by the offline tests, not by a second invocation.** No
+second invocation was made — including one to demonstrate duplicate refusal. The suite proves a
+repeat attempt is refused `ACKNOWLEDGEMENT_EXISTS` leaving the first acknowledgement byte-identical,
+and that eight concurrent invocations at one delivery id produce exactly one acknowledgement with
+exactly one winner, in both the single-root and separated-root configurations.
+
+### 0.5 What did NOT happen
+
+**No event was published. No event bus was used. No runtime, scheduler or webhook server was
+started. No S10 or AEIT_09 packet was assembled. No external destination changed. No production
+handoff occurred. No Lead, prospect, opportunity or pipeline entry was created. PG1, PG2 and PG5 did
+not move.**
+
+### 0.6 What this proves, and what it does not
+
+**Proves — A, B and C of §4's ladder, with D false.** Transport implemented; a receiver invoked; and
+**a durable, idempotent acknowledgement recorded — the first time anything in this estate has been
+observably *received*.**
+
+**Does not prove** anything about content: the acknowledged packet carried an **empty payload**, so
+this is evidence about the transport mechanism only. No external destination received anything and
+none is reachable by that receiver. The event routes are untouched — nothing still publishes, and
+`DEMAND_SHIFT` remains `DESIGNED` with zero subscribers, so **Sales (05), Marketing (03) and
+Operations (08) are exactly as `SECTOR-PK2` found them.** PK2's **P4, P5, P7 and P8** are untouched.
+
+**The delivery line is stopped here.** Every remaining step needs either a real packet (blocked by
+P4/P5) or a real destination (blocked by P7/P8, which no fixture can close).
+
+### 0.7 Standing of the sections below
+
+§1–§3's assessment and call graph remain accurate. §4's recommendation was adopted. §7's minimal
+diff was followed, **with one correction**: it proposed writing a durable `DELIVERY_FAILED` record,
+and the implementing decision instead required a failure to be reported **only** in the returned
+result, so a refusal writes nothing at all. §6's durable-failure gap therefore stays open. §7's
+"changes required to the estate event gate: NONE" held — no gate changed. §10's owner decisions D1–D6
+were adopted as recommended; **D4, the estate-wide approval-bypass gap, remains open** and this
+mechanism closes it only for itself, by enforcing its own approval before any side effect rather
+than inheriting the runtime flag.
 
 **Precondition satisfied.** Working tree clean; `DB9-PROV-1`'s nine files are in Git HEAD at
 `a191ab2`, whose contents are exactly the nine reported, so attribution is unambiguous. Nothing was
