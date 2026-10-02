@@ -59,6 +59,34 @@ A packet inherits the **weakest** thing in it. A finding at `Confidence = Low`, 
 
 **Never hand off a `Needs verification` or `Superseded/Delayed` signal** as if settled. `freshness_requirement` is the consumer's right to reject on age; state the real `Last Verified`, not the assembly date.
 
+### The two floors are computed, and they fail closed
+
+*Added by `DB9-PROV-1`, 2026-10-02. Before this, neither floor could be expressed for the audience element at all, because DB 9 carried no provenance in-schema.*
+
+**`confidence_threshold`**
+
+```
+ORDER:  Low < Medium < High          — the only confidence scale Sector uses
+if ANY contributing item has a null Confidence  ->  UNRESOLVED, naming each such element
+else                                            ->  the weakest value on ORDER
+```
+
+**A null is UNASSESSED, and null is weaker than `Low`.** `Low` is a judgement someone made; null is the absence of one. Never read null as `Low` — that would let an unexamined row inherit a floor the other elements earned.
+
+**`freshness_requirement`**
+
+```
+if ANY contributing item has a null Last Verified  ->  UNRESOLVED, naming each such element
+else  ->  the EARLIEST non-null `Next Review` is the consumer's rejection date,
+          stated alongside the OLDEST non-null `Last Verified`
+```
+
+**No assembly date may ever substitute for `Last Verified`.** **Absent dates stay UNRESOLVED** — they are not filled, defaulted or inferred, and no global decay threshold is applied, because the repository defines none.
+
+> **The live field name is `Next Review`**, not `Next Verification`. DB 7 and DB 14 use the latter; DB 1, DB 2, DB 9 and DB 16 use the former. Read the name the store actually carries.
+
+**What this means in practice today:** all four DB 9 audience rows carry a null `Confidence` and a null `Last Verified`, so an Accommodation packet's **both floors resolve to `UNRESOLVED`**, naming the audience element. **State that. Do not fall back to the `Medium` the other elements would have set.** A packet may be assembled and must declare an unresolved floor; it may **not** be reported as a complete hand-off, and no consumer may act on one.
+
 > **A `basis: owner_reasoning` P2 rule may filter a calendar; it may not be quoted to a client.** If the packet's reasoning rests on unratified plugin rules, mark it — the consumer is often the department that would quote it.
 
 ## Step 5 · Verify, log

@@ -362,6 +362,8 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 ### DB 9 — Audience Roles
 **Primary entity:** one audience-role profile within a sub-sector. **Backing:** Draft 11 (Audience = Sector × Signal × Access). Relates sub-sector → CRM Lead/Person + Content persona.
 
+**21 properties, verified live 2026-10-02** by `DB9-PROV-AUDIT-1` and `DB9-PROV-1`. *(This table previously listed the substantive fields only; the seven provenance properties below were missing from it, six of them because the repository had never recorded that they existed live.)*
+
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
 | Audience Profile | Title | ID | |
@@ -372,6 +374,17 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 | Access Paths | Text | EXE | content→DM→call, etc. |
 | CRM Lead/Person | Text (ID) | REL | ClickUp reference |
 | Content Persona | Text | REL | Content 04 Notion `Persona` reference |
+| Content Opportunities | Relation → Content Opportunity | REL | |
+| Destination Profiles (Primary) / (Secondary) | Relation ×2 → DB 16 | REL | added at the 2026-08-20 schema gate |
+| **Confidence** | **Select** | **GOV** | **Low · Medium · High.** Null means **UNASSESSED, never Low.** Non-null requires `Source` **and** `Evidence` |
+| **Source** | **Text** | **GOV** | the re-followable authority; cited or blank |
+| **Source Tier** | **Select** | **GOV** | T1 Primary · T2 Institutional · T3 Commercial-intel · T4 Secondary — same four as DB 7 / DB 16 |
+| **Source URL** | **URL** | **GOV** | cited or blank |
+| **Evidence** | **Text** | **GOV** | the substance *within* the Source. **The only field DB9-PROV-1 added live (2026-10-02)** |
+| **Last Verified** | **Date** | **GOV** | the date a real verification happened. **Never** a write date, page edit time or today's date |
+| **Next Review** | **Date** | **GOV** | required when `Last Verified` is set, and later. **Note the live name is `Next Review`**, the DB 1 / DB 2 / DB 16 convention — not DB 7 / DB 14's `Next Verification` |
+
+> 🔴 **Every provenance value on all four rows is NULL** (28 cells, 0 populated), and **no backfill is authorised.** The rows predate the skill-run log and no run ever wrote DB 9, so no source is recorded anywhere in the repository. Their page bodies assert *"Confidence Medium"* and *"Verified 2026-08-19"*, but an assertion is not evidence — two of the four name no source at all — so nothing was promoted into a governed property. **Row-level provenance is UNRESOLVED, not verified-absent.** The schema snapshot above comes from one bounded live audit; **future live drift is detected by no offline gate and needs another authorised audit.**
 
 ### DB 10 — Decision-Maker Registry
 **Primary entity:** one buyer title profile per sub-sector. **Backing:** xlsx Sheet 09. Sector-level titles/triggers — **references** CRM `Person`, does not replace it (AEIT_06 "roles not types").

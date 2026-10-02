@@ -1,10 +1,54 @@
 # DB9 Provenance Remediation Proposal — `DB9-PROV-1`
 
-> ## 🔴 PROPOSAL · NOT IMPLEMENTED · NO DB9 VALUE CHANGED · NO S10 AUTHORIZATION · NO PACKET ASSEMBLY
+> ## ✅ IMPLEMENTED 2026-10-02 · ⚠️ ITS CENTRAL PREMISE WAS WRONG · 🔴 NO DB9 VALUE BACKFILLED
 >
-> Nothing here is in force. No DB9 field was added, no DB9 value was written or read, and
-> `sector-databases.json`, the S10 skill, its schemas, `AEIT_09`, every validator, every gate and the
-> fixture-authorisation registry are **byte-identical** to their state before this task.
+> **This document is retained as proposal history. Read §0 before §2 or §4 — both were superseded by
+> a bounded live audit before implementation.**
+>
+> **What the proposal got wrong.** §2 proposed adding six provenance fields to DB 9 on the basis that
+> `sector-databases.json` recorded 14 fields and no provenance. **The repository contract was stale.**
+> `DB9-PROV-AUDIT-1` read the live database on 2026-10-02 and found **20 properties**, including
+> `Confidence`, `Source`, `Source Tier`, `Source URL`, `Last Verified` and `Next Review` — six of the
+> seven provenance fields **already existed live** and had simply never been recorded here. **`Evidence`
+> was the only genuinely missing field.**
+>
+> **What was actually implemented.** One additive live write adding **`Evidence` (text, nullable)**,
+> taking DB 9 from 20 to **21 properties** — verified, with the original 20 unchanged and no row value
+> touched. Then repository synchronisation: the contract now records all 21 fields, its false
+> `MISSING_FIELD` statement is superseded, DB 9 is mapped into the Intelligence-Object contract under
+> Q2/Q3/Q4, `SECTOR_NOTION_SCHEMA.md` matches the live schema, S10 Step 4 carries the §6–§8
+> fail-closed rules, and `sector_truth_gate.py` gained check 7.
+>
+> **What was NOT done, and is still not authorised.** No DB 9 row-value backfill. All **28**
+> provenance cells across the four rows remain **null**, including the four `Last Verified` dates the
+> audit found to be explicitly stated in the page bodies. The bodies' asserted *"Confidence Medium"*
+> and *"Verified 2026-08-19"* remain **body assertions only** — an assertion is not evidence, and two
+> of the four rows name no source at all.
+>
+> **Naming correction.** §2 proposed `Next Verification` (DB 7 / DB 14's convention). The live store
+> already uses **`Next Review`** (DB 1 / DB 2 / DB 16's). The live name governs; S10 and the contract
+> both use `Next Review`.
+>
+> §1's assessment, §5's validation rules and §6–§8's aggregation and fail-closed design were sound and
+> were implemented as written. §9's rollback remains accurate for the one field that was added.
+
+## 0. Superseding record
+
+| Section | Standing after 2026-10-02 |
+|---|---|
+| §1 Assessment Q1–Q7, Q10–Q13 | **Sound.** The canonical provenance pattern, the type and enum findings, the Source-versus-Evidence distinction, the fail-closed reasoning and the aggregation design all held. |
+| §1 Assessment **Q2** | **Superseded in part.** Six of the six proposed fields already existed live; the field *shapes* it recommended were right, which is why they matched. |
+| §1 Assessment **Q8–Q9** | **Superseded.** It concluded no provenance could be sourced. True of the *repository*; **false of the page bodies**, which carry an asserted confidence and date on every row, and a named source on one. `DB9-PROV-AUDIT-1` holds the field-by-field classification. |
+| §2 Schema additions | **Largely superseded.** Only `Evidence` was added. The other six were recorded, not created. |
+| §4 Truthful values | **Superseded.** Still 0 of 28 cells populated, but for a different reason: 5 cells are now *sourceable* from page bodies and were deliberately left null pending a separate backfill decision. |
+| §5 Validation rules V1–V9 | **In force**, carried into the contract's field-level `validation` text and into gate check 7. |
+| §6–§8 Aggregation and fail-closed | **In force**, written into S10 Step 4. |
+| §12 Cross-database flag | **Still open.** DB 6 and DB 10 share the gap, and this audit raises the stakes: **their contract entries may be stale too, and no gate would detect it.** |
+
+**Audit of record:** `DB9-PROV-AUDIT-1` (bounded live read, 6 read-only connector calls, 0 writes;
+artifact held in the private sandbox). **Live-drift caveat:** the 21-field snapshot came from one
+bounded audit. **No offline gate can detect later live drift**, so re-verification needs another
+separately authorised audit.
 
 **Raised by:** `SECTOR-PK2` prerequisite **P9**, which found that DB9 carries no governed provenance
 while S10 requires `confidence_threshold` and `freshness_requirement` to inherit from the weakest

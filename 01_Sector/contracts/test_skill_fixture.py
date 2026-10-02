@@ -47,7 +47,17 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # Re-baselined 2026-09-29 after SECTOR-SF2: the CRM row now records that S10 itself wrote, read
 # back and deleted one disposable fixture task - while no real Lead has ever been tagged.
 # Was a30d91d57428d7bcbddaad8b47fba071fd3387d329fd45e6efd63083247f7c4d (2026-09-29, post-CW2).
-S10_ORDINARY_SHA = "337a0ba7d9acfdb790ef01059e896c1a84d135df785f77258c57b51ef49ee07a"
+# Re-baselined 2026-10-02 by DB9-PROV-1 (owner-approved): Step 4 gained the COMPUTED fail-closed
+# floors. `confidence_threshold` is UNRESOLVED whenever any contributing item's Confidence is null
+# (null is weaker than Low, never equal to it); otherwise it is the weakest value on
+# Low < Medium < High. `freshness_requirement` takes the earliest non-null `Next Review` and states
+# the oldest non-null `Last Verified` beside it, is UNRESOLVED when any date is absent, and may
+# never substitute the assembly date. The live DB 9 field name is `Next Review`, not DB7/DB14's
+# `Next Verification`. Before this, neither floor could be expressed for the audience element at
+# all, because DB 9 carried no provenance in-schema - so S10 now reports UNRESOLVED on an
+# Accommodation packet where it previously expressed nothing. That is stricter, not a regression.
+# Was 337a0ba7d9acfdb790ef01059e896c1a84d135df785f77258c57b51ef49ee07a (2026-09-29, post-SF2).
+S10_ORDINARY_SHA = "7acd495e29fbd73c9aaf32db75b838402349d55388123a2de0903ebd9942d581"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)

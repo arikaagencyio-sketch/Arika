@@ -30,6 +30,16 @@ Checks:
   6  DESTINATIONS      Hospitality plugin P5 DB 16 states agree between the markdown and
                        plugin.config.json, match DB16's verified row count, and every
                        validation destination in P4 is profiled
+  7  DB9 PROVENANCE    DB 9's recorded 21-field structure, its seven provenance field names,
+                       types and option sets, agreement across sector-databases.json,
+                       intelligence-object.schema.json, SECTOR_NOTION_SCHEMA.md and S10's
+                       fail-closed rules, and the explicit row-level UNRESOLVED status
+                       (DB9-PROV-1, 2026-10-02)
+
+Check 7 is REPOSITORY-INTERNAL BY DESIGN. This gate never calls Notion, so that offline
+validation stays deterministic - which means it CANNOT detect live schema drift. The 21-field
+structure it enforces came from one bounded live audit (DB9-PROV-AUDIT-1); re-verifying the live
+schema requires another separately authorised audit.
 """
 import io, os, re, sys, glob, json, datetime
 
@@ -244,6 +254,112 @@ def main():
                                 "DB 16 profile. Destination Fit (31h) would block it." % place)
         notes.append("destinations: DB16 verified %s | plugin P5 profiled %d (%s)"
                      % (verified, len(profiled), ", ".join(profiled)))
+
+    # ---------------------------------------------------------------- 7  DB 9 PROVENANCE
+    # Added by DB9-PROV-1 (2026-10-02). REPOSITORY-INTERNAL ONLY, and deliberately so: this gate
+    # must stay offline and deterministic, so it never calls Notion. It therefore cannot detect
+    # LIVE DRIFT - the 21-field snapshot it enforces came from one bounded live audit
+    # (DB9-PROV-AUDIT-1), and re-verifying the live schema needs another authorised audit.
+    DB9_PROV = {
+        "Confidence":    ("select", ["High", "Medium", "Low"]),
+        "Source":        ("text",   None),
+        "Source Tier":   ("select", ["T1 Primary", "T2 Institutional", "T3 Commercial-intel",
+                                     "T4 Secondary"]),
+        "Source URL":    ("url",    None),
+        "Evidence":      ("text",   None),
+        "Last Verified": ("date",   None),
+        "Next Review":   ("date",   None),
+    }
+    dbjson = read(DBJSON)
+    if not dbjson:
+        fail.append("CHECK 7  sector-databases.json is missing.")
+    else:
+        rows = json.loads(dbjson)["databases"]
+        d9 = next((r for r in rows if r.get("db_id") == "DB9"), None)
+        if d9 is None:
+            fail.append("CHECK 7  sector-databases.json records no DB9 entry.")
+        else:
+            names = [f["name"] for f in d9.get("fields", [])]
+            if len(names) != 21:
+                fail.append("CHECK 7  DB9 must record 21 fields (the audited live schema); "
+                            "found %d." % len(names))
+            if len(names) != len(set(names)):
+                dupes = sorted({n for n in names if names.count(n) > 1})
+                fail.append("CHECK 7  DB9 has duplicate field names: %s" % ", ".join(dupes))
+            if d9.get("field_count_verified") != 21:
+                fail.append("CHECK 7  DB9 field_count_verified must be 21; found %r."
+                            % d9.get("field_count_verified"))
+            by = {f["name"]: f for f in d9.get("fields", [])}
+            for pname, (ptype, opts) in DB9_PROV.items():
+                f = by.get(pname)
+                if f is None:
+                    fail.append("CHECK 7  DB9 does not record provenance field %r." % pname)
+                    continue
+                if f.get("notion_type") != ptype:
+                    fail.append("CHECK 7  DB9 %s must be %s; recorded as %r."
+                                % (pname, ptype, f.get("notion_type")))
+                if f.get("required") is not False:
+                    fail.append("CHECK 7  DB9 %s must be recorded nullable "
+                                "(required: false)." % pname)
+                if opts is not None and f.get("allowed_values") != opts:
+                    fail.append("CHECK 7  DB9 %s option set must be %s; recorded as %r."
+                                % (pname, opts, f.get("allowed_values")))
+            # the superseded false claim must stay superseded, and the row-level gap must stay named
+            mf = d9.get("MISSING_FIELD") or {}
+            note = mf.get("note", "")
+            if "NO Confidence, Source, Evidence or Last Verified field at all" in note \
+                    and "FACTUALLY WRONG" not in note:
+                fail.append("CHECK 7  DB9's MISSING_FIELD repeats the superseded claim without "
+                            "marking it corrected.")
+            rl = mf.get("row_level_status") or {}
+            if rl.get("non_null_cells") != 0:
+                fail.append("CHECK 7  DB9 row-level provenance must be recorded as 0 non-null "
+                            "cells until a backfill is authorised; found %r."
+                            % rl.get("non_null_cells"))
+            if rl.get("backfill_authorised") is not False:
+                fail.append("CHECK 7  DB9 must record that no row-value backfill is authorised.")
+            # Q2/Q3/Q4 mapping
+            iojson = read(os.path.join(os.path.dirname(DBJSON), "intelligence-object.schema.json"))
+            if not iojson:
+                fail.append("CHECK 7  intelligence-object.schema.json is missing.")
+            else:
+                props = json.loads(iojson).get("properties", {})
+                for q in ("source", "when_observed", "reliability"):
+                    nf = (props.get(q) or {}).get("notion_field") or {}
+                    if "DB9" not in nf:
+                        fail.append("CHECK 7  intelligence-object.schema.json does not map DB9 "
+                                    "for %s." % q)
+                mapped = (props.get("when_observed") or {}).get("notion_field", {}).get("DB9", "")
+                if "Next Verification" in mapped:
+                    fail.append("CHECK 7  DB9 maps `Next Verification`; the live field name is "
+                                "`Next Review`.")
+            # the human-readable schema doc must agree
+            ns = read(os.path.join(SECTOR, "SECTOR_NOTION_SCHEMA.md")) or ""
+            if "### DB 9 — Audience Roles" in ns:
+                seg = ns.split("### DB 9 — Audience Roles", 1)[1].split("### DB 10", 1)[0]
+                for pname in DB9_PROV:
+                    if pname not in seg:
+                        fail.append("CHECK 7  SECTOR_NOTION_SCHEMA.md DB 9 omits %r." % pname)
+                if "21 properties" not in seg:
+                    fail.append("CHECK 7  SECTOR_NOTION_SCHEMA.md DB 9 does not state 21 "
+                                "properties.")
+                if "UNRESOLVED" not in seg:
+                    fail.append("CHECK 7  SECTOR_NOTION_SCHEMA.md DB 9 does not state that "
+                                "row-level provenance is UNRESOLVED.")
+            # S10 must carry the fail-closed floors
+            s10 = read(os.path.join(ROOT, ".claude", "skills", "sector-handoff-packet",
+                                    "SKILL.md")) or ""
+            for needle, what in [
+                    ("null is weaker than", "that null is weaker than Low"),
+                    ("UNRESOLVED", "the UNRESOLVED outcome"),
+                    ("Low < Medium < High", "the confidence ordering"),
+                    ("Next Review", "the live field name Next Review"),
+                    ("assembly date", "the ban on substituting the assembly date")]:
+                if needle not in s10:
+                    fail.append("CHECK 7  S10 SKILL.md does not state %s." % what)
+            notes.append("DB9 provenance: 21 fields recorded | 7 provenance fields | "
+                         "row-level 0/%d populated | snapshot from a bounded live audit, "
+                         "drift undetectable offline" % (rl.get("cells") or 28))
 
     print("SECTOR DOCUMENTATION-TRUTH GATE")
     print("=" * 66)

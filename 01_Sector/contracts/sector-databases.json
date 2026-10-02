@@ -2260,7 +2260,7 @@
    ],
    "row_count_verified": 4,
    "verified_date": "2026-08-24",
-   "row_count_note": "CORRECTED — the Gate 0 claim of 0 was WRONG. All FOUR canonical role lenses exist for the Accommodation sub-sector (Operator, Buyer, Amplifier, Enabler), each with Content Persona, Access Paths and Primary Signal Type. HOSPITALITY_PLUGIN.md slot P9 was right and the inventory was wrong. NOT blocking for the one Target sub-sector; still empty for all 88 established non-SaaS industries.",
+   "row_count_note": "CORRECTED — the Gate 0 claim of 0 was WRONG. All FOUR canonical role lenses exist for the Accommodation sub-sector (Operator, Buyer, Amplifier, Enabler), each with Content Persona, Access Paths and Primary Signal Type. HOSPITALITY_PLUGIN.md slot P9 was right and the inventory was wrong. NOT blocking for the one Target sub-sector; still empty for all 88 established non-SaaS industries. SCHEMA NOTE (DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)): the `blocking: true` flag above concerns the 88 established non-SaaS industries, which have no rows at all - it is NOT blocking for the one Target sub-sector, as this field's own text already says.",
    "blocking": true,
    "fields": [
     {
@@ -2397,18 +2397,110 @@
      "purpose_tag": "REL",
      "relation_target": "collection://ed957373-e916-4a01-9f44-354d5e037a6a",
      "writer_skill": "S05"
+    },
+    {
+     "name": "Confidence",
+     "notion_type": "select",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "allowed_values": [
+      "High",
+      "Medium",
+      "Low"
+     ],
+     "validation": "Set ONLY from recorded evidence. NULL means UNASSESSED, never Low. A non-null value requires a non-null Source AND Evidence (rule V3). All four rows are currently null: the page bodies assert 'Confidence Medium' but two name no source at all, so the assertions were NOT promoted.",
+     "provenance_of_record": "DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
+    },
+    {
+     "name": "Source",
+     "notion_type": "text",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "validation": "The authority the claim comes from - re-followable. Cited or blank; never a guess.",
+     "provenance_of_record": "DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
+    },
+    {
+     "name": "Source Tier",
+     "notion_type": "select",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "allowed_values": [
+      "T1 Primary",
+      "T2 Institutional",
+      "T3 Commercial-intel",
+      "T4 Secondary"
+     ],
+     "validation": "Required whenever Source is set (rule V4). Same four values as DB7 and DB16.",
+     "provenance_of_record": "DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
+    },
+    {
+     "name": "Source URL",
+     "notion_type": "url",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "validation": "Cited or blank.",
+     "provenance_of_record": "DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
+    },
+    {
+     "name": "Evidence",
+     "notion_type": "text",
+     "field_class": "direct",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "validation": "The specific substance within the Source that supports the row. Cited or blank.",
+     "provenance_of_record": "DB9-PROV-1 (one additive live schema write, 2026-10-02)"
+    },
+    {
+     "name": "Last Verified",
+     "notion_type": "date",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "validation": "The date a qualifying verification actually occurred. NEVER the write date, a file modification time, a page edit time, or today's date absent a real verification (rule V5).",
+     "provenance_of_record": "DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
+    },
+    {
+     "name": "Next Review",
+     "notion_type": "date",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "writer_skill": "S02",
+     "validation": "Required whenever Last Verified is set (rule V6), and strictly later. Freshness is DECLARED per record, not computed from a global threshold the repository does not define. NOTE the live field name is `Next Review` (the DB1/DB2/DB16 convention), not DB7's and DB14's `Next Verification`.",
+     "provenance_of_record": "DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
     }
    ],
    "MISSING_FIELD": {
     "name": "provenance",
-    "note": "DB9 carries NO Confidence, Source, Evidence or Last Verified field at all — weaker than DB6, which at least has Confidence. It cannot satisfy Intelligence-Object questions 2, 3 or 4 in-schema.",
-    "severity": "flagged, not fixed"
+    "status": "SCHEMA GAP CLOSED; ROW-LEVEL PROVENANCE UNRESOLVED",
+    "note": "SUPERSEDES the previous statement, which read 'DB9 carries NO Confidence, Source, Evidence or Last Verified field at all'. That was FACTUALLY WRONG against the live database for three of those four fields: DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02) found Confidence, Source, Source Tier, Source URL, Last Verified and Next Review all present live. Only Evidence was absent, and DB9-PROV-1 (one additive live schema write, 2026-10-02) added it. DB9 can now answer Intelligence-Object questions 2, 3 and 4 IN-SCHEMA. WHAT REMAINS: every provenance value on all four rows is NULL (24 of 24 cells before Evidence, 28 of 28 after). The rows predate the skill-run log and no run ever wrote DB9, so no source is recorded anywhere in the repository. Their page bodies assert 'Confidence Medium' and 'Verified 2026-08-19', but an assertion is not evidence - two rows name no source whatsoever - so nothing was promoted into a governed property. Row-level provenance is UNRESOLVED, not verified-absent.",
+    "severity": "schema fixed and recorded; row-level provenance outstanding",
+    "row_level_status": {
+     "rows": 4,
+     "provenance_fields": 7,
+     "cells": 28,
+     "non_null_cells": 0,
+     "backfill_authorised": false,
+     "detail": "No DB9 row-value backfill is authorised. The DB9-PROV-1 approval covered the schema write and this synchronisation only."
+    }
    },
    "consumers": [
     "Content (04)",
     "DB16",
     "S08 outreach angle"
-   ]
+   ],
+   "field_count_verified": 21,
+   "field_count_note": "CORRECTED by DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02) from 14 to 21. The contract had under-reported the live schema by SIX properties - Confidence, Source, Source Tier, Source URL, Last Verified and Next Review all already existed live and were never recorded here. `Evidence` was the ONLY genuinely missing field and was added by DB9-PROV-1 (one additive live schema write, 2026-10-02). Schema snapshot source: DB9-PROV-AUDIT-1 (bounded live read, 2026-10-02). Future live drift is NOT detected by any offline gate and requires another separately authorised audit."
   },
   {
    "db_id": "DB10",
