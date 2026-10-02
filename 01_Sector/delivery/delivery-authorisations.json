@@ -61,6 +61,21 @@
         "packet_path": "Re-validated to resolve INSIDE the authorised read root - sandbox_root when packet_root is absent, packet_root when it is present - with no `..` traversal and no link escape.",
         "packet_sha256": "Re-computed from the file at delivery time. A changed packet is refused with PACKET_HASH_MISMATCH."
       }
+    },
+    {
+      "id": "SECTOR-DELIVERY-P10-D1",
+      "status": "spent",
+      "approved": "2026-10-02, owner approval in writing: one authorization row, ONE receiver invocation, one internal acknowledgement. No retry and no second invocation.",
+      "destination": "Offer (02)",
+      "fixture_id": "SYNCO-02",
+      "delivery_id": "SYNCO-02-D1",
+      "packet_path": "C:\\Users\\USER\\Arika_Sandboxes\\SYNCO-02\\04_fixture_inputs\\SECTOR-DELIVERY-P10-D1-control-packet.json",
+      "packet_sha256": "09bfd65f7c00c1798bf47b3494be7c0f8b5588550ff0cf2550530a9e3ded6ee7",
+      "packet_root": "C:\\Users\\USER\\Arika_Sandboxes\\SYNCO-02\\04_fixture_inputs",
+      "sandbox_root": "C:\\Users\\USER\\Arika_Sandboxes\\SYNCO-02\\05_outputs",
+      "max_deliveries": 1,
+      "spent_at": "2026-10-02T07:21:26Z",
+      "spent_by_delivery_id": "SYNCO-02-D1"
     }
   ],
   "_no_approved_delivery": "DELIBERATE AND LOAD-BEARING: there is no `approved` delivery row in this file, and no SYNCO-02 row of any status. The mechanism is implemented and tested; no delivery is authorised. Adding an approved row is a separate owner decision."

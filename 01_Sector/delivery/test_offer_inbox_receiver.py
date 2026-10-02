@@ -226,18 +226,36 @@ class AuthorisationFailsClosed(Harness):
     def test_a_reference_not_claiming_approved_fails(self):
         self.assert_refused(self.ref(authorization_status="draft"), "REFERENCE_STATUS_MISMATCH")
 
-    def test_the_shipped_registry_template_cannot_pass(self):
+    def test_no_shipped_row_is_approved_and_the_template_cannot_pass(self):
+        """The durable invariant: the shipped registry carries NO `approved` row.
+
+        Re-baselined 2026-10-02. This test previously also asserted that no SYNCO-02 row was
+        shipped, which encoded "no delivery has ever been authorised" - true while the mechanism
+        was unused, and deliberately false once SECTOR-DELIVERY-P10-D1 was approved, invoked once
+        and spent by owner decision. A `spent` row is RETAINED HISTORY that explains an existing
+        acknowledgement and admits nothing, so the invariant that matters is `approved`, not the
+        absence of any row. Entries are never deleted, so this had to change rather than the file.
+        """
         shipped = os.path.join(HERE, "delivery-authorisations.json")
         with io.open(shipped, encoding="utf-8") as fh:
             reg = json.loads(fh.read())
         rows = reg["delivery_authorisations"]
         self.assertTrue(all(r["status"] != "approved" for r in rows),
-                        "no shipped row may be approved")
-        self.assertFalse(any("SYNCO-02" == r.get("fixture_id") for r in rows),
-                         "no SYNCO-02 row may be shipped")
+                        "no shipped row may be approved: %s"
+                        % [(r["id"], r["status"]) for r in rows])
+        tpl = [r for r in rows if r["id"] == "TEMPLATE-DO-NOT-APPROVE"]
+        self.assertEqual(len(tpl), 1, "the template row must still be present, exactly once")
+        self.assertEqual(tpl[0]["status"], "draft", "the template must stay draft")
+        # the template refuses before touching anything
         res = rx.receive(self.ref(authorization_id="TEMPLATE-DO-NOT-APPROVE"), shipped)
         self.assertEqual(res["refusal_code"], "AUTHORISATION_NOT_APPROVED")
         self.assertEqual(self.acks(), [])
+        # and so does every spent row, so a spent authorisation can never be reused
+        for row in (r for r in rows if r["status"] == "spent"):
+            spent = rx.receive(self.ref(authorization_id=row["id"]), shipped)
+            self.assertEqual(spent["refusal_code"], "AUTHORISATION_NOT_APPROVED",
+                             "a spent row must admit nothing: %s" % row["id"])
+            self.assertEqual(self.acks(), [])
 
 
 class FieldMismatchFailsClosed(Harness):
