@@ -1001,18 +1001,61 @@ class OD1ScopeBoundaries(unittest.TestCase):
 
 DB3_AUDIT = "DB3-PROV-AUDIT-1"
 DB3_SOURCE_OPTS = ["xlsx", "chat", "agent run", "research"]
-DB3_ABSENT = ["Source Tier", "Source URL", "Last Verified", "Next Review", "Next Verification"]
+# REWRITTEN 2026-10-02 by DB3-OD10-OD12-1. DB3_ABSENT was
+#   ["Source Tier", "Source URL", "Last Verified", "Next Review", "Next Verification"]
+# Two of those five were added to live DB3 as nullable dates under OD10 Option D, so asserting
+# their absence would now assert something false. Split rather than shortened: the three that are
+# still absent keep their ban, and the two that now exist get a POSITIVE requirement, which is
+# strictly stronger than having no rule at all.
+DB3_ABSENT = ["Source Tier", "Source URL", "Next Verification"]
+DB3_NOW_PRESENT = ["Last Verified", "Next Review"]
+DB3_OD10 = "DB3-OD10-OD12-1"
 
 
 class DB3RecordedSchema(unittest.TestCase):
 
-    def test_field_count_is_fifteen_and_anchored(self):
+    def test_field_count_is_seventeen_and_anchored(self):
+        # Was test_field_count_is_fifteen_and_anchored. 15 was the correct live count until
+        # DB3-OD10-OD12-1 added two date properties on 2026-10-02. Renamed rather than edited in
+        # place, so the diff cannot be mistaken for a loosened threshold.
         d3 = dbrow("DB3")
-        self.assertEqual(len(d3["fields"]), 15)
-        self.assertEqual(d3.get("field_count_verified"), 15,
+        self.assertEqual(len(d3["fields"]), 17)
+        self.assertEqual(d3.get("field_count_verified"), 17,
                          "DB3 must carry the mechanical count anchor")
         self.assertIn(DB3_AUDIT, d3.get("field_count_note", ""),
-                      "and attribute it to the bounded audit")
+                      "and attribute the original count to the bounded audit")
+        self.assertIn(DB3_OD10, d3.get("field_count_note", ""),
+                      "and attribute the change to the task that made it")
+
+    def test_the_superseded_fifteen_field_count_is_preserved(self):
+        # The point of this test: a dated claim that stops being true is SUPERSEDED, never
+        # silently corrected. This is the same rule check 7b exists to enforce, applied to a
+        # change I made myself.
+        fcs = dbrow("DB3")["field_count_superseded"]
+        self.assertEqual(fcs["was"], 15)
+        self.assertIn("2026-10-02", fcs["was_true_when_written"])
+        self.assertIn("2026-10-02", fcs["became_false_on"])
+        self.assertIn("SUPERSEDED, NOT WRONG", fcs["verdict"])
+        self.assertIs(fcs["preserved_not_rewritten"], True)
+
+    def test_the_two_new_dates_are_recorded_nullable_and_governing(self):
+        by = {f["name"]: f for f in dbrow("DB3")["fields"]}
+        for n in DB3_NOW_PRESENT:
+            self.assertIn(n, by, "%s was added live 2026-10-02 and must be recorded" % n)
+            self.assertEqual(by[n]["notion_type"], "date")
+            self.assertIs(by[n]["required"], False, "%s is nullable" % n)
+            self.assertIn("GOVERN", by[n]["semantics"].upper())
+            self.assertIn("FAILS CLOSED", by[n]["validation"].upper())
+            self.assertIn("217", by[n]["semantics"], "must record null on all 217 rows")
+
+    def test_next_review_not_next_verification(self):
+        by = {f["name"]: f for f in dbrow("DB3")["fields"]}
+        self.assertNotIn("Next Verification", by,
+                         "the owner was explicit: `Next Review`, not `Next Verification`")
+        self.assertIn("Next Verification", by["Next Review"]["semantics"],
+                      "and the choice must be recorded, not merely made")
+        self.assertIn("FIRST TRIGGER", by["Next Review"]["semantics"].upper(),
+                      "Next Review is what finally gives the Stale rule a trigger")
 
     def test_no_duplicate_field_names(self):
         names = [f["name"] for f in dbrow("DB3")["fields"]]
@@ -1038,18 +1081,44 @@ class DB3RecordedSchema(unittest.TestCase):
         self.assertEqual(rl["Evidence"]["non_null"], 217)
         self.assertEqual(rl["Evidence"]["of"], 217)
 
-    def test_temporal_and_tier_fields_are_recorded_absent(self):
+    def test_tier_fields_are_still_recorded_absent(self):
+        # Was test_temporal_and_tier_fields_are_recorded_absent, which required `Last Verified`
+        # and a next-review key inside `fields_absent`. Both now EXIST, so that test would force
+        # the contract to carry a false record. The TIER half of the limitation is untouched and
+        # is still asserted here; the temporal half moved to the two tests below.
         d3 = dbrow("DB3")
         names = [f["name"] for f in d3["fields"]]
         for absent in DB3_ABSENT:
             self.assertNotIn(absent, names, "%s must not be recorded as a DB3 field" % absent)
         pm = d3["provenance_model"]["fields_absent"]
-        for absent in ("Source Tier", "Last Verified", "Source URL"):
+        for absent in ("Source Tier", "Source URL"):
             self.assertIn(absent, pm, "absence of %s must be STATED, not merely omitted" % absent)
-        self.assertTrue(any("Next Review" in k for k in pm),
-                        "absence of a next-review field must be stated")
+        self.assertNotIn("Last Verified", pm, "no longer absent as of 2026-10-02")
+        self.assertFalse(any("Next Review" in k for k in pm),
+                         "no longer absent as of 2026-10-02")
         for k, v in pm.items():
             self.assertIn("ABSENT", v.upper(), "%s must be described as absent" % k)
+
+    def test_the_superseded_absence_claims_are_preserved_verbatim(self):
+        fmr = dbrow("DB3")["provenance_model"]["fields_formerly_absent_now_present"]
+        verb = fmr["superseded_claims_verbatim"]
+        self.assertEqual(len(verb), 2, "both absence claims preserved")
+        for k, v in verb.items():
+            self.assertIn("ABSENT", v.upper(),
+                          "preserved means verbatim - %s no longer reads as an absence claim" % k)
+        self.assertIs(fmr["preserved_not_rewritten"], True)
+
+    def test_absent_and_present_but_null_are_recorded_as_different_facts(self):
+        # The substantive point of the whole task. Adding the fields did NOT fix anything today;
+        # it changed the KIND of failure from unfixable to merely empty.
+        fmr = dbrow("DB3")["provenance_model"]["fields_formerly_absent_now_present"]
+        why = fmr["why_this_distinction_matters"]
+        self.assertIn("DIFFERENT FACTS", why.upper())
+        self.assertIn("fail closed", why.lower())
+        self.assertIn("dead end", why.lower())
+        self.assertIn("did NOT make anything computable", why)
+        for n in DB3_NOW_PRESENT:
+            self.assertIn("NULL", fmr[n].upper())
 
     def test_freshness_threshold_is_recorded_undefined(self):
         by = {f["name"]: f for f in dbrow("DB3")["fields"]}
@@ -1060,6 +1129,27 @@ class DB3RecordedSchema(unittest.TestCase):
         fr = dbrow("DB3")["provenance_model"]["freshness_is_a_declaration_not_a_measurement"]
         self.assertIn("DECLARATION", fr["consequence"].upper())
         self.assertIn("OD10", fr["related_open_item"])
+        self.assertIn("CLOSED BY DISSOLUTION", fr["related_open_item"],
+                      "OD10 closed 2026-10-02; the pointer must say so")
+
+    def test_freshness_is_recorded_non_governing_and_not_derived(self):
+        sd = dbrow("DB3")["provenance_model"][
+            "freshness_is_a_declaration_not_a_measurement"]["superseding_decision"]
+        self.assertIs(sd["freshness_is_non_governing"], True)
+        self.assertIn("DISSOLVED", sd["no_threshold_is_defined_or_needed"].upper())
+        self.assertIn("notAvailableInQuerySql", sd["do_not_derive"],
+                      "the reason is the DB5 Total Score formula precedent, not a bare ban")
+        self.assertIn("not being called", sd["historical_values_are_non_governing_not_false"],
+                      "the 217 Fresh values are non-governing, NOT false")
+
+    def test_the_limitation_is_recorded_half_closed(self):
+        lim = dbrow("DB3")["provenance_model"]["the_actual_limitation"]
+        self.assertIn("NOT MISSING PROVENANCE", lim.upper())
+        self.assertIn("SCHEMA EXPRESSIVENESS", lim.upper())
+        self.assertIn("HALF CLOSED", lim.upper())
+        self.assertIn("EXPRESSIBLE but UNPOPULATED", lim)
+        self.assertIn("SOURCE TIER REMAINS STRUCTURALLY INEXPRESSIBLE", lim.upper(),
+                      "closing the temporal half must not be read as closing the tier half")
 
     def test_the_limitation_is_expressiveness_not_missing_provenance(self):
         pm = dbrow("DB3")["provenance_model"]
@@ -1109,14 +1199,79 @@ class DB3RowLevelRecorded(unittest.TestCase):
         self.assertIn("NOT READ", n["bodies"])
         self.assertIn("not characterised", n["bodies"].lower())
 
-    def test_no_claim_is_made_about_the_high_confidence_rows(self):
+    def test_the_high_confidence_rows_are_now_classified(self):
+        # Was test_no_claim_is_made_about_the_high_confidence_rows, which required
+        # no_claim_is_made_about_them is True. Correct while the bodies were unread; the owner
+        # then authorised reading all three. Refusing to characterise them now would be a FALSE
+        # record, so the test is rewritten to require the classifications BY NAME - which is
+        # stricter than the refusal it replaces.
         hc = self.rl["high_confidence_rows"]
         self.assertEqual(hc["count"], 3)
         self.assertEqual(hc["in_target_set"], 0)
-        self.assertIn("NOT CHARACTERISED", hc["status"].upper())
-        self.assertIs(hc["no_claim_is_made_about_them"], True)
-        self.assertIn("UNVERIFIED EXPOSURE", hc["status"].upper(),
-                      "an exposure, not a confirmed defect")
+        self.assertIn("CHARACTERISED", hc["status"].upper())
+        self.assertIs(hc["no_claim_is_made_about_them"], False)
+        self.assertEqual(hc["bodies_read"], 3)
+        self.assertIs(hc["all_three_bodies_blank"], True)
+
+    def test_the_earlier_refusal_to_characterise_is_preserved(self):
+        sc = self.rl["high_confidence_rows"]["superseded_claim"]
+        self.assertIn("NOT CHARACTERISED", sc["was"].upper())
+        self.assertIs(sc["prior_no_claim_flag"], True)
+        self.assertIn("NOT WRONG", sc["verdict"].upper(),
+                      "declining to characterise unread bodies was correct, not an error")
+        self.assertIs(sc["preserved_not_rewritten"], True)
+
+    def test_one_overstated_two_unresolved(self):
+        cls = self.rl["high_confidence_rows"]["classifications"]
+        verdicts = sorted(v["verdict"] for v in cls.values() if isinstance(v, dict))
+        self.assertEqual(verdicts, ["HIGH_OVERSTATED", "HIGH_UNRESOLVED", "HIGH_UNRESOLVED"])
+
+    def test_h1_requires_a_correction_that_was_not_authorised_here(self):
+        cls = self.rl["high_confidence_rows"]["classifications"]
+        h1 = next(v for v in cls.values()
+                  if isinstance(v, dict) and v["verdict"] == "HIGH_OVERSTATED")
+        self.assertIs(h1["correction_required"], True)
+        self.assertIn("NOT AUTHORISED", h1["correction_is_a_separate_decision"].upper(),
+                      "the owner reserved H1's disposition")
+        self.assertIn("DRAFT 15", h1["why"].upper(),
+                      "the basis is self-referential: Arika's own internal draft")
+        self.assertIn("triggers an agent", h1["not_inert"],
+                      "H1 is not dormant: it is routed and it fires an agent")
+        self.assertIn("Sales", h1["not_inert"])
+        self.assertIs(h1["in_target_s10_path"], False)
+
+    def test_h2_and_h3_need_resourcing_not_rerating(self):
+        cls = self.rl["high_confidence_rows"]["classifications"]
+        unres = [v for v in cls.values()
+                 if isinstance(v, dict) and v["verdict"] == "HIGH_UNRESOLVED"]
+        self.assertEqual(len(unres), 2)
+        for v in unres:
+            self.assertIs(v["correction_required"], False)
+            self.assertIn("RE-SOURCING", v["needs"].upper())
+            self.assertIn("NULL", v["sub_sector"].upper(), "Sub-Sector is null on both - OD13")
+
+    def test_no_confidence_value_was_changed(self):
+        cls = self.rl["high_confidence_rows"]["classifications"]
+        self.assertIn("NO Confidence value was written", cls["_confidence_values_unchanged"])
+        by_value = self.rl["Confidence"]["by_value"]
+        self.assertEqual(by_value, {"High": 3, "Medium": 214, "Low": 0},
+                         "the live distribution after the writes is identical to before")
+
+    def test_the_two_new_columns_are_null_on_every_row(self):
+        for n in DB3_NOW_PRESENT:
+            cell = self.rl[n]
+            self.assertEqual(cell["non_null"], 0)
+            self.assertEqual(cell["of"], 217)
+            self.assertIn("PRESENT BUT NULL", cell["state"].upper())
+            self.assertIs(cell["backfill_authorised"], False)
+
+    def test_the_zero_row_write_proof_is_recorded(self):
+        zp = self.rl["zero_row_writes_proof"]
+        self.assertEqual(zp["schema_writes"], 2)
+        self.assertEqual(zp["row_value_writes"], 0)
+        self.assertEqual(zp["live_calls"], 5)
+        self.assertIn("identical", zp["method"], "the method, not just the conclusion")
+        self.assertIn("31794", zp["result"], "a concrete before/after measure")
 
     def test_no_backfill_authorised(self):
         self.assertIs(self.rl["backfill_authorised"], False)
@@ -1143,12 +1298,29 @@ class DB3IsNotTheSevenFieldShape(unittest.TestCase):
             self.assertEqual(len(dbrow(db_id)["fields"]), n, "%s unchanged" % db_id)
             self.assertIn("Evidence", [f["name"] for f in dbrow(db_id)["fields"]])
 
-    def test_intelligence_object_mapping_is_unchanged(self):
+    def test_intelligence_object_q2_mapping_is_still_unchanged(self):
+        # The Q2 half of this test is unchanged and must stay that way: `Evidence + Source` was
+        # already correct and three successive authorisations have said not to touch it.
         props = json.loads(read(IOJSON))["properties"]
         self.assertEqual(props["source"]["notion_field"]["DB3"], "Evidence + Source",
                          "DB3's Q2 mapping was already correct and must not be touched")
-        self.assertEqual(props["when_observed"]["notion_field"]["DB3"], "Freshness")
         self.assertEqual(props["reliability"]["notion_field"]["DB3"], "Confidence")
+
+    def test_intelligence_object_q3_mapping_now_names_the_two_dates(self):
+        # The Q3 half CHANGED, and this is the one repository edit of the task that went beyond
+        # a straight transcription of live state. It read `Freshness` ALONE, which could not
+        # satisfy when_observed.required = [last_verified, freshness]. That non-compliance was
+        # one of the two reasons Option D is compliance work rather than convenience, so leaving
+        # the mapping stale would have hidden the very defect the task closed.
+        wo = json.loads(read(IOJSON))["properties"]["when_observed"]
+        self.assertEqual(wo["notion_field"]["DB3"], "Last Verified + Next Review")
+        self.assertEqual(sorted(wo["required"]), ["freshness", "last_verified"],
+                         "the canonical object was NOT relaxed - DB3 was made able to satisfy it")
+        self.assertIn("NON-GOVERNING", wo["notion_field_notes"])
+        self.assertIn("could not satisfy", wo["notion_field_notes"],
+                      "the reason for the change must be recorded next to it")
+        self.assertIn("NULL", wo["notion_field_notes"].upper(),
+                      "and that no DB3 row can supply a floor today")
 
 
 class DB3OD6SupersededAndRescoped(unittest.TestCase):
@@ -1202,20 +1374,113 @@ class DB3OD6SupersededAndRescoped(unittest.TestCase):
 
 class DB3OpenItemsRecorded(unittest.TestCase):
 
-    def test_od7_to_od12_are_recorded_and_open(self):
+    def test_od7_to_od13_are_recorded_and_open_except_od10(self):
+        # Was test_od7_to_od12_are_recorded_and_open. OD10 is the only one of the twelve that
+        # closed, and it is NOT simply dropped from the loop - it gets a stricter dedicated test
+        # below. OD13 joins.
         od = json.loads(read(DBJSON))["_open_decisions"]
-        for k in ("OD7", "OD8", "OD9", "OD10", "OD11", "OD12"):
+        for k in ("OD7", "OD8", "OD9", "OD11", "OD12", "OD13"):
             self.assertIn(k, od, "%s must be recorded" % k)
             self.assertIn("OPEN", od[k]["status"], "%s must be OPEN" % k)
-            self.assertNotIn("CLOSED", od[k]["status"])
             self.assertEqual(od[k]["db"], "DB3")
+        for k in ("OD7", "OD8", "OD9", "OD11", "OD13"):
+            self.assertNotIn("CLOSED", od[k]["status"])
+
+    def test_od10_is_closed_by_dissolution_with_its_question_preserved(self):
+        od10 = json.loads(read(DBJSON))["_open_decisions"]["OD10"]
+        self.assertIn("CLOSED BY DISSOLUTION", od10["status"])
+        self.assertIn("NOT reusable", od10["status"],
+                      "the 30/90-day finding belongs in the closure, not only in the proposal")
+        sq = od10["superseded_question"]
+        self.assertIn("Fresh/Aging/Stale thresholds", sq["verbatim"],
+                      "the original question must be preserved verbatim")
+        self.assertIn("DISSOLVED, NOT ANSWERED", sq["verdict"].upper())
+        self.assertIn("UNIMPLEMENTABLE", sq["verdict"].upper(),
+                      "the reason it was dissolved: Option A could not be built at all")
+        self.assertIs(sq["preserved_not_rewritten"], True)
+        self.assertIn("NOT authorised", od10["what_remains_open"],
+                      "closing OD10 did not authorise a backfill or make anything computable")
+
+    def test_the_nine_option_d_decisions_are_recorded(self):
+        odr = dbrow("DB3")["provenance_model"]["od10_decision_record"]
+        self.assertEqual(len(odr["decisions"]), 9)
+        joined = " ".join(odr["decisions"])
+        for needle in ("NON-GOVERNING", "GOVERNING temporal fields", "NO Fresh/Aging/Stale "
+                       "threshold is defined", "NOT reused", "NON-NULL `Next Review` is STALE",
+                       "FAILS CLOSED", "NOT derived", "CLOSED BY DISSOLUTION"):
+            self.assertIn(needle, joined, "decision missing: %s" % needle)
+        self.assertEqual(
+            odr["proposal_sha256"],
+            "51d405e4cac3fb4c3318246646e3b0d324da6251b67c58a48d91024865abafb4",
+            "the approved proposal must be pinned by hash")
+
+    def test_options_a_and_c_are_recorded_as_impossible_not_merely_rejected(self):
+        # The sharpest finding of the assessment, and the one most likely to be softened later
+        # into "we preferred D". A was UNIMPLEMENTABLE; C was EXCLUDED BY CONTRACT.
+        rej = dbrow("DB3")["provenance_model"]["od10_decision_record"]["options_rejected"]
+        self.assertIn("UNIMPLEMENTABLE", rej["A - define a threshold"].upper())
+        self.assertIn("needs a date to measure from", rej["A - define a threshold"])
+        self.assertIn("EXCLUDED BY CONTRACT", rej["C - retire `Freshness`"].upper())
+        self.assertIn("REQUIRED property", rej["C - retire `Freshness`"])
+
+    def test_the_30_and_90_day_horizons_are_recorded_not_reusable(self):
+        thr = dbrow("DB3")["provenance_model"]["od10_decision_record"][
+            "thresholds_examined_and_rejected_as_not_reusable"]
+        self.assertIn("PROSPECT-SCORE", thr["30_day"].upper())
+        self.assertIn("REPOSITORY CONTRACT FILE", thr["90_day"].upper(),
+                      "the 90-day rule governs repository metadata, not row content")
+        self.assertIn("NEITHER IS REUSABLE", thr["verdict"].upper())
+        self.assertIn("`Next Review` NAMING CONVENTION", thr["verdict"],
+                      "what WAS reusable was the naming convention, not a number")
+
+    def test_the_stale_rule_finally_has_a_trigger(self):
+        odr = dbrow("DB3")["provenance_model"]["od10_decision_record"]
+        trig = odr["stale_rule_now_has_a_trigger"]
+        self.assertIn("MUST NOT drive downstream execution", trig)
+        self.assertIn("nothing governed WHEN", trig,
+                      "a consequence with no trigger - that is the defect Option D closed")
+        self.assertIn("never run", trig, "the M4 stale sweep has never run")
+
+    def test_option_d_was_not_chosen_to_make_s10_computable(self):
+        # The authorisation for the assessment said in terms: do not define a threshold merely
+        # to make S10 computable. This test exists so that the recorded motive cannot drift.
+        odr = dbrow("DB3")["provenance_model"]["od10_decision_record"]
+        cnc = odr["contract_non_compliances_this_addresses"]
+        self.assertIn("intelligence-object.schema.json", cnc)
+        self.assertIn("SECTOR_ACTIVATION_CONTRACT.md", cnc)
+        self.assertIn("never the reason", cnc["why_this_matters"])
+        self.assertIn("DOES NOT MAKE THE FRESHNESS FLOOR COMPUTABLE TODAY",
+                      odr["what_this_does_NOT_do"].upper())
+
+    def test_od12_is_characterised_but_still_open(self):
+        od12 = json.loads(read(DBJSON))["_open_decisions"]["OD12"]
+        self.assertIn("OPEN", od12["status"])
+        self.assertIn("HIGH_OVERSTATED", od12["status"])
+        self.assertIn("HIGH_UNRESOLVED", od12["status"])
+        self.assertIn("SEPARATE DECISION", od12["status"].upper())
+        self.assertIn("NO Confidence value was changed", od12["status"])
+        self.assertIs(od12["superseded_question"]["preserved_not_rewritten"], True)
+
+    def test_od13_records_the_subsector_nulls_as_unmeasured(self):
+        od13 = json.loads(read(DBJSON))["_open_decisions"]["OD13"]
+        self.assertIn("OPEN", od13["status"])
+        self.assertIn("UNMEASURED", od13["status"].upper())
+        self.assertIn("Sub-Sector", od13["question"])
+        self.assertIs(od13["bounded_measurement_requires_its_own_authorisation"], True)
+        self.assertIn("Incidentally", od13["how_it_was_found"],
+                      "it was not the object of any query")
+        self.assertIn("gap in my own prior audit", od13["disclosed_gap_in_the_prior_audit"],
+                      "DB3-PROV-AUDIT-1 did not check Sub-Sector population - disclose it")
+        self.assertIn("did NOT measure", od13["not_measured_here"])
 
     def test_each_open_item_names_its_subject(self):
         od = json.loads(read(DBJSON))["_open_decisions"]
         for k, needle in (("OD7", "Last Verified"), ("OD8", "Source Tier"),
-                          ("OD9", "Source URL"), ("OD10", "Fresh/Aging/Stale"),
-                          ("OD11", "re-sourced"), ("OD12", "High-confidence")):
+                          ("OD9", "Source URL"), ("OD11", "re-sourced"),
+                          ("OD12", "High-confidence"), ("OD13", "Sub-Sector")):
             self.assertIn(needle, od[k]["question"], "%s must concern %s" % (k, needle))
+        self.assertIn("Fresh/Aging/Stale", od["OD10"]["superseded_question"]["verbatim"],
+                      "OD10's subject survives in its preserved question")
 
     def test_earlier_decisions_keep_their_state(self):
         od = json.loads(read(DBJSON))["_open_decisions"]
@@ -1232,10 +1497,30 @@ class DB3S10FailsClosed(unittest.TestCase):
     def setUp(self):
         self.txt = flat(read(S10))
 
-    def test_db3_is_the_fourth_element_with_absent_date_fields(self):
+    def test_db3_is_the_fourth_element_with_present_but_null_date_fields(self):
+        # Was test_db3_is_the_fourth_element_with_absent_date_fields, asserting
+        # "FIELD DOES NOT EXIST". Both fields now exist, so S10 must no longer say that.
         self.assertIn("| **DB 3** findings |", self.txt)
-        self.assertIn("FIELD DOES NOT EXIST", self.txt,
-                      "the table must distinguish an absent field from a null cell")
+        self.assertNotIn("FIELD DOES NOT EXIST", self.txt,
+                         "both DB 3 date fields exist as of 2026-10-02")
+        self.assertIn("| **PRESENT, null on all 217** | **PRESENT, null on all 217** |", self.txt,
+                      "BOTH cells - one is not enough")
+        self.assertIn("now *emptily*, no longer *structurally*", self.txt)
+
+    def test_s10_states_three_states_not_two(self):
+        self.assertIn("Three states, not two", self.txt)
+        self.assertIn("present and populated", self.txt, "the third state by name")
+        self.assertIn("changed the kind of failure, not the verdict", self.txt)
+
+    def test_s10_records_freshness_as_non_governing(self):
+        self.assertIn("`Freshness` is NON-GOVERNING and MUST NOT be read as a temporal signal",
+                      self.txt)
+        self.assertIn("A row past a **non-null** `Next Review` is **stale**", self.txt)
+        self.assertIn("No Fresh/Aging/Stale threshold exists and none is needed", self.txt)
+
+    def test_s10_does_not_claim_the_floor_is_now_computable(self):
+        self.assertIn("No backfill is authorised, so nothing in DB 3 can supply a freshness "
+                      "floor today", self.txt)
 
     def test_absent_field_is_distinguished_from_a_null_cell(self):
         self.assertIn("An absent field is a different fact from a present-but-null cell",
@@ -1263,13 +1548,31 @@ class DB3S10FailsClosed(unittest.TestCase):
         self.assertIn("read the body before relying on a DB 3 finding", self.txt)
         self.assertIn("do not treat property-completeness as permission", self.txt)
 
-    def test_no_claim_about_the_high_confidence_rows(self):
-        self.assertIn("make no claim about them", self.txt)
-        self.assertIn("neither that they are sound nor that they are not", self.txt)
+    def test_the_high_confidence_rows_are_classified_in_s10(self):
+        # Was test_no_claim_about_the_high_confidence_rows. The bodies were read under
+        # authorisation and all three are blank, so "make no claim" is no longer honest - but
+        # the earlier position must be visibly SUPERSEDED, not quietly dropped.
+        self.assertIn("all three bodies are blank", self.txt)
+        self.assertIn("HIGH_OVERSTATED", self.txt)
+        self.assertIn("HIGH_UNRESOLVED", self.txt)
+        self.assertIn("*Superseded: this bullet previously said to make no claim about them",
+                      self.txt)
+        self.assertIn("not inert", self.txt,
+                      "H1 is routed to Sales and Marketing with an agent-triggering action")
+        self.assertIn("None is in a Target S10 path", self.txt)
 
-    def test_db3_becomes_the_binding_constraint(self):
-        self.assertIn("DB 3 becomes the binding", self.txt)
-        self.assertIn("cannot be fixed by any backfill", self.txt)
+    def test_db3_is_no_longer_the_unfixable_case(self):
+        # Was test_db3_becomes_the_binding_constraint, asserting "cannot be fixed by any
+        # backfill". That is exactly what stopped being true. The old sentence is kept in the
+        # skill as superseded history, and this test now requires BOTH halves: the correction
+        # and the preserved original.
+        self.assertIn("DB 3 was the harder case until 2026-10-02", self.txt)
+        self.assertIn("could not be fixed by any backfill, because the fields did "
+                      "not exist", self.txt,
+                      "the superseded sentence must survive verbatim in S10")
+        self.assertIn("DB 3 is now an ordinary empty-cell case", self.txt)
+        self.assertIn("fixable in principle", self.txt)
+        self.assertIn("superseded, not deleted", self.txt)
 
 
 if __name__ == "__main__":

@@ -116,7 +116,27 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # UNCHANGED. DB 3 is now the binding constraint on the freshness floor, because no backfill can
 # fix a field that does not exist.
 # Was 8397e683ab1390c6c32c085a9fbf9f1fb1b1fe9c43f1b200ce2d7dbae6355c89 (2026-10-02, post-OD1/OD2).
-S10_ORDINARY_SHA = "52506b25793b937031ac2e3df0dcb3b5c37f11bf1ffac68765d220c49216e81c"
+# Was 52506b25793b937031ac2e3df0dcb3b5c37f11bf1ffac68765d220c49216e81c (2026-10-02, post-DB3 Step A).
+# Re-baselined 2026-10-02 by DB3-OD10-OD12-1 (owner-approved; the approval names the S10
+# Step 4 synchronisation). THE PRECEDING PARAGRAPH IS NOW PARTLY SUPERSEDED, and is kept
+# because it is the reason this change was made: it recorded that DB 3's freshness
+# contribution was UNRESOLVED because `Last Verified` and `Next Review` DO NOT EXIST AS
+# FIELDS. Under OD10 Option D both were added to live DB 3 as nullable dates, so Step 4 no
+# longer says that. What Step 4 now states: both fields EXIST and are NULL ON ALL 217 ROWS,
+# so the freshness floor is UNRESOLVED **emptily rather than structurally**; THREE states are
+# distinguished, not two - absent, present-but-null, and present-and-populated - because only
+# the middle one can ever be filled; `Freshness` is NON-GOVERNING as of OD10 Option D and must
+# never be read as a temporal signal, with `Last Verified` + `Next Review` governing; a row
+# past a NON-NULL `Next Review` is stale and a null one is UNRESOLVED; no Fresh/Aging/Stale
+# threshold exists and NONE IS NEEDED; no backfill is authorised, so nothing in DB 3 can
+# supply a freshness floor today - the KIND of failure changed, not the verdict; and the three
+# High-confidence rows are now CLASSIFIED (H1 HIGH_OVERSTATED, H2/H3 HIGH_UNRESOLVED, all
+# three bodies blank) because the owner authorised reading them, with the earlier no-claim
+# position marked SUPERSEDED rather than deleted. The computed floors, the Low < Medium < High
+# ordering, the null-is-weaker-than-Low rule, the assembly-date ban and the DB6
+# null-Next-Review clause are all UNCHANGED. DB 3 is NO LONGER the unfixable case: it is now
+# an ordinary empty-cell element like DB 9 and DB 10.
+S10_ORDINARY_SHA = "6ffdc4fc108247f1e00b034e1908c6e94c1db69aa04ed24a899156e5d198f756"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)

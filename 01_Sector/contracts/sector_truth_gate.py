@@ -1024,7 +1024,8 @@ def main():
                 for k3 in DB3_NOW_PRESENT:
                     if "NULL" not in str(fmr.get(k3, "")).upper():
                         fail.append("CHECK 7c DB3's %s must be recorded PRESENT BUT NULL." % k3)
-                if "different fact" not in str(fmr.get("why_this_distinction_matters", "")):
+                if not re.search(r"(?i)different fact",
+                                 str(fmr.get("why_this_distinction_matters", ""))):
                     fail.append("CHECK 7c DB3 must record WHY absent and present-but-null are "
                                 "different facts.")
 
@@ -1072,7 +1073,9 @@ def main():
                 fail.append("CHECK 7c DB3 must record that Option C was EXCLUDED BY CONTRACT: "
                             "`freshness` is a REQUIRED property of the Intelligence Object.")
             thr = odr.get("thresholds_examined_and_rejected_as_not_reusable") or {}
-            if "NOT REUSABLE" not in str(thr.get("verdict", "")).upper():
+            # The record says "NEITHER IS REUSABLE"; an exact "NOT REUSABLE" needle was my
+            # own paraphrase of it. Accept either phrasing of the same verdict.
+            if not re.search(r"(?i)neither is reusable|not reusable", str(thr.get("verdict", ""))):
                 fail.append("CHECK 7c DB3 must record that the 30- and 90-day horizons were "
                             "examined and are NOT REUSABLE.")
             if "never run" not in str(odr.get("stale_rule_now_has_a_trigger", "")):
@@ -1098,6 +1101,19 @@ def main():
                             "EXPRESSIVENESS for tier and temporal verification.")
             if "NOT MISSING PROVENANCE" not in lim3:
                 fail.append("CHECK 7c DB3 must NOT be described as missing provenance generally.")
+            # Added 2026-10-02 after mutation testing: the two checks above both survived a
+            # mutation that declared the limitation CLOSED, because the mutation kept their
+            # phrases. Only the TEMPORAL half closed; the tier half is untouched.
+            if "HALF CLOSED" not in lim3:
+                fail.append("CHECK 7c DB3's limitation must be recorded HALF CLOSED - "
+                            "DB3-OD10-OD12-1 closed the temporal half only.")
+            if "SOURCE TIER REMAINS STRUCTURALLY INEXPRESSIBLE" not in lim3:
+                fail.append("CHECK 7c DB3 must record that SOURCE TIER REMAINS STRUCTURALLY "
+                            "INEXPRESSIBLE - closing the temporal half must never read as "
+                            "closing the tier half.")
+            if "EXPRESSIBLE but UNPOPULATED" not in (pm3.get("the_actual_limitation") or ""):
+                fail.append("CHECK 7c DB3's temporal half must be recorded EXPRESSIBLE but "
+                            "UNPOPULATED, not solved.")
             if not re.search(r"(?i)cannot detect later live|no offline gate can detect", blob3):
                 fail.append("CHECK 7c DB3 must warn that live drift is undetectable offline.")
 
@@ -1142,7 +1158,7 @@ def main():
             if "NOT AUTHORISED" not in str(h1.get("correction_is_a_separate_decision", "")).upper():
                 fail.append("CHECK 7c DB3's HIGH_OVERSTATED correction must be recorded as a "
                             "SEPARATE, unauthorised decision - DB3-OD10-OD12-1 did not make it.")
-            if "Draft 15" not in str(h1.get("why", "")):
+            if not re.search(r"(?i)draft 15", str(h1.get("why", ""))):
                 fail.append("CHECK 7c DB3's HIGH_OVERSTATED row must record the actual basis: "
                             "its Evidence cites Arika's own internal draft.")
             for k3, v3 in cls.items():
@@ -1297,7 +1313,14 @@ def main():
                 ("*Superseded: this bullet previously said to make no claim about them",
                  "that the earlier no-claim position is superseded, not silently deleted"),
                 ("all three bodies are blank",
-                 "that all three High-confidence bodies were read and are blank")]:
+                 "that all three High-confidence bodies were read and are blank"),
+                # Added 2026-10-02 after mutation testing: reinstating the unfixable claim as
+                # CURRENT passed the gate, because no needle covered that sentence at all.
+                ("DB 3 was the harder case until 2026-10-02",
+                 "the unfixable-case claim in the PAST tense - it is superseded, and "
+                 "reinstating it as current must fail"),
+                ("DB 3 is now an ordinary empty-cell case",
+                 "that DB 3 is now an ordinary empty-cell element like DB 9 and DB 10")]:
             if needle not in s10b:
                 fail.append("CHECK 7c S10 SKILL.md Step 4 does not state %s." % what)
 
@@ -1357,9 +1380,11 @@ def main():
         notes.append("DB3 provenance: %s fields recorded (was 15, +2 dates 2026-10-02) | own "
                      "4-field model + 2 governing dates, NOT the 7-field shape | Evidence "
                      "required %s/%s | 0 rows with Confidence and no Evidence | "
-                     "tier + both dates STRUCTURALLY ABSENT | Freshness declared, no threshold | "
-                     "OD6 re-scoped, OD7-OD12 open | 211 bodies unread, 3 High rows "
-                     "uncharacterised | drift undetectable offline"
+                     "tier STRUCTURALLY ABSENT, dates PRESENT BUT NULL 0/217 | Freshness "
+                     "NON-GOVERNING, no threshold defined or needed | OD6 re-scoped, OD10 CLOSED "
+                     "BY DISSOLUTION, OD7-OD9/OD11-OD13 open | 211 bodies unread; 3 High rows "
+                     "read and blank: 1 HIGH_OVERSTATED, 2 HIGH_UNRESOLVED | no backfill "
+                     "authorised | drift undetectable offline"
                      % (d3n.get("field_count_verified"),
                         (rl3n.get("Evidence") or {}).get("non_null"),
                         (rl3n.get("Evidence") or {}).get("of")))
