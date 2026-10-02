@@ -205,14 +205,26 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Category | Select | RET | Structure · Economics · Value Chain · Buying Psychology · Decision Dynamics · Trust · Governance/Power · Infrastructure · Risk/Fragility · Strategic Node · **Tool-Stack Chaos** (ADDENDUM 3) · **Demand Pattern** *(added 2026-08-20)* (Draft 13 layers + xlsx Sheets 03–07) |
 | **Geography** | Relation → Geography (DB 11) | REL | ✅ *applied live 2026-08-20 (one-way, matching how DB 7 relates to Geography).* **Optional** — most findings are sector-wide, not place-bound. Set it when a finding is only true somewhere: *"Nairobi MICE demand concentrates Sep–Nov"* is a Nairobi fact, not a Hospitality fact. Without it, destination-scoped intelligence has nowhere to attach and the Resolution Engine cannot narrow by place. |
 | **Destination Profiles** | Relation → Destination Profile (DB 16) | REL | ✅ *live 2026-08-20* — the reverse side of DB 16's `Related Intelligence`. |
-| Evidence | Text | GOV | what supports it |
-| Source | Select/Text | GOV | xlsx sheet · chat · agent run · research |
-| Confidence | Select | GOV | Low · Medium · High |
+| **Evidence** | **Text** | **GOV** | **REQUIRED — "no evidence, no row".** Carries the substance **and, in practice, the re-followable locator.** Populated on **217 of 217** rows |
+| **Source** | **Select** | **GOV** | **xlsx · chat · agent run · research** — *corrected 2026-10-02: the type is a **Select** only (not "Select/Text"), and the first option is `xlsx`, not "xlsx sheet".* 🔴 **All four options are PROCESS LABELS: they record HOW a finding was obtained, never WHO published it.** This field is **not an authority** — the locator belongs in `Evidence` |
+| Confidence | Select | GOV | Low · Medium · High. Populated on **217 of 217** rows (214 Medium · 3 High · 0 Low) |
 | Impact | Select | EXE | Low · Medium · High |
-| Freshness | Select | GOV | Fresh · Aging · Stale |
+| **Freshness** | **Select** | **GOV** | Fresh · Aging · Stale. 🔴 **A DECLARATION, not a computed measurement** — all 217 rows are `Fresh` and **no Fresh/Aging/Stale threshold is defined anywhere**, so nothing can age. Never read as evidence of recency; never substitute it for a verification date |
 | Strategic Implication | Text | EXE | the "so what" |
 | Recommended Action | Text | EXE | Draft 4 execution layer |
 | Routed To (Dept) | Multi-select | REL | **Canonical department vocabulary — 21 values, = `GLOBAL_OS.md` §4** ([`contracts/department-vocabulary.json`](contracts/department-vocabulary.json)). ✅ **Applied 2026-08-24** — holds exactly the 21, no deprecated entries. |
+
+**15 properties, verified live 2026-10-02** by `DB3-PROV-AUDIT-1`. *(The recorded count was already correct — unlike DB 6 and DB 10, which under-reported by five and six. What was missing was the mechanical anchor and any record of what DB 3 cannot hold.)*
+
+> 🟢 **DB 3's row-level provenance is COMPLETE against its own contract.** `Evidence` is REQUIRED and populated on **217 of 217** rows; `Confidence`, `Source` and `Freshness` likewise. **Zero rows carry a `Confidence` without an `Evidence`.** Of the six Accommodation (Target) rows, **five name re-followable sources inline in `Evidence`** and one does not. **No Target-row `Confidence` correction is required.**
+>
+> 🔴 **DB 3 does NOT use the seven-field provenance shape** carried by DB 6, DB 9 and DB 10. It uses its own coherent four-field model — `Evidence` (substance + locator) · `Source` (process kind) · `Confidence` · `Freshness` (declared state) — and [`contracts/intelligence-object.schema.json`](contracts/intelligence-object.schema.json) already maps it correctly as **`Evidence + Source`** for Q2. **DB 3 is not an incomplete copy of the other shape.**
+>
+> 🔴 **What DB 3 cannot hold.** `Source Tier`, `Source URL`, `Last Verified` and `Next Review`/`Next Verification` are **STRUCTURALLY ABSENT** — there is no field for any of them. So the write contract's *"a T4 source may discover but may not confirm"* rule **cannot be evaluated from DB 3's schema at all**, and S10's freshness floor is **structurally UNRESOLVED** for DB 3 rather than merely empty. **An absent field is a different fact from a present-but-null cell — both fail closed, and only the second can be backfilled.**
+>
+> ⚠️ **The limitation is SCHEMA EXPRESSIVENESS for tier and temporal verification — not missing provenance.** Two Target rows carry explicit per-source **tiers** and **both dates** in their page bodies, with no field able to receive them. That is the inverse of DB 6's pre-remediation state, where the fields existed and the values were stranded in bodies. Open items **OD6–OD12** record every outstanding question; **none is resolved**, and `DB3-PROV-1` Step A made **no live write of any kind**.
+>
+> ⚪ **211 of 217 rows were not body-read** (the SaaS branch). Their property-level completeness is verified by an aggregate over all 217; their `Evidence` quality, tiers and dates are **unexamined and deliberately not characterised**. **Three rows carry `Confidence = High`**, none in the Target set — their bodies were outside the authorised scope, so **no claim is made about them** (OD12).
 
 > 🔴 **Documentation-vs-live drift found and closed (2026-08-20).** The 2026-08-19 ADDENDUM 3 changelog records *"**DB 3** `Category += Tool-Stack Chaos`"*, but a live read of the data source found the option **did not exist** — `Category` held only the original 10. The documented change had never been applied, so any attempt to write a Tool-Stack-Chaos finding would have failed. **`Tool-Stack Chaos` was created live in this pass**, alongside `Demand Pattern`, restoring the documented state. Verified after the change: all **215 rows** retain their `Category` value, 0 nulls. *Recorded rather than silently fixed — a changelog entry is not proof a change landed.*
 

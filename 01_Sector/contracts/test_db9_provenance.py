@@ -688,9 +688,14 @@ class S10StepFourNamesEveryCause(unittest.TestCase):
     def setUp(self):
         self.txt = flat(read(S10))
 
-    def test_all_three_contributing_databases_are_named(self):
-        for db_id in ("DB 6", "DB 9", "DB 10"):
+    def test_all_four_contributing_databases_are_named(self):
+        # DB3 added 2026-10-02 by DB3-PROV-1 Step A. The table had named three of four while
+        # Step 4's own prose named findings as a confidence contributor.
+        for db_id in ("DB 3", "DB 6", "DB 9", "DB 10"):
             self.assertIn(db_id, self.txt, "Step 4 must name %s as a contributing element" % db_id)
+        self.assertIn("four contributing elements", self.txt,
+                      "the count must say four, not three")
+        self.assertIn("DB 3 added as the fourth element", self.txt)
 
     def test_db6_populated_confidence_is_described_as_unsupported(self):
         self.assertIn("populated `Confidence` with an EMPTY `Source`", self.txt)
@@ -953,14 +958,23 @@ class OD1ScopeBoundaries(unittest.TestCase):
             self.assertNotIn("CLOSED", od[k]["status"])
 
     def test_db3_finding_is_open_and_caused_no_db3_mutation(self):
+        # UPDATED 2026-10-02: DB3-PROV-1 Step A RE-SCOPED OD6 and replaced its original facts
+        # list, so the old "not acted on" / "terminates in an unsourced claim" phrases are gone
+        # by design. What must survive is that OD6 is OPEN, that the original claim is preserved
+        # rather than rewritten, and that DB3 itself was never mutated.
         od = json.loads(read(DBJSON))["_open_decisions"]["OD6"]
         self.assertEqual(od["db"], "DB3")
         self.assertIn("OPEN", od["status"])
-        self.assertIn("not acted on", od["status"])
-        self.assertTrue(any("NOT mutated" in f for f in od["facts"]),
-                        "OD6 must record that DB3 was not mutated")
-        self.assertTrue(any("terminates in an unsourced claim" in f for f in od["facts"]),
-                        "OD6 must record why the pointer chain failed")
+        self.assertIn("RE-SCOPED", od["status"])
+        self.assertIn("superseded_claim", od,
+                      "the original OD6 framing must be preserved, not rewritten")
+        self.assertIn("DISPROVEN", od["superseded_claim"]["verdict"])
+        self.assertIs(od["superseded_claim"]["preserved_not_rewritten"], True)
+        # DB3 itself must carry no backfill and no exception
+        d3 = dbrow("DB3")
+        self.assertIs(d3["row_level_provenance"]["backfill_authorised"], False)
+        self.assertNotIn("backfill_performed", json.dumps(d3))
+        self.assertNotIn("od1_exception", d3)
         # DB3's own contract entry must be untouched by this task
         d3 = dbrow("DB3")
         self.assertNotIn("od1_exception", d3)
@@ -976,6 +990,286 @@ class OD1ScopeBoundaries(unittest.TestCase):
         od = json.loads(read(DBJSON))["_open_decisions"]["OD1"]
         self.assertIn("documented expectation", od["status"].lower())
         self.assertIn("not an enforced validator", od["status"].lower())
+
+
+# --------------------------------------------------------------------------------------------
+# DB3-PROV-1 Step A (2026-10-02) - repository synchronisation to DB3-PROV-AUDIT-1.
+# Offline and deterministic. REPOSITORY-INTERNAL ONLY: these tests check what the repository
+# RECORDS about DB3. They cannot and do not check the live Notion store, so THEY CANNOT DETECT
+# LATER LIVE DRIFT. Re-verifying DB3's live schema needs another separately authorised audit.
+# --------------------------------------------------------------------------------------------
+
+DB3_AUDIT = "DB3-PROV-AUDIT-1"
+DB3_SOURCE_OPTS = ["xlsx", "chat", "agent run", "research"]
+DB3_ABSENT = ["Source Tier", "Source URL", "Last Verified", "Next Review", "Next Verification"]
+
+
+class DB3RecordedSchema(unittest.TestCase):
+
+    def test_field_count_is_fifteen_and_anchored(self):
+        d3 = dbrow("DB3")
+        self.assertEqual(len(d3["fields"]), 15)
+        self.assertEqual(d3.get("field_count_verified"), 15,
+                         "DB3 must carry the mechanical count anchor")
+        self.assertIn(DB3_AUDIT, d3.get("field_count_note", ""),
+                      "and attribute it to the bounded audit")
+
+    def test_no_duplicate_field_names(self):
+        names = [f["name"] for f in dbrow("DB3")["fields"]]
+        dupes = sorted({n for n in names if names.count(n) > 1})
+        self.assertEqual(dupes, [], "DB3 duplicate field names: %s" % dupes)
+
+    def test_source_is_a_four_value_process_kind_select(self):
+        by = {f["name"]: f for f in dbrow("DB3")["fields"]}
+        src = by["Source"]
+        self.assertEqual(src["notion_type"], "select")
+        self.assertEqual(src["allowed_values"], DB3_SOURCE_OPTS,
+                         "the exact four options, in order")
+        self.assertIn("PROCESS KIND", src["semantics"])
+        self.assertIn("not authority", src["semantics"].lower())
+        self.assertIn("Evidence", src["semantics"],
+                      "must say the locator belongs in Evidence")
+
+    def test_evidence_is_required_and_fully_populated(self):
+        by = {f["name"]: f for f in dbrow("DB3")["fields"]}
+        self.assertIs(by["Evidence"].get("required"), True)
+        self.assertIn("No evidence, no row", by["Evidence"]["validation"])
+        rl = dbrow("DB3")["row_level_provenance"]
+        self.assertEqual(rl["Evidence"]["non_null"], 217)
+        self.assertEqual(rl["Evidence"]["of"], 217)
+
+    def test_temporal_and_tier_fields_are_recorded_absent(self):
+        d3 = dbrow("DB3")
+        names = [f["name"] for f in d3["fields"]]
+        for absent in DB3_ABSENT:
+            self.assertNotIn(absent, names, "%s must not be recorded as a DB3 field" % absent)
+        pm = d3["provenance_model"]["fields_absent"]
+        for absent in ("Source Tier", "Last Verified", "Source URL"):
+            self.assertIn(absent, pm, "absence of %s must be STATED, not merely omitted" % absent)
+        self.assertTrue(any("Next Review" in k for k in pm),
+                        "absence of a next-review field must be stated")
+        for k, v in pm.items():
+            self.assertIn("ABSENT", v.upper(), "%s must be described as absent" % k)
+
+    def test_freshness_threshold_is_recorded_undefined(self):
+        by = {f["name"]: f for f in dbrow("DB3")["fields"]}
+        sem = by["Freshness"]["semantics"]
+        self.assertIn("DECLARED", sem.upper())
+        self.assertIn("no Fresh/Aging/Stale threshold is defined", sem)
+        self.assertIn("never substitute", sem.lower())
+        fr = dbrow("DB3")["provenance_model"]["freshness_is_a_declaration_not_a_measurement"]
+        self.assertIn("DECLARATION", fr["consequence"].upper())
+        self.assertIn("OD10", fr["related_open_item"])
+
+    def test_the_limitation_is_expressiveness_not_missing_provenance(self):
+        pm = dbrow("DB3")["provenance_model"]
+        lim = pm["the_actual_limitation"]
+        self.assertIn("NOT MISSING PROVENANCE GENERALLY", lim.upper())
+        self.assertIn("SCHEMA EXPRESSIVENESS", lim.upper())
+        self.assertIn("TEMPORAL", lim.upper())
+
+    def test_drift_is_declared_undetectable(self):
+        self.assertIn("drift", flat(json.dumps(dbrow("DB3"))).lower())
+        dw = flat(dbrow("DB3")["provenance_model"]["drift_warning"]).lower()
+        self.assertIn("no offline gate can detect later live", dw,
+                      "the warning must say no gate can detect drift")
+
+
+class DB3RowLevelRecorded(unittest.TestCase):
+
+    def setUp(self):
+        self.rl = dbrow("DB3")["row_level_provenance"]
+
+    def test_row_count_and_full_population(self):
+        self.assertEqual(self.rl["rows"], 217)
+        for f in ("Evidence", "Confidence", "Source", "Freshness"):
+            self.assertEqual(self.rl[f]["non_null"], 217, "%s populated 217/217" % f)
+
+    def test_zero_rows_have_confidence_without_evidence(self):
+        self.assertEqual(self.rl["rows_with_confidence_and_no_evidence"], 0,
+                         "this is the fact that disproved the original OD6 framing")
+
+    def test_source_values_sum_to_the_row_count(self):
+        self.assertEqual(sum(self.rl["Source"]["by_value"].values()), 217)
+        self.assertEqual(sum(self.rl["Confidence"]["by_value"].values()), 217)
+
+    def test_target_set_recorded_without_overclaiming(self):
+        t = self.rl["target_sector_rows"]
+        self.assertEqual(t["count"], 6)
+        self.assertEqual(t["evidence_naming_a_source"], 5)
+        self.assertEqual(t["evidence_naming_no_source"], 1)
+        self.assertEqual(t["evidence_naming_a_source"] + t["evidence_naming_no_source"], 6)
+        self.assertIn("NONE", t["confidence_correction_required"],
+                      "no Target-row confidence correction is required")
+
+    def test_non_target_rows_are_not_characterised(self):
+        n = self.rl["non_target_rows"]
+        self.assertEqual(n["count"], 211)
+        self.assertEqual(n["count"] + self.rl["target_sector_rows"]["count"], 217)
+        self.assertIn("NOT READ", n["bodies"])
+        self.assertIn("not characterised", n["bodies"].lower())
+
+    def test_no_claim_is_made_about_the_high_confidence_rows(self):
+        hc = self.rl["high_confidence_rows"]
+        self.assertEqual(hc["count"], 3)
+        self.assertEqual(hc["in_target_set"], 0)
+        self.assertIn("NOT CHARACTERISED", hc["status"].upper())
+        self.assertIs(hc["no_claim_is_made_about_them"], True)
+        self.assertIn("UNVERIFIED EXPOSURE", hc["status"].upper(),
+                      "an exposure, not a confirmed defect")
+
+    def test_no_backfill_authorised(self):
+        self.assertIs(self.rl["backfill_authorised"], False)
+
+
+class DB3IsNotTheSevenFieldShape(unittest.TestCase):
+
+    def test_db3_does_not_claim_the_seven_field_shape(self):
+        pm = dbrow("DB3")["provenance_model"]
+        self.assertIn("not the seven-field shape", pm["summary"].lower())
+        self.assertIn("NOT AN INCOMPLETE COPY", pm["summary"].upper())
+
+    def test_no_seven_field_ratification_anywhere(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]
+        self.assertIn("NOT ratified", od["OD4"]["status"])
+        self.assertIn("DIFFERENT coherent model", od["OD4"]["status"])
+        self.assertTrue(any("COUNTEREXAMPLE" in f for f in od["OD4"]["facts"]),
+                        "OD4 must record DB3 as a counterexample")
+        self.assertTrue(any("SEMANTIC REVERSAL" in f for f in od["OD4"]["facts"]),
+                        "and record why standardising would be a migration, not an addition")
+
+    def test_the_other_three_keep_their_shape(self):
+        for db_id, n in (("DB6", 19), ("DB9", 21), ("DB10", 16)):
+            self.assertEqual(len(dbrow(db_id)["fields"]), n, "%s unchanged" % db_id)
+            self.assertIn("Evidence", [f["name"] for f in dbrow(db_id)["fields"]])
+
+    def test_intelligence_object_mapping_is_unchanged(self):
+        props = json.loads(read(IOJSON))["properties"]
+        self.assertEqual(props["source"]["notion_field"]["DB3"], "Evidence + Source",
+                         "DB3's Q2 mapping was already correct and must not be touched")
+        self.assertEqual(props["when_observed"]["notion_field"]["DB3"], "Freshness")
+        self.assertEqual(props["reliability"]["notion_field"]["DB3"], "Confidence")
+
+
+class DB3OD6SupersededAndRescoped(unittest.TestCase):
+
+    def setUp(self):
+        self.od6 = json.loads(read(DBJSON))["_open_decisions"]["OD6"]
+
+    def test_the_prior_claim_is_preserved_verbatim(self):
+        sc = self.od6["superseded_claim"]
+        self.assertIn("unsupported", sc["question_text"].lower(),
+                      "the original framing must be kept as written")
+        self.assertIs(sc["preserved_not_rewritten"], True)
+        self.assertIn("DISPROVEN", sc["verdict"])
+
+    def test_the_reading_error_is_recorded(self):
+        sc = self.od6["superseded_claim"]
+        self.assertIn("`Source` property ALONE", sc["the_reading_error"])
+        self.assertIn("GOVERNED PROCESS VOCABULARY", sc["the_reading_error"])
+        self.assertIn("ALREADY BEEN READ", sc["aggravating_detail"])
+        self.assertIn("SECOND", sc["pattern"])
+
+    def test_zero_of_217_is_the_disproving_fact(self):
+        self.assertIn("ZERO of 217", self.od6["superseded_claim"]["why_it_was_wrong"])
+
+    def test_od6_is_rescoped_to_four_specific_things(self):
+        rs = self.od6["rescoped_to"]
+        self.assertEqual(len(rs), 4)
+        joined = " ".join(rs)
+        for must in ("temporal", "Source Tier", "Freshness", "Body-level"):
+            self.assertIn(must, joined, "re-scope must name %s" % must)
+        self.assertIn("OPEN", self.od6["status"])
+        self.assertIn("RE-SCOPED", self.od6["status"])
+        self.assertIn("SCHEMA EXPRESSIVENESS", self.od6["status"].upper())
+
+    def test_no_confidence_correction_claimed_as_needed(self):
+        self.assertIn("No Target-row Confidence correction",
+                      self.od6["what_the_audit_found_NOT_required"])
+
+    def test_the_db6_proposal_carries_a_superseding_note_not_a_rewrite(self):
+        # Strip blockquote markers BEFORE flattening: the preserved text is inside a quote block,
+        # so a hard-wrapped phrase would otherwise pick up a stray "> " in the middle.
+        _p = read(os.path.join(ROOT, "01_Sector", "DB6_OD1_OD2_RESOLUTION_PROPOSAL.md"))
+        prop = flat(re.sub(r"(?m)^>\s?", "", _p))
+        self.assertIn("SUPERSEDED 2026-10-02 by `DB3-PROV-AUDIT-1`", prop)
+        self.assertIn("THE CLAIM BELOW IS DISPROVEN", prop)
+        # the original wording must survive verbatim
+        self.assertIn("That is the OD1 pattern exactly", prop,
+                      "the disproven text is preserved, not deleted")
+        self.assertIn("ORIGINAL TEXT, PRESERVED", prop)
+
+
+class DB3OpenItemsRecorded(unittest.TestCase):
+
+    def test_od7_to_od12_are_recorded_and_open(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]
+        for k in ("OD7", "OD8", "OD9", "OD10", "OD11", "OD12"):
+            self.assertIn(k, od, "%s must be recorded" % k)
+            self.assertIn("OPEN", od[k]["status"], "%s must be OPEN" % k)
+            self.assertNotIn("CLOSED", od[k]["status"])
+            self.assertEqual(od[k]["db"], "DB3")
+
+    def test_each_open_item_names_its_subject(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]
+        for k, needle in (("OD7", "Last Verified"), ("OD8", "Source Tier"),
+                          ("OD9", "Source URL"), ("OD10", "Fresh/Aging/Stale"),
+                          ("OD11", "re-sourced"), ("OD12", "High-confidence")):
+            self.assertIn(needle, od[k]["question"], "%s must concern %s" % (k, needle))
+
+    def test_earlier_decisions_keep_their_state(self):
+        od = json.loads(read(DBJSON))["_open_decisions"]
+        for k in ("OD1", "OD2", "OD3"):
+            self.assertIn("CLOSED", od[k]["status"], "%s stays closed" % k)
+        for k in ("OD4", "OD5"):
+            self.assertIn("OPEN", od[k]["status"], "%s stays open" % k)
+        self.assertEqual(dbrow("DB6")["od1_exception"]["expiry"], "2026-11-24",
+                         "the DB6 Buyer exception is untouched")
+
+
+class DB3S10FailsClosed(unittest.TestCase):
+
+    def setUp(self):
+        self.txt = flat(read(S10))
+
+    def test_db3_is_the_fourth_element_with_absent_date_fields(self):
+        self.assertIn("| **DB 3** findings |", self.txt)
+        self.assertIn("FIELD DOES NOT EXIST", self.txt,
+                      "the table must distinguish an absent field from a null cell")
+
+    def test_absent_field_is_distinguished_from_a_null_cell(self):
+        self.assertIn("An absent field is a different fact from a present-but-null cell",
+                      self.txt)
+        self.assertIn("Both fail closed", self.txt)
+        self.assertIn("only the second could ever be filled", self.txt)
+
+    def test_freshness_may_not_substitute_for_a_verification_date(self):
+        self.assertIn("No assembly date, current date, or `Freshness` label may substitute",
+                      self.txt)
+        self.assertIn("cannot age and carries no temporal information", self.txt)
+
+    def test_source_must_not_be_read_as_authority(self):
+        self.assertIn("`Source` is a process-kind dimension, not an authority", self.txt)
+        self.assertIn("Never read `Source` as the authority", self.txt)
+        self.assertIn("never report a row as unsourced because `Source` looks generic", self.txt)
+
+    def test_the_six_target_rows_are_reported_accurately(self):
+        self.assertIn("Five of the six Target rows name re-followable sources inline; one does "
+                      "not", self.txt)
+        self.assertIn("`Evidence` is REQUIRED and populated on 217 of 217 rows", self.txt)
+
+    def test_body_restrictions_may_be_lost(self):
+        self.assertIn("Restrictions recorded only in page bodies can be lost", self.txt)
+        self.assertIn("read the body before relying on a DB 3 finding", self.txt)
+        self.assertIn("do not treat property-completeness as permission", self.txt)
+
+    def test_no_claim_about_the_high_confidence_rows(self):
+        self.assertIn("make no claim about them", self.txt)
+        self.assertIn("neither that they are sound nor that they are not", self.txt)
+
+    def test_db3_becomes_the_binding_constraint(self):
+        self.assertIn("DB 3 becomes the binding", self.txt)
+        self.assertIn("cannot be fixed by any backfill", self.txt)
 
 
 if __name__ == "__main__":

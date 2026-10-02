@@ -107,18 +107,34 @@ Buyer row** — even though three of its four rows are now fully dated, and even
 
 > **The live field name is `Next Review`**, not `Next Verification`. DB 7 and DB 14 use the latter; DB 1, DB 2, DB 9 and DB 16 use the former. Read the name the store actually carries.
 
-**What this means in practice today:** an Accommodation packet's **both floors resolve to `UNRESOLVED`**. *Corrected 2026-10-02 by `DB6-DB10-PROV-1` Step 1 — the previous wording named DB 9 as the only cause, which under-stated it. There are **three** contributing elements, and naming only one would let a reader think fixing DB 9 clears the floor.*
+**What this means in practice today:** an Accommodation packet's **both floors resolve to `UNRESOLVED`**. *Corrected twice, both times for the same reason — under-counting the contributing elements. Step 1 (2026-10-02) replaced wording that named DB 9 as the only cause and listed **three**. `DB3-PROV-1` Step A (2026-10-02) then found the table itself omitted DB 3. There are **four** contributing elements, and naming fewer lets a reader think fixing one clears the floor.*
 
 | Element | `Confidence` | `Last Verified` | `Next Review` | What it contributes |
 |---|---|---|---|---|
+| **DB 3** findings | **`Medium` on all 6 Target rows** | **FIELD DOES NOT EXIST** | **FIELD DOES NOT EXIST** | **confidence floor `Medium`; freshness floor `UNRESOLVED` — structurally, not emptily** |
 | **DB 9** audience | null on all 4 rows | null on all 4 | null on all 4 | `UNRESOLVED` on **both** floors |
 | **DB 6** linguistics | **`Medium` on all 4** | **all 4 populated** | **3 of 4 — Buyer null** | **confidence floor `Medium`; freshness floor `UNRESOLVED`, naming the Buyer row** |
 | **DB 10** decision-makers | null on all 57 | null on all 57 | null on all 57 | `UNRESOLVED` on **both** floors |
 
+*DB 3 added as the fourth element 2026-10-02 by `DB3-PROV-1` Step A, from `DB3-PROV-AUDIT-1`. It was **missing from this table while Step 4's own prose named findings as a confidence contributor** — "A finding at `Confidence = Low` … caps the packet". The table named three of four contributing elements, which is the same class of omission Step 1 corrected when the table named DB 9 alone.*
+
+**DB 3's behaviour, because it differs from the other three in kind:**
+
+- **Confidence contributes normally.** All 217 rows carry a governed `Confidence`, and all six Accommodation rows are `Medium`. DB 3 never triggers a null-driven `UNRESOLVED` on the confidence floor.
+- **`Evidence` is REQUIRED and populated on 217 of 217 rows.** Five of the six Target rows name re-followable sources inline; one does not.
+- 🔴 **`Source` is a process-kind dimension, not an authority.** Its four values — `xlsx` · `chat` · `agent run` · `research` — record **how** a finding was obtained, never **who** published it. **Never read `Source` as the authority and never report a row as unsourced because `Source` looks generic** — the locator lives in `Evidence`.
+- 🔴 **Freshness contributes `UNRESOLVED`, and no backfill can change that.** DB 3 has **no `Last Verified` and no `Next Review` field at all**. **An absent field is a different fact from a present-but-null cell. Both fail closed, but only the second could ever be filled.** Say which one you are reporting.
+- 🔴 **No assembly date, current date, or `Freshness` label may substitute for a missing verification date.** DB 3's `Freshness` is `Fresh` on all 217 rows with **no threshold defined anywhere**, so it cannot age and carries no temporal information. It is a declaration, not a measurement.
+- ⚠️ **Restrictions recorded only in page bodies can be lost.** Two Target rows state limits on how the finding may be used — one that it may not drive a downstream execution without stronger confirmation, one that a particular reading would be overclaiming. **No field carries either.** A packet assembled from properties alone silently drops both, so **read the body before relying on a DB 3 finding**, and do not treat property-completeness as permission.
+- ⚪ **Three DB 3 rows carry `Confidence = High`, none of them Target rows. Their bodies were outside the authorised audit, so make no claim about them** — neither that they are sound nor that they are not.
+
 *DB 6's row updated 2026-10-02 by `DB6-OD1-OD2-1`, which populated 13 cells. Note what did and did
-not change: DB 6 is now the **best-provenanced** of the three elements and it **still** contributes
-an `UNRESOLVED` freshness floor, on the strength of **one** missing `Next Review`. One null is
-enough. The packet floor was `UNRESOLVED` before the backfill and is `UNRESOLVED` after it — the
+not change: DB 6 is the **best-provenanced** of the four elements on the fields it has, and it
+**still** contributes an `UNRESOLVED` freshness floor, on the strength of **one** missing
+`Next Review`. One null is enough. **DB 3 is the harder case: it cannot be fixed by any backfill,
+because the fields do not exist** — so as DB 9 and DB 10 are remediated, **DB 3 becomes the binding
+constraint on the freshness floor.** The packet floor was `UNRESOLVED` before the backfill and is
+`UNRESOLVED` after it — the
 backfill improved the data, not the verdict.*
 
 **Name every contributing element, not just the first.** Four more facts belong in the packet's own words:

@@ -388,13 +388,46 @@ should require.
 
 ### 5.4 A third database shows the same defect — flagged, not expanded
 
-DB 3 holds `Confidence = Medium` against `Source = "research"`. **That is the OD1 pattern exactly:
-a populated confidence with no governed, re-followable source.** So OD1's defect class is **not
-DB 6-only**, and this was found incidentally in a single-record read, not a survey.
+> 🔴 **SUPERSEDED 2026-10-02 by `DB3-PROV-AUDIT-1`. THE CLAIM BELOW IS DISPROVEN.** The original
+> text is preserved verbatim and is **not** rewritten, because the error it contains is the point.
+>
+> **What the bounded DB 3 audit found:** DB 3 does **NOT** reproduce the OD1 pattern. **Zero of
+> 217 rows carry a `Confidence` without an `Evidence`.** `Evidence` is a **REQUIRED** property,
+> populated on **217 of 217** rows, and on five of the six Accommodation rows it names
+> re-followable sources inline. **`Source = research` is governed process vocabulary** — one of
+> four ratified options (`xlsx` · `chat` · `agent run` · `research`), all of which record *how* a
+> finding was obtained and none of which was ever meant to be an authority. The locator lives in
+> `Evidence`, and `intelligence-object.schema.json` already mapped DB 3's Q2 as `Evidence +
+> Source`, correctly.
+>
+> **Why the claim was wrong:** it was drawn from the `Source` property **alone**. Worse, the DB 3
+> record's `Evidence` text had **already been read in the same session** — the ProStay citation is
+> quoted two paragraphs above, in §5.3 — and the conclusion was still reached without it. This is
+> the **second** instance in this programme of a finding mis-framed by reading one field without
+> its companion; the first was listing `_divergences` keys without opening F14, which hid the
+> 2026-09-13 item 31e history. **Both times the data was complete and the reading was partial.**
+>
+> **What survives:** a real defect, but a different one. **OD6 is RE-SCOPED** from a data-quality
+> defect to a **schema-expressiveness** defect — DB 3 has no `Source Tier`, no `Last Verified` and
+> no `Next Review` field, its `Freshness` is inert (all 217 rows `Fresh`, no threshold defined
+> anywhere), and two Accommodation rows carry payload restrictions in their page bodies that no
+> field represents. **No Target-row `Confidence` correction is required.**
+>
+> **The OD4 conclusion below still holds, and for a stronger reason than the one given.** DB 3 is
+> not a laggard behind the seven-field shape — it is a **counterexample** to the assumption that
+> one latent standard exists. Standardising that shape onto DB 3 would require a **semantic
+> reversal** of `Source` from a kind-select to an authority-text, making all 217 existing values
+> wrong under the new meaning. Recorded as open items **OD6–OD12**.
 
-This is **flagged and deliberately not acted on.** It strengthens one existing recommendation:
-**OD4 must not be ratified repository-wide** until DB 3 and the remaining databases are audited —
-ratifying a standard now would ratify it over records that already breach it.
+**ORIGINAL TEXT, PRESERVED — DISPROVEN, DO NOT RELY ON IT:**
+
+> DB 3 holds `Confidence = Medium` against `Source = "research"`. **That is the OD1 pattern
+> exactly: a populated confidence with no governed, re-followable source.** So OD1's defect class
+> is **not DB 6-only**, and this was found incidentally in a single-record read, not a survey.
+>
+> This is **flagged and deliberately not acted on.** It strengthens one existing recommendation:
+> **OD4 must not be ratified repository-wide** until DB 3 and the remaining databases are audited
+> — ratifying a standard now would ratify it over records that already breach it.
 
 ---
 

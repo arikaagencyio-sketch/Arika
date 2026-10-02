@@ -96,7 +96,27 @@ REAL_LOG_FIRST_15_SHA = "9b0183657e1e33c1633d37357e8a193730d69468773f8d4a34e8d29
 # tier whenever a source is set. The computed floors, the Low < Medium < High ordering, the
 # null-is-weaker-than-Low rule and the assembly-date ban are UNCHANGED.
 # Was e741c19e6d580dc4f8c91693ac2835047ee67de555a3617f275746201ab348b8 (2026-10-02, post-Step 2).
-S10_ORDINARY_SHA = "8397e683ab1390c6c32c085a9fbf9f1fb1b1fe9c43f1b200ce2d7dbae6355c89"
+# Re-baselined 2026-10-02 by DB3-PROV-1 Step A (owner-approved; the approval names this
+# re-baseline). Step 4 gained DB 3 as the FOURTH contributing provenance element. It had been
+# missing from the computed-floor table while Step 4's own prose named findings as a confidence
+# contributor - "A finding at `Confidence = Low` ... caps the packet" - so the table listed three
+# of four. That is the same class of omission Step 1 corrected when the table named DB 9 alone,
+# reproduced at smaller scale. What Step 4 now states about DB 3: its Confidence contributes
+# normally (all 217 rows governed, all six Target rows Medium); `Evidence` is REQUIRED and
+# populated 217/217, with five of six Target rows naming re-followable sources inline and one not;
+# `Source` is a PROCESS-KIND dimension - xlsx/chat/agent run/research - and must NEVER be read as
+# the authority or taken to mean a row is unsourced; its freshness contribution is UNRESOLVED
+# because `Last Verified` and `Next Review` DO NOT EXIST AS FIELDS, which is a different fact from
+# an empty cell - both fail closed but only an empty cell can ever be filled; no assembly date,
+# current date or `Freshness` label may substitute, because `Freshness` is `Fresh` on all 217 rows
+# with no threshold defined and so cannot age; payload restrictions recorded only in page bodies
+# can be lost if S10 reads properties alone; and NO claim is made about the three unaudited
+# High-confidence rows. The computed floors, the Low < Medium < High ordering, the
+# null-is-weaker-than-Low rule, the assembly-date ban and the DB6 null-Next-Review clause are all
+# UNCHANGED. DB 3 is now the binding constraint on the freshness floor, because no backfill can
+# fix a field that does not exist.
+# Was 8397e683ab1390c6c32c085a9fbf9f1fb1b1fe9c43f1b200ce2d7dbae6355c89 (2026-10-02, post-OD1/OD2).
+S10_ORDINARY_SHA = "52506b25793b937031ac2e3df0dcb3b5c37f11bf1ffac68765d220c49216e81c"
 
 spec = importlib.util.spec_from_file_location("skill_run_gate", os.path.join(HERE, "skill_run_gate.py"))
 gate = importlib.util.module_from_spec(spec)

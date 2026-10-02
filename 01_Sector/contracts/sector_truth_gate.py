@@ -54,8 +54,17 @@ Checks:
                        finding recorded unmutated, and S10's freshness floor failing closed on
                        EITHER a null Last Verified or a null Next Review
                        (DB6-OD1-OD2-1, 2026-10-02)
+  7c DB3 PROVENANCE    DB 3's recorded 15-field count, `Source` as a four-value PROCESS-KIND
+                       select, `Evidence` required and recorded populated 217/217, the four
+                       temporal/tier fields recorded STRUCTURALLY ABSENT, `Freshness` recorded as
+                       a declaration with no defined threshold, OD6 superseded-and-re-scoped with
+                       its disproven claim preserved, OD7-OD12 open, no seven-field-shape
+                       ratification, no claim about the three unaudited High-confidence rows, the
+                       intelligence-object mapping left as `Evidence + Source`, and S10 Step 4
+                       naming ALL FOUR contributing elements with DB 3's freshness failing closed
+                       (DB3-PROV-1 Step A, 2026-10-02)
 
-Checks 7 and 7b are REPOSITORY-INTERNAL BY DESIGN. This gate NEVER CALLS NOTION, so that offline
+Checks 7, 7b and 7c are REPOSITORY-INTERNAL BY DESIGN. This gate NEVER CALLS NOTION, so that offline
 validation stays deterministic - which means IT CANNOT DETECT LATER LIVE NOTION DRIFT in DB 6,
 DB 9 or DB 10. The 21-, 19- and 16-field structures it enforces are SNAPSHOTS from two bounded
 live audits (DB9-PROV-AUDIT-1 and DB6-DB10-PROV-AUDIT-1, both 2026-10-02) plus the verified
@@ -63,10 +72,17 @@ post-write reads of DB6-DB10-PROV-1 Step 2; re-verifying any live schema require
 separately authorised audit. A passing gate means the REPOSITORY IS SELF-CONSISTENT, not that it
 still matches Notion.
 
-A further limit worth stating because Step 2 invites the mistake: `Evidence` now EXISTS in all
-three databases, and every one of its row values is NULL. A column is a place to put evidence,
-not evidence. This gate checks that the repository records that distinction; it cannot check that
-anyone honours it.
+A further limit worth stating because Step 2 invites the mistake: `Evidence` EXISTS in DB 6, DB 9
+and DB 10. A column is a place to put evidence, not evidence. This gate checks that the repository
+records that distinction; it cannot check that anyone honours it.
+
+CHECK 7c ADDS A SHARPER LIMIT. DB 3 has NO `Last Verified`, NO `Next Review` and NO `Source Tier`
+FIELD AT ALL - an ABSENT FIELD, not an empty cell. Both fail closed, but only an empty cell can
+ever be filled, so a reader must be told which one they are looking at. This gate enforces that
+the repository states the difference. It CANNOT verify DB 3's live schema, and DB 3's 217 rows are
+recorded from ONE bounded audit (DB3-PROV-AUDIT-1); 211 of them were never body-read and three
+High-confidence rows were deliberately not characterised. The gate must never be read as
+confirming anything about those.
 
 Check 7b exists because of a specific, repeated failure mode: owner item 31e added provenance
 fields to DB 6/9/10 on 2026-09-13 and recorded it in `_divergences` F14, but never carried it
@@ -631,8 +647,15 @@ def main():
         od6 = od.get("OD6") or {}
         if od6.get("db") != "DB3":
             fail.append("CHECK 7b OD6 must record the DB3 unsupported-provenance finding.")
-        if not any("NOT mutated" in f for f in (od6.get("facts") or [])):
-            fail.append("CHECK 7b OD6 must record that DB3 was NOT mutated.")
+        # Requires the CURRENT statement by key. Searching the whole record is not enough: OD6's
+        # `superseded_claim` preserves the original facts, one of which also says "NOT mutated",
+        # so a loose search passed even after the live statement was deleted. Mutation testing
+        # found that; the lesson is that a check over preserved history is not a check over
+        # current state.
+        if "NOT mutated" not in (od6.get("db3_not_mutated") or ""):
+            fail.append("CHECK 7b OD6 must record, in `db3_not_mutated`, that DB3 was NOT "
+                        "mutated. A statement inside the preserved `superseded_claim` does not "
+                        "satisfy this - that is history, not current state.")
         d3row = next((r for r in rows7b if r.get("db_id") == "DB3"), None)
         if d3row is not None and "od1_exception" in d3row:
             fail.append("CHECK 7b DB3 must carry no OD1 exception - it was not in scope.")
@@ -801,6 +824,221 @@ def main():
                      % (n6.get("field_count_verified"), n10.get("field_count_verified"),
                         r6.get("non_null_cells"), r6.get("cells"),
                         r10.get("non_null_cells"), r10.get("cells")))
+
+    # ---------------------------------------------------------------- 7c  DB 3 PROVENANCE
+    # Added by DB3-PROV-1 Step A (2026-10-02). SAME BOUNDARY as checks 7 and 7b: offline,
+    # deterministic, repository-internal, and BLIND TO LIVE DRIFT.
+    #
+    # DB 3 is the reason this check exists at all. It does NOT use the seven-field shape - it
+    # answers all three provenance questions with its own four-field model - so a gate written
+    # around the other shape would have reported it as broken. What is enforced here is that the
+    # repository describes DB 3 AS IT IS: a database whose row-level provenance is complete and
+    # whose SCHEMA cannot express a tier or a verification date.
+    DB3_SOURCE_OPTS = ["xlsx", "chat", "agent run", "research"]
+    DB3_ABSENT = ["Source Tier", "Source URL", "Last Verified", "Next Review",
+                  "Next Verification"]
+    if dbjson:
+        d3 = next((r for r in rows7b if r.get("db_id") == "DB3"), None)
+        if d3 is None:
+            fail.append("CHECK 7c sector-databases.json records no DB3 entry.")
+        else:
+            f3 = d3.get("fields") or []
+            by3 = {f.get("name"): f for f in f3}
+            blob3 = re.sub(r"\s+", " ", json.dumps(d3))
+
+            if len(f3) != 15:
+                fail.append("CHECK 7c DB3 must record 15 fields (the audited live schema); "
+                            "found %d." % len(f3))
+            if d3.get("field_count_verified") != 15:
+                fail.append("CHECK 7c DB3 field_count_verified must be 15; found %r."
+                            % d3.get("field_count_verified"))
+            names3 = [f.get("name") for f in f3]
+            dup3 = sorted({n for n in names3 if names3.count(n) > 1})
+            if dup3:
+                fail.append("CHECK 7c DB3 has duplicate field names: %s" % ", ".join(dup3))
+
+            # Source: a four-value PROCESS-KIND select, never an authority
+            src3 = by3.get("Source") or {}
+            if src3.get("notion_type") != "select":
+                fail.append("CHECK 7c DB3 Source must be a select; recorded as %r."
+                            % src3.get("notion_type"))
+            if (src3.get("allowed_values") or []) != DB3_SOURCE_OPTS:
+                fail.append("CHECK 7c DB3 Source options must be exactly %s; recorded as %r."
+                            % (DB3_SOURCE_OPTS, src3.get("allowed_values")))
+            sem3 = src3.get("semantics") or ""
+            if "PROCESS KIND" not in sem3 or "Evidence" not in sem3:
+                fail.append("CHECK 7c DB3 Source must be recorded as a PROCESS KIND whose "
+                            "locator belongs in Evidence - it is not an authority.")
+
+            # Evidence: required, and recorded populated on every row
+            ev3 = by3.get("Evidence") or {}
+            if ev3.get("required") is not True:
+                fail.append("CHECK 7c DB3 Evidence must be recorded required.")
+            rl3 = d3.get("row_level_provenance") or {}
+            if rl3.get("rows") != 217:
+                fail.append("CHECK 7c DB3 must record 217 rows; found %r." % rl3.get("rows"))
+            for fld in ("Evidence", "Confidence", "Source", "Freshness"):
+                cell = rl3.get(fld) or {}
+                if cell.get("non_null") != 217 or cell.get("of") != 217:
+                    fail.append("CHECK 7c DB3 %s must be recorded populated 217/217; found %r."
+                                % (fld, cell))
+            if rl3.get("rows_with_confidence_and_no_evidence") != 0:
+                fail.append("CHECK 7c DB3 must record ZERO rows with a Confidence and no "
+                            "Evidence - this is the fact that disproved the original OD6 "
+                            "framing.")
+            if rl3.get("backfill_authorised") is not False:
+                fail.append("CHECK 7c DB3 must record backfill_authorised false.")
+
+            # temporal and tier fields: recorded STRUCTURALLY ABSENT, not merely omitted
+            pm3 = d3.get("provenance_model") or {}
+            absent3 = pm3.get("fields_absent") or {}
+            for a in DB3_ABSENT:
+                if a in by3:
+                    fail.append("CHECK 7c DB3 must NOT record a %r field: it is structurally "
+                                "absent from the live schema." % a)
+            if not absent3:
+                fail.append("CHECK 7c DB3 must STATE which provenance fields are absent, not "
+                            "merely omit them.")
+            for a in ("Source Tier", "Last Verified", "Source URL"):
+                if a not in absent3:
+                    fail.append("CHECK 7c DB3 must state that %s is absent." % a)
+            if not any("Next Review" in k for k in absent3):
+                fail.append("CHECK 7c DB3 must state that a next-review field is absent.")
+            for k3, v3 in absent3.items():
+                if "ABSENT" not in str(v3).upper():
+                    fail.append("CHECK 7c DB3 %s must be described as absent." % k3)
+
+            # Freshness: a declaration, with no defined threshold
+            fr3 = by3.get("Freshness") or {}
+            frsem = fr3.get("semantics") or ""
+            if "DECLARED" not in frsem.upper():
+                fail.append("CHECK 7c DB3 Freshness must be recorded as a DECLARED state, not a "
+                            "computed measurement.")
+            if "threshold" not in frsem.lower():
+                fail.append("CHECK 7c DB3 Freshness must record that no threshold is defined.")
+            if not re.search(r"(?i)never substitute", frsem):
+                fail.append("CHECK 7c DB3 Freshness must forbid substituting it for a "
+                            "verification date.")
+
+            # the limitation must be named as expressiveness, not missing provenance
+            lim3 = (pm3.get("the_actual_limitation") or "").upper()
+            if "SCHEMA EXPRESSIVENESS" not in lim3:
+                fail.append("CHECK 7c DB3's limitation must be recorded as SCHEMA "
+                            "EXPRESSIVENESS for tier and temporal verification.")
+            if "NOT MISSING PROVENANCE" not in lim3:
+                fail.append("CHECK 7c DB3 must NOT be described as missing provenance generally.")
+            if not re.search(r"(?i)cannot detect later live|no offline gate can detect", blob3):
+                fail.append("CHECK 7c DB3 must warn that live drift is undetectable offline.")
+
+            # no claim about the three unaudited High-confidence rows
+            hc3 = rl3.get("high_confidence_rows") or {}
+            if hc3.get("count") != 3 or hc3.get("in_target_set") != 0:
+                fail.append("CHECK 7c DB3 must record 3 High-confidence rows, none in the "
+                            "Target set.")
+            if hc3.get("no_claim_is_made_about_them") is not True:
+                fail.append("CHECK 7c DB3 must record that NO claim is made about the three "
+                            "unaudited High-confidence rows.")
+            nt3 = rl3.get("non_target_rows") or {}
+            if nt3.get("count") != 211:
+                fail.append("CHECK 7c DB3 must record 211 non-Target rows.")
+            if "NOT READ" not in (nt3.get("bodies") or ""):
+                fail.append("CHECK 7c DB3 must record that the 211 non-Target bodies were not "
+                            "read.")
+
+        # OD6 superseded and re-scoped, with the disproven claim preserved
+        od6b = od.get("OD6") or {}
+        if "RE-SCOPED" not in (od6b.get("status") or ""):
+            fail.append("CHECK 7c OD6 must be recorded RE-SCOPED by DB3-PROV-1 Step A.")
+        if "OPEN" not in (od6b.get("status") or ""):
+            fail.append("CHECK 7c OD6 must remain OPEN.")
+        sc6 = od6b.get("superseded_claim") or {}
+        if not sc6:
+            fail.append("CHECK 7c OD6 must PRESERVE its disproven original claim.")
+        else:
+            if "DISPROVEN" not in (sc6.get("verdict") or ""):
+                fail.append("CHECK 7c OD6's prior claim must be marked DISPROVEN.")
+            if sc6.get("preserved_not_rewritten") is not True:
+                fail.append("CHECK 7c OD6's prior claim must be preserved, not rewritten.")
+            if "ZERO of 217" not in (sc6.get("why_it_was_wrong") or ""):
+                fail.append("CHECK 7c OD6 must record the zero-of-217 fact that disproved it.")
+        if len(od6b.get("rescoped_to") or []) != 4:
+            fail.append("CHECK 7c OD6 must be re-scoped to exactly its four specific items.")
+        for k3 in ("OD7", "OD8", "OD9", "OD10", "OD11", "OD12"):
+            if k3 not in od:
+                fail.append("CHECK 7c open item %s is not recorded." % k3)
+            elif "OPEN" not in (od[k3].get("status") or ""):
+                fail.append("CHECK 7c open item %s must remain OPEN." % k3)
+
+        # intelligence-object mapping must be LEFT ALONE
+        if _io_raw:
+            _iop = (json.loads(_io_raw).get("properties") or {})
+            m3 = ((_iop.get("source") or {}).get("notion_field") or {}).get("DB3")
+            if m3 != "Evidence + Source":
+                fail.append("CHECK 7c DB3's Q2 mapping must stay 'Evidence + Source'; found %r."
+                            % m3)
+
+        # S10 must name all four contributing elements and state DB3's behaviour
+        for needle, what in [
+                ("| **DB 3** findings |", "DB 3 as the fourth contributing element"),
+                ("FIELD DOES NOT EXIST", "that DB 3's date fields do not exist"),
+                ("| **FIELD DOES NOT EXIST** | **FIELD DOES NOT EXIST** |",
+                 "that BOTH of DB 3's date fields are marked non-existent - one is not enough"),
+                ("There are **four** contributing elements",
+                 "the explicit four-element count (the looser phrase also occurs in the prose "
+                 "describing the omission, so it cannot be the test)"),
+                ("An absent field is a different fact from a present-but-null cell",
+                 "the absent-field versus null-cell distinction"),
+                ("`Source` is a process-kind dimension, not an authority",
+                 "that DB 3's Source is not an authority"),
+                ("may substitute", "the ban on substituting a date or a Freshness label"),
+                ("Restrictions recorded only in page bodies can be lost",
+                 "that body-only restrictions can be lost"),
+                ("make no claim about them",
+                 "that no claim is made about the High-confidence rows")]:
+            if needle not in s10b:
+                fail.append("CHECK 7c S10 SKILL.md Step 4 does not state %s." % what)
+
+        # the human-readable schema doc must agree about DB3, too. There was no such check until
+        # mutation testing reverted the markdown's Source type and the gate stayed green.
+        if "### DB 3" in ns7b:
+            seg3 = re.sub(r"\s+", " ", ns7b.split("### DB 3", 1)[1].split("### DB 4", 1)[0])
+            if "| **Source** | **Select** |" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must type `Source` as a "
+                            "Select only - not 'Select/Text'.")
+            # Matches the OPTION-LIST form ("xlsx sheet · chat"), not the bare phrase: the
+            # correction note itself legitimately contains the words "not 'xlsx sheet'", and a
+            # blanket ban flagged that sentence. Same false-positive class as a prohibition
+            # sentence tripping a scan for the thing it prohibits.
+            if "xlsx sheet ·" in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 still lists the first Source "
+                            "option as 'xlsx sheet'; live and the JSON contract both say 'xlsx'.")
+            if "PROCESS LABELS" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must state that all four "
+                            "Source options are process labels, not authorities.")
+            if "15 properties, verified live" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must state 15 properties.")
+            if "STRUCTURALLY ABSENT" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must record the tier and "
+                            "temporal fields as structurally absent.")
+            if "SCHEMA EXPRESSIVENESS" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must name the limitation as "
+                            "schema expressiveness, not missing provenance.")
+            if "DECLARATION, not a computed measurement" not in seg3:
+                fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md DB 3 must record Freshness as a "
+                            "declaration rather than a measurement.")
+        else:
+            fail.append("CHECK 7c SECTOR_NOTION_SCHEMA.md has no DB 3 section.")
+
+        d3n = next((r for r in rows7b if r.get("db_id") == "DB3"), {}) or {}
+        rl3n = d3n.get("row_level_provenance") or {}
+        notes.append("DB3 provenance: %s fields recorded | own 4-field model, NOT the 7-field "
+                     "shape | Evidence required %s/%s | 0 rows with Confidence and no Evidence | "
+                     "tier + both dates STRUCTURALLY ABSENT | Freshness declared, no threshold | "
+                     "OD6 re-scoped, OD7-OD12 open | 211 bodies unread, 3 High rows "
+                     "uncharacterised | drift undetectable offline"
+                     % (d3n.get("field_count_verified"),
+                        (rl3n.get("Evidence") or {}).get("non_null"),
+                        (rl3n.get("Evidence") or {}).get("of")))
 
     print("SECTOR DOCUMENTATION-TRUTH GATE")
     print("=" * 66)

@@ -793,7 +793,9 @@
      "disposition": "green",
      "writer_skill": "S01",
      "intelligence_object_question": "source",
-     "validation": "REQUIRED. No evidence, no row."
+     "validation": "REQUIRED. No evidence, no row.",
+     "semantics": "Carries the substance AND the re-followable locator. This is DB3's Q2 answer together with `Source`, exactly as intelligence-object.schema.json maps it. Populated 217/217.",
+     "provenance_of_record": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
     },
     {
      "name": "Source",
@@ -809,7 +811,9 @@
       "agent run",
       "research"
      ],
-     "intelligence_object_question": "source"
+     "intelligence_object_question": "source",
+     "semantics": "PROCESS KIND, not authority. Records HOW the finding was obtained. The re-followable locator belongs in `Evidence`. Recorded by DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02).",
+     "provenance_of_record": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
     },
     {
      "name": "Confidence",
@@ -825,7 +829,8 @@
       "High"
      ],
      "intelligence_object_question": "reliability",
-     "validation": "MUST match the evidence. Weak evidence + High confidence is a contract breach."
+     "validation": "MUST match the evidence. Weak evidence + High confidence is a contract breach.",
+     "provenance_of_record": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
     },
     {
      "name": "Freshness",
@@ -840,7 +845,9 @@
       "Aging",
       "Stale"
      ],
-     "intelligence_object_question": "when-observed"
+     "intelligence_object_question": "when-observed",
+     "semantics": "A DECLARED state, not a computed measurement. All 217 rows are `Fresh` and no Fresh/Aging/Stale threshold is defined anywhere, so nothing can age. Never read as evidence of recency; never substitute it for a verification date. See open item OD10.",
+     "provenance_of_record": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)"
     },
     {
      "name": "Impact",
@@ -957,7 +964,104 @@
     "DB13",
     "DB16",
     "Content (04)"
-   ]
+   ],
+   "field_count_verified": 15,
+   "field_count_note": "CONFIRMED at 15 by DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02) - recorded and live AGREE, which is the opposite of DB6 and DB10, whose entries under-reported the live schema by five and six properties. No field was added, removed or retyped by DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02): this entry already had the count right and was missing only the mechanical anchor. Future live drift is NOT detected by any offline gate and requires another separately authorised audit.",
+   "provenance_model": {
+    "_recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)",
+    "_snapshot_source": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
+    "summary": "DB3 uses its OWN four-field provenance model, not the seven-field shape carried by DB6, DB9 and DB10. It answers all three Intelligence-Object provenance questions by different means, and `intelligence-object.schema.json` already maps it correctly as `Evidence + Source` for Q2. DB3 IS NOT AN INCOMPLETE COPY OF THE OTHER SHAPE.",
+    "fields_present": {
+     "Evidence": "text, REQUIRED. Carries the substance AND, in practice, the re-followable locator. Populated on 217 of 217 rows.",
+     "Source": "select, REQUIRED. A four-value PROCESS-KIND classifier: xlsx, chat, agent run, research.",
+     "Confidence": "select Low/Medium/High, REQUIRED. Populated on 217 of 217 rows.",
+     "Freshness": "select Fresh/Aging/Stale, REQUIRED. Populated on 217 of 217 rows."
+    },
+    "source_semantics": {
+     "what_it_records": "HOW the finding was obtained.",
+     "what_it_does_NOT_record": "WHO published it. It is not an authority and never was.",
+     "all_four_options_are_process_labels": true,
+     "the_locator_belongs_in_Evidence": true,
+     "consequence": "Anything needing a re-followable authority from DB3 must read `Evidence`, NOT `Source`. Reading `Source` alone and concluding the row is unsourced is the specific error that produced the original OD6 framing - see `od6_history`."
+    },
+    "fields_absent": {
+     "Source Tier": "STRUCTURALLY ABSENT. No tier can be recorded for any DB3 row, so the write contract's T4-may-discover-but-not-confirm rule cannot be evaluated from DB3's schema at all.",
+     "Last Verified": "STRUCTURALLY ABSENT. `Freshness` stands in its place.",
+     "Next Review / Next Verification": "STRUCTURALLY ABSENT, under either name.",
+     "Source URL": "STRUCTURALLY ABSENT."
+    },
+    "freshness_is_a_declaration_not_a_measurement": {
+     "finding": "All 217 rows are `Fresh`, including rows whose bodies state a verification date of 2026-08-19. NO Fresh/Aging/Stale threshold is defined in any repository document, so no row can ever move off `Fresh`.",
+     "consequence": "`Freshness` conveys no temporal information. It is a DECLARATION, not a COMPUTED MEASUREMENT, and must never be read as evidence of recency or substituted for a verification date.",
+     "related_open_item": "OD10 - how the thresholds would be defined."
+    },
+    "the_actual_limitation": "DB3 IS NOT MISSING PROVENANCE GENERALLY. Its row-level provenance is more complete than DB6's was before remediation: Evidence is required and populated on every row, and on five of the six Target-sector rows it names re-followable sources inline. The limitation is SCHEMA EXPRESSIVENESS for TIER and TEMPORAL VERIFICATION - DB3 has nowhere to put a source tier or a verification date, and two Target rows carry both in their page bodies with no field able to receive them.",
+    "drift_warning": "This is a 2026-10-02 snapshot from one bounded live read. No offline gate can detect later live Notion drift in DB3."
+   },
+   "row_level_provenance": {
+    "_snapshot_source": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
+    "rows": 217,
+    "Evidence": {
+     "non_null": 217,
+     "of": 217,
+     "required": true
+    },
+    "Confidence": {
+     "non_null": 217,
+     "of": 217,
+     "by_value": {
+      "High": 3,
+      "Medium": 214,
+      "Low": 0
+     }
+    },
+    "Source": {
+     "non_null": 217,
+     "of": 217,
+     "by_value": {
+      "xlsx": 208,
+      "research": 8,
+      "chat": 1,
+      "agent run": 0
+     }
+    },
+    "Freshness": {
+     "non_null": 217,
+     "of": 217,
+     "by_value": {
+      "Fresh": 217,
+      "Aging": 0,
+      "Stale": 0
+     }
+    },
+    "rows_with_confidence_and_no_evidence": 0,
+    "structural_completeness": "100% against DB3's own contract. Zero rows breach 'no evidence, no row'.",
+    "target_sector_rows": {
+     "count": 6,
+     "sub_sector": "Accommodation - the only Target sub-sector",
+     "all_confidence_medium": true,
+     "evidence_naming_a_source": 5,
+     "evidence_naming_no_source": 1,
+     "weak_row_note": "One Target row's Evidence names NO external source; its body attributes the content to an owner-curated atlas 'corroborated by 2026 hotel-distribution sources' without naming any, and its substance is derived from another database's row. See open item OD11.",
+     "bodies_with_explicit_tiers": 2,
+     "bodies_with_a_verification_date": 6,
+     "bodies_with_a_next_review_date": 2,
+     "confidence_correction_required": "NONE. No Target row's Confidence is unsupported - every one has a populated Evidence and three state an explicit reason why Medium rather than High."
+    },
+    "non_target_rows": {
+     "count": 211,
+     "branch": "B2B SaaS",
+     "property_level": "VERIFIED structurally complete by the all-217-row aggregate.",
+     "bodies": "NOT READ. Their Evidence QUALITY, tiers and dates are unexamined and are deliberately NOT characterised."
+    },
+    "high_confidence_rows": {
+     "count": 3,
+     "in_target_set": 0,
+     "status": "NOT CHARACTERISED. All three sit outside the Target set and their bodies were outside the authorised audit scope. DB3's own validation says weak evidence plus High confidence is a contract breach, so these are an UNVERIFIED EXPOSURE, not a confirmed defect. See open item OD12.",
+     "no_claim_is_made_about_them": true
+    },
+    "backfill_authorised": false
+   }
   },
   {
    "db_id": "DB4",
@@ -4260,7 +4364,7 @@
   }
  ],
  "_open_decisions": {
-  "_note": "Recorded by DB6-DB10-PROV-1 Step 1 (2026-10-02). OD3 closed by Step 2. OD1 closed with one named exception and OD2 closed LOCALLY by DB6-OD1-OD2-1, both 2026-10-02. OD4, OD5 and OD6 are RECORDED, NOT RESOLVED, and none may be resolved without a separate owner decision.",
+  "_note": "Recorded by DB6-DB10-PROV-1 Step 1 (2026-10-02). OD3 closed by Step 2. OD1 closed with one named exception and OD2 closed LOCALLY by DB6-OD1-OD2-1. OD6 RE-SCOPED and OD7-OD12 added by DB3-PROV-1 Step A, all 2026-10-02. OD4, OD5 and OD6-OD12 are RECORDED, NOT RESOLVED, and none may be resolved without a separate owner decision.",
   "OD1": {
    "db": "DB6",
    "question": "May DB6's four populated `Confidence` values remain populated without governed `Source` and `Evidence` fields?",
@@ -4302,9 +4406,10 @@
     "All three databases already carry identical field names, types and option sets, by observation.",
     "DB7 and DB14 use `Next Verification` rather than `Next Review`.",
     "The remaining Sector databases have NOT been audited live.",
-    "As of 2026-10-02 all three databases carry the IDENTICAL SEVEN-field provenance shape live, DB6 and DB10 by Step 2's additive writes. This is an OBSERVED convergence, NOT a ratified Sector-wide standard. The remaining Sector databases are still unaudited, and DB7 and DB14 still use `Next Verification`."
+    "As of 2026-10-02 all three databases carry the IDENTICAL SEVEN-field provenance shape live, DB6 and DB10 by Step 2's additive writes. This is an OBSERVED convergence, NOT a ratified Sector-wide standard. The remaining Sector databases are still unaudited, and DB7 and DB14 still use `Next Verification`.",
+    "2026-10-02, DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02): DB3 is a COUNTEREXAMPLE to the assumption that the seven-field shape is the estate's latent standard. DB3 answers all three provenance questions with its own coherent four-field model, and standardising the seven-field shape onto it would require a SEMANTIC REVERSAL of `Source` from a kind-select to an authority-text, making all 217 existing values wrong under the new meaning. That is a data migration, not a schema addition. DB3 was the FIRST database audited after DB6/DB9/DB10 and it already breaks the assumption."
    ],
-   "status": "OPEN. NOT ratified. Three databases share one shape BY OBSERVATION only."
+   "status": "OPEN. NOT ratified. Three databases share one shape BY OBSERVATION only - and DB3, the fourth audited, uses a DIFFERENT coherent model. A standard that cannot describe DB3 without breaking it is not yet a standard. Eleven databases remain unaudited."
   },
   "OD5": {
    "db": "DB10",
@@ -4317,15 +4422,69 @@
   },
   "OD6": {
    "db": "DB3",
-   "question": "DB3 Sector Intelligence holds a populated `Confidence` of Medium against a `Source` of the bare word `research`. Is that the same unsupported-provenance defect OD1 addressed, and how widely does it run in DB3?",
-   "facts": [
-    "Found incidentally while resolving the DB9 Buyer row's DB3 pointer under DB6-OD1-OD2-1 - one record read, not a survey.",
-    "The pointer chain therefore terminates in an unsourced claim, which is why it could not supply a governed Source to DB9's Buyer row either.",
-    "That record's `Evidence` property does carry real substance and names a specific document inline.",
-    "DB3 was NOT mutated, and the rest of DB3 is unaudited."
+   "question": "DB3 cannot record a source tier or a verification date in-schema, and its `Freshness` state is inert. Should those fields be added, and how should the body-level restrictions that no field represents be handled?",
+   "status": "OPEN, RE-SCOPED 2026-10-02 by DB3-PROV-1 Step A. The original framing was DISPROVEN - see `superseded_claim`. This is a SCHEMA EXPRESSIVENESS defect, not a data-quality defect.",
+   "superseded_claim": {
+    "question_text": "DB3 Sector Intelligence holds a populated `Confidence` of Medium against a `Source` of the bare word `research`. Is that the same unsupported-provenance defect OD1 addressed, and how widely does it run in DB3?",
+    "facts": [
+     "Found incidentally while resolving the DB9 Buyer row's DB3 pointer under DB6-OD1-OD2-1 - one record read, not a survey.",
+     "The pointer chain therefore terminates in an unsourced claim, which is why it could not supply a governed Source to DB9's Buyer row either.",
+     "That record's `Evidence` property does carry real substance and names a specific document inline.",
+     "DB3 was NOT mutated, and the rest of DB3 is unaudited."
+    ],
+    "recorded_by": "DB6-OD1-OD2-1 (2026-10-02), from DB6_OD1_OD2_RESOLUTION_PROPOSAL.md section 5.4",
+    "verdict": "DISPROVEN by DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02).",
+    "why_it_was_wrong": "It asserted DB3 reproduced DB6's unsupported-Confidence pattern. It does not. ZERO of 217 DB3 rows carry a Confidence without an Evidence. `Evidence` is REQUIRED and populated on 217 of 217 rows, and on five of the six Target-sector rows it names re-followable sources inline.",
+    "the_reading_error": "The claim was drawn from the `Source` property ALONE. `Source = research` is GOVERNED PROCESS VOCABULARY - one of four ratified options - not a placeholder and not a bare value standing in for a missing authority.",
+    "aggravating_detail": "The DB3 record's `Evidence` text had ALREADY BEEN READ in the same session that produced the claim, and was quoted in the same section, and the conclusion was still drawn from `Source` alone.",
+    "pattern": "The SECOND instance in this programme of a finding mis-framed by reading one field without its companion. The first was listing `_divergences` keys without opening F14's contents, which hid the 2026-09-13 item 31e history. Both times the data was complete and the reading was partial.",
+    "preserved_not_rewritten": true
+   },
+   "rescoped_to": [
+    "Missing temporal provenance fields - no `Last Verified`, no `Next Review`.",
+    "No `Source Tier` field, so the write contract's tier rule cannot be evaluated.",
+    "Inert `Freshness` semantics - all 217 rows `Fresh`, no threshold defined.",
+    "Body-level payload restrictions that are not represented structurally: two Target rows state limits on how the finding may be used, and no field carries either."
    ],
-   "status": "OPEN. Recorded, not acted on. No DB3 read or write beyond the single record is authorised.",
-   "recorded_by": "DB6-OD1-OD2-1 (bounded live row backfill, verified, 2026-10-02)"
+   "what_the_audit_found_NOT_required": "No Target-row Confidence correction is presently required. Every Target row has a populated Evidence and none is unsupported.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)",
+   "db3_not_mutated": "DB3 was NOT mutated by DB6-OD1-OD2-1, by DB3-PROV-AUDIT-1 or by DB3-PROV-1 Step A. The audit was read-only (9 connector calls, 0 writes) and Step A was repository-only (0 connector calls). No DB3 field, option, relation or row value has been changed at any point."
+  },
+  "OD7": {
+   "db": "DB3",
+   "question": "Should DB3 add `Last Verified` and `Next Review`? It is the only way to make S10's freshness floor computable for DB3, but it creates CAPACITY, not provenance - 211 rows would hold empty dates. Step B. NOT authorised.",
+   "status": "OPEN. Recorded, not resolved.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+  },
+  "OD8": {
+   "db": "DB3",
+   "question": "Should DB3 add `Source Tier`? Two Target rows carry explicit per-source tiers in their bodies and both are MULTI-TIER, so DB6's unresolved multi-source convention question (OD2, closed LOCALLY for DB6 only) would apply immediately.",
+   "status": "OPEN. Recorded, not resolved.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+  },
+  "OD9": {
+   "db": "DB3",
+   "question": "Does `Source URL` add value when `Evidence` already holds locators? Possibly not - and it carries the same single-value limitation that made DB6 leave it null.",
+   "status": "OPEN. Recorded, not resolved.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+  },
+  "OD10": {
+   "db": "DB3",
+   "question": "How would Fresh/Aging/Stale thresholds be defined? Until they are, `Freshness` cannot age and conveys nothing. Related to the unreconciled 30-day and 90-day horizons already flagged in DB9_PROVENANCE_REMEDIATION_PROPOSAL.md section 12.",
+   "status": "OPEN. Recorded, not resolved.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+  },
+  "OD11": {
+   "db": "DB3",
+   "question": "Should the one qualitatively weak Target finding be re-sourced? Its Evidence names no external source and its substance is derived from another database's row.",
+   "status": "OPEN. Recorded, not resolved.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+  },
+  "OD12": {
+   "db": "DB3",
+   "question": "Do the three non-Target High-confidence rows require a bounded audit? Their bodies were outside the authorised scope and NO claim is made about them here.",
+   "status": "OPEN. Recorded, not resolved.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
   }
  }
 }
