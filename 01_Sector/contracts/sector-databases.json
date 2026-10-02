@@ -956,6 +956,32 @@
      "writer_skill": "S10",
      "cross_department": "Content (04)",
      "DEFECT": "F8 — LIVE relation ABSENT from the DB 3 field table in SECTOR_NOTION_SCHEMA.md §2. Undocumented drift, second instance of this failure mode."
+    },
+    {
+     "notion_type": "date",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "disposition": "yellow",
+     "writer_skill": "S01",
+     "intelligence_object_question": "when-observed",
+     "provenance_of_record": "DB3-OD10-OD12-1 (Option D, 2026-10-02) - added live, then verified null on all 217 rows",
+     "name": "Last Verified",
+     "validation": "NULLABLE. A null `Last Verified` is UNRESOLVED and FAILS CLOSED. It is NOT filled from `Freshness`, from another row, from a page body, from the assembly date or from today's date.",
+     "semantics": "One of the two GOVERNING temporal fields for DB3, added 2026-10-02 under OD10 Option D. PRESENT BUT NULL ON ALL 217 ROWS - no backfill is authorised. This is a materially different state from the structural absence that preceded it: both fail closed, but only this one can ever be filled."
+    },
+    {
+     "notion_type": "date",
+     "field_class": "meta",
+     "purpose_tag": "GOV",
+     "required": false,
+     "disposition": "yellow",
+     "writer_skill": "S01",
+     "intelligence_object_question": "when-observed",
+     "provenance_of_record": "DB3-OD10-OD12-1 (Option D, 2026-10-02) - added live, then verified null on all 217 rows",
+     "name": "Next Review",
+     "validation": "NULLABLE. A null `Next Review` is UNRESOLVED and FAILS CLOSED. A row past a NON-NULL `Next Review` is STALE for the governed execution rule. A null one does NOT make a row stale and does NOT make it fresh - it makes it unresolved.",
+     "semantics": "The second GOVERNING temporal field, added 2026-10-02 under OD10 Option D. `Next Review`, NOT `Next Verification` - the DB1/DB2/DB6/DB9/DB10/DB16 convention, deliberately not DB7's. This field gives the write contract's `Stale` rule its FIRST TRIGGER: until it existed, the repository governed what `Stale` does but nothing governed when a row becomes stale. PRESENT BUT NULL ON ALL 217 ROWS."
     }
    ],
    "consumers": [
@@ -965,8 +991,8 @@
     "DB16",
     "Content (04)"
    ],
-   "field_count_verified": 15,
-   "field_count_note": "CONFIRMED at 15 by DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02) - recorded and live AGREE, which is the opposite of DB6 and DB10, whose entries under-reported the live schema by five and six properties. No field was added, removed or retyped by DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02): this entry already had the count right and was missing only the mechanical anchor. Future live drift is NOT detected by any offline gate and requires another separately authorised audit.",
+   "field_count_verified": 17,
+   "field_count_note": "CONFIRMED at 15 by DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02) - recorded and live AGREE, which is the opposite of DB6 and DB10, whose entries under-reported the live schema by five and six properties. No field was added, removed or retyped by DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02): this entry already had the count right and was missing only the mechanical anchor. Future live drift is NOT detected by any offline gate and requires another separately authorised audit. SUPERSEDED IN PART on 2026-10-02 by DB3-OD10-OD12-1 (Option D, 2026-10-02): the live count is now 17. Two nullable date properties - `Last Verified` and `Next Review` - were added by owner authorisation under OD10 Option D. NOTHING ELSE CHANGED: the original 15 properties, their types, all 46 select-option IDs and all 5 relation targets were verified byte-identical before and after. ZERO row values were written. See `field_count_superseded`.",
    "provenance_model": {
     "_recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)",
     "_snapshot_source": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
@@ -975,7 +1001,9 @@
      "Evidence": "text, REQUIRED. Carries the substance AND, in practice, the re-followable locator. Populated on 217 of 217 rows.",
      "Source": "select, REQUIRED. A four-value PROCESS-KIND classifier: xlsx, chat, agent run, research.",
      "Confidence": "select Low/Medium/High, REQUIRED. Populated on 217 of 217 rows.",
-     "Freshness": "select Fresh/Aging/Stale, REQUIRED. Populated on 217 of 217 rows."
+     "Freshness": "select Fresh/Aging/Stale, REQUIRED, populated 217 of 217. NON-GOVERNING as of 2026-10-02 by owner decision under OD10 Option D - retained for historical and display purposes only. It does not drive any floor, gate or execution rule.",
+     "Last Verified": "date, NULLABLE. GOVERNING. Added live 2026-10-02 under OD10 Option D. Null on 217 of 217 rows.",
+     "Next Review": "date, NULLABLE. GOVERNING. Added live 2026-10-02 under OD10 Option D. Null on 217 of 217 rows. `Next Review`, not `Next Verification`."
     },
     "source_semantics": {
      "what_it_records": "HOW the finding was obtained.",
@@ -986,17 +1014,70 @@
     },
     "fields_absent": {
      "Source Tier": "STRUCTURALLY ABSENT. No tier can be recorded for any DB3 row, so the write contract's T4-may-discover-but-not-confirm rule cannot be evaluated from DB3's schema at all.",
-     "Last Verified": "STRUCTURALLY ABSENT. `Freshness` stands in its place.",
-     "Next Review / Next Verification": "STRUCTURALLY ABSENT, under either name.",
      "Source URL": "STRUCTURALLY ABSENT."
     },
     "freshness_is_a_declaration_not_a_measurement": {
      "finding": "All 217 rows are `Fresh`, including rows whose bodies state a verification date of 2026-08-19. NO Fresh/Aging/Stale threshold is defined in any repository document, so no row can ever move off `Fresh`.",
      "consequence": "`Freshness` conveys no temporal information. It is a DECLARATION, not a COMPUTED MEASUREMENT, and must never be read as evidence of recency or substituted for a verification date.",
-     "related_open_item": "OD10 - how the thresholds would be defined."
+     "related_open_item": "OD10 - CLOSED BY DISSOLUTION 2026-10-02. The original text of this record is preserved above; see `superseding_decision`.",
+     "superseding_decision": {
+      "decided_by": "Owner, DB3-OD10-OD12-1 (Option D, 2026-10-02)",
+      "verdict": "STILL ACCURATE AS A DESCRIPTION, AND NOW MOOT AS A PROBLEM. Everything recorded above remains true of the `Freshness` field. What changed is that `Freshness` NO LONGER GOVERNS ANYTHING, so its inability to age stopped being a defect.",
+      "freshness_is_non_governing": true,
+      "no_threshold_is_defined_or_needed": "CORRECT AND DELIBERATE. OD10 was DISSOLVED, not answered: the decay signal comes from `Next Review`, exactly as ten other databases work. No Fresh/Aging/Stale threshold exists, and none is required.",
+      "historical_values_are_non_governing_not_false": "The 217 `Fresh` values were never measurements and are not being called wrong. A label that governed nothing continues to govern nothing - it now says so.",
+      "do_not_derive": "`Freshness` MUST NOT be computed from the new dates and MUST NOT be automatically rewritten. A Notion formula property is `notAvailableInQuerySql` (the DB5 `Total Score` precedent, 2026-09-13), so deriving it would make it unreadable by the very query path every audit here has used.",
+      "related_open_item": "OD10 - CLOSED BY DISSOLUTION 2026-10-02."
+     }
     },
-    "the_actual_limitation": "DB3 IS NOT MISSING PROVENANCE GENERALLY. Its row-level provenance is more complete than DB6's was before remediation: Evidence is required and populated on every row, and on five of the six Target-sector rows it names re-followable sources inline. The limitation is SCHEMA EXPRESSIVENESS for TIER and TEMPORAL VERIFICATION - DB3 has nowhere to put a source tier or a verification date, and two Target rows carry both in their page bodies with no field able to receive them.",
-    "drift_warning": "This is a 2026-10-02 snapshot from one bounded live read. No offline gate can detect later live Notion drift in DB3."
+    "the_actual_limitation": "DB3 IS NOT MISSING PROVENANCE GENERALLY. Its row-level provenance is more complete than DB6's was before remediation: Evidence is required and populated on every row, and on five of the six Target-sector rows it names re-followable sources inline. The limitation is SCHEMA EXPRESSIVENESS, and as of 2026-10-02 it is HALF CLOSED. TEMPORAL VERIFICATION is now EXPRESSIBLE but UNPOPULATED - `Last Verified` and `Next Review` exist and are null on all 217 rows. SOURCE TIER REMAINS STRUCTURALLY INEXPRESSIBLE - there is still nowhere to put a tier, so the write contract's T4-may-discover-but-not-confirm rule still cannot be evaluated from DB3's schema at all. Two Target rows carry tiers in their page bodies with no field able to receive them.",
+    "drift_warning": "The row-level figures are a 2026-10-02 snapshot from bounded live reads. The 17-field count and the two null date columns were verified live on 2026-10-02 immediately after the schema writes. NO OFFLINE GATE CAN DETECT later live Notion drift in DB3 - not this one, and not any that could be written without a connector call.",
+    "_updated_by": "DB3-OD10-OD12-1 (Option D, 2026-10-02) - two additive live schema writes, zero row writes",
+    "fields_formerly_absent_now_present": {
+     "_what_changed": "DB3-OD10-OD12-1 (Option D, 2026-10-02) added both as nullable live date properties. The claims below were TRUE WHEN WRITTEN on 2026-10-02 and became false the same day. They are preserved verbatim, not rewritten.",
+     "superseded_claims_verbatim": {
+      "Last Verified": "STRUCTURALLY ABSENT. `Freshness` stands in its place.",
+      "Next Review / Next Verification": "STRUCTURALLY ABSENT, under either name."
+     },
+     "Last Verified": "NOW PRESENT. Nullable date. PRESENT BUT NULL on 217 of 217 rows.",
+     "Next Review": "NOW PRESENT. Nullable date. PRESENT BUT NULL on 217 of 217 rows. Added under the name `Next Review`; `Next Verification` was NOT created and remains absent.",
+     "why_this_distinction_matters": "An absent field and a present-but-null cell are DIFFERENT FACTS. Both fail closed. Only the second can ever be filled. OD10 Option D converted a structural dead end into explicit unresolved work - it did NOT make anything computable today.",
+     "preserved_not_rewritten": true
+    },
+    "od10_decision_record": {
+     "decided_by": "Owner, DB3-OD10-OD12-1 (Option D, 2026-10-02), approving DB3_OD10_OD12_RESOLUTION_PROPOSAL.md",
+     "proposal_sha256": "51d405e4cac3fb4c3318246646e3b0d324da6251b67c58a48d91024865abafb4",
+     "option": "D - keep `Freshness`, mark it non-governing, add the two governing dates.",
+     "decisions": [
+      "1. `Freshness` remains present for historical and display purposes.",
+      "2. `Freshness` is NON-GOVERNING.",
+      "3. `Last Verified` and `Next Review` are the GOVERNING temporal fields.",
+      "4. NO Fresh/Aging/Stale threshold is defined.",
+      "5. The existing 30-day and 90-day rules are NOT reused.",
+      "6. A row past its NON-NULL `Next Review` is STALE for the governed execution rule.",
+      "7. A null `Last Verified` or `Next Review` is UNRESOLVED and FAILS CLOSED.",
+      "8. `Freshness` is NOT derived and NOT automatically rewritten.",
+      "9. OD10 is CLOSED BY DISSOLUTION."
+     ],
+     "options_rejected": {
+      "A - define a threshold": "UNIMPLEMENTABLE, not merely weak. A deterministic threshold needs a date to measure from and DB3 had none. The option the question implied could not be built.",
+      "B - add dates without saying which signal governs": "Rejected: that ambiguity IS OD10.",
+      "C - retire `Freshness`": "EXCLUDED BY CONTRACT. `freshness` is a REQUIRED property of intelligence-object.schema.json `when_observed`, so retiring it breaches the contract in the other direction. A Notion select deletion would also discard 217 authored values."
+     },
+     "thresholds_examined_and_rejected_as_not_reusable": {
+      "30_day": "Governs medium-band PROSPECT-SCORE decay (DB5 `Re-score Date`) and, separately, DB7 SIGNAL PROXIMITY re-verification. Neither measures a finding's age.",
+      "90_day": "Governs the truth gate's warning on a `verified_date` IN A REPOSITORY CONTRACT FILE - not row content - and, separately, DB7 proximity bands. Closest in shape, but it governs repository metadata and produces a warning, not a state.",
+      "verdict": "NEITHER IS REUSABLE. Lifting either number would be choosing a threshold because one was available. The reusable thing was the `Next Review` NAMING CONVENTION, used by six databases, and that is what was adopted.",
+      "the_30_90_reconciliation_stays_open": "It no longer blocks DB3. See OD7."
+     },
+     "stale_rule_now_has_a_trigger": "SECTOR_WRITE_CONTRACT.md governs what `Stale` DOES - 'Stale intelligence MUST NOT drive downstream execution without revalidation' - but until 2026-10-02 nothing governed WHEN a row becomes stale. It was a consequence with no trigger. SECTOR_CADENCE.md M4's stale sweep keys on DB7's `Next Verification`, a field DB3 lacks, and has never run. `Next Review` supplies the missing trigger.",
+     "contract_non_compliances_this_addresses": {
+      "intelligence-object.schema.json": "`when_observed.required` is [last_verified, freshness] - BOTH - and DB3 mapped `Freshness` alone. DB3 could not satisfy a required property of the canonical object.",
+      "SECTOR_ACTIVATION_CONTRACT.md": "Section 6's Freshness rule requires every intelligence record to carry a `last update` AND a `next review`. DB3 had neither.",
+      "why_this_matters": "These two make the work COMPLIANCE, not convenience. S10 computability is a CONSEQUENCE of fixing them, never the reason - defining a field to make a computation succeed is precisely what the authorisation forbade."
+     },
+     "what_this_does_NOT_do": "IT DOES NOT MAKE THE FRESHNESS FLOOR COMPUTABLE TODAY. Both columns are null on all 217 rows, so S10's freshness floor stays UNRESOLVED. What changed is the KIND of failure: from STRUCTURAL AND UNFIXABLE to ORDINARY AND EMPTY. A dead end became explicit outstanding work."
+    }
    },
    "row_level_provenance": {
     "_snapshot_source": "DB3-PROV-AUDIT-1 (bounded live read, 2026-10-02)",
@@ -1057,10 +1138,79 @@
     "high_confidence_rows": {
      "count": 3,
      "in_target_set": 0,
-     "status": "NOT CHARACTERISED. All three sit outside the Target set and their bodies were outside the authorised audit scope. DB3's own validation says weak evidence plus High confidence is a contract breach, so these are an UNVERIFIED EXPOSURE, not a confirmed defect. See open item OD12.",
-     "no_claim_is_made_about_them": true
+     "status": "CHARACTERISED 2026-10-02 by DB3-OD10-OD12-1 (Option D, 2026-10-02). All three page bodies were read under owner authorisation and ALL THREE ARE BLANK. See `classifications`.",
+     "no_claim_is_made_about_them": false,
+     "superseded_claim": {
+      "was": "NOT CHARACTERISED. All three sit outside the Target set and their bodies were outside the authorised audit scope.",
+      "was_true_when_written": "2026-10-02 - DB3-PROV-1 Step A. The bodies genuinely had not been read, and the Step A authorisation forbade characterising them.",
+      "became_false_on": "2026-10-02 - the DB3-OD10-OD12 assessment read all three bodies under explicit owner authorisation.",
+      "verdict": "SUPERSEDED BY AUTHORISED EVIDENCE, NOT WRONG. Declining to characterise them was correct while they were unread.",
+      "prior_no_claim_flag": true,
+      "preserved_not_rewritten": true
+     },
+     "bodies_read": 3,
+     "all_three_bodies_blank": true,
+     "classifications": {
+      "H1 - predictive-hire signal": {
+       "verdict": "HIGH_OVERSTATED",
+       "why": "`Source = chat`; `Evidence` cites ARIKA'S OWN INTERNAL DRAFT 15 and nothing external; page body blank. Self-referential provenance - the agency's own framework offered as evidence for market behaviour. This is the exact pattern S01 names a constitutional breach.",
+       "correction_required": true,
+       "correction_is_a_separate_decision": "NOT AUTHORISED under DB3-OD10-OD12-1 (Option D, 2026-10-02). The owner reserved it.",
+       "not_inert": "Routed to Sales and Marketing with an action that triggers an agent, so it is not a dormant row.",
+       "in_target_s10_path": false
+      },
+      "H2 - CSRD delay": {
+       "verdict": "HIGH_UNRESOLVED",
+       "why": "A regulatory fact attributed to the EU Commission, so `High` is defensible IN KIND - but there is no locator, no date and a blank body. 'Verified regulatory fact (EU Commission)' is AN ASSERTION THAT VERIFICATION HAPPENED, NOT A RECORD OF IT.",
+       "correction_required": false,
+       "needs": "RE-SOURCING, not re-rating.",
+       "od10_observed_rather_than_argued": "Its own Evidence re-times outreach to an 'H1 2026' milestone that HAS NOW PASSED, while `Freshness` still reads `Fresh`. A row whose content expired while its freshness label could not change.",
+       "sub_sector": "NULL. See OD13.",
+       "in_target_s10_path": false
+      },
+      "H3 - FSMA 204 delay": {
+       "verdict": "HIGH_UNRESOLVED",
+       "why": "The best-specified of the three - it names the rule, the 30-month delta, both dates and the FDA - but has the same deficits: no locator, no date, blank body.",
+       "correction_required": false,
+       "needs": "RE-SOURCING, not re-rating.",
+       "sub_sector": "NULL. See OD13.",
+       "in_target_s10_path": false
+      },
+      "_confidence_values_unchanged": "NO Confidence value was written, cleared or altered by DB3-OD10-OD12-1 (Option D, 2026-10-02). Live verification after the schema writes confirms 3 High / 214 Medium / 0 Low, identical to before."
+     }
     },
-    "backfill_authorised": false
+    "backfill_authorised": false,
+    "Last Verified": {
+     "non_null": 0,
+     "of": 217,
+     "required": false,
+     "state": "PRESENT BUT NULL on every row. NOT the same fact as structurally absent.",
+     "backfill_authorised": false,
+     "verified_live": "DB3-OD10-OD12-1 (Option D, 2026-10-02), immediately after the two schema writes"
+    },
+    "Next Review": {
+     "non_null": 0,
+     "of": 217,
+     "required": false,
+     "state": "PRESENT BUT NULL on every row. NOT the same fact as structurally absent.",
+     "backfill_authorised": false,
+     "verified_live": "DB3-OD10-OD12-1 (Option D, 2026-10-02), immediately after the two schema writes"
+    },
+    "zero_row_writes_proof": {
+     "_task": "DB3-OD10-OD12-1 (Option D, 2026-10-02)",
+     "live_calls": 5,
+     "schema_writes": 2,
+     "row_value_writes": 0,
+     "method": "30 content measures - per-column non-null counts, per-column total text lengths, and Confidence/Freshness value distributions - were taken BEFORE the two schema writes and re-taken AFTER. All 30 are identical. The 6 expanded date columns (start/end/is_datetime for each new property) returned 0 non-null.",
+     "result": "NO ROW CONTENT CHANGED. 217 rows before and after; Evidence 217/217 and 31794 characters before and after; Confidence 3 High / 214 Medium / 0 Low before and after; Freshness 217 Fresh before and after."
+    }
+   },
+   "field_count_superseded": {
+    "was": 15,
+    "was_true_when_written": "2026-10-02 - DB3-PROV-AUDIT-1 read the live schema and found exactly 15 properties. DB3-PROV-1 Step A recorded that count.",
+    "became_false_on": "2026-10-02 - DB3-OD10-OD12-1 (Option D, 2026-10-02) added `Last Verified` and `Next Review` as two additive live schema writes.",
+    "verdict": "SUPERSEDED, NOT WRONG. The 15-field count was an accurate reading of the schema as it then stood. This is the DB9 lesson applied in advance: a dated claim that later stops being true is superseded, never silently corrected.",
+    "preserved_not_rewritten": true
    }
   },
   {
@@ -4471,8 +4621,17 @@
   "OD10": {
    "db": "DB3",
    "question": "How would Fresh/Aging/Stale thresholds be defined? Until they are, `Freshness` cannot age and conveys nothing. Related to the unreconciled 30-day and 90-day horizons already flagged in DB9_PROVENANCE_REMEDIATION_PROPOSAL.md section 12.",
-   "status": "OPEN. Recorded, not resolved.",
-   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+   "status": "CLOSED BY DISSOLUTION 2026-10-02 by DB3-OD10-OD12-1 (Option D, 2026-10-02). No threshold is defined, and none is needed: `Freshness` is NON-GOVERNING and `Last Verified` + `Next Review` govern. The 30- and 90-day horizons were examined and are NOT reusable.",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)",
+   "superseded_question": {
+    "verbatim": "How would Fresh/Aging/Stale thresholds be defined? Until they are, `Freshness` cannot age and conveys nothing. Related to the unreconciled 30-day and 90-day horizons already flagged in DB9_PROVENANCE_REMEDIATION_PROPOSAL.md section 12.",
+    "status_then": "OPEN. Recorded, not resolved.",
+    "verdict": "DISSOLVED, NOT ANSWERED. The question presupposed that a threshold had to be defined. Investigation found that Option A - define one - is UNIMPLEMENTABLE, because a deterministic threshold needs a date to measure from and DB3 had none. Removing the need for a threshold answered the question by removing it.",
+    "preserved_not_rewritten": true
+   },
+   "closed_by": "DB3-OD10-OD12-1 (Option D, 2026-10-02)",
+   "decision_record": "See databases[DB3].provenance_model.od10_decision_record.",
+   "what_remains_open": "Both new columns are NULL on all 217 rows, so no DB3 row can supply a freshness floor today. That is ORDINARY OUTSTANDING WORK, not a structural defect. Backfill is NOT authorised."
   },
   "OD11": {
    "db": "DB3",
@@ -4483,8 +4642,25 @@
   "OD12": {
    "db": "DB3",
    "question": "Do the three non-Target High-confidence rows require a bounded audit? Their bodies were outside the authorised scope and NO claim is made about them here.",
-   "status": "OPEN. Recorded, not resolved.",
-   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)"
+   "status": "OPEN - but the rows are now CHARACTERISED. 2026-10-02: H1 HIGH_OVERSTATED and REQUIRES a separate correction decision; H2 and H3 HIGH_UNRESOLVED and require RE-SOURCING rather than automatic re-rating. NO Confidence value was changed. H1's correction is a SEPARATE DECISION, deliberately not authorised under DB3-OD10-OD12-1 (Option D, 2026-10-02).",
+   "recorded_by": "DB3-PROV-1 Step A (repository synchronisation only, 2026-10-02)",
+   "superseded_question": {
+    "verbatim": "Do the three non-Target High-confidence rows require a bounded audit? Their bodies were outside the authorised scope and NO claim is made about them here.",
+    "verdict": "ANSWERED IN PART. The bounded audit the question asked about was authorised and performed: all three bodies were read and all three are blank. The question of what to DO about H1 remains open.",
+    "preserved_not_rewritten": true
+   },
+   "classifications": "See databases[DB3].row_level_provenance.high_confidence_rows.",
+   "what_remains_open": "H1's disposition - downgrade to `Medium`, downgrade to `Low`, or re-source - requires owner judgement and cannot be derived. H2 and H3 need a locator and a date, which is re-sourcing work, not a rating change."
+  },
+  "OD13": {
+   "db": "DB3",
+   "question": "`Sub-Sector` is NULL on H2 and H3, against a REQUIRED validation whose own text says a finding that resolves to no sub-sector is noise. How many rows across the estate are in this state, and what is done about them?",
+   "status": "OPEN. Recorded, not resolved. The ESTATE-WIDE COUNT IS UNMEASURED.",
+   "recorded_by": "DB3-OD10-OD12-1 (Option D, 2026-10-02), as an incidental finding",
+   "how_it_was_found": "Incidentally, while reading the three High-confidence bodies under OD12. It was NOT the object of any query.",
+   "disclosed_gap_in_the_prior_audit": "DB3-PROV-AUDIT-1 checked the four provenance fields and did NOT check `Sub-Sector` population. That is a gap in my own prior audit's scope, disclosed rather than quietly filled.",
+   "bounded_measurement_requires_its_own_authorisation": true,
+   "not_measured_here": "DB3-OD10-OD12-1 (Option D, 2026-10-02) explicitly did NOT measure Sub-Sector nulls."
   }
  }
 }
