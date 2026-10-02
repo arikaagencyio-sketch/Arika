@@ -438,6 +438,300 @@ class ApprovalPrecedesSideEffects(Harness):
                              "must enforce its own approval, not inherit %r" % banned)
 
 
+class SeparateReadRoot(unittest.TestCase):
+    """`packet_root` separates the authorised READ root from the authorised WRITE root.
+
+    Every test builds a fixture-shaped tree in the OS temp area:
+        <tmp>/<fixture_id>/04_fixture_inputs/   <- read root
+        <tmp>/<fixture_id>/05_outputs/          <- write root
+    Neither real SYNCO sandbox is touched.
+    """
+
+    FIXTURE = "TMPFIX-01"
+
+    def setUp(self):
+        self.tmp = os.path.realpath(tempfile.mkdtemp(prefix="p10-root-"))
+        self.fixture_root = os.path.join(self.tmp, self.FIXTURE)
+        self.inputs = os.path.join(self.fixture_root, "04_fixture_inputs")
+        self.outputs = os.path.join(self.fixture_root, "05_outputs")
+        os.makedirs(self.inputs)
+        os.makedirs(self.outputs)
+        self.packet = os.path.join(self.inputs, "control-packet.json")
+        self.hash = self.write_packet(GOOD_PACKET)
+        self.registry = os.path.join(self.tmp, "delivery-authorisations.json")
+        self.write_registry()
+
+    def tearDown(self):
+        shutil.rmtree(self.tmp, ignore_errors=True)
+
+    def write_packet(self, obj, path=None):
+        path = path or self.packet
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with io.open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps(obj, ensure_ascii=False, indent=2) + "\n")
+        with io.open(path, "rb") as fh:
+            return hashlib.sha256(fh.read()).hexdigest()
+
+    def write_registry(self, **over):
+        row = {"id": "AUTH-R", "status": "approved", "destination": "Offer (02)",
+               "fixture_id": self.FIXTURE, "delivery_id": "R1",
+               "packet_path": self.packet, "packet_sha256": self.hash,
+               "sandbox_root": self.outputs, "packet_root": self.inputs, "max_deliveries": 1}
+        row.update(over)
+        self.row = row
+        with io.open(self.registry, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps({"delivery_authorisations": [row]}, indent=2) + "\n")
+        return row
+
+    def ref(self, **over):
+        r = {"classification": "TEST_FIXTURE", "fixture_id": self.row["fixture_id"],
+             "delivery_id": self.row["delivery_id"], "packet_path": self.row["packet_path"],
+             "packet_sha256": self.row["packet_sha256"], "destination": "Offer (02)",
+             "authorization_id": "AUTH-R", "authorization_status": "approved",
+             "downstream_authorization": "NONE"}
+        r.update(over)
+        return r
+
+    def acks(self, where=None):
+        d = where or self.outputs
+        return sorted(f for f in os.listdir(d) if f.endswith(".ack.json"))
+
+    def refuse(self, code, ref=None):
+        """Assert a refusal with no side effect.
+
+        The read root is checked for ADDED FILES only: several tests legitimately create a
+        subdirectory or a stray packet there themselves to set the scenario up, so the invariant
+        is that the RECEIVER added nothing - not that the directory is pristine.
+        """
+        before = sorted(os.listdir(self.inputs))
+        res = rx.receive(ref or self.ref(), self.registry)
+        self.assertEqual(res["outcome"], rx.OUTCOME_REFUSED, res)
+        self.assertEqual(res["refusal_code"], code, res)
+        self.assertEqual(self.acks(), [], "a refusal must write no acknowledgement")
+        self.assertEqual(sorted(os.listdir(self.inputs)), before,
+                         "a refusal must not add anything to the read root")
+        with io.open(self.registry, encoding="utf-8") as fh:
+            self.assertNotEqual(json.loads(fh.read())["delivery_authorisations"][0]["status"],
+                                "spent", "a refusal must not spend the row")
+        return res
+
+    # ---- the happy path this amendment exists for ------------------------
+    def test_valid_sibling_roots_read_from_inputs_and_write_to_outputs(self):
+        res = rx.receive(self.ref(), self.registry)
+        self.assertEqual(res["outcome"], rx.OUTCOME_ACK, res.get("refusal_code"))
+        self.assertEqual(self.acks(), ["R1.ack.json"], "exactly one acknowledgement")
+        self.assertEqual(os.path.dirname(res["acknowledgement_path"]), self.outputs,
+                         "the acknowledgement must land in 05_outputs")
+        self.assertEqual(sorted(os.listdir(self.inputs)), ["control-packet.json"],
+                         "04_fixture_inputs still holds only the packet")
+        with io.open(res["acknowledgement_path"], encoding="utf-8") as fh:
+            ack = json.loads(fh.read())
+        self.assertEqual(ack["packet_sha256"], self.hash, "the packet in 04_ was the one read")
+        self.assertIs(ack["external_write"], False)
+        self.assertEqual(ack["downstream_authorization"], "NONE")
+
+    def test_the_row_is_spent_after_a_separated_root_delivery(self):
+        rx.receive(self.ref(), self.registry)
+        with io.open(self.registry, encoding="utf-8") as fh:
+            reg = json.loads(fh.read())
+        self.assertEqual(reg["delivery_authorisations"][0]["status"], "spent")
+
+    # ---- the old behaviour is preserved exactly --------------------------
+    def test_absent_packet_root_preserves_the_original_single_root_behaviour(self):
+        """With no packet_root, the packet must be inside sandbox_root - as before."""
+        inside = os.path.join(self.outputs, "p.json")
+        h2 = self.write_packet(GOOD_PACKET, inside)
+        self.write_registry(packet_root=None, packet_path=inside, packet_sha256=h2)
+        del self.row["packet_root"]
+        with io.open(self.registry, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps({"delivery_authorisations": [self.row]}, indent=2) + "\n")
+        res = rx.receive(self.ref(), self.registry)
+        self.assertEqual(res["outcome"], rx.OUTCOME_ACK, res.get("refusal_code"))
+        self.assertEqual(self.acks(), ["R1.ack.json"])
+
+    def test_absent_packet_root_still_refuses_a_packet_outside_sandbox_root(self):
+        self.write_registry(packet_root=None)
+        del self.row["packet_root"]
+        with io.open(self.registry, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(json.dumps({"delivery_authorisations": [self.row]}, indent=2) + "\n")
+        # the packet lives in 04_fixture_inputs, which is NOT inside 05_outputs
+        self.refuse("PATH_OUTSIDE_SANDBOX")
+
+    # ---- containment ----------------------------------------------------
+    def test_a_packet_outside_packet_root_is_refused(self):
+        elsewhere = os.path.join(self.fixture_root, "stray.json")
+        h2 = self.write_packet(GOOD_PACKET, elsewhere)
+        self.write_registry(packet_path=elsewhere, packet_sha256=h2)
+        self.refuse("PATH_OUTSIDE_SANDBOX")
+
+    def test_a_nested_packet_path_is_refused(self):
+        nested = os.path.join(self.inputs, "sub", "p.json")
+        h2 = self.write_packet(GOOD_PACKET, nested)
+        self.write_registry(packet_path=nested, packet_sha256=h2)
+        self.refuse("PATH_NOT_DIRECT_CHILD")
+
+    # ---- the same-fixture relationship ---------------------------------
+    def test_cross_fixture_roots_are_refused(self):
+        other = os.path.join(self.tmp, "TMPFIX-02", "04_fixture_inputs")
+        os.makedirs(other)
+        p = os.path.join(other, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=other, packet_path=p, packet_sha256=h2)
+        self.refuse("ROOTS_NOT_SIBLINGS")
+
+    def test_non_sibling_roots_are_refused(self):
+        deeper = os.path.join(self.fixture_root, "nest", "04_fixture_inputs")
+        os.makedirs(deeper)
+        p = os.path.join(deeper, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=deeper, packet_path=p, packet_sha256=h2)
+        self.refuse("ROOTS_NOT_SIBLINGS")
+
+    def test_a_wrongly_named_read_root_is_refused(self):
+        wrong = os.path.join(self.fixture_root, "inputs")
+        os.makedirs(wrong)
+        p = os.path.join(wrong, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=wrong, packet_path=p, packet_sha256=h2)
+        self.refuse("PACKET_ROOT_NAME")
+
+    def test_a_wrongly_named_write_root_is_refused(self):
+        wrong = os.path.join(self.fixture_root, "outputs")
+        os.makedirs(wrong)
+        self.write_registry(sandbox_root=wrong)
+        res = rx.receive(self.ref(), self.registry)
+        self.assertEqual(res["refusal_code"], "SANDBOX_ROOT_NAME", res)
+        self.assertEqual(self.acks(wrong), [])
+
+    def test_a_fixture_id_not_matching_the_shared_root_is_refused(self):
+        self.write_registry(fixture_id="NOT-THE-ROOT-NAME")
+        self.refuse("FIXTURE_ID_ROOT_MISMATCH")
+
+    def test_the_normalization_rule_is_the_root_directory_name(self):
+        """A fixture root's directory NAME is its fixture id - the established rule."""
+        self.assertEqual(os.path.basename(self.fixture_root), self.FIXTURE)
+        res = rx.receive(self.ref(), self.registry)
+        self.assertEqual(res["outcome"], rx.OUTCOME_ACK, res.get("refusal_code"))
+
+    # ---- both roots pass every safe-root check independently -------------
+    def test_a_relative_read_root_is_refused(self):
+        self.write_registry(packet_root="04_fixture_inputs")
+        self.refuse("PATH_NOT_ABSOLUTE")
+
+    def test_a_traversed_read_root_is_refused(self):
+        self.write_registry(packet_root=os.path.join(self.fixture_root, "..", self.FIXTURE,
+                                                     "04_fixture_inputs"))
+        self.refuse("PATH_TRAVERSAL")
+
+    def test_a_git_worktree_read_root_is_refused(self):
+        gitfix = os.path.join(self.tmp, "GITFIX")
+        inputs = os.path.join(gitfix, "04_fixture_inputs")
+        os.makedirs(os.path.join(gitfix, ".git"))
+        os.makedirs(inputs)
+        p = os.path.join(inputs, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=inputs, packet_path=p, packet_sha256=h2)
+        self.refuse("PATH_IN_GIT_WORKTREE")
+
+    def test_a_onedrive_read_root_is_refused(self):
+        od = os.path.join(self.tmp, "OneDrive", self.FIXTURE, "04_fixture_inputs")
+        os.makedirs(od)
+        p = os.path.join(od, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=od, packet_path=p, packet_sha256=h2)
+        self.refuse("PATH_FORBIDDEN_LOCATION")
+
+    def test_a_runtime_memory_read_root_is_refused(self):
+        mem = os.path.join(self.tmp, "_memory", self.FIXTURE, "04_fixture_inputs")
+        os.makedirs(mem)
+        p = os.path.join(mem, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=mem, packet_path=p, packet_sha256=h2)
+        self.refuse("PATH_FORBIDDEN_LOCATION")
+
+    def test_a_fixture_log_read_root_is_refused(self):
+        log = os.path.join(self.tmp, "skill_runs", self.FIXTURE, "04_fixture_inputs")
+        os.makedirs(log)
+        p = os.path.join(log, "control-packet.json")
+        h2 = self.write_packet(GOOD_PACKET, p)
+        self.write_registry(packet_root=log, packet_path=p, packet_sha256=h2)
+        self.refuse("PATH_FORBIDDEN_LOCATION")
+
+    @unittest.skipUnless(hasattr(os, "symlink"), "symlinks unsupported")
+    def test_a_symlinked_read_root_is_refused_where_supported(self):
+        link = os.path.join(self.fixture_root, "04_fixture_inputs_link")
+        try:
+            os.symlink(self.inputs, link, target_is_directory=True)
+        except (OSError, NotImplementedError) as exc:
+            self.skipTest("symlink creation not permitted here: %s" % exc)
+        self.write_registry(packet_root=link)
+        res = rx.receive(self.ref(), self.registry)
+        self.assertIn(res["refusal_code"], ("PATH_LINK_ESCAPE", "PACKET_ROOT_NAME"))
+        self.assertEqual(self.acks(), [])
+
+    # ---- order, and unchanged guarantees --------------------------------
+    def test_every_relationship_failure_precedes_any_side_effect(self):
+        for kwargs, code in [({"fixture_id": "WRONG-ROOT"}, "FIXTURE_ID_ROOT_MISMATCH"),
+                             ({"status": "draft"}, "AUTHORISATION_NOT_APPROVED")]:
+            self.write_registry(**kwargs)
+            res = rx.receive(self.ref(), self.registry)
+            self.assertEqual(res["refusal_code"], code, res)
+            self.assertEqual(self.acks(), [], "no acknowledgement for %s" % code)
+            self.assertEqual(sorted(os.listdir(self.inputs)), ["control-packet.json"])
+            with io.open(self.registry, encoding="utf-8") as fh:
+                self.assertNotEqual(json.loads(fh.read())["delivery_authorisations"][0]["status"],
+                                    "spent", "a refusal must not spend the row")
+
+    def test_validate_remains_pure_with_separated_roots(self):
+        before_in = sorted(os.listdir(self.inputs))
+        before_out = sorted(os.listdir(self.outputs))
+        self.write_registry(fixture_id="WRONG-ROOT")
+        try:
+            rx.validate(self.ref(), self.registry)
+        except rx.Refusal:
+            pass
+        self.assertEqual(sorted(os.listdir(self.inputs)), before_in)
+        self.assertEqual(sorted(os.listdir(self.outputs)), before_out)
+
+    def test_concurrency_and_atomicity_are_unchanged_with_separated_roots(self):
+        results, lock = [], threading.Lock()
+        start = threading.Event()
+
+        def attempt():
+            start.wait()
+            r = rx.receive(self.ref(), self.registry)
+            with lock:
+                results.append(r)
+
+        threads = [threading.Thread(target=attempt) for _ in range(8)]
+        for t in threads:
+            t.start()
+        start.set()
+        for t in threads:
+            t.join()
+
+        self.assertEqual(self.acks(), ["R1.ack.json"], "at most one acknowledgement")
+        won = [r for r in results if r["outcome"] in (rx.OUTCOME_ACK, rx.OUTCOME_ACK_UNRESOLVED)]
+        self.assertEqual(len(won), 1, "exactly one invocation may claim the acknowledgement")
+
+    def test_the_packet_hash_is_still_enforced_against_the_read_root(self):
+        """Changing the packet AFTER authorisation is caught by re-hashing the file.
+
+        The reference still carries the hash the row pins, so this is not a field mismatch - the
+        receiver recomputes the file's hash and reports PACKET_HASH_MISMATCH, which is the more
+        precise refusal of the two.
+        """
+        self.write_packet(dict(GOOD_PACKET, extra="changed"))
+        self.refuse("PACKET_HASH_MISMATCH")
+
+    def test_a_missing_packet_in_the_read_root_is_refused(self):
+        ref = self.ref()
+        os.remove(self.packet)
+        res = rx.receive(ref, self.registry)
+        self.assertEqual(res["refusal_code"], "PACKET_MISSING", res)
+        self.assertEqual(self.acks(), [])
+
+
 class Isolation(unittest.TestCase):
     def test_the_receiver_imports_no_connector_network_bus_or_sdk_module(self):
         with io.open(os.path.join(HERE, "offer_inbox_receiver.py"), encoding="utf-8") as fh:

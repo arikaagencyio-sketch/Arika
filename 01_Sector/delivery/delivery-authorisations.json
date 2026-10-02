@@ -51,11 +51,14 @@
       "packet_path": "<absolute path to the packet, which must resolve INSIDE sandbox_root>",
       "packet_sha256": "<sha256 of the packet file, pinned at authorisation time>",
       "sandbox_root": "<absolute path to the ONLY directory an acknowledgement may be written to; must be outside every git working tree, outside OneDrive, and must not name a runtime memory stream or a repository fixture log>",
+      "packet_root": "<OPTIONAL. Absolute path to the only directory the packet may be READ from. Omit it and the original behaviour applies unchanged: packet_path must be inside sandbox_root. Supply it and the read root is separated from the write root - see _field_notes.>",
       "max_deliveries": 1,
       "_field_notes": {
         "status": "draft | approved | spent. Only `approved` admits a delivery.",
         "sandbox_root": "The receiver independently re-validates this: absolute, resolves to itself, no symlink or junction on its chain, not inside a git working tree, no `onedrive` component, and not a production or runtime-log location. A failure here refuses before any side effect.",
-        "packet_path": "Re-validated to resolve INSIDE sandbox_root, with no `..` traversal and no link escape.",
+        "packet_root": "OPTIONAL, and additive. ABSENT: behaviour is exactly as before - packet_path must resolve inside sandbox_root, which bounds both the read and the write. PRESENT: packet_path must resolve inside packet_root instead, while the acknowledgement stays confined to sandbox_root. Both roots then pass EVERY safe-root check independently - absolute, resolving to themselves, no traversal, no symlink or junction on either chain, neither inside a git working tree, neither under OneDrive, and neither naming a repository, runtime-memory or fixture-log location.",
+        "same_fixture_requirement": "When packet_root is present the receiver additionally requires: packet_root is named exactly `04_fixture_inputs`; sandbox_root is named exactly `05_outputs`; both resolve to the SAME parent directory, which is the authorised fixture root; that fixture root's directory NAME equals the authorisation's fixture_id (the mechanism's normalization rule - a fixture root is named for its fixture); packet_path is a DIRECT file inside packet_root, not nested; and the acknowledgement is a direct file inside sandbox_root. This is what refuses a cross-fixture read or write even when both paths are independently safe: roots under two different fixtures do not share a parent, and a parent whose name is not the fixture_id is not that authorisation's fixture.",
+        "packet_path": "Re-validated to resolve INSIDE the authorised read root - sandbox_root when packet_root is absent, packet_root when it is present - with no `..` traversal and no link escape.",
         "packet_sha256": "Re-computed from the file at delivery time. A changed packet is refused with PACKET_HASH_MISMATCH."
       }
     }

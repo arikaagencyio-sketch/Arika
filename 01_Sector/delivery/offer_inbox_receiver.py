@@ -111,6 +111,12 @@ FORBIDDEN_SEGMENTS = ("onedrive",)
 FORBIDDEN_MARKERS = ("_memory", "arika-runtime", "skill_runs", "runtime.jsonl",
                      "the agency drafts")
 
+#: When an authorisation separates its read root from its write root, the two must be these exact
+#: sibling directories of one fixture root. Hard-coded rather than configurable: a free choice of
+#: directory names would let an authorisation point the read root anywhere that happens to be safe.
+PACKET_ROOT_NAME = "04_fixture_inputs"
+ACK_ROOT_NAME = "05_outputs"
+
 
 def assert_safe_root(raw, label):
     """A destination root must be absolute, link-free, outside git and OneDrive, and not a
@@ -152,8 +158,47 @@ def assert_within(child_raw, root_resolved, label):
         raise Refusal("PATH_LINK_ESCAPE", label)
     root = root_resolved.rstrip("\\/")
     if not (res == root or res.startswith(root + os.sep)):
-        raise Refusal("PATH_OUTSIDE_SANDBOX", "%s is not inside the authorised sandbox" % label)
+        raise Refusal("PATH_OUTSIDE_SANDBOX", "%s is not inside the authorised root" % label)
     return res
+
+
+def assert_direct_child(child_resolved, root_resolved, label):
+    """`child` must sit DIRECTLY in `root`, not in a subdirectory of it."""
+    if os.path.dirname(child_resolved) != root_resolved.rstrip("\\/"):
+        raise Refusal("PATH_NOT_DIRECT_CHILD",
+                      "%s must be a direct file inside its authorised root, not nested" % label)
+    return child_resolved
+
+
+def assert_sibling_fixture_roots(packet_root, sandbox_root, fixture_id):
+    """Both roots must be the two named sibling directories of ONE authorised fixture root.
+
+    This is what refuses a cross-fixture read or write even when both paths are independently
+    safe: a read root under one fixture and a write root under another have different parents, and
+    a parent whose name is not the authorisation's fixture id is not that authorisation's fixture.
+
+    NORMALIZATION RULE, established here because the mechanism had none: a fixture root's
+    directory NAME is its fixture id. The sandboxes are already named this way, so the rule
+    records existing practice rather than inventing a mapping.
+    """
+    if os.path.basename(packet_root) != PACKET_ROOT_NAME:
+        raise Refusal("PACKET_ROOT_NAME", "packet_root must be named %r, not %r"
+                      % (PACKET_ROOT_NAME, os.path.basename(packet_root)))
+    if os.path.basename(sandbox_root) != ACK_ROOT_NAME:
+        raise Refusal("SANDBOX_ROOT_NAME", "sandbox_root must be named %r, not %r"
+                      % (ACK_ROOT_NAME, os.path.basename(sandbox_root)))
+    packet_parent = os.path.dirname(packet_root)
+    ack_parent = os.path.dirname(sandbox_root)
+    if packet_parent != ack_parent:
+        raise Refusal("ROOTS_NOT_SIBLINGS",
+                      "packet_root and sandbox_root do not share one resolved parent - a "
+                      "cross-fixture read or write is refused")
+    fixture_root = packet_parent
+    if os.path.basename(fixture_root) != fixture_id:
+        raise Refusal("FIXTURE_ID_ROOT_MISMATCH",
+                      "the shared parent is named %r but the authorisation's fixture_id is %r"
+                      % (os.path.basename(fixture_root), fixture_id))
+    return fixture_root
 
 
 # ---------------------------------------------------------------- validation
@@ -249,7 +294,20 @@ def validate(reference, registry_path):
             raise Refusal("AUTHORISATION_FIELD_MISMATCH", field)
 
     sandbox = assert_safe_root(row.get("sandbox_root"), "sandbox_root")
-    packet_path = assert_within(reference["packet_path"], sandbox, "packet_path")
+
+    # `packet_root` separates the authorised READ root from the authorised WRITE root. Absent, the
+    # original single-root behaviour is preserved EXACTLY: one root bounds both.
+    packet_root_raw = row.get("packet_root")
+    if packet_root_raw is None:
+        packet_root = sandbox
+        fixture_root = None
+    else:
+        packet_root = assert_safe_root(packet_root_raw, "packet_root")
+        fixture_root = assert_sibling_fixture_roots(packet_root, sandbox, reference["fixture_id"])
+
+    packet_path = assert_within(reference["packet_path"], packet_root, "packet_path")
+    if packet_root_raw is not None:
+        assert_direct_child(packet_path, packet_root, "packet_path")
 
     if not os.path.isfile(packet_path):
         raise Refusal("PACKET_MISSING", "no file at the authorised packet path")
@@ -266,8 +324,11 @@ def validate(reference, registry_path):
         raise Refusal("PACKET_NOT_AN_OBJECT")
     _assert_packet_grants_nothing(packet)
 
+    # The acknowledgement stays confined to `sandbox_root` whether or not a read root was given,
+    # and must sit directly in it.
     ack_path = assert_within(os.path.join(sandbox, "%s.ack.json" % reference["delivery_id"]),
                              sandbox, "acknowledgement_path")
+    assert_direct_child(ack_path, sandbox, "acknowledgement_path")
     if os.path.exists(ack_path):
         raise Refusal("ACKNOWLEDGEMENT_EXISTS", "this delivery_id is already acknowledged")
 
