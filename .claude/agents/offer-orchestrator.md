@@ -79,7 +79,7 @@ Framework**.
 ## 3. Route
 
 Produce a `routing_plan`:
-- Hand the seed brief to **`offer-oeos-engineer`** to run the full 12-phase OEOS.
+- Prepare the normalized `OFFER_BRIEF_RECEIVED` handoff recommendation for **`offer-oeos-engineer`** to run the full 12-phase OEOS after human review. A review-required result advertises no downstream event; this runtime does not publish it.
 - Send the engineered tiers to **`offer-pricing-floor-analyst`** for the floor check.
 - Name what a human must approve before anything is quoted or published.
 

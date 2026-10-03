@@ -37,6 +37,8 @@ Sales is responsible for converting qualified opportunities (from Marketing and 
 
 ## 4. Workflow Index
 
+**Active public prospecting run (2026-10-03):** [`PROSPECTING_CYCLE.md`](PROSPECTING_CYCLE.md) records real account research, the outside-Git organization map, prepared first touches, release blockers and execution evidence. Four companies and three email drafts are in the queue; nothing has been sent or registered in live CRM. Continue this run rather than restarting it as a proposal.
+
 | Workflow | Trigger | Steps | Output | Owner | Source |
 |---|---|---|---|---|---|
 | Daily Sales Command Run | "Move revenue today" | 7-agent sequence: Executive Intelligence → RevOps → Demand Gen → Lead Qualification → Sales Execution → Follow-Up → Reflection | Top 5 revenue actions, deal risks, follow-ups due, new pipeline actions, approvals needed, memory updates | Mary Thuo | `06_AI_OPERATIONS/07_Runtime_Examples/Daily_Sales_Command_Run.md` |
@@ -100,7 +102,7 @@ Sales is responsible for converting qualified opportunities (from Marketing and 
 
 ## 8. Decision Log
 
-Live decision log already exists: `06_AI_OPERATIONS/06_AI_Memory_Logs/Decision_Log.md` — use that file going forward rather than duplicating entries here. **Confirmed empty** (one-line template only) — same for `Learning_Loop_Log.md` and `Prompt_Evolution_Log.md`. This is a designed-but-unused capability: the format exists (`AI_Memory_Log_Template.md`), real entries do not yet.
+Live decision log: `06_AI_OPERATIONS/06_AI_Memory_Logs/Decision_Log.md` — use that file going forward rather than duplicating entries here. Its first execution entry is the 2026-10-03 real public-company prospecting cycle. `Learning_Loop_Log.md` and `Prompt_Evolution_Log.md` remain empty templates.
 
 - **2026-06-30 — Reconciled this department's 4-tier risk model with the agency-wide 5-class system** (tracker item 11, resolved). See §10 for the mapping table.
 - **2026-06-30 — Added real daily revenue/activity targets** from `AGENCY_REVENUE_TARGETS.md` (tracker item 9, partially resolved — targets now real, historical actuals still pending). See §7.
@@ -173,6 +175,8 @@ This sub-layer also has its own source-citation lineage (`Master_Source_Registry
 **`generate_blueprint.ps1` provenance note:** the script reads `.docx` files from the *original* pre-restructuring location (`Sales Drafts/`, now `05_Sales/`) plus a hardcoded list of 11 "companion" `.docx` files from the parent directory — some of which (e.g. `HE SALES OS_2024.docx`, `Sales Mechanism 102.docx`, `Nikolaus Luhmann_ Sales.docx`) are **not present as `.md` files anywhere in this folder**, meaning some sources cited in `Master_Source_Registry.csv` are not directly readable today. **Owner-confirmed (2026-06-30, tracker item 10): these 11 files are confirmed-lost, not just unlocated** — no need to keep searching. The citation system remains trustworthy for everything that *is* present (verified 7/7 on spot-check, §13 above); this is a minor completeness gap on a small subset of sources, not a trust problem with the system as a whole.
 
 ## 15. Changelog
+
+- 2026-10-03: Executed the public research and first-touch preparation step for four real companies and corrected Sales' Hospitality qualification route. Added the runnable evidence validator and eight tests. Identity-bearing artifacts remain outside Git; zero sends, calls or verified CRM rows. Exact-message review and account access remain open. See the canonical Decision Log and `PROSPECTING_CYCLE.md`.
 
 - 2026-06-30 — File created as part of v0.1 skeleton restructuring.
 - 2026-06-30 — Content migration: `06_AI_OPERATIONS/` extracted and independently quality-verified (7/7 sampled citations checked out against `Master_Source_Paragraph_Index.csv`; agent framing confirmed to originate in this department's own raw drafts). Capability Registry, Workflow Index, Agent Roster, Skill Library Index, Standards & SOPs Index, and Triggers/Automation Hooks populated. KPI Dictionary and Risk/Incident Log confirmed as genuine gaps (not just unmigrated) per the department's own existing gap backlog.

@@ -39,7 +39,7 @@ output_schema:
         predictive: { type: number }
     total_score: { type: number }
     priority_band: { type: string, enum: [Low, Medium, High, Critical] }
-    matched_service: { type: string, enum: [marketing, sales, partner_acquisition, automation] }
+    matched_service: { type: string, enum: [marketing, sales, partner_acquisition, automation, hospitality_group_discovery, hospitality_property_discovery, hospitality_outlet_discovery, needs_evidence] }
     rescore_date: { type: string }
 memory_stream: 01_Sector/_memory/runtime.jsonl
 emits: [PROSPECT_SCORED]
@@ -76,6 +76,17 @@ Automation.
 `sales-lead-qualification` (05). Service-matched targeting → `marketing-demand-generation` (03).
 
 ## Honesty guardrails
+
+Hospitality prospecting uses the exact `ORG-*` decision level. Match a group to
+`hospitality_group_discovery`, a property to `hospitality_property_discovery`,
+and an outlet/shared service to `hospitality_outlet_discovery` only when the
+supplied evidence supports that route. These are unpriced discovery routes,
+not registered offers or authority to make delivery commitments. Do not reuse
+SaaS ARR tiers for hotels. Every scored category needs dated source evidence;
+an unsupported category scores zero and is explicitly unassessed, not proof
+that the prospect lacks a need. A zero score from missing evidence does not
+disqualify a source-backed routing inquiry. A published facility or loyalty
+programme alone is not a buying signal or evidence of revenue leakage.
 This scorecard is real and ready to use, but **has never been run against a real
 prospect** — treat its output as "ready," not "validated by use." Score only on
 real signal evidence; if a category lacks evidence, score it low and say why —

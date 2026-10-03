@@ -13,6 +13,8 @@
 
 ## 1. How to use it
 
+**2026-10-03 public prospecting application:** the owner's request to execute prospecting today supplies the intent to approach for exploratory discovery (ID3 timing). The real run and exact-message review are in `05_Sales/PROSPECTING_CYCLE.md`. This does not ratify the entire question bank, authorize named-person marketing, approve private client data or open S3/S4. Company structure is specified in `CRM_SCHEMA.md`; live registration remains unverified.
+
 1. **Universal core (this file) + one sector overlay.** Same pattern as `01_Sector/SECTOR_ACTIVATION_CONTRACT.md` §16: the core never carries a sector's values; the overlay supplies them (room counts, archetypes, booking channels, sector data windows). A new sector gets a new overlay, not a new intake.
 2. **Stage by stage.** Ask only what the current stage allows (§2). A question above the current stage is recorded `NOT_ASKED` or `BLOCKED` — never silently skipped.
 3. **The fast version = Stage S1 + S2 `R` rows.** The full profile is every row. Filter, don't rewrite.

@@ -2,9 +2,10 @@
  "_meta": {
   "plugin": "hospitality",
   "plugin_number": "001",
-  "version": "0.1",
-  "generated": "2026-08-24",
-  "derived_from": "01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md v0.2",
+  "version": "0.3",
+  "generated": "2026-10-02",
+
+  "derived_from": "01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md v0.3",
   "what_this_is": "A DERIVED sidecar carrying only the plugin slots that a resolver must read MECHANICALLY. HOSPITALITY_PLUGIN.md remains the authored source of truth; this file is generated from it and must never be edited independently. If the two disagree, the markdown wins and this file is regenerated.",
   "why_it_exists": "SECTOR_OS_ARCHITECTURE.md §4.1 step 4 requires the Resolution Engine to FILTER by the plugin's property-type rule (P2), and step 6 to DERIVE activation dates from the plugin timing table (P7). Both existed only as markdown tables, so no resolver could read them. This gap was flagged nowhere in the repo before Gate 0.",
   "why_it_does_not_breach_the_plugin_rule": "SECTOR_ACTIVATION_CONTRACT.md §16 forbids a plugin from creating 'a store, a field, an agent, or an event'. This file creates none of those. It is a REPRESENTATION of values that already exist in the authored pack — the same values, in a form a procedure can read. No new value is introduced here, and every entry carries a pointer back to the markdown section it came from.",
@@ -347,7 +348,7 @@
     },
     "Hospitality Group": {
      "_all_cells": "unruled",
-     "_blocked_on": "Not a bookable unit. Rules by INHERITANCE: the union of its member properties' archetypes. That is a rule, not a gap - but the union operator is unimplemented, so a resolver meeting a Group today must report it unresolvable rather than guessing a member archetype."
+     "_blocked_on": "Not a bookable unit and no longer a disqualifier. Resolve by bounded inheritance through CRM child Company rows: the explicit union of sourced child property/branch/outlet/shared-service levels. If no child rows exist, report missing child structure, not anti-ICP and not a guessed member archetype. The group itself does not hold a direct signal matrix."
     }
    },
    "tier1_scope": {
@@ -368,7 +369,8 @@
    }
   },
   "framework": "SECTOR_OS_ARCHITECTURE.md 3.1 - the P2 totality rule. Five verdicts (moves, moves_weakly, does_not_move, not_applicable, unruled); four fields per ruled cell (verdict, direction, basis, falsifier); a cell with no falsifier may not hold `moves`.",
-  "restructured": "2026-08-28"
+  "restructured": "2026-08-28",
+  "reconciled": "2026-10-02 - Hospitality Group qualification now comes from CRM child Company structure, not a guessed direct archetype."
  },
  "P5": {
   "slot": "Destination demand-theme vocabulary",

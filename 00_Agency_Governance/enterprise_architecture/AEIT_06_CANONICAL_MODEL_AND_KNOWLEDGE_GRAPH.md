@@ -1,7 +1,7 @@
 # AEIT_06 — Canonical Entity Model & Knowledge Graph (Blueprint)
 
-**Version:** v0.2
-**Last updated:** 2026-08-16
+**Version:** v0.3
+**Last updated:** 2026-10-02
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Fills:** `REGISTRY_TAXONOMY_REFERENCE.md` future-state registries **Semantic/Ontology** and
 **Relationship (entity graph)**. Extends `CRM_SCHEMA.md` (6 objects) to the whole enterprise.
@@ -34,8 +34,8 @@
 ### Party domain
 | Entity | Tag | Owner | Key fields | Notes |
 |---|---|---|---|---|
-| **Company** | [NEW] | Sector (01) for market data; Governance for identity | legal_name, domain, sector_id, size, ARR_band, roles[] | The master org entity. Prospect/Client/Partner/Competitor are **roles**, not types. |
-| **Person** | [NEW] | dept holding the relationship | name, company_id, role, contact, decision_authority | Decision-Maker/Contact are role flags. |
+| **Company** | [NEW] | Sector (01) for market data; Governance for identity | company_id, legal_name/display_name, domain, sector_id, structure_type, entity_level, parent_company_id, root_company_id, size/ARR_band, roles[] | The master org entity. Prospect/Client/Partner/Competitor are **roles**, not types. Structure is a field, not an ID: `SGL` single-site, `MBR` multi-branch/single-brand, `GRP` multi-property group, `HLD` holding/multi-brand, `OUT` standalone outlet. A hotel group, a property, a branch and an outlet can all be Company nodes linked by parent/child edges. |
+| **Person** | [NEW] | dept holding the relationship | person_id, name, company_id, role, contact, decision_authority, decision_scope | Decision-Maker/Contact are role flags. `decision_scope` names the Company level they decide for: group, property/branch, outlet, or shared service. |
 | **Client** (role) | [CRM] | Client Success (07) | lifecycle_stage, relationship_status, health_score, account_owner | SM1. "Account" = billing sense only (R2). |
 | **Partner** (role) | [CRM] | ClientPartner Acq (06) | partner_type, stage, fit_score, trust_score | SM2. |
 | **Competitor** (role) | [NEW] | Sector (01) | positioning, overlap | Feeds market intelligence. |
@@ -53,6 +53,7 @@
 | **Offer** | [NEW] | Offer (02) | registry_id, pricing, ascension_stage | Index of record = Offer Engineering Registry. |
 | **Lead** | [CRM] | Sales (05) *(gen: 03/04/06)* | source, ICP_fit_score (from Sector), touch_history | SM3. |
 | **Opportunity** | [CRM] | Sales (05) | stage, value, probability | SM3. |
+| **Pilot Engagement** | [EXT] | Sales (05) + Client Success (07), with Sector (01) supplying fit intelligence | pilot_id, company_id, target_company_level_id, offer_id, pilot_state, proof_required | A pilot is an engagement record pointing at a Company level; it is not the Company's identity. Used for active tests such as the Hospitality pilot. |
 | **Campaign** | [NEW] | **Content (04)** *(ratified 2026-08-16 — was Marketing 03)* | campaign_id, master_intelligence_id, thesis, objective, offer_id, sector_scope, phase, window | **Owner changed by owner ratification.** Reasoning: `CONTENT_OS.md` §10 and `DESIGN_OS.md` §10 had already agreed to share Campaign as one organizing unit ("so the two departments share one unit of work rather than reconciling two different groupings later"), Marketing (03) holds no live campaign store, and every campaign today originates from a content opportunity rather than a media buy. Marketing (03) remains the consumer for channel/budget/demand execution and is **not** losing campaign *strategy* — it loses only the entity ownership. See `04_Content/CONTENT_OS.md` §8 (2026-08-16). |
 | **Invoice / Payment** | [CRM] | Finance (09) | amount (USD priced/KES invoiced), status | Conversion calculator = roadmap gap. |
 
@@ -101,12 +102,16 @@ of typed edges over the entities in §2.
 ### Core edge types
 ```
 Person        —[works_at]→          Company
+Person        —[decides_for]→       Company       (exact decision scope)
 Company       —[belongs_to]→        Sector
 Company       —[has_role]→          {Prospect | Client | Partner | Competitor}
+Company       —[parent_of]→         Company
+Company       —[contains_unit]→     Company       (property | branch | outlet | shared service)
 Company       —[competes_with]→     Company
 Company       —[classified_as]→     ICP Classification        (set by Sector)
 Lead          —[derived_from]→      Company + Signal Score
 Opportunity   —[for]→               Company + Offer
+Pilot Eng.    —[tests_offer_with]→  Company + Offer
 Campaign      —[targets]→           Sector | Audience
 Content       —[expresses]→         Brand
 Content       —[generated_by]→      Agent | Design
@@ -138,11 +143,19 @@ freshness(last_verified) · version_history · supersedes/superseded_by`
 
 ## 5. What is NOT built here (deferred)
 - **Instances.** This is the schema/ontology, not populated data. Real Company/Knowledge-Object
-  instances arrive when IntOS is activated and real clients exist.
+  instances arrive when IntOS is activated and real clients exist. The 2026-10-02 Hospitality pilot
+  ruling makes one real Company instance necessary, but this file still does not store the identity:
+  create it in the CRM/identity layer and reference it here by ID only.
 - **A graph database.** Whether the graph lives in ClickUp relations, `bois`' vector store, or a
   dedicated graph DB is a Tech Stack decision sequenced in `AEIT_10` — not pre-decided here.
 
 ## 6. Decision Log
+- **2026-10-02 — Company structure and Pilot Engagement added.** Owner direction on the Hospitality
+  pilot required the model to stop treating groups as an anti-ICP edge case. `Company` now separates
+  permanent identity from structure (`SGL`/`MBR`/`GRP`/`HLD`/`OUT`) and supports parent/child Company
+  levels for group → property/branch → outlet/shared-service. `Pilot Engagement` is added as an
+  engagement record pointing at the exact Company level being tested; it never replaces the Company
+  identity. Real pilot names stay outside markdown. — Codex
 - **2026-08-16 — `Campaign` ownership moved Marketing (03) → Content (04). Owner-ratified.** The first
   amendment to this catalogue's ownership column. Three claimants existed on one entity — this file
   named Marketing, while `CONTENT_OS.md` §10 and `DESIGN_OS.md` §10 had already agreed to share
@@ -162,6 +175,8 @@ freshness(last_verified) · version_history · supersedes/superseded_by`
   defined as the IntOS write target. — Claude Code (Opus 4.8)
 
 ## 7. Changelog
+- **v0.3 (2026-10-02):** Added Company structure fields, parent/child organization edges, exact person
+  decision scope, and Pilot Engagement as a canonical engagement extension for active pilots. — Codex
 - **v0.2 (2026-08-16):** `Campaign` owner amended to Content (04) by owner ratification; `Platform`
   and `Narrative Position` added as `[CANDIDATE]` entities; 4 candidate edges added to §4. First
   amendment since creation. — Claude Code (Opus 5)

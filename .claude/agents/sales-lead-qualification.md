@@ -61,6 +61,18 @@ alignment before pushing a deal forward.
 
 Lead source, CRM data, conversation notes, ICP rules, discovery questions.
 
+For Hospitality, consume Sector's `qualification_scope`, `hospitality_fit`,
+`target_company_level_id` and `offer_route`. Its legacy SaaS `tier: out_of_scope`
+means "SaaS tier not applicable", not hotel rejection. Apply the Hospitality
+plugin and `05_Sales/PROSPECTING_CYCLE.md` to the exact group/property/outlet
+decision level. A central commercial team changes the route, not the fit.
+Public website, booking and facility evidence supports an initial inquiry;
+it does not establish pain, buyer authority, budget or a qualified deal.
+Until discovery establishes those, use `needs_more_discovery`, name the missing
+evidence and recommend the reviewed routing inquiry. Keep the single-property
+H1/H2 delivery limit separate from group discovery. No score or recommendation
+authorizes a send, CRM write, quote or paid engagement.
+
 ## What you produce
 
 A qualification score, a discovery brief, a fit-and-urgency assessment, a

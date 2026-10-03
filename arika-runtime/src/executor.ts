@@ -30,6 +30,7 @@ export interface RunResult {
   recommendation: Record<string, unknown>;
   memoryPath: string | null;
   emitted: string[];
+  status: "awaiting_review" | "advisory_complete";
 }
 
 let client: Anthropic | undefined;
@@ -56,6 +57,10 @@ export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunRes
   // lane or a misdirected destination costs nothing to discover. An ordinary
   // run returns from this immediately and is unaffected.
   assertFixturePreconditions(spec.name, ctx);
+
+  if (ctx.trigger !== "manual" && requiresHumanApproval(spec.risk_class, spec.requires_human_approval)) {
+    throw new Error(`Human review required: ${spec.name} may only prepare a recommendation through a manual run.`);
+  }
 
   let recommendation: Record<string, unknown>;
   switch (spec.execution) {
@@ -88,8 +93,8 @@ export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunRes
  * Deliberately NOT withheld: `needs_more_seed_data`, `add_new_offer` and
  * `update_existing_offer`. Each has a human-reviewed path forward (PG3; RD7 for
  * a structural continuation), so the right control for them is that review, not
- * suppression - withholding would wrongly signal a stop. Nothing here sends an
- * event anywhere: this only narrows what a result reports.
+ * suppression in this helper. Finalization additionally withholds ALL events
+ * while human review is required. Nothing here publishes an event.
  */
 const WITHHELD_EMITS: Record<string, { field: string; values: readonly string[] }> = {
   OFFER_BRIEF_RECEIVED: { field: "registry_action", values: ["reject"] },
@@ -142,15 +147,16 @@ export function finalizeRun(
     riskClass: spec.risk_class,
     recommendation,
     memoryPath,
+    status: humanGate ? "awaiting_review" : "advisory_complete",
     // The recommendation and the memory line above are untouched; only the
     // advertised events are narrowed.
     //
     // Isolation rule: a TEST_FIXTURE run advertises NO events at all, whatever
     // the spec declares or the recommendation says. A fixture is terminal by
     // design - it must never signal a hand-off (e.g. OEOS's OFFER_ENGINEERED,
-    // which the pricing analyst subscribes to). This is about fixtures only: it
-    // changes no spec, no ordinary run, RD5 or the real Offer workflow.
-    emitted: ctx.fixture ? [] : advertisedEmits(spec.emits, recommendation),
+    // which the pricing analyst subscribes to). Ordinary results awaiting human
+    // review are terminal too; neither rule grants approval or changes a spec.
+    emitted: ctx.fixture || humanGate ? [] : advertisedEmits(spec.emits, recommendation),
   };
 }
 

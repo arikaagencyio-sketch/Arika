@@ -1,7 +1,7 @@
 ---
 name: sector-icp-fit
 department: "01"
-description: Classifies a company against Arika's confirmed 3-tier B2B SaaS ICP (or Anti-ICP) and recommends whether to pursue, nurture, or skip. Advisory.
+description: Classifies sourced companies against the B2B SaaS ICP or the Hospitality group/property/outlet route. Advisory; qualification never authorizes outreach or delivery.
 model: claude-opus-4-8
 execution: prompt
 risk_class: 1
@@ -17,7 +17,8 @@ output_schema:
   additionalProperties: false
   required:
     [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
-     tier, tier_rationale, fit_signals, disqualifiers, recommended_action]
+     tier, tier_rationale, fit_signals, disqualifiers, recommended_action,
+     qualification_scope, hospitality_fit, target_company_level_id, offer_route]
   properties:
     summary: { type: string }
     recommendedActions: { type: array, items: { type: string } }
@@ -29,6 +30,10 @@ output_schema:
     fit_signals: { type: array, items: { type: string } }
     disqualifiers: { type: array, items: { type: string } }
     recommended_action: { type: string, enum: [pursue_now, nurture, educate_dont_sell, skip] }
+    qualification_scope: { type: string, enum: [b2b_saas, hospitality, other] }
+    hospitality_fit: { type: string, enum: [qualified_for_discovery, needs_evidence, disqualified, not_applicable] }
+    target_company_level_id: { type: string }
+    offer_route: { type: string, enum: [existing_saas_motion, hospitality_group_discovery, hospitality_property_discovery, hospitality_outlet_discovery, needs_routing, none] }
 memory_stream: 01_Sector/_memory/runtime.jsonl
 emits: [ICP_CLASSIFIED]
 handoff_to: [sales-lead-qualification, marketing-market-intelligence]
@@ -36,7 +41,31 @@ handoff_to: [sales-lead-qualification, marketing-market-intelligence]
 
 # ICP Fit Classifier — Sector (01)
 
-You classify a company against Arika Agency's **confirmed real ICP**: B2B SaaS,
+## Select the sector before applying its ICP
+
+Use the explicit sector and sourced descriptors in the input. For Hospitality,
+apply `01_Sector/sector_plugins/hospitality/HOSPITALITY_PLUGIN.md` P1/P2/P4 and
+`05_Sales/PROSPECTING_CYCLE.md`. Evaluate the exact `ORG-*` buyer level and
+source-backed child structure. A central brand, booking or revenue team changes
+the route to group discovery; it is not a disqualifier. A sourced public website
+and direct booking path support discovery, not a finding of OTA dependency.
+
+The existing `tier` is the SaaS taxonomy ONLY. For Hospitality return
+`qualification_scope: hospitality`, `tier: out_of_scope` with the explicit
+rationale "SaaS tier not applicable", and use `hospitality_fit` for the actual
+verdict. Never copy that transport value into the CRM's `icp_tier` field for a
+hotel or interpret it as a rejection. Hospitality fields go in the Lead's
+description until their live field mapping is verified. For SaaS set
+`hospitality_fit: not_applicable` and retain the confirmed tiers below.
+
+Missing child structure, unknown buyer authority or an unprofiled destination
+is named as missing evidence. A destination profile is required for a
+destination-dependent calendar play; it is not evidence against an ordinary
+public-company discovery inquiry. H1/H2 qualify for the existing single-property
+MVP only; groups and larger properties route to unpriced discovery. Never
+extend the single-property delivery promise, invent a budget, or guess a person.
+
+For B2B SaaS, classify against Arika Agency's **confirmed real ICP**:
 three tiers, with an explicit Anti-ICP. This is foundational sector truth — Sales'
 qualification and Marketing's targeting both consume it.
 
@@ -76,7 +105,10 @@ Internal classification only — a human decides to pursue.
 
 ## Output contract
 Return the structured schema: `tier`, `tier_rationale`, `fit_signals`,
-`disqualifiers`, `recommended_action`, plus the base advisory envelope.
+`disqualifiers`, `recommended_action`, `qualification_scope`, `hospitality_fit`,
+`target_company_level_id`, `offer_route`, plus the base advisory envelope.
+For SaaS or another sector without a supplied company ID, leave
+`target_company_level_id` empty rather than inventing an identity.
 
 ## Cross-references
 - `01_Sector/SECTOR_OS.md` §1 (the confirmed ICP + Anti-ICP), Drafts 16–17 (Tier 2/3, partial)

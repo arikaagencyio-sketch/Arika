@@ -41,7 +41,7 @@ The overlay narrows core rows; it deletes none. The gate checks every ID below e
 | Core ID | Hospitality adjustment |
 |---|---|
 | U-A02 | No website → **stop: anti-ICP** (a property with no website needs a build first — `OFFER_OS.md` §3 seed) |
-| U-A05 | A chain or group with a central brand.com / direct-booking team → **stop: anti-ICP** (Decision 71). H3 is out of the MVP anyway |
+| U-A05 | A central brand.com / direct-booking team routes to group discovery under the 2026-10-02 reconciliation. Single-property MVP delivery remains H1/H2 only |
 | U-A08 | Unit = **rooms** → answered by H-A03 |
 | U-D05 | Rate parity and channel rate position = `Draft 41` class (c) evidence — **client systems only**; a (c)-dominant finding redirects (P4a) |
 | U-H04 | = OTAs and wholesalers the property says it uses. Arika's own viewing of OTA pages only if H-Z01 = yes |
@@ -56,6 +56,8 @@ The overlay narrows core rows; it deletes none. The gate checks every ID below e
 
 ## 2. Stop rules — checked at S1, before anything is carried forward
 
+**2026-10-03 scope clarification:** these rules gate the original single-property MVP delivery push. The public discovery route in `05_Sales/PROSPECTING_CYCLE.md` commits to no delivery. An unprofiled destination blocks a destination-dependent calendar play, not a routing inquiry based on the company's own public page. Groups resolve through sourced child organization levels.
+
 From packet PG1. Any one stops the pilot at S1; record the rule in the run sheet (§5).
 
 | Rule | Row | Stop when |
@@ -63,8 +65,8 @@ From packet PG1. Any one stops the pilot at S1; record the rule in the run sheet
 | No website | U-A02 | No website |
 | No direct booking path | U-I01 · H-B01 | No direct path exists |
 | Outside geography scope | H-A02 | Outside Kenya-inbound, **or** a destination with no Destination Profile — Mombasa and any unprofiled place are blocked unless the owner commissions a profile first (skill S05) |
-| Unresolvable archetype | H-A01 | `Hospitality Group` (the plugin's union operator is unimplemented). `Destination Property` is unruled — flag and continue with reduced Sector grounding |
-| Central brand team | U-A05 | A chain with a central brand.com / direct-booking team |
+| Missing group structure | H-A01 | Group child structure is unsourced; obtain the actual property/outlet map. `Destination Property` remains unruled |
+| Central brand team | U-A05 | Route to the group/shared-service decision level; this is not an anti-ICP stop |
 | Outside the MVP size | H-A03 | H3 (121–250 rooms or 2–5 properties) or under 30 rooms. Unknown → continue with `H-band: UNKNOWN`; MVP fit stays unconfirmed |
 
 ---
@@ -93,7 +95,7 @@ Same format as the core (`| ID | Question | Stage | Req | Label | Feeds | If mis
 | H-A05 | Non-room demand facilities — restaurants/bars, meeting and event space (capacity if published), spa, activities | S1 | O | PUBLIC | Plugin P2 `Sales/MICE` cells · P5 themes | `NONE FOUND` |
 | H-A06 | Official classification or star rating, if published | S1 | O | PUBLIC | Positioning context | `NOT PUBLISHED` |
 | H-A07 | Months of operation — open all year, or seasonal closure months | S1 | O | PUBLIC | Plugin P13 · campaign timing | `UNKNOWN` |
-| H-A08 | Who controls marketing, the website and the booking engine — owner, GM, management company, franchisor, group | S2 | R | CLIENT-SUPPLIED | Anti-ICP · H3 condition · U-B06 approver | `UNKNOWN` — anti-ICP unconfirmed |
+| H-A08 | Who controls marketing, the website and the booking engine — owner, GM, management company, franchisor, group | S2 | R | CLIENT-SUPPLIED | Exact decision-level route · H3 delivery condition · U-B06 approver | `UNKNOWN` — decision authority unconfirmed; not a group anti-ICP |
 
 ### H-B — Booking path & distribution
 
@@ -173,5 +175,7 @@ Nothing identifying goes in this table. The name, URL and answers stay in the cl
 ---
 
 ## 6. Changelog
+
+- 2026-10-03: Applied the sourced group/property/outlet reconciliation to U-A05 and H-A08. Central commercial ownership selects the decision-level route rather than rejecting the company. Clarified that single-property MVP delivery gates do not prohibit a reviewed public-company routing inquiry; they remain delivery gates. No intake answer, pricing or private-data permission is invented.
 
 - **2026-09-14 — Created (v0.1-draft, owner review required).** Hospitality overlay for the universal intake (`00_Agency_Governance/CLIENT_INTAKE_PROFILE.md`), for the first pilot `PILOT-H-001`. Maps packet OI1–OI9 and RD1–RD2 onto rows; narrows 11 core rows for hospitality; restates PG1's six stop rules against their rows; adds **37 `H-` questions** (gate count; 148 with the core) — handling permissions, property profile (plugin P2 archetype, P4 destination, H-bands), booking path and distribution, guests and demand (P5, P14), hospitality measures, and the owner-approved MVP audit data set MD1–MD8 plus an optional seasonal baseline (Worksheet §8 #22, open); an S2 conversation guide bound to plugin P10 language and QG3/QG5; and a pseudonymous run sheet. **No property named, no client data, no prices; still Working Hypothesis / Not Quotable.** — Claude Code (Opus 5)

@@ -1,0 +1,5 @@
+# Byte-pinned evidence must survive Windows checkouts unchanged.
+01_Sector/fixtures/*.json text eol=lf
+02_Offer/fixtures/*.json text eol=lf
+01_Sector/_memory/*.jsonl text eol=lf
+02_Offer/_memory/*.jsonl text eol=lf

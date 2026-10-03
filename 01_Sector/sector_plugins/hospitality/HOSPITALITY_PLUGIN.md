@@ -5,7 +5,8 @@
 **Status:** Gate 1 (DECIDE) — **config pack only. No *rows* from this file have been written to Notion.**
 
 > ⚠️ **Precision correction (2026-08-24).** This line previously read *"Nothing in this file has been written to Notion,"* which is not accurate. **Two of this pack's vocabularies are already live Notion option sets** on DB 16 Destination Profile — `Demand Themes` (23 options, slot **P5**) and `Asset / Property Archetypes` (10 options, slot **P2**) — each stamped `PLUGIN-SUPPLIED VOCABULARY (slot Pn)` in its own Notion field description. They arrived with the Gate 2 schema apply, because a select option set *is* schema. **No rows exist**; the vocabularies do. The distinction matters: the blanket claim read as though the plugin had had no effect on the workspace.
-**Version:** v0.2 (2026-09-15)
+**Version:** v0.3 (2026-10-02)
+
 
 > **What this file is.** A **doctrine/config pack**, not runtime code. The word "plugin" here is deliberately *not* the repo's runtime sense (`finos-plugin`, `bois`, which are executable) — hence the directory `sector_plugins/`, not `plugins/`. This pack supplies **values** into Universal Core fields. It **MUST NOT** create a store, a field, an agent, or an event.
 
@@ -45,7 +46,7 @@
 | Vertical | **Hospitality** — `Atlas Layer = Established`, `Industry Type = A (Marketing-driven)`, `Priority Tier = T1`, `Sector Priority Score = 78` (**P1 Pursue now**) | DB 1 Sectors Master |
 | Sub-sector (pilot) | **Accommodation (Hotels)** — `Status = Target`, the repo's first `Target` sub-sector | DB 2 Sub-Sectors |
 | Business models | Independent property · group/chain-affiliated · owner-operated · management-contract · franchise | DB 2 `Business Model` |
-| Company archetype (pilot) | 30–100 room independent property | DB 2 `Company Archetype` |
+| Company archetype (pilot) | Active multi-level hospitality target: group → property/branch → outlet/shared-service, plus independent properties where applicable | DB 2 `Company Archetype` + CRM `Company` tree |
 | Tool-stack chaos | 🔴 **Extreme**, `Fragmentation Type = Integration`; characteristic stack: PMS · CRS · channel manager · RMS · CRM · POS · booking engine | DB 2 tool-stack field group |
 
 **Second sub-sector** in the established atlas (`Hospitality` carries 2 division-level industries) is **not** authored — depth-first rule: it gets plugin rows when its cross-loop is authored.
@@ -54,11 +55,27 @@
 
 ## P2 — Entity/asset typology + property-type rules
 
-**The Entity Registry is the ClickUp CRM `Company` object.** A property, a group, a parent and a subsidiary are all `Company` with roles and relationships (`AEIT_06`: *"Prospect/Client/Partner/Competitor are roles, not types"*). This plugin does **not** create a property store; it supplies the **archetype vocabulary** and the **rule that says which signals move which archetype's demand** — the property-type calendar layer (`SECTOR_OS_ARCHITECTURE.md` §4.1 step 4).
+**The Entity Registry is the ClickUp CRM `Company` object.** A property, a group, a parent, a subsidiary, a shared service and an outlet are all `Company` with roles and relationships (`AEIT_06`: *"Prospect/Client/Partner/Competitor are roles, not types"*). This plugin does **not** create a property or outlet store; it supplies the **archetype vocabulary** and the **rule that says which signals move which archetype's demand** — the property-type calendar layer (`SECTOR_OS_ARCHITECTURE.md` §4.1 step 4).
 
 **Archetype vocabulary** (🟡 owner-curated, from the owner's sector brief):
 
 `City / Conference Hotel` · `Business Hotel` · `Beach Resort` · `Safari Lodge` · `Tented Camp` · `Boutique Property` · `Serviced Apartment` · `Villa` · `Destination Property` · `Hospitality Group` (a parent, not a bookable unit)
+
+**CRM organization levels used by the active pilot** (not DB16 P2 archetype options until written there): `Shared Group Service` · `Restaurant / Bar Outlet` · `Spa / Wellness Outlet` · `MICE / Conference Unit`.
+
+### Group qualification + inheritance rule (added 2026-10-02)
+
+Owner direction confirms the live Hospitality pilot target is a **real multi-property group**, not a fictional/simulation-only company. The real identity stays outside markdown and is represented in CRM/private identity storage as an `ORG-*` tree plus a `PILOT-*` engagement record.
+
+**Qualification rule:** `Hospitality Group` qualifies when the buyer sits at group level or a group-owned shared service (central reservations, loyalty, revenue/marketing, group F&B/MICE). A central brand.com or revenue team is **not** an anti-ICP by itself; it changes the buying level and the offer route.
+
+**Inheritance rule:** a group inherits its child units as a portfolio, but the inheritance is explicit and bounded:
+- A group-level packet may aggregate properties/outlets for diagnosis, portfolio opportunity and routing.
+- A property/branch-level claim requires a sourced child `Company` row; do not project one property's evidence onto every property in the group.
+- An outlet-level claim (restaurant, bar, spa, MICE) carries its own sector/sub-sector and buyer scope; do not flatten it into the hotel unless the CRM parent/child link says it belongs there.
+- A group can be a prospect for a portfolio audit while one property or outlet is already a client/pilot. Relationship role is per Company level.
+
+**Offer-routing implication:** independent-property outreach still uses the Direct Booking Engine seed. Group-level outreach routes through a portfolio/gateway variant (for example, OTA leakage and direct-booking opportunity across properties, with outlet-level entry points where evidence supports them). Pricing and proof remain unset until Offer (02) validates them.
 
 ---
 
@@ -154,7 +171,7 @@
 ### Declared `unruled` — gaps with a reason, not blanks
 
 - **`Destination Property`** — Present in the live DB 16 `Asset / Property Archetypes` option set and never defined in this pack. Before it can be ruled, the owner must say what it IS: a standalone property that constitutes the destination (a lodge or resort with no competing supply nearby), or a distinct commercial category. Until then every cell is `unruled` - a declared gap, not an oversight.
-- **`Hospitality Group`** — Not a bookable unit. Rules by INHERITANCE: the union of its member properties' archetypes. That is a rule, not a gap - but the union operator is unimplemented, so a resolver meeting a Group today must report it unresolvable rather than guessing a member archetype.
+- **`Hospitality Group`** — Not a bookable unit and no longer a disqualifier. Rules by bounded inheritance through CRM child `Company` rows: resolve the group as the explicit union of sourced child property/branch/outlet/shared-service levels. If no child rows exist, report **missing child structure**, not anti-ICP and not a guessed member archetype. The group itself does not hold a direct signal matrix.
 
 🟡 **Honesty:** this matrix is a structured statement of the owner's sector reasoning, not measured data. It is a **falsifiable default** — Gate F exists to break it. Where a real client's performance contradicts a cell, the cell changes and its `basis` becomes `observed`.
 
@@ -354,6 +371,7 @@ What DB 12 Sector State's sector-appropriate fields mean here:
 
 ## Changelog
 
+- **v0.3 (2026-10-02, active pilot reconciliation):** Reconciled the plugin with owner direction that the Hospitality pilot target is a real multi-property group, while keeping the real identity out of repo markdown. Added the group qualification + bounded inheritance rule: central brand/revenue teams are buyer levels, not anti-ICP; group packets resolve through explicit CRM child `Company` rows; outlet/shared-service targets are CRM organization levels until written to DB 16 as live option values. Synchronized the machine-readable sidecar's `Hospitality Group` note so the resolver reports missing child structure rather than "group is unimplemented." — Codex
 - **v0.2 (2026-09-15, destination drift fix):** P4 and P5 aligned with DB 16 as recorded in `SECTOR_OS.md` §3, `SECTOR_OS_ARCHITECTURE.md` and `contracts/sector-databases.json`: **Nairobi · Maasai Mara · Diani profiled (verified 2026-08-28); Mombasa not profiled.**
   - **P4:** DB 11 is now given as 13 rows at two levels, the `Destination` level is recorded as applied, and the Gate F validation set is corrected.
   - **P5:** new DB 16 state column; Diani no longer reads *unauthored*.
@@ -364,4 +382,5 @@ What DB 12 Sector State's sector-appropriate fields mean here:
   The vocabulary, proposed themes and shapes are unchanged. No Notion write.
 
   ⚠️ **Not backfilled:** the 2026-08-28 P2 restructure (the P2 totality rule and 18 Tier-1 cells, recorded in `SECTOR_OS.md` §15) has no entry here. — Claude Code (Opus 5)
+
 - **v0.1 (2026-08-20, Gate 1 — DECIDE):** Created as Sector Plugin #001. **Migrated** the Hospitality timing-rule table out of `CALENDAR_INTELLIGENCE.md` §5.2 (P7) and the Kenya-inbound candidate source pack out of §12 (P8) — moved, not rewritten, with pointers left behind. **Authored new:** the property-type typology and the signal-to-archetype rule that makes the property-type calendar layer possible (P2), the destination demand-theme vocabulary for DB 16 with proposed Nairobi/Mombasa/Maasai Mara assignments marked as falsifiable hypotheses (P5), the signal-type weighting profile (P6), the seasonality/compression configuration (P13), and the KPI semantics for DB 12's sector-appropriate fields (P14). **Referenced, never re-typed:** the live pilot content in DB 3/6/9/10, DB 7's commercial rhythm, Content DB 5's 3 opportunities, and Offer (02)'s entry-offer seed. Two slots left honestly unauthored (P3 demand-pattern layer, P12 pillar/angle set). **Nothing written to Notion.** — Claude Code (Opus 5)

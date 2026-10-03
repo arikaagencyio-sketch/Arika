@@ -244,7 +244,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
 | Company | Title | ID | |
-| Company ID (CRM) | Text | REL | ClickUp `Company`/`Lead` id |
+| Company ID (CRM) | Text | REL | ClickUp `Company`/`Lead` id; use the exact target level where known (root group, property/branch, outlet, or shared service) |
 | Tier | Select | EXE | Tier 1 · Tier 2 · Tier 3 · Anti-ICP · Out-of-scope |
 | Recommended Action | Select | EXE | pursue_now · nurture · educate_dont_sell · skip |
 | Tier Rationale | Text | GOV | |
@@ -259,7 +259,7 @@ Legend for field **Purpose**: `ID`=identity · `RET`=retrieval/filter · `REL`=r
 | Field | Type | Purpose | Notes |
 |---|---|---|---|
 | Prospect | Title | ID | |
-| Company ID (CRM) | Text | REL | ClickUp id |
+| Company ID (CRM) | Text | REL | ClickUp id; use the exact target Company level where known |
 | Internal / Market / Behavioral / Stated / Competitive / Predictive | Number ×6 | EXE | 0–15 each (Draft 15) |
 | Total Score | Number (rollup/sum) | EXE | 0–90 |
 | Priority Band | Select | EXE | Low(0–22) · Medium(23–45) · High(46–67) · Critical(68–90) |
@@ -585,7 +585,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 | Booking / Decision Triggers | Text | EXE | what actually causes the commitment |
 | **Commercial Opportunities** | Relation → Industry Offer Matrix (DB 8) | REL/EXE | which offers this destination's demand shape supports |
 | Related Intelligence | Relation → Sector Intelligence (DB 3) | REL | the place-scoped findings (via DB 3's new `Geography`) |
-| Related Entities (CRM) | Text (ID list) | REL | ClickUp `Company` IDs — **reference only.** Properties are CRM `Company` rows; this DB never stores one |
+| Related Entities (CRM) | Text (ID list) | REL | ClickUp `Company` IDs — **reference only.** Groups, properties/branches, outlets and shared services are CRM `Company` rows; this DB never stores one |
 | Sub-Sector | Relation → Sub-Sectors (DB 2) | REL | which industry reads this place this way |
 | Source / Source URL | Text + URL | GOV | 🟢 per claim |
 | Source Tier | Select | GOV | same enum as DB 7 — T4 cannot drive downstream |
@@ -597,7 +597,7 @@ Additions that make the signal layer **sourced, directional, and change-aware**.
 
 **Profiled set (verified 2026-08-28):** `Nairobi` · `Maasai Mara` · `Diani` — the three Gate F validation destinations, sourced to T1 destination pages (`contracts/sector-databases.json` DB16). **`Mombasa` is not profiled** — pending; `Destination Fit` blocks it (owner decision 31h) until a profile is written. *Was (2026-08-20 spec):* the seed set included Mombasa and deferred Diani until an engagement needed it.
 
-### Worked example (depth-proof) — Hospitality *(illustrative only — see the plugin for the live rules)*
+### Worked example (depth-proof) — Hospitality *(schema proof; see the plugin for the live rules and CRM for active pilot identity)*
 Hospitality is the reference that sets the depth bar; the schema above must hold **all** of it. Coverage check against the owner's hospitality spec:
 - **The 6-calendar commercial fusion** (Demand · Compression/Event · Sales/MICE · Travel-Trade · Marketing-Demand · Seasonality/Destination) → `Signal Type` values (one DB, filtered views — not 6 DBs).
 - **"It is in which country / property"** → `Geography` relation (Global→Africa→Kenya→Nairobi; Property = template).
