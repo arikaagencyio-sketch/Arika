@@ -437,12 +437,50 @@ SF2_EXECUTION_ID = "s10-2026-09-29-sector-sf2-syn-s10-01-crm-tag-1"
 
 
 class SpentState(unittest.TestCase):
-    def test_both_authorisations_are_spent_and_nothing_is_approved(self):
+    def test_the_spent_authorisations_are_spent_and_nothing_is_approved(self):
+        """REWRITTEN 2026-10-03 by PK2-P4-PREP, not loosened.
+
+        This asserted the exact roster [SF1 spent, SF2 spent], which a deliberate addition
+        changes - SECTOR-SF3 was added as a DRAFT row the same day. Pinning the whole roster
+        made the test fail on any new row whatever its status, including a draft that admits
+        nothing, so it could not distinguish "a third authorisation was approved behind our
+        backs" from "a third authorisation was prepared for the owner to decline".
+
+        The replacement is STRICTER on what matters: SF1 and SF2 must still be exactly as they
+        were, NOTHING may be approved, and every row beyond the two must be a draft. A row that
+        appeared already approved, or a spent row that was reopened, still fails here.
+        """
         reg = json.loads(rd(REGISTRY))["authorisations"]
-        self.assertEqual([(a["id"], a["status"]) for a in reg],
-                         [("SECTOR-SF1", "spent"), ("SECTOR-SF2", "spent")])
+        by_id = {a["id"]: a for a in reg}
+        self.assertEqual([a["id"] for a in reg][:2], ["SECTOR-SF1", "SECTOR-SF2"],
+                         "the two spent rows must stay, in order, first")
+        self.assertEqual(by_id["SECTOR-SF1"]["status"], "spent")
+        self.assertEqual(by_id["SECTOR-SF2"]["status"], "spent")
         self.assertFalse(any(a["status"] == "approved" for a in reg), "nothing may sit approved")
-        self.assertIn(SF1_EXECUTION_ID, reg[0]["spent"])
+        for a in reg[2:]:
+            self.assertEqual(a["status"], "draft",
+                             "%s is neither of the two spent rows, so it must be a draft; "
+                             "an approved or spent newcomer is exactly what this guards" % a["id"])
+            self.assertIn("_not_enacted", a,
+                          "%s must carry the _not_enacted marker while it is a draft" % a["id"])
+        self.assertIn(SF1_EXECUTION_ID, by_id["SECTOR-SF1"]["spent"])
+
+    def test_a_draft_row_holds_no_record_and_pins_its_inputs(self):
+        """A draft row must be inert AND fully specified, so approving it adds no new decision."""
+        reg = json.loads(rd(REGISTRY))["authorisations"]
+        drafts = [a for a in reg if a["status"] == "draft"]
+        log = rd(SANDBOX_LOG)
+        for a in drafts:
+            self.assertNotIn(a["id"], log, "%s is draft and must hold no record" % a["id"])
+            self.assertEqual(a["skill_id"], "S10")
+            self.assertTrue(a["packet"].startswith("01_Sector/fixtures/"),
+                            "the packet must live under 01_Sector/fixtures/")
+            self.assertEqual(a["max_records"], 1)
+            rec = os.path.join(ROOT, a["synthetic_record"])
+            self.assertTrue(os.path.isfile(rec), "%s names a missing record" % a["id"])
+            self.assertEqual(hashlib.sha256(rd(rec, "rb")).hexdigest(),
+                             a["synthetic_record_sha256"],
+                             "%s's pinned hash must match the file on disk" % a["id"])
 
     def test_sf1s_own_artifacts_are_unaltered_by_the_later_run(self):
         self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, PACKET_REL), "rb")).hexdigest(), PACKET_SHA,

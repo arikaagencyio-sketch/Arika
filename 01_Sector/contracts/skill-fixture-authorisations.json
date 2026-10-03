@@ -34,6 +34,28 @@
       "max_records": 1,
       "permits_external_write": "ONE disposable ClickUp task on the canonical Lead list: create, set the four governed tags, read them back, delete it, confirm its absence. Nothing else - no Notion, Offer, Content, event or second task, and no retry.",
       "note": "Draft. The gate refuses any record written under it while it is draft, and it admits exactly one record when approved."
+    },
+    {
+      "id": "SECTOR-SF3",
+      "status": "draft",
+      "_not_enacted": "DRAFT. NOT APPROVED. NOT ENACTED. A draft authorisation admits nothing: the registry rule and skill_run_gate.py check 7 both refuse any record written under it. Prepared 2026-10-03 by PK2-P4-PREP so the owner has an exact row to approve or decline; preparing it closes NO blocker and moves NO gate.",
+      "skill": "sector-handoff-packet",
+      "skill_id": "S10",
+      "record": "01_Sector/PK2_P4_P5_DRY_RUN_PROPOSAL.md; owner decision belongs in 01_Sector/SECTOR_OS.md section 8",
+      "synthetic_record": "01_Sector/fixtures/SYN-S10-01.sector-record.json",
+      "synthetic_record_sha256": "8247eefd3b84d1f4a64f385637eabb2dc617b1b76a43c2466a1b99ae7e62d94f",
+      "packet": "01_Sector/fixtures/SYN-S10-01.s10-packet-sf3.json",
+      "max_records": 1,
+      "purpose": "Exercise S10 Step 4's COMPUTED FAIL-CLOSED FLOORS over all FOUR contributing elements (DB3 findings, DB9 audience, DB6 linguistics, DB10 decision-makers) against the recorded contract state in sector-databases.json. That rule has NEVER been executed by any S10 run: SECTOR-SF1 (2026-09-22) and SECTOR-SF2 (2026-09-29) both predate DB9-PROV-1, DB6-DB10-PROV-1, DB6-OD1-OD2-1, DB3-PROV-1 and DB3-OD10-OD12-1, every one of which landed 2026-10-02, and the real S10 run was 2026-08-29. Both existing fixture packets state their floors as PROSE about the synthetic record rather than computing them from the four elements.",
+      "permits_external_write": "NONE. F3's default applies in full: no Notion, no ClickUp, no CRM tag, no Offer or Content write, no event, no second task, no retry, and no delivery to the offer_inbox_receiver. `payload.writes` and `payload.events` stay empty and `payload.fixture.external_writes` is absent.",
+      "expected_outcome_pinned_before_the_run": {
+        "decision": "NO_OP",
+        "confidence_threshold": "Medium - the weakest governed Confidence among the contributing elements, capped further by the packet being SYNTHETIC.",
+        "freshness_requirement": "UNRESOLVED, naming EVERY unresolved element: DB3 (both dates present but NULL on all 217 rows), DB9 (null on all 4), DB6 (Buyer row's Next Review null), DB10 (null on all 57).",
+        "destinations": "No route may read `delivered` or `delivered_fixture_verified`. Routes that would deliver read `not_attempted_fixture`; routes that do not deliver read `HANDOFF_FAILURE`.",
+        "note": "Pinned BEFORE any run, so a different result is a finding rather than a rationalisation."
+      },
+      "note": "Draft. The gate refuses any record written under it while it is draft, and it admits exactly one record when approved."
     }
   ]
 }
