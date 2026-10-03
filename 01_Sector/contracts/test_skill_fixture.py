@@ -200,6 +200,80 @@ class OrdinaryPath(unittest.TestCase):
         self.assertEqual(hashlib.sha256(stripped.encode("utf-8")).hexdigest(), S10_ORDINARY_SHA,
                          "ordinary S10 text changed; if intentional, re-baseline with a dated changelog")
 
+    def test_s10_fixture_notice_matches_the_registry(self):
+        """The CLASS fix, second instance. Added 2026-10-03 by PK2-P4-PREP.
+
+        S10's fixture-mode notice said "The only one, SECTOR-SF1, was spent on 2026-09-22" while
+        the registry held TWO spent rows - SECTOR-SF2 was approved and spent on 2026-09-29. The
+        operative clause ("none is approved") stayed correct, so nothing was ever wrongly
+        admitted; the COUNT drifted and no test compared the sentence to the registry.
+
+        This checks the notice against the registry instead of against a remembered sentence.
+        """
+        notice = rd(SKILL_MD, "rb").decode("utf-8")
+        self.assertEqual(notice.count("<!-- FIXTURE-MODE:BEGIN -->"), 1)
+        block = notice.split("<!-- FIXTURE-MODE:BEGIN -->", 1)[1].split("<!-- FIXTURE-MODE:END -->", 1)[0]
+        # Scan the OPERATIVE notice only. A superseded sentence is preserved verbatim inside an
+        # italic `*Corrected ...*` note, and a naive scan matches the quotation of the very claim
+        # the correction retracts. That false positive fired on the first run of this test, and is
+        # the same class as a prohibition sentence tripping a scan for the thing it prohibits -
+        # seen before in check 7c's `xlsx sheet` ban. Preserved history must not be scanned as if
+        # it were a live assertion.
+        operative = block.split("*Corrected", 1)[0]
+        auths = json.loads(rd(REGISTRY))["authorisations"]
+        spent = [a["id"] for a in auths if a["status"] == "spent"]
+        approved = [a["id"] for a in auths if a["status"] == "approved"]
+
+        # every spent authorisation must be named in the notice, so the count cannot drift again
+        for aid in spent:
+            self.assertIn(aid, operative,
+                          "%s is spent and must be named in S10's fixture notice" % aid)
+        # the notice must not claim a single authorisation while several exist
+        if len(spent) > 1:
+            self.assertNotIn("The only one", operative,
+                             "%d spent authorisations exist; the notice claims one" % len(spent))
+        # the operative clause must still match the registry
+        if not approved:
+            self.assertIn("None is `approved`, so refuse", operative,
+                          "no authorisation is approved; the notice must say so and refuse")
+        else:
+            self.assertNotIn("None is `approved`", operative,
+                             "%s is approved; the notice must not deny it" % approved)
+
+    def test_no_authorisation_is_currently_approved(self):
+        """P4's live state, asserted rather than described.
+
+        This is the invariant that keeps the fixture path shut: a run is admissible only while
+        some row is `approved`, and none is. If a future row is approved deliberately, this test
+        is the one that must be changed, which is the point - it cannot happen quietly.
+        """
+        auths = json.loads(rd(REGISTRY))["authorisations"]
+        approved = [a["id"] for a in auths if a["status"] == "approved"]
+        self.assertEqual(approved, [],
+                         "no S10 fixture authorisation may ship approved; found %s" % approved)
+        self.assertTrue(auths, "the registry must not be empty")
+        for a in auths:
+            self.assertIn(a["status"], ("draft", "spent", "approved"))
+
+    def test_each_spent_authorisation_has_exactly_its_one_record(self):
+        """A spent row is retained history. Its record count must equal its limit, so neither a
+        reopened authorisation nor a deleted record can pass unnoticed."""
+        auths = {a["id"]: a for a in json.loads(rd(REGISTRY))["authorisations"]}
+        counts = {}
+        for line in rd(SANDBOX_LOG).splitlines():
+            if not line.strip():
+                continue
+            fx = json.loads(line)["payload"]["fixture"]
+            counts[fx["authorisation_id"]] = counts.get(fx["authorisation_id"], 0) + 1
+        for aid, a in auths.items():
+            if a["status"] == "spent":
+                self.assertEqual(counts.get(aid, 0), a.get("max_records", 1),
+                                 "%s is spent: it must hold exactly its %d authorised record(s)"
+                                 % (aid, a.get("max_records", 1)))
+            if a["status"] == "draft":
+                self.assertEqual(counts.get(aid, 0), 0,
+                                 "%s is draft and must hold no record" % aid)
+
     def test_ordinary_record_is_valid_and_may_record_delivered(self):
         r = ordinary_record()
         self.assertTrue(valid(r))

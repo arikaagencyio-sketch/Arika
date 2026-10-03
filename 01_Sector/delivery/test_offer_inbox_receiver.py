@@ -215,6 +215,67 @@ class AuthorisationFailsClosed(Harness):
         self.write_registry(status="spent")
         self.assert_refused(self.ref(), "AUTHORISATION_NOT_APPROVED")
 
+    def test_self_describing_claims_match_the_rows(self):
+        """The CLASS fix. Added 2026-10-03 by PK2-P4-PREP.
+
+        `_no_approved_delivery` is prose sitting beside the rows it describes. On 2026-10-02 it
+        still said "and no SYNCO-02 row of any status" while SECTOR-DELIVERY-P10-D1 (fixture_id
+        SYNCO-02) sat two keys above it, approved, invoked and spent the same day. The governing
+        TEST had already been re-baselined for that exact reason - see
+        test_no_shipped_row_is_approved_and_the_template_cannot_pass - but nothing checked the
+        FILE'S OWN PROSE against its rows, so the note drifted for a day while every test passed.
+
+        This test checks the claim against the data rather than against a remembered sentence, so
+        the same class of drift fails here next time instead of being discovered by reading.
+        """
+        shipped = os.path.join(HERE, "delivery-authorisations.json")
+        with io.open(shipped, encoding="utf-8") as fh:
+            reg = json.loads(fh.read())
+        rows = reg["delivery_authorisations"]
+        note = reg["_no_approved_delivery"]
+        approved = [r["id"] for r in rows if r["status"] == "approved"]
+
+        # 1. the claim the note still makes must be true of the rows
+        self.assertIn("no `approved` delivery row", note)
+        self.assertEqual(approved, [],
+                         "the note claims no approved row; found %s" % approved)
+
+        # 2. the note must NOT re-assert the absence of any fixture row, because rows persist
+        self.assertNotIn("no SYNCO-02 row", note,
+                         "a spent row is retained history; the note must not deny its existence")
+        for row in rows:
+            fid = row.get("fixture_id", "")
+            if row["status"] == "spent" and fid and not fid.startswith("<"):
+                self.assertNotIn("no %s row" % fid, note,
+                                 "the note denies %s, which is present and spent" % fid)
+
+        # 3. the superseded claim must be preserved rather than deleted
+        sup = reg["_no_approved_delivery_superseded_claim"]
+        self.assertIn("NO SYNCO-02 ROW OF ANY STATUS", sup["was"].upper())
+        self.assertIn("2026-10-02", sup["was_true_when_written"])
+        self.assertIn("2026-10-02", sup["became_false_on"])
+        self.assertIn("NOT WRONG", sup["verdict"].upper())
+        self.assertIs(sup["preserved_not_rewritten"], True)
+
+    def test_the_spent_p10_row_is_retained_and_still_admits_nothing(self):
+        """A spent row must stay in the file AND stay inert. Both halves matter.
+
+        Deleting it would orphan the SYNCO-02 acknowledgement it explains; re-approving it would
+        allow a second delivery on a one-attempt authorisation.
+        """
+        shipped = os.path.join(HERE, "delivery-authorisations.json")
+        with io.open(shipped, encoding="utf-8") as fh:
+            rows = json.loads(fh.read())["delivery_authorisations"]
+        d1 = [r for r in rows if r["id"] == "SECTOR-DELIVERY-P10-D1"]
+        self.assertEqual(len(d1), 1, "the spent P10 delivery row must be retained, exactly once")
+        self.assertEqual(d1[0]["status"], "spent")
+        self.assertEqual(d1[0]["fixture_id"], "SYNCO-02")
+        self.assertEqual(d1[0]["max_deliveries"], 1)
+        self.assertEqual(d1[0]["spent_by_delivery_id"], d1[0]["delivery_id"])
+        res = rx.receive(self.ref(authorization_id="SECTOR-DELIVERY-P10-D1"), shipped)
+        self.assertEqual(res["refusal_code"], "AUTHORISATION_NOT_APPROVED")
+        self.assertEqual(self.acks(), [])
+
     def test_missing_authorisation_id_fails(self):
         self.assert_refused(self.ref(authorization_id="NOPE"), "AUTHORISATION_NOT_FOUND")
 

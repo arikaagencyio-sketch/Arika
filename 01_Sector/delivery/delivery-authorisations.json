@@ -78,5 +78,5 @@
       "spent_by_delivery_id": "SYNCO-02-D1"
     }
   ],
-  "_no_approved_delivery": "DELIBERATE AND LOAD-BEARING: there is no `approved` delivery row in this file, and no SYNCO-02 row of any status. The mechanism is implemented and tested; no delivery is authorised. Adding an approved row is a separate owner decision."
+  "_no_approved_delivery": "DELIBERATE AND LOAD-BEARING: there is no `approved` delivery row in this file. The mechanism is implemented and tested; no delivery is authorised. Adding an approved row is a separate owner decision."
 }

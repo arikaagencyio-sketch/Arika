@@ -177,8 +177,10 @@ Loops: `activation`, `feedback`.
 
 > 🔴 **Disabled.** This mode runs only under a Sector fixture authorisation whose status is
 > **`approved`** in [`contracts/skill-fixture-authorisations.json`](../../../01_Sector/contracts/skill-fixture-authorisations.json).
-> The only one, **SECTOR-SF1, was spent on 2026-09-22** after its one attempt; none is `approved`, **so refuse.** Ordinary use of this skill never enters
-> this mode. **A001 is excluded:** its skill records stay deferred under A001 D6 (T1-4).
+> **Two have existed and both are SPENT** — **SECTOR-SF1** on 2026-09-22 and **SECTOR-SF2** on 2026-09-29, each after its one attempt. **None is `approved`, so refuse.** Ordinary use of this skill never enters
+> this mode.
+>
+> *Corrected 2026-10-03 (`PK2-P4-PREP`): this line read "The only one, SECTOR-SF1, was spent on 2026-09-22". That was true when written and became false on 2026-09-29, when SECTOR-SF2 was approved and spent. **The operative clause — none is `approved` — was correct throughout**, so the skill never admitted anything it should have refused. A spent row is retained history and admits nothing; entries are never deleted. This notice is inside the `FIXTURE-MODE` block, which `S10_ORDINARY_SHA` excludes, so the ordinary-path hash is unaffected.* **A001 is excluded:** its skill records stay deferred under A001 D6 (T1-4).
 
 **What it is for.** Exercising this skill's *mechanism* on an independently labelled synthetic
 Sector record, without delivering anything anywhere: the route check, the per-destination
