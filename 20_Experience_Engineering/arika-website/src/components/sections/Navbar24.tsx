@@ -252,7 +252,7 @@ export const Navbar24Defaults: Props = {
   logo: {
     url: "/",
     src: "",
-    alt: "Arika Agency",
+    alt: "Arika Growth",
   },
   links: [
     { title: "Solutions", url: "/solutions" },

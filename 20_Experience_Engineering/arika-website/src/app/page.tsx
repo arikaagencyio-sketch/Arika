@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Header153
         heading="A Revenue Infrastructure Partner for B2B SaaS"
-        description="Arika Agency designs and operates the systems that turn strategy, marketing, sales, and automation into one connected revenue engine — built for B2B SaaS companies from post-seed through Series C."
+        description="Arika Growth designs and operates the systems that turn strategy, marketing, sales, and automation into one connected revenue engine — built for B2B SaaS companies from post-seed through Series C."
         buttons={[
           { title: "Get My Free Assessment" },
           { title: "Book a Strategy Session", variant: "secondary" },

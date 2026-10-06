@@ -71,7 +71,7 @@
 > **Full dossier: [`LINKEDIN_PRESENCE_OS.md`](LINKEDIN_PRESENCE_OS.md)** — the consolidated LinkedIn source of truth (blocking chain, warm-up runway, connection strategy, content playbook, orchestration, open decisions). The summary below stays here for cross-platform comparison.
 
 - **Account (revised 2026-08-08):** the path is the **established founder profile (Mary Thuo)**, which creates and admins the Page. The company-named "Arika" personal profile is a removal risk and is recommended for retirement. **Page no longer blocked.**
-- **Warm-up (S2→S3):** complete profile (photo, headline "Founder, Arika Agency", 1 experience, About); add real connections; verify email+phone; post a couple of manual updates. ~1–2 weeks.
+- **Warm-up (S2→S3):** complete profile (photo, headline "Founder, Arika Growth", 1 experience, About); add real connections; verify email+phone; post a couple of manual updates. ~1–2 weeks.
 - **Then:** create Page → create developer app (must attach to the Page) → products (Sign In w/ OpenID Connect + Share on LinkedIn; Advertising API for token refresh) → redirect `https://<postiz-domain>/integrations/social/linkedin` → creds into Coolify → connect.
 - **Flag notes:** new-account Page gate; known Postiz OAuth "Not enough scopes" bug.
 

@@ -2,7 +2,7 @@
 
 **Department:** Design (19)
 **Position in flow:** Horizontal support layer — the agency's creative production studio. Sits downstream of Branding (12) (identity/strategy) and Content (04) (briefs/narrative), converting both into finished assets; feeds Marketing (03)'s distribution and, once packaged as a client offer, Offer (02). Reports into Agency Governance (00).
-**Mandate:** Own the agency's creative asset production — the asset library, the AI/production engine, and Canva as the creative-assembly layer — for Arika Agency's own content and campaigns first, and (once packaged) as a service for client/sector design work.
+**Mandate:** Own the agency's creative asset production — the asset library, the AI/production engine, and Canva as the creative-assembly layer — for Arika Growth Limited's own content and campaigns first, and (once packaged) as a service for client/sector design work.
 **Owner:** Mary Thuo
 
 > See [`GLOBAL_OS.md`](../GLOBAL_OS.md) for how this file fits into the whole system. Read that first if you haven't.

@@ -1,4 +1,4 @@
-# Operations Constitution — Arika Agency (08)
+# Operations Constitution — Arika Growth Limited (08)
 
 **Status:** v0.1 — created 2026-07-14, at the owner's explicit direction, once every other department had a real agent layer to orchestrate.
 **Owner:** Mary Thuo

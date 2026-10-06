@@ -4,8 +4,8 @@ import { CardGrid } from "@/components/sections/CardGrid";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "Industry Solutions | Arika Agency",
-  description: "Arika Agency works with B2B SaaS companies across three real ICP tiers.",
+  title: "Industry Solutions | Arika Growth",
+  description: "Arika Growth works with B2B SaaS companies across three real ICP tiers.",
 };
 
 // NOTE: This page uses the recommended reframe flagged in

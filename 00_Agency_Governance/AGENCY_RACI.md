@@ -11,7 +11,7 @@
 
 **R**esponsible — does the work. **A**ccountable — owns the outcome, signs off, answerable if it fails (exactly one per row). **C**onsulted — input sought before acting. **I**nformed — told after the fact.
 
-All "Responsible/Accountable" cells below are department names, not individuals, by design — they describe the *functional* structure this RACI targets, independent of who currently staffs it. **Confirmed 2026-06-30: every department is currently owned by one person, Mary Thuo** (`GLOBAL_OS.md` §4) — so every cell below currently resolves to her in practice. The department-name structure is kept rather than collapsed to her name everywhere, so this table stays correct and ready to use once Arika Agency brings on additional people per department. This table covers *cross-department* functions only; department-local RACI lives in each `{DEPT}_OS.md` §11.
+All "Responsible/Accountable" cells below are department names, not individuals, by design — they describe the *functional* structure this RACI targets, independent of who currently staffs it. **Confirmed 2026-06-30: every department is currently owned by one person, Mary Thuo** (`GLOBAL_OS.md` §4) — so every cell below currently resolves to her in practice. The department-name structure is kept rather than collapsed to her name everywhere, so this table stays correct and ready to use once Arika Growth Limited brings on additional people per department. This table covers *cross-department* functions only; department-local RACI lives in each `{DEPT}_OS.md` §11.
 
 ## Cross-Department Functions
 
@@ -43,7 +43,7 @@ All "Responsible/Accountable" cells below are department names, not individuals,
 ## Open Items
 
 - This table will need expansion as real workflows get built (each department's Workflow Index, `{DEPT}_OS.md` §4) and surface new cross-department handoffs not yet anticipated here.
-- Once Arika Agency brings on people beyond Mary Thuo, revisit whether any department-name cell should split into a real named individual distinct from her.
+- Once Arika Growth Limited brings on people beyond Mary Thuo, revisit whether any department-name cell should split into a real named individual distinct from her.
 
 ## Changelog
 

@@ -4,7 +4,7 @@ import { CardGrid } from "@/components/sections/CardGrid";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "Solutions | Arika Agency",
+  title: "Solutions | Arika Growth",
   description: "Outcome-led solutions for B2B SaaS revenue infrastructure.",
 };
 

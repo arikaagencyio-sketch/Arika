@@ -4,8 +4,8 @@ import { Pricing38 } from "@/components/sections/Pricing38";
 import { Faq2 } from "@/components/sections/Faq2";
 
 export const metadata: Metadata = {
-  title: "Pricing | Arika Agency",
-  description: "How Arika Agency prices engagements, by company stage.",
+  title: "Pricing | Arika Growth",
+  description: "How Arika Growth prices engagements, by company stage.",
 };
 
 export default function PricingPage() {

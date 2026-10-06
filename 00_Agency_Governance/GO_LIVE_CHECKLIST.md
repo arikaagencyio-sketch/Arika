@@ -123,6 +123,22 @@ The six-station Experience Spec System (`20_Experience_Engineering/EXPERIENCE_SP
 
 ---
 
+## Phase 11 — Legal entity → operating company (added 2026-10-06)
+
+**Arika Growth Limited** is incorporated: private limited, BRS reg. no. **PVT-PQ1EWEKM**, Active, registered 2026-10-06, KRA PIN **P052592532D**. Source documents are the BRS record and the KRA PIN Certificate (owner-supplied). The repo-wide rename from "Arika Agency" is done (`GLOBAL_OS.md` §10, v0.29.3). **The business bank account is the one remaining blocker before public operations begin** (owner, 2026-10-06). The holding-company question is **deferred** by owner decision.
+
+| # | Item | Type | Status | Notes |
+|---|---|---|---|---|
+| 50 | Open the **business bank account** in the name of Arika Growth Limited | **Owner action** | 🔴 **On hold — the biggest remaining step** | Needs the BRS certificate and KRA PIN, both in hand. Unblocks invoicing and payment collection, and with them the first public operations push. Record the bank and account details for invoices once opened |
+| 51 | **County Single Business Permit** (Kiambu County) | **Owner action** | Not started | Required to trade (`10_Legal/LEGAL_ENTITY_SETUP.md` §3) |
+| 52 | Rename the **Zoho Books** org "Arika Agency" (`929138528`) → **Arika Growth Limited**; add the KRA PIN, registered address and reg. no. to the org profile and invoice template; set the December financial year-end | **Owner action** (no rename tool is available via the connector) | Not started | The KRA PIN must appear on every tax invoice |
+| 53 | Rename the live tool containers: ClickUp folder "Arika Agency CRM", Notion workspace "Arika Agency's Space", Canva root folder "Arika Agency" | Owner action / buildable (ClickUp via connector, on approval) | Not started | The repo keeps these names verbatim until each tool is actually renamed |
+| 54 | **LinkedIn Company Page**: rename `Arika Agency` → **Arika Growth**; set Organization type to **Privately held**; decide whether the vanity URL moves to `arika-growth`; fill in founded year 2026 and location (Kiambu, Kenya) | **Owner action** | Not started | `21_Presence/LINKEDIN_PRESENCE_OS.md` |
+| 55 | Claim **@arikagrowth** on every platform | **Owner action** | In progress (owner) | `00_Agency_Governance/ARIKA_GROWTH_COMPANY_PROFILE.md` §1 |
+| 56 | Re-cut the **logo wordmark** "ARIKA AGENCY / GROWTH PARTNERS" → **ARIKA GROWTH**; update the Canva Brand Kit and the site's logo images | Design (19) + owner approval | Not started | The site's text now reads Arika Growth, but its logo PNGs still show the old wordmark |
+| 57 | Email: move off `arikaagency.com` at renewal; then update the KRA iTax and BRS contact email (both currently `growth@arikaagency.com`) | **Owner action** | Not started | Do not change the domain in records until it actually changes |
+| 58 | Redeploy the website (Vercel) so the renamed copy goes live | Buildable | Not started | Source updated 2026-10-06; the live site still shows the old name until redeployed |
+
 ## How to use this
 
 - Phase 1 and 2 are the actual blockers for "live." Everything in Phase 3 depends on Phase 1 being real (you can't run a real deal through a CRM that doesn't exist yet).
@@ -131,6 +147,8 @@ The six-station Experience Spec System (`20_Experience_Engineering/EXPERIENCE_SP
 - Update each row's Status column in place as work completes, and log the real outcome in the relevant department's own Decision Log/Changelog (per `GLOBAL_OS.md` §10's rule) — don't let this file become the only record.
 
 ## Changelog
+
+- 2026-10-06 — **Added Phase 11 (items 50–58): legal entity → operating company.** Arika Growth Limited is incorporated (PVT-PQ1EWEKM, KRA PIN P052592532D). The bank account is the remaining blocker, and the holdco question is deferred. — Claude Code (Opus 5.5)
 
 - 2026-10-02 — **Added Phase 3 item 12a for the active Hospitality pilot record.** The OS now treats the pilot as a real target, not a fictional company, but the CRM/private identity rows are not yet confirmed live. Item 12a is the operational bridge: create/verify the `ORG-*` Company tree and `PILOT-*` engagement before outreach or any claim of CRM activation. Also corrected Phase 3 item 12 from stale "Zoho CRM" wording to ClickUp CRM, matching the live platform decision. — Codex
 - 2026-07-09 — **Added Phase 10 — Experience Spec System stand-up & discoverability last-mile** (items 46-49), while aligning the owner's "Design Department" plugin into Experience Engineering (20) as its codified spec discipline (`20_Experience_Engineering/EXPERIENCE_SPEC_SYSTEM.md`). The discipline itself is real and runnable now (4 skills + 11 agents); these items are the tool-adoption follow-ons — confirm Whimsical (item 46 / tracker item 56), pick a form service (47), the discoverability last-mile (48: Search Console, analytics, OG images, schema, fact-consistency), and the first true end-to-end station run on the next build (49). None block using the Spec System today. — Claude Code (Opus 4.8)

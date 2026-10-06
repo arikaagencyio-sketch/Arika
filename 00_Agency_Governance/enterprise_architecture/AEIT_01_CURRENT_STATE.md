@@ -14,7 +14,7 @@ AEIT three-agent audit (2026-07-22).
 
 ## 1. The one-paragraph truth
 
-Arika Agency is a **20-department, 106-agent, 4-code-plugin, heavily-governed enterprise
+Arika Growth Limited is a **20-department, 106-agent, 4-code-plugin, heavily-governed enterprise
 architecture** expressed almost entirely in markdown, sitting on top of a **solo-operator,
 0-client, $0-revenue, not-yet-legally-incorporated** business. The documentation discipline is
 genuinely high (self-auditing changelogs, honest 🔴 flags, supersession chains). The **built
@@ -124,7 +124,7 @@ Authoritative sources for this split: `REGISTRY_TAXONOMY_REFERENCE.md` (active v
 The single most important current-state fact, quantified:
 
 - **Business reality:** headcount 1 (solo, AI-assisted); 0 employees / 0 contractors / 0 payroll;
-  0 clients; $0 revenue; target $1M/month ($35K/day). The agency **does not legally exist yet**
+  0 clients; $0 revenue; target $1M/month ($35K/day). The agency **did not legally exist yet** *(superseded 2026-10-06: incorporated as Arika Growth Limited, PVT-PQ1EWEKM)*
   (`[ARIKA LEGAL ENTITY]` is a placeholder in every contract template; counsel instructed
   2026-07-19, reply awaited — *2026-09-14: counsel has since issued two unsigned letters of engagement; scope
   not agreed; `OWNER_INPUT_NEEDED.md` item 59*).

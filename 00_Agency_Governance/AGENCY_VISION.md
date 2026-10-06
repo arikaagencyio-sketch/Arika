@@ -1,4 +1,4 @@
-# Arika Agency — Vision
+# Arika Growth Limited — Vision
 
 **Status:** Confirmed real (2026-06-30) — this is the owner's own synthesis across the full body of prior brainstorming material, not a generic AI draft. Resolves `AGENCY_OPERATING_CONSTITUTION.md` §2 (Mission & Objectives) and tracker item 1.
 **Source:** Synthesized by the owner from a deep-dive across the entire "The Agency" project/folder — every chat, source, insight, response, resource, and "elite conversation" that informed this repo's department OS files — then pasted into this Claude Code conversation in two passes (an initial 10-layer vision, then an upgraded version adding the Financial Orchestration layer once real revenue targets were introduced). Full verbatim source saved at `00_Agency_Governance/Agency Vision and Revenue Cognition (Chat Source).md`.
@@ -10,7 +10,7 @@
 
 ## Core Vision Statement
 
-Arika Agency exists to become a fully integrated **Revenue Intelligence and Execution System** that designs, builds, and operates the entire growth infrastructure of B2B and complex B2C companies — where revenue is not "generated through services," but **engineered through systems**.
+Arika Growth Limited exists to become a fully integrated **Revenue Intelligence and Execution System** that designs, builds, and operates the entire growth infrastructure of B2B and complex B2C companies — where revenue is not "generated through services," but **engineered through systems**.
 
 It is a self-operating growth architecture that replaces fragmented business functions (marketing, sales, branding, acquisition, operations, automation) with one unified intelligence layer that continuously:
 

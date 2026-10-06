@@ -5,8 +5,8 @@ import { CardGrid } from "@/components/sections/CardGrid";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "Frameworks & Methodology | Arika Agency",
-  description: "How Arika Agency thinks: the 360° Growth Revenue Framework and the Ideal Ascension Model.",
+  title: "Frameworks & Methodology | Arika Growth",
+  description: "How Arika Growth thinks: the 360° Growth Revenue Framework and the Ideal Ascension Model.",
 };
 
 export default function FrameworksPage() {

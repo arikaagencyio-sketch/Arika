@@ -1,4 +1,4 @@
-# Arika Agency — Revenue Targets & Cognitive Calendar System
+# Arika Growth Limited — Revenue Targets & Cognitive Calendar System
 
 **Status:** Confirmed real (2026-06-30) — these are the owner's actual, stated, "do-or-die" operating targets, not illustrative AI brainstorm. Resolves tracker item 34 (real agency revenue targets — confirmed absent until this point).
 **Owner's framing:** *"I am the orchestrator... I am the salesperson, execution person, all of that, but I have the aid of artificial intelligence... my aim is a do-or-die aim."* The owner runs sales/execution personally, AI-assisted; targets are treated as non-negotiable, the same way payroll/bills/KPIs would be for any operating business.

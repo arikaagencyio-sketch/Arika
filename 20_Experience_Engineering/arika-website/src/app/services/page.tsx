@@ -4,8 +4,8 @@ import { CardGrid } from "@/components/sections/CardGrid";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "Services | Arika Agency",
-  description: "Arika Agency's real service lines, one per department capability.",
+  title: "Services | Arika Growth",
+  description: "Arika Growth's real service lines, one per department capability.",
 };
 
 export default function ServicesPage() {

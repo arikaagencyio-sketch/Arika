@@ -65,9 +65,7 @@ transfers personal data out of Kenya daily with no documented s.48 basis.**
 ## Placeholders
 
 `[SQUARE BRACKETS]` mark every value a human must supply. **A document with brackets left in it
-is not ready to send.** Common ones: `[CLIENT LEGAL NAME]`, `[ARIKA LEGAL ENTITY]`,
+is not ready to send.** Common ones: `[CLIENT LEGAL NAME]`,
 `[GOVERNING LAW]`, `[FEE]`, `[DATE]`.
 
-⚠️ **`[ARIKA LEGAL ENTITY]` is itself an open question** — whether Arika trades as a sole
-proprietorship or needs a limited company before signing MSAs with liability caps is **counsel
-question 7** in `LEGAL_RESEARCH.md` §6, and was deliberately not researched.
+✅ **Arika's own party details are filled in (2026-10-06).** Arika contracts as **Arika Growth Limited**, a private limited company: registration no. **PVT-PQ1EWEKM**, KRA PIN **P052592532D**, registered office Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County, P.O. Box 310 – 00605, Uthiru, Kenya. The former `[ARIKA LEGAL ENTITY]` and `[REGISTERED ADDRESS]` placeholders have been replaced in every template. Governing law, jurisdiction and all client-side values remain placeholders. **The templates are still unreviewed by counsel.**

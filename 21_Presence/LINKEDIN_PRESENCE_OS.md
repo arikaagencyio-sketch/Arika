@@ -79,7 +79,7 @@ This dossier **consolidates and reconciles**; it does not re-own capability (one
 |---|---|---|---|
 | **A** | **Mary Thuo — personal profile** | The real founder. Established, connected, credentialed | ✅ exists, mature |
 | **B** | **"Arika" — personal profile** | A company-named *personal* account — ✅ **confirmed by owner 2026-08-08**: opened under the agency name, not a person's name | ⚠️ exists, S1, **policy risk** |
-| **C** | **Arika Agency — Company Page** | The institutional entity | 🔴 not created |
+| **C** | **Arika Growth — Company Page** | The institutional entity | 🔴 not created |
 
 ### 4.2 The structural fact that decides the arrangement
 
@@ -100,7 +100,7 @@ B also splits the effort: every hour spent warming it is an hour not spent on A,
 ### 4.4 Recommended architecture
 
 ```
-  A · Mary Thuo (personal)                    C · Arika Agency (Company Page)
+  A · Mary Thuo (personal)                    C · Arika Growth (Company Page)
   ─────────────────────────                   ──────────────────────────────
   The founder voice          ──creates──►     The institutional entity
   Opinion · narrative                         Proof · offers · careers
@@ -113,7 +113,7 @@ B also splits the effort: every hour spent warming it is an hour not spent on A,
 
 **A is the engine; C is the infrastructure.** That ordering is not a compromise — it is what the platform rewards and what this repo's own doctrine already says: *"founders are bought before agencies"* (`PRESENCE_OS.md` §3.2). Personal profiles substantially out-reach Company Pages organically; the Page earns its keep as the entity that holds the dev app, verification, employees, ads, and institutional proof.
 
-**Your instinct to link the personal profile to the agency as founder is exactly right** — and LinkedIn has a purpose-built mechanism for it: **workplace verification**. Listing Arika Agency as current experience and verifying it via a company-domain email produces a verified badge on your profile stating you work there. For a 0-client agency, "a real, credentialed person demonstrably operates this" is the scarcest credibility asset available, and it is free.
+**Your instinct to link the personal profile to the agency as founder is exactly right** — and LinkedIn has a purpose-built mechanism for it: **workplace verification**. Listing Arika Growth as current experience and verifying it via a company-domain email produces a verified badge on your profile stating you work there. For a 0-client agency, "a real, credentialed person demonstrably operates this" is the scarcest credibility asset available, and it is free.
 
 ### 4.5 Merits & demerits — the three arrangements
 
@@ -147,11 +147,11 @@ This split is not just aesthetic: it means the distribution engine drives the Pa
 What remains once A is doing the work:
 
 ```
-A: verify profile + list Arika Agency  →  CREATE PAGE (C)  →  warm C manually  →  dev app  →  API/Postiz  →  engine test
+A: verify profile + list Arika Growth  →  CREATE PAGE (C)  →  warm C manually  →  dev app  →  API/Postiz  →  engine test
    (days, not weeks)                      (days)              (1–2 weeks)         (needs C)    (needs app)   (12 stages)
 ```
 
-- **Page-creation gates** (verify live at creation time — platform rules change and this repo does not treat vendor rules as permanent): profile 7+ days old · profile photo · multiple connections · minimum profile strength · **current position at Arika Agency listed** · company-domain email for verification. A plausibly clears all but the last two already; both are same-day fixes.
+- **Page-creation gates** (verify live at creation time — platform rules change and this repo does not treat vendor rules as permanent): profile 7+ days old · profile photo · multiple connections · minimum profile strength · **current position at Arika Growth listed** · company-domain email for verification. A plausibly clears all but the last two already; both are same-day fixes.
 - ~~The mailbox is the critical path.~~ ✅ **Resolved 2026-08-08 (owner): all company emails are active.** `mary.thuo@arikaagency.com` receives, so Page-creation verification and workplace verification are both unblocked. **Page creation is now a same-day action.**
 - **⚠️ The Page still needs its own warm-up.** C is a brand-new asset on day one. Creating a Page and immediately attaching a developer app and an auto-poster is the classic ban pattern the tracker's rule 6 exists to prevent (*one new asset at a time*). Post to C manually for 1–2 weeks before the dev app.
 - **Page → dev app → Postiz** is unchanged: the app must attach to C and be created by an admin of C; products *Sign In with OpenID Connect* + *Share on LinkedIn* (+ *Advertising API* for token refresh); redirect `https://<postiz-domain>/integrations/social/linkedin`; creds into Coolify. ⚠️ Known Postiz OAuth *"Not enough scopes"* bug.
@@ -166,7 +166,7 @@ Extends the tracker's stage model with LinkedIn-specific actions. **Golden rule 
 
 > **⚠️ Revised 2026-08-08 — this runway now applies to two assets on different clocks.**
 > **Profile A (Mary Thuo)** is already warm: it likely sits at **S3 or beyond** for account-maturity purposes, so S2 below collapses to a same-day profile-completion pass and the connection ramp becomes optional acceleration rather than a gate.
-> **Page C (Arika Agency)** is a **brand-new asset from the day it is created** and runs its own S2 → S3 → S4 cycle. The dev app hangs off C's maturity, not A's. Do not let A's maturity tempt you into wiring an auto-poster to a one-week-old Page — that is the exact "one new asset at a time" violation (tracker §3 rule 6).
+> **Page C (Arika Growth)** is a **brand-new asset from the day it is created** and runs its own S2 → S3 → S4 cycle. The dev app hangs off C's maturity, not A's. Do not let A's maturity tempt you into wiring an auto-poster to a one-week-old Page — that is the exact "one new asset at a time" violation (tracker §3 rule 6).
 
 ### S2 — Humanize & verify *(days 1–3, unblocked, do now)*
 
@@ -177,7 +177,7 @@ Extends the tracker's stage model with LinkedIn-specific actions. **Golden rule 
 | Real profile photo + background banner | Page-creation gate; the "is this a real person" signal |
 | Headline — see §7.8 for options | The single most-read line on LinkedIn |
 | About section — first 2 lines carry it (the rest is behind "see more") | Positioning, and a Page-creation profile-strength input |
-| **Current position: Founder, Arika Agency** | **Hard Page-creation requirement** — the Page cannot be created without the company listed as current experience |
+| **Current position: Founder, Arika Growth** | **Hard Page-creation requirement** — the Page cannot be created without the company listed as current experience |
 | Verify email **and** phone | Account-trust signal; reduces restriction risk |
 | Custom profile URL | Cheap, permanent, quotable everywhere else |
 | Featured section — leave empty for now | Nothing substantiable to feature yet (§9) |
@@ -326,7 +326,7 @@ Draft 13's three bios rest on fabrications and **cannot be used** (§7.7). Below
 
 **Headline** *(220 char limit; this is 79)*
 ```
-Founder, Arika Agency | Revenue infrastructure for B2B SaaS — systems, not activity
+Founder, Arika Growth | Revenue infrastructure for B2B SaaS — systems, not activity
 ```
 
 **About** *(2,600 char limit)*
@@ -366,7 +366,7 @@ mary.thuo@arikaagency.com
 | Field | Value |
 |---|---|
 | Title | `Founder` |
-| Company | `Arika Agency` — free text is fine before the Page exists; once created, LinkedIn associates it and pulls the logo |
+| Company | `Arika Growth` — free text is fine before the Page exists; once created, LinkedIn associates it and pulls the logo |
 | Employment type | Self-employed |
 | Location | Kenya |
 | Start date | ⚠️ Owner input — do not invent |
@@ -385,8 +385,8 @@ mary.thuo@arikaagency.com
 | Workplace verification | **After** the Page exists — verify via company email. This is the badge that says a real person operates the agency (§4.4) |
 
 **Alternate headlines** if the recommended one doesn't sound like you:
-- `Founder, Arika Agency | I build the revenue operating system most companies assume they already have`
-- `Founder, Arika Agency | Before you hire, audit. Before you buy, diagnose`
+- `Founder, Arika Growth | I build the revenue operating system most companies assume they already have`
+- `Founder, Arika Growth | Before you hire, audit. Before you buy, diagnose`
 
 ---
 
@@ -488,7 +488,7 @@ The proposal's architecture is broadly right and largely already yours. But the 
 
 | Field | Value | State |
 |---|---|---|
-| **Page name** | `Arika Agency` | ⚠️ Should match the registered legal entity — confirm with Legal (10); the repo has no registration record |
+| **Page name** | `Arika Growth` | ✅ The legal entity is now **Arika Growth Limited** (reg. no. PVT-PQ1EWEKM, 2026-10-06). 🔴 **The live Page is still named `Arika Agency`. Rename it on LinkedIn**, and change Organization type from *Sole proprietorship* to **Privately held** |
 | **Public URL** | `linkedin.com/company/arika-agency` | Claim early; permanent |
 | **Website** | *(leave blank at creation)* | 🔴 **Verified 2026-08-08: `arikaagency.com` has no A record and does not resolve.** Domain is registered with DNS at Zoho, but nothing is served at the apex; the site exists only on a `.vercel.app` subdomain, uncommitted (`PRESENCE_OS.md` §3.2). Shipping it is a **DNS + deploy** task (EE 20), not a domain purchase. Field is optional and editable later — leave it empty rather than point at a dead host |
 | **Industry** | `Business Consulting and Services` | ✅ **Locked 2026-08-09.** Consulting frame where Tier 1 budget sits; broad enough to hold all four functions. Rejected: `Marketing Services`/`Advertising Services` (files you as a channel vendor — the exact category the Realignment says you are not), `IT Services` (misses revenue architecture), `Software Development` (you don't sell software), `Strategic Management Services` (reads as the generic strategy you position against). **If offered narrower children, take the parent** — the offer spans several |
@@ -516,7 +516,7 @@ Marketing, sales, automation and operations — engineered as one revenue system
 
 > Most companies don't have a marketing problem, a sales problem, or an automation problem. They have a revenue architecture problem — functions that were built separately and are asked to produce a single number together.
 >
-> Arika Agency builds revenue infrastructure for B2B SaaS: the connective system across marketing, sales, automation, partnerships and operations that turns disconnected activity into a machine that can be measured, diagnosed and scaled.
+> Arika Growth builds revenue infrastructure for B2B SaaS: the connective system across marketing, sales, automation, partnerships and operations that turns disconnected activity into a machine that can be measured, diagnosed and scaled.
 >
 > We publish what we learn building it — frameworks, diagnostics and revenue architecture briefs — because the thinking is the proof.
 >
@@ -539,7 +539,7 @@ Marketing, sales, automation and operations — engineered as one revenue system
 | L7 | **What happens to profile B ("Arika")?** | It is a standing policy risk (§4.3) and splits a solo operator's effort; it cannot become the Page | **Retire it.** No profile→Page conversion exists — so either close it, or rename it to a real person who will genuinely use it. Do not grow it |
 | L8 | **Second Super Admin for the Page** | One Super Admin is a single point of failure for the Page *and* the dev app hanging off it | Defer until a second trusted person exists — but log it now with HR (11)'s single-point-of-failure map (`hr-owner-sustainability`) rather than discovering it at the first hire |
 | L9 | **Accept founder-led entanglement?** | Founder-led means the personal audience never transfers with the agency, and the channel can't be delegated later without losing its reach (§4.5) | Accept it at this stage — the credibility is worth more than the optionality — but decide it consciously, not by default |
-| L10 | **Official positioning string for the Page** — "360° Growth Revenue Agency" vs. the confirmed "360° Cognitive Revenue Operating System" (vision) vs. "Revenue Infrastructure Partner" (Offer 02) | It becomes the Page name/tagline and then propagates everywhere; three competing strings is how positioning dies | Page **name** = the legal entity (`Arika Agency`); positioning lives in the **tagline**, drawn from the confirmed pair — not a fourth string invented in a side conversation |
+| L10 | **Official positioning string for the Page** — "360° Growth Revenue Agency" vs. the confirmed "360° Cognitive Revenue Operating System" (vision) vs. "Revenue Infrastructure Partner" (Offer 02) | It becomes the Page name/tagline and then propagates everywhere; three competing strings is how positioning dies | Page **name** = the legal entity (`Arika Growth`; legal name Arika Growth Limited). Note that the BRS nature-of-business wording (2026-10-06) uses "360° Growth Revenue Agency"; positioning lives in the **tagline**, drawn from the confirmed pair — not a fourth string invented in a side conversation |
 | L11 | **Audience: "all of the above"?** | Contradicts Sector's owner-curated 3-tier ICP *and* its explicit Anti-ICP | Reframe as **broad roles, narrow accounts**: the whole buying committee *inside* Tier 1/Tier 2 B2B SaaS accounts (§11.3 item 4) |
 | L12 | **Higgsfield — reinstate or keep rejected?** | It was explicitly rejected in favour of OpenArt on 2026-07-03; the diagram reintroduces it | If genuinely wanted for motion, run it as a **supersession** through `techstack-inventory-registrar` with reasoning — not a silent addition |
 | L13 | **What is Foxy, and does it replace or duplicate Postiz?** | The role it's assigned is already filled by a deployed, healthy, paid executor | Identify the product first; register in TechStack; then decide replace-vs-duplicate. Default: **Postiz stays** |

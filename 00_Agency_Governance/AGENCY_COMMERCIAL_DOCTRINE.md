@@ -1,10 +1,10 @@
-# Agency Commercial Doctrine — Arika Agency
+# Agency Commercial Doctrine — Arika Growth Limited
 
 **Version:** v0.1.0
 **Last updated:** 2026-07-23
 **Owner:** Mary Thuo (Agency Governance, 00)
 **Author of this pass:** Claude Code (Opus 4.8)
-**Status:** Doctrine — the top inheritance layer for how the agency thinks, speaks, and behaves in public. Governance-owned (owner decision, 2026-07-23: Commercial Philosophy + Operating Voice live in Governance, above every department). Seeded from the owner's own "presence" work (Parts 1–4, 2026-07-23). Reality note: the agency is solo, pre-revenue, 0-client, not-yet-incorporated — this doctrine is written *before* the presence it governs exists, deliberately, so the presence is built to it rather than reverse-engineered from whatever gets published first.
+**Status:** Doctrine — the top inheritance layer for how the agency thinks, speaks, and behaves in public. Governance-owned (owner decision, 2026-07-23: Commercial Philosophy + Operating Voice live in Governance, above every department). Seeded from the owner's own "presence" work (Parts 1–4, 2026-07-23). Reality note: the agency is solo, pre-revenue, 0-client, incorporated 2026-10-06 as Arika Growth Limited (reg. no. PVT-PQ1EWEKM) — this doctrine is written *before* the presence it governs exists, deliberately, so the presence is built to it rather than reverse-engineered from whatever gets published first.
 
 > Read `GLOBAL_OS.md` first, then `AGENCY_VISION.md` and `AGENCY_OPERATING_CONSTITUTION.md`. This file is the **behavioral and commercial-voice layer** that expresses those two outward. It does not restate the vision or re-legislate the constitution — it governs how every public artifact *behaves*.
 

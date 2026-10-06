@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Contact3 } from "@/components/sections/Contact3";
 
 export const metadata: Metadata = {
-  title: "Contact | Arika Agency",
-  description: "Contact Arika Agency.",
+  title: "Contact | Arika Growth",
+  description: "Contact Arika Growth.",
 };
 
 export default function ContactPage() {

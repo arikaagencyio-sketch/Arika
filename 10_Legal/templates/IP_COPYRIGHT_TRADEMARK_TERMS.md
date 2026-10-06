@@ -140,7 +140,7 @@ Arika against claims that they do.
 
 ## 6. Arika's own marks — internal policy
 
-6.1 **Marks in use:** `[ARIKA / Arika Agency / the logo / arikaagency.com]`.
+6.1 **Marks in use:** `[ARIKA / Arika Growth / Arika Growth Limited / the logo / arikaagency.com]`.
 
 6.2 **🔴 Registration status: `[NOT REGISTERED — TO CONFIRM]`.**
 

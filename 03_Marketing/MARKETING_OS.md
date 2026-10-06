@@ -166,7 +166,7 @@ Every platform is a **distribution endpoint**, not a separate content strategy �
 
 **Finding:** nearly every sampled raw draft is an AI-chat-transcript brainstorm (opens with a literal "You are an elite Marketing Operating System Architect..." prompt) — confirms the underlying source material is generic AI-generated strategy theory, not the agency's lived operating history, even though `Elite_Marketing_Agentic_OS/` is faithfully derived from it. One real-world signal: `Marketing Legal Structures. Draft 32.md` references the "Kenya Data Protection Act" alongside GDPR/CCPA.
 
-**Confirmed by owner, 2026-06-30:** Kenya is real — Arika Agency operates in/serves Kenya. More broadly, the owner confirmed the agency operates globally and must comply with the relevant advertising, copyright, and data-protection laws of every jurisdiction it serves, not just Kenya/GDPR/CCPA. Treat compliance content in this department as needing a genuinely multi-jurisdictional posture (jurisdiction list not yet enumerated — add real countries/regions as real engagements happen, don't pre-build a speculative global list).
+**Confirmed by owner, 2026-06-30:** Kenya is real — Arika Growth Limited operates in/serves Kenya. More broadly, the owner confirmed the agency operates globally and must comply with the relevant advertising, copyright, and data-protection laws of every jurisdiction it serves, not just Kenya/GDPR/CCPA. Treat compliance content in this department as needing a genuinely multi-jurisdictional posture (jurisdiction list not yet enumerated — add real countries/regions as real engagements happen, don't pre-build a speculative global list).
 
 ## 15. Changelog
 

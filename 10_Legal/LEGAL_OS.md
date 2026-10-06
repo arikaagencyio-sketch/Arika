@@ -71,7 +71,7 @@ Legal is a **newly created department** — confirmed as a real gap during works
 | Claims substantiation | **Drafted, unreviewed.** Class C performance claims **banned** — no engagements exist to substantiate one |
 | AI/API tooling terms | **Drafted, unreviewed** |
 | **AI-governance legal review** | 🔴 **Not possible.** No reviewer. Blocks 17 |
-| **Entity structure** | 🔴 **Unresolved and deliberately un-researched** — `[ARIKA LEGAL ENTITY]` is a placeholder in every template |
+| **Entity structure** | ✅ **Resolved 2026-10-06.** Operating company is **Arika Growth Limited** (private limited, reg. no. PVT-PQ1EWEKM, KRA PIN P052592532D); its name and registered address are now filled in every template. Holding company **deferred** (owner, 2026-10-06: not to come up soon; operate now) |
 | Partner agreement | **Not drafted.** 06 needs one |
 | Privacy policy (public-facing) | **Not drafted.** Needed if the site collects anything |
 
@@ -139,7 +139,7 @@ The real measures once counsel is engaged: **templates reviewed / total**, and *
 | 2 | **🔴 No named AI-governance legal reviewer** | **`ai-enablement-governance-gate` (17)** → **offer #11 entirely**: highest setup ceiling in the catalog ($250,000+) and the **only path to Draft 28's $500K–$5M whale tier** | **Active** — 17 is wired and cannot deliver |
 | 3 | **🔴 Personal data leaves Kenya daily with no documented s.48 basis** | Any client data entering any Arika tool | **Active but low-consequence** — no client data exists *yet* |
 | 4 | **Sub-processor register incomplete** — every entry in `DPA.md` Annex B reads `[TO VERIFY]` | Any GDPR-covered client; **Arika is fully liable for all of them** | Latent |
-| 5 | **`[ARIKA LEGAL ENTITY]` unresolved** | Every MSA with a liability cap | Latent |
+| 5 | ~~**`[ARIKA LEGAL ENTITY]` unresolved**~~ **Closed 2026-10-06:** Arika Growth Limited | Every MSA with a liability cap | Closed |
 | 6 | **🔴 The IP registrant is unsettled — and the letter currently on the table would register it in the wrong place.** v2 §2.1.6–2.1.7 file copyright and trademark *"in your favour"* — **personally to Mary** — against a stated intent that all IP sit at **holdco** level. Moving it later attracts 5% CGT, stamp duty on assignment, and WHT on royalties (`LEGAL_ENTITY_SETUP.md` §4.1) | **Any KIPI or KECOBO filing.** Nothing should be filed until this closes | **The one item on this list where signing the wrong document costs real money.** Latent only because nothing is signed — and it stops being latent the day it is *(added 2026-08-09)* |
 | 7 | **AI-copyright position unresolved** | What Arika can honestly tell a client it owns | Latent — **but Arika already ships AI-generated assets.** ⚠️ **v1 of the engagement letter would have resolved this; v2 removed the advice** (§8) |
 | 8 | **OpenArt Free-plan commercial terms unchecked** — imagery generated under it is **live on the Arika website** | Possibly already in breach | **Checkable today, free** |

@@ -11,7 +11,7 @@
 **SOW Number:** `[SOW-YYYY-NN]`
 **Effective Date:** `[DATE]`
 **Client:** `[CLIENT LEGAL NAME]`
-**Arika:** `[ARIKA LEGAL ENTITY]`
+**Arika:** Arika Growth Limited (registration no. PVT-PQ1EWEKM, KRA PIN P052592532D)
 
 This SOW is issued under, and incorporates, the **Master Services Agreement** dated `[MSA
 DATE]` (the "**MSA**"). Terms defined in the MSA have the same meaning here. On conflict, the
@@ -162,7 +162,7 @@ warranted outcome**.
 
 **AGREED:**
 
-| | **`[ARIKA LEGAL ENTITY]`** | **`[CLIENT LEGAL NAME]`** |
+| | **Arika Growth Limited** | **`[CLIENT LEGAL NAME]`** |
 |---|---|---|
 | Signature | ............................. | ............................. |
 | Name | `[NAME]` | `[NAME]` |
@@ -180,4 +180,4 @@ warranted outcome**.
 - [ ] §5 dependencies are real and dated
 - [ ] §2 acceptance criteria are objective enough to settle "is it done?"
 - [ ] MSA is signed and in force
-- [ ] `[ARIKA LEGAL ENTITY]` resolved (`LEGAL_RESEARCH.md` §6, counsel question 7)
+- [x] Arika legal entity resolved: Arika Growth Limited, PVT-PQ1EWEKM (2026-10-06) (`LEGAL_RESEARCH.md` §6, counsel question 7)

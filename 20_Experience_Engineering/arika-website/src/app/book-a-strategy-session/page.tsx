@@ -3,8 +3,8 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { Contact3 } from "@/components/sections/Contact3";
 
 export const metadata: Metadata = {
-  title: "Book a Strategy Session | Arika Agency",
-  description: "Book a strategy session with Arika Agency.",
+  title: "Book a Strategy Session | Arika Growth",
+  description: "Book a strategy session with Arika Growth.",
 };
 
 export default function BookAStrategySessionPage() {

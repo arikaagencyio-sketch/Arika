@@ -12,7 +12,7 @@
 # DATA PROCESSING AGREEMENT
 
 **This Data Processing Agreement** (the "**DPA**") supplements the Master Services Agreement
-dated `[MSA DATE]` (the "**MSA**") between **`[ARIKA LEGAL ENTITY]`** ("**Arika**", the
+dated `[MSA DATE]` (the "**MSA**") between **Arika Growth Limited** (registration no. PVT-PQ1EWEKM) ("**Arika**", the
 **Processor**) and **`[CLIENT LEGAL NAME]`** ("**Client**", the **Controller**).
 
 Per **MSA Clause 1.3**, this DPA **takes precedence** over the MSA on any data-protection

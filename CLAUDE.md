@@ -1,6 +1,6 @@
 # Claude Code Entry Point
 
-This repository is Arika Agency's Operating System. The substance lives in plain markdown, not here — this file is intentionally a thin pointer.
+This repository is Arika Growth Limited's Operating System. The substance lives in plain markdown, not here — this file is intentionally a thin pointer.
 
 ## How to operate in this repo
 

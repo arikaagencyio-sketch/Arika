@@ -63,7 +63,7 @@ export const Footer16 = (props: Footer16Props) => {
         <div className="grid grid-cols-1 gap-x-[8vw] gap-y-12 pb-8 md:gap-y-16 md:pb-10 lg:grid-cols-[0.75fr_1fr] lg:gap-y-4 lg:pb-12">
           <div className="flex flex-col">
             <Link href="/" className="mb-5 md:mb-6">
-              <Image src="/images/arika-logo-full.png" alt="Arika Agency — Growth Partners" width={742} height={875} className="h-32 w-auto" />
+              <Image src="/images/arika-logo-full.png" alt="Arika Growth" width={742} height={875} className="h-32 w-auto" />
             </Link>
             <p className="mb-5 md:mb-6">{newsletterDescription}</p>
             <div className="w-full max-w-md">
@@ -169,7 +169,7 @@ export const Footer16Defaults: Props = {
       ],
     },
   ],
-  footerText: "© 2026 Arika Agency. All rights reserved.",
+  footerText: "© 2026 Arika Growth Limited. All rights reserved.",
   footerLinks: [
     { title: "Privacy Policy", url: "#" },
     { title: "Terms of Service", url: "#" },

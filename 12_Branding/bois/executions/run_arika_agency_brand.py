@@ -25,7 +25,7 @@ def main() -> int:
     # than invented — tracker item 30's explicitly flagged residual gap.
     client = ClientObject(
         client_id="arika-agency",
-        company_name="Arika Agency",
+        company_name="Arika Growth Limited",
         sector="B2B Revenue Infrastructure / GTM Systems Agency",
         sub_sector="Revenue Operating System Provider for B2B SaaS",
         geography="Kenya-based, serving clients globally",
@@ -152,7 +152,7 @@ def main() -> int:
     context = orchestrator.assemble_context(
         client=client,
         task=(
-            "Define Arika Agency's own core brand identity, positioning, and "
+            "Define Arika Growth Limited's own core brand identity, positioning, and "
             "voice as BOIS's first real (non-hypothetical) client"
         ),
         deliverable="brand_identity_definition",

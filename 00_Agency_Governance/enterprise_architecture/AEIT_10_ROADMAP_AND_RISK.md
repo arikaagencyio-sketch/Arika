@@ -7,7 +7,7 @@
 (AEIT_04), and the missing-piece builds (AEIT_06–09).
 **Status:** Roadmap + risk register. Nothing here is executed in Phase Zero.
 
-> The governing principle is **reality-gating**: a solo, pre-revenue, not-yet-incorporated business
+> The governing principle is **reality-gating**: a solo, pre-revenue business (incorporated 2026-10-06 as Arika Growth Limited)
 > whose automation has never run does not build a collection platform first. Each phase unlocks only
 > when its gate is met. This is what stops the architecture from outrunning the business again.
 

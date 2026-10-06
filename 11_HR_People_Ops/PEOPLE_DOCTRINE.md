@@ -1,4 +1,4 @@
-# People Doctrine — Arika Agency
+# People Doctrine — Arika Growth Limited
 
 **Owner:** Mary Thuo
 **Created:** 2026-07-15, from the owner's direct brief of the same date.

@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { Blog33 } from "@/components/sections/Blog33";
 
 export const metadata: Metadata = {
-  title: "Insights | Arika Agency",
+  title: "Insights | Arika Growth",
   description: "Revenue intelligence, architecture, operations, and leadership — organized by pillar.",
 };
 

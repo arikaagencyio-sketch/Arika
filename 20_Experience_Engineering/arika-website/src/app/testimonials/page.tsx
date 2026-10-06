@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "Testimonials | Arika Agency",
+  title: "Testimonials | Arika Growth",
   description: "Client testimonials — published as real engagements complete.",
 };
 

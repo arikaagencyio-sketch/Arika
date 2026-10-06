@@ -468,7 +468,7 @@ The Page is a **new asset**: manual only, ~2 posts/week for its first two weeks 
 >
 > Nobody designed the connections. So the handoffs leak, the data disagrees, and every function can hit its own target while revenue stays flat.
 >
-> Arika Agency exists to build that connective layer: the system underneath the functions, engineered so the number is something you can diagnose rather than something that happens to you.
+> Arika Growth exists to build that connective layer: the system underneath the functions, engineered so the number is something you can diagnose rather than something that happens to you.
 >
 > We publish what we learn building it — frameworks, diagnostics, and revenue architecture briefs.
 >
@@ -549,7 +549,7 @@ See §7 below — the Page's cornerstone artifact.
 >
 > Take the last three tools your organisation bought. For each, write the process on paper without naming the tool. The ones you cannot write are the ones to address before the next purchase.
 >
-> — Arika Agency
+> — Arika Growth
 
 ---
 
@@ -557,4 +557,5 @@ See §7 below — the Page's cornerstone artifact.
 
 - **2026-08-09 — Month one complete: 14 founder posts, 3 Page posts, and Revenue Architecture Brief #001.** Weeks 3–4 step the founder cadence to 4/week; the Page runs its own 2/week warm-up in institutional register (no "I", no founder story) with profile A resharing. Sources continue to be Sector (01)'s owner-curated intelligence and the agency's real build record — the TechStack audit (4 of 30 rows false), the host migration (card rejected → OOM kill → self-hosted), the written Anti-ICP. Brief #001 deliberately publishes the *shape* of the diagnostic model and withholds the 90-point scorecard's calibration, which is the Gateway Offer's engine. **Unapproved: Class 3 sign-off outstanding on all 17 pieces.** — Claude Code (Opus 5)
 - **2026-08-09 — Registration status resolved as non-blocking.** Business unregistered; owner confirmed it must not stall launch. Honest answers exist for both dependent fields: Organization type = **Sole proprietorship** (accurate for an unregistered trading name operated by one person — `Privately held` would falsely imply incorporation), Name = **Arika Agency** (a trading name is a real name, and Page names are editable). The authorized-representative attestation is truthful: there is no third party whose authority is being borrowed. Guidance recorded: keep the vanity URL brandable (`arika-agency`) rather than encoding a legal form, since names flex easily and URLs do not. — Claude Code (Opus 5)
+- **2026-10-06 — Superseded: the business is now incorporated as Arika Growth Limited** (private limited, reg. no. PVT-PQ1EWEKM). The Page's Organization type should change from *Sole proprietorship* to **Privately held**, and its name from `Arika Agency` to **Arika Growth**. Owner decision: whether to move the vanity URL to `arika-growth` to match @arikagrowth. — Claude Code (Opus 5.5)
 - **2026-08-09 — First six LinkedIn posts drafted; the content gap closed in principle.** The repo had a complete LinkedIn strategy and zero posts. Sourced from Sector (01)'s owner-curated intelligence and the agency's own build record rather than Draft 13's fabricated founder history — every claim is substantiable from this repository. Formats, pillars and houses rotate per the dossier; each post carries an economic job. **Unapproved: Class 3 sign-off outstanding.** — Claude Code (Opus 5)

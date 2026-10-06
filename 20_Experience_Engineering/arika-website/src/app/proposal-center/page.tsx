@@ -4,8 +4,8 @@ import { CardGrid } from "@/components/sections/CardGrid";
 import { Contact3 } from "@/components/sections/Contact3";
 
 export const metadata: Metadata = {
-  title: "Proposal Center | Arika Agency",
-  description: "Request a proposal from Arika Agency.",
+  title: "Proposal Center | Arika Growth",
+  description: "Request a proposal from Arika Growth.",
 };
 
 export default function ProposalCenterPage() {

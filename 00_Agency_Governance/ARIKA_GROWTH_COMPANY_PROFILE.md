@@ -1,6 +1,6 @@
 # Arika Growth Limited — Company Profile & Master Brief
 
-**Version:** v1.2 (BRS registration record added) · **Date:** 2026-10-06 · **Owner:** Mary Thuo
+**Version:** v1.3 (repo-wide rename done; placeholders filled) · **Date:** 2026-10-06 · **Owner:** Mary Thuo
 **For:** Design, Marketing and Sales. This is the source brief for proposals, pitch decks, meeting prep, prospecting, the website and social profiles.
 **Status:** A consolidation of what the operating system already records. Nothing new has been decided in it. Where the system has no confirmed answer, it says so (marked **OPEN**) and leaves it blank.
 
@@ -401,17 +401,21 @@ Several of these ranges were completed by AI from the master pricing document ra
 - [ ] Claim **@arikagrowth** on every platform (LinkedIn, Instagram, X, TikTok, YouTube, Facebook, Threads), then update the display names
 - [ ] Re-cut the logo wordmark from "ARIKA AGENCY / GROWTH PARTNERS" to **ARIKA GROWTH**, then update the Canva Brand Kit
 - [ ] Move the business email to the Arika Growth identity at renewal, and update signatures
-- [ ] Website: update the name, About page and footer (legal name plus registration number PVT-PQ1EWEKM)
-- [ ] Contract templates: replace `[ARIKA LEGAL ENTITY]` with **Arika Growth Limited** with registration number PVT-PQ1EWEKM and the registered address (the templates still need legal review)
+- [x] Website source: name, titles, About page and footer (© Arika Growth Limited) updated 2026-10-06. **Still to do:** redeploy, and swap the logo images once the wordmark is re-cut
+- [x] Contract templates: `[ARIKA LEGAL ENTITY]` and `[REGISTERED ADDRESS]` replaced with **Arika Growth Limited**, reg. no. PVT-PQ1EWEKM, KRA PIN and registered office, 2026-10-06 (the templates still need legal review)
 - [ ] Accounting: the Zoho Books organization is currently named "Arika Agency". Rename it to **Arika Growth Limited**, add the **KRA PIN P052592532D** and the registered address to the organization profile and invoice template, set the financial year to end in December, and confirm the cut-over date (06/10/2026) with the accountant
 - [ ] KRA iTax: change the contact email from growth@arikaagency.com to the new domain once the mailboxes move
 - [ ] Address spelling: "Dagorett" appears the same way on **both** the BRS and KRA records. Use it exactly as registered on official documents. If it should read "Dagoretti", correct it at BRS first and then at KRA
 - [ ] Income-tax compliance calendar: the obligation is live from 06/10/2026 (handover to Finance and the accountant)
 - [ ] Domain: transfer the registration into the company's name
-- [ ] Update the repo's own records (GLOBAL_OS, Legal entity file, Branding, etc.), which still say "Arika Agency" and "pre-incorporation". **This has not been done in this pass; owner approval is needed first.**
+- [x] Repo-wide rename done 2026-10-06 (`GLOBAL_OS.md` v0.29.3). Live tool names (Zoho, ClickUp, Notion, Canva, LinkedIn) stay verbatim until each tool is renamed. See `GO_LIVE_CHECKLIST.md` Phase 11
+- [ ] **Business bank account**: the biggest remaining step before public operations (on hold, owner)
+- [ ] Rename the LinkedIn Company Page `Arika Agency` → **Arika Growth** and set Organization type to **Privately held**
+- [ ] Rename the ClickUp folder, Notion workspace and Canva root folder that still carry "Arika Agency"
 
 **Open decisions (owner)**
-- Pre-incorporation and new-name marketing advice from counsel
+- Holding company: **deferred** (owner, 2026-10-06). Note that the earlier advice to hold KIPI/KECOBO filings until the holdco question closes now leaves trademark filing waiting indefinitely, so decide whether to file in Arika Growth Limited's name
+- Official positioning string: the BRS nature of business says "360° Growth Revenue Agency", while marketing uses "Revenue Infrastructure Partner" (LinkedIn decision L10)
 - Whether the AI Opportunity Assessment belongs to Automation or AI Enablement, and whether to sell it as a shared entry point
 - Whether the Growth Workshop and Sales Call Review become real offers
 - How Strategic Partnership Infrastructure relates to the Acquisition System Ladder

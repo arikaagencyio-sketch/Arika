@@ -17,9 +17,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Arika Agency — Revenue Infrastructure Partner",
+  title: "Arika Growth — Revenue Infrastructure Partner",
   description:
-    "Arika Agency: the 360° Growth Revenue Operating System for B2B SaaS companies.",
+    "Arika Growth: the 360° Growth Revenue Operating System for B2B SaaS companies.",
 };
 
 export default function RootLayout({

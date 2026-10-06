@@ -29,7 +29,7 @@ This file contains **two** NDAs. Use the right one:
 
 **This Mutual Non-Disclosure Agreement** is made on `[DATE]` between:
 
-**(1) `[ARIKA LEGAL ENTITY]`**, of `[REGISTERED ADDRESS]`, Kenya; and
+**(1) Arika Growth Limited**, a private limited company incorporated in Kenya (registration no. PVT-PQ1EWEKM, KRA PIN P052592532D), of Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County, P.O. Box 310 – 00605, Uthiru, Kenya; and
 **(2) `[OTHER PARTY LEGAL NAME]`**, of `[ADDRESS]`,
 
 each a "**Party**". Each Party may act as **Discloser** or **Recipient**.
@@ -167,7 +167,7 @@ of `[JURISDICTION]`.
 
 **AGREED:**
 
-| | **`[ARIKA LEGAL ENTITY]`** | **`[OTHER PARTY]`** |
+| | **Arika Growth Limited** | **`[OTHER PARTY]`** |
 |---|---|---|
 | Signature | ............................. | ............................. |
 | Name | `[NAME]` | `[NAME]` |
@@ -185,7 +185,7 @@ partner, contractor, or freelancer.
 
 **This Non-Disclosure Agreement** is made on `[DATE]` between:
 
-**(1) `[ARIKA LEGAL ENTITY]`**, of `[REGISTERED ADDRESS]`, Kenya ("**Arika**", the
+**(1) Arika Growth Limited**, a private limited company incorporated in Kenya (registration no. PVT-PQ1EWEKM, KRA PIN P052592532D), of Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County, P.O. Box 310 – 00605, Uthiru, Kenya ("**Arika**", the
 **Discloser**); and
 **(2) `[RECIPIENT LEGAL NAME]`**, of `[ADDRESS]` (the "**Recipient**").
 
@@ -264,7 +264,7 @@ licence is granted. Evaluation is not use.
 
 **AGREED:**
 
-| | **`[ARIKA LEGAL ENTITY]`** | **`[RECIPIENT]`** |
+| | **Arika Growth Limited** | **`[RECIPIENT]`** |
 |---|---|---|
 | Signature | ............................. | ............................. |
 | Name | `[NAME]` | `[NAME]` |

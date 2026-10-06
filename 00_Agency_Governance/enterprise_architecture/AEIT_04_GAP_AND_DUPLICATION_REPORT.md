@@ -171,7 +171,7 @@ Severity key: 🔴 High · 🟠 Medium · 🟡 Low-but-structural.
 
 ### D3 🟠 Legal non-existence blocks a downstream governance gate
 - **Evidence:** AI Enablement (17)'s Class-3 governance gate requires a legal-reviewed framework;
-  Legal has no engaged counsel and the agency does not legally exist (`GLOBAL_OS.md` §4, dept 17;
+  Legal has no engaged counsel and the agency did not then legally exist *(incorporated 2026-10-06 as Arika Growth Limited)* (`GLOBAL_OS.md` §4, dept 17;
   `10_Legal/LEGAL_OS.md` §8, counsel instructed 2026-07-19, reply awaited). *2026-09-14: counsel has since
   issued two letters of engagement, both unsigned; scope is not agreed and no review has happened
   (`OWNER_INPUT_NEEDED.md` item 59). The gate stays blocked.*

@@ -1,7 +1,7 @@
 # Agency Operating Constitution
 
 **Status:** v0.1-draft — process/structure sections are load-bearing now; mission/objective content is placeholder pending owner input.
-**Owner:** Mary Thuo (Arika Agency)
+**Owner:** Mary Thuo (Arika Growth Limited)
 **Last updated:** 2026-06-30
 
 > Referenced from [`GLOBAL_OS.md`](../GLOBAL_OS.md) §3. This is the full version; that file carries only a compressed summary.
@@ -14,7 +14,7 @@ This constitution governs how the agency operates as a system — who decides wh
 
 ## 2. Mission & Objectives
 
-**Confirmed real, 2026-06-30.** Full vision: `00_Agency_Governance/AGENCY_VISION.md`. One-sentence form: *"Arika Agency is a 360° Cognitive Revenue Operating System that transforms businesses into self-orchestrating revenue engines by integrating sales, marketing, branding, acquisition, automation, operations, and financial intelligence into a unified system that manages revenue probability under time, capital, and opportunity constraints to produce predictable, scalable, and compounding growth."*
+**Confirmed real, 2026-06-30.** Full vision: `00_Agency_Governance/AGENCY_VISION.md`. One-sentence form: *"Arika Growth Limited is a 360° Cognitive Revenue Operating System that transforms businesses into self-orchestrating revenue engines by integrating sales, marketing, branding, acquisition, automation, operations, and financial intelligence into a unified system that manages revenue probability under time, capital, and opportunity constraints to produce predictable, scalable, and compounding growth."*
 
 **Real objectives (confirmed, 2026-06-30):** full detail in `00_Agency_Governance/AGENCY_REVENUE_TARGETS.md`.
 
@@ -50,7 +50,7 @@ These apply across every department, regardless of what any department-local Sta
 | Anything in Risk Class 3+ (§5) | Mary Thuo | — |
 | Amendments to this constitution | Mary Thuo | — |
 
-**Confirmed 2026-06-30:** Mary Thuo is the sole agency owner, accountable for every department (see `GLOBAL_OS.md` §4, Department Index). Once Arika Agency grows beyond solo ownership, split the "Who decides" column back out per department and restore the escalation-to-agency-owner pattern for cross-department disagreements.
+**Confirmed 2026-06-30:** Mary Thuo is the sole agency owner, accountable for every department (see `GLOBAL_OS.md` §4, Department Index). Once Arika Growth Limited grows beyond solo ownership, split the "Who decides" column back out per department and restore the escalation-to-agency-owner pattern for cross-department disagreements.
 
 ## 5. Risk Classes
 

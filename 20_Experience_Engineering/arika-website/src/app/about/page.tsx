@@ -4,8 +4,8 @@ import { CardGrid } from "@/components/sections/CardGrid";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "About | Arika Agency",
-  description: "Arika Agency — a Revenue Infrastructure Partner for B2B SaaS.",
+  title: "About | Arika Growth",
+  description: "Arika Growth — a Revenue Infrastructure Partner for B2B SaaS.",
 };
 
 export default function AboutPage() {
@@ -14,7 +14,7 @@ export default function AboutPage() {
       <PageHeader
         tagline="About"
         heading="A Revenue Infrastructure Partner, not another marketing retainer"
-        description="Arika Agency exists to architect the systems that turn strategy, marketing, sales, branding, and automation into one connected revenue engine — built for B2B SaaS companies, operating in Kenya and serving clients globally."
+        description="Arika Growth exists to architect the systems that turn strategy, marketing, sales, branding, and automation into one connected revenue engine — built for B2B SaaS companies, operating in Kenya and serving clients globally."
       />
 
       <CardGrid

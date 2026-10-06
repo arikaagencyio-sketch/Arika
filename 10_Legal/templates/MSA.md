@@ -10,7 +10,7 @@
 
 **This Master Services Agreement** (the "**Agreement**") is made on `[EFFECTIVE DATE]` between:
 
-**(1) `[ARIKA LEGAL ENTITY]`**, of `[REGISTERED ADDRESS]`, Kenya ("**Arika**"); and
+**(1) Arika Growth Limited**, a private limited company incorporated in Kenya (registration no. PVT-PQ1EWEKM, KRA PIN P052592532D), of Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County, P.O. Box 310 – 00605, Uthiru, Kenya ("**Arika**"); and
 **(2) `[CLIENT LEGAL NAME]`**, of `[CLIENT REGISTERED ADDRESS]` ("**Client**"),
 
 each a "**Party**" and together the "**Parties**".
@@ -219,10 +219,10 @@ SOW in the [12] months preceding the claim]`**.
 > 2. **Is it commercially survivable?** Arika's Starter audit is **$2,500** (`02_Offer`). A cap
 >    at fees-paid means a **$2,500 engagement caps liability at $2,500** — while the client acts
 >    on findings affecting far more. Conversely offer #11 reaches **$250,000+**.
-> 3. **Does `[ARIKA LEGAL ENTITY]` sit behind this cap?** A **sole proprietorship has no
->    liability shield** — the cap is contractual only, and personal assets sit behind it. See
->    counsel question 7 in `LEGAL_RESEARCH.md` §6. **Resolve the entity before signing anything
->    with a liability cap.**
+> 3. ~~**Does `[ARIKA LEGAL ENTITY]` sit behind this cap?**~~ **Resolved 2026-10-06: the contracting party is Arika Growth Limited (private limited, reg. no. PVT-PQ1EWEKM), so the company's limited liability, not personal assets, now sits behind the cap. Questions 1 and 2 still need counsel.** *(Original note: a sole proprietorship has no
+>    liability shield — the cap is contractual only, and personal assets sit behind it. See
+>    counsel question 7 in `LEGAL_RESEARCH.md` §6. Resolve the entity before signing anything
+>    with a liability cap.)*
 
 9.4 The exclusions and cap apply regardless of the basis of the claim.
 
@@ -288,7 +288,7 @@ arbitrator(s).]`
 
 **AGREED** by the Parties:
 
-| | **`[ARIKA LEGAL ENTITY]`** | **`[CLIENT LEGAL NAME]`** |
+| | **Arika Growth Limited** | **`[CLIENT LEGAL NAME]`** |
 |---|---|---|
 | Signature | ............................. | ............................. |
 | Name | `[NAME]` | `[NAME]` |

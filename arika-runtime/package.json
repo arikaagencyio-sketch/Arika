@@ -1,7 +1,7 @@
 {
   "name": "arika-runtime",
   "version": "0.1.0",
-  "description": "Unified agent runtime for Arika Agency's OS — one canonical spec format + one executor that runs every department's agents from manual, cron, event, and webhook triggers.",
+  "description": "Unified agent runtime for Arika Growth Limited's OS — one canonical spec format + one executor that runs every department's agents from manual, cron, event, and webhook triggers.",
   "type": "module",
   "private": true,
   "bin": {

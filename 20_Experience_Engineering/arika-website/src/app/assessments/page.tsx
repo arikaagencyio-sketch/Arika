@@ -5,7 +5,7 @@ import { Faq2 } from "@/components/sections/Faq2";
 import { Cta58 } from "@/components/sections/Cta58";
 
 export const metadata: Metadata = {
-  title: "Free Assessment — Revenue Infrastructure Audit | Arika Agency",
+  title: "Free Assessment — Revenue Infrastructure Audit | Arika Growth",
   description:
     "The Revenue Infrastructure Audit: a fixed-fee, 7-14 day diagnostic across funnel, sales, CRM, automation, acquisition, team, and offer.",
 };

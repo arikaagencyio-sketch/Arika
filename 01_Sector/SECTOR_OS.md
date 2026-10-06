@@ -11,11 +11,11 @@
 
 ## 1. Identity
 
-The agency's name is **Arika Agency** (confirmed by the owner, 2026-06-30 — the Excel database in §13 independently named it "Arika Group"/"Arika Growth Agency"; "Arika Agency" is the form to use going forward across this repo).
+**The company's legal name is Arika Growth Limited** (private limited, BRS reg. no. PVT-PQ1EWEKM, KRA PIN P052592532D, incorporated 2026-10-06; it supersedes the earlier working name "Arika Agency"). *(History: the working name was confirmed by the owner on 2026-06-30 — the Excel database in §13 independently named it "Arika Group"/"Arika Growth Agency"; "Arika Growth Limited" is the form to use going forward across this repo).
 
 Sector sits upstream of every other department: "Sector Layer → determines truth; Branding → expresses truth; Offer → packages truth; Marketing → distributes truth; Sales → converts truth. If your sector layer is weak → everything downstream underperforms." (Draft 1, also the framing inherited into this template.) The department's own stated core question: *"How does this specific market (sector) think, buy, trust, and scale?"*
 
-**✅ Resolved 2026-06-30 — real sector confirmed.** The original 14 raw drafts (still the conceptual/methodology layer, §3-4, §10) never named a real sector — every industry mentioned was hypothetical. That gap is now closed: the owner provided a real, structured sector decision via `Other Source Reference/Arika_B2B_SaaS_Intelligence_Database.xlsx` (a 13-sheet intelligence database) plus a prior "Sider Fusion" AI chat session (saved as `Draft 15`-`17`, partial). **Arika Agency's real sector is B2B SaaS**, segmented into 3 ICP tiers:
+**✅ Resolved 2026-06-30 — real sector confirmed.** The original 14 raw drafts (still the conceptual/methodology layer, §3-4, §10) never named a real sector — every industry mentioned was hypothetical. That gap is now closed: the owner provided a real, structured sector decision via `Other Source Reference/Arika_B2B_SaaS_Intelligence_Database.xlsx` (a 13-sheet intelligence database) plus a prior "Sider Fusion" AI chat session (saved as `Draft 15`-`17`, partial). **Arika Growth Limited's real sector is B2B SaaS**, segmented into 3 ICP tiers:
 
 | Tier | Profile | Why this tier | Status |
 |---|---|---|---|

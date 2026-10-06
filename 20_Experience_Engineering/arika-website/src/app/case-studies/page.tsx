@@ -3,8 +3,8 @@ import { PageHeader } from "@/components/sections/PageHeader";
 import { Portfolio23 } from "@/components/sections/Portfolio23";
 
 export const metadata: Metadata = {
-  title: "Case Studies | Arika Agency",
-  description: "How every Arika Agency engagement is structured, start to finish.",
+  title: "Case Studies | Arika Growth",
+  description: "How every Arika Growth engagement is structured, start to finish.",
 };
 
 export default function CaseStudiesPage() {

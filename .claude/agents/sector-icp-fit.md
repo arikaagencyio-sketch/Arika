@@ -65,7 +65,7 @@ public-company discovery inquiry. H1/H2 qualify for the existing single-property
 MVP only; groups and larger properties route to unpriced discovery. Never
 extend the single-property delivery promise, invent a budget, or guess a person.
 
-For B2B SaaS, classify against Arika Agency's **confirmed real ICP**:
+For B2B SaaS, classify against Arika Growth Limited's **confirmed real ICP**:
 three tiers, with an explicit Anti-ICP. This is foundational sector truth — Sales'
 qualification and Marketing's targeting both consume it.
 
