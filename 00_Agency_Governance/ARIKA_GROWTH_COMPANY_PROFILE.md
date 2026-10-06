@@ -1,6 +1,6 @@
 # Arika Growth Limited — Company Profile & Master Brief
 
-**Version:** v1.1 (KRA PIN certificate added) · **Date:** 2026-10-06 · **Owner:** Mary Thuo
+**Version:** v1.2 (BRS registration record added) · **Date:** 2026-10-06 · **Owner:** Mary Thuo
 **For:** Design, Marketing and Sales. This is the source brief for proposals, pitch decks, meeting prep, prospecting, the website and social profiles.
 **Status:** A consolidation of what the operating system already records. Nothing new has been decided in it. Where the system has no confirmed answer, it says so (marked **OPEN**) and leaves it blank.
 
@@ -21,9 +21,13 @@
 | **Short name for everyday use** | **Arika Growth** (or **Arika** once the full name has already appeared) |
 | **KRA PIN** | **P052592532D** (KRA PIN Certificate dated 06/10/2026). It **must appear on every tax invoice** and on all correspondence with KRA. It is not needed in marketing material. |
 | **Tax obligation** | Income Tax – Company, effective **06/10/2026**. Accounting year ends in **December** (the KRA default). |
-| **Company registration number** | **OPEN — being finalized.** Leave a placeholder `[REG. NO.]` in any document that needs it. |
+| **Company registration number** | **PVT-PQ1EWEKM** (Business Registration Service) |
+| **Entity type & status** | Private Limited · **Active** · registered **2026-10-06** |
+| **Registered nature of business** | *"The company will operate as a 360° Growth Revenue Agency, providing integrated strategic, commercial, operational, technological and growth services to businesses and organisations."* This is the legal objects wording. Market-facing copy still uses **Revenue Infrastructure Partner** (§3). |
 | **Founder & owner** | Mary Thuo (sole owner) |
-| **Registered address (as on the KRA record)** | Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County · P.O. Box 310 – 00605 · Tax area: Kikuyu · Station: Kiambu |
+| **Registered address (as on the BRS and KRA records)** | Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County · Locality: Kikuyu · **P.O. Box 310 – 00605, Uthiru** · KRA tax area: Kikuyu · KRA station: Kiambu |
+| **Registered mobile** | +254 142 324 624 |
+| **NSSF / NHIF numbers** | Blank on the BRS record. They are only needed once the company employs staff (there are none yet). NHIF has since been replaced by SHA/SHIF, so confirm the current requirement with the accountant. |
 | **Email on the KRA record** | growth@arikaagency.com *(old domain; update the KRA iTax profile when the email moves to the Arika Growth identity)* |
 | **Base** | Kenya (registered office in Kiambu County) |
 | **Market served** | Kenya, plus clients globally. Each engagement follows the advertising, copyright and data-protection law of the client's own jurisdiction. |
@@ -35,7 +39,7 @@
 1. **"Arika Agency" is retired as the business name.** Do not use it in any new material: not in decks, proposals, signatures, invoices, the website, bios or handles.
 2. "Agency" can still describe *how we work* in lowercase prose (e.g. "an agency-style engagement"), but it is never part of the name. Even so, the preferred self-description is **Revenue Infrastructure Partner** (§3), because the positioning explicitly rejects "marketing agency".
 3. In contracts, proposals and invoices, the first mention is the full legal name, **Arika Growth Limited**, with "Arika Growth" after that.
-3a. Tax invoices carry the legal name, the **KRA PIN P052592532D** and the registered address. Add the registration number once it is issued.
+3a. Tax invoices carry the legal name, the **KRA PIN P052592532D** and the registered address. Where required, add the registration number **PVT-PQ1EWEKM**.
 4. The current logo wordmark reads *"ARIKA AGENCY / GROWTH PARTNERS"*, so it **must be re-cut for the new name** before it appears on anything new. See §11 and §17.
 
 ---
@@ -397,17 +401,16 @@ Several of these ranges were completed by AI from the master pricing document ra
 - [ ] Claim **@arikagrowth** on every platform (LinkedIn, Instagram, X, TikTok, YouTube, Facebook, Threads), then update the display names
 - [ ] Re-cut the logo wordmark from "ARIKA AGENCY / GROWTH PARTNERS" to **ARIKA GROWTH**, then update the Canva Brand Kit
 - [ ] Move the business email to the Arika Growth identity at renewal, and update signatures
-- [ ] Website: update the name, About page and footer (legal name plus `[REG. NO.]`)
-- [ ] Contract templates: replace `[ARIKA LEGAL ENTITY]` with **Arika Growth Limited** once the registration number is issued (the templates still need legal review)
+- [ ] Website: update the name, About page and footer (legal name plus registration number PVT-PQ1EWEKM)
+- [ ] Contract templates: replace `[ARIKA LEGAL ENTITY]` with **Arika Growth Limited** with registration number PVT-PQ1EWEKM and the registered address (the templates still need legal review)
 - [ ] Accounting: the Zoho Books organization is currently named "Arika Agency". Rename it to **Arika Growth Limited**, add the **KRA PIN P052592532D** and the registered address to the organization profile and invoice template, set the financial year to end in December, and confirm the cut-over date (06/10/2026) with the accountant
 - [ ] KRA iTax: change the contact email from growth@arikaagency.com to the new domain once the mailboxes move
-- [ ] Confirm the spelling on the KRA record, "Dagorett" (probably "Dagoretti"). Official documents must match the KRA record exactly, so correct it with KRA if it is wrong
+- [ ] Address spelling: "Dagorett" appears the same way on **both** the BRS and KRA records. Use it exactly as registered on official documents. If it should read "Dagoretti", correct it at BRS first and then at KRA
 - [ ] Income-tax compliance calendar: the obligation is live from 06/10/2026 (handover to Finance and the accountant)
 - [ ] Domain: transfer the registration into the company's name
 - [ ] Update the repo's own records (GLOBAL_OS, Legal entity file, Branding, etc.), which still say "Arika Agency" and "pre-incorporation". **This has not been done in this pass; owner approval is needed first.**
 
 **Open decisions (owner)**
-- Company registration number (pending)
 - Pre-incorporation and new-name marketing advice from counsel
 - Whether the AI Opportunity Assessment belongs to Automation or AI Enablement, and whether to sell it as a shared entry point
 - Whether the Growth Workshop and Sales Call Review become real offers
@@ -433,4 +436,5 @@ Several of these ranges were completed by AI from the master pricing document ra
 | Legal status and claims limits | `10_Legal/LEGAL_ENTITY_SETUP.md` · `10_Legal/templates/CLAIMS_SUBSTANTIATION_POLICY.md` |
 | Prospecting state | `05_Sales/PROSPECTING_CYCLE.md` |
 | New legal name, handles | Owner statement, 2026-10-06 |
-| KRA PIN, tax obligation, registered address | KRA PIN Certificate, ARIKA GROWTH LIMITED, dated 06/10/2026 (provided by the owner) |
+| KRA PIN, tax obligation | KRA PIN Certificate, ARIKA GROWTH LIMITED, dated 06/10/2026 (provided by the owner) |
+| Registration number, entity type and status, nature of business, registered address, mobile | BRS registration record (screenshot provided by the owner, 2026-10-06) |
