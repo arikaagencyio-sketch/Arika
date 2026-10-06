@@ -1,6 +1,6 @@
 # Arika Growth Limited — Company Profile & Master Brief
 
-**Version:** v1.0 · **Date:** 2026-10-06 · **Owner:** Mary Thuo
+**Version:** v1.1 (KRA PIN certificate added) · **Date:** 2026-10-06 · **Owner:** Mary Thuo
 **For:** Design, Marketing and Sales. This is the source brief for proposals, pitch decks, meeting prep, prospecting, the website and social profiles.
 **Status:** A consolidation of what the operating system already records. Nothing new has been decided in it. Where the system has no confirmed answer, it says so (marked **OPEN**) and leaves it blank.
 
@@ -19,10 +19,13 @@
 |---|---|
 | **Registered business name** | **Arika Growth Limited** (private limited company, Kenya) |
 | **Short name for everyday use** | **Arika Growth** (or **Arika** once the full name has already appeared) |
-| **KRA PIN** | Obtained. *(Number held by the owner. Do not print it in marketing material.)* |
+| **KRA PIN** | **P052592532D** (KRA PIN Certificate dated 06/10/2026). It **must appear on every tax invoice** and on all correspondence with KRA. It is not needed in marketing material. |
+| **Tax obligation** | Income Tax – Company, effective **06/10/2026**. Accounting year ends in **December** (the KRA default). |
 | **Company registration number** | **OPEN — being finalized.** Leave a placeholder `[REG. NO.]` in any document that needs it. |
 | **Founder & owner** | Mary Thuo (sole owner) |
-| **Base** | Nairobi, Kenya |
+| **Registered address (as on the KRA record)** | Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County · P.O. Box 310 – 00605 · Tax area: Kikuyu · Station: Kiambu |
+| **Email on the KRA record** | growth@arikaagency.com *(old domain; update the KRA iTax profile when the email moves to the Arika Growth identity)* |
+| **Base** | Kenya (registered office in Kiambu County) |
 | **Market served** | Kenya, plus clients globally. Each engagement follows the advertising, copyright and data-protection law of the client's own jurisdiction. |
 | **Social handles** | **@arikagrowth**, to be secured on every platform. The owner is checking availability and claiming them first, before anything else is published. **OPEN until claimed.** |
 | **Business email** | Moves to the Arika Growth identity when the mailboxes are renewed. Until then the current addresses stay live. **OPEN.** |
@@ -32,6 +35,7 @@
 1. **"Arika Agency" is retired as the business name.** Do not use it in any new material: not in decks, proposals, signatures, invoices, the website, bios or handles.
 2. "Agency" can still describe *how we work* in lowercase prose (e.g. "an agency-style engagement"), but it is never part of the name. Even so, the preferred self-description is **Revenue Infrastructure Partner** (§3), because the positioning explicitly rejects "marketing agency".
 3. In contracts, proposals and invoices, the first mention is the full legal name, **Arika Growth Limited**, with "Arika Growth" after that.
+3a. Tax invoices carry the legal name, the **KRA PIN P052592532D** and the registered address. Add the registration number once it is issued.
 4. The current logo wordmark reads *"ARIKA AGENCY / GROWTH PARTNERS"*, so it **must be re-cut for the new name** before it appears on anything new. See §11 and §17.
 
 ---
@@ -45,7 +49,7 @@
 > Most businesses don't have a marketing problem or a sales problem. They have a commercial-architecture problem. Arika Growth is a Revenue Infrastructure Partner: we diagnose how revenue is actually produced in your business, then design, build and run the connected system of strategy, brand, marketing, sales, partnerships, automation and AI that makes growth predictable.
 
 **Boilerplate (About paragraph)**
-> Arika Growth Limited is a Nairobi-based Revenue Infrastructure Partner serving clients in Kenya and globally. Using its 360° Growth Revenue Framework, Arika replaces disconnected service providers with one engineered growth system spanning sector intelligence, offer design, brand, marketing, sales, client and partner acquisition, operations, automation and AI enablement. Businesses don't hire Arika for deliverables. They plug into a revenue operating system that works as an extension of their own commercial brain.
+> Arika Growth Limited is a Kenya-based Revenue Infrastructure Partner serving clients in Kenya and globally. Using its 360° Growth Revenue Framework, Arika replaces disconnected service providers with one engineered growth system spanning sector intelligence, offer design, brand, marketing, sales, client and partner acquisition, operations, automation and AI enablement. Businesses don't hire Arika for deliverables. They plug into a revenue operating system that works as an extension of their own commercial brain.
 
 **Vision (formal)**
 > A 360° Cognitive Revenue Operating System that transforms businesses into self-orchestrating revenue engines, integrating sales, marketing, branding, acquisition, automation, operations and financial intelligence into one unified system that manages revenue probability under time, capital and opportunity constraints, to produce predictable, scalable and compounding growth.
@@ -395,7 +399,10 @@ Several of these ranges were completed by AI from the master pricing document ra
 - [ ] Move the business email to the Arika Growth identity at renewal, and update signatures
 - [ ] Website: update the name, About page and footer (legal name plus `[REG. NO.]`)
 - [ ] Contract templates: replace `[ARIKA LEGAL ENTITY]` with **Arika Growth Limited** once the registration number is issued (the templates still need legal review)
-- [ ] Accounting: the Zoho Books organization is currently named "Arika Agency". Rename it and confirm the cut-over date with the accountant
+- [ ] Accounting: the Zoho Books organization is currently named "Arika Agency". Rename it to **Arika Growth Limited**, add the **KRA PIN P052592532D** and the registered address to the organization profile and invoice template, set the financial year to end in December, and confirm the cut-over date (06/10/2026) with the accountant
+- [ ] KRA iTax: change the contact email from growth@arikaagency.com to the new domain once the mailboxes move
+- [ ] Confirm the spelling on the KRA record, "Dagorett" (probably "Dagoretti"). Official documents must match the KRA record exactly, so correct it with KRA if it is wrong
+- [ ] Income-tax compliance calendar: the obligation is live from 06/10/2026 (handover to Finance and the accountant)
 - [ ] Domain: transfer the registration into the company's name
 - [ ] Update the repo's own records (GLOBAL_OS, Legal entity file, Branding, etc.), which still say "Arika Agency" and "pre-incorporation". **This has not been done in this pass; owner approval is needed first.**
 
@@ -425,4 +432,5 @@ Several of these ranges were completed by AI from the master pricing document ra
 | Partners | `06_ClientPartner_Acquisition/CLIENTPARTNER_OS.md` |
 | Legal status and claims limits | `10_Legal/LEGAL_ENTITY_SETUP.md` · `10_Legal/templates/CLAIMS_SUBSTANTIATION_POLICY.md` |
 | Prospecting state | `05_Sales/PROSPECTING_CYCLE.md` |
-| New legal name, KRA PIN, handles | Owner statement, 2026-10-06 |
+| New legal name, handles | Owner statement, 2026-10-06 |
+| KRA PIN, tax obligation, registered address | KRA PIN Certificate, ARIKA GROWTH LIMITED, dated 06/10/2026 (provided by the owner) |

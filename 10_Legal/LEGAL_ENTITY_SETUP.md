@@ -1,6 +1,15 @@
 # Legal Entity Setup — Arika Agency (First Operating Entity)
 
-**Created:** 2026-07-19 · **Last updated:** 2026-08-09 · **Status:** 🔴 Pre-incorporation. **Neither entity exists yet.**
+**Created:** 2026-07-19 · **Last updated:** 2026-10-06 · **Status:** 🟡 **Operating company registered with KRA as ARIKA GROWTH LIMITED. The registration number is still being finalized, and the holding company still does not exist.**
+
+> **2026-10-06 update (owner-supplied KRA PIN Certificate):**
+> - **Legal name:** **ARIKA GROWTH LIMITED**. The trading name "Arika Agency" is retired.
+> - **KRA PIN:** **P052592532D**. Certificate dated 06/10/2026.
+> - **Tax obligation:** Income Tax – Company, effective 06/10/2026. Accounting year ends in December.
+> - **Registered address:** Plot No. Dagorett Kinoo/216, Connector 3, Kabete District, Kiambu County. P.O. Box 310 – 00605. Tax area Kikuyu, station Kiambu.
+> - **KRA contact email:** growth@arikaagency.com.
+> - **Still open:** the company registration number (owner: "being finalized"), the County Single Business Permit, the bank account, and the holdco/IP sequencing question in §4.1 and §6 Q1. **Nothing should be filed at KIPI or KECOBO until the holdco question is closed.** Contract templates may now replace `[ARIKA LEGAL ENTITY]` with "Arika Growth Limited", but they **remain unreviewed by counsel**.
+> - The sections below are the pre-incorporation record. They are kept as history, not rewritten.
 **Counsel engaged?** Not yet. **Sarah Ndwiga, Managing Partner, Ndwiga Law Advocates LLP** (Westlands, Nairobi; **Collins Wachira** assisting) has issued **two Letters of Engagement — v1 dated 29 July 2026 and v2 dated 6 August 2026. Neither is signed.**
 
 **Engagement state — 2026-08-09: two letters received, decision pending.** Full cross-check in **[`COUNSEL_ENGAGEMENT_REVIEW.md`](COUNSEL_ENGAGEMENT_REVIEW.md)**; both letters preserved verbatim in [`_correspondence/`](_correspondence/).
@@ -22,7 +31,7 @@
 | | |
 |---|---|
 | Holding company | **Does not exist.** Intended. |
-| Arika Agency as a legal entity | **Does not exist.** No incorporation, no registration. |
+| Arika Agency as a legal entity | ~~**Does not exist.** No incorporation, no registration.~~ → **2026-10-06: exists as ARIKA GROWTH LIMITED, KRA PIN P052592532D. Registration number pending.** |
 | Current form | Unregistered. `[ARIKA LEGAL ENTITY]` is still a placeholder in all seven contract templates. |
 | Ownership | **Mary Thuo, sole owner.** No partner, no co-founder, no shareholder — confirmed across `AGENCY_OPERATING_CONSTITUTION.md`, `AGENCY_RACI.md`, `AGENCY_KPI_DICTIONARY.md` (2026-06-30). |
 | Clients / revenue | **Zero.** Pre-launch. |
