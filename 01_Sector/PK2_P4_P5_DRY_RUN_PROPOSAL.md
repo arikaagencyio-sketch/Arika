@@ -386,3 +386,81 @@ Task premise: *"prefer SYNCO-02 if it remains the fit-passing fixture"* | **SYNC
 **Preparing this closed no blocker, moved no gate and changed no readiness figure.** P4 remains **OPEN** until the owner approves the row; S10 has not run; no packet exists at the SF3 path.
 
 The exact approval wording is in the covering report, not here, so that this document cannot be mistaken for the approval itself.
+
+---
+
+## 14. SUPERSEDING CORRECTION — the `confidence_threshold` criterion was wrong
+
+*Added 2026-10-08, after `SECTOR-SF3` was enacted, spent, and scored. **Nothing above is rewritten.** §8 check 6 and `SECTOR-SF3.expected_outcome_pinned_before_the_run` stand as written, because a pinned expectation that is quietly edited after the result is no longer a pin.*
+
+### 14.1 The original criterion, preserved
+
+> **§8 PASS check 6:** *"`confidence_threshold` resolves to **`Medium`**, as the weakest governed `Confidence`, with the synthetic cap stated."*
+>
+> **`SECTOR-SF3.expected_outcome_pinned_before_the_run.confidence_threshold`:** *"Medium - the weakest governed Confidence among the contributing elements, capped further by the packet being SYNTHETIC."*
+
+**That criterion is wrong, and it was wrong when it was written on 2026-10-03.**
+
+### 14.2 The rule, and what it actually returns
+
+`SKILL.md:66-74`:
+
+```
+ORDER:  Low < Medium < High
+if ANY contributing item has a null Confidence  ->  UNRESOLVED, naming each such element
+else                                            ->  the weakest value on ORDER
+```
+
+> **A null is UNASSESSED, and null is weaker than `Low`.** `Low` is a judgement someone made; null is the absence of one. Never read null as `Low`.
+
+| Element | `Confidence` | Contributes |
+|---|---|---|
+DB 3 findings (217 rows) | 217/217 populated — 3 High, 214 Medium, 0 Low | `Medium` |
+DB 6 linguistics (4 rows) | `Medium` on all 4 | `Medium` |
+**DB 9 audience (4 rows)** | **0 of 28 provenance cells → null on every row** | 🔴 **UNRESOLVED** |
+**DB 10 decision-makers (57 rows)** | **0 of 399 — "ZERO across all 57 rows and all seven fields"** | 🔴 **UNRESOLVED** |
+
+🔴 **Packet-level `confidence_threshold` must be `UNRESOLVED` whenever ANY contributing element's `Confidence` is null** — here naming **DB 9 and DB 10**. S10 states the conclusion directly at line 110: *"an Accommodation packet's **both floors resolve to `UNRESOLVED`**."*
+
+### 14.3 What `Medium` actually described
+
+**`Medium` was the contribution of the two RESOLVED elements, read off the right-hand column of Step 4's table — not the packet floor.** DB 3 and DB 6 each contribute `Medium`, and `Medium` *would* have been the floor had DB 9 and DB 10 been assessed. They are not. **A per-element contribution and a packet-level floor are different quantities, and the rule's whole purpose is to stop the assessed elements from lending their floor to the unassessed ones** — *"that would let an unexamined row inherit a floor the other elements earned."*
+
+The error is therefore not arithmetic. It is that the pin **restated the premise the rule exists to refuse.**
+
+### 14.4 The run was correct; the checklist was not
+
+The attempt derived both floors programmatically from the recorded contract state and printed them before writing anything:
+
+```
+DERIVED confidence_threshold = UNRESOLVED  naming ['DB 9 audience', 'DB 10 decision-makers']
+DERIVED freshness_requirement = UNRESOLVED naming ['DB 3 findings', 'DB 6 linguistics',
+                                                   'DB 9 audience', 'DB 10 decision-makers']
+```
+
+**Nothing was bent toward the pin.** Producing `Medium` would have required violating the governing rule, which is never an acceptable way to pass a test.
+
+🔴 **The procedural verdict stands at FAIL and is not retroactively converted.** A pinned expectation exists so that a surprising result is a finding rather than a rationalisation — and that is exactly what happened, except the finding was in the pin. Rewriting check 6 into a passing criterion after the fact would destroy the only property that made pinning worth doing.
+
+### 14.5 The planning defect: a three-write envelope that could not leave the repository green
+
+**A second, independent defect in this proposal, and it is mine.**
+
+§5.2 authorised **exactly three** repository writes — the packet, one log line, and the status flip. That envelope was correct for the *run* and **too narrow for its consequences.** A successful SF3 run necessarily invalidated:
+
+| Artifact | Why it broke |
+|---|---|
+`test_sf1s_own_artifacts_are_unaltered_by_the_later_run` | hard-coded `len(lines) == 2`; the authorised append made it 3 |
+`test_the_spent_authorisations_are_spent_and_nothing_is_approved` | asserted rows beyond the first two are `draft`; SF3 became `spent` |
+`test_s10_fixture_notice_matches_the_registry` | **my own class-fix test**, correctly demanding that a newly spent id be named in S10's notice |
+S10's fixture notice | said *"Two have existed"* |
+
+**None is a defect in the run. All four are maintenance the run makes mandatory, and none was inside the envelope** — so a correct run could only ever end with a red suite. **I did not foresee this when I wrote §5.2.**
+
+**The standing lesson, and it generalises beyond fixtures:** an authorisation that permits a state change must also permit the updates that state change forces, or it guarantees its own failure. A write envelope should be scoped to *the consequences of the change*, not to the change alone. **Where the two genuinely must be separated, the proposal must say so and pre-authorise the follow-up** rather than leave it to be discovered afterwards.
+
+### 14.6 What the corrective closeout changed, and what it did not
+
+**Corrected** (2026-10-08, offline, no external call): the three stale tests — now **registry-derived**, so no hand-written count has to be edited when a fixture is spent; S10's notice, naming SF1, SF2 and SF3, with a stable `<!-- NOTICE-HISTORY -->` marker so preserved history is never scanned as a live assertion again; and `SECTOR_OS_ARCHITECTURE.md`'s version collision, which was **never related to SF3** and is what failed §8 check 11.
+
+**Not changed:** 🔴 **the SF3 packet and its log record are byte-identical** — packet `551a31d3…`, record line `3badbd16…`. §8 check 6 still reads `Medium` and still scores FAIL. **No retry is authorised, and none is technically necessary:** a second run on the same inputs would reproduce the same packet byte for byte. **There is nothing to learn from repeating it.**

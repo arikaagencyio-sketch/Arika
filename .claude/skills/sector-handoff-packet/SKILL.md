@@ -177,10 +177,11 @@ Loops: `activation`, `feedback`.
 
 > 🔴 **Disabled.** This mode runs only under a Sector fixture authorisation whose status is
 > **`approved`** in [`contracts/skill-fixture-authorisations.json`](../../../01_Sector/contracts/skill-fixture-authorisations.json).
-> **Two have existed and both are SPENT** — **SECTOR-SF1** on 2026-09-22 and **SECTOR-SF2** on 2026-09-29, each after its one attempt. **None is `approved`, so refuse.** Ordinary use of this skill never enters
+> **Three have existed and all three are SPENT** — **SECTOR-SF1** (2026-09-22), **SECTOR-SF2** (2026-09-29) and **SECTOR-SF3** (2026-10-08), each after its one attempt. **None is `approved`, so refuse.** Ordinary use of this skill never enters
 > this mode.
 >
-> *Corrected 2026-10-03 (`PK2-P4-PREP`): this line read "The only one, SECTOR-SF1, was spent on 2026-09-22". That was true when written and became false on 2026-09-29, when SECTOR-SF2 was approved and spent. **The operative clause — none is `approved` — was correct throughout**, so the skill never admitted anything it should have refused. A spent row is retained history and admits nothing; entries are never deleted. This notice is inside the `FIXTURE-MODE` block, which `S10_ORDINARY_SHA` excludes, so the ordinary-path hash is unaffected.* **A001 is excluded:** its skill records stay deferred under A001 D6 (T1-4).
+<!-- NOTICE-HISTORY: everything below this marker is PRESERVED HISTORY. Tests must not scan it as a live assertion. -->
+> *This notice has now drifted twice, and the fix is no longer another hand-written count. `test_s10_fixture_notice_matches_the_registry` derives the invariant FROM the registry: every spent id must be named here, the operative refusal must match whether any row is `approved`, and a stale singular/dual claim fails. The count above is therefore checked, not trusted. Earlier wordings — "The only one, SECTOR-SF1" (to 2026-10-03) and "Two have existed" (to 2026-10-08) — were each true when written; the operative clause — none is `approved` — was correct throughout, so the skill never admitted anything it should have refused. A spent row is retained history and admits nothing; entries are never deleted. This notice sits inside the `FIXTURE-MODE` block, which `S10_ORDINARY_SHA` excludes, so the ordinary-path hash is unaffected.* **A001 is excluded:** its skill records stay deferred under A001 D6 (T1-4).
 
 **What it is for.** Exercising this skill's *mechanism* on an independently labelled synthetic
 Sector record, without delivering anything anywhere: the route check, the per-destination

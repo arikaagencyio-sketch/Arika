@@ -213,13 +213,22 @@ class OrdinaryPath(unittest.TestCase):
         notice = rd(SKILL_MD, "rb").decode("utf-8")
         self.assertEqual(notice.count("<!-- FIXTURE-MODE:BEGIN -->"), 1)
         block = notice.split("<!-- FIXTURE-MODE:BEGIN -->", 1)[1].split("<!-- FIXTURE-MODE:END -->", 1)[0]
-        # Scan the OPERATIVE notice only. A superseded sentence is preserved verbatim inside an
-        # italic `*Corrected ...*` note, and a naive scan matches the quotation of the very claim
-        # the correction retracts. That false positive fired on the first run of this test, and is
-        # the same class as a prohibition sentence tripping a scan for the thing it prohibits -
-        # seen before in check 7c's `xlsx sheet` ban. Preserved history must not be scanned as if
-        # it were a live assertion.
-        operative = block.split("*Corrected", 1)[0]
+        # Scan the OPERATIVE notice only, split on a STABLE MACHINE-READABLE MARKER.
+        #
+        # This has now false-positived twice for the same reason: preserved history quotes the
+        # very claim it retracts, and a scan that cannot tell history from assertion flags it.
+        # The first fix split on the literal "*Corrected", which then broke the moment the note
+        # was reworded on 2026-10-08 - a strip keyed to prose is itself prose-fragile.
+        #
+        # `<!-- NOTICE-HISTORY -->` in SKILL.md is the boundary now. It cannot drift with wording,
+        # and if it is ever removed this test fails loudly rather than silently scanning history.
+        # Same class as check 7c's `xlsx sheet` ban tripping on the sentence that explains it.
+        MARKER = "<!-- NOTICE-HISTORY"
+        self.assertIn(MARKER, block,
+                      "S10's fixture notice must carry the NOTICE-HISTORY marker separating the "
+                      "live notice from preserved history; without it this test cannot tell "
+                      "them apart")
+        operative = block.split(MARKER, 1)[0]
         auths = json.loads(rd(REGISTRY))["authorisations"]
         spent = [a["id"] for a in auths if a["status"] == "spent"]
         approved = [a["id"] for a in auths if a["status"] == "approved"]
@@ -434,36 +443,63 @@ PACKET_SHA = "7554729f114d737dc4f365847dd336c0606e9fbc776d5e339a94671acb2f1798"
 SF2_PACKET_SHA = "a4e0ff7ce334dcf4fc4c834821ce1e4322be484e313628aa741e2f179c6bb673"
 SF1_EXECUTION_ID = "s10-2026-09-22-sector-sf1-syn-s10-01-fixture-1"
 SF2_EXECUTION_ID = "s10-2026-09-29-sector-sf2-syn-s10-01-crm-tag-1"
+# SECTOR-SF3 enacted and spent 2026-10-08. Its attempt produced the first execution anywhere of
+# S10 Step 4's four-element computed floors; both resolved UNRESOLVED, which is the designed
+# answer when provenance is absent. The run was SCORED FAIL against its own section 8 checklist on
+# two checks, NEITHER caused by the run - a mis-specified `Medium` confidence expectation and a
+# pre-existing truth-gate defect - so these pins record a CORRECT packet from a procedurally
+# failed run. See 01_Sector/PK2_P4_P5_DRY_RUN_PROPOSAL.md section 14.
+SF3_LINE_SHA = "3badbd16451de02eddffae91893bbb92cf1da2a85829b0b88ad069555351ff70"
+SF3_PACKET_SHA = "551a31d3e259d3d72839fa6724b95bcf7593e0d0dec7b654a2a68bd0ce28657a"
+SF3_EXECUTION_ID = "s10-2026-10-08-sector-sf3-syn-s10-01-computed-floors-1"
+SF3_PACKET_REL = "01_Sector/fixtures/SYN-S10-01.s10-packet-sf3.json"
+
+# Pins keyed by authorisation id, so a new spent fixture adds a row here and nothing else.
+SPENT_PINS = {
+    "SECTOR-SF1": {"line": SF1_LINE_SHA, "exec": SF1_EXECUTION_ID,
+                   "packet_rel": PACKET_REL, "packet": PACKET_SHA},
+    "SECTOR-SF2": {"line": SF2_LINE_SHA, "exec": SF2_EXECUTION_ID,
+                   "packet_rel": "01_Sector/fixtures/SYN-S10-01.s10-packet-sf2.json",
+                   "packet": SF2_PACKET_SHA},
+    "SECTOR-SF3": {"line": SF3_LINE_SHA, "exec": SF3_EXECUTION_ID,
+                   "packet_rel": SF3_PACKET_REL, "packet": SF3_PACKET_SHA},
+}
 
 
 class SpentState(unittest.TestCase):
-    def test_the_spent_authorisations_are_spent_and_nothing_is_approved(self):
-        """REWRITTEN 2026-10-03 by PK2-P4-PREP, not loosened.
+    def test_every_authorisation_is_spent_and_nothing_is_approved(self):
+        """REWRITTEN 2026-10-08 after SECTOR-SF3 was enacted and spent. Not loosened.
 
-        This asserted the exact roster [SF1 spent, SF2 spent], which a deliberate addition
-        changes - SECTOR-SF3 was added as a DRAFT row the same day. Pinning the whole roster
-        made the test fail on any new row whatever its status, including a draft that admits
-        nothing, so it could not distinguish "a third authorisation was approved behind our
-        backs" from "a third authorisation was prepared for the owner to decline".
+        History of this one test is the whole argument for deriving from the registry:
+          - to 2026-09-22 it asserted the pre-run state (SF1 draft, no artifacts);
+          - to 2026-10-03 it asserted the exact roster [SF1 spent, SF2 spent];
+          - to 2026-10-08 it asserted "the first two are spent, everything after is draft";
+          - each wording was true when written and each had to be hand-edited by the next change.
 
-        The replacement is STRICTER on what matters: SF1 and SF2 must still be exactly as they
-        were, NOTHING may be approved, and every row beyond the two must be a draft. A row that
-        appeared already approved, or a spent row that was reopened, still fails here.
+        It now derives from the registry: EVERY row is either `spent` with its pinned execution
+        id, or `draft` carrying `_not_enacted` and holding no record. NOTHING may be `approved` -
+        that is the invariant keeping the fixture path shut, and it is the one a future enactment
+        must change deliberately. A reopened spent row, a silently approved row, or a spent row
+        whose pins are missing all still fail here.
         """
         reg = json.loads(rd(REGISTRY))["authorisations"]
-        by_id = {a["id"]: a for a in reg}
-        self.assertEqual([a["id"] for a in reg][:2], ["SECTOR-SF1", "SECTOR-SF2"],
-                         "the two spent rows must stay, in order, first")
-        self.assertEqual(by_id["SECTOR-SF1"]["status"], "spent")
-        self.assertEqual(by_id["SECTOR-SF2"]["status"], "spent")
-        self.assertFalse(any(a["status"] == "approved" for a in reg), "nothing may sit approved")
-        for a in reg[2:]:
-            self.assertEqual(a["status"], "draft",
-                             "%s is neither of the two spent rows, so it must be a draft; "
-                             "an approved or spent newcomer is exactly what this guards" % a["id"])
-            self.assertIn("_not_enacted", a,
-                          "%s must carry the _not_enacted marker while it is a draft" % a["id"])
-        self.assertIn(SF1_EXECUTION_ID, by_id["SECTOR-SF1"]["spent"])
+        self.assertTrue(reg, "the registry must not be empty")
+        self.assertFalse(any(a["status"] == "approved" for a in reg),
+                         "nothing may sit approved: %s"
+                         % [a["id"] for a in reg if a["status"] == "approved"])
+        spent = [a for a in reg if a["status"] == "spent"]
+        self.assertEqual([a["id"] for a in spent], sorted(SPENT_PINS),
+                         "every spent authorisation must be pinned in SPENT_PINS, in order")
+        for a in spent:
+            self.assertIn(SPENT_PINS[a["id"]]["exec"], a["spent"],
+                          "%s's spent note must name the execution id it spent" % a["id"])
+        for a in reg:
+            if a["status"] == "draft":
+                self.assertIn("_not_enacted", a,
+                              "%s is draft and must carry the _not_enacted marker" % a["id"])
+            else:
+                self.assertEqual(a["status"], "spent",
+                                 "%s: only draft or spent may ship" % a["id"])
 
     def test_a_draft_row_holds_no_record_and_pins_its_inputs(self):
         """A draft row must be inert AND fully specified, so approving it adds no new decision."""
@@ -482,13 +518,63 @@ class SpentState(unittest.TestCase):
                              a["synthetic_record_sha256"],
                              "%s's pinned hash must match the file on disk" % a["id"])
 
-    def test_sf1s_own_artifacts_are_unaltered_by_the_later_run(self):
-        self.assertEqual(hashlib.sha256(rd(os.path.join(ROOT, PACKET_REL), "rb")).hexdigest(), PACKET_SHA,
-                         "SF1's packet must survive every later fixture untouched")
+    def test_every_spent_fixtures_artifacts_are_byte_unaltered(self):
+        """REWRITTEN 2026-10-08. The hard-coded `len(lines) == 2` is gone.
+
+        That count was the fragile part: it had to be edited the moment SECTOR-SF3 appended its
+        authorised record, and the failure it produced said nothing about whether an EARLIER line
+        had been tampered with - which is the thing that actually matters in an append-only log.
+
+        The line count is now DERIVED: it must equal the sum of `max_records` over the spent
+        authorisations. Every spent fixture's line AND packet is pinned individually, so an
+        authorised append passes while any rewrite of an earlier line or packet fails.
+        """
+        reg = json.loads(rd(REGISTRY))["authorisations"]
+        spent = [a for a in reg if a["status"] == "spent"]
+        expected = sum(a.get("max_records", 1) for a in spent)
         lines = [l for l in rd(SANDBOX_LOG, "rb").splitlines(keepends=True) if l.strip()]
-        self.assertEqual(len(lines), 2, "one record per spent authorisation, appended in order")
-        self.assertEqual(hashlib.sha256(lines[0]).hexdigest(), SF1_LINE_SHA,
-                         "SF1's record changed - the fixture log is append-only")
+        self.assertEqual(len(lines), expected,
+                         "the log must hold exactly one record per spent authorisation "
+                         "(derived from the registry: %d), found %d" % (expected, len(lines)))
+        for i, a in enumerate(spent):
+            pin = SPENT_PINS[a["id"]]
+            self.assertEqual(hashlib.sha256(lines[i]).hexdigest(), pin["line"],
+                             "%s's record changed - the fixture log is append-only" % a["id"])
+            self.assertEqual(
+                hashlib.sha256(rd(os.path.join(ROOT, pin["packet_rel"]), "rb")).hexdigest(),
+                pin["packet"],
+                "%s's packet must survive every later fixture untouched" % a["id"])
+
+    def test_no_log_line_is_unapproved_or_unexplained(self):
+        """Strict detection, kept and tightened. Added 2026-10-08.
+
+        Every line must name an authorisation that EXISTS and is non-draft, and every spent
+        authorisation must be accounted for by a line. An orphan record, a record under a draft,
+        and a spent row whose record vanished are three different defects and all three fail.
+        """
+        reg = {a["id"]: a for a in json.loads(rd(REGISTRY))["authorisations"]}
+        seen = {}
+        for i, line in enumerate(rd(SANDBOX_LOG).splitlines(), 1):
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            self.assertEqual(r.get("classification"), "TEST_FIXTURE",
+                             "line %d in the fixture log is unmarked" % i)
+            aid = r["payload"]["fixture"]["authorisation_id"]
+            self.assertIn(aid, reg, "line %d names unknown authorisation %r" % (i, aid))
+            self.assertNotEqual(reg[aid]["status"], "draft",
+                                "line %d was written under DRAFT %s" % (i, aid))
+            self.assertEqual(r["payload"]["fixture"]["packet"], reg[aid]["packet"],
+                             "line %d's packet differs from %s's" % (i, aid))
+            seen[aid] = seen.get(aid, 0) + 1
+            self.assertLessEqual(seen[aid], reg[aid].get("max_records", 1),
+                                 "%s exceeds its record limit" % aid)
+        for aid, a in reg.items():
+            if a["status"] == "spent":
+                self.assertEqual(seen.get(aid, 0), a.get("max_records", 1),
+                                 "%s is spent but its record is missing" % aid)
+            if a["status"] == "draft":
+                self.assertEqual(seen.get(aid, 0), 0, "%s is draft and must hold no record" % aid)
 
     def test_the_fixture_record_is_marked_isolated_and_delivers_nothing(self):
         r = json.loads(rd(SANDBOX_LOG, "rb").splitlines(keepends=True)[0])  # SF1's own line
