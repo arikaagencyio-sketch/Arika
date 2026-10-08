@@ -37,8 +37,7 @@
     },
     {
       "id": "SECTOR-SF3",
-      "status": "draft",
-      "_not_enacted": "DRAFT. NOT APPROVED. NOT ENACTED. A draft authorisation admits nothing: the registry rule and skill_run_gate.py check 7 both refuse any record written under it. Prepared 2026-10-03 by PK2-P4-PREP so the owner has an exact row to approve or decline; preparing it closes NO blocker and moves NO gate.",
+      "status": "spent",
       "skill": "sector-handoff-packet",
       "skill_id": "S10",
       "record": "01_Sector/PK2_P4_P5_DRY_RUN_PROPOSAL.md; owner decision belongs in 01_Sector/SECTOR_OS.md section 8",
@@ -55,7 +54,10 @@
         "destinations": "No route may read `delivered` or `delivered_fixture_verified`. Routes that would deliver read `not_attempted_fixture`; routes that do not deliver read `HANDOFF_FAILURE`.",
         "note": "Pinned BEFORE any run, so a different result is a finding rather than a rationalisation."
       },
-      "note": "Draft. The gate refuses any record written under it while it is draft, and it admits exactly one record when approved."
+      "note": "Draft. The gate refuses any record written under it while it is draft, and it admits exactly one record when approved.",
+      "approved": "2026-10-08, owner approval in writing (re-affirmed after the confidence-criterion concern was raised 2026-10-07 and the identical approval was re-sent).",
+      "spent": "2026-10-08T09:37:07Z - its one attempt made (s10-2026-10-08-sector-sf3-syn-s10-01-computed-floors-1). Packet sha256 551a31d3e259d3d72839fa6724b95bcf7593e0d0dec7b654a2a68bd0ce28657a.",
+      "outcome": "ATTEMPT COMPLETED. The packet is CORRECT and the run exercised what it was authorised to exercise. SCORED FAIL against proposal section 8 on TWO checks, NEITHER caused by the run: (6) the pinned confidence_threshold read `Medium`, but S10's own rule returns UNRESOLVED because DB9 and DB10 carry a null Confidence - the pin conflated DB3's and DB6's per-element contribution with the packet-level floor; (11) `all five gates pass` - sector_truth_gate.py fails 2 checks introduced by commit 7d341f5 (a re-collided v0.3 entry in SECTOR_OS_ARCHITECTURE.md), unrelated to this run and outside the three authorised writes. No retry was made. A further attempt needs a NEW owner decision and a NEW row."
     }
   ]
 }

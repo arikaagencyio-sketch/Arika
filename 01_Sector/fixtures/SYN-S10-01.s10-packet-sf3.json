@@ -1,0 +1,166 @@
+{
+  "classification": "TEST_FIXTURE",
+  "handoff_id": "SECTOR-SF3-SYN-S10-01-COMPUTED-FLOORS",
+  "producer": "Sector (01) / S10 sector-handoff-packet",
+  "consumer": "NONE. This packet is written to the fixture path and handed to nobody.",
+  "trigger": {
+    "kind": "manual",
+    "gate": null,
+    "detail": "SECTOR-SF3 owner-approved TEST_FIXTURE execution (one attempt, no retry). A fixture unit has no sector state machine, so there is no Offer-Ready promotion and no Gate G - the authorisation IS the trigger, as in SECTOR-SF1 and SECTOR-SF2."
+  },
+  "payload": {
+    "classification": "TEST_FIXTURE",
+    "unit": "SYN-S10-01",
+    "sector": "Hospitality",
+    "sub_sector": "Accommodation",
+    "simulated_verdict": "in_scope",
+    "verdict_label": "SIMULATED_VERDICT: a mechanism fixture result, not a fit verdict. It says nothing about whether any real property fits.",
+    "what_this_packet_carries": "The computed fail-closed floors over all FOUR contributing elements, and nothing else. No finding, no angle, no audience, no offer match, no timing and no CRM tag - because fixture mode reads no live store.",
+    "not_read_fixture": [
+      "DB3",
+      "DB4",
+      "DB6",
+      "DB7",
+      "DB8",
+      "DB9",
+      "DB10",
+      "DB15",
+      "DB16"
+    ],
+    "floor_inputs_source": "The floors are derived from the RECORDED CONTRACT STATE in 01_Sector/contracts/sector-databases.json, which S10's header names as field truth and F0 permits as a repository file. NO live Notion store was read.",
+    "contributing_elements": [
+      {
+        "element": "DB 3 findings",
+        "rows": 217,
+        "confidence": {
+          "state": "ASSESSED",
+          "detail": "217 of 217 populated; by value {'High': 3, 'Medium': 214, 'Low': 0}",
+          "contribution": "Medium"
+        },
+        "last_verified": {
+          "state": "PRESENT BUT NULL",
+          "detail": "0 of 217 populated"
+        },
+        "next_review": {
+          "state": "PRESENT BUT NULL",
+          "detail": "0 of 217 populated"
+        },
+        "three_state": "PRESENT BUT NULL - not absent. The fields were added live 2026-10-02 by DB3-OD10-OD12-1 and every cell of both is null. Absent and present-but-null both fail closed; only the second can ever be filled.",
+        "provenance": "01_Sector/contracts/sector-databases.json -> databases[DB3].row_level_provenance"
+      },
+      {
+        "element": "DB 6 linguistics",
+        "rows": 4,
+        "confidence": {
+          "state": "ASSESSED",
+          "detail": "Medium on all 4 rows (non_null_detail, unchanged by the backfill)",
+          "contribution": "Medium"
+        },
+        "last_verified": {
+          "state": "POPULATED",
+          "detail": "all 4 rows"
+        },
+        "next_review": {
+          "state": "NULL ON THE BUYER ROW",
+          "detail": "populated on Operator, Amplifier and Enabler (2026-11-24); NULL on Buyer - no review date is asserted anywhere for that row, and inheriting another row's date is explicitly forbidden"
+        },
+        "provenance": "01_Sector/contracts/sector-databases.json -> databases[DB6].MISSING_FIELD.row_level_status (17 of 28 cells)"
+      },
+      {
+        "element": "DB 9 audience",
+        "rows": 4,
+        "confidence": {
+          "state": "NULL",
+          "detail": "0 of 28 provenance cells populated, so Confidence is null on all 4 rows",
+          "contribution": "UNRESOLVED"
+        },
+        "last_verified": {
+          "state": "NULL",
+          "detail": "null on all 4 rows"
+        },
+        "next_review": {
+          "state": "NULL",
+          "detail": "null on all 4 rows"
+        },
+        "provenance": "01_Sector/contracts/sector-databases.json -> databases[DB9].MISSING_FIELD.row_level_status"
+      },
+      {
+        "element": "DB 10 decision-makers",
+        "rows": 57,
+        "confidence": {
+          "state": "NULL",
+          "detail": "0 of 399 provenance cells populated, so Confidence is null on all 57 rows",
+          "contribution": "UNRESOLVED"
+        },
+        "last_verified": {
+          "state": "NULL",
+          "detail": "null on all 57 rows"
+        },
+        "next_review": {
+          "state": "NULL",
+          "detail": "null on all 57 rows"
+        },
+        "provenance": "01_Sector/contracts/sector-databases.json -> databases[DB10].MISSING_FIELD.row_level_status"
+      }
+    ],
+    "angle": null,
+    "artifact": null
+  },
+  "validation_rules": {
+    "confidence_rule": "ORDER Low < Medium < High. If ANY contributing item has a null Confidence -> UNRESOLVED, naming each such element; else the weakest value on ORDER. A null is UNASSESSED and weaker than Low.",
+    "freshness_rule": "If ANY contributing item has a null Last Verified OR a null Next Review -> UNRESOLVED, naming each such element; else the EARLIEST Next Review as the rejection date with the OLDEST Last Verified.",
+    "no_substitution": "No assembly date, current date, Freshness label or sibling row's date may substitute for either date. A borrowed date is a fabricated one.",
+    "three_state": "A field may be absent, present-but-null, or present-and-populated. Absent and present-but-null both fail closed; only the second can be filled. Say which one is being reported.",
+    "boundary_law": "An angle, never an artifact. This packet carries neither."
+  },
+  "confidence_threshold": {
+    "resolved": "UNRESOLVED",
+    "unresolved_elements": [
+      "DB 9 audience",
+      "DB 10 decision-makers"
+    ],
+    "reason": "DB 9 and DB 10 carry a NULL Confidence on every row (0 of 28 and 0 of 399 provenance cells), and a null is UNASSESSED - weaker than Low. The rule therefore returns UNRESOLVED naming each such element.",
+    "would_have_been": "Medium, had DB 9 and DB 10 been assessed: DB 3 contributes Medium (214 of 217 rows Medium, 3 High) and DB 6 contributes Medium on all four rows. That per-element contribution is NOT the packet floor.",
+    "synthetic_cap": "SYNTHETIC - the input is a constructed record and no attribute was observed, which caps everything in this packet regardless of the floor.",
+    "act_on": "Nothing. This packet tests mechanism only."
+  },
+  "freshness_requirement": {
+    "resolved": "UNRESOLVED",
+    "unresolved_elements": [
+      "DB 3 findings",
+      "DB 6 linguistics",
+      "DB 9 audience",
+      "DB 10 decision-makers"
+    ],
+    "detail": {
+      "DB 3 findings": {
+        "last_verified": "PRESENT BUT NULL",
+        "next_review": "PRESENT BUT NULL"
+      },
+      "DB 6 linguistics": {
+        "last_verified": "POPULATED",
+        "next_review": "NULL ON THE BUYER ROW"
+      },
+      "DB 9 audience": {
+        "last_verified": "NULL",
+        "next_review": "NULL"
+      },
+      "DB 10 decision-makers": {
+        "last_verified": "NULL",
+        "next_review": "NULL"
+      }
+    },
+    "db3_three_state": "PRESENT BUT NULL, not absent.",
+    "rejection_date": null,
+    "rule": "A consumer may reject on age. No rejection date can be stated, because no contributing element supplies both dates."
+  },
+  "owner": "Sector (01)",
+  "sla_cadence": "None. A fixture has no SLA and creates no obligation.",
+  "failure_modes": [
+    "Reading this packet as evidence about any real property, market, demand, buyer, capacity, price or performance. It is none of those.",
+    "Reading `simulated_verdict: in_scope` as a fit verdict. It is a mechanism result.",
+    "Reading the computed floors as a statement that the data is adequate. Both resolve to UNRESOLVED, which is the designed answer when provenance is absent.",
+    "Treating `not_attempted_fixture` as a delivery. Nothing was delivered anywhere.",
+    "Marking any PG gate passed. The PG ladder is defined over a real property; this run moves none of it."
+  ]
+}
