@@ -5,6 +5,7 @@ import { Command } from "commander";
 import { config as loadEnv } from "dotenv";
 import { loadAgents } from "../agent-registry.js";
 import { runAgent } from "../executor.js";
+import { isApprovalRefusal } from "../approval.js";
 import { buildFixtureOptions } from "../fixture.js";
 import { packageRoot, repoRoot } from "../paths.js";
 
@@ -61,6 +62,15 @@ program
       const result = await runAgent(spec, { trigger: "manual", input, ...fixtureOpts });
       console.log(JSON.stringify(result, null, 2));
     } catch (err) {
+      // D4 - a refusal is NOT a failed run and must not be reported as one. It
+      // exits 2 so a script can tell "governed stop" from "something broke",
+      // and it prints the structured refusal rather than only a message.
+      if (isApprovalRefusal(err)) {
+        console.error("REFUSED — human approval is required and no approval-resume path exists.");
+        console.error(JSON.stringify(err.refusal, null, 2));
+        process.exit(2);
+        return;
+      }
       console.error(`Run failed: ${(err as Error).message}`);
       process.exit(1);
     }

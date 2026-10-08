@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import type { AgentSpec } from "./spec-schema.js";
 import { baseOutputSchema, MAX_NONSTREAMING_TOKENS } from "./spec-schema.js";
 import { agentRequestsApproval, requiresHumanApproval } from "./governance.js";
+import { assertDispatchApproval, assertStaticApproval } from "./approval.js";
 import { writeMemory } from "./memory-writer.js";
 import { assertFixturePreconditions } from "./fixture.js";
 import { runFinosAgent } from "./wrappers/finos.js";
@@ -58,9 +59,12 @@ export async function runAgent(spec: AgentSpec, ctx: RunContext): Promise<RunRes
   // run returns from this immediately and is unaffected.
   assertFixturePreconditions(spec.name, ctx);
 
-  if (ctx.trigger !== "manual" && requiresHumanApproval(spec.risk_class, spec.requires_human_approval)) {
-    throw new Error(`Human review required: ${spec.name} may only prepare a recommendation through a manual run.`);
-  }
+  // D4 STAGE 1 - the statically gated case, refused BEFORE the model call so a
+  // gated operation costs nothing to discover. Until D4 this fired only when the
+  // trigger was not `manual`, which treated a human typing a command as approval;
+  // presence is not recorded approval, and Constitution section 3 #5 carves out
+  // no exception for convenience. Class 0-2 with no spec flag is unaffected.
+  assertStaticApproval(spec, ctx);
 
   let recommendation: Record<string, unknown>;
   switch (spec.execution) {
@@ -127,6 +131,13 @@ export function finalizeRun(
     spec.requires_human_approval,
     agentRequestsApproval(recommendation),
   );
+
+  // D4 STAGE 2 - refused after response validation and BEFORE the memory write,
+  // the advertised emits and anything downstream. The recommendation's own flag
+  // could not have been known at stage 1, which is why there are two stages.
+  // A memory line is what the estate counts as a dated execution record, so a
+  // refused run must not leave one behind.
+  assertDispatchApproval(spec, ctx, recommendation, humanGate);
 
   const memoryPath = writeMemory(
     spec,

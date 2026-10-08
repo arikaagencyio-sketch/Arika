@@ -3,6 +3,73 @@
 Newest first. Records architecture decisions made while building the runtime,
 per GLOBAL_OS.md §10.
 
+## 2026-10-08 — D4: dispatch fails closed when human approval is required
+
+**The defect.** `finalizeRun` computed `humanGate`, wrote it to memory, returned it — and
+**nothing acted on it**. Its only consumers were `console.log` calls in `index.ts`. The
+2026-09-13 decision below made the gate *correct*; it did not make it *act*. Suppressing
+the emits (2026-09-22) narrowed the blast radius without closing the gate.
+
+**Evidence it was live, not latent:** all five 2026-09-13 Offer production records carry
+`recommendation.requiresHumanApproval: true` and **all five ran to completion** —
+`offer-orchestrator` ×2, `offer-oeos-engineer` ×2, `offer-pricing-floor-analyst` ×1.
+
+**Decision: two gates, at the two moments the requirement becomes knowable.**
+
+| Stage | Rule | Refused before |
+|---|---|---|
+`pre_model` | `risk_class >= 3` or `spec.requires_human_approval` | **the model call**, the memory write, emits, publication, receiver invocation, registry mutation |
+`post_response` | the recommendation's own `requiresHumanApproval: true` (plus either static rule) | **the memory write**, emits, publication, receiver invocation, registry mutation |
+
+**A refusal is a thrown `ApprovalRequiredError`, never a boolean.** A returned boolean can be
+read and dropped — that is precisely what happened. It carries a structured, serialisable
+`refusal`: `{ code: "APPROVAL_REQUIRED", stage, agent, riskClass, reasons[], refusedBefore[],
+approvalEvidence: null }`. Callers branch on `isApprovalRefusal()`, never on the message.
+This matches the runtime's existing fail-closed convention (`assertFixturePreconditions`,
+`assertStreamMatchesMode`) and the receiver in `01_Sector/delivery/offer_inbox_receiver.py`,
+which enforces its **own** approval before any side effect rather than inheriting a reported flag.
+
+**Why the memory write is on the far side of the gate.** A memory line is what the estate counts
+as a dated execution record (`AEIT_11` §5). Writing one for a run that was stopped would
+manufacture execution evidence for something that did not complete.
+
+🔴 **The manual trigger no longer bypasses the static gate.** Until D4 the pre-model check read
+`ctx.trigger !== "manual"`, treating a human typing a command as approval. **Presence is not
+recorded approval**, and Constitution §3 #5 carves out no exception for convenience. This affects
+**17 agents** — 11 at class ≥ 3, 10 with the spec flag, 4 in both — and **none of the nine agents
+with a dated execution record is among them**, so it closes a path nothing has used.
+
+🔴 **No approval-resume path exists, deliberately.** There is no flag, token or parameter that
+satisfies these gates; a boolean `approved: true` would be exactly the bypass D4 removes. The
+repository's three authorisation registries (`skill-fixture-authorisations.json`,
+`provisioning-authorisations.json`, `delivery-authorisations.json`) show the shape real evidence
+would take — a one-attempt row naming the exact target, pinned, spent on use — but **owner item 58
+is UNDECIDED**, so the governance rows such a registry would hold do not exist, and `executor.ts`
+publishes nothing, so there is no dispatch to resume *to*. Building it now would pre-empt an open
+owner decision and add a bypass surface with no consumer. **Refusal only; the capability gap is
+reported, not quietly filled.**
+
+**The fixture lane is exempt, narrowly and on evidence.** A fixture advertises **no** emits
+unconditionally, so it dispatches nothing; the lane is gated harder already
+(`FIXTURE_LANE_ENABLED` is `false`, and an `approved` authorisation naming a registered sandbox
+stream is required); and **two of the three existing fixture records (OFFER-F2, OFFER-F3) carry
+`requiresHumanApproval: true`** — gating fixtures would have made those runs impossible. The
+exemption requires a literal `fixture === true`, and a test proves a merely truthy value does not
+exempt anything.
+
+**Class 0–2 with no flag is untouched.** No gate, a memory line, and the declared emits survive.
+D4 does not broaden into the advisory path.
+
+**Not changed:** the five 2026-09-13 Offer records and every other runtime log line. The log is
+append-only and those are dated evidence. Under D4 all five would have been refused; that is the
+point, and it is not retroactively applied.
+
+**Verified:** `npm test` → **80/80** (was 71), build and typecheck clean. Three tests were
+**rewritten, not loosened** — each had asserted that a gated run *completed* while recording the
+gate, and each now asserts the refusal **plus** that no memory line is left behind, which is
+strictly more than it checked before. **15 mutations**, each removing or inverting one guard,
+each caught.
+
 ## 2026-10-01 — OFFLINE-FIXTURE-GUARD-1: offline fixture tests can fail closed on network use
 
 **Why:** the only network blocks in existence were temporary files in a session scratchpad, and the

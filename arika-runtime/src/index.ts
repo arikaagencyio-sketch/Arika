@@ -2,11 +2,31 @@ import { join } from "node:path";
 import { config as loadEnv } from "dotenv";
 import { loadAgents } from "./agent-registry.js";
 import { runAgent } from "./executor.js";
+import { isApprovalRefusal } from "./approval.js";
 import { packageRoot } from "./paths.js";
 import { eventBus } from "./triggers/event-bus.js";
 import { JoinGate } from "./triggers/join-gate.js";
 import { registerSchedules } from "./triggers/scheduler.js";
 import { startWebhookServer } from "./triggers/webhook-server.js";
+
+/**
+ * D4 - every dispatch caller must branch on a refusal EXPLICITLY. A refusal is not
+ * a failure to report and retry; it is a governed stop. Printing it through the
+ * generic `failed:` path would let an operator read it as a transient error, so
+ * each site prints REFUSED, names the stage and the reasons, and returns without
+ * continuing. Nothing downstream of these call sites runs on a refusal, because
+ * `runAgent` never returns one.
+ */
+function reportRefusal(where: string, agent: string, err: unknown): boolean {
+  if (!isApprovalRefusal(err)) return false;
+  const r = err.refusal;
+  console.error(
+    `[${where}] REFUSED ${agent} — ${r.code} at ${r.stage} (class ${r.riskClass}). ` +
+      `Reasons: ${r.reasons.join("; ")}. Nothing was written, emitted or dispatched. ` +
+      `No approval-resume path exists: this run cannot be continued by a flag.`,
+  );
+  return true;
+}
 
 async function main(): Promise<void> {
   loadEnv({ path: join(packageRoot, ".env") });
@@ -24,6 +44,7 @@ async function main(): Promise<void> {
           const result = await runAgent(spec, { trigger: "event", eventType: evt.type, input: evt.payload });
           console.log(`[event ${evt.type}] ${spec.name} → approval:${result.requiresHumanApproval}`);
         } catch (err) {
+          if (reportRefusal(`event ${evt.type}`, spec.name, err)) return;
           console.error(`[event ${evt.type}] ${spec.name} failed: ${(err as Error).message}`);
         }
       });
@@ -51,6 +72,7 @@ async function main(): Promise<void> {
             });
             console.log(`[join ${joined.key}] ${spec.name} → approval:${result.requiresHumanApproval}`);
           } catch (err) {
+            if (reportRefusal(`join ${joined.key}`, spec.name, err)) return;
             console.error(`[join ${joined.key}] ${spec.name} failed: ${(err as Error).message}`);
           }
         },
@@ -62,7 +84,10 @@ async function main(): Promise<void> {
   const jobs = registerSchedules([...agents.values()], (spec) => {
     runAgent(spec, { trigger: "schedule" }).then(
       (r) => console.log(`[cron] ${spec.name} ran → approval:${r.requiresHumanApproval}`),
-      (e: Error) => console.error(`[cron] ${spec.name} failed: ${e.message}`),
+      (e: Error) => {
+        if (reportRefusal("cron", spec.name, e)) return;
+        console.error(`[cron] ${spec.name} failed: ${e.message}`);
+      },
     );
   });
 

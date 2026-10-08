@@ -13,6 +13,14 @@ import {
   parseStructuredOutput,
   runAgent,
 } from "../dist/executor.js";
+import {
+  APPROVAL_REFUSAL_CODE,
+  ApprovalRequiredError,
+  assertDispatchApproval,
+  assertStaticApproval,
+  isApprovalRefusal,
+  staticApprovalReasons,
+} from "../dist/approval.js";
 import { loadAgents } from "../dist/agent-registry.js";
 import { writeMemory } from "../dist/memory-writer.js";
 import {
@@ -302,19 +310,22 @@ test("memory-writer: appends a bois-compatible JSONL line", () => {
 
 // Runs the real post-agent path (gate + memory write) with a canned recommendation,
 // returning both the top-level result and the line it logged.
-function finalizeWith(riskClass, recommendation) {
-  const file = join(tmpdir(), `arika-approval-${process.pid}-${Math.random().toString(36).slice(2)}.jsonl`);
-  const spec = {
+function approvalSpec(riskClass, file, specFlag = false) {
+  return {
     name: "t-offer",
     department: "02",
     execution: "prompt",
     risk_class: riskClass,
-    requires_human_approval: false,
+    requires_human_approval: specFlag,
     memory_stream: file,
     emits: [],
   };
+}
+
+function finalizeWith(riskClass, recommendation) {
+  const file = join(tmpdir(), `arika-approval-${process.pid}-${Math.random().toString(36).slice(2)}.jsonl`);
   try {
-    const result = finalizeRun(spec, { trigger: "manual", input: {} }, recommendation);
+    const result = finalizeRun(approvalSpec(riskClass, file), { trigger: "manual", input: {} }, recommendation);
     const logged = JSON.parse(readFileSync(file, "utf8").trim());
     return { result, logged };
   } finally {
@@ -322,12 +333,53 @@ function finalizeWith(riskClass, recommendation) {
   }
 }
 
-test("approval: a low-risk agent that asks for sign-off raises the top-level gate", () => {
-  // The Offer (02) test runs: class 1, recommendation said true, top level said false.
+/**
+ * D4. Runs `finalizeRun` expecting a REFUSAL, and returns the structured refusal
+ * together with whether a memory line was written. The memory check is the point:
+ * a refusal that still left a run record behind would be a half-closed gate.
+ */
+function refusalFrom(riskClass, recommendation, specFlag = false) {
+  const file = join(tmpdir(), `arika-refuse-${process.pid}-${Math.random().toString(36).slice(2)}.jsonl`);
+  try {
+    let caught;
+    try {
+      finalizeRun(approvalSpec(riskClass, file, specFlag), { trigger: "manual", input: {} }, recommendation);
+    } catch (err) {
+      caught = err;
+    }
+    assert.ok(caught, "finalizeRun must REFUSE a gated run, not return a result");
+    assert.ok(isApprovalRefusal(caught), "the refusal must be an ApprovalRequiredError");
+    return { refusal: caught.refusal, wroteMemory: existsSync(file), error: caught };
+  } finally {
+    rmSync(file, { force: true });
+  }
+}
+
+test("D4: a low-risk agent that asks for sign-off is REFUSED after the response, before memory", () => {
+  // REWRITTEN for D4, not loosened. This asserted that the gate was RECORDED
+  // (top-level + memory line both true) - which was the 2026-09-13 fix, and which
+  // left the run completing. The five 2026-09-13 Offer records are exactly this
+  // shape: class 1, recommendation true, run completed. D4 refuses instead, and
+  // this test now additionally proves NO memory line is left behind.
   for (const riskClass of [0, 1, 2]) {
-    const { result, logged } = finalizeWith(riskClass, { summary: "quote-bound", requiresHumanApproval: true });
-    assert.equal(result.requiresHumanApproval, true, `class ${riskClass}: top-level must honour the agent`);
-    assert.equal(logged.payload.requiresHumanApproval, true, `class ${riskClass}: memory line must match`);
+    const { refusal, wroteMemory } = refusalFrom(riskClass, {
+      summary: "quote-bound",
+      requiresHumanApproval: true,
+    });
+    assert.equal(refusal.code, APPROVAL_REFUSAL_CODE);
+    assert.equal(refusal.stage, "post_response", `class ${riskClass}: only knowable after the call`);
+    assert.equal(refusal.riskClass, riskClass);
+    assert.ok(
+      refusal.reasons.some((r) => r.includes("recommendation returned requiresHumanApproval")),
+      `class ${riskClass}: the agent's own flag must be named as the reason`,
+    );
+    assert.equal(wroteMemory, false, `class ${riskClass}: a refused run writes NO memory line`);
+    assert.ok(refusal.refusedBefore.includes("memory write"));
+    assert.ok(refusal.refusedBefore.includes("advertised emits"));
+    assert.ok(refusal.refusedBefore.includes("event publication"));
+    assert.ok(refusal.refusedBefore.includes("receiver invocation"));
+    assert.ok(refusal.refusedBefore.includes("registry mutation"));
+    assert.equal(refusal.approvalEvidence, null, "no approval-resume path may appear here");
   }
 });
 
@@ -339,11 +391,170 @@ test("approval: a low-risk agent that does not ask for sign-off stays ungated", 
   assert.equal(finalizeWith(1, { summary: "no flag" }).result.requiresHumanApproval, false);
 });
 
-test("approval: risk class 3+ forces sign-off even when the agent says false", () => {
+test("D4: class 3 and 4 are REFUSED even when the agent says false", () => {
+  // REWRITTEN for D4. This asserted that class 3+ FORCED the recorded gate while
+  // the run still completed. Now the run is refused - and at class 3+ the reason
+  // is static, so the refusal is also available before any model call.
   for (const riskClass of [3, 4]) {
-    const { result, logged } = finalizeWith(riskClass, { summary: "x", requiresHumanApproval: false });
-    assert.equal(result.requiresHumanApproval, true, `class ${riskClass} must force approval`);
-    assert.equal(logged.payload.requiresHumanApproval, true);
+    const { refusal, wroteMemory } = refusalFrom(riskClass, { summary: "x", requiresHumanApproval: false });
+    assert.equal(refusal.code, APPROVAL_REFUSAL_CODE);
+    assert.equal(refusal.riskClass, riskClass);
+    assert.ok(
+      refusal.reasons.some((r) => r.includes(`class ${riskClass} requires human sign-off`)),
+      `class ${riskClass}: the Constitution rule must be named`,
+    );
+    assert.equal(wroteMemory, false, `class ${riskClass}: no memory line on refusal`);
+  }
+});
+
+test("D4: the Class 3 static gate refuses BEFORE the model is invoked, on every trigger", async () => {
+  // `runAgent` would call the model for a `prompt` agent. A refusal that arrives
+  // first is the only reason these assertions can run with no API key set.
+  for (const trigger of ["manual", "event", "join", "schedule", "webhook"]) {
+    const spec = approvalSpec(3, undefined);
+    let caught;
+    try {
+      await runAgent(spec, { trigger, input: {} });
+    } catch (err) {
+      caught = err;
+    }
+    assert.ok(isApprovalRefusal(caught), `${trigger}: class 3 must be refused`);
+    assert.equal(caught.refusal.stage, "pre_model", `${trigger}: refused before the model call`);
+    assert.ok(caught.refusal.refusedBefore.includes("model invocation"));
+  }
+});
+
+test("D4: the Class 4 static gate refuses BEFORE the model is invoked, on every trigger", async () => {
+  for (const trigger of ["manual", "event", "join", "schedule", "webhook"]) {
+    let caught;
+    try {
+      await runAgent(approvalSpec(4, undefined), { trigger, input: {} });
+    } catch (err) {
+      caught = err;
+    }
+    assert.ok(isApprovalRefusal(caught), `${trigger}: class 4 must be refused`);
+    assert.equal(caught.refusal.stage, "pre_model");
+    assert.equal(caught.refusal.riskClass, 4);
+  }
+});
+
+test("D4: a manual run no longer bypasses the static gate", async () => {
+  // Until D4 the pre-model gate read `ctx.trigger !== "manual"`, treating a human
+  // typing a command as approval. Presence is not recorded approval, and
+  // Constitution section 3 #5 carves out no exception for convenience.
+  let caught;
+  try {
+    await runAgent(approvalSpec(3, undefined), { trigger: "manual", input: {} });
+  } catch (err) {
+    caught = err;
+  }
+  assert.ok(isApprovalRefusal(caught), "a manual class 3 run must be refused too");
+  assert.equal(caught.refusal.stage, "pre_model");
+});
+
+test("D4: a spec-flagged Class 1 agent is refused before the model call", async () => {
+  let caught;
+  try {
+    await runAgent(approvalSpec(1, undefined, true), { trigger: "manual", input: {} });
+  } catch (err) {
+    caught = err;
+  }
+  assert.ok(isApprovalRefusal(caught), "spec requires_human_approval must gate statically");
+  assert.equal(caught.refusal.stage, "pre_model");
+  assert.ok(caught.refusal.reasons.some((r) => r.includes("requires_human_approval: true")));
+});
+
+test("D4: Class 0-2 advisory behaviour is untouched", () => {
+  // The scope limit. No spec flag, no agent flag -> no gate, a memory line, and
+  // the declared emits survive. D4 must not broaden into these.
+  for (const riskClass of [0, 1, 2]) {
+    assert.deepEqual(staticApprovalReasons({ risk_class: riskClass, requires_human_approval: false }), []);
+    const { result, logged } = finalizeWith(riskClass, { summary: "internal", requiresHumanApproval: false });
+    assert.equal(result.requiresHumanApproval, false);
+    assert.equal(result.status, "advisory_complete");
+    assert.equal(logged.payload.requiresHumanApproval, false);
+  }
+  // And the static gate lets them reach the model.
+  for (const riskClass of [0, 1, 2]) {
+    assert.doesNotThrow(() =>
+      assertStaticApproval({ name: "t", risk_class: riskClass, requires_human_approval: false }, { trigger: "manual" }),
+    );
+  }
+});
+
+test("D4: a refusal is structured and machine-checkable, not a message or a boolean", () => {
+  const { refusal, error } = refusalFrom(1, { requiresHumanApproval: true });
+  // A caller branches on the contract, never on prose.
+  assert.equal(refusal.code, "APPROVAL_REQUIRED");
+  assert.ok(["pre_model", "post_response"].includes(refusal.stage));
+  assert.equal(typeof refusal.agent, "string");
+  assert.equal(typeof refusal.riskClass, "number");
+  assert.ok(Array.isArray(refusal.reasons) && refusal.reasons.length > 0);
+  assert.ok(Array.isArray(refusal.refusedBefore) && refusal.refusedBefore.length > 0);
+  assert.equal(refusal.approvalEvidence, null);
+  // Serialisable whole, so a caller may log the refusal rather than retype it.
+  assert.deepEqual(JSON.parse(JSON.stringify(error)), refusal);
+  // It is an Error, so it cannot be dropped the way a returned boolean can.
+  assert.ok(error instanceof Error);
+  assert.ok(error instanceof ApprovalRequiredError);
+  assert.equal(error.isApprovalRefusal, true);
+  // And the guard must not fire on an ordinary failure.
+  assert.equal(isApprovalRefusal(new Error("ordinary")), false);
+  assert.equal(isApprovalRefusal(undefined), false);
+  assert.equal(isApprovalRefusal({ isApprovalRefusal: true }), false, "a lookalike without the code is not a refusal");
+});
+
+test("D4: no approval flag, token or parameter can satisfy the gate", () => {
+  // Requirement: passing `true` must not create a bypass. There is no parameter
+  // to pass, and these prove the shapes someone might reach for do nothing.
+  for (const ctx of [
+    { trigger: "manual" },
+    { trigger: "manual", approved: true },
+    { trigger: "manual", approval: "owner", humanApproved: true },
+    { trigger: "manual", requiresHumanApproval: false },
+  ]) {
+    assert.throws(
+      () => assertStaticApproval({ name: "t", risk_class: 4, requires_human_approval: false }, ctx),
+      isApprovalRefusal,
+      `class 4 must refuse regardless of ${JSON.stringify(ctx)}`,
+    );
+  }
+  assert.throws(
+    () =>
+      assertDispatchApproval(
+        { name: "t", risk_class: 1, requires_human_approval: false },
+        { trigger: "manual", approved: true },
+        { requiresHumanApproval: true, approved: true },
+        true,
+      ),
+    isApprovalRefusal,
+    "an `approved` key in the recommendation is not approval evidence",
+  );
+});
+
+test("D4: the fixture lane is exempt, and the exemption is narrow", () => {
+  // A fixture advertises NO emits at all, so it dispatches nothing - the risk D4
+  // addresses does not exist there. Two of the three existing fixture records
+  // (OFFER-F2, OFFER-F3) carry requiresHumanApproval true; gating fixtures would
+  // have made those runs impossible.
+  assert.doesNotThrow(() =>
+    assertStaticApproval({ name: "t", risk_class: 4, requires_human_approval: true }, { trigger: "manual", fixture: true }),
+  );
+  assert.doesNotThrow(() =>
+    assertDispatchApproval(
+      { name: "t", risk_class: 4, requires_human_approval: true },
+      { trigger: "manual", fixture: true },
+      { requiresHumanApproval: true },
+      true,
+    ),
+  );
+  // ...and `fixture` must be a literal true, not merely truthy.
+  for (const notFixture of [1, "yes", {}]) {
+    assert.throws(
+      () => assertStaticApproval({ name: "t", risk_class: 4 }, { trigger: "manual", fixture: notFixture }),
+      isApprovalRefusal,
+      `fixture: ${JSON.stringify(notFixture)} must not exempt anything`,
+    );
   }
 });
 
