@@ -180,12 +180,16 @@ Time-relative words ("last month") go stale: prefer absolute dates.
 
 ## `production`: design work or text-only
 - **`text_only`**: the translation's format is text-capable (`Text post`,
-  `Article / Long-form`, `Poll`, `Thread`, `Newsletter issue`), and
-  `visual_direction` and `canva_instructions` are empty or read `text-only`.
-- **`design`**: every other known format.
+  `Article / Long-form`, `Poll`, `Thread`, `Newsletter issue`),
+  `visual_direction` and `canva_instructions` are empty or read `text-only`,
+  and nothing visual will be published with it.
+- **`design`**: every other known format, **and any text-capable piece that
+  carries a visual**. A text-capable format is not automatically asset-free.
 - **`unknown`**: the format is not in the vocabulary. That blocks the brief.
 
-Text-only content never goes to Design. It reaches G2 once its final copy exists.
+Text-only content never goes to Design, but it **does** need a human G1. Its path
+is G1 (path `text_only`), then G2, once the final copy exists. Every public piece
+needs a human G1 and a human G2.
 
 ## `ready_for_design` is a recommendation; a human flips the trigger
 `Publishing Status = Ready for Design` fires the live Creative Pipeline routine.

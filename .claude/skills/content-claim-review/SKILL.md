@@ -28,7 +28,7 @@ One DB7 brief ID and its current `Version`. Read the brief, its translation, its
 
 ## Output (writes nothing)
 
-`{brief_id, version, verdict: pass | revise | reject, claims: [{text, kind, sources, issue}], unsupported: [...], stale_terms: [...]}`. Run `validate_write` with the claims list; a refusal code means `revise` or `reject`.
+`{brief_id, revision, verdict: pass | revise | reject, claims: [{text, kind, sources, issue}], unsupported: [...], stale_terms: [...]}`. Run `validate_write` with the claims list; a refusal code means `revise` or `reject`. **The verdict covers one brief at one revision.** The G2 gate refuses a verdict that names another brief (R24) or another revision (R12). Re-review after every Version bump. *(Field renamed `version` → `revision` in the hardening unit to match the gate.)*
 
 ## Handoff
 

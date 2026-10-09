@@ -1,6 +1,6 @@
 # Content — Skill Matrix
 
-**Department:** Content (04) · **Version:** v0.2 (2026-10-09, correction unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
+**Department:** Content (04) · **Version:** v0.3 (2026-10-09, hardening unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
 
 Modelled on [`01_Sector/SECTOR_SKILL_MATRIX.md`](../01_Sector/SECTOR_SKILL_MATRIX.md). **Agents decide; skills validate and apply.** Skills are grouped by write boundary, so seven skills cover eight capabilities: copywriting, long-form, scripts and carousels are one boundary (DB7 authored fields).
 
@@ -41,8 +41,8 @@ The JSON twin holds the field-level assignment: **361 fields across 8 databases,
 | C02 | [`content-narrative-review`](../.claude/skills/content-narrative-review/SKILL.md) | Opportunity / translation / brief ID | DB2 only | R08 R10 R19 | `Position ID` (new version = new ID) | C03 / C04 |
 | C03 | [`content-surface-translation`](../.claude/skills/content-surface-translation/SKILL.md) | Opportunity + Position IDs | DB6 (+ Surface, Audience Role, Editorial DRAGON), DB3, DB1 behaviour | R03 R05 R06 R07 R08 R09 R10 R23 | family + platform + **audience role** + surface + format · `Overlay ID` | C04 |
 | C04 | [`content-brief-writer`](../.claude/skills/content-brief-writer/SKILL.md) | Translation ID | DB7 authored fields, `Version` | R01 R03 R04 R06 R09 R10 R15 R16 R17 R18 R20 R21 | `Translation` (one live brief; revise = VERSION, exactly +1) | C05; text-only → C06; design → human G1 |
-| C05 | [`content-claim-review`](../.claude/skills/content-claim-review/SKILL.md) | Brief ID + Version | nothing | R04 R05 R16 | n/a (read-only) | C06 or back to C04 |
-| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID + Version + C05 verdict + finished asset set (design) or final copy (text-only) | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R09 R12 R18 R20 R22 | Brief ID + Version | **human reviewer** |
+| C05 | [`content-claim-review`](../.claude/skills/content-claim-review/SKILL.md) | Brief ID + Version | nothing (verdict names brief ID + revision) | R04 R05 R16 | n/a (read-only) | human G1, then C06; or back to C04 |
+| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID (= write target) + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only), each bound to that brief and Version | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R09 R12 R18 R20 R22 R24 R25 | Brief ID + Version | **human reviewer** |
 | C07 | [`content-source-retrieval`](../.claude/skills/content-source-retrieval/SKILL.md) | Any canonical ID | nothing | temp URLs, `rights: unknown`, private pilot data | n/a | caller |
 
 ---
@@ -60,22 +60,26 @@ Sector finding / narrative position
         │
    C04 brief-writer ──(Version N)──► DB7
         │
-   C05 claim-review (read-only verdict on N)
+   C05 claim-review (read-only verdict on brief + N)
         │
-        ├── text-only ──────────────────────────────────────────────┐
+   HUMAN: G1 concept review on brief + N, recording the path (both paths)
+        │
+        ├── path text_only ─────────────────────────────────────────┐
         │                                                           │
-   HUMAN: G1 concept review + readiness on N (gate: readiness)      │
+   path design: readiness (gate: readiness)                         │
         │                                                           │
    HUMAN: Ready for Design ──► Design (19) routine: storyboard for N │
         │                                                           │
-   HUMAN: spend approval for N ──► Design generates the artifact    │
+   HUMAN: spend approval for brief + N ──► Design generates the artifact (provenance: brief + N)
         │                                                           │
-   C06 approval-prep ──(Submitted for review: N + asset set)──► DB7 ◄┘ (text-only: N + final copy)
-        │
+   C06 approval-prep ──(Submitted for review: N + G1 + asset set)──► DB7 ◄┘ (text-only: N + G1 + final copy)
+        │                                    (gate: submission; the packet must describe the page written)
    HUMAN: G2 on the exact finished artifact ──► HUMAN: manual publication + link-back record (Presence 21)
 
 C07 source-retrieval is called by any step.
 ```
+
+*Hardening unit (2026-10-09):* the v0.2 graph sent text-only content from C05 straight to C06 with no G1. That was the assistant's reading, never an owner decision. The owner's hardening brief requires G1 and G2 for every public item.
 
 The order is the two-pass DRAGON order: nothing at C03 or below may proceed while C01's Strategic pass is `Not yet run`. **Corrected 2026-10-09:** v0.1 drew G2 *before* Ready for Design, so an approval would have bound a brief whose artifact did not yet exist. Rules: `CONTENT_WRITE_CONTRACT.md` §8.
 
@@ -107,6 +111,11 @@ No new agent was built. No event bus, scheduler or Notion runtime client was add
   - `WorkflowOrder`
   - `DuplicateLookupState`
   - `ProductionMemoryUntouched`
+- **Hardening unit regression classes** (2026-10-09). Each covers missing, wrong-brief, stale, invalid and valid evidence:
+  - `EvidenceBinding`
+  - `AssetValidity`
+  - `SubmissionTarget`
+  - `G1OnBothPaths`
 
 All fixture data is synthetic (`fx-`). The tests touch no Notion record. A module-level check fails the run if `04_Content/_memory` changes.
 
@@ -114,6 +123,12 @@ The proposed routine's decision table has its own suite: `python -m unittest dis
 
 ## 6. Changelog
 
+- **v0.3 (2026-10-09, hardening unit)** — Changes:
+  - G1 is drawn on both paths.
+  - C05 and C06 inputs are bound to brief ID + Version.
+  - C06 gains R24 and R25.
+  - Hardening test classes are listed.
+  - No skill was added; no ownership changed. — Claude Code (Opus 5.5)
 - **v0.2 (2026-10-09, correction unit)** — Changes:
   - C03's idempotency key regains `Audience Role`.
   - Refusal codes R09, R12 and R20–R23 are added to the skills that can trigger them.

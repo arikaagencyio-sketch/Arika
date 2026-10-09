@@ -1,6 +1,6 @@
 # Content — Write Contract
 
-**Department:** Content (04) · **Version:** v0.2 (2026-10-09, correction unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
+**Department:** Content (04) · **Version:** v0.3 (2026-10-09, hardening unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
 
 **Machine-readable companion:** [`contracts/content-databases.json`](contracts/content-databases.json) (one writer per field, DB1–DB8, from the live schemas of 2026-10-09). **Runnable gate:** [`contracts/content_write_gate.py`](contracts/content_write_gate.py) with tests in [`contracts/test_content_write_gate.py`](contracts/test_content_write_gate.py).
 
@@ -25,7 +25,9 @@
 - **Approval Integrity cannot catch every stale approval.** The formula compares `G2 Approved Revision` with `Version`. It cannot see a copy change that happened without a bump.
 - **There is no change-detection evidence.** Nothing in this repository proves that any brief's copy matches the revision a human approved. Notion page history is the only trail, and nothing reads it automatically.
 
-So: the gate makes a skill-driven write safe. It does not make the database safe. A content hash recorded at G2 would close part of the gap. That would be a new property or a page-body convention, and it is **proposed, not built**.
+So: the gate makes a skill-driven write safe. It does not make the database safe. A content hash recorded at G2 would close part of the gap. That would be a new property or a page-body convention, and it is **proposed, not built**. The minimal storage and fingerprint proposal, with exactly what it would and would not catch, is [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md) (prepared 2026-10-09, not applied).
+
+**Evidence is only as good as its identity (hardening unit, 2026-10-09).** Every gate binds stage evidence to one brief ID and one Version: G1, storyboard, spend approval, claim review, asset provenance and the G2 packet. The gate cannot check that the evidence is *true*. A G1 line a person typed is taken at its word. What it refuses is evidence that is **unidentified, about another brief, or about another revision**. Before this unit, a G1 from brief B at revision 2 satisfied brief A at revision 2.
 
 ---
 
@@ -133,8 +135,10 @@ Every rule has a code in the gate. A refusal is a record: which rule, and what w
 | R19 | An owner-decision value without a recorded quote and date | §2 |
 | R20 | A revision that is missing or is not a whole number of 1 or more, anywhere it binds something (brief `Version`, approved revision, published revision, G1, spend approval, submission) | §6.4 |
 | R21 | A publication-affecting change without exactly one `Version` increment; a bump with no such change; a copy change sent as UPDATE instead of VERSION; a new brief not at 1; a change checked without the prior brief | §6.4 |
-| R22 | A workflow stage out of order: Ready for Design without a human G1 for this revision; text-only content sent to Design; generation without a human spend approval for this revision; G2 submission before the finished artifact (design) or the final copy (text-only); C06 submitting without context | §8 |
+| R22 | A workflow stage out of order: Ready for Design without a human G1 for this revision; **a G2 submission without a human G1 for this revision, on either path**; a G1 that records no path, or a path the brief no longer matches; text-only content sent to Design; text-only content listing assets; generation without a human spend approval for this revision; G2 submission before the finished artifact (design) or the final copy (text-only); C06 submitting without context | §8 |
 | R23 | A select value outside its recorded vocabulary (`Audience Role`, `Format`); an unknown format, which leaves the design or text-only path undecidable | §7.1 |
+| R24 | Stage evidence without identity: a brief with no ID; a G1, storyboard, spend approval, claim review or asset provenance that names no brief or **another brief**; a G2 submission whose packet describes a page other than the write target, or whose target was not read back | §8.1 |
+| R25 | An invalid asset: an ID that is blank, too short, contains whitespace or is a URL (a temporary vendor link is never an asset reference, §9.3); a version that is missing or not a whole number of 1 or more; the same asset listed twice | §8.1 |
 
 ---
 
@@ -232,22 +236,59 @@ Strategic DRAGON (DB5) → Editorial DRAGON (DB6) → brief copy at Version N (D
   → human publishes; the publication record reproduces revision N and the asset set   R12, R14
 ```
 
-**Text-only work.** The format is text-capable (`Text post`, `Article / Long-form`, `Poll`, `Thread`, `Newsletter issue`), and `Visual Direction` and `Canva Instructions` are empty or read `text-only`. Path: Strategic → Editorial → **final copy at Version N → G2 on that copy** → human publishes. It does not go to Design and needs no spend approval. The gate refuses a text-only brief as Ready for Design (R22). An unknown format is refused rather than guessed (R23).
+**Text-only work.** It needs all four of these:
+- a text-capable format (`Text post`, `Article / Long-form`, `Poll`, `Thread`, `Newsletter issue`);
+- `Visual Direction` and `Canva Instructions` that are empty or read `text-only`;
+- no assets;
+- a human G1 that records `path: text_only`.
+
+**A text-capable format is not automatically asset-free.** An article with a header image or a newsletter with a chart is design work.
+
+```
+Strategic DRAGON → Editorial DRAGON → final copy at Version N
+  → G1: concept review on Version N, path text_only        (human)        R22, R12, R24
+  → G2: the exact final copy at Version N                  (human)        R11, R12, R22
+  → human publishes
+```
+
+Text-only work skips Design and spend approval. **It never skips G1** (owner direction, hardening brief, 2026-10-09: "Require human G1 and G2 for every public content item. Genuinely text-only work skips Design and generation-spend approval, not G1."). The gate refuses:
+- a text-only brief as Ready for Design (R22);
+- a G2 submission without G1 on either path (R22);
+- a G1 whose path no longer matches the brief (R22);
+- an unknown format (R23), rather than guessing.
+
+*Was (v0.2, earlier the same day):* the text-only path ran from final copy straight to G2, with no G1. That was **the assistant's reading** of the correction brief's line "Text-only content may reach G2 once its final copy exists". The handover flagged it for owner confirmation. **It was never an owner decision**, and it is superseded.
 
 | | G1 Concept review + readiness | Spend approval | G2 Pre-publish approval |
 |---|---|---|---|
 | Question | Should this exist, and is it ready to produce? | May credits be spent on this revision? | Is this exact finished artifact safe and right to publish? |
-| Object | One brief at one `Version`, before Design | One brief at one `Version`, after the storyboard | Copy at one `Version` + the finished asset set (design), or the final copy (text-only) |
-| Checked by | `validate_design_readiness` (`content_write_gate.py readiness`) | `validate_generation_start` | `validate_g2_submission`, then `validate_publication` |
+| Object | One brief at one `Version`, on **both** paths: before Design (design), before G2 (text-only) | One brief at one `Version`, after the storyboard (design only) | Copy at one `Version` + the finished asset set (design), or the final copy (text-only) |
+| Checked by | `validate_design_readiness` (`content_write_gate.py readiness`, design) and `validate_g2_submission` (`content_write_gate.py submission`, both paths) | `validate_generation_start` | `validate_g2_submission`, then `validate_publication` |
 | Who decides | A named human | A named human (Design 19's gate; approval matrix: human gate before credit spend) | `content-publishing-gate` (advisory) → **a named human**, Class 3 |
-| Recorded | **No Notion property yet.** A dated page-body line on the brief: `G1 passed \| rev N \| <reviewer> \| <date>` | Owned by Design (19). Content checks only that it exists for the same brief and Version | DB7 `G2 Decision` = Approved + Reviewer + Decided At + Approved Revision. The approved asset set is listed in the G2 packet (no property yet) |
+| Recorded | **No Notion property yet.** A dated page-body line on the brief: `G1 passed \| brief <page id> \| rev N \| path design\|text_only \| <reviewer> \| <date>` | Owned by Design (19). Content checks only that it exists for the same brief ID and Version | DB7 `G2 Decision` = Approved + Reviewer + Decided At + Approved Revision. The approved asset set (ID, version, provenance) is listed in the G2 packet (no property yet) |
 | Expires | Yes, on any publication-affecting change | Yes, likewise | **Yes.** Any copy change bumps `Version`, and the approval no longer covers it |
 
 Passing G1 never implies G2. A G2 approval never covers a later revision or a different asset. **No agent and no skill can approve, pass G1 or approve spend** (R01, R11, R22).
 
 *Was (v0.1, 2026-10-09):* G1 was the concept decision on the opportunity (DB5 `Decision`). The skill matrix put **G2 before Ready for Design**, so approval would have bound a brief whose artifact did not yet exist. DB5 `Decision = Promoted to Brief` remains the owner's concept decision on the opportunity. G1 is now the brief-level review before Design.
 
-**Not built, by design of this unit:** G1 and approved-artifact properties on DB7 (a Notion schema change, outside this unit), and any automatic G1 check in the routine (it cannot read a page-body convention reliably). Until they exist, the T2a checkpoint in the Creative Pipeline proposal is the human step that holds G1.
+**Not built, by design of this unit:** G1 and approved-artifact properties on DB7 (a Notion schema change, outside this unit), and any automatic G1 check in the routine (it cannot read a page-body convention reliably). Until they exist, the T2a checkpoint in the Creative Pipeline proposal is the human step that holds G1. *(Hardening unit: the minimal storage is now proposed in [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md); still not built.)*
+
+### 8.1 Evidence identity (hardening unit, 2026-10-09)
+
+Every record a stage relies on names **the brief and the revision it covers**. The gate compares both with the brief under check:
+
+| Evidence | Must carry | Refused when |
+|---|---|---|
+| G1 | `brief_id`, `revision`, `path` (`design` / `text_only`), `by: human:…`, `at`, `decision: passed` | missing; agent-made; undated; another brief (R24); another revision (R12); invalid revision (R20); no path, or a path the brief no longer matches (R22) |
+| Storyboard | `brief_id`, `revision`. The routine's COMPLETED marker `[… \| brief=<id> \| rev=<N>]` is this record | missing (R22); another brief (R24); stale (R12); invalid (R20) |
+| Spend approval | `brief_id`, `revision`, `by: human:…`, `at`, `scope` | as G1, and no scope (R22) |
+| Claim review (C05) | `brief_id`, `revision`, `verdict: pass` | missing or not `pass` (R22); another brief (R24); stale (R12) |
+| Asset | `asset_id` (registry token, never a URL), `version` (whole number ≥ 1), `rights`, `provenance: {brief_id, brief_revision}` | invalid ID or version, or listed twice (R25); provenance missing or for another brief (R24); made for another revision (R12); rights unknown (R22) |
+| G2 packet (C06 write) | `target` = the brief page written; the target read back (`state.prior`) at the packet's Version | no target, or a packet for another page (R24); target moved on (R12) |
+| Publication | brief ID; approved and published asset sets equal, each asset valid | as above, plus R11, R12, R14 |
+
+**Provisional asset-ID format.** Design (19)'s Asset Registry is not built (§9.2), so no canonical asset-ID format exists. Until Design ratifies one, the gate accepts a 3–128 character token of letters, digits and `. _ : -`. That rules out URLs, whitespace and blanks. It is a placeholder, not Design's decision.
 
 ---
 
@@ -296,7 +337,8 @@ No Content event reaches another department automatically: the runtime publishes
 | Sector → Content | Human invoking C01 | Sector finding ID → DB5 opportunity ID | R03/R04/R05 pass; read-back matches | Page-body change line + DB5 `Source Intelligence` |
 | Content → Design | **Human** records G1, then sets `Ready for Design` | DB7 brief ID + Version → routine storyboard comment | `content_write_gate.py readiness` passes on a live snapshot: both DRAGON passes, surface assigned, valid Version, upstream links, a design (not text-only) brief, G1 for this Version | The G1 page-body line; the routine's comment carrying `[creative-pipeline v2 \| completed \| …]` |
 | Design → generation | **Human** spend approval | Brief ID + Version + storyboard → generation jobs | `validate_generation_start` passes | Design (19)'s spend record |
-| Content → G2 | Human invoking C06, then the reviewer | Brief ID + Version + C05 verdict + finished asset set (design) or final copy (text-only) → `G2 Decision` | `validate_g2_submission` passes; reviewer, date and approved revision recorded by the human | DB7 G2 fields + the G2 packet's asset list + Approval Integrity green |
+| Content → G1 (text-only) | **Human** reviewer | Brief ID + Version + final copy → G1 line with `path text_only` | Both DRAGON passes, surface assigned, valid Version; the copy is final | The G1 page-body line naming brief ID, revision and path |
+| Content → G2 | Human invoking C06, then the reviewer | Brief ID + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only) → `G2 Decision` | `validate_g2_submission` (`content_write_gate.py submission`) passes, with every record bound to this brief and Version; reviewer, date and approved revision recorded by the human | DB7 G2 fields + the G2 packet's asset list + Approval Integrity green |
 | G2 → publication | **Human publisher** | Approved brief ID + Version + asset set → native post | R11–R14 pass | Publication record (brief ID, revision, asset set, surface, native URL, date, publisher) in the Presence publication log (not yet built) |
 | Engagement → Sales | Human | Conversation → `LEAD_CREATED` input to `sales-lead-qualification` | Consent and CRM ownership respected | CRM record, owned by Sales |
 
@@ -327,6 +369,10 @@ The data model puts **translation before brief**: a DB7 brief requires its DB6 t
 
 ## 13. Changelog
 
+- **v0.3 (2026-10-09, owner-authorised hardening unit)** — Repository only. No Notion write and no activation.
+  - **The remaining failures were reproduced against `ce310c6`'s gate.** G1, storyboard, spend, claim-review and asset evidence for another brief were accepted at a matching revision. A G2 packet for one brief was accepted as a write on another. Assets missing a version, or an ID, on both sides passed publication. A temporary vendor URL passed as an asset ID. Text-only G2 passed with no G1.
+  - **What changed.** Evidence is bound to brief ID + Version (§8.1, R24). Asset rules added (R25). **G1 is required on both paths** (owner direction, quoted in §8; the v0.2 text-only reading is marked as the assistant's, superseded). "Text-capable is not asset-free" is made explicit. A `submission` command was added to the gate. The storage and fingerprint proposal is prepared, not applied.
+  - **Unchanged.** Triggers, emits, risk classes, field ownership and Notion option names. — Claude Code (Opus 5.5)
 - **v0.2 (2026-10-09, owner-authorised correction unit)** — Seven review findings on `74feb86` corrected in the repository. No Notion write; only read-only schema fetches.
   - **Vocabulary.** One explicit surface, audience and format vocabulary with the live option IDs (§7.1). Unknown values fail closed.
   - **Revisions.** Positive revisions enforced; publication-affecting changes must bump `Version` exactly once; stale and missing revisions refused (§6.4, R20, R21).

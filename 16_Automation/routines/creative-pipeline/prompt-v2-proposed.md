@@ -19,7 +19,7 @@
 3. **Three distinct outcomes.** Blocked, failed and completed are separate. Only completed writes the COMPLETED marker. A failed brief leaves no marker, so the next run retries it.
 4. **The comment is read back** after posting.
 
-**Decision table as code:** [`disposition.py`](disposition.py). [`test_disposition.py`](test_disposition.py) checks the prompt text below against it. The surface names and DRAGON values come from [`04_Content/contracts/content-databases.json`](../../../04_Content/contracts/content-databases.json) `vocabularies`.
+**Decision table as code:** [`disposition.py`](disposition.py), a **non-production model** that nothing deploys or runs; the routine follows the prompt text below. [`test_disposition.py`](test_disposition.py) checks the prompt text below against it. The surface names and DRAGON values come from [`04_Content/contracts/content-databases.json`](../../../04_Content/contracts/content-databases.json) `vocabularies`.
 
 ```text
 You are Arika Growth's Design (19) Creative Pipeline Automation, running as a scheduled cloud routine. You have a Notion MCP connector (read/write) and read access to this repository's checked-out files. You have NO generation, OpenArt or Canva tools. That is deliberate: a human approves spend before any credit is used (16_Automation/AUTOMATION_OS.md, 00_Agency_Governance/AUTOMATION_APPROVAL_MATRIX.md).

@@ -128,6 +128,26 @@ doctrine inline rather than via shared skills."*
 
 ## 8. Decision Log
 
+- **2026-10-09 — Hardening unit: stage evidence bound to brief ID + Version; G1 on both paths (owner-authorised; repository only).**
+  - **Owner direction (hardening brief, quoted):** "Require human G1 and G2 for every public content item. Genuinely text-only work skips Design and generation-spend approval, not G1. Text-capable formats are not automatically asset-free." It is recorded as **today's** direction. It does not back-date or reword an earlier decision. The earlier text-only-without-G1 reading was the assistant's, not the owner's, and is marked as superseded where it appeared: contract §8, skill matrix §3, C04, and the correction-unit entry below.
+  - **Reproduced first, against `ce310c6`, with synthetic fixtures.** Each of these was accepted:
+    - G1 from another brief at the same revision;
+    - a storyboard and spend approval from another brief;
+    - a claim review and asset provenance from another brief;
+    - a G2 packet for brief A written onto brief C;
+    - an asset with no version on both sides at publication;
+    - an asset with no ID on both sides;
+    - a temporary vendor URL as an asset ID;
+    - text-only G2 with no G1.
+  - **What changed:**
+    - Every stage record names a brief ID and revision, and the gate binds it to the brief under check (R24, R12, R20).
+    - Assets need a registry-token ID (never a URL), a whole-number version and provenance `{brief_id, brief_revision}`, with no duplicates (R25). The asset-ID format is provisional until Design's registry defines one.
+    - A G2 packet must describe its own write target, read back at its Version (R24, R12).
+    - G1 is required at G2 submission on both paths and records the path. A path the brief no longer matches is refused (R22).
+    - A `submission` command was added to the gate.
+  - **Unchanged:** triggers, emits, risk classes, field ownership, Notion option names and the routine prompt. The routine's decision-table model is labelled non-production.
+  - **Prepared, not implemented:** [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md). It covers six additive DB7 properties for G1 and the approved asset set, a SHA-256 content fingerprint, and what direct Notion edits still escape.
+  - **Not done:** no Notion write, no activation, no agent run, no status flip, no publication, no commit by hand. Results are in §15. — Claude Code (Opus 5.5)
 - **2026-10-09 — Correction unit: seven review findings on `74feb86` fixed in the repository (owner-authorised).**
   - **Scope.** Repository corrections only. Notion was read, never written: read-only schema fetches of DB5, DB6 and DB7. The live routine, approval-matrix rows, public profiles and storage permissions were untouched. Nothing was published or generated, and nothing was committed or pushed by hand.
   - **(1) Surface vocabulary.** The live DB6 options are `LinkedIn - Founder profile` `016f7eea…`, `LinkedIn - Company Page` `18754c3f…`, `Single-identity channel` `e06665b3…` and `Not yet assigned` `7ceba672…`, with ASCII hyphens. Before this unit:
@@ -147,7 +167,7 @@ doctrine inline rather than via shared skills."*
     - G1 concept review and readiness before Ready for Design, by a human, for the exact Version;
     - human spend approval before any generation;
     - G2 on the exact finished artifact (copy + asset set, each made for that Version).
-    Text-only content reaches G2 once its final copy exists, and never goes to Design (R22). The skill matrix had drawn G2 before Design.
+    Text-only content reaches G2 once its final copy exists, and never goes to Design (R22). The skill matrix had drawn G2 before Design. *⚠ Hardening unit, same day: text-only content also needs a human G1. That is the owner's direction in the hardening brief. The no-G1 reading of this line was the assistant's, flagged at handover, and never an owner decision (entry above).*
   - **(4) Duplicates.** A CREATE needs a verified lookup (`status: complete`, a timestamp and a records list). Missing, failed, partial or unknown lookups are refused (R10_LOOKUP_UNVERIFIED); before this unit, `state={}` meant "no duplicates". `Audience Role`, the existing DB6 field mirroring Sector DB9, is restored to the DB6 natural key, so two audience variants of one family are no longer duplicates. No new audience store.
   - **(5)–(6) Routine proposal amended, not applied.**
     - BLOCKED, FAILED and COMPLETED are now distinct, with separate markers. Blocked or failed briefs never write the completed marker, and failures retry. Campaign stays optional.
@@ -409,6 +429,21 @@ running system has changed.
 
 ## 15. Changelog
 
+- 2026-10-09 — **Hardening unit (owner-authorised; repository only).**
+  - **Starting point.** HEAD `ce310c6` (auto-sync of the correction unit, 22 files) matched `origin/master`, with a clean tree.
+  - **Files.** 16 edited and 1 added (`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`). Write contract v0.3, skill matrix v0.3, field contract v0.3 (workflow block only; no field, writer or option changed).
+  - **Verification, 2026-10-09:**
+    - All reproduced failures were re-run after the fix, and each is refused.
+    - Content tests **146/146** (up from 116), with sub-cases for missing, wrong-brief, stale, invalid and valid evidence.
+    - Routine model tests **27/27**.
+    - Gate PASS (361 fields).
+    - Sector 228/228.
+    - `arika-runtime`: typecheck clean, 80/80 tests, 115 agents.
+    - Content agent schemas closed.
+    - No trigger, emit, risk-class, handoff or ownership line changed in any agent or skill.
+    - The `submission` command passes and refuses on PowerShell-written (BOM) snapshots.
+    - `_memory` untouched.
+  - **Not committed by this session.** — Claude Code (Opus 5.5)
 - 2026-10-09 — **Correction unit (owner-authorised; repository only).**
   - **Files.** 19 files edited and 3 added (`04_Content/CONTENT_UNIT_ROLLBACK_PROPOSAL.md`, `16_Automation/routines/creative-pipeline/disposition.py`, `test_disposition.py`); detail in §8. Contract docs: write contract v0.2 and skill matrix v0.2.
   - **Live verification, read-only.**

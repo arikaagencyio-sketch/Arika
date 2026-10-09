@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 """
+NON-PRODUCTION MODEL. Nothing deploys, schedules or imports this file in
+production; the live routine never runs it.
+
 Creative Pipeline routine, prompt v2 (PROPOSED, not applied): the per-brief
 decision table as code.
 
@@ -27,6 +30,7 @@ REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "04_Content", "contracts"))
 import content_write_gate as gate  # noqa: E402
 
+PRODUCTION = False  # a model for tests and review; the routine is an LLM following the prompt text
 PROMPT_VERSION = "creative-pipeline v2"
 COMPLETED = "[creative-pipeline v2 | completed | brief={brief} | rev={rev}]"
 BLOCKED = "[creative-pipeline v2 | blocked | brief={brief} | rev={rev} | reasons={reasons}]"

@@ -145,6 +145,14 @@ class Duplicates(unittest.TestCase):
         self.assertEqual(r["outcome"], "completed")
 
 
+class NonProductionLabel(unittest.TestCase):
+    def test_model_is_labelled_non_production_everywhere(self):
+        self.assertIs(d.PRODUCTION, False)
+        self.assertTrue(d.__doc__.strip().startswith("NON-PRODUCTION MODEL"))
+        self.assertIn("non-production model", read("prompt-v2-proposed.md"))
+        self.assertIn("non-production model", read("CHANGE_PROPOSAL.md"))
+
+
 class PromptMatchesTable(unittest.TestCase):
     """The live routine follows prose; these keep the prose and the table aligned."""
 

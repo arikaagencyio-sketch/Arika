@@ -1,9 +1,10 @@
 {
   "_meta": {
     "artifact": "Content (04) database + field ownership contract, DB1-DB8",
-    "version": "0.2",
+    "version": "0.3",
     "generated": "2026-10-09",
     "amended": "2026-10-09 correction unit: explicit option vocabularies with live option IDs (surface, audience_role, format, Publishing Status), Audience Role restored to the DB6 natural key, publication-affecting DB7 fields marked for revision checks, workflow stages recorded.",
+    "amended_hardening": "2026-10-09 hardening unit: G1 required on both paths (owner direction in the hardening brief); stage evidence bound to brief ID + Version; asset ID / version / provenance rules. No field, writer or option changed.",
     "generated_by": "Claude Code (Opus 5.5), human-invoked session",
     "source_of_truth": "Live Notion data-source schemas fetched 2026-10-09 via MCP (after the 2026-10-09 additive changes). CONTENT_INTELLIGENCE_SCHEMA.md is authoritative for why a field exists; this file is authoritative for who may write it.",
     "row_counts": "row_count_verified = a live SELECT COUNT(*) that actually ran on the verified_date. Never back-filled from changelogs.",
@@ -121,11 +122,14 @@
     ],
     "text_only_path": [
       "Strategic DRAGON -> Editorial DRAGON -> final copy at Version N",
-      "G2 on the exact final copy at Version N (human) -> human publishes. No Design stage, no spend approval."
+      "G1 concept review on Version N, path = text_only (human). Required: text-only skips Design and spend approval, never G1 (hardening unit, owner direction).",
+      "G2 on the exact final copy at Version N (human) -> human publishes."
     ],
-    "g1_record": "No Notion property exists for G1. Until one is approved, G1 is a dated page-body line on the brief written or quoted from the human reviewer: 'G1 passed | rev N | <reviewer> | <date>'.",
-    "spend_approval_record": "Owned by Design (19) and the approval matrix (Creative Pipeline: human gate before credit spend). Content's gate checks only that one exists for the same brief and Version.",
-    "g2_artifact_record": "No Notion property holds the approved asset set. Until one is approved, the G2 packet on the brief page lists it, and the publication record must reproduce it exactly."
+    "text_only_rule": "Genuinely text-only = a text-capable format AND empty (or 'text-only') Visual Direction and Canva Instructions AND no assets AND a human G1 recording path text_only. A text-capable format alone is never asset-free.",
+    "evidence_binding": "Every stage record (G1, storyboard, spend approval, claim review, asset provenance, G2 submission) names the brief ID and the revision it covers. Another brief, another revision, or no identity is refused (R12, R20, R24). Assets: a registry-token ID (never a URL), a whole-number version >= 1, listed once, and provenance {brief_id, brief_revision} (R25).",
+    "g1_record": "No Notion property exists for G1. Until one is approved (proposal: 04_Content/APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md), G1 is a dated page-body line on the brief written or quoted from the human reviewer: 'G1 passed | brief <page id> | rev N | path design|text_only | <reviewer> | <date>'.",
+    "spend_approval_record": "Owned by Design (19) and the approval matrix (Creative Pipeline: human gate before credit spend). Content's gate checks only that one exists for the same brief ID and Version.",
+    "g2_artifact_record": "No Notion property holds the approved asset set. Until one is approved (same proposal), the G2 packet on the brief page lists it (asset ID, version, provenance), and the publication record must reproduce it exactly."
   },
   "state_axes": {
     "knowledge_maturity": "Status (Draft/Validating/Active/Superseded/Archived) on DB1-DB6, DB8",

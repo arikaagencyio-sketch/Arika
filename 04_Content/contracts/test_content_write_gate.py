@@ -110,24 +110,66 @@ def readiness_ctx(**over):
            "links": {"opportunity": "fx-opp-001", "translation": "fx-tr-001", "narrative_position_ids": ["nar-fx-belief"]},
            "opportunity": opportunity(),
            "translation": translation(),
-           "g1": {"decision": "passed", "by": "human:Mary Thuo", "at": "2026-10-20", "revision": 2}}
+           "g1": g1()}
     ctx.update(over)
     return ctx
+
+
+BRIEF_ID, OTHER_BRIEF = "fx-brief-001", "fx-brief-OTHER"
+
+
+def g1(path="design", **over):
+    r = {"decision": "passed", "path": path, "by": "human:Mary Thuo", "at": "2026-10-20",
+         "brief_id": BRIEF_ID, "revision": 2}
+    r.update(over)
+    return r
+
+
+def asset(asset_id="fx-asset-1", version=1, brief_id=BRIEF_ID, brief_revision=2, rights="owned"):
+    return {"asset_id": asset_id, "version": version, "rights": rights,
+            "provenance": {"brief_id": brief_id, "brief_revision": brief_revision}}
 
 
 def submission_ctx(fmt="Carousel", artifacts="default", **over):
-    b = {"id": "fx-brief-001", "version": 2, "caption": "Final copy", "script": "S1 ...",
+    b = {"id": BRIEF_ID, "version": 2, "caption": "Final copy", "script": "S1 ...",
          "visual_direction": "Navy", "canva_instructions": "6 frames"}
-    if fmt == "Text post":
+    text_only = fmt in ("Text post", "Newsletter issue")
+    if text_only:
         b.update(visual_direction="", canva_instructions="text-only")
     if artifacts == "default":
-        artifacts = [] if fmt == "Text post" else [
-            {"asset_id": "fx-asset-1", "version": 1, "brief_revision": 2, "rights": "owned"}]
+        artifacts = [] if text_only else [asset()]
     ctx = {"brief": b, "revision": 2, "opportunity": opportunity(),
-           "translation": translation(fmt=fmt),
-           "claim_review": {"verdict": "pass", "revision": 2}, "artifacts": artifacts}
+           "translation": translation(fmt=fmt, surface=CHANNEL if fmt == "Newsletter issue" else FOUNDER,
+                                      platform="Newsletter" if fmt == "Newsletter issue" else "LinkedIn"),
+           "g1": g1(path="text_only" if text_only else "design"),
+           "claim_review": {"verdict": "pass", "brief_id": BRIEF_ID, "revision": 2}, "artifacts": artifacts}
     ctx.update(over)
     return ctx
+
+
+def generation_ctx(**over):
+    ctx = {"brief": {"id": BRIEF_ID, "version": 2, "publishing_status": "Ready for Design"},
+           "storyboard": {"brief_id": BRIEF_ID, "revision": 2},
+           "spend_approval": {"by": "human:Mary Thuo", "at": "2026-10-21", "brief_id": BRIEF_ID, "revision": 2,
+                              "scope": "6 carousel frames, image model only"}}
+    ctx.update(over)
+    return ctx
+
+
+def design_approval(**over):
+    b = approved_brief(format="Carousel", visual_direction="Navy", canva_instructions="6 frames",
+                       g2_approved_artifacts=[asset()])
+    b.update(over)
+    return b
+
+
+def c06_submit(sub=None, target=BRIEF_ID, prior="default"):
+    p = {"db": "DB7", "mode": "UPDATE", "actor": "C06", "fields": {"G2 Decision": "Submitted for review"},
+         "g2_submission": submission_ctx() if sub is None else sub}
+    if target is not None:
+        p["target"] = target
+    state = {"prior": {"id": BRIEF_ID, "Version": 2.0}} if prior == "default" else ({"prior": prior} if prior else {})
+    return g.validate_write(p, CONTRACT, state=state)
 
 
 def approved_brief(**over):
@@ -362,9 +404,7 @@ class G2Failure(unittest.TestCase):
         self.assertEqual(g.validate_write(p, CONTRACT, state={}).codes.count("R01_HUMAN_ONLY"), 2)
 
     def test_skill_may_submit_a_finished_artifact_for_review(self):
-        p = {"db": "DB7", "mode": "UPDATE", "actor": "C06", "fields": {"G2 Decision": "Submitted for review"},
-             "g2_submission": submission_ctx()}
-        v = g.validate_write(p, CONTRACT, state={})
+        v = c06_submit()
         self.assertTrue(v.ok, v)
 
 
@@ -647,8 +687,9 @@ class RevisionIntegrity(unittest.TestCase):
 # --------------------------------------------------------------------------- finding 3
 
 class WorkflowOrder(unittest.TestCase):
-    """Finding 3: G1 + readiness before Design; human spend approval before generation;
-    G2 on the exact finished artifact; text-only reaches G2 once its final copy exists."""
+    """Finding 3 (correction unit), as hardened: G1 + readiness before Design; human spend
+    approval before generation; G2 on the exact finished artifact. Text-only work skips
+    Design and spend approval, never G1 (hardening unit)."""
 
     def test_ready_design_brief_with_g1_passes(self):
         v = g.validate_design_readiness(readiness_ctx())
@@ -659,17 +700,15 @@ class WorkflowOrder(unittest.TestCase):
         self.assertIn("R22_STAGE_ORDER", v.codes)
 
     def test_g1_by_an_agent_is_refused(self):
-        v = g.validate_design_readiness(readiness_ctx(g1={"decision": "passed", "by": "agent:content-brief-builder",
-                                                          "at": "2026-10-20", "revision": 2}))
+        v = g.validate_design_readiness(readiness_ctx(g1=g1(by="agent:content-brief-builder")))
         self.assertIn("R22_STAGE_ORDER", v.codes)
 
     def test_g1_for_an_older_revision_is_refused(self):
-        v = g.validate_design_readiness(readiness_ctx(g1={"decision": "passed", "by": "human:Mary Thuo",
-                                                          "at": "2026-10-20", "revision": 1}))
+        v = g.validate_design_readiness(readiness_ctx(g1=g1(revision=1)))
         self.assertIn("R12_REVISION_MISMATCH", v.codes)
 
     def test_text_only_brief_does_not_go_to_design(self):
-        ctx = readiness_ctx(translation=translation(fmt="Text post"))
+        ctx = readiness_ctx(translation=translation(fmt="Text post"), g1=g1(path="text_only"))
         ctx["brief"].update(visual_direction="", canva_instructions="text-only")
         self.assertIn("R22_STAGE_ORDER", g.validate_design_readiness(ctx).codes)
 
@@ -681,12 +720,7 @@ class WorkflowOrder(unittest.TestCase):
             self.assertIn(c, codes)
 
     def generation(self, **over):
-        ctx = {"brief": {"id": "fx-brief-001", "version": 2, "publishing_status": "Ready for Design"},
-               "storyboard": {"revision": 2},
-               "spend_approval": {"by": "human:Mary Thuo", "at": "2026-10-21", "revision": 2,
-                                  "scope": "6 carousel frames, image model only"}}
-        ctx.update(over)
-        return g.validate_generation_start(ctx)
+        return g.validate_generation_start(generation_ctx(**over))
 
     def test_generation_with_human_spend_approval_passes(self):
         v = self.generation()
@@ -696,28 +730,27 @@ class WorkflowOrder(unittest.TestCase):
         self.assertIn("R22_STAGE_ORDER", self.generation(spend_approval=None).codes)
 
     def test_generation_with_agent_spend_approval_is_refused(self):
-        v = self.generation(spend_approval={"by": "agent:design-production-engine-coordinator", "at": "2026-10-21",
-                                            "revision": 2, "scope": "x"})
-        self.assertIn("R22_STAGE_ORDER", v.codes)
+        sa = dict(generation_ctx()["spend_approval"], by="agent:design-production-engine-coordinator")
+        self.assertIn("R22_STAGE_ORDER", self.generation(spend_approval=sa).codes)
 
     def test_spend_approval_for_an_older_revision_is_refused(self):
-        v = self.generation(spend_approval={"by": "human:Mary Thuo", "at": "2026-10-21", "revision": 1, "scope": "x"})
-        self.assertIn("R12_REVISION_MISMATCH", v.codes)
+        sa = dict(generation_ctx()["spend_approval"], revision=1)
+        self.assertIn("R12_REVISION_MISMATCH", self.generation(spend_approval=sa).codes)
 
     def test_generation_before_design_status_is_refused(self):
-        v = self.generation(brief={"id": "fx-brief-001", "version": 2, "publishing_status": "In progress"})
+        v = self.generation(brief={"id": BRIEF_ID, "version": 2, "publishing_status": "In progress"})
         self.assertIn("R22_STAGE_ORDER", v.codes)
 
     def test_g2_submission_before_finished_artifact_is_refused(self):
         self.assertIn("R22_STAGE_ORDER", g.validate_g2_submission(submission_ctx(artifacts=[])).codes)
 
     def test_g2_submission_of_artifact_made_for_older_revision_is_refused(self):
-        arts = [{"asset_id": "fx-asset-1", "version": 1, "brief_revision": 1, "rights": "owned"}]
-        self.assertIn("R12_REVISION_MISMATCH", g.validate_g2_submission(submission_ctx(artifacts=arts)).codes)
+        v = g.validate_g2_submission(submission_ctx(artifacts=[asset(brief_revision=1)]))
+        self.assertIn("R12_REVISION_MISMATCH", v.codes)
 
     def test_g2_submission_of_artifact_with_unknown_rights_is_refused(self):
-        arts = [{"asset_id": "fx-asset-1", "version": 1, "brief_revision": 2, "rights": "unknown"}]
-        self.assertIn("R22_STAGE_ORDER", g.validate_g2_submission(submission_ctx(artifacts=arts)).codes)
+        v = g.validate_g2_submission(submission_ctx(artifacts=[asset(rights="unknown")]))
+        self.assertIn("R22_STAGE_ORDER", v.codes)
 
     def test_text_only_reaches_g2_once_final_copy_exists(self):
         v = g.validate_g2_submission(submission_ctx(fmt="Text post"))
@@ -735,31 +768,32 @@ class WorkflowOrder(unittest.TestCase):
         import tempfile
         with tempfile.TemporaryDirectory() as tmp:
             good, bad = os.path.join(tmp, "snap.json"), os.path.join(tmp, "bad.json")
+            sub = os.path.join(tmp, "sub.json")
             with open(good, "w", encoding="utf-8-sig") as fh:  # BOM, as PowerShell 5.1 writes it
                 json.dump(readiness_ctx(), fh)
+            with open(sub, "w", encoding="utf-8-sig") as fh:
+                json.dump(submission_ctx(fmt="Text post"), fh)
             with open(bad, "w", encoding="utf-8") as fh:
                 fh.write("{not json")
             with contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(g.main(["readiness", good]), 0)
+                self.assertEqual(g.main(["submission", sub]), 0)
                 self.assertEqual(g.main(["readiness", bad]), 2)
+                self.assertEqual(g.main(["submission", bad]), 2)
                 self.assertEqual(g.main(["readiness", os.path.join(tmp, "missing.json")]), 2)
 
     def test_c06_cannot_submit_without_context(self):
         p = {"db": "DB7", "mode": "UPDATE", "actor": "C06", "fields": {"G2 Decision": "Submitted for review"}}
         self.assertIn("R22_STAGE_ORDER", g.validate_write(p, CONTRACT, state={}).codes)
 
-    def design_approval(self, **over):
-        return approved_brief(format="Carousel", visual_direction="Navy", canva_instructions="6 frames",
-                              g2_approved_artifacts=[{"asset_id": "fx-asset-1", "version": 1}], **over)
-
     def test_design_publication_with_the_approved_artifact_passes(self):
         v = g.validate_publication(publication(artifacts=[{"asset_id": "fx-asset-1", "version": 1}]),
-                                   self.design_approval())
+                                   design_approval())
         self.assertTrue(v.ok, v)
 
     def test_design_publication_with_a_different_artifact_is_refused(self):
         v = g.validate_publication(publication(artifacts=[{"asset_id": "fx-asset-1", "version": 2}]),
-                                   self.design_approval())
+                                   design_approval())
         self.assertIn("R12_REVISION_MISMATCH", v.codes)
 
     def test_design_approval_without_artifact_is_refused(self):
@@ -823,6 +857,197 @@ class DuplicateLookupState(unittest.TestCase):
         db6 = next(d for d in CONTRACT["databases"] if d["db_id"] == "DB6")
         audience_fields = [f["name"] for f in db6["fields"] if "audience" in f["name"].lower()]
         self.assertEqual(audience_fields, ["Audience Role"])
+
+
+# --------------------------------------------------------------------------- hardening unit (2026-10-09)
+
+def _evidence_cases(valid, rev_key="revision"):
+    """(name, evidence, codes that must appear). Every wrong case changes ONE thing."""
+    no_brief = {k: v for k, v in valid.items() if k != "brief_id"}
+    return [
+        ("wrong brief", dict(valid, brief_id=OTHER_BRIEF), {"R24_EVIDENCE_IDENTITY"}),
+        ("no brief id", no_brief, {"R24_EVIDENCE_IDENTITY"}),
+        ("blank brief id", dict(valid, brief_id="  "), {"R24_EVIDENCE_IDENTITY"}),
+        ("stale revision", dict(valid, **{rev_key: 1}), {"R12_REVISION_MISMATCH"}),
+        ("zero revision", dict(valid, **{rev_key: 0}), {"R20_REVISION_INVALID"}),
+        ("fractional revision", dict(valid, **{rev_key: 2.5}), {"R20_REVISION_INVALID"}),
+        ("missing revision", dict(valid, **{rev_key: None}), {"R20_REVISION_INVALID"}),
+    ]
+
+
+class EvidenceBinding(unittest.TestCase):
+    """Hardening item 1-2: evidence for a different brief at a matching revision used to pass
+    (reproduced against ce310c6). Each stage's evidence now binds to brief ID + current Version."""
+
+    def check(self, run, valid, rev_key="revision", missing_code="R22_STAGE_ORDER"):
+        self.assertTrue(run(valid).ok, run(valid))
+        for name, ev, expected in _evidence_cases(valid, rev_key):
+            with self.subTest(case=name):
+                codes = set(run(ev).codes)
+                self.assertTrue(expected <= codes, (name, codes))
+                self.assertEqual(codes - expected, set(), "only the changed field may fail: %r" % codes)
+        if missing_code:
+            with self.subTest(case="missing record"):
+                self.assertIn(missing_code, run(None).codes)
+
+    def test_g1_at_readiness(self):
+        self.check(lambda ev: g.validate_design_readiness(readiness_ctx(g1=ev)), g1())
+
+    def test_g1_at_g2_submission(self):
+        self.check(lambda ev: g.validate_g2_submission(submission_ctx(g1=ev)), g1())
+
+    def test_storyboard_before_generation(self):
+        self.check(lambda ev: g.validate_generation_start(generation_ctx(storyboard=ev)),
+                   generation_ctx()["storyboard"])
+
+    def test_spend_approval_before_generation(self):
+        self.check(lambda ev: g.validate_generation_start(generation_ctx(spend_approval=ev)),
+                   generation_ctx()["spend_approval"])
+
+    def test_claim_review_at_g2_submission(self):
+        self.check(lambda ev: g.validate_g2_submission(submission_ctx(claim_review=ev)),
+                   submission_ctx()["claim_review"])
+
+    def test_asset_provenance_at_g2_submission(self):
+        def run(prov):
+            a = asset()
+            a["provenance"] = prov
+            return g.validate_g2_submission(submission_ctx(artifacts=[a]))
+        self.check(run, asset()["provenance"], rev_key="brief_revision", missing_code="R24_EVIDENCE_IDENTITY")
+
+    def test_approved_asset_provenance_at_publication(self):
+        def run(prov):
+            a = asset()
+            a["provenance"] = prov
+            return g.validate_publication(publication(artifacts=[{"asset_id": "fx-asset-1", "version": 1}]),
+                                          design_approval(g2_approved_artifacts=[a]))
+        self.check(run, asset()["provenance"], rev_key="brief_revision", missing_code="R24_EVIDENCE_IDENTITY")
+
+    def test_brief_without_an_id_cannot_bind_anything(self):
+        ctx = readiness_ctx()
+        del ctx["brief"]["id"]
+        self.assertIn("R24_EVIDENCE_IDENTITY", g.validate_design_readiness(ctx).codes)
+        sub = submission_ctx()
+        sub["brief"]["id"] = ""
+        self.assertIn("R24_EVIDENCE_IDENTITY", g.validate_g2_submission(sub).codes)
+        self.assertIn("R24_EVIDENCE_IDENTITY",
+                      g.validate_publication(publication(), approved_brief(id=None)).codes)
+
+
+class AssetValidity(unittest.TestCase):
+    """Hardening item 1-2: an asset with no version (or no ID) on BOTH sides used to pass
+    publication because the two sets still matched (reproduced against ce310c6)."""
+
+    def publish(self, approved, published):
+        return g.validate_publication(publication(artifacts=published), design_approval(g2_approved_artifacts=approved))
+
+    def test_missing_version_on_both_sides_is_refused(self):
+        a = asset()
+        del a["version"]
+        v = self.publish([a], [{"asset_id": "fx-asset-1"}])
+        self.assertGreaterEqual(v.codes.count("R25_ASSET_INVALID"), 2)
+
+    def test_missing_id_on_both_sides_is_refused(self):
+        v = self.publish([asset(asset_id=None)], [{"asset_id": None, "version": 1}])
+        self.assertGreaterEqual(v.codes.count("R25_ASSET_INVALID"), 2)
+
+    def test_invalid_versions_are_refused(self):
+        for bad in (0, -1, 1.5, True, "1"):
+            with self.subTest(version=bad):
+                v = g.validate_g2_submission(submission_ctx(artifacts=[asset(version=bad)]))
+                self.assertIn("R25_ASSET_INVALID", v.codes)
+
+    def test_invalid_ids_are_refused(self):
+        for bad in ("", "  ", "a", "https://cdn.vendor.example/tmp/x.png?sig=1", "has space", None, 42):
+            with self.subTest(asset_id=bad):
+                v = g.validate_g2_submission(submission_ctx(artifacts=[asset(asset_id=bad)]))
+                self.assertIn("R25_ASSET_INVALID", v.codes)
+
+    def test_duplicate_asset_is_refused(self):
+        v = g.validate_g2_submission(submission_ctx(artifacts=[asset(), asset(version=2)]))
+        self.assertIn("R25_ASSET_INVALID", v.codes)
+
+    def test_published_asset_missing_its_version_is_refused(self):
+        v = self.publish([asset()], [{"asset_id": "fx-asset-1"}])
+        self.assertIn("R25_ASSET_INVALID", v.codes)
+        self.assertIn("R12_REVISION_MISMATCH", v.codes)
+
+    def test_valid_asset_set_passes(self):
+        v = self.publish([asset(), asset(asset_id="fx-asset-2", version=3)],
+                         [{"asset_id": "fx-asset-2", "version": 3}, {"asset_id": "fx-asset-1", "version": 1}])
+        self.assertTrue(v.ok, v)
+
+
+class SubmissionTarget(unittest.TestCase):
+    """Hardening item 2: the G2 submission context must belong to the page being written."""
+
+    def test_valid_submission_on_its_own_brief_passes(self):
+        v = c06_submit()
+        self.assertTrue(v.ok, v)
+
+    def test_write_without_a_target_is_refused(self):
+        self.assertIn("R24_EVIDENCE_IDENTITY", c06_submit(target=None).codes)
+
+    def test_submission_for_another_brief_is_refused(self):
+        # reproduced against ce310c6: a packet for brief A was accepted as a write on brief C
+        self.assertIn("R24_EVIDENCE_IDENTITY", c06_submit(target=OTHER_BRIEF,
+                                                          prior={"id": OTHER_BRIEF, "Version": 2}).codes)
+
+    def test_target_not_read_back_is_refused(self):
+        self.assertIn("R24_EVIDENCE_IDENTITY", c06_submit(prior=None).codes)
+
+    def test_prior_record_of_another_page_is_refused(self):
+        self.assertIn("R24_EVIDENCE_IDENTITY", c06_submit(prior={"id": OTHER_BRIEF, "Version": 2}).codes)
+
+    def test_target_moved_on_since_the_packet_is_refused(self):
+        self.assertIn("R12_REVISION_MISMATCH", c06_submit(prior={"id": BRIEF_ID, "Version": 3}).codes)
+
+    def test_target_without_a_valid_version_is_refused(self):
+        self.assertIn("R20_REVISION_INVALID", c06_submit(prior={"id": BRIEF_ID, "Version": None}).codes)
+
+
+class G1OnBothPaths(unittest.TestCase):
+    """Hardening item 3 (owner direction, 2026-10-09): G1 and G2 for every public item.
+    Text-only skips Design and spend approval, not G1. Text-capable is not asset-free."""
+
+    def test_text_only_submission_without_g1_is_refused(self):
+        # reproduced against ce310c6: accepted with no G1 at all
+        self.assertIn("R22_STAGE_ORDER", g.validate_g2_submission(submission_ctx(fmt="Text post", g1=None)).codes)
+
+    def test_design_submission_without_g1_is_refused(self):
+        self.assertIn("R22_STAGE_ORDER", g.validate_g2_submission(submission_ctx(g1=None)).codes)
+
+    def test_text_only_with_g1_passes_on_both_text_formats(self):
+        for fmt in ("Text post", "Newsletter issue"):
+            with self.subTest(fmt=fmt):
+                v = g.validate_g2_submission(submission_ctx(fmt=fmt))
+                self.assertTrue(v.ok, v)
+
+    def test_g1_must_record_the_path(self):
+        rec = g1()
+        del rec["path"]
+        self.assertIn("R22_STAGE_ORDER", g.validate_g2_submission(submission_ctx(g1=rec)).codes)
+
+    def test_g1_path_must_match_the_brief(self):
+        self.assertIn("R22_STAGE_ORDER",
+                      g.validate_g2_submission(submission_ctx(fmt="Text post", g1=g1(path="design"))).codes)
+        self.assertIn("R22_STAGE_ORDER", g.validate_g2_submission(submission_ctx(g1=g1(path="text_only"))).codes)
+
+    def test_text_capable_format_with_visual_direction_is_design_work(self):
+        ctx = submission_ctx(fmt="Newsletter issue", g1=g1(path="text_only"))
+        ctx["brief"].update(visual_direction="One header graphic: OTA commission chart")
+        codes = g.validate_g2_submission(ctx).codes
+        self.assertIn("R22_STAGE_ORDER", codes)  # G1 said text-only; the brief now needs an asset, and has none
+
+    def test_text_only_brief_listing_assets_is_refused(self):
+        v = g.validate_g2_submission(submission_ctx(fmt="Text post", artifacts=[asset()]))
+        self.assertIn("R22_STAGE_ORDER", v.codes)
+
+    def test_text_only_readiness_refuses_design_and_points_to_g2(self):
+        ctx = readiness_ctx(translation=translation(fmt="Text post"), g1=g1(path="text_only"))
+        ctx["brief"].update(visual_direction="", canva_instructions="")
+        details = " ".join(r["detail"] for r in g.validate_design_readiness(ctx).refusals)
+        self.assertIn("G2 submission", details)
 
 
 # --------------------------------------------------------------------------- tests stay out of production memory

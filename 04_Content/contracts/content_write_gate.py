@@ -2,8 +2,9 @@
 """
 Content (04) write gate.
 
-    python 04_Content/contracts/content_write_gate.py                    # contract integrity
-    python 04_Content/contracts/content_write_gate.py readiness FILE.json  # G1 readiness on a brief snapshot
+    python 04_Content/contracts/content_write_gate.py                     # contract integrity
+    python 04_Content/contracts/content_write_gate.py readiness FILE.json   # design path: G1 + readiness before Ready for Design
+    python 04_Content/contracts/content_write_gate.py submission FILE.json  # either path: G2 submission (C06) on a snapshot
     python -m unittest discover -s 04_Content/contracts -p "test_*.py"
 
 Two jobs, both pure (no network, no Notion, no file writes):
@@ -30,6 +31,11 @@ Two jobs, both pure (no network, no Notion, no file writes):
    validate_schema_change() return a Verdict. A skill runs them, or reasons
    through the same rules, BEFORE any apply. The rules are the refusal list
    in CONTENT_WRITE_CONTRACT.md s5.
+
+   Stage evidence (G1, storyboard, spend approval, claim review, asset
+   provenance, a G2 submission) binds to ONE brief ID and ONE Version. A
+   record for another brief, another revision, or with no identity at all
+   is refused, even when every other value matches (R12, R20, R24, R25).
 
 What it cannot see. The gate validates proposals and snapshots handed to it.
 It does not read Notion. A person editing a brief directly in Notion bypasses
@@ -66,6 +72,12 @@ QUOTABLE_OFFER_STATUS = {"Active"}
 UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 COPY_FIELDS_THAT_PUBLISH = ("Script", "Caption", "Visual Direction", "Canva Instructions")
 LOOKUP_OK = "complete"
+# Until Design (19)'s Asset Registry defines its ID format, an asset ID is a
+# 3-128 character token of letters, digits and . _ : -. That excludes URLs
+# (a temporary vendor link is never an asset's reference, contract s9.3),
+# whitespace and empty values. Provisional, not Design's ratified format.
+ASSET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$")
+PRODUCTION_PATHS = ("design", "text_only")
 
 
 class Verdict:
@@ -573,14 +585,39 @@ def validate_write(proposal, contract=None, state=None):
     _check_surface(v, proposal, contract)
     _check_revision(v, proposal, contract, state)
     _check_duplicate(v, proposal, contract, state)
+    prior = (state or {}).get("prior")
+    target = proposal.get("target")
+    if isinstance(prior, dict) and prior.get("id") and target and prior["id"] != target:
+        v.refuse("R24_EVIDENCE_IDENTITY", "the prior record %r is not the write target %r" % (prior["id"], target))
     if proposal.get("db") == "DB7" and proposal.get("fields", {}).get("G2 Decision") == "Submitted for review":
-        sub = proposal.get("g2_submission")
-        if not sub:
-            v.refuse("R22_STAGE_ORDER", "Submitted for review needs the submission context: brief, revision, "
-                     "claim review, and the finished artifact or the final copy")
-        else:
-            v.extend(validate_g2_submission(sub, contract))
+        _check_submission_target(v, proposal, state, contract)
     return v
+
+
+def _check_submission_target(v, proposal, state, contract):
+    """The G2 packet must describe the page being written, at its current Version."""
+    sub = proposal.get("g2_submission")
+    if not sub:
+        v.refuse("R22_STAGE_ORDER", "Submitted for review needs the submission context: brief, revision, G1, "
+                 "claim review, and the finished artifact or the final copy")
+        return
+    target = proposal.get("target")
+    sub_id = (sub.get("brief") or {}).get("id")
+    if not target:
+        v.refuse("R24_EVIDENCE_IDENTITY", "the write names no target brief, so the submission cannot be bound to it")
+    elif sub_id != target:
+        v.refuse("R24_EVIDENCE_IDENTITY", "the submission describes brief %r; the write targets %r" % (sub_id, target))
+    prior = (state or {}).get("prior")
+    if not isinstance(prior, dict):
+        v.refuse("R24_EVIDENCE_IDENTITY", "the target brief was not read back (state.prior), so its current Version is unknown")
+    else:
+        on_record = revision_value(prior.get("Version"))
+        described = revision_value((sub.get("brief") or {}).get("version"))
+        if on_record is None:
+            v.refuse("R20_REVISION_INVALID", "the target brief has no valid Version (%r)" % prior.get("Version"))
+        elif described != on_record:
+            v.refuse("R12_REVISION_MISMATCH", "the submission describes Version %r; the target is at %d" % (described, on_record))
+    v.extend(validate_g2_submission(sub, contract))
 
 
 # --------------------------------------------------------------------------- workflow stages
@@ -600,30 +637,93 @@ def _dragon_and_surface(v, ctx, contract, stage):
     return entry
 
 
-def _human_record(v, rec, rev, what):
-    """A gate record (G1, spend approval) made by a named human, dated, for revision `rev`."""
-    rec = rec or {}
+def _brief_identity(v, b, stage):
+    """The brief under check must carry its own ID, or no evidence can be bound to it."""
+    bid = (b or {}).get("id")
+    if not isinstance(bid, str) or not bid.strip():
+        v.refuse("R24_EVIDENCE_IDENTITY", "the brief has no ID, so %s evidence cannot be bound to it" % stage)
+        return None
+    return bid
+
+
+def _bind(v, ev, brief_id, rev, what, rev_key="revision"):
+    """Stage evidence must name this exact brief and its current Version. A record
+    for another brief, another revision, or with no identity is refused, even when
+    every other value in it matches."""
+    ev = ev if isinstance(ev, dict) else {}
+    named = ev.get("brief_id")
+    if not isinstance(named, str) or not named.strip():
+        v.refuse("R24_EVIDENCE_IDENTITY", "%s names no brief" % what)
+    elif brief_id is not None and named != brief_id:
+        v.refuse("R24_EVIDENCE_IDENTITY", "%s belongs to brief %r, not %r" % (what, named, brief_id))
+    got = revision_value(ev.get(rev_key))
+    if got is None:
+        v.refuse("R20_REVISION_INVALID", "%s names no valid revision (%r)" % (what, ev.get(rev_key)))
+    elif rev is not None and got != rev:
+        v.refuse("R12_REVISION_MISMATCH", "%s is for revision %d; the brief is at %d" % (what, got, rev))
+
+
+def _human_record(v, rec, brief_id, rev, what):
+    """A gate record (G1, spend approval): a named human, a date, this brief, this Version."""
+    rec = rec if isinstance(rec, dict) else {}
     if not (_is_human(rec.get("by")) and rec.get("at")):
         v.refuse("R22_STAGE_ORDER", "%s is not recorded by a named human with a date" % what)
+    _bind(v, rec, brief_id, rev, what)
+
+
+def _check_g1(v, g1, brief_id, rev, path):
+    """G1 is required on BOTH paths, design and text-only. The human records the
+    production path at G1; the brief as it stands must still be that path."""
+    g1 = g1 if isinstance(g1, dict) else {}
+    if g1.get("decision") != "passed":
+        v.refuse("R22_STAGE_ORDER", "G1 concept review has not passed this brief (decision %r)" % g1.get("decision"))
         return
-    got = revision_value(rec.get("revision"))
-    if got is None:
-        v.refuse("R20_REVISION_INVALID", "%s names no valid revision (%r)" % (what, rec.get("revision")))
-    elif rev is not None and got != rev:
-        v.refuse("R12_REVISION_MISMATCH", "%s was given for revision %d; the brief is at %d" % (what, got, rev))
+    _human_record(v, g1, brief_id, rev, "G1 concept review")
+    if g1.get("path") not in PRODUCTION_PATHS:
+        v.refuse("R22_STAGE_ORDER", "G1 does not record the production path (design or text_only): %r" % g1.get("path"))
+    elif path is not None and g1["path"] != path:
+        v.refuse("R22_STAGE_ORDER", "G1 decided the %s path; the brief as it stands is %s work" % (g1["path"], path))
+
+
+def valid_asset_id(x):
+    return isinstance(x, str) and bool(ASSET_ID.match(x))
+
+
+def _check_assets(v, arts, brief_id, rev, what, provenance=True):
+    """Each asset: a valid ID, a whole-number version >= 1, listed once; and, on the
+    authoritative lists, production provenance naming this brief and revision."""
+    if not isinstance(arts, list):
+        v.refuse("R25_ASSET_INVALID", "the %s asset list is not a list" % what)
+        return
+    seen = set()
+    for a in arts:
+        a = a if isinstance(a, dict) else {}
+        aid = a.get("asset_id")
+        label = "%s asset %r" % (what, aid)
+        if not valid_asset_id(aid):
+            v.refuse("R25_ASSET_INVALID", "%s: not a valid asset ID (a registry token; never a URL or blank)" % label)
+        elif aid in seen:
+            v.refuse("R25_ASSET_INVALID", "%s is listed twice" % label)
+        else:
+            seen.add(aid)
+        if revision_value(a.get("version")) is None:
+            v.refuse("R25_ASSET_INVALID", "%s has no whole-number version >= 1 (%r)" % (label, a.get("version")))
+        if provenance:
+            _bind(v, a.get("provenance"), brief_id, rev, "production provenance of %s" % label, rev_key="brief_revision")
 
 
 def validate_design_readiness(ctx, contract=None):
-    """G1 concept review + readiness, checked BEFORE a human sets Ready for Design.
+    """Design path: G1 concept review + readiness, checked BEFORE a human sets Ready for Design.
 
     ctx = {"brief": {"id", "version", "visual_direction", "canva_instructions", "caption", "script"},
            "links": {"opportunity", "translation", "narrative_position_ids"},
            "opportunity": {"strategic_dragon"},
            "translation": {"editorial_dragon", "surface", "format", "family_id"},
-           "g1": {"decision": "passed", "by": "human:...", "at", "revision"}}"""
+           "g1": {"decision": "passed", "path": "design", "by": "human:...", "at", "brief_id", "revision"}}"""
     contract = contract or load_contract()
     v = Verdict()
     b, links, tr = ctx.get("brief") or {}, ctx.get("links") or {}, ctx.get("translation") or {}
+    bid = _brief_identity(v, b, "readiness")
     rev = revision_value(b.get("version"))
     if rev is None:
         v.refuse("R20_REVISION_INVALID", "brief Version %r is not a whole number >= 1" % b.get("version"))
@@ -639,14 +739,10 @@ def validate_design_readiness(ctx, contract=None):
     if prod is None:
         v.refuse("R23_UNKNOWN_OPTION", "format %r is unknown; cannot tell design work from text-only" % tr.get("format"))
     elif prod == "text_only":
-        v.refuse("R22_STAGE_ORDER", "text-only content does not go to Design; it reaches G2 once its final copy exists")
+        v.refuse("R22_STAGE_ORDER", "text-only content does not go to Design; its G1 is checked at G2 submission")
     elif not all((b.get(k) or "").strip() for k in ("visual_direction", "canva_instructions")):
         v.refuse("R22_STAGE_ORDER", "Visual Direction and Canva Instructions are needed before Design")
-    g1 = ctx.get("g1") or {}
-    if g1.get("decision") != "passed":
-        v.refuse("R22_STAGE_ORDER", "G1 concept review has not passed this brief (decision %r)" % g1.get("decision"))
-    else:
-        _human_record(v, g1, rev, "G1 concept review")
+    _check_g1(v, ctx.get("g1"), bid, rev, "design")
     return v
 
 
@@ -654,42 +750,45 @@ def validate_generation_start(ctx, contract=None):
     """Human spend approval, checked BEFORE any generation or credit spend.
 
     ctx = {"brief": {"id", "version", "publishing_status"},
-           "storyboard": {"revision"},             # the routine's completed comment
-           "spend_approval": {"by": "human:...", "at", "revision", "scope"}}"""
+           "storyboard": {"brief_id", "revision"},     # read from the routine's COMPLETED marker
+           "spend_approval": {"by": "human:...", "at", "brief_id", "revision", "scope"}}"""
     v = Verdict()
     b = ctx.get("brief") or {}
+    bid = _brief_identity(v, b, "generation")
     rev = revision_value(b.get("version"))
     if rev is None:
         v.refuse("R20_REVISION_INVALID", "brief Version %r is not a whole number >= 1" % b.get("version"))
     if b.get("publishing_status") != "Ready for Design":
         v.refuse("R22_STAGE_ORDER", "generation before the brief reached Design (status %r)" % b.get("publishing_status"))
-    sb = revision_value((ctx.get("storyboard") or {}).get("revision"))
-    if sb is None:
+    if not ctx.get("storyboard"):
         v.refuse("R22_STAGE_ORDER", "no storyboard on record for this brief")
-    elif rev is not None and sb != rev:
-        v.refuse("R12_REVISION_MISMATCH", "storyboard is for revision %d; the brief is at %d" % (sb, rev))
+    else:
+        _bind(v, ctx["storyboard"], bid, rev, "storyboard")
     sa = ctx.get("spend_approval")
     if not sa:
         v.refuse("R22_STAGE_ORDER", "no human spend approval; nothing may be generated or spent")
         return v
-    _human_record(v, sa, rev, "spend approval")
+    _human_record(v, sa, bid, rev, "spend approval")
     if not sa.get("scope"):
         v.refuse("R22_STAGE_ORDER", "spend approval names no scope (what may be generated)")
     return v
 
 
 def validate_g2_submission(ctx, contract=None):
-    """G2 is on the exact finished artifact. C06 may submit only when it exists.
+    """G2 is on the exact finished artifact, and G1 is required on both paths.
 
     ctx = {"brief": {"id", "version", "caption", "script", "visual_direction", "canva_instructions"},
-           "revision": N,                                   # what is being submitted
+           "revision": N,                                     # what is being submitted
            "opportunity": {"strategic_dragon"},
            "translation": {"editorial_dragon", "surface", "format"},
-           "claim_review": {"verdict": "pass", "revision": N},
-           "artifacts": [{"asset_id", "version", "brief_revision", "rights"}]}   # design work only"""
+           "g1": {"decision": "passed", "path", "by", "at", "brief_id", "revision"},
+           "claim_review": {"verdict": "pass", "brief_id", "revision"},
+           "artifacts": [{"asset_id", "version", "rights",
+                          "provenance": {"brief_id", "brief_revision"}}]}   # design work only"""
     contract = contract or load_contract()
     v = Verdict()
     b, tr = ctx.get("brief") or {}, ctx.get("translation") or {}
+    bid = _brief_identity(v, b, "G2 submission")
     cur, sub = revision_value(b.get("version")), revision_value(ctx.get("revision"))
     if cur is None:
         v.refuse("R20_REVISION_INVALID", "brief Version %r is not a whole number >= 1" % b.get("version"))
@@ -698,10 +797,12 @@ def validate_g2_submission(ctx, contract=None):
     if cur and sub and cur != sub:
         v.refuse("R12_REVISION_MISMATCH", "submitting revision %d; the brief is at %d" % (sub, cur))
     _dragon_and_surface(v, ctx, contract, "G2 submission")
-    cr = ctx.get("claim_review") or {}
-    if cr.get("verdict") != "pass" or revision_value(cr.get("revision")) != cur:
-        v.refuse("R22_STAGE_ORDER", "claim review (C05) has not passed revision %r" % cur)
+    cr = ctx.get("claim_review")
+    if not isinstance(cr, dict) or cr.get("verdict") != "pass":
+        v.refuse("R22_STAGE_ORDER", "claim review (C05) has not passed (verdict %r)" % (cr or {}).get("verdict"))
+    _bind(v, cr, bid, cur, "claim review (C05)")
     prod = production_class(contract, tr.get("format"), b)
+    _check_g1(v, ctx.get("g1"), bid, cur, prod)
     arts = ctx.get("artifacts") or []
     if prod is None:
         v.refuse("R23_UNKNOWN_OPTION", "format %r is unknown; cannot tell design work from text-only" % tr.get("format"))
@@ -709,26 +810,23 @@ def validate_g2_submission(ctx, contract=None):
         if not any((b.get(k) or "").strip() for k in ("caption", "script")):
             v.refuse("R22_STAGE_ORDER", "text-only content reaches G2 once its final copy exists; Caption and Script are empty")
         if arts:
-            v.refuse("R22_STAGE_ORDER", "a text-only brief lists design artifacts; re-classify it or route it through Design")
+            v.refuse("R22_STAGE_ORDER", "a text-only brief lists design artifacts; it is not asset-free, so route it through Design")
     else:
         if not arts:
             v.refuse("R22_STAGE_ORDER", "G2 judges the finished artifact; Design has delivered none for revision %r" % cur)
-        for a in arts:
-            if not a.get("asset_id") or revision_value(a.get("version")) is None:
-                v.refuse("R22_STAGE_ORDER", "artifact %r has no asset ID or valid version" % a.get("asset_id"))
-            made_for = revision_value(a.get("brief_revision"))
-            if made_for is None or (cur and made_for != cur):
-                v.refuse("R12_REVISION_MISMATCH", "artifact %r was produced for revision %r; the brief is at %r"
-                         % (a.get("asset_id"), a.get("brief_revision"), cur))
-            if a.get("rights") in (None, "", "unknown"):
-                v.refuse("R22_STAGE_ORDER", "artifact %r has unknown rights" % a.get("asset_id"))
+        else:
+            _check_assets(v, arts, bid, cur, "submitted", provenance=True)
+            for a in arts:
+                if (a or {}).get("rights") in (None, "", "unknown"):
+                    v.refuse("R22_STAGE_ORDER", "submitted asset %r has unknown rights" % (a or {}).get("asset_id"))
     return v
 
 
 # --------------------------------------------------------------------------- publication
 
 def _artifact_set(arts):
-    return sorted((a.get("asset_id"), revision_value(a.get("version"))) for a in (arts or []))
+    return sorted((str(a.get("asset_id")), revision_value(a.get("version")) or 0)
+                  for a in (arts or []) if isinstance(a, dict))
 
 
 def validate_publication(record, brief, contract=None):
@@ -736,9 +834,13 @@ def validate_publication(record, brief, contract=None):
 
     brief = {"id", "version", "surface", "format", "visual_direction", "canva_instructions",
              "g2_decision", "g2_reviewer", "g2_decided_at", "g2_approved_revision",
-             "g2_approved_artifacts": [{"asset_id", "version"}]}   # design work only"""
+             "g2_approved_artifacts": [{"asset_id", "version",
+                                        "provenance": {"brief_id", "brief_revision"}}]}   # design work only
+    record = {"brief_id", "revision", "surface", "native_post_url", "published_at", "publisher",
+              "artifacts": [{"asset_id", "version"}]}"""
     contract = contract or load_contract()
     v = Verdict()
+    bid = _brief_identity(v, brief, "publication")
     if not _is_human(record.get("publisher")):
         v.refuse("R11_APPROVAL_MISSING", "agents never publish; publisher must be a named human")
     if brief.get("g2_decision") != "Approved":
@@ -761,8 +863,8 @@ def validate_publication(record, brief, contract=None):
     for k in ("brief_id", "surface", "native_post_url", "published_at"):
         if not record.get(k):
             v.refuse("R14_LINKBACK", "publication record has no %s" % k)
-    if record.get("brief_id") and record.get("brief_id") != brief.get("id"):
-        v.refuse("R14_LINKBACK", "record points at a different brief")
+    if record.get("brief_id") and record.get("brief_id") != bid:
+        v.refuse("R14_LINKBACK", "record points at brief %r, not %r" % (record.get("brief_id"), bid))
     rs = resolve_surface(contract, record.get("surface")) if record.get("surface") else None
     bs = resolve_surface(contract, brief.get("surface"))
     if record.get("surface") and rs is None:
@@ -786,12 +888,16 @@ def validate_publication(record, brief, contract=None):
     if prod is None:
         v.refuse("R23_UNKNOWN_OPTION", "format %r is unknown; cannot tell which artifact was approved" % brief.get("format"))
     elif prod == "design":
-        approved_set = _artifact_set(brief.get("g2_approved_artifacts"))
-        if not approved_set:
+        approved_arts = brief.get("g2_approved_artifacts") or []
+        published_arts = record.get("artifacts") or []
+        if not approved_arts:
             v.refuse("R11_APPROVAL_MISSING", "G2 approved no finished artifact for this design brief")
-        elif _artifact_set(record.get("artifacts")) != approved_set:
-            v.refuse("R12_REVISION_MISMATCH", "published artifacts %r differ from the approved set %r"
-                     % (_artifact_set(record.get("artifacts")), approved_set))
+        else:
+            _check_assets(v, approved_arts, bid, approved, "approved", provenance=True)
+            _check_assets(v, published_arts, bid, approved, "published", provenance=False)
+            if _artifact_set(published_arts) != _artifact_set(approved_arts):
+                v.refuse("R12_REVISION_MISMATCH", "published artifacts %r differ from the approved set %r"
+                         % (_artifact_set(published_arts), _artifact_set(approved_arts)))
     elif record.get("artifacts"):
         v.refuse("R12_REVISION_MISMATCH", "a text-only approval covers no design artifact")
     return v
@@ -840,20 +946,24 @@ def _print_verdict(label, v):
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     contract = load_contract()
-    if argv[:1] == ["readiness"] and len(argv) == 2:
+    commands = {"readiness": ("READINESS (design path: G1, before Ready for Design)", validate_design_readiness),
+                "submission": ("G2 SUBMISSION (either path: G1, claim review, final copy or finished artifact)",
+                               validate_g2_submission)}
+    if argv[:1] and argv[0] in commands and len(argv) == 2:
+        label, check = commands[argv[0]]
         try:
             # utf-8-sig: Windows PowerShell 5.1 writes a BOM; a snapshot written there must still load.
             with open(argv[1], encoding="utf-8-sig") as fh:
                 ctx = json.load(fh)
         except (OSError, ValueError) as exc:
-            print("READINESS: NOT RUN - snapshot unreadable (%s). Not a pass." % exc)
+            print("%s: NOT RUN - snapshot unreadable (%s). Not a pass." % (argv[0].upper(), exc))
             return 2
         if not isinstance(ctx, dict):
-            print("READINESS: NOT RUN - snapshot is not a JSON object. Not a pass.")
+            print("%s: NOT RUN - snapshot is not a JSON object. Not a pass." % argv[0].upper())
             return 2
-        return _print_verdict("READINESS (G1, before Ready for Design)", validate_design_readiness(ctx, contract))
+        return _print_verdict(label, check(ctx, contract))
     if argv:
-        print("usage: content_write_gate.py [readiness SNAPSHOT.json]")
+        print("usage: content_write_gate.py [readiness|submission SNAPSHOT.json]")
         return 2
     errors = check_contract(contract)
     counts = {db["db_id"]: len(db["fields"]) for db in contract["databases"]}

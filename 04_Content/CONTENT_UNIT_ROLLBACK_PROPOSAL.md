@@ -8,6 +8,8 @@
 |---|---|---|---|
 | **Content unit** (2026-10-09) | `74feb86` (auto-sync, 15:46:32; on `origin/master`) | **25 files, all from this unit.** The commit holds no unrelated file: `git show --stat 74feb86`, checked in the correction unit | None. The routine reads neither these files nor V2. The runtime loads the six edited agents |
 | **Correction unit** (2026-10-09) | Not committed by this session. If auto-sync publishes it, find the SHA with `git log --format=%H -1 -- 16_Automation/routines/creative-pipeline/disposition.py` (a file only this unit adds) | Edits to 19 of the 25 files above (`git status`, checked in the correction unit), plus 3 new: `disposition.py`, `test_disposition.py`, this file | None |
+| *Correction unit, as published* | **`ce310c6`** (auto-sync, 2026-10-09 19:07:30; on `origin/master`). Exactly the 22 files above, no unrelated file (`git show --stat ce310c6`, checked in the hardening unit) | — | None |
+| **Hardening unit** (2026-10-09) | Not committed by this session. If auto-sync publishes it, find the SHA with `git log --format=%H -1 -- 04_Content/APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md` (a file only this unit adds) | Edits to files from both earlier units, plus that one new file | None |
 | **Notion, Content unit** (2026-10-09) | Not in git. Recorded in `CONTENT_OS.md` §8 and `CONTENT_INTELLIGENCE_SCHEMA.md` §10 | — | Additive properties and options on DB2, DB5, DB6 and DB7; row edits on DB2, DB5, DB6 and DB7 |
 | **Notion, correction unit** | None. Only read-only schema fetches were made | — | — |
 
@@ -33,10 +35,13 @@ contracts/content-databases.json ◄── content_write_gate.py ◄── test_
 - **Reverting the repository while keeping the Notion additions:** the DB5/DB6/DB7 fields lose their recorded owner. They are documented only in the history entries, which stay. Harmless to the routine: its six trigger-read properties were never changed.
 - **Reverting Notion while keeping the repository:** the field contract would describe properties that no longer exist (counts 361 → fewer), and the routine proposal's readiness checks would read empty fields. **Edit the contract in the same change as any Notion rollback.**
 - **Reverting `74feb86` before the correction unit:** this conflicts, because the correction unit edits 19 of the same files. **Order: correction unit first, then `74feb86`.**
+- **Full order with the hardening unit:** hardening unit → `ce310c6` → `74feb86`. Each edits files the next one introduced. Reverting the hardening unit alone (R0 below) leaves `ce310c6` intact. That reinstates the evidence-binding and asset failures and text-only G2 without G1, all reproduced against `ce310c6` on 2026-10-09.
 
 ## 3. Options
 
-**Option R1: undo the correction unit only.** This returns to `74feb86`. **Not recommended**: it reinstates the seven defects the owner's review found (each reproduced against `74feb86` on 2026-10-09).
+**Option R0: undo the hardening unit only.** Not recommended, for the same reason as R1. Revert its auto-sync commit, or restore its paths from the parent commit and delete `APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`. Append the history entry; do not delete it.
+
+**Option R1: undo the correction unit only.** *(After the hardening unit is committed, R0 must come first.)* This returns to `74feb86`. **Not recommended**: it reinstates the seven defects the owner's review found (each reproduced against `74feb86` on 2026-10-09).
 `git revert <correction-sha>` if its auto-sync commit holds only this unit's files. Otherwise restore by path:
 `git checkout <correction-sha>^ -- <the 19 modified paths>`, delete the three new files, then commit.
 
@@ -74,4 +79,9 @@ Verify with `npx tsc --noEmit -p .`, `npm test` and `npx arika list` (expect 115
 
 ## 5. Changelog
 
+- **2026-10-09 (hardening unit)** — Updates:
+  - The correction unit's commit is recorded (`ce310c6`, 22 files, no unrelated work).
+  - A row and option R0 are added for the hardening unit.
+  - The full revert order is stated.
+  - Nothing executed. — Claude Code (Opus 5.5)
 - **2026-10-09** — Prepared under the owner's correction-unit brief ("prepare a current, dependency-aware rollback proposal for the committed changes; execute no rollback"). — Claude Code (Opus 5.5)

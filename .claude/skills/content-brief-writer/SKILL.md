@@ -44,7 +44,7 @@ R01 `Ready for Design` or `Done` · R03 missing Opportunity, Translation or Narr
 1. Read the translation: family, surface (resolve it through `vocabularies.surface`; unknown → stop), both DRAGON passes, audience role, format.
 2. Write the copy so every claim is either a sourced fact, a labelled opinion, or a framework. List claims in `Evidence` with their source and date. If the Offer relation is empty, the copy names no price and no package.
 3. Match the natural key (`Translation`) with a verified lookup (`status: complete`; a failed query is never "no brief"). New brief → CREATE at `Version = 1`. Existing brief → fetch it, then **VERSION**: change the copy, set `Version` to **exactly prior + 1**, and append a change line. Hand the gate the fetched brief as `state.prior`. A G1 pass, spend approval or G2 approval on the old Version no longer covers it. The publication-affecting fields are listed in `content-databases.json` (DB7, `publication_affecting`).
-4. Run `validate_write`. Recommend readiness only when it passes **with** `recommend_ready_for_design: true`, and state the recommendation in the page body for the human. **Text-only briefs do not go to Design** (text-capable format, `Visual Direction` and `Canva Instructions` empty or `text-only`). Hand them to C05 → C06 for G2 once the copy is final. Design briefs wait for the human G1 (contract §8).
+4. Run `validate_write`. Recommend readiness only when it passes **with** `recommend_ready_for_design: true`, and state the recommendation in the page body for the human. **Text-only briefs do not go to Design.** That means a text-capable format, `Visual Direction` and `Canva Instructions` empty or `text-only`, and no assets. A text-capable format alone is not asset-free: an article with a header image is design work. **Every brief, text-only or design, waits for a human G1** on its current Version. G1 records the brief ID, the revision and the path (contract §8, §8.1).
 
 **Limit, stated plainly.** These rules cover writes made through this skill. A person editing the brief in Notion bypasses them (contract §0.2).
 
@@ -54,7 +54,11 @@ Read back the six trigger properties byte-for-byte and the `Version`. `Brief Int
 
 ## Handoff
 
-Text-only: to C05 (claim review), then C06 (G2 approval prep) once the copy is final. Design work goes to C05, then the human G1 (`content_write_gate.py readiness`), then the human `Ready for Design` flip. Spend approval and generation follow, and only then C06 on the finished artifact.
+**Both paths** go to C05 (claim review), then the human G1.
+- **Text-only:** G1 with `path text_only`, then C06 (G2 approval prep) once the copy is final.
+- **Design:** G1 with `path design`, then `content_write_gate.py readiness`, then the human `Ready for Design` flip. Spend approval and generation follow, and only then C06 on the finished artifact.
+
+*(Before the hardening unit, this said text-only went from C05 straight to C06, with no G1. That was the assistant's reading, not an owner decision. It is superseded.)*
 
 ## Execution record
 
