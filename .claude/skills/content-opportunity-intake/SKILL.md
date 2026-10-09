@@ -40,7 +40,7 @@ R03 no Source, or neither a Sector finding nor a narrative position · R04/R05 a
 2. **Run the Strategic pass.** For each letter write one line in `Strategic DRAGON Notes`: D (the actual constraint), R (the commercial mechanism), A (the systems producing it), G (the capability that improves it), O (what decision or workflow it changes), N (the next action). Set `Strategic DRAGON` to `Complete`, `Partial` (with which letters are missing and why) or `Not applicable` (with why). Never leave it blank.
 3. **Score honestly.** `Total Score` and `Tier` are formulas. A total below 20 has no tier. Leave it below threshold rather than inflating a dimension.
 4. **Proof.** If no proof exists, set `Proof Status = Proof required — named` and write what proof would be required.
-5. **Match the natural key.** Query DB5 for the `Opportunity ID`. Found → UPDATE or VERSION. Not found → CREATE. If the query fails, stop: the result is incomplete, not empty.
+5. **Match the natural key.** Query DB5 for the `Opportunity ID`. Found → UPDATE or VERSION. Not found → CREATE. If the query fails, stop: the result is incomplete, not empty. Hand the gate the lookup as `{status, checked_at, records}`; only `status: complete` admits a CREATE (R10_LOOKUP_UNVERIFIED).
 6. **Apply**, then append the change line to the page body.
 
 ## Verification (read-after-write)

@@ -1,6 +1,6 @@
 # Content — Skill Matrix
 
-**Department:** Content (04) · **Version:** v0.1 (2026-10-09) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
+**Department:** Content (04) · **Version:** v0.2 (2026-10-09, correction unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
 
 Modelled on [`01_Sector/SECTOR_SKILL_MATRIX.md`](../01_Sector/SECTOR_SKILL_MATRIX.md). **Agents decide; skills validate and apply.** Skills are grouped by write boundary, so seven skills cover eight capabilities: copywriting, long-form, scripts and carousels are one boundary (DB7 authored fields).
 
@@ -39,10 +39,10 @@ The JSON twin holds the field-level assignment: **361 fields across 8 databases,
 |---|---|---|---|---|---|---|
 | C01 | [`content-opportunity-intake`](../.claude/skills/content-opportunity-intake/SKILL.md) | Mapper recommendation, Sector finding ID | DB5 (+ Strategic DRAGON), DB4 | R03 R04 R05 R07 R10 R16 R19 | `Opportunity ID` · `Campaign Code` | C02 → C03 |
 | C02 | [`content-narrative-review`](../.claude/skills/content-narrative-review/SKILL.md) | Opportunity / translation / brief ID | DB2 only | R08 R10 R19 | `Position ID` (new version = new ID) | C03 / C04 |
-| C03 | [`content-surface-translation`](../.claude/skills/content-surface-translation/SKILL.md) | Opportunity + Position IDs | DB6 (+ Surface, Editorial DRAGON), DB3, DB1 behaviour | R03 R05 R06 R07 R08 R09 R10 | family + platform + surface + format · `Overlay ID` | C04 |
-| C04 | [`content-brief-writer`](../.claude/skills/content-brief-writer/SKILL.md) | Translation ID | DB7 authored fields, `Version` | R01 R03 R04 R06 R10 R15 R16 R17 R18 | `Translation` (one live brief; revise = VERSION) | C05 → C06; human → Design |
+| C03 | [`content-surface-translation`](../.claude/skills/content-surface-translation/SKILL.md) | Opportunity + Position IDs | DB6 (+ Surface, Audience Role, Editorial DRAGON), DB3, DB1 behaviour | R03 R05 R06 R07 R08 R09 R10 R23 | family + platform + **audience role** + surface + format · `Overlay ID` | C04 |
+| C04 | [`content-brief-writer`](../.claude/skills/content-brief-writer/SKILL.md) | Translation ID | DB7 authored fields, `Version` | R01 R03 R04 R06 R09 R10 R15 R16 R17 R18 R20 R21 | `Translation` (one live brief; revise = VERSION, exactly +1) | C05; text-only → C06; design → human G1 |
 | C05 | [`content-claim-review`](../.claude/skills/content-claim-review/SKILL.md) | Brief ID + Version | nothing | R04 R05 R16 | n/a (read-only) | C06 or back to C04 |
-| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID + Version + C05 verdict | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R18 | Brief ID + Version | **human reviewer** |
+| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID + Version + C05 verdict + finished asset set (design) or final copy (text-only) | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R09 R12 R18 R20 R22 | Brief ID + Version | **human reviewer** |
 | C07 | [`content-source-retrieval`](../.claude/skills/content-source-retrieval/SKILL.md) | Any canonical ID | nothing | temp URLs, `rights: unknown`, private pilot data | n/a | caller |
 
 ---
@@ -58,19 +58,26 @@ Sector finding / narrative position
         │
    C03 surface-translation ──(Editorial DRAGON, Surface)──► DB6 (+DB3, DB1)
         │
-   C04 brief-writer ──(Version)──► DB7
+   C04 brief-writer ──(Version N)──► DB7
         │
-   C05 claim-review (read-only verdict)
+   C05 claim-review (read-only verdict on N)
         │
-   C06 approval-prep ──(Submitted for review)──► DB7
+        ├── text-only ──────────────────────────────────────────────┐
+        │                                                           │
+   HUMAN: G1 concept review + readiness on N (gate: readiness)      │
+        │                                                           │
+   HUMAN: Ready for Design ──► Design (19) routine: storyboard for N │
+        │                                                           │
+   HUMAN: spend approval for N ──► Design generates the artifact    │
+        │                                                           │
+   C06 approval-prep ──(Submitted for review: N + asset set)──► DB7 ◄┘ (text-only: N + final copy)
         │
-   HUMAN: G2 decision on this Version ──► HUMAN: Ready for Design ──► Design (19) routine
-                                     └──► HUMAN: manual publication + link-back record (Presence 21)
+   HUMAN: G2 on the exact finished artifact ──► HUMAN: manual publication + link-back record (Presence 21)
 
 C07 source-retrieval is called by any step.
 ```
 
-The order is the two-pass DRAGON order: nothing at C03 or below may proceed while C01's Strategic pass is `Not yet run`.
+The order is the two-pass DRAGON order: nothing at C03 or below may proceed while C01's Strategic pass is `Not yet run`. **Corrected 2026-10-09:** v0.1 drew G2 *before* Ready for Design, so an approval would have bound a brief whose artifact did not yet exist. Rules: `CONTENT_WRITE_CONTRACT.md` §8.
 
 ---
 
@@ -91,8 +98,25 @@ No new agent was built. No event bus, scheduler or Notion runtime client was add
 
 ## 5. Tests
 
-`python -m unittest discover -s 04_Content/contracts -p "test_*.py"` covers contract integrity and the owner's ten scenarios: founder content from a verified source, Page framework content, a Hospitality brief, missing evidence, partial / not-applicable DRAGON, a G2 failure, a missing-approval refusal, duplicate handling, Postiz unavailable, and manual publication link-back. All fixture data is synthetic (`fx-`). The tests touch no Notion record and no `_memory` stream.
+`python -m unittest discover -s 04_Content/contracts -p "test_*.py"` covers:
+- **Contract integrity.**
+- **The owner's ten scenarios:** founder content from a verified source, Page framework content, a Hospitality brief, missing evidence, partial / not-applicable DRAGON, a G2 failure, a missing-approval refusal, duplicate handling, Postiz unavailable, and manual publication link-back.
+- **One regression class per correction finding** (2026-10-09):
+  - `SurfaceVocabulary`
+  - `RevisionIntegrity`
+  - `WorkflowOrder`
+  - `DuplicateLookupState`
+  - `ProductionMemoryUntouched`
+
+All fixture data is synthetic (`fx-`). The tests touch no Notion record. A module-level check fails the run if `04_Content/_memory` changes.
+
+The proposed routine's decision table has its own suite: `python -m unittest discover -s 16_Automation/routines/creative-pipeline -p "test_*.py"`.
 
 ## 6. Changelog
 
+- **v0.2 (2026-10-09, correction unit)** — Changes:
+  - C03's idempotency key regains `Audience Role`.
+  - Refusal codes R09, R12 and R20–R23 are added to the skills that can trigger them.
+  - The dependency graph is corrected: G1 and spend approval come before Design work, and G2 comes on the finished artifact. There is also a text-only path.
+  - Test inventory updated. — Claude Code (Opus 5.5)
 - **v0.1 (2026-10-09)** — Created with the seven skills and the gate. — Claude Code (Opus 5.5)

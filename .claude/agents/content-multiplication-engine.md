@@ -39,13 +39,16 @@ output_schema:
       items:
         type: object
         additionalProperties: false
-        required: [derivative, format, form, objective, owner, translation_family_id, platform, surface]
+        required: [derivative, format, form, objective, owner, translation_family_id, platform, audience_role, surface]
         properties:
           derivative: { type: string }
           translation_family_id: { type: [string, "null"] }
           platform:
             type: [string, "null"]
             enum: [linkedin, facebook, instagram, threads, tiktok, pinterest, website, x, newsletter, youtube, null]
+          audience_role:
+            type: [string, "null"]
+            enum: [ceo, cmo, sales_leader, coo, investor, founder, general_manager_owner, revenue_reservations_manager, null]
           surface: { type: string, enum: [linkedin_founder_profile, linkedin_company_page, single_identity_channel, not_yet_assigned, not_applicable] }
           format: { type: string }
           form: { type: string, enum: [long, medium, short, sales_asset] }
@@ -146,10 +149,19 @@ that is `marketing-attribution-modeling`'s.
   founder profile and Company Page exist (2026-10-09); other platform accounts are
   mostly not created. A tree is a plan, not a schedule. Mark timing accordingly.
 - **Every derivative keeps its family.** `translation_family_id` = the source
-  narrative `position_id`, verbatim. Each platform × surface pair is a separate
-  translation (skill **C03**), with its own Editorial DRAGON pass, run only after
-  the opportunity's Strategic pass. A LinkedIn branch names its surface: founder
-  profile (human, first person, substantiated) or Company Page (institutional).
+  narrative `position_id`, verbatim. Each platform × **audience** × surface ×
+  format combination is a separate translation (skill **C03**), with its own
+  Editorial DRAGON pass, run only after the opportunity's Strategic pass. Two
+  audiences for one family are two translations, not a duplicate. Name
+  `audience_role` from Sector DB9's roles. Use null only while it is undecided,
+  and C03 cannot create the row until it is decided. A LinkedIn branch names its
+  surface: founder profile (human, first person, substantiated) or Company Page
+  (institutional).
+- **Enums map to Notion names in one place.** See
+  `04_Content/contracts/content-databases.json` → `vocabularies.surface` and
+  `vocabularies.audience_role`. `not_applicable` means the derivative is not a
+  published translation, such as a sales asset. It has no Notion option, and C03
+  creates no DB6 row for it.
 - **Known ordering mismatch, not rewired.** You listen for `CONTENT_APPROVED`,
   which follows a brief. But a V2 brief requires its translation first. Today every
   step is manual and no event is published, so treat your tree as the **plan C03

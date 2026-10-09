@@ -1,8 +1,9 @@
 {
   "_meta": {
     "artifact": "Content (04) database + field ownership contract, DB1-DB8",
-    "version": "0.1",
+    "version": "0.2",
     "generated": "2026-10-09",
+    "amended": "2026-10-09 correction unit: explicit option vocabularies with live option IDs (surface, audience_role, format, Publishing Status), Audience Role restored to the DB6 natural key, publication-affecting DB7 fields marked for revision checks, workflow stages recorded.",
     "generated_by": "Claude Code (Opus 5.5), human-invoked session",
     "source_of_truth": "Live Notion data-source schemas fetched 2026-10-09 via MCP (after the 2026-10-09 additive changes). CONTENT_INTELLIGENCE_SCHEMA.md is authoritative for why a field exists; this file is authoritative for who may write it.",
     "row_counts": "row_count_verified = a live SELECT COUNT(*) that actually ran on the verified_date. Never back-filled from changelogs.",
@@ -44,7 +45,87 @@
       "Canva Instructions": "text",
       "Publishing Status": "select"
     },
-    "publishing_status_options": ["Not started", "In progress", "Ready for Design", "Done"]
+    "publishing_status_options": ["Not started", "In progress", "Ready for Design", "Done"],
+    "publishing_status_option_ids": {
+      "Not started": "e552621d-0910-4dd1-8853-fcee1b0d1536",
+      "In progress": "5d53abab-a8ad-433e-bba9-390b4c493c3f",
+      "Ready for Design": "2502a443-7515-4272-ac7d-187d47728d97",
+      "Done": "e34ae6e7-4240-4d5c-8699-722b4eb4eb95"
+    },
+    "option_ids_verified": "2026-10-09, read-only notion-fetch of collection://761b3f94-bdbf-4b3d-8234-4cda579697ca (correction unit)"
+  },
+  "vocabularies": {
+    "_rule": "One vocabulary per select the gate reasons about. The Notion option name is authoritative and is never renamed; option IDs are recorded so a rename or re-creation is detectable. Agent enums map to Notion names here and nowhere else. A Notion write carries the exact Notion name (Notion would silently create a new option from an agent enum). A value found in neither column is unknown and fails closed.",
+    "surface": {
+      "db_id": "DB6", "field": "Surface",
+      "verified": "2026-10-09, read-only notion-fetch of collection://9abf586d-d3bd-4401-b416-d5e0af1f3162 (correction unit). Hyphens are ASCII U+002D.",
+      "options": [
+        { "notion": "LinkedIn - Founder profile", "option_id": "016f7eea-b42e-4485-8b26-120eebbd5e24", "agent_enum": "linkedin_founder_profile", "assigned": true, "linkedin": true, "voice": "first_person_allowed", "url_hosts": ["linkedin.com"] },
+        { "notion": "LinkedIn - Company Page", "option_id": "18754c3f-6008-4447-a13e-022a11119d2e", "agent_enum": "linkedin_company_page", "assigned": true, "linkedin": true, "voice": "institutional", "url_hosts": ["linkedin.com"] },
+        { "notion": "Single-identity channel", "option_id": "e06665b3-559b-497c-8c52-918b9ccf7443", "agent_enum": "single_identity_channel", "assigned": true, "linkedin": false, "voice": "channel", "url_hosts": null },
+        { "notion": "Not yet assigned", "option_id": "7ceba672-abc1-44eb-b4ec-8db1eda6b23d", "agent_enum": "not_yet_assigned", "assigned": false, "linkedin": null, "voice": null, "url_hosts": null }
+      ],
+      "agent_only": [
+        { "agent_enum": "not_applicable", "used_by": "content-multiplication-engine", "meaning": "The derivative is not a published translation (for example a sales asset). C03 creates no DB6 row for it. Never written to Notion." },
+        { "agent_enum": "unknown", "used_by": "content-publishing-gate", "meaning": "The gate could not determine the surface. Never passes G2. Never written to Notion." }
+      ]
+    },
+    "audience_role": {
+      "db_id": "DB6", "field": "Audience Role",
+      "canonical_source": "Sector (01) DB9 Audience Roles (collection://e0513cc9-682f-4dd4-965c-e0292abe86e4), referenced from DB5 Audience. The DB6 select mirrors role names verbatim; it is not a second audience store.",
+      "verified": "2026-10-09, read-only notion-fetch of collection://9abf586d-d3bd-4401-b416-d5e0af1f3162 (correction unit)",
+      "options": [
+        { "notion": "CEO", "option_id": "626a011a-86e7-4bce-8a4b-dcf4fd469388", "agent_enum": "ceo" },
+        { "notion": "CMO", "option_id": "22499767-45ee-4674-8469-0f78686fc8a2", "agent_enum": "cmo" },
+        { "notion": "Sales Leader", "option_id": "082ff05c-3ee2-4687-a780-6db4212d63ed", "agent_enum": "sales_leader" },
+        { "notion": "COO", "option_id": "3e4c73f8-f8af-4e62-a664-88b37759254c", "agent_enum": "coo" },
+        { "notion": "Investor", "option_id": "9e3e21e5-85e0-4271-9706-b50209e9b936", "agent_enum": "investor" },
+        { "notion": "Founder", "option_id": "ebd7e1a1-14db-4c37-8ff8-4f166457b3d4", "agent_enum": "founder" },
+        { "notion": "General Manager / Owner", "option_id": "544696bf-740c-421c-9737-522b6b15de9b", "agent_enum": "general_manager_owner" },
+        { "notion": "Revenue / Reservations Manager", "option_id": "490c08ad-6d9a-4389-b06a-a85fa4f57e12", "agent_enum": "revenue_reservations_manager" }
+      ]
+    },
+    "format": {
+      "db_id": "DB6", "field": "Format",
+      "verified": "2026-10-09, read-only notion-fetch of collection://9abf586d-d3bd-4401-b416-d5e0af1f3162 (correction unit)",
+      "production_rule": "design = always needs Design (19). text_capable = text-only when the brief's Visual Direction and Canva Instructions are empty or read exactly 'text-only'; otherwise it needs Design.",
+      "options": [
+        { "notion": "Text post", "option_id": "45c33dc4-3524-4365-94a6-e1c90d4793c6", "production": "text_capable" },
+        { "notion": "Carousel", "option_id": "32a141cf-ac1e-49ae-a5a1-ec0fe96bda3f", "production": "design" },
+        { "notion": "Article / Long-form", "option_id": "5943e275-4548-43ac-a911-fc314e52ca81", "production": "text_capable" },
+        { "notion": "Short video", "option_id": "c958847e-40b6-470b-8d72-746e35265822", "production": "design" },
+        { "notion": "Long video", "option_id": "be649d54-dfea-4c06-9418-fc70d87fd952", "production": "design" },
+        { "notion": "Static image", "option_id": "2a600d2d-dc8f-4fd4-9aee-1e590202b03e", "production": "design" },
+        { "notion": "Poll", "option_id": "7442ff98-e59e-44f7-aa71-f925bff69168", "production": "text_capable" },
+        { "notion": "Thread", "option_id": "41983cbe-67d0-41d3-b2c1-33379eba8abb", "production": "text_capable" },
+        { "notion": "Newsletter issue", "option_id": "3035bcc6-e23b-48aa-933b-e87fdc868229", "production": "text_capable" },
+        { "notion": "Live / Audio", "option_id": "9d58a5c9-7b0d-4844-af58-9301f1ebdfb8", "production": "design" }
+      ]
+    },
+    "dragon_status": {
+      "fields": ["DB5.Strategic DRAGON", "DB6.Editorial DRAGON"],
+      "verified": "2026-10-09, read-only notion-fetch of both data sources (correction unit); identical names on both",
+      "done": ["Complete", "Partial", "Not applicable"],
+      "not_done": ["Not yet run"]
+    }
+  },
+  "workflow": {
+    "_rule": "Corrected 2026-10-09 (owner correction brief). Each stage needs the one before it. A human acts at every gate; no agent or skill passes one.",
+    "design_path": [
+      "Strategic DRAGON (DB5) -> Editorial DRAGON (DB6) -> brief copy at Version N (DB7)",
+      "G1 concept review + readiness check on Version N (human) -> human sets Publishing Status = Ready for Design",
+      "Creative Pipeline routine: storyboard + production plan comment for Version N (planning only)",
+      "Human spend approval for Version N before any generation or credit spend (Design 19)",
+      "Design produces the finished artifact (asset IDs + versions)",
+      "G2 on the exact finished artifact: copy at Version N + the asset set (human) -> human publishes"
+    ],
+    "text_only_path": [
+      "Strategic DRAGON -> Editorial DRAGON -> final copy at Version N",
+      "G2 on the exact final copy at Version N (human) -> human publishes. No Design stage, no spend approval."
+    ],
+    "g1_record": "No Notion property exists for G1. Until one is approved, G1 is a dated page-body line on the brief written or quoted from the human reviewer: 'G1 passed | rev N | <reviewer> | <date>'.",
+    "spend_approval_record": "Owned by Design (19) and the approval matrix (Creative Pipeline: human gate before credit spend). Content's gate checks only that one exists for the same brief and Version.",
+    "g2_artifact_record": "No Notion property holds the approved asset set. Until one is approved, the G2 packet on the brief page lists it, and the publication record must reproduce it exactly."
   },
   "state_axes": {
     "knowledge_maturity": "Status (Draft/Validating/Active/Superseded/Archived) on DB1-DB6, DB8",
@@ -327,15 +408,16 @@
       "db_id": "DB6", "name": "Content Translation Matrix",
       "collection_url": "collection://9abf586d-d3bd-4401-b416-d5e0af1f3162",
       "owner_dept": "04", "row_count_verified": 2, "verified_date": "2026-10-09",
-      "natural_key": ["Translation Family ID", "Platform", "Surface", "Format"],
+      "natural_key": ["Translation Family ID", "Platform", "Audience Role", "Surface", "Format"],
+      "natural_key_note": "Restored 2026-10-09 (correction unit): the schema's primary entity is one (Narrative x Platform x Audience) expression (CONTENT_INTELLIGENCE_SCHEMA.md DB 6). v0.1 dropped Audience, so two audience variants of one family collided. Audience Role is the existing DB6 field; values from vocabularies.audience_role.",
       "fields": [
-        { "name": "Translation", "type": "title", "class": "direct", "writer": "C03" },
+        { "name": "Translation", "type": "title", "class": "direct", "writer": "C03", "note": "{Family} · {Platform} · {Audience}" },
         { "name": "Translation Family ID", "type": "text", "class": "direct", "writer": "C03", "note": "MUST equal the Source Truth Position ID verbatim." },
-        { "name": "Surface", "type": "select", "class": "vocab", "writer": "C03", "note": "Founder profile / Company Page / Single-identity channel / Not yet assigned." },
+        { "name": "Surface", "type": "select", "class": "vocab", "writer": "C03", "vocabulary": "surface", "note": "Exact live names in vocabularies.surface: LinkedIn - Founder profile / LinkedIn - Company Page / Single-identity channel / Not yet assigned." },
         { "name": "Editorial DRAGON", "type": "select", "class": "state", "writer": "C03", "note": "Pass Two. Only after the Opportunity Strategic pass is set." },
         { "name": "Editorial DRAGON Notes", "type": "text", "class": "meta", "writer": "C03" },
         { "name": "Asset Tier", "type": "select", "class": "vocab", "writer": "C03" },
-        { "name": "Audience Role", "type": "select", "class": "vocab", "writer": "C03", "note": "Hospitality roles added 2026-10-09 from Sector DB9; never rename an option." },
+        { "name": "Audience Role", "type": "select", "class": "vocab", "writer": "C03", "vocabulary": "audience_role", "note": "Part of the natural key. Mirrors Sector DB9 role names; hospitality roles added 2026-10-09. Never rename an option." },
         { "name": "CTA", "type": "text", "class": "direct", "writer": "C03" },
         { "name": "Campaign", "type": "relation", "class": "relation", "writer": "C03" },
         { "name": "Confidence", "type": "select", "class": "meta", "writer": "C03" },
@@ -346,7 +428,7 @@
         { "name": "Emotional Entry", "type": "text", "class": "direct", "writer": "C03" },
         { "name": "Engagement Mechanism", "type": "text", "class": "direct", "writer": "C03" },
         { "name": "Evidence", "type": "text", "class": "meta", "writer": "C03" },
-        { "name": "Format", "type": "select", "class": "vocab", "writer": "C03" },
+        { "name": "Format", "type": "select", "class": "vocab", "writer": "C03", "vocabulary": "format" },
         { "name": "Hook", "type": "text", "class": "direct", "writer": "C03" },
         { "name": "Hook Type", "type": "text", "class": "direct", "writer": "C03" },
         { "name": "Last Reviewed", "type": "date", "class": "meta", "writer": "C03" },
@@ -390,17 +472,17 @@
       "natural_key": ["Translation"],
       "natural_key_note": "One live brief per translation. A new revision is a VERSION (bump Version) or a SUPERSEDE (new row + Supersedes), never a second CREATE.",
       "fields": [
-        { "name": "Title", "type": "title", "class": "direct", "writer": "C04", "trigger_sensitive": true },
-        { "name": "Script", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true },
-        { "name": "Caption", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true },
-        { "name": "Visual Direction", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true },
-        { "name": "Canva Instructions", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true },
+        { "name": "Title", "type": "title", "class": "direct", "writer": "C04", "trigger_sensitive": true, "note": "Internal name. Not publication-affecting." },
+        { "name": "Script", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true, "publication_affecting": true },
+        { "name": "Caption", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true, "publication_affecting": true },
+        { "name": "Visual Direction", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true, "publication_affecting": true },
+        { "name": "Canva Instructions", "type": "text", "class": "direct", "writer": "C04", "trigger_sensitive": true, "publication_affecting": true },
         { "name": "Publishing Status", "type": "select", "class": "state", "writer": "C04", "trigger_sensitive": true, "human_only_values": ["Ready for Design", "Done"], "note": "Ready for Design fires the Creative Pipeline routine. Human only." },
         { "name": "Objective", "type": "text", "class": "direct", "writer": "C04" },
         { "name": "Desire", "type": "text", "class": "direct", "writer": "C04" },
         { "name": "Objection", "type": "text", "class": "direct", "writer": "C04" },
-        { "name": "Engagement Follow-up", "type": "text", "class": "direct", "writer": "C04" },
-        { "name": "Evidence", "type": "text", "class": "meta", "writer": "C04" },
+        { "name": "Engagement Follow-up", "type": "text", "class": "direct", "writer": "C04", "publication_affecting": true, "note": "Changes what happens after publication (DM trigger)." },
+        { "name": "Evidence", "type": "text", "class": "meta", "writer": "C04", "publication_affecting": true, "note": "The claim list a G2 reviewer approved against." },
         { "name": "Confidence", "type": "select", "class": "meta", "writer": "C04" },
         { "name": "Source", "type": "text", "class": "meta", "writer": "C04" },
         { "name": "Source Type", "type": "select", "class": "meta", "writer": "C04" },
@@ -409,15 +491,15 @@
         { "name": "Effective Date", "type": "date", "class": "meta", "writer": "C04" },
         { "name": "Last Reviewed", "type": "date", "class": "meta", "writer": "C04" },
         { "name": "Next Review", "type": "date", "class": "meta", "writer": "C04" },
-        { "name": "Version", "type": "number", "class": "meta", "writer": "C04", "note": "Bumped on ANY copy change. A G2 approval binds to one Version." },
-        { "name": "Platform", "type": "multi_select", "class": "vocab", "writer": "C04" },
+        { "name": "Version", "type": "number", "class": "meta", "writer": "C04", "revision": true, "note": "A positive integer, never empty. A new brief starts at 1. Any publication-affecting change is a VERSION that sets exactly prior + 1; no change, no bump. A G1 pass, a spend approval and a G2 approval each bind to one Version. Notion returns it as a float (1.0); the gate accepts integral values only." },
+        { "name": "Platform", "type": "multi_select", "class": "vocab", "writer": "C04", "publication_affecting": true },
         { "name": "Opportunity", "type": "relation", "class": "relation", "writer": "C04", "note": "REQUIRED." },
-        { "name": "Translation", "type": "relation", "class": "relation", "writer": "C04", "note": "REQUIRED." },
+        { "name": "Translation", "type": "relation", "class": "relation", "writer": "C04", "publication_affecting": true, "note": "REQUIRED. A different translation is a different surface, audience or format." },
         { "name": "Narrative Position", "type": "relation", "class": "relation", "writer": "C04", "note": "REQUIRED; must include the translation's family position." },
         { "name": "Campaign", "type": "relation", "class": "relation", "writer": "C04" },
         { "name": "Sector Platform Overlay", "type": "relation", "class": "relation", "writer": "C04" },
         { "name": "Sub-Sector", "type": "relation", "class": "relation", "writer": "C04" },
-        { "name": "Offer", "type": "relation", "class": "relation", "writer": "C04", "note": "Optional. Absence is recorded, and forbids any offer, price or commercial-term claim." },
+        { "name": "Offer", "type": "relation", "class": "relation", "writer": "C04", "publication_affecting": true, "note": "Optional. Absence is recorded, and forbids any offer, price or commercial-term claim." },
         { "name": "Supersedes", "type": "relation", "class": "relation", "writer": "C04" },
         { "name": "G2 Decision", "type": "select", "class": "state", "writer": "C06", "human_only_values": ["Changes requested", "Approved", "Rejected"] },
         { "name": "G2 Reviewer", "type": "text", "class": "strategic", "writer": "human_only" },

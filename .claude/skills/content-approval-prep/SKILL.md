@@ -1,13 +1,18 @@
 ---
 name: content-approval-prep
-description: Skill C06 of Content (04). Assembles the G2 packet for ONE exact brief revision — copy, claim-review verdict, both DRAGON passes, surface, sources and open risks — and may set G2 Decision to Not submitted or Submitted for review only. The human reviewer sets Approved, Rejected or Changes requested, the reviewer, the date and the approved revision. Use after content-claim-review passes. Never approves, publishes or schedules.
+description: Skill C06 of Content (04). Assembles the G2 packet for ONE exact brief revision — copy, claim-review verdict, both DRAGON passes, surface, sources and open risks — and may set G2 Decision to Not submitted or Submitted for review only. The human reviewer sets Approved, Rejected or Changes requested, the reviewer, the date and the approved revision. Use after content-claim-review passes, and for design work only once the finished artifact exists (text-only: once the final copy exists). Never approves, publishes or schedules.
 ---
 
 # C06 · Content Approval Prep
 
 **Read [`04_Content/CONTENT_WRITE_CONTRACT.md`](../../../04_Content/CONTENT_WRITE_CONTRACT.md) §7–§8 first.**
 
-> **The one rule that defines this skill: you prepare the decision; you never make it.** An approval belongs to a named human and to one `Version`.
+> **The one rule that defines this skill: you prepare the decision; you never make it.** An approval belongs to a named human, to one `Version`, and to the **exact finished artifact**.
+
+**When you may submit (contract §8, corrected 2026-10-09).**
+- **Design work:** only after Design has delivered the finished artifact for the current Version. That means asset IDs and versions, each made for this revision, with known rights. A storyboard is not a finished artifact.
+- **Text-only work** (text-capable format; `Visual Direction` and `Canva Instructions` empty or `text-only`): as soon as the final copy exists.
+- `validate_write` refuses `Submitted for review` without a `g2_submission` context. It runs `validate_g2_submission`, which refuses on R12, R20 and R22.
 
 ## Step 0 · The write path
 
@@ -17,8 +22,8 @@ description: Skill C06 of Content (04). Assembles the G2 packet for ONE exact br
 
 ## The G2 packet (appended to the brief page body)
 
-1. Brief ID, **Version**, surface, platform.
-2. The copy exactly as it will publish.
+1. Brief ID, **Version**, surface (exact Notion name), platform, and whether the brief is design work or text-only.
+2. The copy exactly as it will publish, and for design work the **asset set** (asset ID + version, each made for this Version). The publication record must reproduce this list, because no Notion property holds it yet.
 3. C05's verdict and claim table.
 4. Strategic and Editorial DRAGON statuses with notes.
 5. `content-publishing-gate`'s advisory verdict (6 alignments, 8 filters, 3 never-publish rules).
@@ -31,7 +36,7 @@ description: Skill C06 of Content (04). Assembles the G2 packet for ONE exact br
 
 ## Refusals
 
-R01 any of `Approved`, `Rejected`, `Changes requested`; any write to `G2 Reviewer`, `G2 Decided At`, `G2 Approved Revision` · R18 `Packet State` · submitting a revision C05 marked `reject` · submitting while `Surface = Not yet assigned` on a LinkedIn brief.
+R01 any of `Approved`, `Rejected`, `Changes requested`; any write to `G2 Reviewer`, `G2 Decided At`, `G2 Approved Revision` · R18 `Packet State` · R22 submitting before C05 passed this Version, before the finished artifact (design) or the final copy (text-only), or with an artifact of unknown rights · R09 submitting while `Surface = Not yet assigned`, or with a surface outside the vocabulary · R12 submitting a revision other than the current `Version`, or an artifact made for an older one · R20 a missing or invalid revision.
 
 ## After the human decides
 

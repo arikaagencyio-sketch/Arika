@@ -154,7 +154,10 @@ Stay at your altitude. Don't rewrite brand identity; that's Branding's.
 
 ## Messaging (Stage 6.5) — use the real part only
 The audience messaging matrix (**CEO / CMO / Sales Leader / COO / Investor**) is
-usable — set `audience_message` for the asset's actual decision-maker. For the
+usable — set `audience_message` for the asset's actual decision-maker. Your
+`role` enum maps to the DB6 `Audience Role` option names in
+`04_Content/contracts/content-databases.json` → `vocabularies.audience_role`;
+the audience is part of a translation's identity. For the
 Hospitality pilot, use the Sector (01) DB9 roles **General Manager / Owner** (the
 economic buyer) and **Revenue / Reservations Manager** (the operator) rather than
 forcing a hotel GM into `ceo`.

@@ -30,11 +30,18 @@
 | LC-P14 | Post 14, wk 4 Thu | Founder profile | Revenue Intelligence (canonical) | Frameworks · Framework Drop | Draft 13 revenue-anatomy structure | `nar-belief-data-drives-decisions` (M) | "Revenue was up 12%" is a hypothetical; label it as one | Minor revise |
 | LC-C1 | Page launch post | Company Page | (none) → Revenue Architecture (M) | Founder Thinking (institutional) | Repo positioning | `nar-core-revenue-growth-system` (H) | Positioning string still open (L10); copy is cross-sector-safe | Keep; recheck after L10 |
 | LC-C3 | Institutional observation | Company Page | (none) → Revenue Architecture (M) | Insights | Sector cross-sector pattern | **Family A** (§2) | "repeats across almost every sector we map" overstates; soften | Minor revise |
-| LC-B1 | Revenue Architecture Brief #001 | Company Page | (none) → Revenue Architecture (M) | Frameworks · Article | Sector cross-sector pattern | **Family A** (§2) | Two unsourced figures: "repeats more than any other", "below a third of capability" | Revise both |
+| LC-B1 | Revenue Architecture Brief #001 (launch file §6 "C2", full draft §7) | Company Page | (none) → Revenue Architecture (M) | Frameworks · Article | Sector cross-sector pattern | **Family A** (§2) | Two unsourced figures: "repeats more than any other", "below a third of capability" | Revise both |
 | LC-H1 | Notion DB7 `3c121e15eb9381f48574dfe6e1f43828` · "The OTA Tax — LinkedIn carousel (Awareness)" | **Not yet assigned** | Revenue Intelligence (inherited, DB5) | Insights · Carousel | StayNTouch / Pixel & Polish 2026, T3, researched 2026-08-19 | `nar-misconception-more-leads` (**linked**) | Surface unassigned (blocks readiness); both DRAGON passes `Not yet run`; Engagement Follow-up names an audit offer not in DB8 (no price stated) | Owner: choose surface; C01/C03 run passes |
 | LC-H2 | Notion DB7 `3c121e15eb9381b9aa93cad6e6ac7d9c` · "The real cost of an OTA booking — Newsletter #1" | Single-identity channel | Revenue Intelligence (inherited) | Insights · Newsletter issue | Same sources + Sector direct-share benchmark | `nar-misconception-more-leads` + `nar-belief-trust-accelerates-sales` | No email list exists; copy names the OTA-Leakage Audit, which is not in DB8; DRAGON passes `Not yet run` | Hold until a list exists; Offer (02) to confirm the audit |
 
 **Status of every row:** `pending review`. **G2:** none. **Notion:** LC-H1 and LC-H2 carry `G2 Decision = Not submitted` (set 2026-10-09).
+
+**Counts, stated once:**
+- **17 repository drafts:** 14 founder posts (P01–P14) and 3 Page pieces (C1, C2 = LC-B1, C3).
+- **2 Notion briefs:** LC-H1 and LC-H2.
+- **19 items in total.**
+
+The 2026-10-09 handover said "18 drafts" in one place. That figure came from the LinkedIn record artifact (17 repository drafts + the OTA carousel), counts a different set, and is not this ledger's count. *Surface labels in this table are shorthand. The exact Notion options are `LinkedIn - Founder profile`, `LinkedIn - Company Page`, `Single-identity channel` and `Not yet assigned` (`CONTENT_WRITE_CONTRACT.md` §7.1).*
 
 ---
 
@@ -54,13 +61,29 @@ Originals are preserved in the launch file. These proposals replace them only af
 
 The original says "I built 106 AI agents… Not one of them can run. The API key isn't set." That is false today, and the run records show it was already inaccurate on 2026-08-09: Branding and Design agents had run in July.
 
-**Verified facts (2026-10-09):** 115 agent specifications register in `arika-runtime` (`npx arika list`). Non-fixture run records exist for **7 distinct agents, 15 runs in total**, across Branding (2026-07-14, 2026-07-19), Design (2026-07-19), Tech Stack (2026-08-23 → 08-30) and Offer (2026-09-13), counted from `*/_memory/runtime.jsonl`. **Re-count at G2: the numbers will move.**
+**Verified facts (re-counted 2026-10-09, correction unit):**
+- **Agent specifications.** 115 register in `arika-runtime` (`npx arika list`).
+- **Run records.** Every `runtime.jsonl` in the repository holds **18 `agent_run` records from `arika-runtime`, by 9 distinct agents in 5 departments.** 13 were manual runs and 5 scheduled:
+
+| Department | Runs | Dates | Agents |
+|---|---|---|---|
+| Branding | 7, manual | 2026-07-14, 2026-07-19 | 2 |
+| Design | 1, manual | 2026-07-19 | 1 |
+| Sales | 3, scheduled | 2026-08-24, 2026-08-27 | 2 |
+| Tech Stack | 2, scheduled | 2026-08-23, 2026-08-30 | 1 |
+| Offer | 5, manual | 2026-09-13 | 3 |
+
+- **Earlier count, superseded.** The first count (this ledger, 2026-10-09) said **7 agents, 15 runs**, and so did `CONTENT_OS.md` §8. It globbed `*/_memory/runtime.jsonl` and missed the Sales log at `05_Sales/06_AI_OPERATIONS/06_AI_Memory_Logs/runtime.jsonl`.
+- **Note on the Sales runs.** All three ran with no input and produced "nothing to evaluate" recommendations. They are still runs.
+- **Re-count at G2: the numbers will move.**
 
 > I've written 115 AI agent specifications for my agency.
 >
-> Seven of them have ever run. Fifteen runs, in total.
+> Nine of them have ever run. Eighteen runs, in total.
 >
-> The other 108 are documents. Careful, connected, well-argued documents that have never done a thing.
+> The other 106 are documents. Careful, connected, well-argued documents that have never done a thing.
+
+*Earlier draft of these three lines (same date, superseded): "Seven of them have ever run. Fifteen runs, in total. The other 108 are documents."*
 >
 > I did the fun part first.
 >
@@ -116,9 +139,16 @@ The launch file uses four LinkedIn-only labels (`21_Presence/LINKEDIN_PRESENCE_O
 | DB1 LinkedIn `Account Status = Not created`, but the profile and Company Page exist | Notion DB1 | Presence (21) owns `Account Status`; listed for the Presence unit |
 | Opportunities `opp-accom-direct-benchmark-002` and `opp-accom-low-season-003` have no Narrative Position | Notion DB5 | No translation or brief carries evidence of the right position; the link is not guessed |
 | No hospitality offer exists in DB8; LC-H1 and LC-H2 name the OTA-Leakage Audit | Notion DB7 | Offer (02) owns offers. Absence recorded; no price or term may be stated |
-| LC-H1 `Surface = Not yet assigned` | Notion DB6 | Founder profile or Company Page is an owner editorial decision |
+| LC-H1 `Surface = Not yet assigned` | Notion DB6 | `LinkedIn - Founder profile` or `LinkedIn - Company Page` is an owner editorial decision |
+| LC-H1 and LC-H2 would fail the G1 readiness check today (both DRAGON passes `Not yet run`, no G1 recorded; LC-H1 surface unassigned) | Notion DB5/DB6/DB7 | Running the passes is C01/C03 work after the owner's surface decision; G1 is a human act (contract §8) |
 | `Approval Integrity` formula output is not readable through the API | Notion DB7 | Verify once in the Notion UI |
 
 ## 6. Changelog
 
+- **2026-10-09 (correction unit)** — Corrections:
+  - Run counts corrected to 9 agents and 18 runs; the 7 and 15 figures are kept above as superseded. LC-P01's replacement lines now read nine, eighteen and 106.
+  - LC-B1 mapped to launch-file "C2".
+  - Counts stated once.
+  - Surface shorthand pointed at the live names.
+  - The G1 readiness gap recorded. — Claude Code (Opus 5.5)
 - **2026-10-09** — Created. 19 items reconciled (17 repository drafts, 2 Notion briefs). Notion repairs applied the same day are recorded in `CONTENT_OS.md` §8. — Claude Code (Opus 5.5)

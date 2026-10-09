@@ -37,7 +37,7 @@ R10 a reused `Position ID` (a new version gets a new ID, e.g. `-v2`) · R19 Acti
 
 ## Procedure (registry write)
 
-1. Query DB2 for the `Position ID`. Query failed → stop, incomplete.
+1. Query DB2 for the `Position ID`. Query failed → stop, incomplete. Hand the gate the lookup as `{status, checked_at, records}`; only `status: complete` admits a CREATE (R10_LOOKUP_UNVERIFIED).
 2. **SUPERSEDE**: create the successor (new ID, `Version` +1, Status per owner decision), then set the predecessor's `Status = Superseded` and append a change line to **both** pages naming the other. Do not change the predecessor's content fields.
 3. **CREATE**: Status starts `Draft` or `Validating`. New terminology rows use `DRAGON Reading = Two-pass — Strategic then Editorial`; other rows use `Not applicable`, never blank.
 

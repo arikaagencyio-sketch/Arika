@@ -1,6 +1,6 @@
 # Content — Write Contract
 
-**Department:** Content (04) · **Version:** v0.1 (2026-10-09) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
+**Department:** Content (04) · **Version:** v0.2 (2026-10-09, correction unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
 
 **Machine-readable companion:** [`contracts/content-databases.json`](contracts/content-databases.json) (one writer per field, DB1–DB8, from the live schemas of 2026-10-09). **Runnable gate:** [`contracts/content_write_gate.py`](contracts/content_write_gate.py) with tests in [`contracts/test_content_write_gate.py`](contracts/test_content_write_gate.py).
 
@@ -19,6 +19,13 @@
 ### 0.2 What the gate enforces, and what it does not
 
 [`content_write_gate.py`](contracts/content_write_gate.py) enforces two things by exit code: the contract's own integrity (one writer per field, trigger properties intact, skills present on disk), and the refusal rules in §5 against a **write proposal**. It does **not** read Notion. Read-after-write verification (§6.3) is a step the skill performs and records. Said plainly so no reader mistakes the gate for a check on the live database.
+
+**What it cannot protect (stated 2026-10-09, correction unit).** The gate sees only what a skill hands it. Three gaps follow, and none is closed:
+- **A person editing a brief directly in Notion bypasses it.** That covers changing a caption without bumping `Version`, typing a new select option, or setting `G2 Approved Revision` to the wrong number.
+- **Approval Integrity cannot catch every stale approval.** The formula compares `G2 Approved Revision` with `Version`. It cannot see a copy change that happened without a bump.
+- **There is no change-detection evidence.** Nothing in this repository proves that any brief's copy matches the revision a human approved. Notion page history is the only trail, and nothing reads it automatically.
+
+So: the gate makes a skill-driven write safe. It does not make the database safe. A content hash recorded at G2 would close part of the gap. That would be a new property or a page-body convention, and it is **proposed, not built**.
 
 ---
 
@@ -91,7 +98,7 @@ DRAGON is one strategy run in two passes. Strategic DRAGON decides what is true 
 **One canonical representation.** In agent output it is a single nested object, `dragon.strategic` and `dragon.editorial`, each `{status, reason, letters: {D,R,A,G,O,N}}`. No flat aliases are stored beside it.
 
 **Rules (enforced: R07, R08):**
-1. Order is fixed: Strategic → Editorial → G2 quality review → human approval. An Editorial pass may not be recorded while the Opportunity's Strategic pass is `Not yet run`.
+1. Order is fixed: Strategic → Editorial → the rest of the workflow in §8 (G1, then Design and spend approval for visual work, then G2 on the finished artifact). An Editorial pass may not be recorded while the Opportunity's Strategic pass is `Not yet run`. *(v0.1 wrote "Strategic → Editorial → G2 quality review → human approval", which skipped G1 and Design. Corrected 2026-10-09.)*
 2. Every new record declares its pass status: `Complete`, `Partial`, `Not applicable`, or `Not yet run`. A blank is refused.
 3. `Partial` and `Not applicable` require a reason in the Notes field.
 4. **History is preserved.** The v1 record `nar-terminology-dragon` keeps `Conflict — unresolved` and is `Superseded`; its successor is `nar-terminology-dragon-v2`. Records carrying `LinkedIn — content construction` or `Realignment — operating philosophy` keep those values. The 10 belief rows created 2026-08-19 with a blank `DRAGON Reading` are left as they are and recorded as a known gap ([`CONTENT_RECONCILIATION_LEDGER.md`](CONTENT_RECONCILIATION_LEDGER.md) §4).
@@ -113,17 +120,21 @@ Every rule has a code in the gate. A refusal is a record: which rule, and what w
 | R06 | Translation Family ID ≠ Source Truth Position ID; a brief whose narrative positions exclude its translation's family | Schema doc DB6 |
 | R07 | A blank, invalid, or unreasoned DRAGON pass status | §4 |
 | R08 | Editorial before Strategic; a Ready-for-Design recommendation without both passes | §4 |
-| R09 | A LinkedIn translation with a non-LinkedIn surface; a LinkedIn brief recommended ready while `Surface = Not yet assigned` | §7 |
-| R10 | A CREATE without its natural key, or one that duplicates an existing natural key. Retries never duplicate | Sector contract §5 |
-| R11 | Publication without a human G2 `Approved` decision, reviewer and date; any agent as publisher | Constitution §5, Class 3 |
-| R12 | Approval bound to a different revision than the one published | §8 |
+| R09 | A surface that does not fit the platform (a LinkedIn surface on a non-LinkedIn row, or `Single-identity channel` on LinkedIn); a brief recommended ready, or submitted to G2, while `Surface = Not yet assigned`. **R09_SURFACE_UNKNOWN:** a surface that is neither a live Notion option nor a mapped agent enum (§7.1). A Notion write must carry the exact Notion name | §7 |
+| R10 | A CREATE without its natural key, or one that duplicates an existing natural key. Retries never duplicate. **R10_LOOKUP_UNVERIFIED:** a CREATE whose duplicate lookup is missing, failed, partial or of unknown status. Only a lookup with `status: complete`, a timestamp and a records list counts | Sector contract §5 |
+| R11 | Publication without a human G2 `Approved` decision, reviewer and date; any agent as publisher; design work approved without a finished artifact | Constitution §5, Class 3 |
+| R12 | A stale binding: an approval, G1 pass, spend approval, storyboard, submission or artifact for a different revision than the current one; published artifacts that differ from the approved set | §8 |
 | R13 | Publishing through Postiz before warm-up has cleared, the channel is connected, and a matrix row exists | Presence tracker §3 |
-| R14 | A publication record that cannot link back: missing brief, surface, URL or date; a non-LinkedIn URL for a LinkedIn surface | §8 |
-| R15 | First-person singular in Company Page copy. The Page speaks institutionally | `21_Presence/LINKEDIN_PRESENCE_OS.md` §4.6 |
+| R14 | A publication record that cannot link back: missing brief, surface, URL or date; a surface outside the vocabulary or unassigned; a URL that is not https, or not on the surface's host (`linkedin.com` for both LinkedIn surfaces) | §8 |
+| R15 | First-person singular in copy for a surface whose voice is `institutional` (`LinkedIn - Company Page`). The Page speaks institutionally | `21_Presence/LINKEDIN_PRESENCE_OS.md` §4.6 |
 | R16 | Any pricing or offer-term claim without an `Active` Offer (02) row. The Offer relation is optional; its absence forbids commercial claims | §1 |
 | R17 | Renaming, retyping, dropping or reordering a trigger-read property | §7 |
 | R18 | Writing a field reserved for or owned by another department | §1 |
 | R19 | An owner-decision value without a recorded quote and date | §2 |
+| R20 | A revision that is missing or is not a whole number of 1 or more, anywhere it binds something (brief `Version`, approved revision, published revision, G1, spend approval, submission) | §6.4 |
+| R21 | A publication-affecting change without exactly one `Version` increment; a bump with no such change; a copy change sent as UPDATE instead of VERSION; a new brief not at 1; a change checked without the prior brief | §6.4 |
+| R22 | A workflow stage out of order: Ready for Design without a human G1 for this revision; text-only content sent to Design; generation without a human spend approval for this revision; G2 submission before the finished artifact (design) or the final copy (text-only); C06 submitting without context | §8 |
+| R23 | A select value outside its recorded vocabulary (`Audience Role`, `Format`); an unknown format, which leaves the design or text-only path undecidable | §7.1 |
 
 ---
 
@@ -133,6 +144,8 @@ Every rule has a code in the gate. A refusal is a record: which rule, and what w
 
 Reused verbatim from Sector: `CREATE` · `UPDATE` · `VERSION` · `SUPERSEDE` · `NO_OP` · `REJECT` · `ESCALATE`. Select exactly one, explicitly. Match on the natural key before any CREATE. A retried skill never creates a second record.
 
+**The lookup must be verified (R10).** Before a CREATE, the skill queries or fetches the database for the natural key. It hands the gate the outcome as `{status, checked_at, records}`. Only `status: complete` with a records list counts. A failed, partial, quota-exhausted or unknown lookup refuses the CREATE. **It never means the database is empty.**
+
 | DB | Natural key |
 |---|---|
 | DB1 | `Platform` |
@@ -140,8 +153,10 @@ Reused verbatim from Sector: `CREATE` · `UPDATE` · `VERSION` · `SUPERSEDE` ·
 | DB3 | `Overlay ID` |
 | DB4 | `Campaign Code` |
 | DB5 | `Opportunity ID` |
-| DB6 | `Translation Family ID` + `Platform` + `Surface` + `Format` |
+| DB6 | `Translation Family ID` + `Platform` + **`Audience Role`** + `Surface` + `Format` |
 | DB7 | `Translation` (one live brief per translation; a new revision is a VERSION, which bumps `Version`) |
+
+**DB6 identity carries the audience (restored 2026-10-09).** The schema's primary entity is one *(Narrative × Platform × Audience)* expression (`CONTENT_INTELLIGENCE_SCHEMA.md` DB 6). v0.1 dropped the audience from the key, so a General Manager variant and a Revenue Manager variant of one family collided as duplicates. The key uses the **existing** DB6 `Audience Role` field. Its options mirror Sector DB9 Audience Roles verbatim; DB5 `Audience` is the relation to DB9 itself. No second audience store exists or is created.
 
 ### 6.2 The change-history rule
 
@@ -152,6 +167,17 @@ On any UPDATE that replaces a value, and on every VERSION and SUPERSEDE, append 
 After every apply, read the record back (fetch the page, or query the field) and compare it with the proposal. A write the connector reports as successful but that does not read back is a **partial failure**. Record it as one; do not retry blind.
 
 **A failed query is never zero results.** When the Notion query quota is exhausted or the connector errors, the operation is `incomplete`, and the record says so. Fall back to fetching pages by ID where possible.
+
+### 6.4 Revisions
+
+`Version` on DB7 is the revision, and every gate binds to it.
+- **Valid values.** A whole number of 1 or more. Notion returns it as a float (`2.0`), and the gate accepts integral values only. Empty, 0, negative, fractional, boolean or text is not a revision (R20).
+- **A new brief starts at 1.**
+- **What counts as a change.** The **publication-affecting** fields are marked in `content-databases.json`: `Script`, `Caption`, `Visual Direction`, `Canva Instructions`, `Platform`, `Engagement Follow-up`, `Evidence`, `Translation` and `Offer`. `Title` is an internal name and is not one.
+- **How a change is applied.** A change to any of those fields is a **VERSION** that sets `Version` to exactly prior + 1. The skill must hand the gate the prior brief so it can compare (R21).
+- **No change, no bump.** A bump with no such change is refused, because it would silently stale an approval.
+- **What binds to a revision.** A G1 pass, a spend approval, a storyboard, a G2 submission, a finished artifact and a G2 approval each name one revision. A different current `Version` makes them stale (R12).
+- **What this does not cover.** These rules hold only for writes that pass through a skill. §0.2 says what they cannot see.
 
 ---
 
@@ -166,21 +192,62 @@ After every apply, read the record back (fetch the page, or query the field) and
 
 A value on one axis never implies a value on another. DB7 `Approval Integrity` (formula) shows a red cell when the packet lifecycle runs ahead of G2, or when an approval names a revision other than the current `Version`.
 
-**Trigger-read properties are frozen** (R17): `Title`, `Script`, `Caption`, `Visual Direction`, `Canva Instructions` (text/title) and `Publishing Status` (select: `Not started`, `In progress`, `Ready for Design`, `Done`, in that order). Routine `trig_01WyyrXEkFZck1D49tm6BfKv` reads them by name.
+**Trigger-read properties are frozen** (R17): `Title`, `Script`, `Caption`, `Visual Direction`, `Canva Instructions` (text/title) and `Publishing Status` (select: `Not started`, `In progress`, `Ready for Design`, `Done`, in that order). Routine `trig_01WyyrXEkFZck1D49tm6BfKv` reads them by name. Their option IDs are recorded in `content-databases.json` (`trigger_contract.publishing_status_option_ids`).
+
+### 7.1 One vocabulary, Notion names authoritative
+
+`content-databases.json` → `vocabularies` holds the live option names and option IDs for DB6 `Surface`, `Audience Role` and `Format`, and the DRAGON statuses. They were read by a read-only fetch on 2026-10-09, in the correction unit. Agents emit snake_case enums; the vocabulary maps each one to its Notion name. **That mapping lives there and nowhere else.**
+
+| Notion option (exact) | Option ID | Agent enum | Platform | Voice | Post URL host |
+|---|---|---|---|---|---|
+| `LinkedIn - Founder profile` | `016f7eea-b42e-4485-8b26-120eebbd5e24` | `linkedin_founder_profile` | LinkedIn only | First person allowed, substantiated | `linkedin.com` |
+| `LinkedIn - Company Page` | `18754c3f-6008-4447-a13e-022a11119d2e` | `linkedin_company_page` | LinkedIn only | **Institutional: no first person singular** (R15) | `linkedin.com` |
+| `Single-identity channel` | `e06665b3-559b-497c-8c52-918b9ccf7443` | `single_identity_channel` | Not LinkedIn | The channel's one identity | (none recorded) |
+| `Not yet assigned` | `7ceba672-abc1-44eb-b4ec-8db1eda6b23d` | `not_yet_assigned` | Any | Drafting only; never Ready for Design, G2 or publication | — |
+
+Agent-only values that have **no Notion option** and never pass: `not_applicable` (multiplication engine: a derivative that is not a published translation) and `unknown` (publishing gate).
+
+**Rules.**
+- A Notion write carries the exact Notion name. Notion would silently create a new option from an agent enum.
+- Matching is exact, with no case-folding and no dash normalisation. `Company Page`, `Founder profile` and `LinkedIn — Company Page` (em dash) are **unknown**, and unknown fails closed (R09_SURFACE_UNKNOWN, R23).
+- Options are never renamed.
+- The tests pin the IDs, so a contract edit that drifts from Notion fails.
+
+*Correction:* the 2026-10-09 decision logs (`CONTENT_OS.md` §8, `CONTENT_INTELLIGENCE_SCHEMA.md` §10) wrote the surface options as "Founder profile · Company Page". The live names carry the `LinkedIn - ` prefix. The gate always used the live names; the agents used enums with no recorded mapping.
 
 ---
 
-## 8. G1 and G2 are different decisions
+## 8. The workflow: G1, spend approval, G2 (corrected 2026-10-09)
 
-| | G1 Concept review | G2 Pre-publish approval |
-|---|---|---|
-| Question | Should this exist at all? | Is this exact artifact safe and right to publish? |
-| Object | An opportunity or translation (an idea) | One brief at one `Version` (the final artifact) |
-| Who | Presence economics gate + Content (advisory) → human | `content-publishing-gate` (advisory) → **a named human**, Class 3 |
-| Recorded | DB5 `Decision` (`Promoted to Brief` = owner decision) | DB7 `G2 Decision` = Approved + Reviewer + Decided At + Approved Revision |
-| Expires | No | **Yes.** Any copy change bumps `Version`, and the approval no longer covers it |
+**Design work** (any format that needs Design, or text-capable formats with visual direction):
 
-Passing G1 never implies G2. A G2 approval never covers a later revision. **No agent and no skill can approve** (R01, R11).
+```
+Strategic DRAGON (DB5) → Editorial DRAGON (DB6) → brief copy at Version N (DB7)
+  → G1: concept review + readiness on Version N            (human)        R22, R12
+  → human sets Publishing Status = Ready for Design
+  → Creative Pipeline routine: storyboard + plan for N      (planning only)
+  → spend approval for Version N, before any generation    (human)        R22, R12
+  → Design produces the finished artifact (asset IDs + versions, made for N)
+  → G2: the exact finished artifact = copy at N + that asset set   (human)  R11, R12, R22
+  → human publishes; the publication record reproduces revision N and the asset set   R12, R14
+```
+
+**Text-only work.** The format is text-capable (`Text post`, `Article / Long-form`, `Poll`, `Thread`, `Newsletter issue`), and `Visual Direction` and `Canva Instructions` are empty or read `text-only`. Path: Strategic → Editorial → **final copy at Version N → G2 on that copy** → human publishes. It does not go to Design and needs no spend approval. The gate refuses a text-only brief as Ready for Design (R22). An unknown format is refused rather than guessed (R23).
+
+| | G1 Concept review + readiness | Spend approval | G2 Pre-publish approval |
+|---|---|---|---|
+| Question | Should this exist, and is it ready to produce? | May credits be spent on this revision? | Is this exact finished artifact safe and right to publish? |
+| Object | One brief at one `Version`, before Design | One brief at one `Version`, after the storyboard | Copy at one `Version` + the finished asset set (design), or the final copy (text-only) |
+| Checked by | `validate_design_readiness` (`content_write_gate.py readiness`) | `validate_generation_start` | `validate_g2_submission`, then `validate_publication` |
+| Who decides | A named human | A named human (Design 19's gate; approval matrix: human gate before credit spend) | `content-publishing-gate` (advisory) → **a named human**, Class 3 |
+| Recorded | **No Notion property yet.** A dated page-body line on the brief: `G1 passed \| rev N \| <reviewer> \| <date>` | Owned by Design (19). Content checks only that it exists for the same brief and Version | DB7 `G2 Decision` = Approved + Reviewer + Decided At + Approved Revision. The approved asset set is listed in the G2 packet (no property yet) |
+| Expires | Yes, on any publication-affecting change | Yes, likewise | **Yes.** Any copy change bumps `Version`, and the approval no longer covers it |
+
+Passing G1 never implies G2. A G2 approval never covers a later revision or a different asset. **No agent and no skill can approve, pass G1 or approve spend** (R01, R11, R22).
+
+*Was (v0.1, 2026-10-09):* G1 was the concept decision on the opportunity (DB5 `Decision`). The skill matrix put **G2 before Ready for Design**, so approval would have bound a brief whose artifact did not yet exist. DB5 `Decision = Promoted to Brief` remains the owner's concept decision on the opportunity. G1 is now the brief-level review before Design.
+
+**Not built, by design of this unit:** G1 and approved-artifact properties on DB7 (a Notion schema change, outside this unit), and any automatic G1 check in the routine (it cannot read a page-body convention reliably). Until they exist, the T2a checkpoint in the Creative Pipeline proposal is the human step that holds G1.
 
 ---
 
@@ -227,9 +294,10 @@ No Content event reaches another department automatically: the runtime publishes
 | Handoff | Operator | Input → output | Accepted when | Evidence |
 |---|---|---|---|---|
 | Sector → Content | Human invoking C01 | Sector finding ID → DB5 opportunity ID | R03/R04/R05 pass; read-back matches | Page-body change line + DB5 `Source Intelligence` |
-| Content → Design | **Human** sets `Ready for Design` | DB7 brief ID (+ Version) → routine storyboard comment | Both DRAGON passes set, surface assigned, Brief Integrity clean | The routine's comment on the brief page, carrying its marker |
-| Content → G2 | Human invoking C06, then the reviewer | DB7 brief ID + Version + C05 verdict → `G2 Decision` | Reviewer, date and approved revision recorded by the human | DB7 G2 fields + Approval Integrity green |
-| G2 → publication | **Human publisher** | Approved brief ID + Version → native post | R11–R14 pass | Publication record (brief ID, revision, surface, native URL, date, publisher) in the Presence publication log (not yet built) |
+| Content → Design | **Human** records G1, then sets `Ready for Design` | DB7 brief ID + Version → routine storyboard comment | `content_write_gate.py readiness` passes on a live snapshot: both DRAGON passes, surface assigned, valid Version, upstream links, a design (not text-only) brief, G1 for this Version | The G1 page-body line; the routine's comment carrying `[creative-pipeline v2 \| completed \| …]` |
+| Design → generation | **Human** spend approval | Brief ID + Version + storyboard → generation jobs | `validate_generation_start` passes | Design (19)'s spend record |
+| Content → G2 | Human invoking C06, then the reviewer | Brief ID + Version + C05 verdict + finished asset set (design) or final copy (text-only) → `G2 Decision` | `validate_g2_submission` passes; reviewer, date and approved revision recorded by the human | DB7 G2 fields + the G2 packet's asset list + Approval Integrity green |
+| G2 → publication | **Human publisher** | Approved brief ID + Version + asset set → native post | R11–R14 pass | Publication record (brief ID, revision, asset set, surface, native URL, date, publisher) in the Presence publication log (not yet built) |
 | Engagement → Sales | Human | Conversation → `LEAD_CREATED` input to `sales-lead-qualification` | Consent and CRM ownership respected | CRM record, owned by Sales |
 
 ### 10.1 Ordering mismatch, identified and not rewired
@@ -259,4 +327,12 @@ The data model puts **translation before brief**: a DB7 brief requires its DB6 t
 
 ## 13. Changelog
 
+- **v0.2 (2026-10-09, owner-authorised correction unit)** — Seven review findings on `74feb86` corrected in the repository. No Notion write; only read-only schema fetches.
+  - **Vocabulary.** One explicit surface, audience and format vocabulary with the live option IDs (§7.1). Unknown values fail closed.
+  - **Revisions.** Positive revisions enforced; publication-affecting changes must bump `Version` exactly once; stale and missing revisions refused (§6.4, R20, R21).
+  - **Workflow.** G1 and readiness before Design, human spend approval before generation, G2 on the exact finished artifact, and the text-only path (§8, R22).
+  - **Lookups.** Only a verified duplicate lookup counts (§6.1).
+  - **Audience.** Audience restored to DB6 identity.
+  - **Limits.** What the gate cannot see is stated in §0.2.
+  - Each finding has regression tests, and each was re-run against `74feb86`'s gate to confirm the defect existed. — Claude Code (Opus 5.5)
 - **v0.1 (2026-10-09)** — Created under the owner's Content-unit authorisation. Modelled on Sector's v0.2 contract. Adds what Sector's lacks: a runnable gate that refuses write proposals. Owner direction recorded: two-pass DRAGON (§4). Notion changes applied the same day are in `CONTENT_OS.md` §8. — Claude Code (Opus 5.5)

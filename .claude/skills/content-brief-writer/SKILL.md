@@ -37,14 +37,16 @@ DB7 fields whose writer is `C04`: the six trigger-read properties, `Objective`, 
 
 ## Refusals
 
-R01 `Ready for Design` or `Done` · R03 missing Opportunity, Translation or Narrative Position · R04 any fact without a dated source; any client outcome · R05 T4-only facts · R06 the translation's family not among the brief's positions · R10 a second brief for the same translation (revise with VERSION instead) · R15 first person on a Company Page brief · R16 any price, package or commercial term without an `Active` Offer row · R17 renaming or retyping a trigger-read property · R18 `Packet State` / `packet_id` / `variant_id`.
+R01 `Ready for Design` or `Done` · R03 missing Opportunity, Translation or Narrative Position · R04 any fact without a dated source; any client outcome · R05 T4-only facts · R06 the translation's family not among the brief's positions · R09 a translation surface outside the vocabulary (it cannot be voice-checked) · R10 a second brief for the same translation (revise with VERSION instead); a CREATE without a verified lookup · R15 first person on a `LinkedIn - Company Page` brief · R16 any price, package or commercial term without an `Active` Offer row · R17 renaming or retyping a trigger-read property · R18 `Packet State` / `packet_id` / `variant_id` · **R20** a missing or invalid `Version` · **R21** a publication-affecting change without exactly one bump, a bump without a change, or a copy change sent as UPDATE.
 
 ## Procedure
 
-1. Read the translation: family, surface, both DRAGON passes, audience role.
+1. Read the translation: family, surface (resolve it through `vocabularies.surface`; unknown → stop), both DRAGON passes, audience role, format.
 2. Write the copy so every claim is either a sourced fact, a labelled opinion, or a framework. List claims in `Evidence` with their source and date. If the Offer relation is empty, the copy names no price and no package.
-3. Match the natural key (`Translation`). Existing brief → **VERSION**: change the copy, bump `Version` by 1, append a change line. A G2 approval on the old Version no longer covers it.
-4. Run `validate_write`. Recommend readiness only when it passes **with** `recommend_ready_for_design: true`, and state the recommendation in the page body for the human.
+3. Match the natural key (`Translation`) with a verified lookup (`status: complete`; a failed query is never "no brief"). New brief → CREATE at `Version = 1`. Existing brief → fetch it, then **VERSION**: change the copy, set `Version` to **exactly prior + 1**, and append a change line. Hand the gate the fetched brief as `state.prior`. A G1 pass, spend approval or G2 approval on the old Version no longer covers it. The publication-affecting fields are listed in `content-databases.json` (DB7, `publication_affecting`).
+4. Run `validate_write`. Recommend readiness only when it passes **with** `recommend_ready_for_design: true`, and state the recommendation in the page body for the human. **Text-only briefs do not go to Design** (text-capable format, `Visual Direction` and `Canva Instructions` empty or `text-only`). Hand them to C05 → C06 for G2 once the copy is final. Design briefs wait for the human G1 (contract §8).
+
+**Limit, stated plainly.** These rules cover writes made through this skill. A person editing the brief in Notion bypasses them (contract §0.2).
 
 ## Verification
 
@@ -52,7 +54,7 @@ Read back the six trigger properties byte-for-byte and the `Version`. `Brief Int
 
 ## Handoff
 
-To C05 (claim review) then C06 (approval prep). To Design only through the human `Ready for Design` flip.
+Text-only: to C05 (claim review), then C06 (G2 approval prep) once the copy is final. Design work goes to C05, then the human G1 (`content_write_gate.py readiness`), then the human `Ready for Design` flip. Spend approval and generation follow, and only then C06 on the finished artifact.
 
 ## Execution record
 

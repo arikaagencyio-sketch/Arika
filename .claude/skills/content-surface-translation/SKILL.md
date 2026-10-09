@@ -22,14 +22,18 @@ You are performing the **apply** step of Content's write layer.
 
 ## Surfaces
 
-| Surface | Voice | Publishing |
-|---|---|---|
-| `LinkedIn - Founder profile` | First person, opinion, building in the open. Never a fabricated history | Manual, by the founder, always |
-| `LinkedIn - Company Page` | Institutional. **No first person singular** (R15) | Manual during warm-up; engine later, gated (R13) |
-| `Single-identity channel` | Newsletter, website: one sending identity | Per channel |
-| `Not yet assigned` | Declared state | Blocks a LinkedIn Ready-for-Design recommendation (R09) |
+| Surface (exact Notion name) | Agent enum | Voice | Publishing |
+|---|---|---|---|
+| `LinkedIn - Founder profile` | `linkedin_founder_profile` | First person, opinion, building in the open. Never a fabricated history | Manual, by the founder, always |
+| `LinkedIn - Company Page` | `linkedin_company_page` | Institutional. **No first person singular** (R15) | Manual during warm-up; engine later, gated (R13) |
+| `Single-identity channel` | `single_identity_channel` | Newsletter, website: one sending identity. Never on a LinkedIn row (R09) | Per channel |
+| `Not yet assigned` | `not_yet_assigned` | Declared state | Blocks Ready for Design, G2 and publication (R09) |
 
-Choosing the surface for a new piece is an owner editorial call. Record it, don't infer it.
+The names and option IDs are in `content-databases.json` → `vocabularies.surface`. **Write the exact Notion name**, ASCII hyphen included. Never write the agent enum: Notion would silently create a new option, and the gate refuses it (R09_SURFACE_UNKNOWN). The agent values `not_applicable` and `unknown` have no Notion option: create no row for them. Choosing the surface for a new piece is an owner editorial call. Record it, don't infer it.
+
+## Audience is part of the translation's identity
+
+One DB6 row is one *(family × platform × audience × surface × format)* expression. `Audience Role` is required on CREATE. It is the existing DB6 select, whose options mirror Sector DB9 Audience Roles verbatim (`vocabularies.audience_role`). Map the agent enum (`general_manager_owner`) to the Notion name (`General Manager / Owner`). A General Manager variant and a Revenue Manager variant of one family are two rows, not a duplicate. Never create another audience field or store.
 
 ## Permitted writes
 
@@ -37,13 +41,13 @@ DB6 and DB3 fields whose writer is `C03`, including `Surface`, `Editorial DRAGON
 
 ## Refusals
 
-R03 no Opportunity, Platform, or source · R06 family ≠ Source Truth Position ID · R07 blank Editorial status on CREATE · **R08 Editorial pass recorded while the Opportunity's Strategic pass is `Not yet run`** · R09 a non-LinkedIn surface on a LinkedIn row · R10 an existing family + platform + surface + format · R05 T4-only buyer-behaviour claims (`Presence Reality` stays `Unverified` without a cited source).
+R03 no Opportunity, Platform, or source · R06 family ≠ Source Truth Position ID · R07 blank Editorial status on CREATE · **R08 Editorial pass recorded while the Opportunity's Strategic pass is `Not yet run`** · R09 a surface that does not fit the platform, or one outside the vocabulary · R10 an existing family + platform + audience role + surface + format; a CREATE without a verified lookup · R23 an `Audience Role` or `Format` outside the vocabulary · R05 T4-only buyer-behaviour claims (`Presence Reality` stays `Unverified` without a cited source).
 
 ## Procedure
 
 1. Read the Opportunity's `Strategic DRAGON`. Not set → stop and hand back to C01.
 2. Run the **Editorial pass**: D (the question that invites a real answer), R (the pain felt this week), A (only substantiated, first-hand claims), G (what the reader can use today), O (the defensible argument), N (the one reader it is written for). Record the status and per-letter notes.
-3. Match the natural key on DB6. Query failed → stop, incomplete.
+3. Match the natural key on DB6 and hand the gate the lookup as `{status, checked_at, records}`. Only `status: complete` lets a CREATE through. A failed, partial or quota-exhausted query → stop, `incomplete`. **It is never an empty database** (R10_LOOKUP_UNVERIFIED).
 4. Apply; append the change line. On an UPDATE that replaces a value, preserve the prior value in the line.
 
 ## Verification

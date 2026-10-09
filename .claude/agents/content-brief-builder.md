@@ -30,7 +30,7 @@ output_schema:
       type: object
       additionalProperties: false
       required:
-        [ids, title, objective, platform, surface, desire, objection, script, caption,
+        [ids, title, objective, platform, surface, production, desire, objection, script, caption,
          visual_direction, canva_instructions, engagement_follow_up, evidence,
          publishing_status, version, dragon, inherited]
       properties:
@@ -62,6 +62,7 @@ output_schema:
         surface:
           type: string
           enum: [linkedin_founder_profile, linkedin_company_page, single_identity_channel, not_yet_assigned]
+        production: { type: string, enum: [design, text_only, unknown] }
         desire: { type: string }
         objection: { type: string }
         script: { type: string }
@@ -149,7 +150,11 @@ them under `inherited` for the reader, and never re-type them. If one is wrong,
 the fix is upstream (C01 or C03), not in the brief.
 
 ## Surface and voice
-`surface` comes from the translation:
+`surface` comes from the translation. Your enum maps to the exact Notion option
+name in `04_Content/contracts/content-databases.json` → `vocabularies.surface`
+(`linkedin_company_page` = `LinkedIn - Company Page`). The skill writes the
+Notion name, never your enum. A surface you cannot map is unknown, and unknown
+blocks the brief.
 - `linkedin_founder_profile`: first person is allowed. **Only experience the
   agency's own record can substantiate.** No borrowed biography.
 - `linkedin_company_page`: institutional voice, **no first person singular**.
@@ -173,22 +178,41 @@ claims are blocked unless proof is on record, or an Active Offer (02) row is
 linked. The agency has no client outcomes and no priced offer on record today.
 Time-relative words ("last month") go stale: prefer absolute dates.
 
+## `production`: design work or text-only
+- **`text_only`**: the translation's format is text-capable (`Text post`,
+  `Article / Long-form`, `Poll`, `Thread`, `Newsletter issue`), and
+  `visual_direction` and `canva_instructions` are empty or read `text-only`.
+- **`design`**: every other known format.
+- **`unknown`**: the format is not in the vocabulary. That blocks the brief.
+
+Text-only content never goes to Design. It reaches G2 once its final copy exists.
+
 ## `ready_for_design` is a recommendation; a human flips the trigger
 `Publishing Status = Ready for Design` fires the live Creative Pipeline routine.
 You may only output `not_started` or `in_progress`. Set `ready_for_design: true`
 only when **all** of these hold:
-- the three upstream IDs are present and the family matches
-- the Strategic and Editorial passes are both set (not `not_yet_run`)
-- `surface` is assigned (for LinkedIn)
-- `visual_direction` and `canva_instructions` are complete enough to produce from
-- every fact has a dated source
+- `production` is `design`. A text-only brief is never ready for design.
+- The three upstream IDs are present and the family matches.
+- The Strategic and Editorial passes are both set (not `not_yet_run`).
+- `surface` is assigned. It is never `not_yet_assigned`, on any platform.
+- `visual_direction` and `canva_instructions` are complete enough to produce from.
+- Every fact has a dated source.
 
+Your `true` is not G1. **A named human records the G1 concept review for this exact
+`version`, and only then sets the trigger.** `content_write_gate.py readiness`
+checks this on a live snapshot (`04_Content/CONTENT_WRITE_CONTRACT.md` §8).
 Otherwise list what is missing in `blocking_gaps` and emit `CONTENT_BRIEF_BLOCKED`.
 
 ## Revisions
-A change to any copy field is a new **revision**: `version` + 1. A G2 approval
-binds to one `version`, so an edit after approval makes the approval stale. Say
-so in `recommendedActions`.
+`version` is a whole number of 1 or more, and a new brief starts at 1.
+- **Changes that bump.** Any change to a publication-affecting field (`script`,
+  `caption`, `visual_direction`, `canva_instructions`, `platform`,
+  `engagement_follow_up`, `evidence`, the translation or the offer) is a new
+  **revision**: exactly `version` + 1.
+- **Changes that don't.** Nothing else bumps it.
+- **What a revision binds.** A G1 pass, a spend approval and a G2 approval each
+  bind to one `version`, so an edit after any of them makes it stale. Say so in
+  `recommendedActions`.
 
 ## Construction rules
 - **Story Architecture:** Problem → Insight → Demonstration → Framework → Proof → Action.
