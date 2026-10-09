@@ -96,8 +96,19 @@ was built on filler.
 
 ## 6. Skill Library Index
 
-*(placeholder — none yet; the 6 agents in §5 carry their doctrine inline rather than
-via shared skills, matching the pattern in every other migrated department.)*
+**Seven skills (C01–C07), authored 2026-10-09. None has run yet.** Agents decide;
+skills validate and apply. Matrix: [`CONTENT_SKILL_MATRIX.md`](CONTENT_SKILL_MATRIX.md) ·
+contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md) · field ownership:
+[`contracts/content-databases.json`](contracts/content-databases.json) · gate:
+`python 04_Content/contracts/content_write_gate.py`.
+
+`content-opportunity-intake` (C01) · `content-narrative-review` (C02) ·
+`content-surface-translation` (C03) · `content-brief-writer` (C04) ·
+`content-claim-review` (C05) · `content-approval-prep` (C06) ·
+`content-source-retrieval` (C07), all under `.claude/skills/`.
+
+*Was (until 2026-10-09): "placeholder — none yet; the 6 agents in §5 carry their
+doctrine inline rather than via shared skills."*
 
 ## 7. KPI Dictionary (department-local)
 
@@ -117,6 +128,7 @@ via shared skills, matching the pattern in every other migrated department.)*
 
 ## 8. Decision Log
 
+- **2026-10-09 — Content write layer built; two-pass DRAGON ratified; Hospitality chain repaired (owner-authorised Content unit).** Owner decisions recorded, quoted from the 2026-10-09 implementation brief: (1) **DRAGON is one strategy run in two passes**: Strategic (Diagnosis, Revenue Logic, Architecture, Growth Systems, Operational Intelligence, Navigation) before Editorial (Dialogue, Relatability, Authenticity, Growth, Opinion, Niche-orientation); each pass on new content carries Complete / Partial / Not applicable with reasons; history is preserved. This resolves §10 Conflict 1. (2) **Content Briefs V2 is canonical.** (3) **Hospitality → Accommodation is the first pilot content chain**, not the default sector. Built: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md), [`CONTENT_SKILL_MATRIX.md`](CONTENT_SKILL_MATRIX.md), [`contracts/content-databases.json`](contracts/content-databases.json) (361 fields, one writer each), a runnable gate with 48 tests, seven skills, [`CONTENT_RECONCILIATION_LEDGER.md`](CONTENT_RECONCILIATION_LEDGER.md), `_memory/` placeholder; six agents aligned to V2 (§5). **Notion changes (all additive, all read back):** DB5 `Strategic DRAGON` + `Strategic DRAGON Notes`; DB6 `Editorial DRAGON` + `Editorial DRAGON Notes` + `Surface`, and `Audience Role` options `General Manager / Owner` and `Revenue / Reservations Manager` (sourced verbatim from Sector DB9; the six existing option IDs verified unchanged; the field description was cleared by the ALTER and restored the same session); DB7 `G2 Decision`, `G2 Reviewer`, `G2 Decided At`, `G2 Approved Revision`, `Approval Integrity` (formula; the six trigger-read properties verified byte-identical); DB2 `DRAGON Reading` option `Two-pass — Strategic then Editorial` (historical option IDs unchanged). **Rows:** created DB2 `nar-terminology-dragon-v2` (page `3f421e15eb9381968efdfb5b500feb12`, Active); `nar-terminology-dragon` (page `3be21e15eb938184a1e0c13caed5bec4`) → `Superseded`, conflict value kept; DB5 `opp-accom-ota-tax-001` (page `3c121e15eb93814097efe223a4fef5de`) `Narrative Position` linked to `nar-misconception-more-leads` (evidence: both translations' family ID and the brief's link); DB5 ×3 `Strategic DRAGON = Not yet run`; DB6 OTA LinkedIn (`3c121e15eb938181be29f6315caf5805`) and Newsletter (`3c121e15eb9381b79999dbb24e13d56b`) translations `Audience Role` `CEO` → `General Manager / Owner` (prior value kept in a page-body change line), `Editorial DRAGON = Not yet run`, `Surface` = `Not yet assigned` / `Single-identity channel`; DB7 both briefs `G2 Decision = Not submitted`. **Not done, by design:** no publication, no Ready-for-Design flip, routine untouched, V1 untouched, Offer left empty (absence recorded; commercial claims forbidden), 10 blank DB2 belief readings left as a recorded gap. **Self-correction:** the 2026-10-09 audit (and `21_Presence/PRESENCE_OS.md`) say manual runtime use is verified only for Offer (02). Run records show **7 agents across Branding, Design, Tech Stack and Offer, 15 runs, from 2026-07-14**. — Claude Code (Opus 5.5)
 - **2026-08-16 — Content Intelligence Architecture v1.0 approved; 7 decisions taken.** The department's structural answer to a real diagnosis: the content-brief database was carrying intelligence and production spec in the same layer, so intelligence had nowhere to live and nothing to translate it into platform-native expression. A full-repository sweep preceded the design and materially reshaped it — of 19 proposed databases, **5 already existed elsewhere** (Sector's 13 Notion DBs, the Offer Engineering Registry, PIL, the SCIC calendar, Presence's Content Distribution Engine), **6 are blocked by reality gates already ruled on with reasons** (Performance Intelligence, Learnings, Distribution, Outreach, Production Assets, and 4 calendar stores), and **1 folded into another**. The build is therefore **7 new databases** — exactly the "minimum core" the owner's own specification named, plus a thin Offer mirror — not a parallel architecture. The owner decisions:
   1. **Content Briefs is deleted and rebuilt fresh** rather than modified in place. Accepted cost: the live Creative Pipeline routine (`trig_01WyyrXEkFZck1D49tm6BfKv`) must be re-pointed and re-verified before the old database is deleted, and the rebuild must reproduce `Publishing Status` and five other property names **byte-identically** — the routine reads them by name and matches `"Ready for Design"` exactly.
   2. **`Campaign` moved Marketing (03) → Content (04)** — ratified in `AEIT_06` §2 (see there for reasoning). Marketing keeps campaign strategy, channel, budget and demand execution; only entity ownership moved.
@@ -231,6 +243,14 @@ Realignment DRAGON is an *operating philosophy* (how the agency thinks). They ma
 both be real at different altitudes — exactly like the 4-way narrative distinction
 resolved on 2026-07-03 — or one may supersede the other. **Unresolved.**
 `content-brief-builder` must name which it applied and flag the conflict on every run.
+
+> ✅ **Resolved 2026-10-09 (owner).** Both readings are kept, as **two ordered passes
+> of one strategy**: **Strategic DRAGON** (the Realignment letters) decides what is
+> true and worth saying, and is recorded on DB5. **Editorial DRAGON** (the Draft 13
+> letters) decides how to say it so it lands, and is recorded on DB6. Strategic
+> always runs first. The text above is kept as the record of the conflict. Terminology
+> record: DB2 `nar-terminology-dragon-v2`; the v1 record is `Superseded` with
+> `Conflict — unresolved` intact. Rules: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md) §4.
 
 **Conflict 2 — the Instagram "Implementation Strategy" pivot was noted but never absorbed.**
 §3 records that `Instagram as a Business Tool. Draft 14.md` *"pivoted mid-file to
@@ -358,6 +378,7 @@ running system has changed.
 
 ## 15. Changelog
 
+- 2026-10-09 — **Content write layer (owner-authorised Content unit).** Added `CONTENT_WRITE_CONTRACT.md`, `CONTENT_SKILL_MATRIX.md`, `CONTENT_RECONCILIATION_LEDGER.md`, `contracts/` (field contract, gate, tests), `_memory/README.md`, and seven skills under `.claude/skills/content-*`. Rewrote `content-brief-builder` and amended the other five `content-*` agents to the V2 fields, relation IDs, canonical 10 platforms, surface, revision and two-pass DRAGON. Their emits, triggers and consumers are unchanged. §6 filled, §8 logged, §10 Conflict 1 marked resolved (original text kept). Notion: additive schema and row changes listed in §8. Verified 2026-10-09: gate PASS (8 databases, 361 fields, one writer each); Content contract tests 48/48; Sector contract tests 228/228 (regression); `arika-runtime` typecheck clean, test suite 80/80, `arika list` loads 115 agents. A diff check confirmed no agent's triggers, emits or risk class changed. No production agent was run. Not committed by this session. — Claude Code (Opus 5.5)
 - 2026-08-16 — **Content Intelligence Architecture v1.0 approved (§8).** Phase 1 (paper reconciliation) applied: `AEIT_06` amended — `Campaign` owner Marketing (03) → Content (04), and `Platform` + `Narrative Position` added as `[CANDIDATE]` entities following the Geography precedent, with 4 candidate edges; `PLATFORM_INTELLIGENCE_REGISTRY.md` §5 rewritten (per-sector overlay moved to Content, given a real home in the Sector × Platform Matrix) and 2 decisions logged there; cross-reference note added to `03_Marketing/MARKETING_OS.md` §3. **Phases 2–7 (all Notion build steps) are blocked** — the Notion connector disconnected mid-session. Nothing was built, nothing was deleted, and the live content-brief database and its cloud routine are untouched. — Claude Code (Opus 5)
 - 2026-06-30 — Department created as part of v0.1 skeleton restructuring; was initially merged into Marketing as `360_Agency_Content/`, then corrected to a standalone department per explicit owner feedback (it was conceived as a full department, not a Marketing sub-area), with all subsequent departments renumbered (Sales 04→05, ClientPartner Acquisition 05→06, Client Success 06→07, Operations 07→08, Finance 08→09, Legal 09→10, HR/People Ops 10→11, Branding 11→12, Tech Stack 12→13, Cross-Domain Synthesis 13→14).
 - 2026-06-30 — Content migration: all 10 files read in full. Capability Registry, Workflow Index, KPI Dictionary, and Standards & SOPs Index populated. `Project Realignment Stratergy.md` confirmed as the most "decision-like" document found in any department to date (real document lineage, clear from/to/why argument) but flagged as unconfirmed reasoning, not a logged decision. Unresolved 3-way content-pillar naming conflict across source files documented rather than silently picking one. Content/Marketing department boundary flagged as an imposed architectural decision, not one drawn in the source material — added to owner-input tracker for confirmation.
@@ -376,7 +397,10 @@ bois-compatible envelope (`{timestamp, agent, department, stream, event_type,
 source:"arika-runtime", payload}` — `arika-runtime/DESIGN.md`). This is the only
 record of what Content agents actually did, and the only evidence
 `operations-state-monitor` (08) can use to mark this department `live` rather than
-`documented`. **The stream is empty until the first run.**
+`documented`. **The stream is empty until the first run.** As of 2026-10-09 the
+folder exists with a tracked placeholder (`_memory/README.md`) and no stream file.
+Skills (§6) will log to `_memory/skill_runs.jsonl`, a separate file in Sector's
+execution-record format. Neither holds a record yet, and none is back-filled.
 
 **Feedback loop.** §7's KPIs cannot miss a threshold yet — nothing is published and
 no accounts exist. The loop that *is* live is different and more useful right now:

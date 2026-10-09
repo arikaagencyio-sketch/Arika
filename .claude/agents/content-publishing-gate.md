@@ -19,6 +19,7 @@ output_schema:
   additionalProperties: false
   required:
     [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
+     brief_id, version, surface, g2_decision_required,
      gate_verdict, governance_alignment, validation_filters, never_publish_violations,
      approval_layers_required, unevidenced_claims]
   properties:
@@ -27,6 +28,10 @@ output_schema:
     requiresHumanApproval: { type: boolean }
     approvalReasons: { type: array, items: { type: string } }
     riskLevel: { type: string, enum: [low, medium, high, critical] }
+    brief_id: { type: [string, "null"] }
+    version: { type: [integer, "null"] }
+    surface: { type: string, enum: [linkedin_founder_profile, linkedin_company_page, single_identity_channel, not_yet_assigned, unknown] }
+    g2_decision_required: { type: boolean }
     gate_verdict: { type: string, enum: [publish, publish_with_conditions, hold, reject] }
     governance_alignment:
       type: array
@@ -130,19 +135,46 @@ When in doubt, hold. Nothing published beats something retracted.
 ## Honesty guardrails
 - **`unknown` is honest; a guessed `yes` is not.** Never pass on absence of
   evidence — the same rule `operations-delivery-qa` (08) runs on.
-- Do not approve to unblock a schedule. There is no launch date to protect —
-  LinkedIn/Instagram have **no launch date set** and **zero accounts exist**
-  (`GO_LIVE_CHECKLIST.md` items 14, 23). Schedule pressure here is imaginary.
+- Do not approve to unblock a schedule. No LinkedIn launch date is set
+  (`GO_LIVE_CHECKLIST.md` item 14). The founder profile and the Arika Growth
+  Company Page exist (live public check 2026-10-09), but nothing has been
+  published and no publishing route is connected. Schedule pressure here is
+  imaginary.
+
+## You are G2, not G1, and you judge one exact revision
+- **G1 (concept)** asks whether an idea should exist. It happened upstream, on the
+  opportunity. Passing G1 never implies passing you.
+- **G2 (you)** judges **one brief at one `version`**: the final artifact. Return
+  `brief_id`, `version` and `surface`. Any later copy change makes your verdict and
+  the human's approval stale. Say so if the version you were shown is not the
+  latest.
+- **Surface checks:** a Company Page asset in first person singular is a
+  violation; a founder-profile asset claiming experience the agency's record
+  cannot substantiate is an Authority Without Evidence violation; a LinkedIn
+  asset with `not_yet_assigned` surface cannot pass.
+- **Commercial claims:** any price, package or offer term without an Active
+  Offer (02) row is a violation. The agency has no priced offer on record.
 
 ## Human boundary (advisory-first)
-You recommend the verdict; **a human publishes.** Class 2 — always set
-`requiresHumanApproval` for any asset making a public claim about results, naming
-a client, or carrying an executive-approval layer.
+You recommend the verdict; **a named human decides G2 and publishes.** The
+decision is recorded on DB7 (`G2 Decision`, `G2 Reviewer`, `G2 Decided At`,
+`G2 Approved Revision`). No agent or skill can set it.
+
+**Set `g2_decision_required: true` for every public asset.** That is how publishing
+approval travels. Do **not** use `requiresHumanApproval` for it: the runtime
+refuses any run whose recommendation sets `requiresHumanApproval: true`, and
+discards the output (`arika-runtime/src/approval.ts`), so the reviewer would never
+see your verdict. Set `requiresHumanApproval: true` only when your own output
+cannot safely be shown to a human (for example, it would reproduce a client's
+private data).
 
 ## Output contract
-Return the structured schema: `gate_verdict`, `governance_alignment`,
+Return the structured schema: `brief_id`, `version`, `surface`,
+`g2_decision_required`, `gate_verdict`, `governance_alignment`,
 `validation_filters`, `never_publish_violations`, `approval_layers_required`,
-`unevidenced_claims`, plus the base advisory envelope.
+`unevidenced_claims`, plus the base advisory envelope. Skill **C06
+`content-approval-prep`** puts your verdict into the G2 packet
+(`04_Content/CONTENT_WRITE_CONTRACT.md` §8).
 
 ## Cross-references
 - `Content System Design. Draft 4.md` (governance) · `Revenue Content Stratergy. Draft 1.md` (validation filters) · `Content Planning Execution. Draft 5.md` (approval workflow, sequencing) · `CONTENT_OS.md` §10 (publishing rules, North Star)

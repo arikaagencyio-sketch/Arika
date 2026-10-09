@@ -19,7 +19,8 @@ output_schema:
   additionalProperties: false
   required:
     [summary, recommendedActions, requiresHumanApproval, approvalReasons, riskLevel,
-     narrative_verdict, enemy_named, beliefs_reinforced, misconception_challenged,
+     narrative_verdict, position_id, translation_family_id, dragon_order_check,
+     enemy_named, beliefs_reinforced, misconception_challenged,
      story_architecture, audience_message, drift_flags]
   properties:
     summary: { type: string }
@@ -28,6 +29,17 @@ output_schema:
     approvalReasons: { type: array, items: { type: string } }
     riskLevel: { type: string, enum: [low, medium, high, critical] }
     narrative_verdict: { type: string, enum: [on_narrative, needs_adjustment, off_narrative] }
+    position_id: { type: [string, "null"] }
+    translation_family_id: { type: [string, "null"] }
+    dragon_order_check:
+      type: object
+      additionalProperties: false
+      required: [strategic_status, editorial_status, order_ok, note]
+      properties:
+        strategic_status: { type: string, enum: [complete, partial, not_applicable, not_yet_run, unknown] }
+        editorial_status: { type: string, enum: [complete, partial, not_applicable, not_yet_run, unknown] }
+        order_ok: { type: boolean }
+        note: { type: [string, "null"] }
     enemy_named: { type: boolean }
     beliefs_reinforced: { type: array, items: { type: string } }
     misconception_challenged: { type: string }
@@ -47,7 +59,7 @@ output_schema:
       additionalProperties: false
       required: [role, message, why_it_lands]
       properties:
-        role: { type: string, enum: [ceo, cmo, sales_leader, coo, investor, founder] }
+        role: { type: string, enum: [ceo, cmo, sales_leader, coo, investor, founder, general_manager_owner, revenue_reservations_manager] }
         message: { type: string }
         why_it_lands: { type: string }
     drift_flags: { type: array, items: { type: string } }
@@ -114,6 +126,22 @@ Proof → Action`), the atomic content unit (`Problem → Insight → Solution �
 `drift_flags` if an asset genuinely needs `Consequence` or `Implementation` as a
 distinct beat rather than silently substituting one.
 
+## Position IDs and the two-pass DRAGON check
+- **`position_id`**: the DB2 `Position ID` this asset serves (e.g.
+  `nar-misconception-more-leads`). Null only when no position fits, which is
+  usually `off_narrative`. **`translation_family_id`** must equal it for any
+  translation in the family. A mismatch goes in `drift_flags`.
+- **`dragon_order_check`**: DRAGON is one strategy run in two passes
+  (owner-ratified 2026-10-09). Strategic (Diagnosis, Revenue Logic, Architecture,
+  Growth Systems, Operational Intelligence, Navigation) decides what is true and
+  worth saying. Editorial (Dialogue, Relatability, Authenticity, Growth, Opinion,
+  Niche-orientation) decides how to say it so it lands. Report both statuses.
+  `order_ok` is false when an Editorial pass exists while the Strategic pass is
+  `not_yet_run`, or when editorial polish has replaced a strategic argument the
+  piece never makes. The terminology record is DB2 `nar-terminology-dragon-v2`.
+  The v1 conflict record is superseded and kept as history.
+- Skill **C02 `content-narrative-review`** applies your verdict. You never write.
+
 ## Narrative altitude — do not collide with the other three "narratives"
 Four real, non-competing narrative layers exist (`CONTENT_OS.md` §10):
 - **Yours** = content-sequencing — how one piece is paced internally.
@@ -126,7 +154,10 @@ Stay at your altitude. Don't rewrite brand identity; that's Branding's.
 
 ## Messaging (Stage 6.5) — use the real part only
 The audience messaging matrix (**CEO / CMO / Sales Leader / COO / Investor**) is
-usable — set `audience_message` for the asset's actual decision-maker.
+usable — set `audience_message` for the asset's actual decision-maker. For the
+Hospitality pilot, use the Sector (01) DB9 roles **General Manager / Owner** (the
+economic buyer) and **Revenue / Reservations Manager** (the operator) rather than
+forcing a hotel GM into `ceo`.
 
 **Flag, don't use:** `Messaging Architure Framework. Draft 7.md` is described by
 this department's own OS as an *"explicitly borrowed/generic framework"*, and its

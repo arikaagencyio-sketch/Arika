@@ -31,9 +31,47 @@ output_schema:
         additionalProperties: false
         required:
           [opportunity_id, problem_category, atomic_unit, audience, pillar, house,
-           content_type, funnel_position, business_objective, priority, research_dependency]
+           content_type, funnel_position, business_objective, priority, research_dependency,
+           source_refs, sub_sector_id, audience_role_id, narrative_position_id, dragon]
         properties:
           opportunity_id: { type: string }
+          source_refs:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              required: [source_id, source_type, tier, verified_at]
+              properties:
+                source_id: { type: string }
+                source_type: { type: string, enum: [sector_finding, sector_signal, narrative_position, repo_doctrine, owner_curated, external_research] }
+                tier: { type: [string, "null"], enum: [t1_primary, t2_institutional, t3_commercial_intel, t4_secondary, null] }
+                verified_at: { type: [string, "null"] }
+          sub_sector_id: { type: [string, "null"] }
+          audience_role_id: { type: [string, "null"] }
+          narrative_position_id: { type: [string, "null"] }
+          dragon:
+            type: object
+            additionalProperties: false
+            required: [strategic]
+            properties:
+              strategic:
+                type: object
+                additionalProperties: false
+                required: [status, reason, letters]
+                properties:
+                  status: { type: string, enum: [complete, partial, not_applicable, not_yet_run] }
+                  reason: { type: [string, "null"] }
+                  letters:
+                    type: object
+                    additionalProperties: false
+                    required: [diagnosis, revenue_logic, architecture, growth_systems, operational_intelligence, navigation]
+                    properties:
+                      diagnosis: { type: [string, "null"] }
+                      revenue_logic: { type: [string, "null"] }
+                      architecture: { type: [string, "null"] }
+                      growth_systems: { type: [string, "null"] }
+                      operational_intelligence: { type: [string, "null"] }
+                      navigation: { type: [string, "null"] }
           problem_category: { type: string, enum: [revenue, marketing, sales, operations, automation, leadership] }
           atomic_unit:
             type: object
@@ -58,7 +96,7 @@ output_schema:
           priority:
             type: object
             additionalProperties: false
-            required: [revenue_impact, authority_impact, demand_impact, sales_impact, differentiation_impact, total, tier]
+            required: [revenue_impact, authority_impact, demand_impact, sales_impact, differentiation_impact, total, tier, threshold_status]
             properties:
               revenue_impact: { type: integer, minimum: 1, maximum: 10 }
               authority_impact: { type: integer, minimum: 1, maximum: 10 }
@@ -66,7 +104,8 @@ output_schema:
               sales_impact: { type: integer, minimum: 1, maximum: 10 }
               differentiation_impact: { type: integer, minimum: 1, maximum: 10 }
               total: { type: integer, minimum: 5, maximum: 50 }
-              tier: { type: string, enum: [tier_1_mission_critical, tier_2_growth_supporting, tier_3_amplification] }
+              tier: { type: [string, "null"], enum: [tier_1_mission_critical, tier_2_growth_supporting, tier_3_amplification, null] }
+              threshold_status: { type: string, enum: [tiered, below_threshold] }
           research_dependency: { type: string }
     backlog_tier_summary: { type: string }
     rejected: { type: array, items: { type: string } }
@@ -116,9 +155,11 @@ both; don't collapse them.
 - **Revenue Signals** → Sector (01)'s 6-category buying-signal framework and
   90-point scorecard (`01_Sector/SECTOR_OS.md` §3, §7) is the strongest source —
   real and owner-curated. Use it before the generic backlog.
-- **Revenue Reality** → its 7 native sub-pillars already have **fully-built
-  5-post series with titles, hooks, and key realizations** (`Linkedin Stratergy.
-  Draft 13.md`). That is real, ready backlog — map to it rather than inventing.
+- **Revenue Reality** → its 7 native sub-pillars have **5-post series outlines**
+  (`Linkedin Stratergy. Draft 13.md`). Use the **structures** (titles, hooks,
+  arguments). Its first-person stories, figures and trademark claims are
+  fabricated and must not become opportunities
+  (`21_Presence/LINKEDIN_PRESENCE_OS.md` §7.7).
 
 ## Priority scoring (the real formula, 5 dimensions, max 50)
 Revenue Impact + Authority Impact + Demand Impact + Sales Impact +
@@ -131,6 +172,31 @@ Differentiation Impact, each **1–10** (`Content Planning Execution. Draft 5.md
 | **Tier 3** | 20–29 | Amplification |
 
 `total` must equal the sum of the five — do not round or fudge it to reach a tier.
+
+**Below threshold (totals 5–19) is a declared state, not a fourth tier.** Set
+`tier: null` and `threshold_status: below_threshold`. Such an opportunity is
+recorded as `Backlog` or rejected through the revenue filter; it is never lifted
+into Tier 3 by inflating a dimension. Every tiered opportunity sets
+`threshold_status: tiered`. (DB5's `Tier` formula shows the same gap rather than
+inventing a tier; this closes the mismatch logged on 2026-08-16.)
+
+## The Strategic DRAGON pass (owner-ratified 2026-10-09) — yours to run
+DRAGON is one strategy run in two passes. **You run Pass One, Strategic DRAGON**,
+which decides what is true and worth saying. Editorial DRAGON comes later, per
+surface, in translation. Fill `dragon.strategic.letters` with one line each:
+**D**iagnosis (the actual constraint), **R**evenue Logic (the commercial mechanism),
+**A**rchitecture (the systems producing it), **G**rowth Systems (the capability that
+improves it), **O**perational Intelligence (the decision or workflow it changes),
+**N**avigation (the next action). Status `complete`, `partial` or `not_applicable`;
+`partial` and `not_applicable` need a `reason`. A pass you could not run is
+`not_yet_run`, never blank. Skill C01 records it on DB5.
+
+## Sources and IDs
+Every opportunity cites its upstream by ID in `source_refs`: a Sector finding or
+signal, an existing narrative position, or a repo-doctrine record, with tier and
+`verified_at`. A T4-only source cannot drive execution. `sub_sector_id: null`
+means agency-wide. **Do not default to Hospitality**, which is the first pilot,
+not the business.
 
 **Dependency rule (hard):** *"No Tier 1 content is produced without research."*
 Every Tier 1 opportunity must name its `research_dependency`. If the research

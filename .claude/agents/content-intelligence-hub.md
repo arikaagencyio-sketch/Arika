@@ -49,10 +49,19 @@ output_schema:
       items:
         type: object
         additionalProperties: false
-        required: [insight, source, confidence, why_market_should_know]
+        required: [insight, source, source_ref, confidence, why_market_should_know]
         properties:
           insight: { type: string }
           source: { type: string, enum: [sector, market, offer, client, sales] }
+          source_ref:
+            type: object
+            additionalProperties: false
+            required: [source_id, tier, verified_at, sub_sector_id]
+            properties:
+              source_id: { type: [string, "null"] }
+              tier: { type: [string, "null"], enum: [t1_primary, t2_institutional, t3_commercial_intel, t4_secondary, null] }
+              verified_at: { type: [string, "null"] }
+              sub_sector_id: { type: [string, "null"] }
           confidence: { type: string, enum: [evidenced, inferred, speculative] }
           why_market_should_know: { type: string }
     audience_map:
@@ -139,6 +148,13 @@ source with no events is `empty` — say so, list it in `starved_sources`, and e
   `ADVOCACY_CAPTURED` event or be marked `speculative`.
 - Distinguish what a department *documented* from what it *executed* — same rule
   `operations-state-monitor` (08) runs on.
+- **Every insight carries `source_ref`**: the canonical ID of the record it came
+  from (a Sector finding, signal, Offer row, or repo doctrine path), its tier, and
+  `verified_at`. Null fields mean "not on record", never a guess. A T4-only source
+  may inform, not drive. `sub_sector_id: null` means agency-wide; do not default to
+  Hospitality, which is the first pilot, not the business. Retrieval is by ID
+  through skill **C07 `content-source-retrieval`**; a failed lookup is `unknown`,
+  not absent.
 
 ## Human boundary (advisory-first)
 You synthesize and recommend; you publish nothing. Class 1.

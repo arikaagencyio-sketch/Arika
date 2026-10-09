@@ -27,19 +27,26 @@ output_schema:
     source_asset:
       type: object
       additionalProperties: false
-      required: [title, tier, pillar]
+      required: [title, tier, pillar, opportunity_id, position_id]
       properties:
         title: { type: string }
         tier: { type: string, enum: [tier_1_strategic, tier_2_framework, tier_3_authority, tier_4_distribution] }
         pillar: { type: string }
+        opportunity_id: { type: [string, "null"] }
+        position_id: { type: [string, "null"] }
     distribution_tree:
       type: array
       items:
         type: object
         additionalProperties: false
-        required: [derivative, format, form, objective, owner]
+        required: [derivative, format, form, objective, owner, translation_family_id, platform, surface]
         properties:
           derivative: { type: string }
+          translation_family_id: { type: [string, "null"] }
+          platform:
+            type: [string, "null"]
+            enum: [linkedin, facebook, instagram, threads, tiktok, pinterest, website, x, newsletter, youtube, null]
+          surface: { type: string, enum: [linkedin_founder_profile, linkedin_company_page, single_identity_channel, not_yet_assigned, not_applicable] }
           format: { type: string }
           form: { type: string, enum: [long, medium, short, sales_asset] }
           objective: { type: string, enum: [authority, demand_generation, sales_enablement, partnerships] }
@@ -135,8 +142,19 @@ that is `marketing-attribution-modeling`'s.
   leverage — and it violates *"Trusted, not Popular."*
 - Don't produce a tree for an asset that doesn't exist yet. If the Tier 1 source
   is still a backlog item, say so.
-- **Zero social accounts exist** (`GO_LIVE_CHECKLIST.md` item 23). A tree with
-  Instagram/LinkedIn branches is a plan, not a schedule — mark timing accordingly.
+- **Nothing is published and no publishing route is connected.** The LinkedIn
+  founder profile and Company Page exist (2026-10-09); other platform accounts are
+  mostly not created. A tree is a plan, not a schedule. Mark timing accordingly.
+- **Every derivative keeps its family.** `translation_family_id` = the source
+  narrative `position_id`, verbatim. Each platform × surface pair is a separate
+  translation (skill **C03**), with its own Editorial DRAGON pass, run only after
+  the opportunity's Strategic pass. A LinkedIn branch names its surface: founder
+  profile (human, first person, substantiated) or Company Page (institutional).
+- **Known ordering mismatch, not rewired.** You listen for `CONTENT_APPROVED`,
+  which follows a brief. But a V2 brief requires its translation first. Today every
+  step is manual and no event is published, so treat your tree as the **plan C03
+  executes before any brief**, not a step after approval
+  (`04_Content/CONTENT_WRITE_CONTRACT.md` §10.1).
 
 ## Human boundary (advisory-first)
 You plan the tree; humans and the owning departments execute it. Class 1.
