@@ -128,6 +128,29 @@ doctrine inline rather than via shared skills."*
 
 ## 8. Decision Log
 
+- **2026-10-10 — Storage unit: approval evidence stored on DB7 (owner-authorised; Notion schema + repository).**
+  - **Owner authorisation (quoted, 2026-10-10):** "the six additive DB7 properties in APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md; Option A: G2 Packet Manifest; combined G1 decision/path; owner-only G1/G2 decisions initially; resolved Surface, Audience Role, Format, Platform relation IDs and linked Offer Status; the specified Approval Integrity formula extension; corresponding repository code, contracts, skills and tests."
+  - **Starting point.** HEAD `6731006` (auto-sync of the follow-up unit, its 8 files) equalled `origin/master`, with a clean tree.
+  - **Live schema checked before any change:**
+    - DB7 held 49 properties matching the contract.
+    - The six trigger-read properties were unchanged (`Publishing Status` options and IDs as recorded).
+    - The fetch exposes IDs for selects, formulas and relations only.
+  - **Notion changes, each read back:**
+    - six properties added: `G1 Decision` (`djxwdw`, three options with recorded IDs), `G1 Reviewer`, `G1 Decided At`, `G1 Revision`, `G2 Packet Manifest`, `G2 Submitted Fingerprint`;
+    - DB7 49 → 55;
+    - `Approval Integrity` (`V3R2dQ`) extended with the three specified checks.
+
+    Nothing was renamed. No row was written: no backfill, no G1 or G2 decision. Deviation: the fifth red label is text (`RED -`), because Notion rejected a fifth 🔴 as a "type error". The condition is exact. Details, both expressions and the rollback steps are in `CONTENT_INTELLIGENCE_SCHEMA.md` §10 and `CONTENT_UNIT_ROLLBACK_PROPOSAL.md` §6 / R4b.
+  - **Repository changes:**
+    - **Gate:** the G2 manifest and SHA-256 fingerprint are computed from a fresh read-back of the exact target (brief, its one translation, every linked offer; one session, 30-minute window). Golden value pinned and recomputed independently from the specification.
+    - **New refusals:** R26 (stored evidence differs: copy, assets, Surface, Audience Role, Format, Platform IDs or Offer Status changed), R27 (unreadable, partial, stale or foreign context; stored evidence is never reused) and R28 (G1 or G2 not by an approver; owner only).
+    - **Versioning:** context-only and asset-only VERSIONs carry no invented copy edit.
+    - **Re-submission:** refused when content changed at the same Version.
+    - **G1:** read from properties.
+    - **Contract:** v0.4, 367 fields.
+    - **Docs:** skills C03, C04 and C06, the brief-builder and publishing-gate agents, the write contract v0.4 and the skill matrix v0.4.
+  - **Unchanged:** triggers, emits, risk classes, department ownership and canonical option names (diff-checked).
+  - **Not claimed.** No formula or check prevents a Notion edit or authenticates a reviewer. The approver name `Mary Thuo` comes from `GLOBAL_OS.md` §4, and the owner should confirm the exact string. — Claude Code (Opus 5.5)
 - **2026-10-10 — Follow-up unit: the G2 submission ID triple, and the resolved-context fingerprint specification (owner-authorised; repository only).**
   - **Starting point.** HEAD `9124997` (auto-sync of the hardening unit, 17 files) equalled `origin/master`, with a clean tree.
   - **Reproduced first, with synthetic fixtures.** A read-back (`state.prior`) with a Version but no page ID, an empty ID or a `None` ID let `Submitted for review` through. Whitespace and non-string IDs were already refused, but only indirectly, through the packet's own brief-ID check.
@@ -445,6 +468,16 @@ running system has changed.
 
 ## 15. Changelog
 
+- 2026-10-10 — **Storage unit (owner-authorised; Notion schema + repository).**
+  - **Notion:** DB7 +6 properties and the Approval Integrity extension, read back (§8).
+  - **Repository:** edits to the gate, tests, field contract (v0.4), write contract (v0.4), skill matrix (v0.4), storage proposal (status: applied), schema doc (§10/§11), rollback proposal, this file, the C03/C04/C06 skills, two agents and the routine CHANGE_PROPOSAL.
+  - **Verification, 2026-10-10:**
+    - Content tests **210/210** (up from 154).
+    - Gate PASS (367 fields; DB7 55).
+    - Routine model 27/27; Sector 228/228.
+    - `arika-runtime`: typecheck clean, 80/80 tests, 115 agents.
+    - No trigger, emit, risk-class, handoff or writer change.
+  - **Not committed by this session.** — Claude Code (Opus 5.5)
 - 2026-10-10 — **Follow-up unit (owner-authorised; repository only).**
   - **Files.** 8 edited, none added: `content_write_gate.py`, `test_content_write_gate.py`, `APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`, `CONTENT_WRITE_CONTRACT.md` (v0.3.1), `CONTENT_SKILL_MATRIX.md` (v0.3.1), `CONTENT_UNIT_ROLLBACK_PROPOSAL.md`, this file, and the `content-approval-prep` skill.
   - **Verification, 2026-10-10:**

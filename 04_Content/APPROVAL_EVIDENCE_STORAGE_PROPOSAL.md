@@ -1,6 +1,6 @@
 # Approval evidence storage and content fingerprint — proposal
 
-**Department:** Content (04) · **Prepared:** 2026-10-09 (hardening unit) · **Amended:** 2026-10-10 (follow-up unit: resolved publishing context, §3.1) · **Status: PROPOSAL ONLY.** No Notion property, no code, no formula has been added.
+**Department:** Content (04) · **Prepared:** 2026-10-09 (hardening unit) · **Amended:** 2026-10-10 (follow-up unit: resolved publishing context, §3.1) · **Status: APPLIED 2026-10-10 (storage unit), with the owner's choices and the deviations recorded in §9.** Everything above §9 is the design as approved. *(Status until 2026-10-10: "PROPOSAL ONLY. No Notion property, no code, no formula has been added.")*
 
 Applying it needs three things, in this order:
 1. Owner approval of this document, including the choices in §7.
@@ -176,9 +176,58 @@ The extension options are in §7. Each is the same mechanism with no new propert
 
 ## 8. Changelog
 
+- **2026-10-10 (storage unit)** — **Applied.** Authorisation, choices and deviations are in §9. — Claude Code (Opus 5.5)
 - **2026-10-10** — Amended under the owner's follow-up brief. Changes:
   - The resolved publishing context (Surface, Audience Role, Format) is captured and compared through the fingerprint (§3.1), so a linked page changing beneath an unchanged relation ID cannot inherit the previous approval.
   - Deterministic normalisation and unreadable-context handling are defined (R27).
   - Option A (`G2 Packet Manifest`) is presented for approval against Option B, the original `G2 Asset Set`. The field count stays at six either way.
   - Not implemented. — Claude Code (Opus 5.5)
 - **2026-10-09** — Prepared under the owner's hardening brief ("Prepare, but do not implement, the minimal G1/approved-asset storage and content-fingerprint proposal. Explain direct-Notion-edit limits."). — Claude Code (Opus 5.5)
+
+## 9. As applied (storage unit, 2026-10-10)
+
+**Owner authorisation (2026-10-10, quoted):** "the six additive DB7 properties in APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md; Option A: G2 Packet Manifest; combined G1 decision/path; owner-only G1/G2 decisions initially; resolved Surface, Audience Role, Format, Platform relation IDs and linked Offer Status; the specified Approval Integrity formula extension; corresponding repository code, contracts, skills and tests."
+
+**§7 choices, as decided by the owner:**
+
+| Choice | Decision |
+|---|---|
+| G1 Decision | Combined decision and path in one select |
+| Fifth property | Option A, `G2 Packet Manifest` |
+| Scope of `resolved` | Extended to the translation's Platform relation IDs and the linked Offer's `Offer Status` |
+| Reviewers | Owner only, initially (`approvers` in `content-databases.json`: "Mary Thuo", from `GLOBAL_OS.md` §4; **the exact string is to be confirmed by the owner**) |
+| Last-edited signal | Not authorised, not added |
+
+**Applied in Notion** (read back; details in `CONTENT_INTELLIGENCE_SCHEMA.md` §10, 2026-10-10):
+- The six properties exist with these IDs:
+  - `G1 Decision` (`djxwdw`), with options `Passed (design)` `dd5c26e4…`, `Passed (text-only)` `dcb7e2c3…` and `Returned` `857c39cc…`;
+  - `G1 Reviewer`, `G1 Decided At`, `G1 Revision`;
+  - `G2 Packet Manifest`, `G2 Submitted Fingerprint`.
+- DB7: 49 → 55.
+- `Approval Integrity` is extended with the three specified checks.
+
+**Applied in the repository:**
+- **Gate** (`contracts/content_write_gate.py`):
+  - `read_context`, `build_evidence`, `parse_manifest`, `compare_evidence`, `g1_from_properties`;
+  - refusal codes R26, R27 and R28;
+  - context-only and asset-only VERSION;
+  - evidence written at submission must equal the gate's own computation from a fresh read of the exact target.
+- **Contract:** v0.4, 367 fields.
+- **Tests:** a golden fingerprint, independently recomputed from the specification.
+- **Docs:** skills, agents, the write contract and the skill matrix.
+
+**Deviations from the design:**
+1. **Manifest content.** The manifest also carries `format`, `brief_id` and `revision`. That way a stored manifest can be bound to its brief and approval (R24, R12).
+2. **Offers.** `resolved.offers` is a list of `{offer_id, offer_status}` for every linked offer. A brief may link more than one.
+3. **Freshness.** A read-back counts as fresh when every part was read completely, in one session, within 30 minutes before the check (`FRESH_WINDOW_SECONDS`). That window is a gate constant, not an owner decision. Change it only with a recorded decision.
+4. **Formula label.** The fifth red label reads `RED -` rather than 🔴. The Notion API rejects a fifth 🔴 in this formula as a "type error" whatever the structure. The condition itself is exactly as specified.
+5. **Not applied:**
+   - no content-row backfill;
+   - no G1 or G2 decision;
+   - the routine prompt is unchanged, so it still does not read the G1 properties (that needs a separate amendment and approval).
+
+**Still true (§4), in short:**
+- The checks run only when invoked.
+- Human-only fields are a convention, not a Notion permission.
+- A typed reviewer name is not authenticated.
+- The formula shows a state; it prevents nothing.

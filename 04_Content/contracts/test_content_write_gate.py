@@ -4,9 +4,10 @@ Tests for the Content (04) write gate.
 
     python -m unittest discover -s 04_Content/contracts -p "test_*.py"
 
-Every record here is synthetic (ids prefixed `fx-`). Nothing is read from or
-written to Notion, the runtime, or any _memory stream; ProductionMemoryUntouched
-checks that last point on every run.
+Every record here is synthetic: `fx-` tokens, or Notion-shaped page IDs whose
+bodies are zeros (b1… briefs, c1… translations, d1… platforms, e1… offers).
+Nothing is read from or written to Notion, the runtime, or any _memory stream;
+ProductionMemoryUntouched checks that last point on every run.
 """
 import copy
 import os
@@ -21,10 +22,12 @@ CONTRACT = g.load_contract()
 MEMORY_DIR = os.path.join(g.REPO, "04_Content", "_memory")
 AGENTS_DIR = os.path.join(g.REPO, ".claude", "agents")
 
-# Live field counts read from the Notion schemas on 2026-10-09. If a field is
-# added in Notion, the contract must gain an owner for it in the same change.
+# Live field counts read from the Notion schemas on 2026-10-09; DB7 re-read on
+# 2026-10-10 before and after the storage unit added six properties (49 -> 55).
+# If a field is added in Notion, the contract must gain an owner for it in the
+# same change.
 LIVE_FIELD_COUNTS = {"DB1": 34, "DB2": 44, "DB3": 51, "DB4": 45,
-                     "DB5": 54, "DB6": 52, "DB7": 49, "DB8": 32}
+                     "DB5": 54, "DB6": 52, "DB7": 55, "DB8": 32}
 
 # Option names and IDs as returned by a read-only notion-fetch of DB6 and DB7 on
 # 2026-10-09 (correction unit). Pinned here so a rename in the contract, or a
@@ -105,7 +108,7 @@ def translation_create(audience="General Manager / Owner", surface=PAGE, **over)
 
 
 def readiness_ctx(**over):
-    ctx = {"brief": {"id": "fx-brief-001", "version": 2, "caption": "Copy", "script": "S1 ...",
+    ctx = {"brief": {"id": BRIEF_ID, "version": 2, "caption": "Copy", "script": "S1 ...",
                      "visual_direction": "Navy, one chart per frame", "canva_instructions": "1080x1350, 6 frames"},
            "links": {"opportunity": "fx-opp-001", "translation": "fx-tr-001", "narrative_position_ids": ["nar-fx-belief"]},
            "opportunity": opportunity(),
@@ -115,7 +118,36 @@ def readiness_ctx(**over):
     return ctx
 
 
-BRIEF_ID, OTHER_BRIEF = "fx-brief-001", "fx-brief-OTHER"
+BRIEF_ID, OTHER_BRIEF = "b1000000000040008000000000000001", "b1000000000040008000000000000002"
+TRANSLATION_ID = "c1000000000040008000000000000001"
+PLATFORM_ID, OTHER_PLATFORM_ID = "d1000000000040008000000000000001", "d1000000000040008000000000000002"
+OFFER_ID = "e1000000000040008000000000000001"
+SESSION, CHECKED_AT, READ_AT = "fx-session-1", "2026-10-10T12:00:00Z", "2026-10-10T11:58:00Z"
+OWNER = "Mary Thuo"
+
+
+def fresh_ctx(brief_id=BRIEF_ID, version=2, caption="Final copy", script="S1 ...", vd="Navy", ci="6 frames",
+              platform=("LinkedIn",), translation_ids=(TRANSLATION_ID,), translation_page=TRANSLATION_ID,
+              surface=FOUNDER, audience="Founder", fmt="Carousel", platform_ids=(PLATFORM_ID,),
+              offer_ids=(), offer_status="Active", session=SESSION, checked_at=CHECKED_AT, read_at=READ_AT,
+              translation_status="complete"):
+    """A synthetic FRESH read-back: the brief, its one translation and its offers, one session."""
+    def part(page_id, properties, status="complete"):
+        return {"status": status, "session": session, "read_at": read_at, "page_id": page_id, "properties": properties}
+    return {"session": session, "checked_at": checked_at,
+            "brief": part(brief_id, {"Script": script, "Caption": caption, "Visual Direction": vd,
+                                     "Canva Instructions": ci, "Engagement Follow-up": "", "Evidence": "",
+                                     "Platform": list(platform), "Translation": list(translation_ids),
+                                     "Offer": list(offer_ids), "Version": version}),
+            "translation": part(translation_page, {"Surface": surface, "Audience Role": audience, "Format": fmt,
+                                                   "Platform": list(platform_ids)}, status=translation_status),
+            "offers": [part(o, {"Offer Status": offer_status}) for o in offer_ids]}
+
+
+def evidence(fresh, assets=()):
+    v, ev = g.build_evidence(fresh, list(assets), CONTRACT)
+    assert ev is not None, v
+    return ev
 
 
 def g1(path="design", **over):
@@ -156,37 +188,77 @@ def generation_ctx(**over):
     return ctx
 
 
-def design_approval(**over):
-    b = approved_brief(format="Carousel", visual_direction="Navy", canva_instructions="6 frames",
-                       g2_approved_artifacts=[asset()])
-    b.update(over)
-    return b
+def fresh_for_submission(sub, **over):
+    """The fresh read-back that matches a submission packet, unless overridden."""
+    b, tr = sub.get("brief") or {}, sub.get("translation") or {}
+    entry = g.resolve_surface(CONTRACT, tr.get("surface"))
+    kw = dict(brief_id=b.get("id"), version=b.get("version"), caption=b.get("caption") or "",
+              script=b.get("script") or "", vd=b.get("visual_direction") or "", ci=b.get("canva_instructions") or "",
+              surface=entry["notion"] if entry else tr.get("surface"), fmt=tr.get("format"))
+    kw.update(over)
+    return fresh_ctx(**kw)
 
 
-def c06_submit(sub=None, target=BRIEF_ID, prior="default"):
-    p = {"db": "DB7", "mode": "UPDATE", "actor": "C06", "fields": {"G2 Decision": "Submitted for review"},
-         "g2_submission": submission_ctx() if sub is None else sub}
+def c06_submit(sub=None, target=BRIEF_ID, prior="default", fresh="default", fields="computed"):
+    """A C06 'Submitted for review' write, with the read-back and gate-computed evidence."""
+    sub = submission_ctx() if sub is None else sub
+    fresh = fresh_for_submission(sub) if fresh == "default" else fresh
+    written = {"G2 Decision": "Submitted for review"}
+    if fields == "computed":
+        _, ev = g.build_evidence(fresh, sub.get("artifacts") or [], CONTRACT)
+        if ev is not None:
+            written.update({"G2 Packet Manifest": ev["manifest_text"], "G2 Submitted Fingerprint": ev["fingerprint"]})
+    elif isinstance(fields, dict):
+        written.update(fields)
+    p = {"db": "DB7", "mode": "UPDATE", "actor": "C06", "fields": written, "g2_submission": sub}
     if target is not None:
         p["target"] = target
-    state = {"prior": {"id": BRIEF_ID, "Version": 2.0}} if prior == "default" else ({"prior": prior} if prior else {})
+    prior = {"id": BRIEF_ID, "Version": 2.0} if prior == "default" else prior
+    state = {"fresh": fresh}
+    if prior:
+        state["prior"] = prior
     return g.validate_write(p, CONTRACT, state=state)
 
 
-def approved_brief(**over):
-    b = {"id": "fx-brief-001", "version": 2, "surface": FOUNDER, "format": "Text post",
-         "visual_direction": "", "canva_instructions": "",
-         "g2_decision": "Approved", "g2_approved_revision": 2,
-         "g2_reviewer": "Mary Thuo", "g2_decided_at": "2026-10-20"}
-    b.update(over)
-    return b
+def approval(surface=FOUNDER, fmt="Text post", vd="", ci="", assets=(), offer_ids=(), offer_status="Active",
+             audience="Founder", caption="Final copy", script="", **brief_over):
+    """(stored DB7 approval fields, the fresh read that produced them). Evidence is
+    computed by the gate itself, exactly as C06 would write it at submission."""
+    fresh = fresh_ctx(surface=surface, fmt=fmt, vd=vd, ci=ci, offer_ids=offer_ids, offer_status=offer_status,
+                      audience=audience, caption=caption, script=script)
+    ev = evidence(fresh, assets)
+    b = {"id": BRIEF_ID, "version": 2, "g2_decision": "Approved", "g2_approved_revision": 2,
+         "g2_reviewer": OWNER, "g2_decided_at": "2026-10-20",
+         "g2_packet_manifest": ev["manifest_text"], "g2_submitted_fingerprint": ev["fingerprint"]}
+    b.update(brief_over)
+    return b, fresh
+
+
+def design_approval(assets=None, **over):
+    return approval(fmt="Carousel", vd="Navy", ci="6 frames", assets=[asset()] if assets is None else assets, **over)
 
 
 def publication(**over):
-    r = {"brief_id": "fx-brief-001", "revision": 2, "surface": FOUNDER,
+    r = {"brief_id": BRIEF_ID, "revision": 2, "surface": FOUNDER,
          "native_post_url": "https://www.linkedin.com/feed/update/urn:li:activity:0000000000000000000/",
          "published_at": "2026-10-21", "publisher": "human:Mary Thuo"}
     r.update(over)
     return r
+
+
+def publish(appr=None, fresh="default", **record_over):
+    brief_fields, approved_fresh = approval() if appr is None else appr
+    return g.validate_publication(publication(**record_over), brief_fields, CONTRACT,
+                                  approved_fresh if fresh == "default" else fresh)
+
+
+def with_manifest(appr, mutate):
+    """The same approval with its stored manifest edited by `mutate` (re-serialised
+    canonically), and the stored fingerprint left as it was."""
+    brief_fields, fresh = appr
+    m = copy.deepcopy(__import__("json").loads(brief_fields["g2_packet_manifest"]))
+    mutate(m)
+    return dict(brief_fields, g2_packet_manifest=g.canonical_json(m)), fresh
 
 
 def _memory_snapshot():
@@ -391,7 +463,7 @@ class G2Failure(unittest.TestCase):
     """Scenario 6: a rejected or changes-requested brief cannot be published, and no skill can approve."""
 
     def test_rejected_brief_cannot_be_published(self):
-        v = g.validate_publication(publication(), approved_brief(g2_decision="Rejected"))
+        v = publish(approval(g2_decision="Rejected"))
         self.assertIn("R11_APPROVAL_MISSING", v.codes)
 
     def test_skill_cannot_set_approved(self):
@@ -412,15 +484,15 @@ class MissingApprovalRefusal(unittest.TestCase):
     """Scenario 7."""
 
     def test_submitted_is_not_approved(self):
-        v = g.validate_publication(publication(), approved_brief(g2_decision="Submitted for review"))
+        v = publish(approval(g2_decision="Submitted for review"))
         self.assertIn("R11_APPROVAL_MISSING", v.codes)
 
     def test_approval_for_an_older_revision_is_refused(self):
-        v = g.validate_publication(publication(revision=3), approved_brief(version=3, g2_approved_revision=2))
+        v = publish(approval(version=3, g2_approved_revision=2), revision=3)
         self.assertIn("R12_REVISION_MISMATCH", v.codes)
 
     def test_approval_without_reviewer_is_refused(self):
-        v = g.validate_publication(publication(), approved_brief(g2_reviewer=""))
+        v = publish(approval(g2_reviewer=""))
         self.assertIn("R11_APPROVAL_MISSING", v.codes)
 
     def test_skill_cannot_flip_ready_for_design(self):
@@ -472,22 +544,22 @@ class ManualPublicationLinkBack(unittest.TestCase):
     """Scenario 10."""
 
     def test_complete_record_links_back(self):
-        v = g.validate_publication(publication(), approved_brief())
+        v = publish(approval())
         self.assertTrue(v.ok, v)
 
     def test_missing_native_url_is_refused(self):
-        self.assertIn("R14_LINKBACK", g.validate_publication(publication(native_post_url=""), approved_brief()).codes)
+        self.assertIn("R14_LINKBACK", publish(approval(), native_post_url="").codes)
 
     def test_non_linkedin_url_is_refused(self):
-        v = g.validate_publication(publication(native_post_url="https://example.com/post/1"), approved_brief())
+        v = publish(approval(), native_post_url="https://example.com/post/1")
         self.assertIn("R14_LINKBACK", v.codes)
 
     def test_surface_drift_is_refused(self):
-        v = g.validate_publication(publication(surface=PAGE), approved_brief())
+        v = publish(approval(), surface=PAGE)
         self.assertIn("R14_LINKBACK", v.codes)
 
     def test_agent_publisher_is_refused(self):
-        v = g.validate_publication(publication(publisher="agent:presence-engagement"), approved_brief())
+        v = publish(approval(), publisher="agent:presence-engagement")
         self.assertIn("R11_APPROVAL_MISSING", v.codes)
 
 
@@ -565,20 +637,19 @@ class SurfaceVocabulary(unittest.TestCase):
         self.assertIn("R09_SURFACE", g.validate_write(p, CONTRACT, state=lookup("DB6")).codes)
 
     def test_linkedin_url_check_applies_to_agent_enum_surface(self):
-        v = g.validate_publication(publication(surface="linkedin_company_page", native_post_url="https://example.com/p/1"),
-                                   approved_brief(surface=PAGE))
+        v = publish(approval(surface=PAGE), surface="linkedin_company_page", native_post_url="https://example.com/p/1")
         self.assertIn("R14_LINKBACK", v.codes)
 
     def test_agent_enum_and_notion_label_are_the_same_surface(self):
-        v = g.validate_publication(publication(surface="linkedin_company_page"), approved_brief(surface=PAGE))
+        v = publish(approval(surface=PAGE), surface="linkedin_company_page")
         self.assertTrue(v.ok, v)
 
     def test_unknown_publication_surface_fails_closed(self):
-        v = g.validate_publication(publication(surface="Company Page"), approved_brief(surface=PAGE))
+        v = publish(approval(surface=PAGE), surface="Company Page")
         self.assertIn("R14_LINKBACK", v.codes)
 
     def test_unassigned_surface_cannot_be_published(self):
-        v = g.validate_publication(publication(surface=UNASSIGNED), approved_brief(surface=UNASSIGNED))
+        v = publish(approval(surface=UNASSIGNED), surface=UNASSIGNED)
         self.assertIn("R14_LINKBACK", v.codes)
 
     def test_every_agent_surface_enum_is_mapped(self):
@@ -672,11 +743,11 @@ class RevisionIntegrity(unittest.TestCase):
 
     def test_missing_revisions_at_publication_are_refused(self):
         # Before the correction, None == None let this through.
-        v = g.validate_publication(publication(revision=None), approved_brief(version=None, g2_approved_revision=None))
+        v = publish(approval(version=None, g2_approved_revision=None), revision=None)
         self.assertGreaterEqual(v.codes.count("R20_REVISION_INVALID"), 3)
 
     def test_stale_approval_is_refused(self):
-        v = g.validate_publication(publication(revision=2), approved_brief(version=3, g2_approved_revision=2))
+        v = publish(approval(version=3, g2_approved_revision=2), revision=2)
         self.assertIn("R12_REVISION_MISMATCH", v.codes)
 
     def test_submission_of_a_stale_revision_is_refused(self):
@@ -787,18 +858,15 @@ class WorkflowOrder(unittest.TestCase):
         self.assertIn("R22_STAGE_ORDER", g.validate_write(p, CONTRACT, state={}).codes)
 
     def test_design_publication_with_the_approved_artifact_passes(self):
-        v = g.validate_publication(publication(artifacts=[{"asset_id": "fx-asset-1", "version": 1}]),
-                                   design_approval())
+        v = publish(design_approval(), artifacts=[{"asset_id": "fx-asset-1", "version": 1}])
         self.assertTrue(v.ok, v)
 
     def test_design_publication_with_a_different_artifact_is_refused(self):
-        v = g.validate_publication(publication(artifacts=[{"asset_id": "fx-asset-1", "version": 2}]),
-                                   design_approval())
+        v = publish(design_approval(), artifacts=[{"asset_id": "fx-asset-1", "version": 2}])
         self.assertIn("R12_REVISION_MISMATCH", v.codes)
 
     def test_design_approval_without_artifact_is_refused(self):
-        v = g.validate_publication(publication(), approved_brief(format="Carousel", visual_direction="Navy",
-                                                                 canva_instructions="6 frames"))
+        v = publish(approval(fmt="Carousel", vd="Navy", ci="6 frames"))
         self.assertIn("R11_APPROVAL_MISSING", v.codes)
 
 
@@ -917,10 +985,8 @@ class EvidenceBinding(unittest.TestCase):
 
     def test_approved_asset_provenance_at_publication(self):
         def run(prov):
-            a = asset()
-            a["provenance"] = prov
-            return g.validate_publication(publication(artifacts=[{"asset_id": "fx-asset-1", "version": 1}]),
-                                          design_approval(g2_approved_artifacts=[a]))
+            appr = with_manifest(design_approval(), lambda m: m["assets"][0].__setitem__("provenance", prov))
+            return publish(appr, artifacts=[{"asset_id": "fx-asset-1", "version": 1}])
         self.check(run, asset()["provenance"], rev_key="brief_revision", missing_code="R24_EVIDENCE_IDENTITY")
 
     def test_brief_without_an_id_cannot_bind_anything(self):
@@ -931,7 +997,7 @@ class EvidenceBinding(unittest.TestCase):
         sub["brief"]["id"] = ""
         self.assertIn("R24_EVIDENCE_IDENTITY", g.validate_g2_submission(sub).codes)
         self.assertIn("R24_EVIDENCE_IDENTITY",
-                      g.validate_publication(publication(), approved_brief(id=None)).codes)
+                      publish(approval(id=None)).codes)
 
 
 class AssetValidity(unittest.TestCase):
@@ -939,7 +1005,11 @@ class AssetValidity(unittest.TestCase):
     publication because the two sets still matched (reproduced against ce310c6)."""
 
     def publish(self, approved, published):
-        return g.validate_publication(publication(artifacts=published), design_approval(g2_approved_artifacts=approved))
+        if all(g.valid_asset_id(a.get("asset_id")) and g.revision_value(a.get("version")) for a in approved):
+            appr = design_approval(assets=approved)
+        else:  # an invalid stored set can only exist if the manifest was corrupted; simulate that
+            appr = with_manifest(design_approval(), lambda m: m.__setitem__("assets", approved))
+        return publish(appr, artifacts=published)
 
     def test_missing_version_on_both_sides_is_refused(self):
         a = asset()
@@ -1117,6 +1187,368 @@ class G1OnBothPaths(unittest.TestCase):
         ctx["brief"].update(visual_direction="", canva_instructions="")
         details = " ".join(r["detail"] for r in g.validate_design_readiness(ctx).refusals)
         self.assertIn("G2 submission", details)
+
+
+# --------------------------------------------------------------------------- storage unit (2026-10-10)
+
+# Option IDs of DB7 G1 Decision as read back from Notion after the storage unit created it.
+LIVE_G1_DECISION = {"Passed (design)": "dd5c26e4-77b8-4d1c-a479-ef71995b248b",
+                    "Passed (text-only)": "dcb7e2c3-4bce-4db9-9645-eeea3b7545d4",
+                    "Returned": "857c39cc-1c86-4116-97dc-32282a8b9b6c"}
+LIVE_OFFER_STATUS = {"Active": "0be591e2-dc22-4327-81a6-82dfddece551",
+                     "In engineering": "5826dd7e-6528-4c79-b71b-25cf0b117166",
+                     "Not quotable": "e0331817-9f17-4103-b27d-6fe57c1aa1f7",
+                     "Contested": "bf64d969-f328-4747-a835-adbb8e3a4975"}
+# Pinned output of build_evidence(fresh_ctx(), [asset()]). If this changes, every stored
+# fingerprint in Notion stops matching: change it only with a recorded migration.
+GOLDEN_FINGERPRINT = "sha256:35fb291342927d4b8ee6f52efca37a59a57ca96053a2a75b50582b32ae66b281"
+# (Recomputed 2026-10-10 by an independent script built from the published specification,
+# not from the gate's code: identical.)
+
+
+class StorageSchema(unittest.TestCase):
+    """The six DB7 properties, their owners, counts and pinned option IDs."""
+
+    def test_six_storage_fields_with_their_writers(self):
+        db7 = g.field_index(CONTRACT)["DB7"]
+        expected = {"G1 Decision": ("select", "human_only"), "G1 Reviewer": ("text", "human_only"),
+                    "G1 Decided At": ("date", "human_only"), "G1 Revision": ("number", "human_only"),
+                    "G2 Packet Manifest": ("text", "C06"), "G2 Submitted Fingerprint": ("text", "C06")}
+        for name, (typ, writer) in expected.items():
+            self.assertEqual((db7[name]["type"], db7[name]["writer"]), (typ, writer), name)
+
+    def test_total_field_count_is_367(self):
+        self.assertEqual(sum(len(d["fields"]) for d in CONTRACT["databases"]), 367)
+
+    def test_g1_decision_options_are_pinned_to_live_ids(self):
+        opts = CONTRACT["vocabularies"]["g1_decision"]["options"]
+        self.assertEqual({o["notion"]: o["option_id"] for o in opts}, LIVE_G1_DECISION)
+        self.assertEqual([(o["decision"], o["path"]) for o in opts],
+                         [("passed", "design"), ("passed", "text_only"), ("returned", None)])
+
+    def test_offer_status_options_are_pinned_to_live_ids(self):
+        opts = CONTRACT["vocabularies"]["offer_status"]["options"]
+        self.assertEqual({o["notion"]: o["option_id"] for o in opts}, LIVE_OFFER_STATUS)
+
+    def test_g1_and_g2_are_owner_only(self):
+        self.assertEqual((CONTRACT["approvers"]["g1"], CONTRACT["approvers"]["g2"]), ([OWNER], [OWNER]))
+
+    def test_gate_catches_a_storage_field_with_the_wrong_writer(self):
+        bad = copy.deepcopy(CONTRACT)
+        db7 = next(d for d in bad["databases"] if d["db_id"] == "DB7")
+        next(f for f in db7["fields"] if f["name"] == "G1 Revision")["writer"] = "C06"
+        self.assertTrue(any(e.startswith("C10") for e in g.check_contract(bad)))
+
+    def test_skills_cannot_write_g1(self):
+        for name in ("G1 Decision", "G1 Reviewer", "G1 Decided At", "G1 Revision"):
+            p = {"db": "DB7", "mode": "UPDATE", "actor": "C06", "fields": {name: "x"}}
+            self.assertIn("R01_HUMAN_ONLY", g.validate_write(p, CONTRACT, state={}).codes, name)
+
+
+class Fingerprint(unittest.TestCase):
+    """Deterministic: same content, same hash, on any machine; one canonical ID form."""
+
+    def test_golden_fingerprint(self):
+        self.assertEqual(evidence(fresh_ctx(), [asset()])["fingerprint"], GOLDEN_FINGERPRINT)
+
+    def test_key_order_and_input_order_do_not_matter(self):
+        a = evidence(fresh_ctx(platform=("LinkedIn", "Newsletter")), [asset("fx-asset-1"), asset("fx-asset-2")])
+        f = fresh_ctx(platform=("Newsletter", "LinkedIn"))
+        f["brief"]["properties"] = dict(reversed(list(f["brief"]["properties"].items())))
+        b = evidence(f, [asset("fx-asset-2"), asset("fx-asset-1")])
+        self.assertEqual(a["fingerprint"], b["fingerprint"])
+        self.assertEqual(a["manifest_text"], b["manifest_text"])
+
+    def test_line_endings_and_unicode_normal_form_do_not_matter(self):
+        nfc = evidence(fresh_ctx(caption="Café line one\nline two"))["fingerprint"]
+        nfd_crlf = evidence(fresh_ctx(caption="Café line one\r\nline two"))["fingerprint"]
+        self.assertEqual(nfc, nfd_crlf)
+
+    def test_whitespace_is_content(self):
+        self.assertNotEqual(evidence(fresh_ctx(caption="Final copy"))["fingerprint"],
+                            evidence(fresh_ctx(caption="Final copy "))["fingerprint"])
+
+    def test_dashed_and_undashed_ids_give_one_fingerprint(self):
+        dashed = lambda h: "%s-%s-%s-%s-%s" % (h[:8], h[8:12], h[12:16], h[16:20], h[20:])
+        a = evidence(fresh_ctx(), [asset()])
+        b = evidence(fresh_ctx(brief_id=dashed(BRIEF_ID), translation_ids=(dashed(TRANSLATION_ID),),
+                               translation_page=dashed(TRANSLATION_ID), platform_ids=(dashed(PLATFORM_ID),)),
+                     [asset(brief_id=dashed(BRIEF_ID))])
+        self.assertEqual(a["fingerprint"], b["fingerprint"])
+        self.assertEqual(a["manifest"]["brief_id"], BRIEF_ID)
+
+    def test_non_canonical_ids_are_refused_not_normalised(self):
+        for bad in (BRIEF_ID.upper(), " " + BRIEF_ID, "fx-brief-001"):
+            with self.subTest(brief_id=bad):
+                v, ev = g.build_evidence(fresh_ctx(brief_id=bad), [], CONTRACT)
+                self.assertIsNone(ev)
+                self.assertIn("R27_CONTEXT_UNREADABLE", v.codes)
+
+    def test_hand_edited_manifest_is_not_trusted(self):
+        text = evidence(fresh_ctx())["manifest_text"]
+        for edited in (text.replace(",", ", "), text + " ", "{}", "not json", ""):
+            with self.subTest(edited=edited[:20]):
+                v = g.Verdict()
+                self.assertIsNone(g.parse_manifest(v, edited))
+                self.assertIn("R26_FINGERPRINT_MISMATCH", v.codes)
+
+    def test_manifest_records_the_full_resolved_context(self):
+        m = evidence(fresh_ctx(offer_ids=(OFFER_ID,)))["manifest"]
+        self.assertEqual(m["resolved"], {"translation_id": TRANSLATION_ID, "surface": FOUNDER, "audience_role": "Founder",
+                                         "format": "Carousel", "platform_ids": [PLATFORM_ID],
+                                         "offers": [{"offer_id": OFFER_ID, "offer_status": "Active"}]})
+
+
+class FreshContext(unittest.TestCase):
+    """Unknown or unreadable context never inherits stored evidence (R27)."""
+
+    def unreadable(self, fresh, code="R27_CONTEXT_UNREADABLE"):
+        v, ev = g.build_evidence(fresh, [], CONTRACT)
+        self.assertIsNone(ev, v)
+        self.assertIn(code, v.codes)
+
+    def test_no_read_back(self):
+        self.unreadable(None)
+
+    def test_failed_translation_read(self):
+        self.unreadable(fresh_ctx(translation_status="failed"))
+
+    def test_partial_brief_read(self):
+        f = fresh_ctx()
+        del f["brief"]["properties"]["Caption"]
+        self.unreadable(f)
+
+    def test_partial_translation_read(self):
+        f = fresh_ctx()
+        del f["translation"]["properties"]["Format"]
+        self.unreadable(f)
+
+    def test_stale_read(self):
+        self.unreadable(fresh_ctx(read_at="2026-10-10T09:00:00Z"))
+
+    def test_read_after_the_check(self):
+        self.unreadable(fresh_ctx(read_at="2026-10-10T12:05:00Z"))
+
+    def test_read_without_a_time_zone(self):
+        self.unreadable(fresh_ctx(read_at="2026-10-10T11:58:00"))
+
+    def test_part_from_another_session(self):
+        f = fresh_ctx()
+        f["translation"]["session"] = "fx-session-OLD"
+        self.unreadable(f)
+
+    def test_translation_read_is_not_the_linked_page(self):
+        self.unreadable(fresh_ctx(translation_page="c1000000000040008000000000000009"), "R24_EVIDENCE_IDENTITY")
+
+    def test_two_linked_translations(self):
+        self.unreadable(fresh_ctx(translation_ids=(TRANSLATION_ID, "c1000000000040008000000000000002")))
+
+    def test_linked_offer_not_read(self):
+        f = fresh_ctx(offer_ids=(OFFER_ID,))
+        f["offers"] = []
+        self.unreadable(f)
+
+    def test_offer_read_but_not_linked(self):
+        f = fresh_ctx(offer_ids=(OFFER_ID,))
+        f["brief"]["properties"]["Offer"] = []
+        self.unreadable(f, "R24_EVIDENCE_IDENTITY")
+
+    def test_unknown_surface_and_offer_status(self):
+        self.unreadable(fresh_ctx(surface="Company Page"), "R09_SURFACE_UNKNOWN")
+        self.unreadable(fresh_ctx(offer_ids=(OFFER_ID,), offer_status="Live"), "R23_UNKNOWN_OPTION")
+
+    def test_read_and_empty_is_null_not_unreadable(self):
+        ev = evidence(fresh_ctx(audience=None))
+        self.assertIsNone(ev["manifest"]["resolved"]["audience_role"])
+
+    def test_stored_evidence_is_never_inherited_when_the_read_fails(self):
+        appr = approval()
+        v = publish(appr, fresh=fresh_ctx(translation_status="failed", fmt="Text post", vd="", ci="", script=""))
+        self.assertFalse(v.ok)
+        self.assertIn("R27_CONTEXT_UNREADABLE", v.codes)
+        self.assertFalse(publish(appr, fresh=None).ok)
+
+
+class ChangeDetection(unittest.TestCase):
+    """A publishable copy, asset or resolved-context change without Version +1 is
+    caught (R26 at publication, R21 at re-submission). A context-only or asset-only
+    change is versioned without inventing a DB7 copy edit."""
+
+    def moved(self, v):
+        return " ".join(r["detail"] for r in v.refusals if r["code"] == "R26_FINGERPRINT_MISMATCH")
+
+    def published_with(self, **fresh_over):
+        brief_fields, fresh = approval(offer_ids=(OFFER_ID,))
+        changed = fresh_ctx(**dict(dict(fmt="Text post", vd="", ci="", script="", offer_ids=(OFFER_ID,)), **fresh_over))
+        return publish((brief_fields, fresh), fresh=changed)
+
+    def test_unchanged_passes(self):
+        v = self.published_with()
+        self.assertTrue(v.ok, v)
+
+    def test_copy_edit_without_a_bump(self):
+        v = self.published_with(caption="Final copy, edited in Notion")
+        self.assertIn("R26_FINGERPRINT_MISMATCH", v.codes)
+
+    def test_context_changes_beneath_an_unchanged_relation(self):
+        cases = {"surface": dict(surface=PAGE), "audience_role": dict(audience="CEO"),
+                 "format": dict(fmt="Article / Long-form"), "platform_ids": dict(platform_ids=(OTHER_PLATFORM_ID,)),
+                 "offers": dict(offer_status="Not quotable")}
+        for key, over in cases.items():
+            with self.subTest(component=key):
+                v = self.published_with(**over)
+                self.assertIn("R26_FINGERPRINT_MISMATCH", v.codes)
+                self.assertIn("resolved.%s" % key, self.moved(v))
+
+    def test_asset_swapped_after_approval(self):
+        v = publish(design_approval(), artifacts=[{"asset_id": "fx-asset-9", "version": 1}])
+        self.assertIn("R26_FINGERPRINT_MISMATCH", v.codes)
+        self.assertIn("R12_REVISION_MISMATCH", v.codes)
+
+    def test_resubmission_at_the_same_version_after_a_context_change(self):
+        stored = evidence(fresh_ctx(), [asset()])
+        prior = {"id": BRIEF_ID, "Version": 2.0, "G2 Packet Manifest": stored["manifest_text"],
+                 "G2 Submitted Fingerprint": stored["fingerprint"]}
+        sub = submission_ctx(translation=translation(surface=PAGE))
+        sub["brief"]["caption"] = "Final copy"  # institutional voice, so only the context differs
+        v = c06_submit(sub=sub, prior=prior)
+        self.assertIn("R21_REVISION_INCREMENT", v.codes)
+
+    def version(self, reason, prior_manifest=None, fresh=None, extra=None, version=3):
+        p = {"db": "DB7", "mode": "VERSION", "actor": "C04", "reason": reason, "fields": {"Version": version},
+             "links": {"opportunity": opportunity(), "translation": translation(surface=PAGE),
+                       "narrative_position_ids": ["nar-fx-belief"]}}
+        p.update(extra or {})
+        prior = prior_brief()
+        if prior_manifest is not None:
+            prior["G2 Packet Manifest"] = prior_manifest
+        return p, g.validate_write(p, CONTRACT, state={"prior": prior, "fresh": fresh})
+
+    def test_context_only_version_is_accepted_without_a_copy_edit(self):
+        stored = evidence(fresh_ctx(surface=FOUNDER))
+        p, v = self.version("context_change", stored["manifest_text"], fresh_ctx(surface=PAGE))
+        self.assertTrue(v.ok, v)
+        self.assertEqual(set(p["fields"]), {"Version"})
+
+    def test_context_only_version_without_a_change_is_refused(self):
+        stored = evidence(fresh_ctx())
+        _, v = self.version("context_change", stored["manifest_text"], fresh_ctx())
+        self.assertIn("R21_REVISION_INCREMENT", v.codes)
+
+    def test_context_only_version_with_an_unreadable_context_is_refused(self):
+        stored = evidence(fresh_ctx())
+        _, v = self.version("context_change", stored["manifest_text"], fresh_ctx(translation_status="failed"))
+        self.assertIn("R27_CONTEXT_UNREADABLE", v.codes)
+
+    def test_context_only_version_needs_a_baseline(self):
+        _, v = self.version("context_change", None, fresh_ctx(surface=PAGE))
+        self.assertIn("R21_REVISION_INCREMENT", v.codes)
+        before = evidence(fresh_ctx(surface=FOUNDER))["manifest"]["resolved"]
+        _, v = self.version("context_change", None, fresh_ctx(surface=PAGE), extra={"context_before": before})
+        self.assertTrue(v.ok, v)
+
+    def test_context_only_change_must_bump_exactly_once(self):
+        stored = evidence(fresh_ctx(surface=FOUNDER))
+        _, v = self.version("context_change", stored["manifest_text"], fresh_ctx(surface=PAGE), version=4)
+        self.assertIn("R21_REVISION_INCREMENT", v.codes)
+
+    def test_asset_only_version(self):
+        stored = evidence(fresh_ctx(), [asset()])
+        _, v = self.version("asset_change", stored["manifest_text"], None,
+                            extra={"assets": [{"asset_id": "fx-asset-1", "version": 2}]})
+        self.assertTrue(v.ok, v)
+        _, v = self.version("asset_change", stored["manifest_text"], None,
+                            extra={"assets": [{"asset_id": "fx-asset-1", "version": 1}]})
+        self.assertIn("R21_REVISION_INCREMENT", v.codes)
+
+    def test_after_a_bump_g1_and_g2_must_be_renewed(self):
+        self.assertIn("R12_REVISION_MISMATCH", g.validate_design_readiness(readiness_ctx(
+            brief=dict(readiness_ctx()["brief"], version=3))).codes)
+        self.assertIn("R12_REVISION_MISMATCH", publish(approval(version=3)).codes)
+
+
+class OwnerOnly(unittest.TestCase):
+    """Owner-only G1/G2, initially. A typed-name comparison, not authentication."""
+
+    def test_g1_by_another_human_is_refused(self):
+        v = g.validate_design_readiness(readiness_ctx(g1=g1(by="human:Someone Else")))
+        self.assertIn("R28_REVIEWER_NOT_AUTHORISED", v.codes)
+        v = g.validate_g2_submission(submission_ctx(g1=g1(by="human:Someone Else")))
+        self.assertIn("R28_REVIEWER_NOT_AUTHORISED", v.codes)
+
+    def test_g2_by_another_human_or_a_padded_name_is_refused(self):
+        for name in ("Someone Else", " Mary Thuo", "mary thuo"):
+            with self.subTest(reviewer=name):
+                self.assertIn("R28_REVIEWER_NOT_AUTHORISED", publish(approval(g2_reviewer=name)).codes)
+
+    def test_owner_passes(self):
+        self.assertTrue(g.validate_design_readiness(readiness_ctx()).ok)
+        self.assertTrue(publish().ok)
+
+
+class G1FromProperties(unittest.TestCase):
+    def props(self, **over):
+        p = {"G1 Decision": "Passed (design)", "G1 Reviewer": OWNER, "G1 Decided At": "2026-10-20", "G1 Revision": 2.0}
+        p.update(over)
+        return p
+
+    def test_stored_g1_maps_to_the_gate_record(self):
+        r = g.g1_from_properties(self.props(), BRIEF_ID, CONTRACT)
+        self.assertEqual(r, {"decision": "passed", "path": "design", "by": "human:" + OWNER, "at": "2026-10-20",
+                             "brief_id": BRIEF_ID, "revision": 2.0})
+        self.assertTrue(g.validate_design_readiness(readiness_ctx(g1=r)).ok)
+
+    def test_text_only_and_returned(self):
+        self.assertEqual(g.g1_from_properties(self.props(**{"G1 Decision": "Passed (text-only)"}), BRIEF_ID, CONTRACT)["path"],
+                         "text_only")
+        r = g.g1_from_properties(self.props(**{"G1 Decision": "Returned"}), BRIEF_ID, CONTRACT)
+        self.assertIn("R22_STAGE_ORDER", g.validate_design_readiness(readiness_ctx(g1=r)).codes)
+
+    def test_empty_unknown_or_stale_g1_is_refused(self):
+        self.assertIsNone(g.g1_from_properties(self.props(**{"G1 Decision": None}), BRIEF_ID, CONTRACT))
+        for props in (self.props(**{"G1 Decision": "Approved"}), self.props(**{"G1 Revision": 1})):
+            with self.subTest(props=props):
+                r = g.g1_from_properties(props, BRIEF_ID, CONTRACT)
+                self.assertFalse(g.validate_design_readiness(readiness_ctx(g1=r)).ok)
+
+
+class SubmissionEvidence(unittest.TestCase):
+    """C06 writes the manifest and fingerprint the gate computes from a fresh read-back
+    of the exact target, together with Submitted for review."""
+
+    def test_valid_submission_passes(self):
+        v = c06_submit()
+        self.assertTrue(v.ok, v)
+
+    def test_text_only_submission_passes(self):
+        v = c06_submit(sub=submission_ctx(fmt="Text post"))
+        self.assertTrue(v.ok, v)
+
+    def test_missing_evidence_fields_are_refused(self):
+        self.assertIn("R22_STAGE_ORDER", c06_submit(fields=None).codes)
+
+    def test_typed_evidence_is_refused(self):
+        v = c06_submit(fields={"G2 Packet Manifest": "{}", "G2 Submitted Fingerprint": "sha256:" + "0" * 64})
+        self.assertIn("R26_FINGERPRINT_MISMATCH", v.codes)
+
+    def test_no_fresh_read_is_refused(self):
+        self.assertIn("R27_CONTEXT_UNREADABLE", c06_submit(fresh=None, fields={"G2 Packet Manifest": "x",
+                                                                               "G2 Submitted Fingerprint": "y"}).codes)
+
+    def test_fresh_read_of_another_page_is_refused(self):
+        sub = submission_ctx()
+        self.assertIn("R24_EVIDENCE_IDENTITY", c06_submit(sub=sub, fresh=fresh_for_submission(sub, brief_id=OTHER_BRIEF)).codes)
+
+    def test_packet_copy_or_context_differing_from_the_page_is_refused(self):
+        sub = submission_ctx()
+        self.assertIn("R26_FINGERPRINT_MISMATCH",
+                      c06_submit(sub=sub, fresh=fresh_for_submission(sub, caption="Something else")).codes)
+        self.assertIn("R26_FINGERPRINT_MISMATCH",
+                      c06_submit(sub=sub, fresh=fresh_for_submission(sub, surface=PAGE)).codes)
+
+    def test_asset_made_for_another_brief_is_refused(self):
+        v = c06_submit(sub=submission_ctx(artifacts=[asset(brief_id=OTHER_BRIEF)]))
+        self.assertIn("R24_EVIDENCE_IDENTITY", v.codes)
 
 
 # --------------------------------------------------------------------------- tests stay out of production memory

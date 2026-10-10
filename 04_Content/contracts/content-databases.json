@@ -1,8 +1,9 @@
 {
   "_meta": {
     "artifact": "Content (04) database + field ownership contract, DB1-DB8",
-    "version": "0.3",
+    "version": "0.4",
     "generated": "2026-10-09",
+    "amended_storage": "2026-10-10 storage unit (owner-authorised): six additive DB7 properties (G1 Decision, G1 Reviewer, G1 Decided At, G1 Revision, G2 Packet Manifest, G2 Submitted Fingerprint), the Approval Integrity formula extension, g1_decision and offer_status vocabularies, owner-only approvers. DB7 49 -> 55; total 361 -> 367.",
     "amended": "2026-10-09 correction unit: explicit option vocabularies with live option IDs (surface, audience_role, format, Publishing Status), Audience Role restored to the DB6 natural key, publication-affecting DB7 fields marked for revision checks, workflow stages recorded.",
     "amended_hardening": "2026-10-09 hardening unit: G1 required on both paths (owner direction in the hardening brief); stage evidence bound to brief ID + Version; asset ID / version / provenance rules. No field, writer or option changed.",
     "generated_by": "Claude Code (Opus 5.5), human-invoked session",
@@ -31,7 +32,7 @@
     "C03": { "name": "content-surface-translation", "writes": ["DB1", "DB3", "DB6"], "role": "Platform behaviour, sector x platform overlay, per-surface translation + Editorial DRAGON pass" },
     "C04": { "name": "content-brief-writer", "writes": ["DB7"], "role": "Copywriting, long-form, scripts, carousels; the V2 brief's authored fields" },
     "C05": { "name": "content-claim-review", "writes": [], "role": "Claim and provenance validation. Read-only; returns a verdict." },
-    "C06": { "name": "content-approval-prep", "writes": ["DB7"], "role": "Assembles the G2 packet for one exact revision; may set G2 Decision to Not submitted / Submitted for review only" },
+    "C06": { "name": "content-approval-prep", "writes": ["DB7"], "role": "Assembles the G2 packet for one exact revision; may set G2 Decision to Not submitted / Submitted for review only, and writes the gate-computed G2 Packet Manifest and G2 Submitted Fingerprint with a submission" },
     "C07": { "name": "content-source-retrieval", "writes": [], "role": "ID-based retrieval of sources and Design-owned assets. Read-only." }
   },
   "trigger_contract": {
@@ -54,6 +55,12 @@
       "Done": "e34ae6e7-4240-4d5c-8699-722b4eb4eb95"
     },
     "option_ids_verified": "2026-10-09, read-only notion-fetch of collection://761b3f94-bdbf-4b3d-8234-4cda579697ca (correction unit)"
+  },
+  "approvers": {
+    "_rule": "Owner-only G1 and G2 decisions, initially (owner authorisation, 2026-10-10). The gate compares the typed reviewer name with this list, exactly. That is a convention check: Notion does not authenticate a typed name, and neither does this file.",
+    "source": "GLOBAL_OS.md s4: Mary Thuo is the owner of Content (04). Exact string to be confirmed by the owner.",
+    "g1": ["Mary Thuo"],
+    "g2": ["Mary Thuo"]
   },
   "vocabularies": {
     "_rule": "One vocabulary per select the gate reasons about. The Notion option name is authoritative and is never renamed; option IDs are recorded so a rename or re-creation is detectable. Agent enums map to Notion names here and nowhere else. A Notion write carries the exact Notion name (Notion would silently create a new option from an agent enum). A value found in neither column is unknown and fails closed.",
@@ -101,6 +108,26 @@
         { "notion": "Thread", "option_id": "41983cbe-67d0-41d3-b2c1-33379eba8abb", "production": "text_capable" },
         { "notion": "Newsletter issue", "option_id": "3035bcc6-e23b-48aa-933b-e87fdc868229", "production": "text_capable" },
         { "notion": "Live / Audio", "option_id": "9d58a5c9-7b0d-4844-af58-9301f1ebdfb8", "production": "design" }
+      ]
+    },
+    "g1_decision": {
+      "db_id": "DB7", "field": "G1 Decision",
+      "verified": "2026-10-10, read back from the server schema returned by the ADD COLUMN call (storage unit). Property ID djxwdw.",
+      "options": [
+        { "notion": "Passed (design)", "option_id": "dd5c26e4-77b8-4d1c-a479-ef71995b248b", "decision": "passed", "path": "design" },
+        { "notion": "Passed (text-only)", "option_id": "dcb7e2c3-4bce-4db9-9645-eeea3b7545d4", "decision": "passed", "path": "text_only" },
+        { "notion": "Returned", "option_id": "857c39cc-1c86-4116-97dc-32282a8b9b6c", "decision": "returned", "path": null }
+      ]
+    },
+    "offer_status": {
+      "db_id": "DB8", "field": "Offer Status",
+      "owner": "02 Offer. Content reads it into the G2 evidence; it never writes it.",
+      "verified": "2026-10-10, read-only notion-fetch of collection://850f5a23-6533-4f48-89f3-ef6bc7f360b6 (storage unit)",
+      "options": [
+        { "notion": "Active", "option_id": "0be591e2-dc22-4327-81a6-82dfddece551" },
+        { "notion": "In engineering", "option_id": "5826dd7e-6528-4c79-b71b-25cf0b117166" },
+        { "notion": "Not quotable", "option_id": "e0331817-9f17-4103-b27d-6fe57c1aa1f7" },
+        { "notion": "Contested", "option_id": "bf64d969-f328-4747-a835-adbb8e3a4975" }
       ]
     },
     "dragon_status": {
@@ -510,10 +537,16 @@
         { "name": "G2 Decided At", "type": "date", "class": "strategic", "writer": "human_only" },
         { "name": "G2 Approved Revision", "type": "number", "class": "strategic", "writer": "human_only" },
         { "name": "Target Publish Date", "type": "date", "class": "strategic", "writer": "human_only", "note": "Stays empty until the owner sets a launch date." },
+        { "name": "G1 Decision", "type": "select", "class": "strategic", "writer": "human_only", "vocabulary": "g1_decision", "note": "Added 2026-10-10. Decision and path in one choice. Owner only, initially. Empty = not reviewed." },
+        { "name": "G1 Reviewer", "type": "text", "class": "strategic", "writer": "human_only", "note": "Added 2026-10-10. A typed name, checked against approvers.g1. Not authenticated." },
+        { "name": "G1 Decided At", "type": "date", "class": "strategic", "writer": "human_only", "note": "Added 2026-10-10." },
+        { "name": "G1 Revision", "type": "number", "class": "strategic", "writer": "human_only", "note": "Added 2026-10-10. The Version the G1 covers; any later Version makes it stale." },
+        { "name": "G2 Packet Manifest", "type": "text", "class": "meta", "writer": "C06", "note": "Added 2026-10-10 (Option A). Canonical JSON content-g2-manifest/1 computed by the gate from a fresh read-back at submission: assets with provenance and the resolved context. Never typed by hand." },
+        { "name": "G2 Submitted Fingerprint", "type": "text", "class": "meta", "writer": "C06", "note": "Added 2026-10-10. sha256 of publishable copy, assets and resolved context at the submitted Version, computed by the gate. Recomputed before publication (R26)." },
         { "name": "Packet State", "type": "select", "class": "state", "writer": "reserved:21 Presence" },
         { "name": "packet_id", "type": "text", "class": "meta", "writer": "reserved:21 Presence" },
         { "name": "variant_id", "type": "text", "class": "meta", "writer": "reserved:21 Presence" },
-        { "name": "Approval Integrity", "type": "formula", "class": "derived", "writer": "computed:formula" },
+        { "name": "Approval Integrity", "type": "formula", "class": "derived", "writer": "computed:formula", "note": "Formula V3R2dQ, extended 2026-10-10 with three red checks (Ready for Design without Passed (design); G1 Revision != Version once Ready for Design or Done; Approved with G2 Approved Revision != G1 Revision). Shows; never prevents an edit or authenticates a reviewer. Expression text and rollback source: CONTENT_INTELLIGENCE_SCHEMA.md s10 (2026-10-10)." },
         { "name": "Brief Integrity", "type": "formula", "class": "derived", "writer": "computed:formula" },
         { "name": "Content House", "type": "rollup", "class": "derived", "writer": "computed:rollup" },
         { "name": "Core Message", "type": "rollup", "class": "derived", "writer": "computed:rollup" },
@@ -553,7 +586,7 @@
         { "name": "Mechanism", "type": "text", "class": "direct", "writer": "external:02 Offer" },
         { "name": "Next Review", "type": "date", "class": "meta", "writer": "external:02 Offer" },
         { "name": "Objections", "type": "text", "class": "direct", "writer": "external:02 Offer" },
-        { "name": "Offer Status", "type": "select", "class": "state", "writer": "external:02 Offer" },
+        { "name": "Offer Status", "type": "select", "class": "state", "writer": "external:02 Offer", "vocabulary": "offer_status" },
         { "name": "Problem Solved", "type": "text", "class": "direct", "writer": "external:02 Offer" },
         { "name": "Proof Requirements", "type": "text", "class": "meta", "writer": "external:02 Offer" },
         { "name": "Relevant Platforms", "type": "relation", "class": "relation", "writer": "external:02 Offer" },

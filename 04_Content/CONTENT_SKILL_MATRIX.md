@@ -1,6 +1,6 @@
 # Content — Skill Matrix
 
-**Department:** Content (04) · **Version:** v0.3.1 (2026-10-10, follow-up unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
+**Department:** Content (04) · **Version:** v0.4 (2026-10-10, storage unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
 
 Modelled on [`01_Sector/SECTOR_SKILL_MATRIX.md`](../01_Sector/SECTOR_SKILL_MATRIX.md). **Agents decide; skills validate and apply.** Skills are grouped by write boundary, so seven skills cover eight capabilities: copywriting, long-form, scripts and carousels are one boundary (DB7 authored fields).
 
@@ -15,10 +15,10 @@ Modelled on [`01_Sector/SECTOR_SKILL_MATRIX.md`](../01_Sector/SECTOR_SKILL_MATRI
 | C03 surface-translation | **behaviour fields** | | **writes** | | | **writes** | | |
 | C04 brief-writer | | | | | | | **authored fields** | read |
 | C05 claim-review | read | read | read | read | read | read | read | read |
-| C06 approval-prep | | | | | | | **G2 Decision (2 values)** | |
+| C06 approval-prep | | | | | | | **G2 Decision (2 values), G2 Packet Manifest, G2 Submitted Fingerprint** | |
 | C07 source-retrieval | read | read | read | read | read | read | read | read |
 
-The JSON twin holds the field-level assignment: **361 fields across 8 databases, each with exactly one writer** (a skill, a computation, the reverse side of a relation, a named human, or another department). The gate fails on any field with zero or two writers.
+The JSON twin holds the field-level assignment: **367 fields across 8 databases, each with exactly one writer** (361 until the storage unit added six DB7 properties on 2026-10-10) (a skill, a computation, the reverse side of a relation, a named human, or another department). The gate fails on any field with zero or two writers.
 
 ### 1.1 Where ownership crosses a boundary
 
@@ -27,7 +27,7 @@ The JSON twin holds the field-level assignment: **361 fields across 8 databases,
 | DB1 `Account Status` | Presence (21) | Account truth is the onboarding tracker |
 | DB1 `Launch Priority`, DB4 `Revenue Target`, DB7 `Target Publish Date` | Owner (human only) | Owner decisions and money |
 | DB4 `Design Folder` | Design (19) | Design creates and records its own folders |
-| DB6 `Approved By`, DB7 `G2 Reviewer` / `G2 Decided At` / `G2 Approved Revision` | Human only | Approval is never delegated |
+| DB6 `Approved By`, DB7 `G2 Reviewer` / `G2 Decided At` / `G2 Approved Revision`, DB7 `G1 Decision` / `G1 Reviewer` / `G1 Decided At` / `G1 Revision` | Human only (G1 and G2: owner only, initially) | Approval is never delegated |
 | DB7 `Packet State`, `packet_id`, `variant_id` | Presence (21) | L3 Reservoir packet machine |
 | DB8 (all fields) | Offer (02) | Content never owns an offer or a price |
 
@@ -42,7 +42,7 @@ The JSON twin holds the field-level assignment: **361 fields across 8 databases,
 | C03 | [`content-surface-translation`](../.claude/skills/content-surface-translation/SKILL.md) | Opportunity + Position IDs | DB6 (+ Surface, Audience Role, Editorial DRAGON), DB3, DB1 behaviour | R03 R05 R06 R07 R08 R09 R10 R23 | family + platform + **audience role** + surface + format · `Overlay ID` | C04 |
 | C04 | [`content-brief-writer`](../.claude/skills/content-brief-writer/SKILL.md) | Translation ID | DB7 authored fields, `Version` | R01 R03 R04 R06 R09 R10 R15 R16 R17 R18 R20 R21 | `Translation` (one live brief; revise = VERSION, exactly +1) | C05; text-only → C06; design → human G1 |
 | C05 | [`content-claim-review`](../.claude/skills/content-claim-review/SKILL.md) | Brief ID + Version | nothing (verdict names brief ID + revision) | R04 R05 R16 | n/a (read-only) | human G1, then C06; or back to C04 |
-| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID (= write target = read-back ID, exactly) + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only), each bound to that brief and Version | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R09 R12 R18 R20 R22 R24 R25 | Brief ID + Version | **human reviewer** |
+| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID (= write target = read-back ID, exactly) + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only), each bound to that brief and Version | DB7 `G2 Decision` (Not submitted / Submitted for review), with the gate-computed `G2 Packet Manifest` and `G2 Submitted Fingerprint` | R01 R09 R12 R18 R20 R21 R22 R24 R25 R26 R27 R28 | Brief ID + Version + fingerprint | **human reviewer (owner)** |
 | C07 | [`content-source-retrieval`](../.claude/skills/content-source-retrieval/SKILL.md) | Any canonical ID | nothing | temp URLs, `rights: unknown`, private pilot data | n/a | caller |
 
 ---
@@ -123,6 +123,12 @@ The proposed routine's decision table has its own suite: `python -m unittest dis
 
 ## 6. Changelog
 
+- **v0.4 (2026-10-10, storage unit)** — Changes:
+  - C06 also writes the gate-computed G2 Packet Manifest and G2 Submitted Fingerprint.
+  - G1 fields are human-only, owner only initially.
+  - 367 fields.
+  - Storage-unit test classes added: `StorageSchema`, `Fingerprint`, `FreshContext`, `ChangeDetection`, `OwnerOnly`, `G1FromProperties`, `SubmissionEvidence`.
+  - No skill added; no department ownership changed. — Claude Code (Opus 5.5)
 - **v0.3.1 (2026-10-10, follow-up unit)** — C06's input names the exact ID triple. The `SubmissionIdentityTriple` test class is added. No skill or ownership change. — Claude Code (Opus 5.5)
 - **v0.3 (2026-10-09, hardening unit)** — Changes:
   - G1 is drawn on both paths.

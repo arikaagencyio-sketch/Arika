@@ -54,6 +54,8 @@ R03 no Opportunity, Platform, or source · R06 family ≠ Source Truth Position 
 
 Query or fetch the row. Confirm `Translation Family ID`, `Surface`, `Editorial DRAGON` and `Audience Role` read back. `Family Integrity` and `Publishable Here` are formulas the API returns as opaque references: check them in the Notion UI, and say so in the record.
 
+**A changed translation can invalidate an approval (since 2026-10-10).** Changing `Surface`, `Audience Role`, `Format` or `Platform` on a translation that a brief already links breaks that brief's stored G2 fingerprint. This applies once the brief has been submitted, and also after its G1. Tell C04 to record a `context_change` VERSION on each linked brief. Never leave the old approval standing.
+
 ## Handoff
 
 To C04 (brief). Multiplication across further surfaces repeats this skill per surface; see contract §10.1 for the event-ordering mismatch.

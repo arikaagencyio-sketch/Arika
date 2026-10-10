@@ -217,6 +217,11 @@ Otherwise list what is missing in `blocking_gaps` and emit `CONTENT_BRIEF_BLOCKE
 - **What a revision binds.** A G1 pass, a spend approval and a G2 approval each
   bind to one `version`, so an edit after any of them makes it stale. Say so in
   `recommendedActions`.
+- **Context and asset changes bump too (since 2026-10-10).** A change to the
+  linked translation's surface, audience, format or platform, to a linked
+  offer's status, or to the asset set also needs `version` + 1, without inventing
+  a copy edit. The gate checks it against the stored G2 evidence. The G1 and G2
+  decisions are stored on the brief (owner only, initially) and must be renewed.
 
 ## Construction rules
 - **Story Architecture:** Problem → Insight → Demonstration → Framework → Proof → Action.

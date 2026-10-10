@@ -24,6 +24,9 @@ Two jobs, both pure (no network, no Notion, no file writes):
      C8  DB7 Version is the revision field, and the four copy fields that
          reach the public are publication-affecting
      C9  every natural-key field exists, and DB6's key carries Audience Role
+     C10 the six approval-evidence DB7 fields exist with their writers (G1
+         fields human-only; the G2 manifest and fingerprint written by C06),
+         and G1 / G2 approvers are recorded (owner only, initially)
 
 2. PROPOSAL REFUSALS. validate_write(), validate_design_readiness(),
    validate_generation_start(), validate_g2_submission(),
@@ -42,11 +45,24 @@ It does not read Notion. A person editing a brief directly in Notion bypasses
 it entirely: a copy change made there without a Version bump is invisible to
 this file (CONTENT_WRITE_CONTRACT.md s0.2). It narrows the defect for writes
 that go through a skill; it does not close it.
+
+Approval evidence (storage unit, 2026-10-10). build_evidence() computes the
+G2 Packet Manifest and the G2 Submitted Fingerprint from a FRESH read-back
+(the brief, its one linked translation and every linked offer, read in one
+session, inside FRESH_WINDOW_SECONDS). compare_evidence() checks stored
+evidence against a fresh computation. A failed, partial, stale or foreign read
+is R27 and computes nothing: stored evidence is never reused in its place. A
+difference is R26. Neither these checks nor the Notion Approval Integrity
+formula prevent an edit or authenticate a reviewer: a typed reviewer name is
+taken at its word, and a check only runs when someone runs it.
 """
+import hashlib
 import json
 import os
 import re
 import sys
+import unicodedata
+from datetime import datetime
 from urllib.parse import urlparse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -82,6 +98,21 @@ ASSET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$")
 # Comparison is exact: a dashed and an undashed form of one page do NOT match.
 PAGE_ID = ASSET_ID
 PRODUCTION_PATHS = ("design", "text_only")
+
+# Approval evidence (storage unit, 2026-10-10).
+NOTION_HEX = re.compile(r"^[0-9a-f]{32}$")
+NOTION_DASHED = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
+FINGERPRINT = re.compile(r"^sha256:[0-9a-f]{64}$")
+MANIFEST_FORMAT = "content-g2-manifest/1"
+FRESH_WINDOW_SECONDS = 1800          # every part read within 30 minutes before the check
+EVIDENCE_TEXT_FIELDS = ("Script", "Caption", "Visual Direction", "Canva Instructions",
+                        "Engagement Follow-up", "Evidence")
+EVIDENCE_MULTI_FIELDS = ("Platform",)
+EVIDENCE_RELATION_FIELDS = ("Translation", "Offer")
+TRANSLATION_CONTEXT = ("Surface", "Audience Role", "Format", "Platform")
+STORAGE_FIELDS = {"G1 Decision": "human_only", "G1 Reviewer": "human_only", "G1 Decided At": "human_only",
+                  "G1 Revision": "human_only", "G2 Packet Manifest": "C06", "G2 Submitted Fingerprint": "C06"}
+EVIDENCE_CHANGE_REASONS = ("context_change", "asset_change")
 
 
 class Verdict:
@@ -130,7 +161,7 @@ def _writer_kind(writer):
 
 def _check_vocabularies(contract, idx, errors):
     vocabs = contract.get("vocabularies", {})
-    for name in ("surface", "audience_role", "format"):
+    for name in ("surface", "audience_role", "format", "g1_decision", "offer_status"):
         voc = vocabs.get(name)
         if not voc:
             errors.append("C7 vocabulary %r is missing" % name)
@@ -239,7 +270,23 @@ def check_contract(contract, skills_dir=SKILLS_DIR):
     db6 = next((d for d in contract["databases"] if d["db_id"] == "DB6"), {})
     if "Audience Role" not in db6.get("natural_key", []):
         errors.append("C9 DB6 natural key must include Audience Role (one Narrative x Platform x Audience expression)")
+
+    for name, writer in STORAGE_FIELDS.items():
+        if db7.get(name, {}).get("writer") != writer:
+            errors.append("C10 DB7 %s must exist with writer %s" % (name, writer))
+    approvers = contract.get("approvers", {})
+    for gate_name in ("g1", "g2"):
+        names = approvers.get(gate_name)
+        if not (isinstance(names, list) and names and all(isinstance(n, str) and n.strip() == n and n for n in names)):
+            errors.append("C10 approvers.%s must list at least one exact reviewer name" % gate_name)
+    for o in vocabs_options(contract, "g1_decision"):
+        if o.get("decision") not in ("passed", "returned") or (o["decision"] == "passed") != (o.get("path") in PRODUCTION_PATHS):
+            errors.append("C10 g1_decision option %r needs decision passed/returned and a path when passed" % o.get("notion"))
     return errors
+
+
+def vocabs_options(contract, vocabulary):
+    return (contract.get("vocabularies", {}).get(vocabulary) or {}).get("options", [])
 
 
 # --------------------------------------------------------------------------- vocabularies
@@ -343,12 +390,59 @@ def _check_revision(v, proposal, contract, state):
         if new != prior_rev + 1:
             v.refuse("R21_REVISION_INCREMENT", "%s changed: Version must be %d (prior %d + 1), got %d"
                      % (", ".join(changed), prior_rev + 1, prior_rev, new))
+    elif proposal.get("reason") in EVIDENCE_CHANGE_REASONS:
+        # A context-only or asset-only change: nothing in DB7's copy moved, so no copy
+        # edit is invented. The change itself must be evidenced against the stored
+        # manifest (or, for context before any submission, a declared baseline).
+        if mode != "VERSION":
+            v.refuse("R21_REVISION_INCREMENT", "an evidenced %s is a VERSION, not an %s" % (proposal["reason"], mode))
+        if _evidenced_change(v, proposal, state, contract, prior_rev) and new != prior_rev + 1:
+            v.refuse("R21_REVISION_INCREMENT", "%s: Version must be %d (prior %d + 1), got %d"
+                     % (proposal["reason"], prior_rev + 1, prior_rev, new))
     else:
         if new != prior_rev:
             v.refuse("R21_REVISION_INCREMENT",
                      "Version moves %d -> %d with no publication-affecting change" % (prior_rev, new))
         if mode == "VERSION":
             v.refuse("R21_REVISION_INCREMENT", "VERSION with no publication-affecting change; this is a NO_OP")
+
+
+def _evidenced_change(v, proposal, state, contract, prior_rev):
+    """True only when the declared context or asset change is visible in the evidence."""
+    prior = (state or {}).get("prior") or {}
+    stored = parse_manifest(v, prior["G2 Packet Manifest"]) if prior.get("G2 Packet Manifest") else None
+    if prior.get("G2 Packet Manifest") and stored is None:
+        return False
+    if proposal["reason"] == "context_change":
+        ctx_v, ctx = read_context((state or {}).get("fresh"), contract)
+        v.extend(ctx_v)
+        if ctx is None:
+            return False
+        if ctx["revision"] != prior_rev:
+            v.refuse("R12_REVISION_MISMATCH", "the fresh read shows Version %r; the brief on record is at %d"
+                     % (ctx["revision"], prior_rev))
+            return False
+        baseline = stored["resolved"] if stored is not None else proposal.get("context_before")
+        if not isinstance(baseline, dict):
+            v.refuse("R21_REVISION_INCREMENT", "a context-only VERSION needs a baseline: the stored G2 Packet "
+                     "Manifest, or a declared context_before when nothing was submitted yet")
+            return False
+        if baseline == ctx["resolved"]:
+            v.refuse("R21_REVISION_INCREMENT", "the resolved context has not changed against its baseline; nothing to version")
+            return False
+        return True
+    if stored is None:
+        v.refuse("R21_REVISION_INCREMENT", "an asset-only VERSION needs the stored G2 Packet Manifest to compare against")
+        return False
+    new_assets = proposal.get("assets")
+    if not isinstance(new_assets, list):
+        v.refuse("R25_ASSET_INVALID", "an asset-only VERSION must name the new asset set")
+        return False
+    _check_assets(v, new_assets, None, None, "new", provenance=False)
+    if _artifact_set(new_assets) == _artifact_set(stored["assets"]):
+        v.refuse("R21_REVISION_INCREMENT", "the asset set has not changed against the stored manifest; nothing to version")
+        return False
+    return v.ok
 
 
 # --------------------------------------------------------------------------- write proposals
@@ -638,7 +732,54 @@ def _check_submission_target(v, proposal, state, contract):
             v.refuse("R20_REVISION_INVALID", "the target brief has no valid Version (%r)" % prior.get("Version"))
         elif described != on_record:
             v.refuse("R12_REVISION_MISMATCH", "the submission describes Version %r; the target is at %d" % (described, on_record))
+    _check_submission_evidence(v, proposal, state, contract, sub)
     v.extend(validate_g2_submission(sub, contract))
+
+
+def _check_submission_evidence(v, proposal, state, contract, sub):
+    """Storage unit (2026-10-10). The G2 Packet Manifest and G2 Submitted Fingerprint
+    are computed by the gate from a FRESH read-back of the exact write target. They
+    are never typed, and never reused from an earlier submission."""
+    fields = proposal.get("fields", {})
+    for name in ("G2 Packet Manifest", "G2 Submitted Fingerprint"):
+        if not fields.get(name):
+            v.refuse("R22_STAGE_ORDER", "Submitted for review must also write %s" % name)
+    fresh = (state or {}).get("fresh")
+    ev_v, ev = build_evidence(fresh, sub.get("artifacts") or [], contract)
+    v.extend(ev_v)
+    if ev is None:
+        return
+    read_id = (fresh.get("brief") or {}).get("page_id")
+    if read_id != proposal.get("target"):
+        v.refuse("R24_EVIDENCE_IDENTITY", "the fresh read is of page %r, not the write target %r"
+                 % (read_id, proposal.get("target")))
+    described = revision_value((sub.get("brief") or {}).get("version"))
+    if ev["context"]["revision"] != described:
+        v.refuse("R12_REVISION_MISMATCH", "the fresh read shows Version %r; the packet describes %r"
+                 % (ev["context"]["revision"], described))
+    copy = sub.get("brief") or {}
+    read = ev["context"]["fields"]
+    for key, name in (("caption", "Caption"), ("script", "Script"),
+                      ("visual_direction", "Visual Direction"), ("canva_instructions", "Canva Instructions")):
+        if _norm_text(copy.get(key) or "") != read.get(name):
+            v.refuse("R26_FINGERPRINT_MISMATCH", "the packet's %s differs from the fresh read of the page" % name)
+    resolved = ev["context"]["resolved"]
+    tr = sub.get("translation") or {}
+    surface = resolve_surface(contract, tr.get("surface"))
+    if (surface or {}).get("notion") != resolved.get("surface") or tr.get("format") != resolved.get("format"):
+        v.refuse("R26_FINGERPRINT_MISMATCH", "the packet's translation context (%r, %r) differs from the fresh read (%r, %r)"
+                 % (tr.get("surface"), tr.get("format"), resolved.get("surface"), resolved.get("format")))
+    for name, key in (("G2 Packet Manifest", "manifest_text"), ("G2 Submitted Fingerprint", "fingerprint")):
+        if fields.get(name) and fields[name] != ev[key]:
+            v.refuse("R26_FINGERPRINT_MISMATCH", "the %s written differs from the one computed from the fresh read-back" % name)
+    prior = (state or {}).get("prior") or {}
+    if prior.get("G2 Submitted Fingerprint") and prior.get("G2 Packet Manifest"):
+        earlier = parse_manifest(Verdict(), prior["G2 Packet Manifest"])
+        if (earlier is not None and earlier.get("revision") == ev["context"]["revision"]
+                and prior["G2 Submitted Fingerprint"] != ev["fingerprint"]):
+            v.refuse("R21_REVISION_INCREMENT", "since the last submission at Version %d, %s changed without a Version "
+                     "bump; record a VERSION first" % (ev["context"]["revision"],
+                                                     "; ".join(evidence_diff(earlier, ev["manifest"])) or "publishable copy"))
 
 
 # --------------------------------------------------------------------------- workflow stages
@@ -693,7 +834,31 @@ def _human_record(v, rec, brief_id, rev, what):
     _bind(v, rec, brief_id, rev, what)
 
 
-def _check_g1(v, g1, brief_id, rev, path):
+def _authorised(v, contract, gate_name, reviewer, what):
+    """Owner-only, initially (owner authorisation 2026-10-10). This compares a typed
+    name with the recorded approver list. It does not authenticate anyone."""
+    allowed = (contract or load_contract()).get("approvers", {}).get(gate_name, [])
+    if reviewer not in allowed:
+        v.refuse("R28_REVIEWER_NOT_AUTHORISED", "%s was recorded by %r; only %s may decide it" % (what, reviewer, allowed))
+
+
+def g1_from_properties(props, brief_id, contract=None):
+    """The G1 record as stored on the brief (G1 Decision / Reviewer / Decided At /
+    Revision), shaped for _check_g1. The page it was read from IS the binding, so
+    brief_id is the ID of that page. None when no G1 has been recorded."""
+    contract = contract or load_contract()
+    decision = props.get("G1 Decision")
+    if decision is None or decision == "":
+        return None
+    opt = next((o for o in vocabs_options(contract, "g1_decision") if o["notion"] == decision), None)
+    reviewer = props.get("G1 Reviewer")
+    return {"decision": opt["decision"] if opt else "unrecognised option %r" % decision,
+            "path": opt.get("path") if opt else None,
+            "by": "human:%s" % reviewer if isinstance(reviewer, str) and reviewer else None,
+            "at": props.get("G1 Decided At"), "brief_id": brief_id, "revision": props.get("G1 Revision")}
+
+
+def _check_g1(v, g1, brief_id, rev, path, contract=None):
     """G1 is required on BOTH paths, design and text-only. The human records the
     production path at G1; the brief as it stands must still be that path."""
     g1 = g1 if isinstance(g1, dict) else {}
@@ -701,6 +866,8 @@ def _check_g1(v, g1, brief_id, rev, path):
         v.refuse("R22_STAGE_ORDER", "G1 concept review has not passed this brief (decision %r)" % g1.get("decision"))
         return
     _human_record(v, g1, brief_id, rev, "G1 concept review")
+    if _is_human(g1.get("by")):
+        _authorised(v, contract, "g1", g1["by"][len("human:"):], "G1")
     if g1.get("path") not in PRODUCTION_PATHS:
         v.refuse("R22_STAGE_ORDER", "G1 does not record the production path (design or text_only): %r" % g1.get("path"))
     elif path is not None and g1["path"] != path:
@@ -764,7 +931,7 @@ def validate_design_readiness(ctx, contract=None):
         v.refuse("R22_STAGE_ORDER", "text-only content does not go to Design; its G1 is checked at G2 submission")
     elif not all((b.get(k) or "").strip() for k in ("visual_direction", "canva_instructions")):
         v.refuse("R22_STAGE_ORDER", "Visual Direction and Canva Instructions are needed before Design")
-    _check_g1(v, ctx.get("g1"), bid, rev, "design")
+    _check_g1(v, ctx.get("g1"), bid, rev, "design", contract)
     return v
 
 
@@ -824,7 +991,7 @@ def validate_g2_submission(ctx, contract=None):
         v.refuse("R22_STAGE_ORDER", "claim review (C05) has not passed (verdict %r)" % (cr or {}).get("verdict"))
     _bind(v, cr, bid, cur, "claim review (C05)")
     prod = production_class(contract, tr.get("format"), b)
-    _check_g1(v, ctx.get("g1"), bid, cur, prod)
+    _check_g1(v, ctx.get("g1"), bid, cur, prod, contract)
     arts = ctx.get("artifacts") or []
     if prod is None:
         v.refuse("R23_UNKNOWN_OPTION", "format %r is unknown; cannot tell design work from text-only" % tr.get("format"))
@@ -844,6 +1011,297 @@ def validate_g2_submission(ctx, contract=None):
     return v
 
 
+# --------------------------------------------------------------------------- approval evidence
+
+def canonical_page_id(x):
+    """One canonical form for evidence: 32 lowercase hex, no dashes. A dashed
+    lowercase UUID converts. Anything else (upper case, padded, a fixture token,
+    a non-string) is not a Notion page ID here and yields None."""
+    if isinstance(x, str):
+        if NOTION_HEX.match(x):
+            return x
+        if NOTION_DASHED.match(x):
+            return x.replace("-", "")
+    return None
+
+
+def canonical_json(obj):
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def _norm_text(s):
+    return unicodedata.normalize("NFC", s.replace("\r\n", "\n"))
+
+
+def _parse_time(s):
+    if not isinstance(s, str):
+        return None
+    try:
+        t = datetime.fromisoformat(s.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    return t if t.tzinfo is not None else None
+
+
+def _fresh_part(v, part, name, session, checked_at):
+    """A part of the read-back counts only when it was read completely, in this
+    session, with a timezone-aware read time inside the freshness window."""
+    if not isinstance(part, dict) or part.get("status") != "complete":
+        status = part.get("status") if isinstance(part, dict) else None
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s was not read completely (status %r)" % (name, status))
+        return False
+    ok = True
+    if part.get("session") != session:
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s was read in another session (%r)" % (name, part.get("session")))
+        ok = False
+    t = _parse_time(part.get("read_at"))
+    if t is None:
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s has no timezone-aware read time (%r)" % (name, part.get("read_at")))
+        ok = False
+    elif checked_at is not None and (t > checked_at or (checked_at - t).total_seconds() > FRESH_WINDOW_SECONDS):
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s was read at %s, outside the %d-minute window before the check"
+                 % (name, part.get("read_at"), FRESH_WINDOW_SECONDS // 60))
+        ok = False
+    if not isinstance(part.get("properties"), dict):
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s carries no properties" % name)
+        ok = False
+    return ok
+
+
+def _page_ids(v, values, what):
+    values = [] if values is None else values
+    if not isinstance(values, list):
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s is not a list of page IDs (%r)" % (what, values))
+        return None
+    out = []
+    for x in values:
+        c = canonical_page_id(x)
+        if c is None:
+            v.refuse("R27_CONTEXT_UNREADABLE", "%s holds %r, which is not a Notion page ID" % (what, x))
+            return None
+        out.append(c)
+    if len(set(out)) != len(out):
+        v.refuse("R27_CONTEXT_UNREADABLE", "%s lists a page twice" % what)
+        return None
+    return sorted(out)
+
+
+def _known_option(v, contract, vocabulary, value, what, code):
+    """Exact Notion option name or None (read, and empty). Anything else is refused."""
+    if value is None:
+        return None
+    if not isinstance(value, str) or value not in {o["notion"] for o in vocabs_options(contract, vocabulary)}:
+        v.refuse(code, "%s = %r is not a recorded Notion option" % (what, value))
+    return value
+
+
+def read_context(fresh, contract=None):
+    """Normalise a FRESH read-back into {brief_id, revision, fields, resolved}.
+
+    fresh = {"session": str, "checked_at": ISO-8601 with zone,
+             "brief":       {"status": "complete", "session", "read_at", "page_id", "properties": {...DB7}},
+             "translation": {"status", "session", "read_at", "page_id",
+                             "properties": {"Surface", "Audience Role", "Format", "Platform": [ids]}},
+             "offers":      [{"status", "session", "read_at", "page_id", "properties": {"Offer Status"}}]}
+
+    Returns (verdict, None) when anything is unreadable, partial, stale, from
+    another session, foreign or unknown. Stored evidence is never substituted."""
+    contract = contract or load_contract()
+    v = Verdict()
+    if not isinstance(fresh, dict):
+        v.refuse("R27_CONTEXT_UNREADABLE", "no fresh read-back was supplied; stored evidence is not reused in its place")
+        return v, None
+    session = fresh.get("session")
+    if not (isinstance(session, str) and session and session.strip() == session):
+        v.refuse("R27_CONTEXT_UNREADABLE", "the read-back names no session")
+    checked_at = _parse_time(fresh.get("checked_at"))
+    if checked_at is None:
+        v.refuse("R27_CONTEXT_UNREADABLE", "the read-back has no timezone-aware check time")
+    brief_ok = _fresh_part(v, fresh.get("brief"), "the brief", session, checked_at)
+    translation_ok = _fresh_part(v, fresh.get("translation"), "the linked translation", session, checked_at)
+    if not brief_ok:
+        return v, None
+    bp = fresh["brief"]["properties"]
+    bid = canonical_page_id(fresh["brief"].get("page_id"))
+    if bid is None:
+        v.refuse("R27_CONTEXT_UNREADABLE", "the brief page ID %r is not a Notion page ID" % fresh["brief"].get("page_id"))
+    needed = EVIDENCE_TEXT_FIELDS + EVIDENCE_MULTI_FIELDS + EVIDENCE_RELATION_FIELDS + ("Version",)
+    missing = [k for k in needed if k not in bp]
+    if missing:
+        v.refuse("R27_CONTEXT_UNREADABLE", "the brief read is partial: %s missing" % ", ".join(missing))
+        return v, None
+    rev = revision_value(bp["Version"])
+    if rev is None:
+        v.refuse("R20_REVISION_INVALID", "the brief's Version %r is not a whole number >= 1" % bp["Version"])
+    fields = {}
+    for k in EVIDENCE_TEXT_FIELDS:
+        val = "" if bp[k] is None else bp[k]
+        if not isinstance(val, str):
+            v.refuse("R27_CONTEXT_UNREADABLE", "the brief's %s is not text (%r)" % (k, val))
+            continue
+        fields[k] = _norm_text(val)
+    platforms = [] if bp["Platform"] is None else bp["Platform"]
+    if not (isinstance(platforms, list) and all(isinstance(p, str) for p in platforms)):
+        v.refuse("R27_CONTEXT_UNREADABLE", "the brief's Platform is not a list of names (%r)" % (platforms,))
+    else:
+        fields["Platform"] = sorted(_norm_text(p) for p in platforms)
+    for k in EVIDENCE_RELATION_FIELDS:
+        ids = _page_ids(v, bp[k], "the brief's %s relation" % k)
+        if ids is not None:
+            fields[k] = ids
+    resolved = {}
+    linked_translation = fields.get("Translation")
+    if linked_translation is not None and len(linked_translation) != 1:
+        v.refuse("R27_CONTEXT_UNREADABLE", "the brief links %d translations; exactly one is required"
+                 % len(linked_translation))
+    elif linked_translation is not None and translation_ok:
+        tp = fresh["translation"]["properties"]
+        read_id = canonical_page_id(fresh["translation"].get("page_id"))
+        if read_id != linked_translation[0]:
+            v.refuse("R24_EVIDENCE_IDENTITY", "the translation read (%r) is not the page the brief links (%r)"
+                     % (fresh["translation"].get("page_id"), linked_translation[0]))
+        missing = [k for k in TRANSLATION_CONTEXT if k not in tp]
+        if missing:
+            v.refuse("R27_CONTEXT_UNREADABLE", "the translation read is partial: %s missing" % ", ".join(missing))
+        else:
+            resolved["translation_id"] = linked_translation[0]
+            resolved["surface"] = _known_option(v, contract, "surface", tp["Surface"], "Surface", "R09_SURFACE_UNKNOWN")
+            resolved["audience_role"] = _known_option(v, contract, "audience_role", tp["Audience Role"],
+                                                      "Audience Role", "R23_UNKNOWN_OPTION")
+            resolved["format"] = _known_option(v, contract, "format", tp["Format"], "Format", "R23_UNKNOWN_OPTION")
+            platform_ids = _page_ids(v, tp["Platform"], "the translation's Platform relation")
+            if platform_ids is not None:
+                resolved["platform_ids"] = platform_ids
+    parts = fresh.get("offers", [])
+    if not isinstance(parts, list):
+        v.refuse("R27_CONTEXT_UNREADABLE", "the offer reads are not a list")
+        parts = []
+    by_id = {}
+    for part in parts:
+        pid = canonical_page_id(part.get("page_id")) if isinstance(part, dict) else None
+        if pid is None:
+            v.refuse("R27_CONTEXT_UNREADABLE", "an offer read has no Notion page ID")
+        elif pid in by_id:
+            v.refuse("R27_CONTEXT_UNREADABLE", "offer %s was read twice" % pid)
+        else:
+            by_id[pid] = part
+    linked_offers = fields.get("Offer")
+    if linked_offers is not None:
+        offers = []
+        for oid in linked_offers:
+            part = by_id.get(oid)
+            if part is None:
+                v.refuse("R27_CONTEXT_UNREADABLE", "linked offer %s was not read" % oid)
+                continue
+            if not _fresh_part(v, part, "linked offer %s" % oid, session, checked_at):
+                continue
+            if "Offer Status" not in part["properties"]:
+                v.refuse("R27_CONTEXT_UNREADABLE", "the read of offer %s is partial: Offer Status missing" % oid)
+                continue
+            offers.append({"offer_id": oid,
+                           "offer_status": _known_option(v, contract, "offer_status", part["properties"]["Offer Status"],
+                                                         "Offer Status of %s" % oid, "R23_UNKNOWN_OPTION")})
+        for pid in by_id:
+            if pid not in linked_offers:
+                v.refuse("R24_EVIDENCE_IDENTITY", "offer %s was read but is not linked to the brief" % pid)
+        resolved["offers"] = sorted(offers, key=lambda o: o["offer_id"])
+    if not v.ok:
+        return v, None
+    return v, {"brief_id": bid, "revision": rev, "fields": fields, "resolved": resolved}
+
+
+def build_evidence(fresh, assets, contract=None, provenance=True):
+    """Compute the G2 Packet Manifest and G2 Submitted Fingerprint from a fresh read.
+
+    Fingerprint = "sha256:" + SHA-256 of canonical JSON (keys sorted, separators
+    "," and ":", UTF-8, NFC text, CRLF -> LF, nothing trimmed) of
+    {brief_id, revision, fields: every publication-affecting DB7 field,
+     assets: [[asset_id, version], ...] sorted, resolved: {translation_id, surface,
+     audience_role, format, platform_ids, offers: [{offer_id, offer_status}]}}.
+    `provenance=False` is for the publication recompute, where the published
+    assets carry no provenance (the stored manifest holds it)."""
+    contract = contract or load_contract()
+    v, ctx = read_context(fresh, contract)
+    if ctx is None:
+        return v, None
+    if not isinstance(assets, list):
+        v.refuse("R25_ASSET_INVALID", "the asset set is not a list")
+        return v, None
+    norm = []
+    for a in assets:
+        a = a if isinstance(a, dict) else {}
+        prov = a.get("provenance") if isinstance(a.get("provenance"), dict) else {}
+        named = prov.get("brief_id")
+        norm.append({"asset_id": a.get("asset_id"), "version": a.get("version"),
+                     "provenance": {"brief_id": canonical_page_id(named) or named,
+                                    "brief_revision": prov.get("brief_revision")}})
+    _check_assets(v, norm, ctx["brief_id"], ctx["revision"], "packet", provenance=provenance)
+    if not v.ok:
+        return v, None
+    manifest_assets = []
+    for a in sorted(norm, key=lambda a: a["asset_id"]):
+        entry = {"asset_id": a["asset_id"], "version": revision_value(a["version"])}
+        if provenance:
+            entry["provenance"] = {"brief_id": a["provenance"]["brief_id"],
+                                   "brief_revision": revision_value(a["provenance"]["brief_revision"])}
+        manifest_assets.append(entry)
+    manifest = {"format": MANIFEST_FORMAT, "brief_id": ctx["brief_id"], "revision": ctx["revision"],
+                "assets": manifest_assets, "resolved": ctx["resolved"]}
+    payload = {"brief_id": ctx["brief_id"], "revision": ctx["revision"], "fields": ctx["fields"],
+               "assets": [[a["asset_id"], a["version"]] for a in manifest_assets], "resolved": ctx["resolved"]}
+    digest = hashlib.sha256(canonical_json(payload).encode("utf-8")).hexdigest()
+    return v, {"fingerprint": "sha256:" + digest, "manifest": manifest,
+               "manifest_text": canonical_json(manifest), "context": ctx}
+
+
+def parse_manifest(v, text, what="the stored G2 Packet Manifest"):
+    """The stored manifest, or None with an R26. A manifest that is not in canonical
+    form was edited by hand and is not trusted."""
+    if not isinstance(text, str) or not text:
+        v.refuse("R26_FINGERPRINT_MISMATCH", "%s is empty" % what)
+        return None
+    try:
+        m = json.loads(text)
+    except ValueError:
+        v.refuse("R26_FINGERPRINT_MISMATCH", "%s is not JSON" % what)
+        return None
+    if (not isinstance(m, dict) or m.get("format") != MANIFEST_FORMAT
+            or not isinstance(m.get("assets"), list) or not isinstance(m.get("resolved"), dict)):
+        v.refuse("R26_FINGERPRINT_MISMATCH", "%s is not a %s manifest" % (what, MANIFEST_FORMAT))
+        return None
+    if canonical_json(m) != text:
+        v.refuse("R26_FINGERPRINT_MISMATCH", "%s is not in canonical form, so it was edited outside the gate" % what)
+        return None
+    return m
+
+
+def evidence_diff(old, new):
+    """Names of the manifest components that differ (copy is not in the manifest)."""
+    if not isinstance(old, dict) or not isinstance(new, dict):
+        return []
+    moved = [k for k in ("brief_id", "revision") if old.get(k) != new.get(k)]
+    if _artifact_set(old.get("assets")) != _artifact_set(new.get("assets")):
+        moved.append("assets")
+    o, n = old.get("resolved") or {}, new.get("resolved") or {}
+    for k in sorted(set(o) | set(n)):
+        if o.get(k) != n.get(k):
+            moved.append("resolved.%s: %r -> %r" % (k, o.get(k), n.get(k)))
+    return moved
+
+
+def compare_evidence(v, stored_fingerprint, stored_manifest, fresh_ev):
+    """R26 when stored evidence and a fresh computation differ, naming what moved."""
+    if not (isinstance(stored_fingerprint, str) and FINGERPRINT.match(stored_fingerprint)):
+        v.refuse("R26_FINGERPRINT_MISMATCH", "no valid G2 Submitted Fingerprint on record (%r)" % (stored_fingerprint,))
+        return
+    if fresh_ev is None:
+        return  # the read failed: R27 is already recorded, and nothing stored is inherited
+    if stored_fingerprint != fresh_ev["fingerprint"]:
+        moved = evidence_diff(stored_manifest, fresh_ev["manifest"])
+        v.refuse("R26_FINGERPRINT_MISMATCH", "the approved evidence no longer matches a fresh read: %s"
+                 % ("; ".join(moved) or "publishable copy or a DB7 relation changed (copy is not stored in the manifest)"))
+
+
 # --------------------------------------------------------------------------- publication
 
 def _artifact_set(arts):
@@ -851,15 +1309,16 @@ def _artifact_set(arts):
                   for a in (arts or []) if isinstance(a, dict))
 
 
-def validate_publication(record, brief, contract=None):
+def validate_publication(record, brief, contract=None, fresh=None):
     """A manual publication record linking a live post back to the exact approved artifact.
 
-    brief = {"id", "version", "surface", "format", "visual_direction", "canva_instructions",
-             "g2_decision", "g2_reviewer", "g2_decided_at", "g2_approved_revision",
-             "g2_approved_artifacts": [{"asset_id", "version",
-                                        "provenance": {"brief_id", "brief_revision"}}]}   # design work only
+    brief = {"id", "version", "g2_decision", "g2_reviewer", "g2_decided_at", "g2_approved_revision",
+             "g2_packet_manifest", "g2_submitted_fingerprint"}    # as stored on DB7
     record = {"brief_id", "revision", "surface", "native_post_url", "published_at", "publisher",
-              "artifacts": [{"asset_id", "version"}]}"""
+              "artifacts": [{"asset_id", "version"}]}
+    fresh  = a fresh read-back (read_context). The approved surface, format and asset set come
+             from the stored manifest; the stored fingerprint must equal a recomputation from
+             the fresh read plus the assets actually published."""
     contract = contract or load_contract()
     v = Verdict()
     bid = _brief_identity(v, brief, "publication")
@@ -869,6 +1328,8 @@ def validate_publication(record, brief, contract=None):
         v.refuse("R11_APPROVAL_MISSING", "G2 decision is %r, not Approved" % brief.get("g2_decision"))
     if not (brief.get("g2_reviewer") and brief.get("g2_decided_at")):
         v.refuse("R11_APPROVAL_MISSING", "G2 approval has no reviewer or date on record")
+    elif brief.get("g2_decision") == "Approved":
+        _authorised(v, contract, "g2", brief.get("g2_reviewer"), "G2")
     cur = revision_value(brief.get("version"))
     approved = revision_value(brief.get("g2_approved_revision"))
     published = revision_value(record.get("revision"))
@@ -887,12 +1348,23 @@ def validate_publication(record, brief, contract=None):
             v.refuse("R14_LINKBACK", "publication record has no %s" % k)
     if record.get("brief_id") and record.get("brief_id") != bid:
         v.refuse("R14_LINKBACK", "record points at brief %r, not %r" % (record.get("brief_id"), bid))
+    canonical_bid = canonical_page_id(bid) if bid else None
+    if bid and canonical_bid is None:
+        v.refuse("R24_EVIDENCE_IDENTITY", "brief ID %r is not a Notion page ID, so stored evidence cannot be bound" % bid)
+    stored = parse_manifest(v, brief.get("g2_packet_manifest"))
+    if stored is not None:
+        if stored.get("brief_id") != canonical_bid:
+            v.refuse("R24_EVIDENCE_IDENTITY", "the stored manifest is for brief %r, not %r" % (stored.get("brief_id"), canonical_bid))
+        if approved is not None and stored.get("revision") != approved:
+            v.refuse("R12_REVISION_MISMATCH", "the stored manifest is for revision %r; the approval is for %r"
+                     % (stored.get("revision"), approved))
+    approved_context = (stored or {}).get("resolved") or {}
     rs = resolve_surface(contract, record.get("surface")) if record.get("surface") else None
-    bs = resolve_surface(contract, brief.get("surface"))
+    bs = resolve_surface(contract, approved_context.get("surface")) if stored is not None else None
     if record.get("surface") and rs is None:
         v.refuse("R14_LINKBACK", "published surface %r is not in the recorded vocabulary" % record.get("surface"))
-    if bs is None:
-        v.refuse("R14_LINKBACK", "the approved surface %r is not in the recorded vocabulary" % brief.get("surface"))
+    if stored is not None and bs is None:
+        v.refuse("R14_LINKBACK", "the approved surface %r is not in the recorded vocabulary" % approved_context.get("surface"))
     if rs and not rs["assigned"]:
         v.refuse("R14_LINKBACK", "a post cannot be published to %r" % rs["notion"])
     if rs and bs and rs["notion"] != bs["notion"]:
@@ -906,21 +1378,33 @@ def validate_publication(record, brief, contract=None):
         host = parsed.netloc.lower()
         if hosts and not any(host == h or host.endswith("." + h) for h in hosts):
             v.refuse("R14_LINKBACK", "native post URL %r is not on %s for surface %r" % (url, hosts, rs["notion"]))
-    prod = production_class(contract, brief.get("format"), brief)
+    published_arts = record.get("artifacts") or []
+    ev_v, ev = build_evidence(fresh, published_arts, contract, provenance=False)
+    v.extend(ev_v)
+    if ev is not None:
+        if canonical_bid and ev["context"]["brief_id"] != canonical_bid:
+            v.refuse("R24_EVIDENCE_IDENTITY", "the fresh read is of brief %r, not %r" % (ev["context"]["brief_id"], canonical_bid))
+        if cur is not None and ev["context"]["revision"] != cur:
+            v.refuse("R12_REVISION_MISMATCH", "the fresh read shows Version %r; the record says %d" % (ev["context"]["revision"], cur))
+    compare_evidence(v, brief.get("g2_submitted_fingerprint"), stored, ev)
+    if stored is None:
+        return v
+    if stored["assets"]:
+        _check_assets(v, stored["assets"], canonical_bid, approved, "approved", provenance=True)
+    if _artifact_set(published_arts) != _artifact_set(stored["assets"]):
+        v.refuse("R12_REVISION_MISMATCH", "published artifacts %r differ from the approved set %r"
+                 % (_artifact_set(published_arts), _artifact_set(stored["assets"])))
+    if ev is None:
+        return v
+    fields = ev["context"]["fields"]
+    prod = production_class(contract, approved_context.get("format"),
+                            {"visual_direction": fields.get("Visual Direction"),
+                             "canva_instructions": fields.get("Canva Instructions")})
     if prod is None:
-        v.refuse("R23_UNKNOWN_OPTION", "format %r is unknown; cannot tell which artifact was approved" % brief.get("format"))
-    elif prod == "design":
-        approved_arts = brief.get("g2_approved_artifacts") or []
-        published_arts = record.get("artifacts") or []
-        if not approved_arts:
-            v.refuse("R11_APPROVAL_MISSING", "G2 approved no finished artifact for this design brief")
-        else:
-            _check_assets(v, approved_arts, bid, approved, "approved", provenance=True)
-            _check_assets(v, published_arts, bid, approved, "published", provenance=False)
-            if _artifact_set(published_arts) != _artifact_set(approved_arts):
-                v.refuse("R12_REVISION_MISMATCH", "published artifacts %r differ from the approved set %r"
-                         % (_artifact_set(published_arts), _artifact_set(approved_arts)))
-    elif record.get("artifacts"):
+        v.refuse("R23_UNKNOWN_OPTION", "format %r is unknown; cannot tell which artifact was approved" % approved_context.get("format"))
+    elif prod == "design" and not stored["assets"]:
+        v.refuse("R11_APPROVAL_MISSING", "G2 approved no finished artifact for this design brief")
+    elif prod == "text_only" and (published_arts or stored["assets"]):
         v.refuse("R12_REVISION_MISMATCH", "a text-only approval covers no design artifact")
     return v
 

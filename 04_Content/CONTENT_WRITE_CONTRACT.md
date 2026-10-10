@@ -1,6 +1,6 @@
 # Content — Write Contract
 
-**Department:** Content (04) · **Version:** v0.3.1 (2026-10-10, follow-up unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
+**Department:** Content (04) · **Version:** v0.4 (2026-10-10, storage unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
 
 **Machine-readable companion:** [`contracts/content-databases.json`](contracts/content-databases.json) (one writer per field, DB1–DB8, from the live schemas of 2026-10-09). **Runnable gate:** [`contracts/content_write_gate.py`](contracts/content_write_gate.py) with tests in [`contracts/test_content_write_gate.py`](contracts/test_content_write_gate.py).
 
@@ -27,7 +27,21 @@
 
 So: the gate makes a skill-driven write safe. It does not make the database safe. A content hash recorded at G2 would close part of the gap. That would be a new property or a page-body convention, and it is **proposed, not built**. The minimal storage and fingerprint proposal, with exactly what it would and would not catch, is [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md) (prepared 2026-10-09, not applied).
 
-**A linked page can change beneath an approval (recorded 2026-10-10).** The surface, audience role and format live on the DB6 translation, not on the brief. If that page's `Surface` changes after G2 while the brief's `Translation` relation keeps the same page ID, nothing in DB7 moves. Today's publication check then compares the published surface with the surface read **at publication**, not the one approved, so the approval silently carries over. Closing this needs stored approval evidence. The capture and comparison rules are specified in [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md) §3.1. **Proposed, not built.**
+**Stored evidence narrows, and does not close, the gap (storage unit, 2026-10-10).** DB7 now stores:
+- G1 (`G1 Decision`, `G1 Reviewer`, `G1 Decided At`, `G1 Revision`);
+- the G2 packet (`G2 Packet Manifest`, `G2 Submitted Fingerprint`).
+
+What this catches, the next time a check runs:
+- a direct Notion edit to publishable copy, assets or resolved context after submission (R26 at publication, R21 at re-submission);
+- an unreadable or stale read, which is refused instead of trusted (R27).
+
+What it does not do:
+- **No check runs on its own.** Nothing is scheduled.
+- **Human-only fields are not enforced.** The rule is this contract's convention, not a Notion permission.
+- **Reviewer names are not authenticated.** A typed reviewer name is compared with the owner-only approver list (R28); neither the gate nor Notion verifies who typed it.
+- **The Approval Integrity formula prevents nothing.** It shows a red cell; it stops no edit and authenticates no reviewer.
+
+**A linked page can change beneath an approval (recorded 2026-10-10).** *(Closed for the resolved Surface, Audience Role, Format, Platform IDs and Offer Status by the storage unit, the same day: they are in the fingerprint. Other linked-page attributes are still not covered.)* The surface, audience role and format live on the DB6 translation, not on the brief. If that page's `Surface` changes after G2 while the brief's `Translation` relation keeps the same page ID, nothing in DB7 moves. Today's publication check then compares the published surface with the surface read **at publication**, not the one approved, so the approval silently carries over. Closing this needs stored approval evidence. The capture and comparison rules are specified in [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md) §3.1. **Proposed, not built.**
 
 **Evidence is only as good as its identity (hardening unit, 2026-10-09).** Every gate binds stage evidence to one brief ID and one Version: G1, storyboard, spend approval, claim review, asset provenance and the G2 packet. The gate cannot check that the evidence is *true*. A G1 line a person typed is taken at its word. What it refuses is evidence that is **unidentified, about another brief, or about another revision**. Before this unit, a G1 from brief B at revision 2 satisfied brief A at revision 2.
 
@@ -140,6 +154,9 @@ Every rule has a code in the gate. A refusal is a record: which rule, and what w
 | R22 | A workflow stage out of order: Ready for Design without a human G1 for this revision; **a G2 submission without a human G1 for this revision, on either path**; a G1 that records no path, or a path the brief no longer matches; text-only content sent to Design; text-only content listing assets; generation without a human spend approval for this revision; G2 submission before the finished artifact (design) or the final copy (text-only); C06 submitting without context | §8 |
 | R23 | A select value outside its recorded vocabulary (`Audience Role`, `Format`); an unknown format, which leaves the design or text-only path undecidable | §7.1 |
 | R24 | Stage evidence without identity: a brief with no ID; a G1, storyboard, spend approval, claim review or asset provenance that names no brief or **another brief**; a G2 submission whose packet describes a page other than the write target, or whose target was not read back | §8.1 |
+| R26 | Stored approval evidence that does not match a fresh computation: a G2 Submitted Fingerprint or Packet Manifest that differs from the gate's recomputation (copy, assets or resolved context changed); a manifest not in canonical form; evidence typed instead of computed; a packet whose copy or translation context differs from the page | §8.2 |
+| R27 | Context that cannot be trusted as fresh: no read-back; a part not read completely; read in another session, with no time zone, or outside the 30-minute window; a partial read; a non-canonical page ID; not exactly one linked translation; a linked offer not read. **Stored evidence is never reused in its place** | §8.2 |
+| R28 | A G1 or G2 decision recorded by anyone not on the approver list (owner only, initially). A typed-name comparison, not authentication | §8.2 |
 | R25 | An invalid asset: an ID that is blank, too short, contains whitespace or is a URL (a temporary vendor link is never an asset reference, §9.3); a version that is missing or not a whole number of 1 or more; the same asset listed twice | §8.1 |
 
 ---
@@ -267,7 +284,7 @@ Text-only work skips Design and spend approval. **It never skips G1** (owner dir
 | Object | One brief at one `Version`, on **both** paths: before Design (design), before G2 (text-only) | One brief at one `Version`, after the storyboard (design only) | Copy at one `Version` + the finished asset set (design), or the final copy (text-only) |
 | Checked by | `validate_design_readiness` (`content_write_gate.py readiness`, design) and `validate_g2_submission` (`content_write_gate.py submission`, both paths) | `validate_generation_start` | `validate_g2_submission`, then `validate_publication` |
 | Who decides | A named human | A named human (Design 19's gate; approval matrix: human gate before credit spend) | `content-publishing-gate` (advisory) → **a named human**, Class 3 |
-| Recorded | **No Notion property yet.** A dated page-body line on the brief: `G1 passed \| brief <page id> \| rev N \| path design\|text_only \| <reviewer> \| <date>` | Owned by Design (19). Content checks only that it exists for the same brief ID and Version | DB7 `G2 Decision` = Approved + Reviewer + Decided At + Approved Revision. The approved asset set (ID, version, provenance) is listed in the G2 packet (no property yet) |
+| Recorded | **DB7 properties (since 2026-10-10):** `G1 Decision` (`Passed (design)` / `Passed (text-only)` / `Returned`), `G1 Reviewer`, `G1 Decided At`, `G1 Revision`. Human-only; owner only, initially. *(Until 2026-10-10: a dated page-body line, `G1 passed \| brief <page id> \| rev N \| path … \| <reviewer> \| <date>`.)* | Owned by Design (19). Content checks only that it exists for the same brief ID and Version | DB7 `G2 Decision` = Approved + Reviewer + Decided At + Approved Revision, with `G2 Packet Manifest` and `G2 Submitted Fingerprint` written by C06 at submission (§8.2) |
 | Expires | Yes, on any publication-affecting change | Yes, likewise | **Yes.** Any copy change bumps `Version`, and the approval no longer covers it |
 
 Passing G1 never implies G2. A G2 approval never covers a later revision or a different asset. **No agent and no skill can approve, pass G1 or approve spend** (R01, R11, R22).
@@ -282,13 +299,41 @@ Every record a stage relies on names **the brief and the revision it covers**. T
 
 | Evidence | Must carry | Refused when |
 |---|---|---|
-| G1 | `brief_id`, `revision`, `path` (`design` / `text_only`), `by: human:…`, `at`, `decision: passed` | missing; agent-made; undated; another brief (R24); another revision (R12); invalid revision (R20); no path, or a path the brief no longer matches (R22) |
+| G1 | `brief_id`, `revision`, `path` (`design` / `text_only`), `by: human:…`, `at`, `decision: passed`. Since 2026-10-10 this record is built from the G1 properties by `g1_from_properties`; the page it was read from is the binding | missing; agent-made; undated; another brief (R24); another revision (R12); invalid revision (R20); no path, or a path the brief no longer matches (R22) |
 | Storyboard | `brief_id`, `revision`. The routine's COMPLETED marker `[… \| brief=<id> \| rev=<N>]` is this record | missing (R22); another brief (R24); stale (R12); invalid (R20) |
 | Spend approval | `brief_id`, `revision`, `by: human:…`, `at`, `scope` | as G1, and no scope (R22) |
 | Claim review (C05) | `brief_id`, `revision`, `verdict: pass` | missing or not `pass` (R22); another brief (R24); stale (R12) |
 | Asset | `asset_id` (registry token, never a URL), `version` (whole number ≥ 1), `rights`, `provenance: {brief_id, brief_revision}` | invalid ID or version, or listed twice (R25); provenance missing or for another brief (R24); made for another revision (R12); rights unknown (R22) |
 | G2 packet (C06 write) | Three page IDs, each a valid token and **exactly equal**: `proposal.target` (the page written), `state.prior.id` (the page read back) and `g2_submission.brief.id` (the page the packet describes). The read-back must also show the packet's Version | any of the three missing, empty, whitespace-only, padded, non-string or different, including a dashed and an undashed form of one page (R24) *(tightened 2026-10-10)*; target moved on (R12); target Version invalid (R20) |
 | Publication | brief ID; approved and published asset sets equal, each asset valid | as above, plus R11, R12, R14 |
+
+### 8.2 Stored approval evidence (storage unit, 2026-10-10)
+
+**At submission.**
+- C06 hands the gate a **fresh read-back** of the exact target brief: the brief page, its one linked translation and every linked offer.
+- The read must be complete, from one session, and no more than 30 minutes before the check. Page IDs must be canonical Notion IDs.
+- The gate computes the **G2 Packet Manifest** (canonical JSON, `content-g2-manifest/1`) and the **G2 Submitted Fingerprint** (`sha256:` of copy, assets and resolved context). It also checks that the packet's copy and translation context equal that read.
+- C06 writes **exactly those two strings** with `Submitted for review`. Typed values, values from another page, or a fresh read of another page are refused (R26, R24).
+
+**What the resolved context holds:** `translation_id`, `surface`, `audience_role`, `format`, `platform_ids` and `offers[{offer_id, offer_status}]`. Values are exact Notion option names; `null` means read-and-empty. Anything unreadable or unknown computes nothing (R27, R09, R23).
+
+**At publication.**
+- The gate recomputes the fingerprint from a fresh read plus the assets actually published, and compares it with the stored one.
+- The approved surface, format and asset set come from the stored manifest, never from the current page.
+- Any difference is R26, naming the component that moved, for example `resolved.surface: 'LinkedIn - Founder profile' -> 'LinkedIn - Company Page'`.
+
+**Changes need Version +1 and renewed G1 and G2:**
+
+| Change | How it is recorded | What the gate refuses |
+|---|---|---|
+| **Copy** | A VERSION (§6.4) | — |
+| **Context only** (translation surface, audience, format or platform; offer status) | A VERSION with `reason: context_change` and only `Version` written. **No copy edit is invented.** The gate verifies the change against the stored manifest; before any submission, a declared `context_before` serves instead (unverifiable, so stated as such) | No change, an unreadable context, or a bump other than +1 (R21, R27) |
+| **Assets only** | A VERSION with `reason: asset_change`, checked against the stored manifest's asset set | Same as above |
+| **Any of these at the same Version since the last submission** | — | Re-submission (R21) |
+
+After any bump, the G1 and G2 records bind to the old Version and must be renewed by the owner.
+
+**Owner only, initially.** G1 and G2 reviewers must be on `approvers` in `content-databases.json` (R28). This is a name comparison.
 
 **Provisional asset-ID format.** Design (19)'s Asset Registry is not built (§9.2), so no canonical asset-ID format exists. Until Design ratifies one, the gate accepts a 3–128 character token of letters, digits and `. _ : -`. That rules out URLs, whitespace and blanks. It is a placeholder, not Design's decision.
 
@@ -337,9 +382,9 @@ No Content event reaches another department automatically: the runtime publishes
 | Handoff | Operator | Input → output | Accepted when | Evidence |
 |---|---|---|---|---|
 | Sector → Content | Human invoking C01 | Sector finding ID → DB5 opportunity ID | R03/R04/R05 pass; read-back matches | Page-body change line + DB5 `Source Intelligence` |
-| Content → Design | **Human** records G1, then sets `Ready for Design` | DB7 brief ID + Version → routine storyboard comment | `content_write_gate.py readiness` passes on a live snapshot: both DRAGON passes, surface assigned, valid Version, upstream links, a design (not text-only) brief, G1 for this Version | The G1 page-body line; the routine's comment carrying `[creative-pipeline v2 \| completed \| …]` |
+| Content → Design | **Human** records G1, then sets `Ready for Design` | DB7 brief ID + Version → routine storyboard comment | `content_write_gate.py readiness` passes on a live snapshot: both DRAGON passes, surface assigned, valid Version, upstream links, a design (not text-only) brief, G1 for this Version | The G1 properties on the brief (a page-body line until 2026-10-10); the routine's comment carrying `[creative-pipeline v2 \| completed \| …]` |
 | Design → generation | **Human** spend approval | Brief ID + Version + storyboard → generation jobs | `validate_generation_start` passes | Design (19)'s spend record |
-| Content → G1 (text-only) | **Human** reviewer | Brief ID + Version + final copy → G1 line with `path text_only` | Both DRAGON passes, surface assigned, valid Version; the copy is final | The G1 page-body line naming brief ID, revision and path |
+| Content → G1 (text-only) | **Human** reviewer | Brief ID + Version + final copy → `G1 Decision = Passed (text-only)` with reviewer, date and `G1 Revision` | Both DRAGON passes, surface assigned, valid Version; the copy is final | The G1 properties on the brief (a page-body line until 2026-10-10) |
 | Content → G2 | Human invoking C06, then the reviewer | Brief ID + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only) → `G2 Decision` | `validate_g2_submission` (`content_write_gate.py submission`) passes, with every record bound to this brief and Version; reviewer, date and approved revision recorded by the human | DB7 G2 fields + the G2 packet's asset list + Approval Integrity green |
 | G2 → publication | **Human publisher** | Approved brief ID + Version + asset set → native post | R11–R14 pass | Publication record (brief ID, revision, asset set, surface, native URL, date, publisher) in the Presence publication log (not yet built) |
 | Engagement → Sales | Human | Conversation → `LEAD_CREATED` input to `sales-lead-qualification` | Consent and CRM ownership respected | CRM record, owned by Sales |
@@ -371,6 +416,14 @@ The data model puts **translation before brief**: a DB7 brief requires its DB6 t
 
 ## 13. Changelog
 
+- **v0.4 (2026-10-10, owner-authorised storage unit)** — Changes:
+  - **Notion:** six DB7 properties and the Approval Integrity extension. Recorded in `CONTENT_INTELLIGENCE_SCHEMA.md` §10.
+  - **G1 storage:** G1 now lives in properties.
+  - **Stored evidence and refusals:** the G2 manifest and fingerprint are computed by the gate from a fresh read (§8.2). R26, R27 and R28 added.
+  - **Versioning:** context-only and asset-only VERSIONs.
+  - **Approvers:** owner only.
+  - **Limits:** stated in §0.2.
+  - **Unchanged:** triggers, emits, risk classes, department ownership and canonical option names. — Claude Code (Opus 5.5)
 - **v0.3.1 (2026-10-10, owner-authorised follow-up unit)** — Repository only.
   - **Reproduced against `9124997`.** A read-back (`state.prior`) with a Version but no page ID, an empty ID or a `None` ID let `Submitted for review` through.
   - **Fixed.** `proposal.target`, `state.prior.id` and `g2_submission.brief.id` must each be a valid page ID and exactly equal (§8.1, R24). The revision checks are unchanged. The brief-ID check at every stage uses the same page-ID rule.

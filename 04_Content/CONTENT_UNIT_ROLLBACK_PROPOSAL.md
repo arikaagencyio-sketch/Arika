@@ -14,6 +14,9 @@
 | **Follow-up unit** (2026-10-10) | Not committed by this session. It adds no file, so find its auto-sync commit as the first commit after `9124997` that touches `04_Content/contracts/content_write_gate.py`, and check `git show --stat` | Edits only | None |
 | **Notion, Content unit** (2026-10-09) | Not in git. Recorded in `CONTENT_OS.md` §8 and `CONTENT_INTELLIGENCE_SCHEMA.md` §10 | — | Additive properties and options on DB2, DB5, DB6 and DB7; row edits on DB2, DB5, DB6 and DB7 |
 | **Notion, correction unit** | None. Only read-only schema fetches were made | — | — |
+| *Follow-up unit, as published* | **`6731006`** (auto-sync, 2026-10-10 14:38:38; on `origin/master`). Exactly its 8 files (`git show --stat 6731006`, checked in the storage unit) | — | None |
+| **Storage unit** (2026-10-10) | Not committed by this session. Find its auto-sync commit as the first commit after `6731006` that touches `04_Content/contracts/content-databases.json`, and check `git show --stat` | Edits only | Gate, tests, contract, skills and agents now require the six DB7 properties |
+| **Notion, storage unit** (2026-10-10) | Not in git. Recorded in `CONTENT_INTELLIGENCE_SCHEMA.md` §10 (2026-10-10) and §6 below | — | DB7 +6 properties (49 → 55); Approval Integrity formula extended. No row written |
 
 ## 2. Dependency map (what breaks if you remove one layer and keep another)
 
@@ -71,6 +74,11 @@ Verify with `npx tsc --noEmit -p .`, `npm test` and `npx arika list` (expect 115
 8. Read every change back.
 9. Update `content-databases.json` in the same change (see §2).
 
+**Option R4b: storage-unit Notion rollback (2026-10-10).** This needs a separate approval and a live session. **Dependency: revert the storage unit's repository changes in the same change.** The gate, the contract (55 / 367 fields) and the C06 submission path require these properties; with them removed, every submission and publication check refuses.
+1. Restore the formula first, so it never references a dropped property: `ALTER COLUMN "Approval Integrity" SET FORMULA('<prior expression, §6>') COMMENT '<prior description, §6>'`.
+2. Only if no row uses them, drop `G1 Decision`, `G1 Reviewer`, `G1 Decided At`, `G1 Revision`, `G2 Packet Manifest` and `G2 Submitted Fingerprint`. Today no row does, because no backfill was made. Once any G1 or G2 evidence exists, dropping it destroys approval history: export it into the brief's page body first.
+3. Read back: 49 properties, the trigger-read six unchanged.
+
 **Option R5: the routine.** Nothing to roll back. v2 has never been applied. If it is applied later, its rollback is `CHANGE_PROPOSAL.md` §7 (restore `prompt-v1-original.md`).
 
 ## 4. Never
@@ -81,6 +89,12 @@ Verify with `npx tsc --noEmit -p .`, `npm test` and `npx arika list` (expect 115
 
 ## 5. Changelog
 
+- **2026-10-10 (storage unit)** — Changes:
+  - Recorded the follow-up unit's commit (`6731006`).
+  - Added rows for the storage unit and its Notion changes.
+  - Added option R4b.
+  - Kept the exact formula expressions in §6.
+  - Nothing executed. — Claude Code (Opus 5.5)
 - **2026-10-10 (follow-up unit)** — Records the hardening unit's commit (`9124997`, 17 files, no unrelated work) and adds the follow-up unit and the full revert order. Nothing executed. — Claude Code (Opus 5.5)
 - **2026-10-09 (hardening unit)** — Updates:
   - The correction unit's commit is recorded (`ce310c6`, 22 files, no unrelated work).
@@ -88,3 +102,19 @@ Verify with `npx tsc --noEmit -p .`, `npm test` and `npx arika list` (expect 115
   - The full revert order is stated.
   - Nothing executed. — Claude Code (Opus 5.5)
 - **2026-10-09** — Prepared under the owner's correction-unit brief ("prepare a current, dependency-aware rollback proposal for the committed changes; execute no rollback"). — Claude Code (Opus 5.5)
+
+## 6. Approval Integrity: exact expressions (rollback source)
+
+**Prior** (created 2026-10-09; in force until 2026-10-10), with description `GOV - red cell when the packet lifecycle is ahead of G2, or when the approval was given to a different revision than the current Version. Computed; never written.`:
+
+```
+ifs(and(or(format(prop("Packet State")) == "approved", format(prop("Packet State")) == "scheduled", format(prop("Packet State")) == "published", format(prop("Packet State")) == "measured"), format(prop("G2 Decision")) != "Approved"), "🔴 lifecycle ahead of G2 approval", and(format(prop("G2 Decision")) == "Approved", prop("G2 Approved Revision") != prop("Version")), "🔴 approval is for a different revision", format(prop("G2 Decision")) == "Approved", "✅ G2 approved - current revision", format(prop("G2 Decision")) == "", "- G2 not recorded", format(prop("G2 Decision")))
+```
+
+**Current** (applied 2026-10-10, storage unit), with description `GOV - red when the packet lifecycle is ahead of G2, an approval or G1 covers another revision, or Ready for Design lacks a design G1. Shows only: it prevents no edit and authenticates no reviewer.`:
+
+```
+ifs(and(or(format(prop("Packet State")) == "approved", format(prop("Packet State")) == "scheduled", format(prop("Packet State")) == "published", format(prop("Packet State")) == "measured"), format(prop("G2 Decision")) != "Approved"), "🔴 lifecycle ahead of G2 approval", and(format(prop("G2 Decision")) == "Approved", prop("G2 Approved Revision") != prop("Version")), "🔴 approval is for a different revision", and(format(prop("Publishing Status")) == "Ready for Design", format(prop("G1 Decision")) != "Passed (design)"), "🔴 Ready for Design without a design G1", and(or(format(prop("Publishing Status")) == "Ready for Design", format(prop("Publishing Status")) == "Done"), prop("G1 Revision") != prop("Version")), "🔴 G1 is for a different revision", and(format(prop("G2 Decision")) == "Approved", prop("G2 Approved Revision") != prop("G1 Revision")), "RED - G2 and G1 cover different revisions", format(prop("G2 Decision")) == "Approved", "✅ G2 approved - current revision", format(prop("G2 Decision")) == "", "- G2 not recorded", format(prop("G2 Decision")))
+```
+
+The connector cannot read a formula's expression back. These are the strings that were sent and accepted. A UI edit made after them would not show here.

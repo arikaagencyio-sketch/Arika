@@ -169,6 +169,12 @@ When in doubt, hold. Nothing published beats something retracted.
   - **Text-only** (`production: text_only`): the final copy at one `version`.
     `artifact_refs` is empty.
   - If `production` is `unknown`, or `version` is null, the verdict is `hold`.
+  - **Stored evidence (since 2026-10-10).** The submitted packet is fixed on the
+    brief as `G2 Packet Manifest` and `G2 Submitted Fingerprint`, computed by the
+    gate from a fresh read. Judge the copy and context that evidence describes.
+    If the page or the linked translation now differs from it, or if the read
+    was stale or unreadable, the verdict is `hold`. G1 and G2 are recorded by the
+    owner only, initially. Neither the gate nor Notion authenticates the name.
 - Return `brief_id`, `version`, `surface`, `production` and `artifact_refs`. Any
   later copy change makes your verdict and the human's approval stale. Say so if
   the version you were shown is not the latest.

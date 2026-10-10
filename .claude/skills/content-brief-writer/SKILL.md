@@ -48,6 +48,16 @@ R01 `Ready for Design` or `Done` · R03 missing Opportunity, Translation or Narr
 
 **Limit, stated plainly.** These rules cover writes made through this skill. A person editing the brief in Notion bypasses them (contract §0.2).
 
+**Context-only and asset-only changes (since 2026-10-10, contract §8.2).** These cover two cases:
+- the linked translation's Surface, Audience Role, Format or Platform changed, or a linked offer's status changed;
+- the asset set changed.
+
+In both cases the brief's copy did not change, but the approved evidence no longer holds. Record a **VERSION** that writes only `Version` (prior + 1), with `reason: context_change` or `reason: asset_change`. **Do not invent a copy edit to justify the bump.** The gate verifies the change:
+- against the stored `G2 Packet Manifest`;
+- before any submission, against a declared `context_before`, which cannot be verified and is stated as such.
+
+It refuses a declared change it cannot see (R21) or an unreadable context (R27). The bump makes G1 and G2 stale; the owner renews both. Append the change line naming the component and its prior value.
+
 ## Verification
 
 Read back the six trigger properties byte-for-byte and the `Version`. `Brief Integrity` and `Approval Integrity` are formulas: check them in the Notion UI.
