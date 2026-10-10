@@ -1,6 +1,6 @@
 # Content — Write Contract
 
-**Department:** Content (04) · **Version:** v0.3 (2026-10-09, hardening unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
+**Department:** Content (04) · **Version:** v0.3.1 (2026-10-10, follow-up unit) · **Status:** In force for manual apply. Seven skills implement it (C01–C07). **No skill has run yet**, and `04_Content/_memory/` holds no execution record. The first apply under this contract will be the first one.
 
 **Machine-readable companion:** [`contracts/content-databases.json`](contracts/content-databases.json) (one writer per field, DB1–DB8, from the live schemas of 2026-10-09). **Runnable gate:** [`contracts/content_write_gate.py`](contracts/content_write_gate.py) with tests in [`contracts/test_content_write_gate.py`](contracts/test_content_write_gate.py).
 
@@ -26,6 +26,8 @@
 - **There is no change-detection evidence.** Nothing in this repository proves that any brief's copy matches the revision a human approved. Notion page history is the only trail, and nothing reads it automatically.
 
 So: the gate makes a skill-driven write safe. It does not make the database safe. A content hash recorded at G2 would close part of the gap. That would be a new property or a page-body convention, and it is **proposed, not built**. The minimal storage and fingerprint proposal, with exactly what it would and would not catch, is [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md) (prepared 2026-10-09, not applied).
+
+**A linked page can change beneath an approval (recorded 2026-10-10).** The surface, audience role and format live on the DB6 translation, not on the brief. If that page's `Surface` changes after G2 while the brief's `Translation` relation keeps the same page ID, nothing in DB7 moves. Today's publication check then compares the published surface with the surface read **at publication**, not the one approved, so the approval silently carries over. Closing this needs stored approval evidence. The capture and comparison rules are specified in [`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`](APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md) §3.1. **Proposed, not built.**
 
 **Evidence is only as good as its identity (hardening unit, 2026-10-09).** Every gate binds stage evidence to one brief ID and one Version: G1, storyboard, spend approval, claim review, asset provenance and the G2 packet. The gate cannot check that the evidence is *true*. A G1 line a person typed is taken at its word. What it refuses is evidence that is **unidentified, about another brief, or about another revision**. Before this unit, a G1 from brief B at revision 2 satisfied brief A at revision 2.
 
@@ -285,7 +287,7 @@ Every record a stage relies on names **the brief and the revision it covers**. T
 | Spend approval | `brief_id`, `revision`, `by: human:…`, `at`, `scope` | as G1, and no scope (R22) |
 | Claim review (C05) | `brief_id`, `revision`, `verdict: pass` | missing or not `pass` (R22); another brief (R24); stale (R12) |
 | Asset | `asset_id` (registry token, never a URL), `version` (whole number ≥ 1), `rights`, `provenance: {brief_id, brief_revision}` | invalid ID or version, or listed twice (R25); provenance missing or for another brief (R24); made for another revision (R12); rights unknown (R22) |
-| G2 packet (C06 write) | `target` = the brief page written; the target read back (`state.prior`) at the packet's Version | no target, or a packet for another page (R24); target moved on (R12) |
+| G2 packet (C06 write) | Three page IDs, each a valid token and **exactly equal**: `proposal.target` (the page written), `state.prior.id` (the page read back) and `g2_submission.brief.id` (the page the packet describes). The read-back must also show the packet's Version | any of the three missing, empty, whitespace-only, padded, non-string or different, including a dashed and an undashed form of one page (R24) *(tightened 2026-10-10)*; target moved on (R12); target Version invalid (R20) |
 | Publication | brief ID; approved and published asset sets equal, each asset valid | as above, plus R11, R12, R14 |
 
 **Provisional asset-ID format.** Design (19)'s Asset Registry is not built (§9.2), so no canonical asset-ID format exists. Until Design ratifies one, the gate accepts a 3–128 character token of letters, digits and `. _ : -`. That rules out URLs, whitespace and blanks. It is a placeholder, not Design's decision.
@@ -369,6 +371,11 @@ The data model puts **translation before brief**: a DB7 brief requires its DB6 t
 
 ## 13. Changelog
 
+- **v0.3.1 (2026-10-10, owner-authorised follow-up unit)** — Repository only.
+  - **Reproduced against `9124997`.** A read-back (`state.prior`) with a Version but no page ID, an empty ID or a `None` ID let `Submitted for review` through.
+  - **Fixed.** `proposal.target`, `state.prior.id` and `g2_submission.brief.id` must each be a valid page ID and exactly equal (§8.1, R24). The revision checks are unchanged. The brief-ID check at every stage uses the same page-ID rule.
+  - **Recorded.** The linked-page limitation is now in §0.2, and the storage proposal specifies how the resolved Surface, Audience Role and Format would be captured and compared (not built).
+  - **Unchanged.** G1 and G2 on both paths, two-pass DRAGON, option names, ownership, triggers, emits and risk classes. — Claude Code (Opus 5.5)
 - **v0.3 (2026-10-09, owner-authorised hardening unit)** — Repository only. No Notion write and no activation.
   - **The remaining failures were reproduced against `ce310c6`'s gate.** G1, storyboard, spend, claim-review and asset evidence for another brief were accepted at a matching revision. A G2 packet for one brief was accepted as a write on another. Assets missing a version, or an ID, on both sides passed publication. A temporary vendor URL passed as an asset ID. Text-only G2 passed with no G1.
   - **What changed.** Evidence is bound to brief ID + Version (§8.1, R24). Asset rules added (R25). **G1 is required on both paths** (owner direction, quoted in §8; the v0.2 text-only reading is marked as the assistant's, superseded). "Text-capable is not asset-free" is made explicit. A `submission` command was added to the gate. The storage and fingerprint proposal is prepared, not applied.

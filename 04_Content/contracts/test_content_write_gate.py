@@ -1006,6 +1006,75 @@ class SubmissionTarget(unittest.TestCase):
         self.assertIn("R20_REVISION_INVALID", c06_submit(prior={"id": BRIEF_ID, "Version": None}).codes)
 
 
+NOTION_ID = "0123456789abcdef0123456789abcdef"          # synthetic, Notion-shaped
+NOTION_ID_DASHED = "01234567-89ab-cdef-0123-456789abcdef"  # the same page, dashed form
+
+
+def rebound_submission(page_id):
+    """submission_ctx() with every identity field moved to `page_id`."""
+    sub = copy.deepcopy(submission_ctx())
+    sub["brief"]["id"] = page_id
+    sub["g1"]["brief_id"] = page_id
+    sub["claim_review"]["brief_id"] = page_id
+    for a in sub["artifacts"]:
+        a["provenance"]["brief_id"] = page_id
+    return sub
+
+
+class SubmissionIdentityTriple(unittest.TestCase):
+    """Follow-up unit (2026-10-10): state.prior.id, proposal.target and
+    g2_submission.brief.id must each be a valid page ID and exactly equal.
+    Reproduced against 9124997: a read-back with a Version but no ID, an empty
+    ID or a None ID let Submitted for review through."""
+
+    def ids(self, target, prior_id, packet_id, version=2):
+        prior = {"Version": version}
+        if prior_id is not ABSENT:
+            prior["id"] = prior_id
+        return c06_submit(sub=rebound_submission(packet_id), target=target, prior=prior)
+
+    def test_read_back_with_version_but_no_id_is_refused(self):
+        self.assertIn("R24_EVIDENCE_IDENTITY", self.ids(BRIEF_ID, ABSENT, BRIEF_ID).codes)
+
+    def test_missing_empty_blank_padded_or_non_string_read_back_id_is_refused(self):
+        for bad in ("", None, "   ", " " + BRIEF_ID, BRIEF_ID + " ", BRIEF_ID + "\n", 7, [BRIEF_ID]):
+            with self.subTest(prior_id=bad):
+                self.assertIn("R24_EVIDENCE_IDENTITY", self.ids(BRIEF_ID, bad, BRIEF_ID).codes)
+
+    def test_missing_blank_or_padded_target_is_refused(self):
+        for bad in (None, "", "  ", BRIEF_ID + " "):
+            with self.subTest(target=bad):
+                self.assertIn("R24_EVIDENCE_IDENTITY", self.ids(bad, BRIEF_ID, BRIEF_ID).codes)
+
+    def test_three_identical_but_invalid_ids_are_refused(self):
+        for bad in ("   ", "", 7, "has space"):
+            with self.subTest(all_three=bad):
+                self.assertIn("R24_EVIDENCE_IDENTITY", self.ids(bad, bad, bad).codes)
+
+    def test_any_one_differing_id_is_refused(self):
+        for target, prior_id, packet_id in ((OTHER_BRIEF, BRIEF_ID, BRIEF_ID),
+                                            (BRIEF_ID, OTHER_BRIEF, BRIEF_ID),
+                                            (BRIEF_ID, BRIEF_ID, OTHER_BRIEF)):
+            with self.subTest(target=target, prior=prior_id, packet=packet_id):
+                self.assertIn("R24_EVIDENCE_IDENTITY", self.ids(target, prior_id, packet_id).codes)
+
+    def test_dashed_and_undashed_forms_of_one_page_do_not_match(self):
+        self.assertIn("R24_EVIDENCE_IDENTITY", self.ids(NOTION_ID, NOTION_ID_DASHED, NOTION_ID).codes)
+
+    def test_three_identical_valid_ids_pass(self):
+        for page_id in (BRIEF_ID, NOTION_ID, NOTION_ID_DASHED):
+            with self.subTest(page_id=page_id):
+                v = self.ids(page_id, page_id, page_id)
+                self.assertTrue(v.ok, v)
+
+    def test_revision_checks_still_apply_when_ids_match(self):
+        self.assertEqual(set(self.ids(BRIEF_ID, BRIEF_ID, BRIEF_ID, version=3).codes), {"R12_REVISION_MISMATCH"})
+        self.assertEqual(set(self.ids(BRIEF_ID, BRIEF_ID, BRIEF_ID, version=None).codes), {"R20_REVISION_INVALID"})
+
+
+ABSENT = object()
+
+
 class G1OnBothPaths(unittest.TestCase):
     """Hardening item 3 (owner direction, 2026-10-09): G1 and G2 for every public item.
     Text-only skips Design and spend approval, not G1. Text-capable is not asset-free."""

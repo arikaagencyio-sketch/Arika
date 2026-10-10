@@ -128,6 +128,22 @@ doctrine inline rather than via shared skills."*
 
 ## 8. Decision Log
 
+- **2026-10-10 — Follow-up unit: the G2 submission ID triple, and the resolved-context fingerprint specification (owner-authorised; repository only).**
+  - **Starting point.** HEAD `9124997` (auto-sync of the hardening unit, 17 files) equalled `origin/master`, with a clean tree.
+  - **Reproduced first, with synthetic fixtures.** A read-back (`state.prior`) with a Version but no page ID, an empty ID or a `None` ID let `Submitted for review` through. Whitespace and non-string IDs were already refused, but only indirectly, through the packet's own brief-ID check.
+  - **Fixed in the gate.**
+    - `proposal.target`, `state.prior.id` and `g2_submission.brief.id` must each be a valid page ID: a non-blank, unpadded token. They must be **exactly equal**, with no trimming, case-folding or dash normalisation, so a dashed and an undashed form of one page are refused (R24).
+    - The revision checks are unchanged (R12, R20).
+    - The brief-ID check at every stage now uses the same page-ID rule.
+  - **Proposal amended, not implemented.** `APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md` §3.1 specifies how the G2 packet and fingerprint capture the resolved `Surface`, `Audience Role` and `Format` from the linked translation:
+    - exact Notion option names, NFC, `null` only for read-and-empty;
+    - exactly one translation page;
+    - canonical page IDs.
+
+    A change beneath an unchanged relation ID breaks the fingerprint, and the approval is not inherited: C04 records a VERSION, and G1 and G2 are re-done. Unreadable context computes nothing and reuses nothing (proposed R27). The field count stays at six. Option A (`G2 Packet Manifest` in place of `G2 Asset Set`) is presented for owner approval, not assumed.
+  - **Limitation recorded in the contract (§0.2).** Today an approval does carry over a linked translation's surface change, because the publication check reads the surface at publication time.
+  - **Unchanged:** G1 and G2 on both paths, two-pass DRAGON, option names, field ownership, triggers, emits and risk classes.
+  - **Not done:** no Notion read or write, no activation, no agent run, no commit by hand. Results are in §15. — Claude Code (Opus 5.5)
 - **2026-10-09 — Hardening unit: stage evidence bound to brief ID + Version; G1 on both paths (owner-authorised; repository only).**
   - **Owner direction (hardening brief, quoted):** "Require human G1 and G2 for every public content item. Genuinely text-only work skips Design and generation-spend approval, not G1. Text-capable formats are not automatically asset-free." It is recorded as **today's** direction. It does not back-date or reword an earlier decision. The earlier text-only-without-G1 reading was the assistant's, not the owner's, and is marked as superseded where it appeared: contract §8, skill matrix §3, C04, and the correction-unit entry below.
   - **Reproduced first, against `ce310c6`, with synthetic fixtures.** Each of these was accepted:
@@ -429,6 +445,16 @@ running system has changed.
 
 ## 15. Changelog
 
+- 2026-10-10 — **Follow-up unit (owner-authorised; repository only).**
+  - **Files.** 8 edited, none added: `content_write_gate.py`, `test_content_write_gate.py`, `APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`, `CONTENT_WRITE_CONTRACT.md` (v0.3.1), `CONTENT_SKILL_MATRIX.md` (v0.3.1), `CONTENT_UNIT_ROLLBACK_PROPOSAL.md`, this file, and the `content-approval-prep` skill.
+  - **Verification, 2026-10-10:**
+    - The reproduced cases are now refused, and the valid control passes.
+    - Content tests **154/154** (up from 146); the new class `SubmissionIdentityTriple` has sub-cases.
+    - Routine model tests **27/27**.
+    - Gate PASS (361 fields, `content-databases.json` unchanged).
+    - No trigger, emit, risk-class, handoff or ownership line changed.
+    - `_memory` untouched.
+  - **Not committed by this session.** — Claude Code (Opus 5.5)
 - 2026-10-09 — **Hardening unit (owner-authorised; repository only).**
   - **Starting point.** HEAD `ce310c6` (auto-sync of the correction unit, 22 files) matched `origin/master`, with a clean tree.
   - **Files.** 16 edited and 1 added (`APPROVAL_EVIDENCE_STORAGE_PROPOSAL.md`). Write contract v0.3, skill matrix v0.3, field contract v0.3 (workflow block only; no field, writer or option changed).

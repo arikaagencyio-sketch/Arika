@@ -19,7 +19,7 @@ description: Skill C06 of Content (04). Assembles the G2 packet for ONE exact br
 
   A storyboard is not a finished artifact.
 - **Text-only work** (text-capable format; `Visual Direction` and `Canva Instructions` empty or `text-only`; no assets; G1 path `text_only`): as soon as the final copy exists.
-- **The packet must belong to the page you write.** The write carries `target` (the brief page ID). The target is read back (`state.prior`) at the packet's Version. The packet's brief ID equals the target.
+- **The packet must belong to the page you write.** The write carries `target` (the brief page ID). The target is read back (`state.prior`, **including its page ID**) at the packet's Version. `target`, `state.prior.id` and the packet's brief ID must be three non-blank, unpadded page IDs that are **exactly equal**. Use the same form for all three: a dashed and an undashed ID of one page do not match (R24, tightened 2026-10-10).
 - **How the gate checks it.** `validate_write` refuses `Submitted for review` without a `g2_submission` context. It runs `validate_g2_submission`, which refuses on R12, R20, R22, R24 and R25. Dry-run it with `python 04_Content/contracts/content_write_gate.py submission <snapshot>.json`.
 
 ## Step 0 · The write path

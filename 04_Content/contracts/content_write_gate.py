@@ -77,6 +77,10 @@ LOOKUP_OK = "complete"
 # (a temporary vendor link is never an asset's reference, contract s9.3),
 # whitespace and empty values. Provisional, not Design's ratified format.
 ASSET_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$")
+# A page ID (brief, write target, read-back) is the same kind of token: a Notion
+# page ID in either form, or a synthetic test ID. Never blank, padded or spaced.
+# Comparison is exact: a dashed and an undashed form of one page do NOT match.
+PAGE_ID = ASSET_ID
 PRODUCTION_PATHS = ("design", "text_only")
 
 
@@ -594,23 +598,40 @@ def validate_write(proposal, contract=None, state=None):
     return v
 
 
+def valid_page_id(x):
+    return isinstance(x, str) and bool(PAGE_ID.match(x))
+
+
 def _check_submission_target(v, proposal, state, contract):
-    """The G2 packet must describe the page being written, at its current Version."""
+    """The G2 packet must describe the page being written, at its current Version.
+
+    Three IDs must each be a valid page ID and be exactly equal: proposal.target
+    (the page written), state.prior.id (the page read back) and
+    g2_submission.brief.id (the page the packet describes). Exact string
+    equality: no trimming, no case-folding, no dash normalisation."""
     sub = proposal.get("g2_submission")
     if not sub:
         v.refuse("R22_STAGE_ORDER", "Submitted for review needs the submission context: brief, revision, G1, "
                  "claim review, and the finished artifact or the final copy")
         return
-    target = proposal.get("target")
-    sub_id = (sub.get("brief") or {}).get("id")
-    if not target:
-        v.refuse("R24_EVIDENCE_IDENTITY", "the write names no target brief, so the submission cannot be bound to it")
-    elif sub_id != target:
-        v.refuse("R24_EVIDENCE_IDENTITY", "the submission describes brief %r; the write targets %r" % (sub_id, target))
     prior = (state or {}).get("prior")
+    ids = [("proposal.target", proposal.get("target")),
+           ("state.prior.id", prior.get("id") if isinstance(prior, dict) else None),
+           ("g2_submission.brief.id", (sub.get("brief") or {}).get("id"))]
+    unusable = False
     if not isinstance(prior, dict):
-        v.refuse("R24_EVIDENCE_IDENTITY", "the target brief was not read back (state.prior), so its current Version is unknown")
-    else:
+        v.refuse("R24_EVIDENCE_IDENTITY", "the target brief was not read back (state.prior), so its ID and Version are unknown")
+        unusable = True
+    for name, value in ids:
+        if name == "state.prior.id" and not isinstance(prior, dict):
+            continue
+        if not valid_page_id(value):
+            v.refuse("R24_EVIDENCE_IDENTITY", "%s is missing or not a valid page ID (%r)" % (name, value))
+            unusable = True
+    if not unusable and len({value for _, value in ids}) != 1:
+        v.refuse("R24_EVIDENCE_IDENTITY", "the IDs disagree: target %r, read-back %r, packet %r"
+                 % tuple(value for _, value in ids))
+    if isinstance(prior, dict):
         on_record = revision_value(prior.get("Version"))
         described = revision_value((sub.get("brief") or {}).get("version"))
         if on_record is None:
@@ -640,8 +661,9 @@ def _dragon_and_surface(v, ctx, contract, stage):
 def _brief_identity(v, b, stage):
     """The brief under check must carry its own ID, or no evidence can be bound to it."""
     bid = (b or {}).get("id")
-    if not isinstance(bid, str) or not bid.strip():
-        v.refuse("R24_EVIDENCE_IDENTITY", "the brief has no ID, so %s evidence cannot be bound to it" % stage)
+    if not valid_page_id(bid):
+        v.refuse("R24_EVIDENCE_IDENTITY", "the brief has no valid ID (%r), so %s evidence cannot be bound to it"
+                 % (bid, stage))
         return None
     return bid
 

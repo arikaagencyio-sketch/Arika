@@ -1,6 +1,6 @@
 # Content — Skill Matrix
 
-**Department:** Content (04) · **Version:** v0.3 (2026-10-09, hardening unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
+**Department:** Content (04) · **Version:** v0.3.1 (2026-10-10, follow-up unit) · **Status:** Seven skills authored. **None has run.** Contract: [`CONTENT_WRITE_CONTRACT.md`](CONTENT_WRITE_CONTRACT.md). Field ownership: [`contracts/content-databases.json`](contracts/content-databases.json). Gate: `python 04_Content/contracts/content_write_gate.py`.
 
 Modelled on [`01_Sector/SECTOR_SKILL_MATRIX.md`](../01_Sector/SECTOR_SKILL_MATRIX.md). **Agents decide; skills validate and apply.** Skills are grouped by write boundary, so seven skills cover eight capabilities: copywriting, long-form, scripts and carousels are one boundary (DB7 authored fields).
 
@@ -42,7 +42,7 @@ The JSON twin holds the field-level assignment: **361 fields across 8 databases,
 | C03 | [`content-surface-translation`](../.claude/skills/content-surface-translation/SKILL.md) | Opportunity + Position IDs | DB6 (+ Surface, Audience Role, Editorial DRAGON), DB3, DB1 behaviour | R03 R05 R06 R07 R08 R09 R10 R23 | family + platform + **audience role** + surface + format · `Overlay ID` | C04 |
 | C04 | [`content-brief-writer`](../.claude/skills/content-brief-writer/SKILL.md) | Translation ID | DB7 authored fields, `Version` | R01 R03 R04 R06 R09 R10 R15 R16 R17 R18 R20 R21 | `Translation` (one live brief; revise = VERSION, exactly +1) | C05; text-only → C06; design → human G1 |
 | C05 | [`content-claim-review`](../.claude/skills/content-claim-review/SKILL.md) | Brief ID + Version | nothing (verdict names brief ID + revision) | R04 R05 R16 | n/a (read-only) | human G1, then C06; or back to C04 |
-| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID (= write target) + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only), each bound to that brief and Version | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R09 R12 R18 R20 R22 R24 R25 | Brief ID + Version | **human reviewer** |
+| C06 | [`content-approval-prep`](../.claude/skills/content-approval-prep/SKILL.md) | Brief ID (= write target = read-back ID, exactly) + Version + G1 + C05 verdict + finished asset set (design) or final copy (text-only), each bound to that brief and Version | DB7 `G2 Decision` (Not submitted / Submitted for review) | R01 R09 R12 R18 R20 R22 R24 R25 | Brief ID + Version | **human reviewer** |
 | C07 | [`content-source-retrieval`](../.claude/skills/content-source-retrieval/SKILL.md) | Any canonical ID | nothing | temp URLs, `rights: unknown`, private pilot data | n/a | caller |
 
 ---
@@ -123,6 +123,7 @@ The proposed routine's decision table has its own suite: `python -m unittest dis
 
 ## 6. Changelog
 
+- **v0.3.1 (2026-10-10, follow-up unit)** — C06's input names the exact ID triple. The `SubmissionIdentityTriple` test class is added. No skill or ownership change. — Claude Code (Opus 5.5)
 - **v0.3 (2026-10-09, hardening unit)** — Changes:
   - G1 is drawn on both paths.
   - C05 and C06 inputs are bound to brief ID + Version.
